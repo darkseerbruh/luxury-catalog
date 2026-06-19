@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo *)",
+      "Bash(npx --yes create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Bash(npm -v)",
+      "Read(//usr/local/**)",
+      "Bash(brew --version)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(/opt/homebrew/bin/brew --version)"
+    ]
+  }
+}
