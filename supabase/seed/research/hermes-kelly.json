@@ -1,0 +1,266 @@
+{
+  "brand": {
+    "name": "Hermès",
+    "country_of_origin": "France",
+    "founded_year": 1837,
+    "tier": "ultra-luxury",
+    "description": "French luxury house founded in 1837 as a harness and saddlery workshop in Paris. Same brand-level note applies to both the Kelly and the Birkin: no authentication detail is stored at brand level — it lives at variant and production_record level only.",
+    "confidence_level": "high"
+  },
+  "style": {
+    "name": "Kelly",
+    "style_family": "Kelly",
+    "silhouette": "structured",
+    "closure_type": "turn-lock with strap and belt-style closure (touret turn-lock plus a leather strap that buckles down over the flap, secured by a separate padlock)",
+    "year_introduced": 1935,
+    "redesigned": 1977,
+    "discontinued": false,
+    "year_discontinued": null,
+    "description": "Originally launched in 1935 as the 'Sac à Dépêches,' designed under Robert Dumas, with a trapezoidal silhouette, single reinforced handle, four brass feet, and a flap top secured by a double-belted turn-lock closure. The bag is older than the Birkin (which was introduced in 1984) by roughly five decades. It gained its current name after actress and Princess Grace Kelly was photographed carrying one to shield her pregnancy from paparazzi in the 1950s; Hermès officially renamed the style for her in 1977. Each Kelly is handmade by a single artisan and reportedly takes 18–25 hours and roughly 680 hand stitches to complete.",
+    "confidence_level": "high"
+  },
+  "variants": [
+    {
+      "size_label": "Kelly 28",
+      "size_category": "medium",
+      "construction_method": "sellier",
+      "rigidity": "rigid",
+      "exterior_material_name": "Epsom",
+      "exterior_colorway": null,
+      "hardware_color": null,
+      "hardware_type": "touret turn-lock with belt-strap closure, separate cadena padlock",
+      "strap_type": "none (top handle only; some eras/configurations offer an optional add-on shoulder strap, not fixed)",
+      "strap_attachment_type": "none fixed; optional strap attaches via the same loops the padlock secures, era-dependent",
+      "interior_material_name": null,
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": "typically tonal/matching exterior, visible exterior saddle stitching is the defining sellier marker",
+      "stitching_matches_exterior": true,
+      "market_availability": "global",
+      "year_start": null,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": 14400,
+      "currency": "USD",
+      "authentication_markers": "Sellier construction means the bag is built stitched-side-out then NOT turned inside out: leather edges fold outward, producing crisp, sharp corners and a rigid, boxy silhouette that holds its shape standing upright unsupported. Exterior saddle stitching is visible, even, and tight along all structural seams — hand stitches should be uniform in length and tension, never machine-straight or sloppy. Epsom is a stiffer, embossed, structured calfskin chosen specifically for sellier construction because it holds a crisp shape and resists slouching; it has a fine, consistent cross-hatch grain (engraved, not natural) and noticeably less give than Togo or Clemence. Note: as of the 2026 US price adjustment, Hermès priced Kelly 28 the same across Sellier and Retourné construction and across Togo/Epsom — historically Sellier carried a premium due to more labor-intensive construction.",
+      "confidence_level": "medium",
+      "notes_on_construction_distinction": "Sellier vs retourne: Sellier is stitched with the seam allowance turned OUTWARD before stitching (stitched 'inside-out' relative to retourne), leaving visible topstitching on the exterior and producing a structured, rigid, sharp-cornered shape — this is the harder, more architectural construction historically associated with saddlery technique. Retourne is assembled with edges folded inward, sewn, then turned right-side-out, which hides the stitching and yields a softer, slouchier, more rounded silhouette that drapes and develops patina with wear. Hermès tends to reserve stiffer leathers like Epsom for Sellier and softer leathers (Togo, Clemence) for Retourne, though Togo Sellier bags also exist."
+    }
+  ],
+  "production_records": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "country_of_manufacture": "France",
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": 22,
+      "dimensions_w_cm": 28,
+      "dimensions_d_cm": 10,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Hermès blind stamp system, same letter-in-shape format used across Birkin and Kelly. No shape used 1945–1970 (letter alone). Circle-enclosed letter used 1971–1996. Square-enclosed letter used 1997 through the early-to-mid 2010s. A new blind stamp system began transitioning in late 2014, fully implemented by 2015; PurseBop and similar collector resources track the current letter assignment year by year but the exact post-2015 format (and the current 2025/2026 letter) was not independently re-verified in this pass.",
+      "stamp_placement": "Blind stamp (craftsman ID + date stamp) located inside the bag, typically near the turn-lock hardware mount or on the left interior side close to the back of the flap, depending on era — sources are not fully consistent on the exact placement for every year, so this is treated as approximate.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "Sellier-specific markers beyond the general Hermès blind stamp system: crisp, perfectly even exterior saddle stitching with no skipped or uneven stitches; structured shape that holds itself upright without slumping; sharp, defined corners (vs. the rounded corners of retourne). Blind stamp should be small (a few millimeters), crisply embossed directly into the leather with no ink, and consistent in depth — a poorly stamped, oddly placed, or ink-filled stamp is a red flag for counterfeits.",
+      "sources": "myGemma Hermès Blind Stamps Explained; PurseBop Hermès date stamp guide; Xupes Hermès Date Stamps Guide; The Birkin's and Kelly's House blind stamp guide",
+      "confidence_level": "medium"
+    }
+  ],
+  "known_color_combinations": [],
+  "carry_methods": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "carry_type": "top handle wrist",
+      "possible": "yes",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": null,
+      "notes": "Primary carry method for the Kelly — designed around the single top handle.",
+      "verified": true,
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "carry_type": "top handle crook of arm",
+      "possible": "yes",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": null,
+      "notes": null,
+      "verified": true,
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "carry_type": "shoulder",
+      "possible": "depends",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": null,
+      "notes": "Kelly is not fixed-strap by default; an add-on/optional shoulder strap exists for some configurations and eras (e.g., 'Kelly with strap' / so-called Kelly Bandouliere style and strap accessories sold separately), but it is not standard equipment on every Kelly 28 Sellier. Availability is era- and configuration-dependent and was not fully pinned down in this research pass.",
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "carry_type": "crossbody",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": null,
+      "notes": "Sellier 28 is not designed or strapped for true crossbody wear.",
+      "verified": false,
+      "confidence_level": "medium"
+    }
+  ],
+  "fits": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_name": "iPhone (current generation)",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified in this research pass; commonly reported by collectors as fitting in the Kelly 28 but not confirmed against a primary or corroborated source.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_name": "iPad Mini",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified in this research pass.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_name": "Kindle Paperwhite",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified in this research pass.",
+      "contributor": null,
+      "confidence_level": "low"
+    }
+  ],
+  "interior_storage": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "feature_type": null,
+      "quantity": null,
+      "placement": null,
+      "size_notes": null,
+      "material": null,
+      "color": null,
+      "authentication_notes": "Not independently verified in this research pass — collector sources commonly mention pocket configurations (slip pockets, sometimes a zip pocket on certain eras) but exact quantity/placement per era was not corroborated strongly enough to record without risk of fabrication.",
+      "verified": false,
+      "confidence_level": "low"
+    }
+  ],
+  "serial_tags": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "tag_type": "creed stamp",
+      "format": "Blind stamp combining a craftsman ID (workshop/artisan identifier) and a date stamp encoded as a letter, historically enclosed in a shape that changed by era: no shape 1945–1970, circle 1971–1996, square 1997 to roughly 2014, with a new system transitioning in 2014–2015. The exact current (2025/2026) letter-year mapping was not independently re-verified in this pass.",
+      "placement": "Interior of the bag, near the turn-lock hardware mount or left interior wall near the back of the flap depending on era; exact placement is reported somewhat inconsistently across collector sources.",
+      "material": "embossed directly into the leather, no ink",
+      "year_range": "system in continuous use since 1945 with periodic shape changes; same general format used for Kelly and Birkin",
+      "how_to_read": "The letter indicates production year per Hermès's published (collector-reconstructed) date stamp tables; the surrounding shape (or lack of one) narrows the era. A separate craftsman number/code identifies the individual workshop or artisan.",
+      "authentication_notes": "Stamp should be small (a few millimeters), crisply and evenly embossed with consistent depth and no ink fill. Misplaced, oversized, ink-filled, or inconsistent stamps are a strong counterfeit indicator.",
+      "verified": false,
+      "confidence_level": "medium"
+    }
+  ],
+  "locks_and_keys": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "includes_lock": true,
+      "lock_type": "cadena padlock (separate piece, not fixed to the bag) used to secure the turn-lock/belt-strap closure, paired with a leather clochette and two keys",
+      "key_count": 2,
+      "lock_engraving": "Pre-2000 locks generally bear the Hermès name stamp and a single number on the underside corresponding to the matching key; post-2000 locks bear the word 'Hermès' on the bottom (as do the keys) plus one or two sets of matching engraved numbers shared between lock and keys. Exact engraving format has changed multiple times even in recent years; current-era specifics were not independently verified in this pass.",
+      "clochette_type": "Small leather bell/pouch (matching the bag's leather where possible) that hangs from the top handle via a leather strap loop and holds the two keys.",
+      "authentication_notes": "The Kelly's lock-and-key system (touret turn-lock + separate cadena padlock + clochette + two keys) is one of its most iconic and frequently counterfeited features. On genuine bags, lock and key numbers should match each other; numbering format and presence has changed across eras (see lock_engraving), so a mismatch with the expected era's format is a red flag. Lock weight, engraving depth, and finish quality are commonly cited authentication points by resellers, but precise weight/measurement specs were not independently corroborated in this pass and are left null rather than guessed.",
+      "verified": false,
+      "confidence_level": "medium"
+    }
+  ],
+  "provenance_packaging": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_type": "box",
+      "included_new": true,
+      "description": "Hermès orange box",
+      "material": null,
+      "color": "orange",
+      "branding": null,
+      "format_by_year": null,
+      "authentication_notes": "Box alone never authenticates a bag; should be considered alongside dust bag, receipt, and the bag's own stamps.",
+      "value_impact_if_missing": null,
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_type": "dust bag",
+      "included_new": true,
+      "description": "Felt/flannel dust bag, Hermès branding",
+      "material": null,
+      "color": null,
+      "branding": null,
+      "format_by_year": null,
+      "authentication_notes": null,
+      "value_impact_if_missing": null,
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "item_type": "ribbon",
+      "included_new": true,
+      "description": "Signature Hermès orange ribbon used to tie the box",
+      "material": null,
+      "color": "orange",
+      "branding": null,
+      "format_by_year": null,
+      "authentication_notes": null,
+      "value_impact_if_missing": null,
+      "verified": false,
+      "confidence_level": "low"
+    }
+  ],
+  "sources": [
+    "https://mygemma.com/blogs/news/hermes-blind-stamps-explained",
+    "https://madisonavenuecouture.com/blogs/news/everything-you-wanted-to-know-about-hermes-date-stamps-but-were-too-afraid-to-ask",
+    "https://www.pursebop.com/dearpursebop/question/what-is-the-new-hermes-blind-date-stamp-letter-for-2025",
+    "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
+    "https://www.retyche.com/blogs/news/hermes-authentication-guide",
+    "https://www.rebag.com/thevault/hermes-101-stamps/",
+    "https://www.yoogiscloset.com/authenticate/hermes",
+    "https://lovethatbagetc.com/blogs/the-preloved-pages/hermes-date-stamp-guide",
+    "https://thebirkinsandkellyshouse.com/guide-to-hermes-date-stamps/",
+    "https://www.oreateai.com/blog/retourne-vs-sellier-unpacking-the-nuances-of-herm%C3%A8s-kelly-bag-construction/12e2e01d64aabeb68ba2c0f1d80d1584",
+    "https://theglamandglitter.com/2021/06/hermes-kelly-retourne-vs-sellier/",
+    "https://www.pursebop.com/part-2-hermes-travel-kelly-sellier-vs-retourne/",
+    "https://www.apartstyle.com/post/hermes-kelly-retourne-vs-sellier",
+    "https://vivienneparis.com/blogs/maison-vivienne-blog/difference-between-hermes-kelly-sellier-and-retourne",
+    "https://jewelsaficionado.com/blogs/news/the-difference-between-a-kelly-sellier-and-a-kelly-retourne",
+    "https://www.saikacollective.com/blogs/saika-luxury-authentication-journal/hermes-kelly-sellier-vs-retourne-investment-guide-2026",
+    "https://thebirkinsandkellyshouse.com/the-kelly-sellier-vs-retourne-which-one-to-choose/",
+    "https://romestation.ca/blogs/news/the-hermes-kelly-bag-a-timeless-icon-and-its-fascinating-history",
+    "https://www.rebag.com/thevault/hermes-101-the-kelly-breakdown/",
+    "https://baghunter.com/blogs/insights/hermes-handbag-hardware",
+    "https://baguseek.com/complete-guide-to-hermes-kelly",
+    "https://lovethatbagetc.com/blogs/the-preloved-pages/the-anatomy-of-an-hermes-kelly-bag",
+    "https://laforma.club/anatomy-of-the-hermes-kelly-bag/",
+    "https://www.sothebys.com/en/articles/higher-hermes-bag-prices-in-2026-what-you-need-to-know",
+    "https://www.pursebop.com/the-hermes-kelly-price-guide-2026/",
+    "https://madisonavenuecouture.com/collections/kelly-28cm",
+    "https://saclab.com/hermes-sizes/",
+    "https://madisonavenuecouture.com/blogs/news/hermes-hardware-guide-everything-you-need-to-know"
+  ],
+  "research_gaps_flagged": [
+    "Exact current (2025/2026) blind stamp letter and shape — collector tables exist but were not individually re-verified character-by-character in this pass.",
+    "Interior storage configuration (pocket count, placement, material) for Kelly 28 Sellier — not corroborated strongly enough across sources to record specifics.",
+    "Device fit verification (iPhone, iPad Mini, Kindle Paperwhite) for Kelly 28 — commonly assumed by collectors but no verified source found in this pass; needs hands-on or contributor verification per schema's 'verified' field design.",
+    "Exact screw type/engraving, opening dimensions, and precise stamp font/placement details — left null rather than guessed.",
+    "Optional shoulder strap availability/era for Kelly 28 Sellier specifically — conflicting/unclear signal across sources."
+  ]
+}

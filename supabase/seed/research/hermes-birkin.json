@@ -1,0 +1,391 @@
+{
+  "brand": {
+    "name": "Hermès",
+    "country_of_origin": "France",
+    "founded_year": 1837,
+    "tier": "ultra-luxury",
+    "description": "French luxury house founded in 1837 by Thierry Hermès as a harness and saddlery workshop in Paris. Remains majority family-owned and is known for in-house leather goods production, with the Birkin and Kelly bags as its most iconic handbag lines.",
+    "confidence_level": "verified",
+    "sources": ["https://www.hermes.com/us/en/content/91006-birkin/", "https://en.wikipedia.org/wiki/Birkin_bag"]
+  },
+  "style": {
+    "name": "Birkin",
+    "style_family": null,
+    "silhouette": "structured",
+    "closure_type": "turn-lock with strap (top flap closes with two leather straps that loop through a turn-lock clasp, secured by a separate swing lock/padlock)",
+    "year_introduced": 1984,
+    "redesigned": null,
+    "discontinued": false,
+    "year_discontinued": null,
+    "description": "Designed in 1984 after Hermès then-CEO Jean-Louis Dumas sketched a spacious rectangular holdall for actress and singer Jane Birkin during a commercial flight (commonly cited as 1983/1984; exact year has some variance across sources, with Hermès and most retrospectives settling on 1984). Rectangular, structured silhouette with double rolled top handles, a single wide flap, and a signature front swing lock and clochette (key fob). Sourced as one of the most recognized status symbols in luxury fashion, with multi-year waitlists historically required at retail.",
+    "confidence_level": "high",
+    "sources": [
+      "https://www.sothebys.com/en/articles/everything-you-need-to-know-about-the-hermes-birkin",
+      "https://en.wikipedia.org/wiki/Birkin_bag",
+      "https://www.hermes.com/us/en/content/91006-birkin/"
+    ],
+    "notes": "Some sources cite the originating flight/sketch as 1981 or 1983 rather than 1984; the bag's commercial introduction/production start is most consistently cited as 1984."
+  },
+  "variants": [
+    {
+      "size_label": "Birkin 30",
+      "size_category": "medium",
+      "construction_method": "retourne (standard/soft construction; sellier is a separate, structured construction also produced for Birkin 30 but treated as a distinct variant, not assumed default)",
+      "rigidity": "semi-structured",
+      "exterior_material": "Togo leather",
+      "exterior_colorway": null,
+      "hardware_color": "gold",
+      "hardware_type": "swing lock (turn-lock style front closure) with clochette",
+      "strap_type": "leather, fixed top handles only",
+      "strap_attachment_type": "fixed (sewn handles, not a removable/adjustable strap on the standard Birkin)",
+      "interior_material": null,
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global (subject to Hermès boutique allocation/quota practices)",
+      "year_start": 1984,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": 11600,
+      "currency": "USD",
+      "authentication_markers": "Togo leather should show natural, randomly-distributed pebbled grain (not a uniform stamped pattern); saddle stitching should be hand-done, slightly irregular, with stitches angled and evenly tensioned, not perfectly machine-uniform. Hardware should feel substantial, not light or hollow.",
+      "confidence_level": "medium",
+      "notes": "Birkin 30 dimensions approx. 30 x 22 x 16 cm per reseller listings (JANEFINDS, Madison Avenue Couture); not independently confirmed against an Hermès primary source, so dimensions stored at medium confidence. Retail price ($11,600 USD) sourced from PurseBop 2023/2026 price guide commentary -- Hermès does not publish official global price lists, and prices vary by region/year, so this should be treated as an approximate reference point, not an authoritative current price.",
+      "sources": [
+        "https://janefinds.com/collections/hermes-birkin-30",
+        "https://www.pursebop.com/the-hermes-birkin-price-guide-2026/",
+        "https://theluxurycloset.com/blog/2026/01/06/hermes-birkin-size-guide-25-vs-30-vs-35-vs-40/"
+      ]
+    },
+    {
+      "size_label": "Birkin 35",
+      "size_category": "large",
+      "construction_method": "retourne (standard/soft construction; sellier also exists as a separate variant)",
+      "rigidity": "semi-structured",
+      "exterior_material": "Togo leather",
+      "exterior_colorway": null,
+      "hardware_color": "gold",
+      "hardware_type": "swing lock (turn-lock style front closure) with clochette",
+      "strap_type": "leather, fixed top handles only",
+      "strap_attachment_type": "fixed (sewn handles, not a removable/adjustable strap on the standard Birkin)",
+      "interior_material": null,
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global (subject to Hermès boutique allocation/quota practices)",
+      "year_start": 1984,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": 12700,
+      "currency": "USD",
+      "authentication_markers": "Same Togo grain and saddle-stitch checks as Birkin 30; at 35cm the bag should feel noticeably more substantial/heavier in hardware and leather volume than the 30.",
+      "confidence_level": "low",
+      "notes": "Birkin 35 exact cm dimensions were not found corroborated across multiple independent sources in this research pass -- left null pending verification. Retail price figure ($12,700 USD) sourced only from a single secondary aggregator (PurseBop commentary referencing 2023 pricing); not corroborated by a second independent source, so confidence is low.",
+      "sources": [
+        "https://www.pursebop.com/the-hermes-birkin-price-guide-2026/",
+        "https://theluxurycloset.com/blog/2026/01/06/hermes-birkin-size-guide-25-vs-30-vs-35-vs-40/"
+      ]
+    }
+  ],
+  "production_records": [
+    {
+      "variant_size_label": "Birkin 30",
+      "country_of_manufacture": "France",
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": null,
+      "dimensions_w_cm": null,
+      "dimensions_d_cm": null,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Blind stamp letter system. Four eras: (1) 1945-1970, single letter with no surrounding shape; (2) 1971-1996, letter inside a circle; (3) 1997-2014, letter inside a square; (4) 2015-present, letter only (no shape), not in strict alphabetical/chronological order, accompanied by a craftsman ID code in an 'L LL NNN LL'-style format where the first letter is the date stamp and the following alphanumeric string identifies the individual craftsman/workshop.",
+      "stamp_placement": "Pre-2016: typically found on the strap or front of the bag. Post-2016: relocated to the interior, left side panel.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "Letter 'Y' corresponds to production year 2020 under the post-2015 lettering scheme. Full year-to-letter mapping is documented across multiple authentication/reseller guides but was not exhaustively re-derived here -- only the 2020/'Y' data point was independently corroborated in this pass. Stamp should be a crisp, evenly-pressed deboss directly into the leather, not a printed or shallow/uneven impression.",
+      "sources": [
+        "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
+        "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
+        "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity",
+        "https://laforma.club/hermes-date-stamps/"
+      ],
+      "confidence_level": "medium",
+      "notes": "Multiple independent guide sites corroborate the four-era shape system (no-shape / circle / square / no-shape) and the general post-2015 letter+craftsman-code format, and 'Y' = 2020 appears consistent. Full letter-by-year chart, exact stamp placement transition year (cited as 2016 in one source only), and per-production-year dimension/season detail were not independently verified across enough sources to assign higher confidence, and are left null/medium rather than guessed."
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "country_of_manufacture": "France",
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": null,
+      "dimensions_w_cm": null,
+      "dimensions_d_cm": null,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Same blind stamp system as Birkin 30 (shared across all Hermès leather goods, not size-specific): no-shape (1945-1970) / circle (1971-1996) / square (1997-2014) / letter-only post-2015 with craftsman code.",
+      "stamp_placement": "Pre-2016: strap or front of bag. Post-2016: interior, left side panel.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "Same as Birkin 30 record -- the date stamp system is brand/product-line-wide, not specific to a given Birkin size.",
+      "sources": [
+        "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
+        "https://laforma.club/hermes-date-stamps/"
+      ],
+      "confidence_level": "medium",
+      "notes": "All confidence caveats from the Birkin 30 production record apply equally here, since the date-stamp/blind-stamp system is not size-dependent."
+    }
+  ],
+  "known_color_combinations": [
+    {
+      "variant_size_label": "Birkin 30 and 35, Togo, Gold hardware",
+      "exterior_color": null,
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold",
+      "produced": null,
+      "market": null,
+      "year_range": null,
+      "authentication_notes": "No specific exterior/interior color pairing for Togo + Gold hardware Birkins could be corroborated across independent sources in this research pass. Hermès produces Togo leather Birkins across a very wide range of seasonal and permanent colorways, and interior lining color/material for Birkins (unlike Chanel) is not consistently documented in collector sources reviewed -- Birkins are generally lined in the same leather as the exterior with no separate fabric lining, but this was not independently confirmed enough to assert as fact.",
+      "confidence_level": "low"
+    }
+  ],
+  "carry_methods": [
+    {
+      "variant_size_label": "Birkin 30",
+      "carry_type": "top handle crook of arm",
+      "possible": "yes",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "Birkin's signature carry method via its two rolled top handles.",
+      "verified": false,
+      "confidence_level": "high"
+    },
+    {
+      "variant_size_label": "Birkin 30",
+      "carry_type": "shoulder",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "Standard Birkin has no shoulder strap; only fixed top handles. (Hermès does sell separate optional shoulder straps/'Birkin strap' accessories, but these are not part of the base bag and would be a distinct accessory record, not assumed here.)",
+      "verified": false,
+      "confidence_level": "medium"
+    },
+    {
+      "variant_size_label": "Birkin 30",
+      "carry_type": "crossbody",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "No crossbody strap included with the standard Birkin.",
+      "verified": false,
+      "confidence_level": "medium"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "carry_type": "top handle crook of arm",
+      "possible": "yes",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "Same handle-only carry method as Birkin 30, scaled up.",
+      "verified": false,
+      "confidence_level": "high"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "carry_type": "shoulder",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "No shoulder strap on standard Birkin 35.",
+      "verified": false,
+      "confidence_level": "medium"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "carry_type": "crossbody",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "No crossbody strap included.",
+      "verified": false,
+      "confidence_level": "medium"
+    }
+  ],
+  "fits": [
+    {
+      "variant_size_label": "Birkin 30",
+      "item_name": "iPhone",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified in this research pass. Birkin 30's stated ~22cm width strongly suggests an iPhone fits easily, but this is an inference from dimensions, not a verified fact, so left null per the no-guessing rule for authentication-adjacent claims. Flagging for follow-up hands-on verification.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_size_label": "Birkin 30",
+      "item_name": "iPad Mini",
+      "fits": null,
+      "verified": false,
+      "notes": "Not verified. Could not find a corroborated source confirming fit.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_size_label": "Birkin 30",
+      "item_name": "Kindle Paperwhite",
+      "fits": null,
+      "verified": false,
+      "notes": "Not verified.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "item_name": "iPhone",
+      "fits": null,
+      "verified": false,
+      "notes": "Not verified.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "item_name": "iPad Mini",
+      "fits": null,
+      "verified": false,
+      "notes": "Not verified.",
+      "contributor": null,
+      "confidence_level": "low"
+    },
+    {
+      "variant_size_label": "Birkin 35",
+      "item_name": "Kindle Paperwhite",
+      "fits": null,
+      "verified": false,
+      "notes": "Not verified.",
+      "contributor": null,
+      "confidence_level": "low"
+    }
+  ],
+  "interior_storage": [
+    {
+      "variant_size_label": "Birkin 30 and 35",
+      "feature_type": "zip pocket",
+      "quantity": null,
+      "placement": null,
+      "size_notes": null,
+      "material": null,
+      "color": null,
+      "authentication_notes": "Widely described in collector/authentication sources as having minimal interior storage -- commonly cited as a single zip pocket -- but exact quantity, placement, and whether an open pocket also exists could not be corroborated firmly enough across independent sources in this pass to assert with confidence. Left mostly null pending direct verification against an authoritative source or in-hand inspection.",
+      "verified": false,
+      "confidence_level": "low"
+    }
+  ],
+  "serial_tags": [
+    {
+      "variant_size_label": "Birkin 30 and 35",
+      "tag_type": "creed stamp",
+      "format": "Blind-stamped (debossed, not printed) letter code directly into the leather, optionally inside a circle (1971-1996) or square (1997-2014) depending on era; post-2015 a letter with no surrounding shape, paired with a craftsman identification code.",
+      "placement": "Pre-2016: on the strap or front of the bag. Post-2016: interior, left side panel.",
+      "material": "embossed/debossed directly into leather",
+      "year_range": "1945-present (system has evolved through 4 distinct eras)",
+      "how_to_read": "The date stamp letter encodes the production year; letter-to-year mapping is not strictly sequential post-2015. Confirmed data point: 'Y' = 2020. The accompanying alphanumeric code following the date letter identifies the individual craftsman/atelier who made the piece, not the year.",
+      "authentication_notes": "Stamp must be a clean, evenly-pressed deboss into the leather grain -- not a flat ink print, not shallow or smudged. Placement inconsistent with the bag's claimed production era (e.g., strap stamp on a bag claimed to be made after 2016) is a red flag.",
+      "verified": false,
+      "confidence_level": "medium",
+      "sources": [
+        "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
+        "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
+        "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity"
+      ]
+    }
+  ],
+  "locks_and_keys": [
+    {
+      "variant_size_label": "Birkin 30 and 35",
+      "includes_lock": true,
+      "lock_type": "padlock-style swing lock (turn-lock closure mechanism secured by a separate brass/metal padlock)",
+      "key_count": 2,
+      "lock_engraving": "Hardware (including the lock) is engraved 'Hermès-Paris'; the lock body also carries a number that must match the number engraved on its accompanying keys. Exact engraving font/depth varies by production era.",
+      "clochette_type": "Leather clochette (key fob) made from a single piece of leather (not two pieces sewn together), attached to the bag via a leather strap; houses the key fully concealed when not in use, with the key attached directly to a leather band rather than a metal ring.",
+      "authentication_notes": "Lock and keys should have noticeable weight/heft -- a too-light lock or key suggests inferior materials or a counterfeit. The numeric code on the lock must match the code on the keys exactly. Commonly counterfeited lock numbers cited in authentication guides include 121, 212, and 102 -- presence of one of these numbers is not itself proof of fakery but should prompt closer scrutiny of other markers. Clochette stitching/seam construction (one-piece vs. two-piece leather) is a noted fake tell.",
+      "verified": false,
+      "confidence_level": "medium",
+      "sources": [
+        "https://baghunter.com/blogs/insights/hermes-handbag-hardware",
+        "https://baghunter.com/pages/authentication-guide"
+      ]
+    }
+  ],
+  "provenance_packaging": [
+    {
+      "variant_size_label": "Birkin 30 and 35",
+      "item_type": "box",
+      "included_new": true,
+      "description": "Signature orange gift box with a border and central Hermès logo.",
+      "material": null,
+      "color": "orange",
+      "branding": "Hermès logo, bordered lid design",
+      "format_by_year": "In 2021, Hermès reportedly replaced the white interior lining of some orange boxes with satin-finished navy board stamped in gold foil, though this change was described as limited/selective rather than universal across all box sizes and product lines.",
+      "authentication_notes": "Box alone never authenticates a bag.",
+      "value_impact_if_missing": null,
+      "verified": false,
+      "confidence_level": "low",
+      "sources": ["https://laforma.club/hermes-blue-box-all-you-need-to-know-about-this-special-box/"]
+    },
+    {
+      "variant_size_label": "Birkin 30 and 35",
+      "item_type": "dust bag",
+      "included_new": true,
+      "description": "Protective dust bag, material changed over time (see format_by_year).",
+      "material": "Orange cotton flannel through 2007; beige herringbone twill ('Tuille') fabric -- the same material Hermès uses for saddle felt -- from 2007 onward.",
+      "color": "Orange (pre-2007); beige (2007-present)",
+      "branding": null,
+      "format_by_year": "Material/color transition occurred in 2007: orange cotton flannel (pre-2007) to beige herringbone twill (post-2007).",
+      "authentication_notes": "A dust bag material/color inconsistent with the bag's claimed production year (e.g., a beige herringbone dust bag paired with a bag claimed to be made well before 2007) should prompt further scrutiny, though dust bags are also commonly swapped/lost and are not standalone proof of authenticity or inauthenticity.",
+      "value_impact_if_missing": null,
+      "verified": false,
+      "confidence_level": "medium",
+      "sources": ["https://romestation.ca/zh/blogs/news/era-correct-packaging-dust-bags-boxes-and-tissue-through-the-years"]
+    }
+  ],
+  "sources": [
+    "https://www.hermes.com/us/en/content/91006-birkin/",
+    "https://www.hermes.com/us/en/content/106191-birkin/",
+    "https://en.wikipedia.org/wiki/Birkin_bag",
+    "https://www.sothebys.com/en/articles/everything-you-need-to-know-about-the-hermes-birkin",
+    "https://www.sothebys.com/en/articles/7-secret-details-about-jane-birkins-original-birkin-revealed",
+    "https://janefinds.com/collections/hermes-birkin-30",
+    "https://janefinds.com/products/hermes-birkin-30-gold-togo-gold-hardware-3",
+    "https://madisonavenuecouture.com/collections/birkin-30cm",
+    "https://madisonavenuecouture.com/collections/birkin-35cm",
+    "https://theluxurycloset.com/blog/2026/01/06/hermes-birkin-size-guide-25-vs-30-vs-35-vs-40/",
+    "https://www.pursebop.com/the-hermes-birkin-price-guide-2026/",
+    "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
+    "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
+    "https://legitapp.com/blog/a-comprehensive-guide-to-hermes-date-code",
+    "https://thebirkinsandkellyshouse.com/guide-to-hermes-date-stamps/",
+    "https://www.eleganceduluxe.com/blogs/read-1/hermes-date-stamp-guide",
+    "https://laforma.club/hermes-date-stamps/",
+    "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity",
+    "https://www.rebag.com/thevault/hermes-101-stamps/",
+    "https://baghunter.com/pages/authentication-guide",
+    "https://baghunter.com/blogs/insights/hermes-handbag-hardware",
+    "https://romestation.ca/zh/blogs/news/era-correct-packaging-dust-bags-boxes-and-tissue-through-the-years",
+    "https://laforma.club/hermes-blue-box-all-you-need-to-know-about-this-special-box/"
+  ],
+  "research_gaps_flagged": [
+    "Exact Birkin 35 dimensions (h/w/d cm) not corroborated.",
+    "Full blind-stamp letter-to-year chart not exhaustively re-verified; only 'Y'=2020 confirmed in this pass.",
+    "Interior lining material/color for Birkin not confirmed (unclear if leather-lined throughout or fabric-lined like Chanel).",
+    "Device fit tests (iPhone, iPad Mini, Kindle Paperwhite) not verified against any source -- require hands-on or forum verification, not inferred from exterior dimensions.",
+    "Exact construction_method default (sellier vs. retourne) for a 'standard' Birkin 30/35 -- both exist as separate market variants; this file treats retourne as the more common/default but does not assert one is the sole construction for these size/leather/hardware combos.",
+    "Stitching color, interior color, and specific produced/not-produced color combinations for Togo + Gold hardware not found."
+  ]
+}

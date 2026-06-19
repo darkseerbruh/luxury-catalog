@@ -1,0 +1,308 @@
+{
+  "brand": {
+    "name": "Chanel",
+    "country_of_origin": "France",
+    "founded_year": 1910,
+    "tier": "ultra-luxury",
+    "description": "French luxury house founded by Gabrielle 'Coco' Chanel. Handbags manufactured primarily in France, with some production in Italy and Spain depending on era and category.",
+    "confidence_level": "high"
+  },
+  "style": {
+    "name": "Classic Flap",
+    "style_family": "Classic",
+    "silhouette": "semi-structured",
+    "closure_type": "CC turn-lock",
+    "year_introduced": 1955,
+    "redesigned": 1983,
+    "redesign_notes": "1983: Karl Lagerfeld introduced the interlocking CC turn-lock and the iconic quilted-leather-and-chain combination that defines the modern Classic Flap. The 1955 original (now sold as '2.55') used a rectangular clasp, not the CC turn-lock.",
+    "discontinued": false,
+    "year_discontinued": null,
+    "description": "Chanel's signature quilted flap bag, distinguished from the 2.55 reissue by its CC turn-lock closure (vs. the 2.55's mademoiselle rectangular lock).",
+    "confidence_level": "high"
+  },
+  "variants": [
+    {
+      "variant_index": 0,
+      "size_label": "Medium (M/L)",
+      "size_category": "medium",
+      "construction_method": "semi-structured",
+      "rigidity": "semi-structured",
+      "exterior_material": "Caviar Leather",
+      "exterior_colorway": "black",
+      "hardware_color": "gold",
+      "hardware_type": "CC turn-lock, chain",
+      "strap_type": "chain with leather weave",
+      "strap_attachment_type": "fixed chain",
+      "interior_material": "Lambskin",
+      "interior_color": "burgundy",
+      "interior_matches_exterior": false,
+      "stitching_color": "black/gold-tone thread (matches exterior)",
+      "stitching_matches_exterior": true,
+      "market_availability": "global",
+      "year_start": 2019,
+      "year_end": 2019,
+      "still_in_production": false,
+      "retail_price_original": 6500,
+      "currency": "USD",
+      "authentication_markers": "Double flap interior, CC turn-lock engraving crisp and even, chain feels substantial not hollow",
+      "confidence_level": "high",
+      "notes": "Used as the primary worked example (FW 2019). Retail price for medium caviar GHW in this period commonly cited in the $5,000-$6,900 range depending on exact date within the year due to multiple Chanel price increases in 2019; $6,500 figure from schema doc could not be pinned to an exact invoice and should be treated as approximate.",
+      "confidence_level_price": "medium"
+    }
+  ],
+  "production_records": [
+    {
+      "variant_index": 0,
+      "country_of_manufacture": "France",
+      "production_year": 2019,
+      "production_season": "FW",
+      "dimensions_h_cm": 14,
+      "dimensions_w_cm": 25.5,
+      "dimensions_d_cm": 6.5,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "dimension_source_note": "Multiple reseller listings (Madison Avenue Couture, Luxury Evermore, eBay authenticated listings) converge on approximately 25.5cm W x 14-15.5cm H x 6.5-7cm D for medium caviar GHW. The schema doc's example used H=15.5cm; corroborating sources lean closer to 14cm H. Minor variance across sources is normal for this measurement (where exactly the bag is measured at - widest point vs. base - is not always specified), so both should be treated as approximate, not exact-to-the-millimeter.",
+      "hardware_vendor_notes": null,
+      "screw_type": "flathead, gold-tone",
+      "screw_engraving": null,
+      "date_code_format": "8-digit hologram sticker code, first two digits = series/year code. Series 25 corresponds to 2018 per cross-referenced sources.",
+      "stamp_placement": "Interior leather patch sewn into the bag, typically on the inner wall near the zip pocket",
+      "stamp_font_notes": "CHANEL in serif capitals with PARIS and Made in [Country] beneath; even letter spacing on authentic pieces. Could not independently verify font-level micro-details (kerning measurements, exact typeface name) from primary sources - treat stamp_font_notes as a general pattern, not a forensic-grade spec.",
+      "known_authentication_markers": "Hologram sticker has an X-shaped cut to prevent removal/reapplication without visible damage; covered by clear tape printed vertically with 'CHANEL' and a dark line down one side, with iridescent flecks. Numeral '0' in the serial has a strikethrough; numeral '1' has small serifs/feet. Rainbow shimmer visible when tilted under light.",
+      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; Madison Avenue Couture, Luxury Evermore listings",
+      "confidence_level": "medium",
+      "correction_note": "The database-schema.md example doc states 'Series 25 hologram introduced 2018' and attributes year_range 2018-2021 to it. Independent sources (Xupes) corroborate Series 25 = 2018 specifically, but indicate the 8-digit-code system as a whole (not just Series 25) ran through 2021/2022, with Series 26-31 covering 2019-2021. The original schema doc's year_range for the SPECIFIC Series-25 code should be narrowed to approximately 2018 only, not stretched to 2018-2021 - that broader range describes the sticker-system era, not the Series 25 code itself. Flagging this as a correction to the existing schema doc's worked example."
+    }
+  ],
+  "known_color_combinations": [
+    {
+      "variant_index": 0,
+      "exterior_color": "black",
+      "interior_color": "burgundy",
+      "stitching_color": "black",
+      "hardware_color": "gold",
+      "produced": true,
+      "market": "global",
+      "year_range": "long-running, seen across multiple years including 2019",
+      "authentication_notes": "Burgundy interior with black caviar exterior is one of the most common, well-documented combinations. Burgundy should read as deep wine/oxblood, not bright red or purple-toned. This combination appears repeatedly across reseller listings and collector forum threads, giving it higher confidence than most combination claims.",
+      "confidence_level": "high"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "black",
+      "interior_color": "bright red",
+      "stitching_color": null,
+      "hardware_color": "gold",
+      "produced": false,
+      "market": null,
+      "year_range": null,
+      "authentication_notes": "Could not find a single verified authentic example of black caviar exterior paired with a bright/fire-engine red interior lining in any reseller catalog, collector forum, or authentication guide reviewed. This is consistent with the original schema doc's claim, but I was not able to find a source that explicitly states 'this combination was never produced' as a documented fact (as opposed to absence of evidence). Downgrading confidence from the schema doc's implicit 'high' to medium - absence of a sighting is suggestive but not the same as a brand-confirmed negative.",
+      "confidence_level": "medium"
+    }
+  ],
+  "carry_methods": [
+    {
+      "variant_index": 0,
+      "carry_type": "shoulder",
+      "possible": "yes",
+      "strap_drop_length_cm": 39,
+      "strap_adjustable": false,
+      "notes": "Chain strap can be doubled for a shorter handheld/shoulder carry or worn long; medium flap chain strap drop commonly cited in the 23-43cm adjustable-by-doubling range depending on listing source.",
+      "verified": false,
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "carry_type": "crossbody",
+      "possible": "depends",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "Chain is not length-adjustable via buckle; true crossbody fit depends heavily on wearer torso height. Commonly reported as difficult for wearers above approx. 5'6\".",
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 0,
+      "carry_type": "top handle wrist",
+      "possible": "no",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": false,
+      "notes": "Medium Classic Flap has no top handle; only the chain strap is provided.",
+      "verified": true,
+      "confidence_level": "high"
+    }
+  ],
+  "fits": [
+    {
+      "variant_index": 0,
+      "item_name": "iPhone 15 Pro Max",
+      "fits": "tight",
+      "verified": false,
+      "notes": "Reported by multiple owner/collector sources as fitting in the open slip pockets more easily than the zip pocket. Not independently lab-verified by this research, based on aggregated anecdotal owner reports rather than a single authoritative source.",
+      "contributor": "aggregated reseller/owner reports",
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 0,
+      "item_name": "iPad Mini",
+      "fits": "no",
+      "verified": false,
+      "notes": "Medium flap's structured, narrow opening and curved silhouette are commonly reported as too small/narrow for an iPad Mini to lie flat. Based on general consensus across handbag-sizing discussions rather than a single verified measurement test.",
+      "contributor": "aggregated reseller/owner reports",
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 0,
+      "item_name": "Kindle Paperwhite",
+      "fits": "tight",
+      "verified": false,
+      "notes": "Smaller than an iPad Mini and more plausible, but not independently verified by direct measurement against this exact variant's opening dimensions.",
+      "contributor": "aggregated reseller/owner reports",
+      "confidence_level": "low"
+    }
+  ],
+  "interior_storage": [
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "feature_type": "zip pocket",
+      "quantity": 1,
+      "placement": "back wall of inner flap",
+      "size_notes": null,
+      "material": "lambskin",
+      "color": "burgundy",
+      "authentication_notes": "Commonly repeated claim across authentication guides is that modern (post-2008-ish) medium Classic Flaps have a single zip pocket on the back wall, with two zip pockets associated with vintage/pre-2008 configurations or signaling a fake on a modern bag. I could not find a single primary source that pins this transition to an exact year with full confidence - multiple guides reference hardware/hallmark changes around Cruise 2008 but pocket-count specifics were not consistently corroborated across sources in this research pass. Treat the 'pre/post-2008' framing as a widely-repeated claim, not independently verified to my satisfaction. Confidence downgraded from the schema doc's implicit certainty.",
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "feature_type": "open pocket",
+      "quantity": 2,
+      "placement": "flanking the central zip pocket",
+      "size_notes": null,
+      "material": "lambskin",
+      "color": "burgundy",
+      "authentication_notes": "Standard configuration reported across multiple reseller listings for medium caviar flaps of this era.",
+      "verified": false,
+      "confidence_level": "medium"
+    }
+  ],
+  "serial_tags": [
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "tag_type": "hologram sticker",
+      "format": "8-digit number; first two digits = series code",
+      "placement": "Interior leather patch sewn into the bag, near the zip pocket",
+      "material": "sticker, covered with clear security tape",
+      "year_range": "Series 25 = 2018 (sticker system in general use 2005-2021/2022)",
+      "how_to_read": "First two digits indicate series/year code. Cross-referenced mapping: 24=2017, 25=2018, 26-27=2019, 28=2019-2020, 29=2020, 30=2020-2021, 31=2021 (final sticker series before microchip transition).",
+      "authentication_notes": "Sticker has an X-shaped cut into it so it tears if peeled. Clear tape over the sticker is printed vertically with 'CHANEL' and has a dark line down one side plus faint iridescent flecks visible when tilted. Numeral '0' has a strikethrough; numeral '1' has small serifs/feet on authentic stickers. A flat, non-iridescent sticker or blurry/smudged printing is a red flag.",
+      "verified": false,
+      "confidence_level": "medium",
+      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; The Handbag Authority"
+    },
+    {
+      "variant_index": null,
+      "production_index": null,
+      "tag_type": "RFID chip",
+      "format": "8-character alphanumeric code on a small metal plate with laser-engraved CC logo, color-matched to hardware; codes are non-sequential and do not encode production year",
+      "placement": "Stitched into lining, flap, or inside a pocket depending on style",
+      "material": "metal plate with embedded NFC microchip",
+      "year_range": "Introduced April 2021 onward, replacing the sticker system",
+      "how_to_read": "Code is not human-decodable for year/factory information; chip is read only via Chanel's proprietary in-store NFC equipment, not by the public or resellers.",
+      "authentication_notes": "Does not apply to the FW2019 worked example, included for completeness since this directly affects post-2021 variants and the 'no physical card' provenance claim.",
+      "verified": false,
+      "confidence_level": "medium",
+      "sources": "Madison Avenue Couture: 'Chanel Bags Switch from Serial Stickers to Microchips in 2021'; Lux Second Chance; Bag Religion microchip guide"
+    }
+  ],
+  "locks_and_keys": [
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "includes_lock": false,
+      "lock_type": null,
+      "key_count": 0,
+      "lock_engraving": null,
+      "clochette_type": null,
+      "authentication_notes": "The Classic Flap closes via the CC turn-lock only; it has no separate padlock, no clochette, and no keys. This is consistent across all sources reviewed and is a well-established, uncontroversial fact in the Chanel collector community.",
+      "verified": true,
+      "confidence_level": "verified"
+    }
+  ],
+  "provenance_packaging": [
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "item_type": "dust bag",
+      "included_new": true,
+      "description": "Black flannel dust bag with white CHANEL serif logo and white drawstring cord",
+      "material": "flannel",
+      "color": "black",
+      "branding": "white CHANEL wordmark",
+      "format_by_year": "Dust bag style/font has changed across eras; specific micro-variations by year not independently verified in this pass.",
+      "authentication_notes": "Dust bag alone is not authentication-grade evidence; fakes commonly include passable dust bags.",
+      "value_impact_if_missing": "Minor resale value impact; full box-and-bag sets typically command modestly higher resale prices but this is not authentication-relevant.",
+      "verified": false,
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "item_type": "authenticity card",
+      "included_new": true,
+      "description": "For bags sold before the 2021 microchip transition: a white card bearing a serial number matching the bag's hologram sticker.",
+      "material": "card stock",
+      "color": "white",
+      "branding": "CHANEL",
+      "format_by_year": "Discontinued April 2021 onward; replaced by embedded NFC microchip plates that cannot be read by the public. Bags sold new from April 2021 forward do not include a physical authenticity card.",
+      "authentication_notes": "Authenticity card serial must match the bag's own hologram exactly for cards from the pre-2021 era; mismatched serials are a clear red flag. Post-2021, absence of a card is normal and expected, not suspicious.",
+      "value_impact_if_missing": "For pre-2021 bags, a missing card has some negative resale impact but the bag can still be authenticated via the hologram/serial alone.",
+      "verified": true,
+      "confidence_level": "high",
+      "sources": "Madison Avenue Couture; Lux Second Chance; Bag Religion"
+    },
+    {
+      "variant_index": 0,
+      "production_index": 0,
+      "item_type": "box",
+      "included_new": true,
+      "description": "Black rigid box with white ribbon and white CHANEL wordmark on the lid",
+      "material": "cardboard/rigid box",
+      "color": "black",
+      "branding": "white CHANEL wordmark",
+      "format_by_year": null,
+      "authentication_notes": "Box presence/condition is not itself authentication-grade evidence.",
+      "value_impact_if_missing": "Minimal impact on authentication; modest resale impact.",
+      "verified": false,
+      "confidence_level": "low"
+    }
+  ],
+  "sources": [
+    "https://www.xupes.com/blog/post/the-ultimate-guide-to-chanel-date-codes-history-types-and-authentication",
+    "https://www.fashionphile.com/blogs/academy/chanel-serial-codes-decoded",
+    "https://www.mydiscounthandbag.com/blog-authenticate-chanel.html",
+    "https://madisonavenuecouture.com/blogs/news/chanel-bags-switch-from-serial-stickers-to-microchips-in-2021",
+    "https://luxsecondchance.com/blogs/fashion-news/chanel-ditches-their-authenticity-cards-for-custom-nfc-microchips",
+    "https://www.bagreligion.com/en-us/blogs/expert-opinions/guide-chanel-microchip-nft-blockchain-authentication-2021",
+    "https://www.sothebys.com/en/buy/_Chanel-Black-Quilted-Caviar-Medium-Classic-Double-Flap-Gold-Hardware-2022",
+    "https://madisonavenuecouture.com/products/chanel-medium-double-flapbag-black-caviar-gold-hardware",
+    "https://luxuryevermore.com/products/chanel-classic-flap-medium-caviar-25cm-quilted-beige-gold-hardware",
+    "https://www.sellierknightsbridge.com/blogs/news/the-sellier-bible-to-authenticating-a-chanel-classic-flap-don-t-be-fooled-by-the-fakes",
+    "https://legitcheck.app/guides/chanel/real-vs-fake-chanel-classic-flap/",
+    "/Users/ariellecoambes/Documents/luxury-catalog/docs/database-schema.md (existing vetted schema example, used as starting template, corrections noted inline)"
+  ],
+  "research_notes": {
+    "key_correction_to_existing_schema_doc": "The schema doc's worked example states Series 25 hologram covers 2018-2021. Cross-referencing Xupes and FASHIONPHILE: Series 25 = 2018 specifically; series 26-31 cover 2019-2021. The 2018-2021 range in the original doc appears to conflate 'the sticker era broadly' with 'Series 25 specifically' - these should be treated as two different claims and the production_records entry above narrows this.",
+    "low_confidence_areas_flagged": [
+      "Exact retail price for FW2019 medium caviar GHW ($6,500 figure not pinned to a verifiable invoice; multiple Chanel price increases occurred in 2019)",
+      "Pre/post-2008 one-zip-pocket vs two-zip-pocket claim - widely repeated in secondary sources but I could not independently verify with a primary/authoritative source in this research pass",
+      "Fits data (iPhone/iPad Mini/Kindle) - based on aggregated anecdotal owner reports, not direct measurement verification",
+      "Exact dimensions vary slightly by source (14-15.5cm height) - likely due to inconsistent measurement methodology across resellers, not a true production variance",
+      "'Never produced' color combination claims rely on absence of evidence rather than a brand-confirmed negative statement"
+    ]
+  }
+}

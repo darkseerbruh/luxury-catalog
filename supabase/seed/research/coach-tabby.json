@@ -1,0 +1,204 @@
+{
+  "brand": {
+    "name": "Coach",
+    "country_of_origin": "USA",
+    "founded_year": 1941,
+    "tier": "thrift",
+    "description": "American leather goods house founded in New York City in 1941. Mass-accessible 'premium' tier (not luxury) under Tapestry, Inc. Most commonly found designer handbag brand at US thrift stores and Goodwill, making it a high-volume authentication and discovery target.",
+    "confidence_level": "high"
+  },
+  "style": {
+    "name": "Tabby",
+    "style_family": "Tabby",
+    "silhouette": "structured",
+    "closure_type": "turn-lock",
+    "year_introduced": 1976,
+    "redesigned": 2019,
+    "discontinued": false,
+    "year_discontinued": null,
+    "description": "The Tabby traces to a 1970s-era design lineage associated with legendary Coach designer Bonnie Cashin, though the specific silhouette sold today is not a direct 1:1 reissue of a single original model -- sourcing on the exact original product is thin. Creative director Stuart Vevers relaunched the Tabby as a modern style in Fall 2019, and it became one of Coach's signature turn-lock bags, sold in multiple sizes (commonly 26 and Shoulder Bag configurations) and many limited-edition material/print collaborations.",
+    "confidence_level": "medium",
+    "notes": "year_introduced=1976 reflects the design lineage cited by fashion press (Bonnie Cashin era); this is less firmly verified than the 2019 relaunch date, which is corroborated by multiple sources. Treat 1976 as approximate/contextual, not a confirmed first-production year for an item called 'Tabby'."
+  },
+  "variants": [
+    {
+      "size_label": "Tabby Shoulder Bag 26",
+      "size_category": "small",
+      "construction_method": "structured",
+      "rigidity": "rigid",
+      "exterior_material": "leather (polished pebble leather)",
+      "exterior_colorway": "varies by colorway/season",
+      "hardware_color": "varies (gold-tone or silver-tone by colorway)",
+      "hardware_type": "turn-lock",
+      "strap_type": "both (detachable short strap and detachable long strap)",
+      "strap_attachment_type": "removable",
+      "interior_material": "fabric lining (varies by version; some leather versions use suede lining)",
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global",
+      "year_start": 2019,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": 475,
+      "currency": "USD",
+      "authentication_markers": "Turn-lock should feel solid/heavy, not hollow or light; engraving on hardware should be clean, centered, and deep, not shallow or blurry. Dimensions approx 10.25\" (L) x 5.5\"-6.75\" (H) x 2.75\"-4.25\" (D) depending on material/version. Detachable long strap drop commonly cited around 21\"-21.5\", short strap drop around 7\".",
+      "confidence_level": "medium",
+      "notes": "Price ($475) and dimensions pulled from current coach.com / retailer listings as of research date; Coach frequently runs limited print/material collabs under the same 'Tabby Shoulder Bag 26' name with different SKUs (e.g. CH857, CI032, CP150, CW620), so exact dimensions/price vary slightly by specific drop. This record represents the standard leather version."
+    },
+    {
+      "size_label": "Tabby Shoulder Bag 26 in Signature Canvas",
+      "size_category": "small",
+      "construction_method": "structured",
+      "rigidity": "rigid",
+      "exterior_material": "coated canvas (signature canvas) with calf leather trim",
+      "exterior_colorway": "Signature jacquard print, varies by season",
+      "hardware_color": null,
+      "hardware_type": "turn-lock, snap closure",
+      "strap_type": "both (detachable short strap and detachable long strap)",
+      "strap_attachment_type": "removable",
+      "interior_material": "fabric lining",
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global",
+      "year_start": 2019,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": null,
+      "currency": "USD",
+      "authentication_markers": "Combines signature coated canvas with refined calf leather trim; features inside zip and multifunction pockets, snap closure, outside slip pocket. Detachable short strap 7\" drop, detachable long strap 21\" drop. Dimensions approx 10.25\" (L) x 5.5\" (H) x 2.75\" (W).",
+      "confidence_level": "medium",
+      "notes": "Retail price for this specific canvas SKU (CI032) not confirmed in research; left null rather than guessed."
+    }
+  ],
+  "production_records": null,
+  "known_color_combinations": null,
+  "carry_methods": [
+    {
+      "carry_type": "crossbody",
+      "possible": "yes",
+      "strap_drop_length_cm": 54.6,
+      "strap_adjustable": true,
+      "notes": "Via detachable long strap, commonly cited drop of approximately 21\"-21.5\" (53-55cm), suitable for crossbody wear.",
+      "verified": false
+    },
+    {
+      "carry_type": "shoulder",
+      "possible": "yes",
+      "strap_drop_length_cm": 17.8,
+      "strap_adjustable": false,
+      "notes": "Via detachable short strap, approximately 7\" (17.8cm) drop, for shoulder/handheld carry.",
+      "verified": false
+    },
+    {
+      "carry_type": "hand clutch",
+      "possible": "yes",
+      "strap_drop_length_cm": null,
+      "strap_adjustable": null,
+      "notes": "Top handle / hand-carry possible when straps are detached, per product description of the Tabby's multi-carry design.",
+      "verified": false
+    }
+  ],
+  "fits": [
+    {
+      "item_name": "iPhone (modern, e.g. 15/16 Pro)",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified from a review/measurement source; not stated explicitly in research found.",
+      "contributor": null
+    },
+    {
+      "item_name": "iPad Mini",
+      "fits": null,
+      "verified": false,
+      "notes": "Bag width (~2.75\"-4.25\" depth) suggests an iPad Mini would not fit flat through the opening, but this was not explicitly confirmed by a source, so left unverified rather than guessed.",
+      "contributor": null
+    },
+    {
+      "item_name": "Kindle Paperwhite",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified from a source.",
+      "contributor": null
+    }
+  ],
+  "interior_storage": [
+    {
+      "feature_type": "zip pocket",
+      "quantity": 1,
+      "placement": "interior",
+      "size_notes": null,
+      "material": "fabric or suede lining depending on version",
+      "color": null,
+      "authentication_notes": "Described as 'inside zip and multifunction pockets' on canvas version; configuration may vary slightly by material/SKU.",
+      "verified": false
+    },
+    {
+      "feature_type": "open pocket",
+      "quantity": null,
+      "placement": "interior / exterior (turnlock and open pockets noted on some versions)",
+      "size_notes": null,
+      "material": null,
+      "color": null,
+      "authentication_notes": "Leather Tabby Turnlock Medium version described with outside turn-lock and open pockets plus 1 interior snap pocket and 1 interior zip pocket with suede lining.",
+      "verified": false
+    }
+  ],
+  "serial_tags": [
+    {
+      "tag_type": "creed stamp",
+      "format": "Vintage/older format: two-letter factory or inspector code, slash, numeric style number, slash, two-digit year (e.g. LD/123/85). Modern format (circa 2020+): Coach moved to alphanumeric style numbers (letter + four-digit sequence, e.g. CH857), and around 2014 began phasing out stamped date codes on the creed patch entirely -- many current creed patches show only the authenticity paragraph with no numbers underneath, with style/factory info moved to a separate fabric tag sewn into the lining.",
+      "placement": "Interior leather (or fabric, in modern bags) patch/tag sewn or stamped inside the bag, typically near the lining.",
+      "material": "Stamped or blind-embossed leather patch (vintage); printed fabric tag (modern)",
+      "year_range": "Vintage format roughly pre-1994; transitional formats through the 2010s; current alphanumeric style-number format from approximately 2020 onward",
+      "how_to_read": "Vintage: first two letters = factory/inspector code, middle number = style number, final two digits = year of production. Modern (2020+): style numbers follow patterns such as Letter+4 digits (e.g. CH857), or Letter+4digits-Letter+4digits, or with suffixes -- an 'F' after a hyphen indicates a Factory/outlet-exclusive bag; 'M' indicates Macy's exclusive; 'N' indicates Nordstrom exclusive.",
+      "authentication_notes": "Stamping should be clean, even, and crisp -- blurry or inconsistent fonts are a red flag. Placement should be in the standard designated area (commonly bottom center or corner of the patch); placement outside the norm is suspect. The patch itself should be genuine material with proper stitching; irregular leather or sloppy stitching suggests counterfeit. NOTE: exact current-day (2026) format for newly produced Tabby bags specifically was not independently confirmed beyond the general 2020-era pattern described above -- treat as medium confidence, not a Tabby-specific verified format.",
+      "verified": false
+    }
+  ],
+  "locks_and_keys": {
+    "includes_lock": false,
+    "lock_type": null,
+    "key_count": 0,
+    "lock_engraving": null,
+    "clochette_type": null,
+    "authentication_notes": "The Tabby's closure is an integrated turn-lock (or snap closure on canvas versions), not a separate padlock-and-key system. No source found indicating Coach Tabby ships with a lock/key set. A separate padlock accessory on a Tabby would be inconsistent with the style.",
+    "verified": false
+  },
+  "provenance_packaging": [
+    {
+      "item_type": "dust bag",
+      "included_new": true,
+      "description": "Coach dust bag included with new purchase, standard practice across the brand's current product lines.",
+      "material": "Fabric (non-woven or flannel-style, consistent with Coach's general packaging practice)",
+      "color": null,
+      "branding": "Coach logo/wordmark, exact current design not independently confirmed for Tabby specifically",
+      "format_by_year": null,
+      "authentication_notes": "Dust bag presence/absence does not by itself authenticate a bag; specific design/branding details not verified in this research pass.",
+      "value_impact_if_missing": null,
+      "verified": false
+    }
+  ],
+  "sources": [
+    "https://www.whowhatwear.com/fashion/luxury/history-of-coach-tabby-bag",
+    "https://www.marieclaire.co.uk/fashion/shopping/coach-tabby-bag",
+    "https://www.fzine.com/fashion/coach-tabby-bag-history-of-an-iconic-bag-2023-stuart-vevers",
+    "https://www.alibaba.com/product-insights/how-to-tell-if-a-vintage-coach-bag-is-authentic-using-the-creed-serial-number.html",
+    "https://bonjourbag.com/coach-bag-serial-lookup",
+    "https://www.lovetoknow.com/life/style/coach-purse-serial-numbers",
+    "https://forum.purseblog.com/threads/the-o-and-x-stamps-on-coach-creeds.1020224/",
+    "https://essexfashionhouse.com/blogs/news/the-ultimate-guide-to-coach-serial-numbers",
+    "http://coachbagrehab.blogspot.com/2012/04/guide-to-dates-of-vintage-coach-bags.html",
+    "https://curatedfindsco.com/blogs/news/coach-date-codes-explained-how-to-tell-when-your-bag-was-made",
+    "https://www.coach.com/products/tabby-shoulder-bag-26/CH857.html",
+    "https://www.coach.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html",
+    "https://www.macys.com/shop/product/coach-tabby-turnlock-medium-soft-leather-shoulder-bag?ID=18074559",
+    "https://www.amazon.com/Coach-Tabby-Shoulder-Signature-Canvas/dp/B0DS6NDSPS",
+    "https://www.hoodmwr.com/how-to-tell-if-coach-bags-are-fake-or-real/",
+    "https://inspiretips.blog/spot-fake-coach-bag-checklist-39223",
+    "https://www.yournextshoes.com/fake-coach-bags/"
+  ]
+}

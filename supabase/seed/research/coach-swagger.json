@@ -1,0 +1,235 @@
+{
+  "brand": {
+    "name": "Coach",
+    "country_of_origin": "USA",
+    "founded_year": 1941,
+    "tier": "thrift",
+    "note": "Brand-level facts assumed consistent with parallel Tabby research per task instructions; not re-verified here."
+  },
+  "style": {
+    "name": "Swagger",
+    "style_family": "Swagger",
+    "silhouette": "structured",
+    "closure_type": "turn-lock",
+    "year_introduced": 2015,
+    "redesigned": null,
+    "discontinued": null,
+    "year_discontinued": null,
+    "description": "The Swagger was introduced for Spring 2015 under creative director Stuart Vevers as part of Coach's broader 'Coach 1941' design-led relaunch, which leaned into the brand's heritage pebbled leather and statement turn-lock hardware after Vevers joined as creative director in 2013. The Swagger Carryall is a structured satchel built around a prominent double turn-lock closure on a leather 'belt' strip across the front flap, marketed as a flagship Vevers-era design alongside other turn-lock styles. Available in multiple sizes (Swagger 20/21/27/Wristlet) and later in colorblock and exotic-embossed leather variants.",
+    "confidence_level": "medium",
+    "sources_for_year": ["Marie France Asia Spring 2015 Coach handbag collection coverage", "The Sweetest Escape blog, Coach Swagger 20 Mini Review (June 2016) describing Swagger as a recent/newest bag"]
+  },
+  "variants": [
+    {
+      "size_label": "Swagger 27",
+      "size_category": "medium",
+      "construction_method": "structured satchel",
+      "rigidity": "rigid",
+      "exterior_material": "Pebbled Leather (Coach signature pebble-grain calfskin)",
+      "exterior_colorway": "varies — common colorways include Black, Oxblood, Saddle/Tan, Metallic Bronze; multiple colorblock and exotic-embossed versions also produced",
+      "hardware_color": "varies by colorway — light gold and dark gunmetal/nickel most common",
+      "hardware_type": "double turn-lock (statement belting strap with double turn-lock across front flap)",
+      "strap_type": "structured top handle (fixed, ~4 inch drop) plus detachable/adjustable crossbody strap (~19 inch drop)",
+      "strap_attachment_type": "fixed top handle; D-ring/clip attachment for removable crossbody strap",
+      "interior_material": "fabric lining",
+      "interior_color": "varies by colorway",
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "market_availability": "US, global retail (Coach boutiques, department stores, Coach Outlet)",
+      "year_start": 2015,
+      "year_end": null,
+      "still_in_production": false,
+      "retail_price_original": null,
+      "retail_price_original_note": "Sources disagree: Swagger 21 Carryall MSRP commonly cited at $350; some Swagger 27 resale/retail listings cite $450 original MSRP. Could not verify a single authoritative original Swagger 27 price, so left null. Treat $350-$450 as a plausible range pending better sourcing.",
+      "currency": "USD",
+      "authentication_markers": "Pebbled leather should show natural, slightly irregular grain (not a uniform embossed/plastic-like pattern); leather should compress and rebound when pinched near a seam rather than crease sharply. Turn-lock should be substantial, not hollow-feeling, with crisp, evenly engraved 'COACH' lettering — smudged or shallow engraving is a fake indicator. Could not verify Swagger-specific turn-lock weight figures from any source.",
+      "confidence_level": "medium"
+    }
+  ],
+  "production_records": [
+    {
+      "variant_size_label": "Swagger 27",
+      "country_of_manufacture": null,
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": 19.7,
+      "dimensions_w_cm": 27.3,
+      "dimensions_d_cm": 14.6,
+      "dimensions_note": "Converted from official Coach listing: 10 3/4\" (L) x 7 3/4\" (H) x 5 3/4\" (W). L mapped to width, H to height, W to depth.",
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Coach moved away from interior creed stamps with printed serial numbers in late 2014. For bags produced from roughly 2015 onward (which includes the entire Swagger production run), the serial/date code typically appears on a small white fabric tag sewn into an interior seam or pocket corner rather than stamped on a leather creed patch. Format generally follows: style number (5-6 digits) + color code (3 digits) + date code (letter-number combination for factory/month/year), e.g. format pattern like 'DS1503' decoding to March 2015, USA factory. This is the general post-2014 Coach convention; not verified specifically against a physical Swagger 27 tag.",
+      "stamp_placement": "No leather creed stamp expected for this era; look for small white fabric tag sewn into a bottom interior seam or inside a pocket.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "If a Swagger 27 has a leather creed patch with a stamped serial number in the older LL/DDD/YY format, that would be inconsistent with the bag's 2015+ production era and should raise suspicion. Absence of a leather creed stamp and presence of a small white sewn-in fabric tag is normal and expected for this bag, not a red flag.",
+      "sources": ["bonjourbag.com Coach serial lookup guide", "shopgoodwill.com Coach serial number guide", "lovetoknow.com Coach purse serial numbers"],
+      "confidence_level": "medium"
+    }
+  ],
+  "known_color_combinations": [
+    {
+      "exterior_color": "Black",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "light gold or gunmetal",
+      "produced": true,
+      "market": "US/global",
+      "year_range": "2015-2017 (approx)",
+      "authentication_notes": "Black pebbled leather Swagger with light gold turn-lock is one of the most commonly seen colorways at thrift stores; could not verify an authoritative interior-color pairing.",
+      "confidence_level": "low"
+    },
+    {
+      "exterior_color": "Oxblood",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Oxblood (deep burgundy) pebble leather is a documented retail colorway (e.g. Amazon listing 'Li/Oxblood'). Interior/stitching pairing not verified.",
+      "confidence_level": "low"
+    }
+  ],
+  "carry_methods": [
+    {
+      "carry_type": "top handle wrist",
+      "possible": "yes",
+      "strap_drop_length_cm": 10.2,
+      "strap_adjustable": false,
+      "notes": "Fixed top handle, approximately 4 inch (10.2cm) drop per official Coach spec, suitable for hand or wrist carry, not crook of arm given short drop.",
+      "verified": true
+    },
+    {
+      "carry_type": "top handle crook of arm",
+      "possible": "depends",
+      "strap_drop_length_cm": 10.2,
+      "strap_adjustable": false,
+      "notes": "4 inch handle drop is short for crook-of-arm carry; depends on wearer's arm/hand size. Not independently verified by a fit tester.",
+      "verified": false
+    },
+    {
+      "carry_type": "crossbody",
+      "possible": "yes",
+      "strap_drop_length_cm": 48.3,
+      "strap_adjustable": true,
+      "notes": "Detachable, adjustable crossbody strap with approximately 19 inch (48.3cm) drop per official Coach spec, designed for shoulder/crossbody wear.",
+      "verified": true
+    },
+    {
+      "carry_type": "shoulder",
+      "possible": "yes",
+      "strap_drop_length_cm": 48.3,
+      "strap_adjustable": true,
+      "notes": "Same detachable strap used for shoulder or crossbody carry depending on length adjustment.",
+      "verified": true
+    }
+  ],
+  "fits": [
+    {
+      "item_name": "iPhone (modern, e.g. 14/15 standard)",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified by a fit tester; plausible given bag size but no source confirms explicitly.",
+      "contributor": null
+    },
+    {
+      "item_name": "iPad Mini",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified; could not find a source confirming fit.",
+      "contributor": null
+    },
+    {
+      "item_name": "Kindle Paperwhite",
+      "fits": null,
+      "verified": false,
+      "notes": "Not independently verified; could not find a source confirming fit.",
+      "contributor": null
+    }
+  ],
+  "interior_storage": [
+    {
+      "feature_type": "zip pocket",
+      "quantity": 1,
+      "placement": "interior",
+      "size_notes": null,
+      "material": "fabric",
+      "color": null,
+      "authentication_notes": "Official Coach listing confirms 'inside zip and multifunction pockets' but exact count/placement of each pocket type not itemized in source.",
+      "verified": false
+    },
+    {
+      "feature_type": "open pocket",
+      "quantity": null,
+      "placement": "interior, multifunction pockets per official description",
+      "size_notes": null,
+      "material": "fabric",
+      "color": null,
+      "authentication_notes": "Described only as 'multifunction pockets' in official source; exact quantity not specified.",
+      "verified": false
+    }
+  ],
+  "serial_tags": [
+    {
+      "tag_type": "creed stamp",
+      "format": null,
+      "placement": "Interior leather patch (pre-2014 convention)",
+      "material": "embossed/stamped leather",
+      "year_range": "pre-2014",
+      "how_to_read": "Older format: LL/DDD/YY (two-letter factory/inspector code, style number, year) — this format predates the Swagger's 2015 introduction and would NOT be expected on a genuine Swagger.",
+      "authentication_notes": "A Swagger 27 with this older creed format and serial style would be inconsistent with its known production era — worth flagging as suspicious, though not independently confirmed against an actual Swagger unit.",
+      "verified": false
+    },
+    {
+      "tag_type": "date code",
+      "format": "Style number (5-6 digits) + color code (3 digits) + date code (letter+digits, e.g. 'DS1503' = March 2015, USA factory)",
+      "placement": "Small white fabric tag sewn into an interior seam or pocket corner",
+      "material": "sewn fabric label",
+      "year_range": "approx. 2014/2015 onward, which covers the entire known Swagger production run",
+      "how_to_read": "General post-2014 Coach convention per multiple reseller/authentication guides; not verified against an actual photographed Swagger 27 tag.",
+      "authentication_notes": "A blank leather creed patch combined with a small white sewn fabric tag is normal and expected for this era — not a fake indicator by itself.",
+      "verified": false
+    }
+  ],
+  "locks_and_keys": {
+    "includes_lock": false,
+    "lock_type": "turn-lock closure only (not a separate padlock/key mechanism)",
+    "key_count": 0,
+    "lock_engraving": "COACH logo engraved on turn-lock hardware",
+    "clochette_type": null,
+    "authentication_notes": "Swagger's signature hardware is a double turn-lock closure integrated into the front flap design, not a separate detachable padlock with keys. No source found indicating Swagger ever included a lock-and-key set.",
+    "verified": false
+  },
+  "provenance_packaging": [
+    {
+      "item_type": "dust bag",
+      "included_new": null,
+      "description": "Coach dust bags are commonly included with new handbag purchases across the brand's product line",
+      "material": "fabric (typically a light cotton/flannel-type material per general Coach packaging convention)",
+      "color": null,
+      "branding": "COACH logo print, per general brand convention",
+      "format_by_year": null,
+      "authentication_notes": "Could not verify Swagger-specific dust bag color/branding details from a dedicated source; this is inferred from general Coach packaging practice, not confirmed for this style.",
+      "value_impact_if_missing": null,
+      "verified": false
+    }
+  ],
+  "sources": [
+    "https://www.coach.com/products/coach-swagger-27/12118.html",
+    "https://www.coach.com/products/coach-swagger-27/12117.html",
+    "https://www.coach.com/products/coach-swagger-27-in-burnished-leather/38372.html",
+    "https://www.macys.com/shop/product/coach-swagger-27-in-pebble-leather?ID=2460452",
+    "https://us.amazon.com/COACH-Womens-Swagger-Carryall-Leather/dp/B07J3FQX1R",
+    "https://www.mariefranceasia.com/fashion/latest-news/coach-spring-2015-handbag-collection-61687.html",
+    "https://www.escapesweetest.com/2016/06/coach-swagger-20-mini-review.html",
+    "https://bonjourbag.com/coach-bag-serial-lookup",
+    "https://blog.shopgoodwill.com/english/coach-purse-serial-number-guide",
+    "https://www.lovetoknow.com/life/style/coach-purse-serial-numbers",
+    "https://forum.purseblog.com/threads/the-o-and-x-stamps-on-coach-creeds.1020224/",
+    "https://www.poizon.com/article/authentication/coach-pebble-leather-legit-check",
+    "https://forum.purseblog.com/threads/purchased-a-coach-swagger-27-on-ebay-but-looks-like-a-21.977905/"
+  ]
+}
