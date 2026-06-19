@@ -10,8 +10,12 @@
 - Added `SUPABASE_ACCESS_TOKEN` to `.env.local` (gitignored, not committed) for future CLI use
 
 **Open / blocked:**
-- `theluxurycloset_data.csv` (38.7 MB) exceeds the Drive MCP's 10 MB download limit — needs either manual download+push from Arielle, or a direct Drive API pull with OAuth (not yet wired up)
-- Vercel project not yet linked/deployed — waiting on Arielle's screenshot of the Vercel import flow
+- Vercel project not yet linked/deployed — Arielle has the import screen open, walking through env var setup
 - `npm run dev` not yet verified running live in this session (build passes, which exercises the same code path)
+
+**Data finding (important for Phase 2 planning):**
+- `theluxurycloset_data.csv` (38.7 MB) exceeds Drive MCP's 10 MB raw-download limit. Pulled it as a Google Sheet export instead (`read_file_content`), which truncates at ~130k chars — recovered 63 usable rows, saved as `data/raw/theluxurycloset_data_partial.csv`. This is a small sample, not the full sheet.
+- Brand coverage in *both* CSVs (the partial LuxuryCloset sample and the full 1,998-row TheRealReal export) is almost entirely **Louis Vuitton, Chanel, Hermès** — zero rows for Coach, Kate Spade, Burberry, Gucci, Prada, Fendi, Celine, Dior, or Bottega Veneta.
+- **Plan adjustment:** breadth seeding for LV/Chanel/Hermès can draw from the CSVs; breadth for the other 7-9 brands (especially Coach, which the brief marks non-negotiable) will need hand-built sparse stub records from targeted web research instead, since no CSV data exists for them.
 
 **Note on toolchain:** Node/npm were missing from this machine entirely; installed via nvm rather than Homebrew (brew also not present). Future sessions on this machine should `export NVM_DIR="$HOME/.nvm"; \. "$NVM_DIR/nvm.sh"` before running node/npm — it's not on PATH by default in non-interactive shells.
