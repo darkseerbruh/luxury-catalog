@@ -511,6 +511,154 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
   };
 }
 
+export interface BrandDetail {
+  brandId: number;
+  name: string;
+  tier: string;
+  countryOfOrigin: string | null;
+  foundedYear: number | null;
+  description: string | null;
+  styles: {
+    styleId: number;
+    name: string;
+    silhouette: string | null;
+    yearIntroduced: number | null;
+    discontinued: boolean;
+    variants: {
+      variantId: number;
+      sizeLabel: string | null;
+      exteriorColorway: string | null;
+      hardwareColor: string | null;
+    }[];
+  }[];
+}
+
+export async function getBrandDetail(brandId: number): Promise<BrandDetail | null> {
+  const { data, error } = await getSupabase()
+    .from("brand")
+    .select(
+      "brand_id, name, tier, country_of_origin, founded_year, description, style(style_id, name, silhouette, year_introduced, discontinued, variant(variant_id, size_label, exterior_colorway, hardware_color))"
+    )
+    .eq("brand_id", brandId)
+    .single();
+
+  if (error || !data) return null;
+
+  const styles = ((data.style ?? []) as {
+    style_id: number; name: string; silhouette: string | null;
+    year_introduced: number | null; discontinued: boolean;
+    variant: { variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null }[] | null;
+  }[]).map((s) => ({
+    styleId: s.style_id,
+    name: s.name,
+    silhouette: s.silhouette,
+    yearIntroduced: s.year_introduced,
+    discontinued: s.discontinued,
+    variants: (s.variant ?? []).map((v) => ({
+      variantId: v.variant_id,
+      sizeLabel: v.size_label,
+      exteriorColorway: v.exterior_colorway,
+      hardwareColor: v.hardware_color,
+    })),
+  }));
+
+  return {
+    brandId: data.brand_id,
+    name: data.name,
+    tier: data.tier,
+    countryOfOrigin: data.country_of_origin,
+    foundedYear: data.founded_year,
+    description: data.description,
+    styles,
+  };
+}
+
+export interface BrowseVariant {
+  variantId: number;
+  sizeLabel: string | null;
+  exteriorColorway: string | null;
+  hardwareColor: string | null;
+  styleName: string;
+  brandName: string;
+  contextNote: string | null;
+}
+
+export async function getVariantsByCarry(carrySlug: string): Promise<BrowseVariant[]> {
+  const { data, error } = await getSupabase()
+    .from("carry_method")
+    .select(
+      "carry_type, possible, notes, strap_drop_length_cm, variant:variant_id(variant_id, size_label, exterior_colorway, hardware_color, style:style_id(name, brand:brand_id(name)))"
+    )
+    .ilike("carry_type", `%${carrySlug.replace(/-/g, " ")}%`)
+    .neq("possible", "no")
+    .limit(50);
+
+  if (error || !data) return [];
+
+  return data.flatMap((row) => {
+    const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) as {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null;
+      style: { name: string; brand: { name: string } | { name: string }[] | null } | { name: string; brand: { name: string } | { name: string }[] | null }[] | null;
+    } | null;
+    if (!v) return [];
+    const style = (Array.isArray(v.style) ? v.style[0] : v.style) as { name: string; brand: { name: string } | { name: string }[] | null } | null;
+    if (!style) return [];
+    const brandName = embeddedName(style.brand);
+    const note = [
+      row.strap_drop_length_cm ? `${row.strap_drop_length_cm} cm drop` : null,
+      row.possible === "depends" ? "depends on configuration" : null,
+      row.notes,
+    ].filter(Boolean).join(" · ");
+    return [{
+      variantId: v.variant_id,
+      sizeLabel: v.size_label,
+      exteriorColorway: v.exterior_colorway,
+      hardwareColor: v.hardware_color,
+      styleName: style.name,
+      brandName,
+      contextNote: note || null,
+    }];
+  });
+}
+
+export async function getVariantsByFits(itemSlug: string): Promise<BrowseVariant[]> {
+  const searchTerm = itemSlug.replace(/-/g, " ");
+  const { data, error } = await getSupabase()
+    .from("fits")
+    .select(
+      "item_name, fits, notes, variant:variant_id(variant_id, size_label, exterior_colorway, hardware_color, style:style_id(name, brand:brand_id(name)))"
+    )
+    .ilike("item_name", `%${searchTerm}%`)
+    .neq("fits", "no")
+    .limit(50);
+
+  if (error || !data) return [];
+
+  return data.flatMap((row) => {
+    const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) as {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null;
+      style: { name: string; brand: { name: string } | { name: string }[] | null } | { name: string; brand: { name: string } | { name: string }[] | null }[] | null;
+    } | null;
+    if (!v) return [];
+    const style = (Array.isArray(v.style) ? v.style[0] : v.style) as { name: string; brand: { name: string } | { name: string }[] | null } | null;
+    if (!style) return [];
+    const brandName = embeddedName(style.brand);
+    const note = [
+      row.fits === "tight" ? "tight fit" : null,
+      row.notes,
+    ].filter(Boolean).join(" · ");
+    return [{
+      variantId: v.variant_id,
+      sizeLabel: v.size_label,
+      exteriorColorway: v.exterior_colorway,
+      hardwareColor: v.hardware_color,
+      styleName: style.name,
+      brandName,
+      contextNote: note || null,
+    }];
+  });
+}
+
 /** Brand-level and style-level catalog search, matching the two search depths in the design. */
 export async function searchCatalog(query: string): Promise<SearchResults> {
   const q = query.trim();

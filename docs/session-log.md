@@ -43,6 +43,21 @@
 
 **Note on toolchain:** Node/npm were missing from this machine entirely; installed via nvm rather than Homebrew (brew also not present). Future sessions on this machine should `export NVM_DIR="$HOME/.nvm"; \. "$NVM_DIR/nvm.sh"` before running node/npm — it's not on PATH by default in non-interactive shells.
 
+## 2026-06-19 — Phase 5: Browse UI + Polish
+
+**Done:**
+- `getBrandDetail(brandId)` query: brand metadata + all styles (with variants nested). Separates "live" styles (have variants) from stubs.
+- `getVariantsByCarry(carrySlug)` query: traverses carry_method → variant → style → brand, filters by carry_type ilike, excludes `possible: no`, returns BrowseVariant list with context note (strap drop, "depends" flag).
+- `getVariantsByFits(itemSlug)` query: traverses fits → variant → style → brand, filters by item_name ilike, excludes `fits: no`, returns BrowseVariant list.
+- `/brand/[brandId]` — brand detail page: tier/country/founded metadata, live styles section (each style card with variant list linking to `/bag/[variantId]`), stub styles grid with "not fully researched" note.
+- `/browse/carry/[carryType]` — e.g. `/browse/carry/shoulder`: header with variant count, variant list linking to `/bag/[variantId]` with strap drop and context note, empty state with search fallback.
+- `/browse/fits/[item]` — e.g. `/browse/fits/cell-phone`: same pattern.
+- Home page: all tiles are now `<Link>` components. Brand tiles → `/brand/[brandId]`. Fits tiles → `/browse/fits/[slug]`. Carry tiles → `/browse/carry/[slug]`. Coming-soon brands remain non-linked `<div>`s.
+- Root layout: footer added with site name, nav links (Home/Search/Identify), and tagline.
+- Session log updated.
+
+**Route table:** `/`, `/_not-found`, `/api/identify`, `/bag/[variantId]`, `/brand/[brandId]`, `/browse/carry/[carryType]`, `/browse/fits/[item]`, `/identify`, `/search` — all 9 routes build and lint clean.
+
 ## 2026-06-19 — Phase 4: Camera Tool (/identify)
 
 **Done:**

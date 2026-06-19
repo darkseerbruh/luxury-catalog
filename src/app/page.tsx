@@ -3,16 +3,20 @@ import { getBrandsOverview, getHeroCarousel } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
-const FITS = ["Cell phone", "Tablet or book", "Laptop & more"];
+const FITS: { label: string; slug: string }[] = [
+  { label: "Cell phone", slug: "cell-phone" },
+  { label: "Tablet or book", slug: "tablet" },
+  { label: "Laptop & more", slug: "laptop" },
+];
 
-const CARRY_METHODS = [
-  "Shoulder",
-  "Top handle",
-  "Crossbody",
-  "Backpack",
-  "Belt bag",
-  "Wallets, pouches & clutches",
-  "Rolling luggage",
+const CARRY_METHODS: { label: string; slug: string }[] = [
+  { label: "Shoulder", slug: "shoulder" },
+  { label: "Top handle", slug: "top-handle" },
+  { label: "Crossbody", slug: "crossbody" },
+  { label: "Backpack", slug: "backpack" },
+  { label: "Belt bag", slug: "belt-bag" },
+  { label: "Wallets, pouches & clutches", slug: "clutch" },
+  { label: "Rolling luggage", slug: "luggage" },
 ];
 
 function formatPrice(amount: number | null, currency: string | null) {
@@ -103,13 +107,13 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-b border-border px-5 py-12">
+      <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {liveBrands.map((brand) => (
             <Link
               key={brand.brandId}
-              href={`/search?q=${encodeURIComponent(brand.name)}`}
+              href={`/brand/${brand.brandId}`}
               className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
             >
               {brand.name}
@@ -129,34 +133,36 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-b border-border px-5 py-12">
+      <section id="fits" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">
           Bags by what they fit
         </h2>
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {FITS.map((fit) => (
-            <div
-              key={fit}
-              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground"
+            <Link
+              key={fit.slug}
+              href={`/browse/fits/${fit.slug}`}
+              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
             >
-              {fit}
-            </div>
+              {fit.label}
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="px-5 py-12">
+      <section id="carry" className="px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">
           Bags by how they&rsquo;re carried
         </h2>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {CARRY_METHODS.map((method) => (
-            <div
-              key={method}
-              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground"
+            <Link
+              key={method.slug}
+              href={`/browse/carry/${method.slug}`}
+              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
             >
-              {method}
-            </div>
+              {method.label}
+            </Link>
           ))}
         </div>
       </section>

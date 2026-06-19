@@ -54,6 +54,19 @@ export default function RootLayout({
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
+        <footer className="border-t border-border px-5 py-8 text-sm text-muted">
+          <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="font-serif text-foreground">The Luxury Catalog</p>
+            <nav className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link href="/" className="hover:text-foreground">Home</Link>
+              <Link href="/search" className="hover:text-foreground">Search</Link>
+              <Link href="/identify" className="hover:text-foreground">Identify</Link>
+            </nav>
+            <p className="text-muted/60">
+              The definitive reference for designer handbags.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );
