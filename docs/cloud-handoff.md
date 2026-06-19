@@ -4,12 +4,11 @@
 
 If you're a fresh Claude Code session picking this up, also read (in this order):
 1. This file
-2. `docs/product-brief.md` — product vision, personas, constraints (source of truth for product decisions)
-3. `docs/database-schema.md` — the 15-table schema, field-by-field
-4. `docs/session-log.md` — chronological log of what's been done each phase, with caveats
-5. `AGENTS.md` (repo root) — this Next.js version (16.2.9) has breaking changes from training-data assumptions; read `node_modules/next/dist/docs/` before writing Next.js code
-
-The original session brief (phased plan, Arielle's notification protocol, definition of done) was pasted directly into the previous session's chat, not saved as a file. The phases below summarize it; if you need the verbatim original, ask Arielle — she has it.
+2. `docs/original-session-prompt.md` — the verbatim original session brief: phased plan, notification protocol, constraints, definition of done. The phases summarized below are extracted from this; read the original for full detail.
+3. `docs/product-brief.md` — product vision, personas, constraints (source of truth for product decisions)
+4. `docs/database-schema.md` — the 15-table schema, field-by-field
+5. `docs/session-log.md` — chronological log of what's been done each phase, with caveats
+6. `AGENTS.md` (repo root) — this Next.js version (16.2.9) has breaking changes from training-data assumptions; read `node_modules/next/dist/docs/` before writing Next.js code
 
 ---
 
