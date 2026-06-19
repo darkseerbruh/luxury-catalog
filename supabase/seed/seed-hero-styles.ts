@@ -27,6 +27,7 @@ interface ResearchFile {
   serial_tags: Record<string, any>[];
   locks_and_keys: Record<string, any>[];
   provenance_packaging: Record<string, any>[];
+  price_history: Record<string, any>[];
   sources?: string[];
 }
 
@@ -116,6 +117,7 @@ async function loadResearchFile(filename: string) {
     "serial_tags",
     "locks_and_keys",
     "provenance_packaging",
+    "price_history",
   ] as const) {
     json[key] = normalizeIndex(json[key]);
   }
@@ -285,6 +287,22 @@ async function loadResearchFile(filename: string) {
     value_impact_if_missing: r.value_impact_if_missing ?? null,
     verified: r.verified ?? false,
   }));
+
+  await insertChildRows("price_history", json.price_history, (r, variantId) => {
+    // date_recorded is NOT NULL with a default; only set it when provided so the
+    // default applies instead of inserting an explicit null (which would error).
+    const row: Record<string, any> = {
+      variant_id: variantId,
+      platform: r.platform ?? null,
+      condition: r.condition ?? null,
+      provenance_completeness: r.provenance_completeness ?? null,
+      sale_price: r.sale_price ?? null,
+      currency: r.currency ?? null,
+      notes: r.notes ?? null,
+    };
+    if (r.date_recorded) row.date_recorded = r.date_recorded;
+    return row;
+  });
 
   for (const { table, count } of childInserts) {
     console.log(`  ${table}: ${count}`);

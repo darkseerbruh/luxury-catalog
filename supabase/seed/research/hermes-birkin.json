@@ -28,6 +28,7 @@
   },
   "variants": [
     {
+      "variant_index": 0,
       "size_label": "Birkin 30",
       "size_category": "medium",
       "construction_method": "retourne (standard/soft construction; sellier is a separate, structured construction also produced for Birkin 30 but treated as a distinct variant, not assumed default)",
@@ -59,6 +60,7 @@
       ]
     },
     {
+      "variant_index": 1,
       "size_label": "Birkin 35",
       "size_category": "large",
       "construction_method": "retourne (standard/soft construction; sellier also exists as a separate variant)",
@@ -87,10 +89,65 @@
         "https://www.pursebop.com/the-hermes-birkin-price-guide-2026/",
         "https://theluxurycloset.com/blog/2026/01/06/hermes-birkin-size-guide-25-vs-30-vs-35-vs-40/"
       ]
+    },
+    {
+      "variant_index": 2,
+      "size_label": "Birkin 25",
+      "size_category": "small",
+      "construction_method": "retourne (sellier also exists)",
+      "rigidity": "semi-structured",
+      "exterior_material": null,
+      "exterior_colorway": null,
+      "hardware_color": null,
+      "hardware_type": "swing lock (turn-lock style front closure) with clochette",
+      "strap_type": "leather, fixed top handles only",
+      "strap_attachment_type": "fixed",
+      "interior_material": "chèvre (goatskin) leather",
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global (subject to Hermès boutique allocation/quota practices)",
+      "year_start": 2004,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": null,
+      "currency": "USD",
+      "authentication_markers": null,
+      "confidence_level": "medium",
+      "notes": "Size archetype added from research. Dimensions 25 x 20 x 13 cm (W x H x D), high confidence across multiple size guides (Xupes, SACLAB, Rebag, PurseBop). Introduced 2004. Material/colorway/price left null at size-archetype level; documented colorways are in known_color_combinations."
+    },
+    {
+      "variant_index": 3,
+      "size_label": "Birkin 40",
+      "size_category": "large",
+      "construction_method": "retourne (sellier also exists)",
+      "rigidity": "semi-structured",
+      "exterior_material": null,
+      "exterior_colorway": null,
+      "hardware_color": null,
+      "hardware_type": "swing lock (turn-lock style front closure) with clochette",
+      "strap_type": "leather, fixed top handles only",
+      "strap_attachment_type": "fixed",
+      "interior_material": "chèvre (goatskin) leather",
+      "interior_color": null,
+      "interior_matches_exterior": null,
+      "stitching_color": null,
+      "stitching_matches_exterior": null,
+      "market_availability": "global (subject to Hermès boutique allocation/quota practices)",
+      "year_start": 1984,
+      "year_end": null,
+      "still_in_production": true,
+      "retail_price_original": null,
+      "currency": "USD",
+      "authentication_markers": null,
+      "confidence_level": "medium",
+      "notes": "Size archetype added from research. Dimensions 40 x 30 x 21 cm (W x H x D), high confidence across multiple size guides. The original Birkin size; less commonly produced today."
     }
   ],
   "production_records": [
     {
+      "variant_index": 0,
       "variant_size_label": "Birkin 30",
       "country_of_manufacture": "France",
       "production_year": null,
@@ -117,6 +174,7 @@
       "notes": "Multiple independent guide sites corroborate the four-era shape system (no-shape / circle / square / no-shape) and the general post-2015 letter+craftsman-code format, and 'Y' = 2020 appears consistent. Full letter-by-year chart, exact stamp placement transition year (cited as 2016 in one source only), and per-production-year dimension/season detail were not independently verified across enough sources to assign higher confidence, and are left null/medium rather than guessed."
     },
     {
+      "variant_index": 1,
       "variant_size_label": "Birkin 35",
       "country_of_manufacture": "France",
       "production_year": null,
@@ -139,6 +197,48 @@
       ],
       "confidence_level": "medium",
       "notes": "All confidence caveats from the Birkin 30 production record apply equally here, since the date-stamp/blind-stamp system is not size-dependent."
+    },
+    {
+      "variant_index": 2,
+      "variant_size_label": "Birkin 25",
+      "country_of_manufacture": "France",
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": 20,
+      "dimensions_w_cm": 25,
+      "dimensions_d_cm": 13,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Shared Hermès blind-stamp system (see Birkin 30 record); not size-specific.",
+      "stamp_placement": "Pre-2016: strap or front. Post-2016: interior left side panel.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "Dimensions 25 x 20 x 13 cm (W x H x D).",
+      "sources": ["https://www.xupes.com/blog/post/the-popular-hermes-birkin-size-guide-discover-the-perfect-fit-|-xupes", "https://saclab.com/hermes-sizes/", "https://www.rebag.com/thevault/size-guide-the-hermes-birkin/"],
+      "confidence_level": "high"
+    },
+    {
+      "variant_index": 3,
+      "variant_size_label": "Birkin 40",
+      "country_of_manufacture": "France",
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": 30,
+      "dimensions_w_cm": 40,
+      "dimensions_d_cm": 21,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Shared Hermès blind-stamp system (see Birkin 30 record); not size-specific.",
+      "stamp_placement": "Pre-2016: strap or front. Post-2016: interior left side panel.",
+      "stamp_font_notes": null,
+      "known_authentication_markers": "Dimensions 40 x 30 x 21 cm (W x H x D).",
+      "sources": ["https://www.xupes.com/blog/post/the-popular-hermes-birkin-size-guide-discover-the-perfect-fit-|-xupes", "https://saclab.com/hermes-sizes/", "https://www.rebag.com/thevault/size-guide-the-hermes-birkin/"],
+      "confidence_level": "high"
     }
   ],
   "known_color_combinations": [
