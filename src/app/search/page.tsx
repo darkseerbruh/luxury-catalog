@@ -107,20 +107,22 @@ export default async function SearchPage({
             {style.variants.length > 0 && (
               <ul className="mt-4 divide-y divide-border">
                 {style.variants.map((variant) => (
-                  <li
-                    key={variant.variantId}
-                    className="flex items-center justify-between py-2 text-sm"
-                  >
-                    <span className="text-foreground">
-                      {[variant.sizeLabel, variant.exteriorColorway]
-                        .filter(Boolean)
-                        .join(" · ") || "Variant"}
-                    </span>
-                    {variant.hardwareColor && (
-                      <span className="text-muted">
-                        {variant.hardwareColor} hardware
+                  <li key={variant.variantId}>
+                    <Link
+                      href={`/bag/${variant.variantId}`}
+                      className="flex items-center justify-between py-2 text-sm transition-colors hover:text-gold"
+                    >
+                      <span>
+                        {[variant.sizeLabel, variant.exteriorColorway]
+                          .filter(Boolean)
+                          .join(" · ") || "Variant"}
                       </span>
-                    )}
+                      {variant.hardwareColor && (
+                        <span className="text-muted">
+                          {variant.hardwareColor} hardware
+                        </span>
+                      )}
+                    </Link>
                   </li>
                 ))}
               </ul>
