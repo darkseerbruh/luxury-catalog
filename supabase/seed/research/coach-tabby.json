@@ -22,6 +22,7 @@
   },
   "variants": [
     {
+      "variant_index": 0,
       "size_label": "Tabby Shoulder Bag 26",
       "size_category": "small",
       "construction_method": "structured",
@@ -41,13 +42,14 @@
       "year_start": 2019,
       "year_end": null,
       "still_in_production": true,
-      "retail_price_original": 475,
+      "retail_price_original": 450,
       "currency": "USD",
       "authentication_markers": "Turn-lock should feel solid/heavy, not hollow or light; engraving on hardware should be clean, centered, and deep, not shallow or blurry. Dimensions approx 10.25\" (L) x 5.5\"-6.75\" (H) x 2.75\"-4.25\" (D) depending on material/version. Detachable long strap drop commonly cited around 21\"-21.5\", short strap drop around 7\".",
       "confidence_level": "medium",
-      "notes": "Price ($475) and dimensions pulled from current coach.com / retailer listings as of research date; Coach frequently runs limited print/material collabs under the same 'Tabby Shoulder Bag 26' name with different SKUs (e.g. CH857, CI032, CP150, CW620), so exact dimensions/price vary slightly by specific drop. This record represents the standard leather version."
+      "notes": "Retail price set to $450 USD, the better-corroborated current figure (AOL editorial 'Brass/Chalk ... $450.00', Macy's, eBay NWT $450); an earlier note had $475, which appeared in only one unverified summary and may reflect a quilted/Pillow variant ($495-$575). Coach frequently runs limited print/material collabs under the same 'Tabby Shoulder Bag 26' name with different SKUs (e.g. CH857, CCC02, CI032, CP150), so exact dimensions/price vary slightly by specific drop. This record represents the standard leather version. Verify on live coach.com to upgrade confidence."
     },
     {
+      "variant_index": 1,
       "size_label": "Tabby Shoulder Bag 26 in Signature Canvas",
       "size_category": "small",
       "construction_method": "structured",
@@ -69,13 +71,151 @@
       "still_in_production": true,
       "retail_price_original": null,
       "currency": "USD",
-      "authentication_markers": "Combines signature coated canvas with refined calf leather trim; features inside zip and multifunction pockets, snap closure, outside slip pocket. Detachable short strap 7\" drop, detachable long strap 21\" drop. Dimensions approx 10.25\" (L) x 5.5\" (H) x 2.75\" (W).",
+      "authentication_markers": "Combines signature coated canvas with refined calf leather trim; features inside zip and multifunction pockets, snap closure, outside slip pocket. Detachable short strap 7\" drop, detachable long strap 21\" drop. Dimensions approx 10.25\" (L) x 6\" (H) x 3.25\" (W).",
       "confidence_level": "medium",
       "notes": "Retail price for this specific canvas SKU (CI032) not confirmed in research; left null rather than guessed."
     }
   ],
-  "production_records": null,
-  "known_color_combinations": null,
+  "production_records": [
+    {
+      "variant_index": 0,
+      "country_of_manufacture": null,
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": null,
+      "dimensions_w_cm": 26.04,
+      "dimensions_d_cm": 8.26,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": "Back of the C-closure plate carries an engraved hardware batch code, with the top of the digits partly tucked under the leather (single-source, verify physically).",
+      "date_code_format": "Modern Coach (post-2014) generally does NOT print a decodable month/year date code. The Tabby's interior creed carries a STYLE number, not a date code -- letter+digits (e.g. CH857) or legacy 5-digit numeric (e.g. 73995). Suffix letters after a hyphen: F = factory/outlet exclusive, M = Macy's exclusive, N = Nordstrom exclusive.",
+      "stamp_placement": "Style number stamped at the bottom of a square leather creed patch, stitched inside the main interior compartment. Unlike softer modern Coach styles (which moved the number to a sewn-in white fabric tag c.2014), the structured Tabby retains a stamped leather creed.",
+      "stamp_font_notes": "Font must be crisp and evenly spaced; faded or poorly-printed text is a red flag. Counterfeit creed patches are often undersized with too little space around the embossed border outline and text.",
+      "known_authentication_markers": "Turn-lock 'C' engraving should be clean, thick, and deeply etched -- shallow/messy = replica. Back of the C-closure is a heavy gold-tone plate held by real screws with an engraved hardware batch code. Hardware should feel substantial (heft test); brassy gold tone. Stitching even and secure; creed must be stitched, not glued. KNOWN FAKE TELL: a creed reading 'CR652' belongs to the Coach Juliet, not the Tabby. Verified real Tabby 26 style codes from coach.com: CH857, CCC02, CP150, 73995, 76105 (colorblock), C0772 (Pillow Tabby 26). Documented countries of manufacture for modern Coach: Vietnam, Cambodia, Philippines, India (Tapestry FY2025 10-K), plus China in FY2019/earlier; country alone does not authenticate.",
+      "sources": "https://www.coach.com/products/tabby-shoulder-bag-26/CH857.html; https://www.coach.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html; https://www.poizon.com/article/authentication/coach-tabby-bag-26-legit-check; https://legitique.com/blogs/coach/how-to-authenticate-coach-tabby-guide; https://aliceelizabethluxury.com/blog/how-to-spot-a-fake-coach-tabby-25-pillow; https://curatedfindsco.com/blogs/news/coach-date-codes-explained-how-to-tell-when-your-bag-was-made; https://www.macys.com/shop/product/coach-tabby-26-leather-shoulder-bag?ID=17453857; https://www.nordstrom.com/s/coach-tabby-26-leather-shoulder-bag/7313563",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 1,
+      "country_of_manufacture": null,
+      "production_year": null,
+      "production_season": null,
+      "dimensions_h_cm": 15.24,
+      "dimensions_w_cm": 26.04,
+      "dimensions_d_cm": 8.26,
+      "opening_width_cm": null,
+      "opening_height_cm": null,
+      "hardware_vendor_notes": null,
+      "screw_type": null,
+      "screw_engraving": null,
+      "date_code_format": "Same modern-Coach creed system as the leather Tabby: style number (letter+digits or legacy 5-digit) on a stamped leather creed, no decodable month/year date code post-2014.",
+      "stamp_placement": "Style number stamped at the bottom of a square leather creed patch, stitched inside the main interior compartment.",
+      "stamp_font_notes": "Font crisp and evenly spaced; creed stitched, not glued.",
+      "known_authentication_markers": "Signature coated canvas with refined calf-leather trim and brass/gold-tone hardware (SKU CI032). Same turn-lock and creed authentication checks as the leather Tabby. CI032 dimensions were internally consistent across retailer snippets at 10.25\" L x 6\" H x 3.25\" D.",
+      "sources": "https://www.coach.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html; https://www.coachoutlet.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html; https://www.dillards.com/p/coach-tabby-26-signature-logo-coated-canvas-shoulder-bag/515965734",
+      "confidence_level": "medium"
+    }
+  ],
+  "known_color_combinations": [
+    {
+      "variant_index": 0,
+      "exterior_color": "Chalk (cream)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold-tone / brass",
+      "produced": true,
+      "market": null,
+      "year_range": "c.2023-2026",
+      "authentication_notes": "Standard polished pebble leather line ('Brass/Chalk'). Interior lining color not stated in any accessible source. Source: StockX, AOL, Macy's (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Black",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": null,
+      "year_range": "current (style CH857)",
+      "authentication_notes": "Polished pebble leather. HARDWARE TONE CONFLICT: some listings show gold/brass, one summary shows silver/nickel -- both versions may exist. hardware_color left null pending confirmation.",
+      "confidence_level": "low"
+    },
+    {
+      "variant_index": 1,
+      "exterior_color": "Signature coated canvas (khaki/brown)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "brass / gold-tone",
+      "produced": true,
+      "market": null,
+      "year_range": "current (style CI032)",
+      "authentication_notes": "Signature 'C' coated canvas with calf-leather trim. Source: coach.com, Haute24, Dillard's (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Aquamarine",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": null,
+      "year_range": "current",
+      "authentication_notes": "Polished pebble leather. Source: Amazon listing (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Bold Red / Red Apple",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "brass / gold-tone",
+      "produced": true,
+      "market": null,
+      "year_range": "current",
+      "authentication_notes": "Leather. Source: Amazon, StockX (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Vivid Pink / Flower Pink",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "silver-tone",
+      "produced": true,
+      "market": null,
+      "year_range": "current",
+      "authentication_notes": "Leather. Source: StockX (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Brass / Dark Stone",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold-tone",
+      "produced": true,
+      "market": null,
+      "year_range": "current",
+      "authentication_notes": "Leather. Source: StockX (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "Denim",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "silver-tone",
+      "produced": true,
+      "market": null,
+      "year_range": "current",
+      "authentication_notes": "Leather. Source: StockX (snippet-level).",
+      "confidence_level": "medium"
+    }
+  ],
   "carry_methods": [
     {
       "carry_type": "crossbody",
@@ -104,20 +244,55 @@
   ],
   "fits": [
     {
-      "item_name": "iPhone (modern, e.g. 15/16 Pro)",
-      "fits": null,
+      "variant_index": 0,
+      "item_name": "iPhone (modern, e.g. 15/16 Pro/Pro Max)",
+      "fits": "yes",
       "verified": false,
-      "notes": "Not independently verified from a review/measurement source; not stated explicitly in research found.",
+      "notes": "Multiple owner reviews carry a Pro Max comfortably, often in the back slip pocket. Source: Emtalks, Ella Pretty Blog.",
       "contributor": null
     },
     {
-      "item_name": "iPad Mini",
-      "fits": null,
+      "variant_index": 0,
+      "item_name": "Compact wallet (or even a long wallet)",
+      "fits": "yes",
       "verified": false,
-      "notes": "Bag width (~2.75\"-4.25\" depth) suggests an iPad Mini would not fit flat through the opening, but this was not explicitly confirmed by a source, so left unverified rather than guessed.",
+      "notes": "BrandsShoppe: 'large enough to fit a long wallet and has a divider pocket'; corroborated by Aglaia Magazine.",
       "contributor": null
     },
     {
+      "variant_index": 0,
+      "item_name": "AirPods case",
+      "fits": "yes",
+      "verified": false,
+      "notes": "Fits per Emtalks. A YouTube comparison implies AirPods + a full load is more the Tabby 36's territory, so 'yes' alone, tight when combined.",
+      "contributor": null
+    },
+    {
+      "variant_index": 0,
+      "item_name": "Sunglasses",
+      "fits": "tight",
+      "verified": false,
+      "notes": "Fits but 'starts to get a little snug' alongside a full load. Source: An Indigo Day, Emtalks, BrandsShoppe.",
+      "contributor": null
+    },
+    {
+      "variant_index": 0,
+      "item_name": "Water bottle",
+      "fits": "no",
+      "verified": false,
+      "notes": "Single aggregated source states a water bottle does not fit; consistent with the ~8cm depth and rigid build. Low confidence. Source: Amaboxly.",
+      "contributor": null
+    },
+    {
+      "variant_index": 0,
+      "item_name": "iPad Mini / tablet",
+      "fits": "no",
+      "verified": false,
+      "notes": "Aggregated source states 'not a tablet'; iPad Mini not named specifically. Low confidence. Source: Amaboxly.",
+      "contributor": null
+    },
+    {
+      "variant_index": 0,
       "item_name": "Kindle Paperwhite",
       "fits": null,
       "verified": false,
@@ -149,14 +324,16 @@
   ],
   "serial_tags": [
     {
+      "variant_index": 0,
       "tag_type": "creed stamp",
-      "format": "Vintage/older format: two-letter factory or inspector code, slash, numeric style number, slash, two-digit year (e.g. LD/123/85). Modern format (circa 2020+): Coach moved to alphanumeric style numbers (letter + four-digit sequence, e.g. CH857), and around 2014 began phasing out stamped date codes on the creed patch entirely -- many current creed patches show only the authenticity paragraph with no numbers underneath, with style/factory info moved to a separate fabric tag sewn into the lining.",
-      "placement": "Interior leather (or fabric, in modern bags) patch/tag sewn or stamped inside the bag, typically near the lining.",
-      "material": "Stamped or blind-embossed leather patch (vintage); printed fabric tag (modern)",
+      "format": "Vintage/older format: two-letter factory or inspector code, slash, numeric style number, slash, two-digit year (e.g. LD/123/85). Modern format (circa 2020+): Coach moved to alphanumeric style numbers (letter + four-digit sequence, e.g. CH857), and around 2014 began phasing out stamped date codes on the creed patch entirely -- many current creed patches show only the authenticity paragraph with no numbers underneath, with style/factory info moved to a separate fabric tag sewn into the lining. NOTE: the structured Tabby is an exception -- it retains a STAMPED leather creed carrying the style number, rather than moving it to a fabric tag.",
+      "placement": "Interior leather patch stamped inside the main compartment of the Tabby (bottom of a square leather creed patch). Vintage/other modern styles may use a fabric tag near the lining seam.",
+      "material": "Stamped or blind-embossed leather patch (vintage and Tabby); printed fabric tag (many softer modern styles)",
       "year_range": "Vintage format roughly pre-1994; transitional formats through the 2010s; current alphanumeric style-number format from approximately 2020 onward",
-      "how_to_read": "Vintage: first two letters = factory/inspector code, middle number = style number, final two digits = year of production. Modern (2020+): style numbers follow patterns such as Letter+4 digits (e.g. CH857), or Letter+4digits-Letter+4digits, or with suffixes -- an 'F' after a hyphen indicates a Factory/outlet-exclusive bag; 'M' indicates Macy's exclusive; 'N' indicates Nordstrom exclusive.",
-      "authentication_notes": "Stamping should be clean, even, and crisp -- blurry or inconsistent fonts are a red flag. Placement should be in the standard designated area (commonly bottom center or corner of the patch); placement outside the norm is suspect. The patch itself should be genuine material with proper stitching; irregular leather or sloppy stitching suggests counterfeit. NOTE: exact current-day (2026) format for newly produced Tabby bags specifically was not independently confirmed beyond the general 2020-era pattern described above -- treat as medium confidence, not a Tabby-specific verified format.",
-      "verified": false
+      "how_to_read": "Vintage: first two letters = factory/inspector code, middle number = style number, final two digits = year of production. Modern (2020+): style numbers follow patterns such as Letter+4 digits (e.g. CH857), or Letter+4digits-Letter+4digits, or with suffixes -- an 'F' after a hyphen indicates a Factory/outlet-exclusive bag; 'M' indicates Macy's exclusive; 'N' indicates Nordstrom exclusive. Legacy 5-digit numeric style numbers (e.g. 73995, 76105) also exist for the Tabby across production years.",
+      "authentication_notes": "Stamping should be clean, even, and crisp -- blurry or inconsistent fonts are a red flag. Placement should be in the standard designated area; placement outside the norm is suspect. The patch itself should be genuine leather with proper stitching (stitched, not glued); irregular leather or sloppy stitching suggests counterfeit. KNOWN FAKE TELL: a Tabby creed reading 'CR652' is fake -- that code belongs to the Coach Juliet Shoulder Bag. Verified real Tabby 26 codes (from coach.com): CH857, CCC02, CP150, 73995, 76105, and C0772 (Pillow Tabby 26). The serial on the interior label should match the number printed on the dust bag. Coach does not authenticate bags, so 'call Coach' is not a verification route.",
+      "verified": false,
+      "confidence_level": "medium"
     }
   ],
   "locks_and_keys": {
@@ -177,7 +354,7 @@
       "color": null,
       "branding": "Coach logo/wordmark, exact current design not independently confirmed for Tabby specifically",
       "format_by_year": null,
-      "authentication_notes": "Dust bag presence/absence does not by itself authenticate a bag; specific design/branding details not verified in this research pass.",
+      "authentication_notes": "Dust bag presence/absence does not by itself authenticate a bag; the serial on the interior creed should match the number printed on the dust bag. Specific design/branding details not verified in this research pass.",
       "value_impact_if_missing": null,
       "verified": false
     }
@@ -194,11 +371,34 @@
     "http://coachbagrehab.blogspot.com/2012/04/guide-to-dates-of-vintage-coach-bags.html",
     "https://curatedfindsco.com/blogs/news/coach-date-codes-explained-how-to-tell-when-your-bag-was-made",
     "https://www.coach.com/products/tabby-shoulder-bag-26/CH857.html",
+    "https://www.coach.com/products/tabby-shoulder-bag-26/CCC02.html",
+    "https://www.coach.com/products/tabby-shoulder-bag-26-in-colorblock/76105.html",
+    "https://www.coach.com/products/tabby-shoulder-bag-26-with-pillow-quilting/CP150.html",
+    "https://www.coach.com/products/pillow-tabby-shoulder-bag-26/C0772.html",
     "https://www.coach.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html",
-    "https://www.macys.com/shop/product/coach-tabby-turnlock-medium-soft-leather-shoulder-bag?ID=18074559",
+    "https://www.coachoutlet.com/products/tabby-shoulder-bag-26-in-signature-canvas/CI032.html",
+    "https://www.macys.com/shop/product/coach-tabby-26-leather-shoulder-bag?ID=17453857",
+    "https://www.macys.com/shop/product/coach-tabby-medium-polished-pebble-leather-shoulder-bag-26?ID=18563896",
+    "https://www.nordstrom.com/s/coach-tabby-26-leather-shoulder-bag/7313563",
+    "https://www.dillards.com/p/coach-tabby-26-signature-logo-coated-canvas-shoulder-bag/515965734",
     "https://www.amazon.com/Coach-Tabby-Shoulder-Signature-Canvas/dp/B0DS6NDSPS",
-    "https://www.hoodmwr.com/how-to-tell-if-coach-bags-are-fake-or-real/",
-    "https://inspiretips.blog/spot-fake-coach-bag-checklist-39223",
-    "https://www.yournextshoes.com/fake-coach-bags/"
+    "https://www.amazon.com/Coach-Polished-Leather-Shoulder-Refresh/dp/B0D14J9TSN",
+    "https://www.aol.com/articles/under-500-coach-bag-going-213200020.html",
+    "https://haute24.com/products/coach-tabby-shoulder-bag-26-in-signature-canvas-leather-brass-tan-rust/",
+    "https://stockx.com/coach-tabby-shoulder-bag-26-beadchain-chalk",
+    "https://stockx.com/coach-shoulder-bag-tabby-26-flower-pink",
+    "https://stockx.com/coach-shoulder-bag-tabby-26-brass-dark-stone",
+    "https://stockx.com/coach-shoulder-bag-tabby-26-denim",
+    "https://www.poizon.com/article/authentication/coach-tabby-bag-26-legit-check",
+    "https://legitique.com/blogs/coach/how-to-authenticate-coach-tabby-guide",
+    "https://aliceelizabethluxury.com/blog/how-to-spot-a-fake-coach-tabby-25-pillow",
+    "https://blog.shopgoodwill.com/english/coach-purse-serial-number-guide",
+    "https://www.hisourcing.com/where-are-coach-bags-made/",
+    "https://www.emtalks.co.uk/2024/04/coach-tabby-shoulder-bag-review-coach.html",
+    "https://www.ellaprettyblog.com/my-bag-review-coach-tabby-26/",
+    "https://www.brandsshoppe.com/coach-tabby-shoulder-bag-26-accurate-review/",
+    "https://www.aglaiamagazine.com/coach-tabby-shoulder-bag-26-review/",
+    "https://anindigoday.com/coach-pillow-tabby-bag-review/",
+    "https://amaboxly.com/coach-tabby-bag-review-2026-every-color-size-why-its-still-seas-most-wanted-luxury-bag/"
   ]
 }
