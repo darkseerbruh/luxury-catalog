@@ -7,7 +7,11 @@
       "Read(//usr/local/**)",
       "Bash(brew --version)",
       "Read(//opt/homebrew/bin/**)",
-      "Bash(/opt/homebrew/bin/brew --version)"
+      "Bash(/opt/homebrew/bin/brew --version)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
