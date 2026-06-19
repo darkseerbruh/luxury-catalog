@@ -46,7 +46,7 @@
       "currency": "USD",
       "authentication_markers": "Double flap interior, CC turn-lock engraving crisp and even, chain feels substantial not hollow",
       "confidence_level": "high",
-      "notes": "Used as the primary worked example (FW 2019). Retail price for medium caviar GHW in this period commonly cited in the $5,000-$6,900 range depending on exact date within the year due to multiple Chanel price increases in 2019; $6,500 figure from schema doc could not be pinned to an exact invoice and should be treated as approximate.",
+      "notes": "Used as the primary worked example (FW 2019). Price-history sources put the Medium Classic Flap US retail at ~$5,800 in 2019 and ~$6,500 in 2020, so the stored $6,500 figure more likely reflects a late-2019/2020 increase than early-2019 retail; treat as approximate (Chanel publishes no official price list). For reference, the Medium's documented US trajectory: ~$4,900 (2016), $5,800 (2019), ~$6,500 (2020), $7,800 (Feb 2021), $8,800 (2022), >$10,000 (2023), ~$10,200 (2024), $11,300 (2025). NOTE: the seed loader does not currently import a price_history table, so these are recorded here as a note rather than as price_history rows.",
       "confidence_level_price": "medium"
     }
   ],
@@ -97,6 +97,42 @@
       "market": null,
       "year_range": null,
       "authentication_notes": "Could not find a single verified authentic example of black caviar exterior paired with a bright/fire-engine red interior lining in any reseller catalog, collector forum, or authentication guide reviewed. This is consistent with the original schema doc's claim, but I was not able to find a source that explicitly states 'this combination was never produced' as a documented fact (as opposed to absence of evidence). Downgrading confidence from the schema doc's implicit 'high' to medium - absence of a sighting is suggestive but not the same as a brand-confirmed negative.",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "black",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "silver",
+      "produced": true,
+      "market": "global",
+      "year_range": "long-running, multiple years",
+      "authentication_notes": "Black caviar with silver hardware is a documented standard pairing (alongside the gold-hardware version). Interior color is era-dependent (left null). Source: Madison Avenue Couture, 1stdibs (snippet-level).",
+      "confidence_level": "high"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "black",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold or silver",
+      "produced": true,
+      "market": "global",
+      "year_range": "long-running",
+      "authentication_notes": "Black LAMBSKIN (vs caviar) Classic Flap, offered with gold or silver hardware. Lambskin flaps are commonly documented with a burgundy interior, though this varies by era (not a hard rule). Source: PurseForum threads, Madison Avenue Couture (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_index": 0,
+      "exterior_color": "black",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "ruthenium (aged/gunmetal silver-tone)",
+      "produced": true,
+      "market": "global",
+      "year_range": "seasonal",
+      "authentication_notes": "Ruthenium hardware appears on metallic/goatskin and seasonal Classic Flap pieces. Source: mygemma.com hardware metal-types guide, Madison Avenue Couture (snippet-level).",
       "confidence_level": "medium"
     }
   ],
@@ -198,11 +234,11 @@
       "placement": "Interior leather patch sewn into the bag, near the zip pocket",
       "material": "sticker, covered with clear security tape",
       "year_range": "Series 25 = 2018 (sticker system in general use 2005-2021/2022)",
-      "how_to_read": "First two digits indicate series/year code. Cross-referenced mapping: 24=2017, 25=2018, 26-27=2019, 28=2019-2020, 29=2020, 30=2020-2021, 31=2021 (final sticker series before microchip transition).",
-      "authentication_notes": "Sticker has an X-shaped cut into it so it tears if peeled. Clear tape over the sticker is printed vertically with 'CHANEL' and has a dark line down one side plus faint iridescent flecks visible when tilted. Numeral '0' has a strikethrough; numeral '1' has small serifs/feet on authentic stickers. A flat, non-iridescent sticker or blurry/smudged printing is a red flag.",
+      "how_to_read": "First two digits indicate a series/year code. CAVEAT: the precise series-to-year mapping (24=2017, 25=2018, 26-27=2019, 28=2019-2020, 29=2020, 30=2020-2021, 31=2021) is RESELLER-RECONSTRUCTED and approximate -- it is widely repeated but not Chanel-published, and exact boundaries vary by source, so treat it as a guide, not an authoritative table. The HIGH-confidence, cross-corroborated system-level facts are: serial stickers introduced 1984 (earliest 6-digit, 1XXXXX); transitioned to 7-digit in 1986; 8-digit format used ~2005-2021 (10XXXXXX up to 31XXXXXX); 31XXXXXX is the last serial code used on handbags; SLG stickers continued to 32XXXXXX in 2021-2022.",
+      "authentication_notes": "Sticker has an X-shaped cut into it so it tears if peeled. Clear tape over the sticker is printed vertically with 'CHANEL' and has a dark line down one side plus faint iridescent flecks visible when tilted. Numeral '0' has a strikethrough; numeral '1' has small serifs/feet on authentic stickers. A flat, non-iridescent sticker or blurry/smudged printing is a red flag. Do NOT rely on the exact series-year mapping above to date a bag to a single year -- the digit-count era (6/7/8-digit) and the 1984/1986 milestones are the reliable, citable anchors.",
       "verified": false,
       "confidence_level": "medium",
-      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; The Handbag Authority"
+      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; italystation.com hologram guide; luxbags.fr serial-sticker era guide; romestation.ca; coutureusa.com"
     },
     {
       "variant_index": null,
@@ -215,8 +251,8 @@
       "how_to_read": "Code is not human-decodable for year/factory information; chip is read only via Chanel's proprietary in-store NFC equipment, not by the public or resellers.",
       "authentication_notes": "Does not apply to the FW2019 worked example, included for completeness since this directly affects post-2021 variants and the 'no physical card' provenance claim.",
       "verified": false,
-      "confidence_level": "medium",
-      "sources": "Madison Avenue Couture: 'Chanel Bags Switch from Serial Stickers to Microchips in 2021'; Lux Second Chance; Bag Religion microchip guide"
+      "confidence_level": "high",
+      "sources": "Madison Avenue Couture: 'Chanel Bags Switch from Serial Stickers to Microchips in 2021'; cocoapproved.com; FASHIONPHILE; Lux Second Chance; Bag Religion microchip guide"
     }
   ],
   "locks_and_keys": [

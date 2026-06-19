@@ -62,14 +62,111 @@
       "screw_type": null,
       "screw_engraving": null,
       "date_code_format": "Hermès blind stamp system, same letter-in-shape format used across Birkin and Kelly. No shape used 1945–1970 (letter alone). Circle-enclosed letter used 1971–1996. Square-enclosed letter used 1997 through the early-to-mid 2010s. A new blind stamp system began transitioning in late 2014, fully implemented by 2015; PurseBop and similar collector resources track the current letter assignment year by year but the exact post-2015 format (and the current 2025/2026 letter) was not independently re-verified in this pass.",
-      "stamp_placement": "Blind stamp (craftsman ID + date stamp) located inside the bag, typically near the turn-lock hardware mount or on the left interior side close to the back of the flap, depending on era — sources are not fully consistent on the exact placement for every year, so this is treated as approximate.",
+      "stamp_placement": "Blind stamp (craftsman ID + date stamp) located inside the bag. Placement changed by era: pre-~2016 it was commonly heat/blind-stamped under or inside the left closure strap; from ~2016 onward it moved to the interior left side, upper area, close to the back flap. Sources are not perfectly consistent year-by-year, so treat as era-approximate. (The four-era shape system: no shape 1945-1970, circle 1971-1996, square 1997-2014, no shape again 2015-present.)",
       "stamp_font_notes": null,
       "known_authentication_markers": "Sellier-specific markers beyond the general Hermès blind stamp system: crisp, perfectly even exterior saddle stitching with no skipped or uneven stitches; structured shape that holds itself upright without slumping; sharp, defined corners (vs. the rounded corners of retourne). Blind stamp should be small (a few millimeters), crisply embossed directly into the leather with no ink, and consistent in depth — a poorly stamped, oddly placed, or ink-filled stamp is a red flag for counterfeits.",
       "sources": "myGemma Hermès Blind Stamps Explained; PurseBop Hermès date stamp guide; Xupes Hermès Date Stamps Guide; The Birkin's and Kelly's House blind stamp guide",
       "confidence_level": "medium"
     }
   ],
-  "known_color_combinations": [],
+  "known_color_combinations": [
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "exterior_color": "Noir (Black)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold or palladium",
+      "produced": true,
+      "market": null,
+      "year_range": "permanent color, ongoing",
+      "authentication_notes": "Classic permanent color, offered in both gold and palladium hardware (a customer/era choice, not fixed). Source: Rebag, Romestation, JaneFinds, SACLAB (snippet-level).",
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly (Box Calf)",
+      "exterior_color": "Noir (Black)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold or palladium",
+      "produced": true,
+      "market": null,
+      "year_range": "original/vintage era through present (Box is the original Kelly leather)",
+      "authentication_notes": "Box Calf is the original signature Kelly leather (dates to the 1890s; Grace Kelly's bag). Source: PurseBop, Privé Porter, The Luxury Closet, SACLAB.",
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "exterior_color": "Gold (caramel tan)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold",
+      "produced": true,
+      "market": null,
+      "year_range": "permanent color, ongoing",
+      "authentication_notes": "Documented in both Togo and Epsom (e.g. JaneFinds Kelly 28 Sellier Gold Epsom GHW). Source: Romestation, JaneFinds, Rebag.",
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly 28 Sellier Epsom",
+      "exterior_color": "Étoupe (greige)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "palladium (commonly) or gold",
+      "produced": true,
+      "market": null,
+      "year_range": "permanent since ~2004, ongoing",
+      "authentication_notes": "Commonly paired with palladium for its cool undertones, but offered in both. Source: Romestation, Sotheby's, Fashionphile, Maison de Luxe.",
+      "confidence_level": "high"
+    },
+    {
+      "variant_ref": "Kelly (Togo)",
+      "exterior_color": "Étain (steel grey)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "palladium",
+      "produced": true,
+      "market": null,
+      "year_range": "classic color, ongoing",
+      "authentication_notes": "Source: SACLAB, Privé Porter grey guide, Fashionphile (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_ref": "Kelly (Togo)",
+      "exterior_color": "Craie (chalk)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold or palladium",
+      "produced": true,
+      "market": null,
+      "year_range": "classic/semi-regular, ongoing",
+      "authentication_notes": "Source: Rebag, Madison Avenue Couture (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_ref": "Kelly (Box Calf)",
+      "exterior_color": "Rouge H (deep red)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold",
+      "produced": true,
+      "market": null,
+      "year_range": "original permanent color (one of the earliest)",
+      "authentication_notes": "One of Hermès's original permanent colors (code 46). Source: Madison Avenue Couture (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "variant_ref": "Kelly (Togo)",
+      "exterior_color": "Vert Cypress",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gold or palladium",
+      "produced": true,
+      "market": null,
+      "year_range": "recent classic, ongoing",
+      "authentication_notes": "Source: SACLAB (snippet-level).",
+      "confidence_level": "medium"
+    }
+  ],
   "carry_methods": [
     {
       "variant_ref": "Kelly 28 Sellier Epsom",

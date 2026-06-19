@@ -13,8 +13,9 @@
     "closure_type": "turn-lock",
     "year_introduced": 2015,
     "redesigned": null,
-    "discontinued": null,
+    "discontinued": true,
     "year_discontinued": null,
+    "discontinued_note": "Discontinued from Coach's new mainline production (Coach SAs reportedly recommend the Dreamer as a successor). Coach still sells pre-owned Swaggers via its Reloved/Restored/Upcrafted refurbishment programs, so it is not 'no longer sold at all.' Exact discontinuation year NOT FOUND (forum evidence suggests ~2017-2018, not authoritative) -- year_discontinued left null. Source: PurseForum 'Did Coach discontinue swagger?' thread; coach.com Reloved listings.",
     "description": "The Swagger was introduced for Spring 2015 under creative director Stuart Vevers as part of Coach's broader 'Coach 1941' design-led relaunch, which leaned into the brand's heritage pebbled leather and statement turn-lock hardware after Vevers joined as creative director in 2013. The Swagger Carryall is a structured satchel built around a prominent double turn-lock closure on a leather 'belt' strip across the front flap, marketed as a flagship Vevers-era design alongside other turn-lock styles. Available in multiple sizes (Swagger 20/21/27/Wristlet) and later in colorblock and exotic-embossed leather variants.",
     "confidence_level": "medium",
     "sources_for_year": ["Marie France Asia Spring 2015 Coach handbag collection coverage", "The Sweetest Escape blog, Coach Swagger 20 Mini Review (June 2016) describing Swagger as a recent/newest bag"]
@@ -39,8 +40,8 @@
       "year_start": 2015,
       "year_end": null,
       "still_in_production": false,
-      "retail_price_original": null,
-      "retail_price_original_note": "Sources disagree: Swagger 21 Carryall MSRP commonly cited at $350; some Swagger 27 resale/retail listings cite $450 original MSRP. Could not verify a single authoritative original Swagger 27 price, so left null. Treat $350-$450 as a plausible range pending better sourcing.",
+      "retail_price_original": 450,
+      "retail_price_original_note": "Set to $450 USD for the Swagger 27 (Costco listing, eBay NWT 'UVP 450$', multiple resale references). The previously-conflicting $350 figure belongs to the smaller Swagger 21 (~$295-$350, glovetanned), now disambiguated by size. Snippet-sourced; verify against an archived Coach listing to upgrade confidence.",
       "currency": "USD",
       "authentication_markers": "Pebbled leather should show natural, slightly irregular grain (not a uniform embossed/plastic-like pattern); leather should compress and rebound when pinched near a seam rather than crease sharply. Turn-lock should be substantial, not hollow-feeling, with crisp, evenly engraved 'COACH' lettering — smudged or shallow engraving is a fake indicator. Could not verify Swagger-specific turn-lock weight figures from any source.",
       "confidence_level": "medium"
@@ -89,8 +90,63 @@
       "produced": true,
       "market": "US/global",
       "year_range": null,
-      "authentication_notes": "Oxblood (deep burgundy) pebble leather is a documented retail colorway (e.g. Amazon listing 'Li/Oxblood'). Interior/stitching pairing not verified.",
-      "confidence_level": "low"
+      "authentication_notes": "Oxblood (deep burgundy) pebble leather is a documented retail colorway (e.g. Amazon 'Li/Oxblood'); corroborated by PurseForum 'Coach Oxblood or Bronze Swagger 27' thread. Interior/stitching pairing not verified.",
+      "confidence_level": "medium"
+    },
+    {
+      "exterior_color": "Chalk / Dark Chalk (off-white)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "silver/light",
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Pebbled leather. Source: Amazon, Costco 'Dark Chalk' listing (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "exterior_color": "Black/Chalk colorblock",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Pebbled leather colorblock. Source: Walmart, coach.com colorblock SKUs 12120/26949 (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "exterior_color": "Metallic Brown / Bronze",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": "gunmetal",
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Metallic pebbled leather. Source: Essex Fashion House, PurseForum (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "exterior_color": "Snake-embossed (various)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Snake-embossed leather edition (Swagger 27 SKU 38361; 21 SKUs 38360/57748). Source: coach.com (snippet-level).",
+      "confidence_level": "medium"
+    },
+    {
+      "exterior_color": "Croc-embossed (various)",
+      "interior_color": null,
+      "stitching_color": null,
+      "hardware_color": null,
+      "produced": true,
+      "market": "US/global",
+      "year_range": null,
+      "authentication_notes": "Croc-embossed leather edition (Swagger 27 SKU 37493). Source: coach.com (snippet-level).",
+      "confidence_level": "medium"
     }
   ],
   "carry_methods": [
