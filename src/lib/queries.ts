@@ -988,3 +988,70 @@ export async function getSearchedNotFound(limit = 200): Promise<SearchedNotFound
     .sort((a, b) => b.count - a.count || b.lastSearched.localeCompare(a.lastSearched))
     .slice(0, limit);
 }
+
+/** A user-submitted feedback record about a catalog variant, enriched with the bag it refers to. */
+export interface UserFeedbackEntry {
+  feedbackId: number;
+  recordType: string;
+  recordId: number;
+  feedbackType: string;
+  note: string | null;
+  date: string;
+  resolved: boolean;
+  resolutionNotes: string | null;
+  /** Populated for variant feedback so the dashboard can link to and label the bag. */
+  variant: { variantId: number; brandName: string; styleName: string; label: string } | null;
+}
+
+/** Feedback submitted from bag detail pages, newest first, with the referenced bag resolved for display. */
+export async function getUserFeedback(limit = 200): Promise<UserFeedbackEntry[]> {
+  const { data, error } = await getSupabase()
+    .from("user_feedback")
+    .select("feedback_id, record_type, record_id, feedback_type, user_note, date, resolved, resolution_notes")
+    .order("date", { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+
+  const rows = data as {
+    feedback_id: number; record_type: string; record_id: number; feedback_type: string;
+    user_note: string | null; date: string; resolved: boolean; resolution_notes: string | null;
+  }[];
+
+  // Resolve the referenced variants in one query so each row can show "Brand · Style · size".
+  const variantIds = [...new Set(rows.filter((r) => r.record_type === "variant").map((r) => r.record_id))];
+  const variantsById = new Map<number, { variantId: number; brandName: string; styleName: string; label: string }>();
+
+  if (variantIds.length > 0) {
+    const { data: vData } = await getSupabase()
+      .from("variant")
+      .select("variant_id, size_label, exterior_colorway, style:style_id(name, brand:brand_id(name))")
+      .in("variant_id", variantIds);
+
+    for (const v of (vData ?? []) as {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null;
+      style: { name: string; brand: { name: string } | { name: string }[] | null } | { name: string; brand: { name: string } | { name: string }[] | null }[] | null;
+    }[]) {
+      const style = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
+      const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+      variantsById.set(v.variant_id, {
+        variantId: v.variant_id,
+        brandName: style ? embeddedName(style.brand) : "",
+        styleName: style?.name ?? "",
+        label,
+      });
+    }
+  }
+
+  return rows.map((r) => ({
+    feedbackId: r.feedback_id,
+    recordType: r.record_type,
+    recordId: r.record_id,
+    feedbackType: r.feedback_type,
+    note: r.user_note,
+    date: r.date,
+    resolved: r.resolved,
+    resolutionNotes: r.resolution_notes,
+    variant: r.record_type === "variant" ? variantsById.get(r.record_id) ?? null : null,
+  }));
+}

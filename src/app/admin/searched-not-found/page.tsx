@@ -22,7 +22,12 @@ export default async function SearchedNotFoundPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-5 py-10">
       <header>
-        <p className="text-sm uppercase tracking-widest text-muted">Admin</p>
+        <p className="text-sm uppercase tracking-widest text-muted">
+          <Link href="/admin" className="transition-colors hover:text-gold">
+            Admin
+          </Link>{" "}
+          / Searched, not found
+        </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Searched, not found</h1>
         <p className="mt-2 max-w-2xl text-muted">
           Every search and camera identification that returned no catalog match. The
