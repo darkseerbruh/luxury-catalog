@@ -37,12 +37,20 @@ export default function RootLayout({
             <Link href="/" className="font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <Link
-              href="/search"
-              className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-            >
-              Search
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/identify"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Identify
+              </Link>
+              <Link
+                href="/search"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Search
+              </Link>
+            </div>
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>

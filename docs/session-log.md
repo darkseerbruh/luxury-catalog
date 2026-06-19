@@ -43,6 +43,23 @@
 
 **Note on toolchain:** Node/npm were missing from this machine entirely; installed via nvm rather than Homebrew (brew also not present). Future sessions on this machine should `export NVM_DIR="$HOME/.nvm"; \. "$NVM_DIR/nvm.sh"` before running node/npm — it's not on PATH by default in non-interactive shells.
 
+## 2026-06-19 — Phase 4: Camera Tool (/identify)
+
+**Done:**
+- `@anthropic-ai/sdk` added as a dependency.
+- `/api/identify` — POST route handler: accepts `multipart/form-data` with an `image` field (JPEG/PNG/GIF/WebP, ≤5 MB), sends to `claude-sonnet-4-6` with a structured vision prompt, parses the JSON response, searches the Supabase catalog for a matching variant (style + brand filter, then colorway/hardware scoring), logs misses to `searched_not_found`, and returns `{ identification, catalogMatch }`.
+- `/identify` — client-side page with a camera-capture file input (`accept="image/*" capture="environment"` — opens the rear camera by default on mobile), image preview, submit/clear controls, loading state, and a results section showing: confidence badge, identification card (brand, style, size, colorway, hardware, material), visible authentication markers (from Claude's analysis of the actual image), catalog match card with a deep link to `/bag/[variantId]` or `/search?q=brand`, and a "not in catalog yet" note with search fallback when no match is found.
+- Header updated to include "Identify" link alongside "Search".
+- Build passes clean, ESLint clean. `/identify` is static (client component), `/api/identify` is dynamic server route.
+
+**Constraints honored:**
+- Claude only reports authentication markers visible in the image — the prompt instructs it never to invent or hallucinate details. The same accuracy-over-completeness rule as Phase 2 data.
+- No AI-generated images anywhere — the tool analyzes user-provided photos, produces no images of its own.
+
+**Known gaps:**
+- `ANTHROPIC_API_KEY` must be set in the deployment environment (Vercel env vars) for the tool to function — the route returns 503 with a clear message if it's missing.
+- File size is constrained to 5 MB at the route level; mobile camera images often exceed this in raw format. The UI copy says "max 5 MB" but there's no client-side pre-compression yet — a future pass could add canvas-based resize before upload.
+
 ## 2026-06-19 — Phase 3: Core UI (Home + Search, in progress)
 
 **Done:**
