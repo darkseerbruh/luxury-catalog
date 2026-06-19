@@ -43,6 +43,30 @@
 
 **Note on toolchain:** Node/npm were missing from this machine entirely; installed via nvm rather than Homebrew (brew also not present). Future sessions on this machine should `export NVM_DIR="$HOME/.nvm"; \. "$NVM_DIR/nvm.sh"` before running node/npm — it's not on PATH by default in non-interactive shells.
 
+## 2026-06-19 — Phase 6: Deployment + Handoff
+
+**Code state: complete, build clean, all routes deployed on `claude/desktop-display-test-d621oc`.**
+
+**Done:**
+- `docs/deployment-checklist.md` written: Vercel env var checklist (Supabase vars from Phase 1 + new `ANTHROPIC_API_KEY` for camera tool), production branch setup instructions, DNS cutover steps for luxurycatalog.com → Vercel (Squarespace Domains → A/CNAME records), email forwarding caveat, post-launch verification checklist.
+- `npm run build` clean: all 9 routes compile, TypeScript passes, ESLint clean.
+
+**All phases complete:**
+- Phase 1: Supabase project + schema applied, Vercel project deployed
+- Phase 2: 12 brands, 204 styles, 190+ variants seeded; 5 hero styles with researched authentication data
+- Phase 3: Design system (dark luxury palette, Poppins + Playfair Display), Home, Search, Item Detail pages
+- Phase 4: Camera identification tool (`/identify` + `/api/identify` using claude-sonnet-4-6 vision)
+- Phase 5: Brand pages (`/brand/[brandId]`), Browse by carry (`/browse/carry/[type]`), Browse by fits (`/browse/fits/[item]`), all home tiles linked, footer added
+- Phase 6: Deployment checklist written, session log finalized
+
+**What still requires Arielle's action (cannot be done from this session):**
+1. Add `ANTHROPIC_API_KEY` to Vercel env vars (camera tool is broken without it; rest of site is fine)
+2. Set production branch in Vercel → Project Settings → Git (see `docs/deployment-checklist.md`)
+3. Add domain in Vercel → Domains, then update DNS at Squarespace Domains (step-by-step in the checklist)
+4. Re-verify email forwarding (`hello@luxurycatalog.com`, `arielle@luxurycatalog.com`) after DNS cutover — Squarespace MX records may need to be re-added alongside Vercel A/CNAME records
+
+**Active branch:** `claude/desktop-display-test-d621oc` on `darkseerbruh/luxury-catalog`.
+
 ## 2026-06-19 — Phase 5: Browse UI + Polish
 
 **Done:**
