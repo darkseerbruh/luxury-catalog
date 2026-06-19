@@ -1,9 +1,10 @@
 # Luxury Catalog — Pre-Build Status (as of 2026-06-19)
 
 Answers to the 8 clarifying questions, grounded in the actual state of this
-repo plus Arielle's connected Gmail/Drive. Where the codebase or recent
-account activity settles a question, that's stated as fact with evidence.
-Where it's a personal or product judgment call, it's flagged as open.
+repo plus Arielle's connected Gmail/Drive/Figma/Miro. Where the codebase or
+recent account activity settles a question, that's stated as fact with
+evidence. Where it's a personal or product judgment call, it's flagged as
+open.
 
 ## Technical setup & environment
 
@@ -68,31 +69,57 @@ Bottom line: no asset currently fixes the brand list at "10-12" vs.
 ## Existing assets
 
 **6. Are the 2022 designs accessible?**
-There's no Figma file for this project — checked via the Figma MCP
-(`whoami` confirms Arielle's account/team is connected, but no
-luxury-catalog file exists in it) and via a Drive full-text search for
-`figma.com`, which only turned up unrelated career docs. What's actually
-on file is a **Miro board named "Luxury catalog"**
-(`https://miro.com/app/board/o9J_lvTNUfo=/`), and it's substantial — 275
-items covering:
-- A full information-architecture diagram: core objects (Luxury handbag
-  shoppers, Handbags, Digital closet, Hosted Reviews, Hosted Articles,
-  Partner sales sites, YouTube/Instagram/Pinterest pics) and their fields
-  (Name, Designer, Material, Color, Size, Year, Retail price, Purchase
-  price, Authenticity info, Hardware color, "Got it from...", "Worth it?",
-  "Comparable to...", etc.) — this maps closely onto the 15-table schema
-  already in `supabase/migrations/0001_init_schema.sql`.
-- A detailed wireframe of a product detail page for the **Chanel 19 Flap
-  Bag**: size selector (Wallet on chain / Waist bag / Medium / Large /
-  Maxi), material/color swatches (lambskin, caviar, goatskin, tweed, denim,
-  ostrich, sheepskin), a star rating + review count, and a reviews section
-  with avatars, star ratings, and review text.
-Also on file from the original Feb 2022 proposal email: three PNG
-screenshots ("Screen Shot 2022-02-12 at 9.44/9.45 AM") described there as
-wireframes, attached to that thread.
-**Net: the design reference exists and is reachable right now — it's a
-Miro board, not Figma.** Whoever picks this up should treat the Miro board
-as the source of truth for IA and UI, not go looking for a Figma file.
+Yes — confirmed directly. An earlier pass through the Figma MCP's `whoami`
+(account/team connected, but no file listing capability) and a Drive
+full-text search for `figma.com` turned up nothing, so the first version of
+this doc concluded no Figma file existed and pointed to a Miro board
+instead. Arielle then supplied the actual file link directly
+(`https://www.figma.com/design/hyyoOUbE0Sz9GYR4gzjzMi/The-Luxury-Catalog`),
+which the Figma MCP confirms is real and far more complete than the Miro
+board. It's a single-page, high-fidelity mobile app design ("The Luxury
+Catalog") covering:
+- **Home** — hero ("The Luxury Catalog knows style."), search entry, an
+  "It bags of all time" carousel (Chanel Classic Medium Double Flap, Hermès
+  Kelly Sellier 28cm/30cm, Hermès Birkin Sellier 35cm, Louis Vuitton
+  Neverfull mm — each with resale price range, rating, and review count),
+  an empty-state "Your closet," "Bags by brand" (Chanel live, others
+  "Coming soon" / "Vote to prioritize this brand"), "Bags by what they fit"
+  (cell phone / tablet or book / laptop & more), and "Bags by how they're
+  carried" (shoulder, top handle, crossbody, backpack, belt bag, wallets &
+  pouches & clutches, rolling luggage).
+- **Search** — two depths: brand-level (e.g. "Chanel," 243 results) and
+  style-level (e.g. "Chanel 19," 12 results down to specific SKUs like
+  "Chanel 19 Wallet on Chain WOC").
+- **Item summary** (product detail) — five frames, the most complete being
+  **Chanel 19 Flap Bag, Medium**: size variations (Waist bag / Wallet on
+  chain / Medium / Large / Maxi), material variations grouped by category
+  (Leathers, Tweeds), Year/Color/Hardware/Material attributes, a reviews
+  section, Durability/Occasion/"Worth it?"/"Got it from, for..." fields, and
+  an Authenticity block still marked **"TBD"** — i.e. authentication content
+  is a known design gap, not just a data gap.
+- **Submit a review**, **Onboarding**, **Profile & Closet**, **Settings &
+  Account**, and **Plan selector** (subscription/paywall) — laid out as
+  frames but not yet detailed with content (no child elements under them).
+- **Brand kit** — an actual design system: type pairing (Poppins sans for
+  headline/subhead/eyebrow/body; Playfair Display + Cormorant serif as the
+  alternate pairing), a color palette, button styles, textures, and a full
+  product taxonomy (Bags/luggage/wallets, Fashion, Shoes, Jewelry,
+  Accessories, Eyewear, Watches, Fragrance, Face/Skincare/Makeup) with
+  bag-specific facets by strap type and by size (XS/S/M/L/XL+) — this
+  taxonomy is broader than the 15-table schema currently covers (which is
+  handbags-only).
+- A **"Customer journey"** area simulating external touchpoints (an ad, a
+  Google search result, a social media post) that lead a user into the app.
+The Miro board (`https://miro.com/app/board/o9J_lvTNUfo=/`, still real and
+still useful for the IA-to-schema mapping) reads as the earlier ideation
+pass; this Figma file is the polished, much more complete UI source of
+truth. Also still on file from the original Feb 2022 proposal email: three
+PNG screenshots described there as wireframes — superseded by both of the
+above.
+**Net: a real, substantial Figma file exists and is the primary design
+reference.** Whoever picks this up should build against
+`The-Luxury-Catalog` Figma file first, using the Miro board only for the
+underlying data-model/IA cross-check.
 
 **7. Are the two CSV datasets downloaded locally, or only in Drive?**
 Confirmed: Drive only, not local. `therealreal_data-1.csv` and
@@ -116,7 +143,7 @@ Open — not discoverable from the project. Needs Arielle's answer.
 | DB schema | Fully written (`supabase/migrations/0001_init_schema.sql`, 15 tables), never applied |
 | Vercel | Account created + GitHub-linked today; no project deployed |
 | Domain | `luxurycatalog.com` on Squarespace; email forwarding just added, not yet verified; no DNS → Vercel |
-| Design reference | No Figma file exists; full IA + product-page wireframe live in Miro board "Luxury catalog" |
+| Design reference | High-fidelity Figma file "The Luxury Catalog" (Home, Search, Item summary, Brand kit design system, etc.); Miro board "Luxury catalog" backs the IA |
 | Data | Two large multi-brand reseller CSVs in Drive, unprocessed |
 
 Still genuinely blocked on Arielle: device/environment (Q1), MVP scope
