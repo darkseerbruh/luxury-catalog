@@ -10,7 +10,9 @@ export default async function SearchPage({
 }) {
   const { q = "" } = await searchParams;
   const query = q.trim();
-  const results = query ? await searchCatalog(query) : { brands: [], styles: [] };
+  const results = query
+    ? await searchCatalog(query)
+    : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
 
   return (
@@ -20,7 +22,7 @@ export default async function SearchPage({
           name="q"
           type="search"
           defaultValue={query}
-          placeholder="Search a brand or style…"
+          placeholder="Search — e.g. “structured black bag under 10 inches wide”"
           autoFocus
           className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
@@ -35,9 +37,24 @@ export default async function SearchPage({
       <div className="mx-auto mt-10 w-full max-w-2xl">
         {!query && (
           <p className="text-center text-muted">
-            Search by brand (e.g. &ldquo;Chanel&rdquo;) or style (e.g.
-            &ldquo;Birkin&rdquo;).
+            Search by brand (e.g. &ldquo;Chanel&rdquo;), style (e.g.
+            &ldquo;Birkin&rdquo;), or describe what you want — &ldquo;structured
+            black crossbody under 10 inches wide&rdquo;.
           </p>
+        )}
+
+        {query && results.usedNaturalLanguage && results.interpreted.length > 0 && (
+          <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted">
+            <span>Interpreted as:</span>
+            {results.interpreted.map((part) => (
+              <span
+                key={part}
+                className="rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-gold/90"
+              >
+                {part}
+              </span>
+            ))}
+          </div>
         )}
 
         {query && !hasResults && (

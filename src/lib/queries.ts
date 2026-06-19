@@ -1,3 +1,4 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "./supabase";
 
 export interface BrandOverview {
@@ -40,6 +41,10 @@ export interface BrandSearchResult {
 export interface SearchResults {
   brands: BrandSearchResult[];
   styles: StyleSearchResult[];
+  /** Human-readable summary of how a natural-language query was interpreted, for display above results. */
+  interpreted: string[];
+  /** True when the query was parsed by Claude into structured filters rather than treated as a plain name match. */
+  usedNaturalLanguage: boolean;
 }
 
 type StyleWithVariants = {
@@ -659,11 +664,214 @@ export async function getVariantsByFits(itemSlug: string): Promise<BrowseVariant
   });
 }
 
-/** Brand-level and style-level catalog search, matching the two search depths in the design. */
-export async function searchCatalog(query: string): Promise<SearchResults> {
-  const q = query.trim();
-  if (!q) return { brands: [], styles: [] };
+// ============ Natural-language search ============
 
+/** Structured filters extracted from a free-text query by Claude. */
+export interface SearchFilters {
+  brands: string[];
+  styles: string[];
+  silhouettes: string[];
+  sizeCategories: string[];
+  colors: string[];
+  materials: string[];
+  hardwareColors: string[];
+  carryTypes: string[];
+  maxWidthCm: number | null;
+  minWidthCm: number | null;
+  keywords: string[];
+}
+
+const SEARCH_PARSE_PROMPT = `You convert a shopper's natural-language designer-handbag search into structured filters for a catalog query.
+
+Respond with a JSON object ONLY (no markdown, no surrounding text), with exactly these keys:
+{
+  "brands": ["brand names mentioned, e.g. Chanel, Hermès, Coach"],
+  "styles": ["style/model names mentioned, e.g. Birkin, Classic Flap, Tabby"],
+  "silhouettes": ["zero or more of: structured, semi-structured, slouchy, box, hobo, clutch, belt bag, tote"],
+  "sizeCategories": ["zero or more of: mini, small, medium, large, oversized"],
+  "colors": ["plain color words, e.g. black, caramel, gold"],
+  "materials": ["zero or more of: leather, exotic, fabric, coated canvas"],
+  "hardwareColors": ["e.g. gold, silver, ruthenium, palladium"],
+  "carryTypes": ["zero or more of: crossbody, shoulder, crossbody chest, belt bag waist, top handle wrist, top handle crook of arm, hand clutch, backpack"],
+  "maxWidthCm": number or null,
+  "minWidthCm": number or null,
+  "keywords": ["any remaining meaningful descriptive words not captured above"]
+}
+
+Rules:
+- Only use values from the fixed lists where one is given. If nothing fits a field, use [] (or null for widths).
+- Convert any width given in inches to centimeters (1 inch = 2.54 cm) and put it in maxWidthCm/minWidthCm. "under/less than 10 inches wide" -> maxWidthCm 25.4. "at least 12 inches" -> minWidthCm 30.48.
+- Do not invent brands or styles that are not implied by the query.
+- Lowercase everything except brand and style names.`;
+
+function asStringArray(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  return v.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((x) => x.trim());
+}
+
+function asNumber(v: unknown): number | null {
+  return typeof v === "number" && Number.isFinite(v) ? v : null;
+}
+
+function normalizeFilters(parsed: Record<string, unknown>): SearchFilters {
+  return {
+    brands: asStringArray(parsed.brands),
+    styles: asStringArray(parsed.styles),
+    silhouettes: asStringArray(parsed.silhouettes).map((s) => s.toLowerCase()),
+    sizeCategories: asStringArray(parsed.sizeCategories).map((s) => s.toLowerCase()),
+    colors: asStringArray(parsed.colors).map((s) => s.toLowerCase()),
+    materials: asStringArray(parsed.materials).map((s) => s.toLowerCase()),
+    hardwareColors: asStringArray(parsed.hardwareColors).map((s) => s.toLowerCase()),
+    carryTypes: asStringArray(parsed.carryTypes).map((s) => s.toLowerCase()),
+    maxWidthCm: asNumber(parsed.maxWidthCm),
+    minWidthCm: asNumber(parsed.minWidthCm),
+    keywords: asStringArray(parsed.keywords).map((s) => s.toLowerCase()),
+  };
+}
+
+/** Parse a free-text query into structured filters via Claude. Returns null if unavailable so callers can fall back to plain name matching. */
+async function parseSearchQuery(query: string): Promise<SearchFilters | null> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return null;
+  try {
+    const anthropic = new Anthropic({ apiKey });
+    const message = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 512,
+      messages: [{ role: "user", content: `${SEARCH_PARSE_PROMPT}\n\nSearch query: "${query}"` }],
+    });
+    const raw = (message.content[0] as { type: string; text: string }).text;
+    const jsonText = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+    return normalizeFilters(JSON.parse(jsonText) as Record<string, unknown>);
+  } catch (err) {
+    console.error("Search parse error:", err);
+    return null;
+  }
+}
+
+function hasAttributeFilters(f: SearchFilters): boolean {
+  return (
+    f.styles.length > 0 || f.silhouettes.length > 0 || f.sizeCategories.length > 0 ||
+    f.colors.length > 0 || f.materials.length > 0 || f.hardwareColors.length > 0 ||
+    f.carryTypes.length > 0 || f.maxWidthCm != null || f.minWidthCm != null || f.keywords.length > 0
+  );
+}
+
+function includesAny(haystack: string | null | undefined, needles: string[]): boolean {
+  if (!haystack) return false;
+  const h = haystack.toLowerCase();
+  return needles.some((n) => h.includes(n) || n.includes(h));
+}
+
+/** Human-readable summary of the filters that were actually applied. */
+function describeFilters(f: SearchFilters): string[] {
+  const parts: string[] = [];
+  if (f.styles.length) parts.push(f.styles.join(", "));
+  if (f.silhouettes.length) parts.push(f.silhouettes.join(", "));
+  if (f.sizeCategories.length) parts.push(`${f.sizeCategories.join("/")} size`);
+  if (f.colors.length) parts.push(f.colors.join(", "));
+  if (f.materials.length) parts.push(f.materials.join(", "));
+  if (f.hardwareColors.length) parts.push(`${f.hardwareColors.join("/")} hardware`);
+  if (f.carryTypes.length) parts.push(f.carryTypes.join(", "));
+  if (f.maxWidthCm != null) parts.push(`under ${f.maxWidthCm.toFixed(1)} cm wide`);
+  if (f.minWidthCm != null) parts.push(`over ${f.minWidthCm.toFixed(1)} cm wide`);
+  if (f.keywords.length) parts.push(f.keywords.join(", "));
+  return parts;
+}
+
+type VariantSearchRow = {
+  variant_id: number;
+  size_label: string | null;
+  size_category: string | null;
+  exterior_colorway: string | null;
+  hardware_color: string | null;
+  style: { style_id: number; name: string; silhouette: string | null; brand: { name: string } | { name: string }[] | null } | { style_id: number; name: string; silhouette: string | null; brand: { name: string } | { name: string }[] | null }[] | null;
+  exterior_material: { name: string; material_type: string } | { name: string; material_type: string }[] | null;
+  production_record: { dimensions_w_cm: number | null }[] | null;
+  carry_method: { carry_type: string; possible: string }[] | null;
+};
+
+/** Variant-level search using the structured attribute filters, grouped into styles. */
+async function searchVariantsByFilters(f: SearchFilters): Promise<StyleSearchResult[]> {
+  const { data, error } = await getSupabase()
+    .from("variant")
+    .select(
+      "variant_id, size_label, size_category, exterior_colorway, hardware_color, style:style_id(style_id, name, silhouette, brand:brand_id(name)), exterior_material:exterior_material_id(name, material_type), production_record(dimensions_w_cm), carry_method(carry_type, possible)"
+    )
+    .limit(500);
+
+  if (error || !data) return [];
+
+  const grouped = new Map<number, StyleSearchResult>();
+
+  for (const raw of data as VariantSearchRow[]) {
+    const style = (Array.isArray(raw.style) ? raw.style[0] : raw.style) ?? null;
+    if (!style) continue;
+    const brandName = embeddedName(style.brand);
+    const material = (Array.isArray(raw.exterior_material) ? raw.exterior_material[0] : raw.exterior_material) ?? null;
+    const widths = (raw.production_record ?? [])
+      .map((p) => (p.dimensions_w_cm != null ? Number(p.dimensions_w_cm) : null))
+      .filter((w): w is number => w != null);
+
+    // AND across categories, OR within each category. A variant must satisfy every specified filter.
+    if (f.styles.length && !includesAny(style.name, f.styles.map((s) => s.toLowerCase())) && !includesAny(brandName, f.styles.map((s) => s.toLowerCase()))) continue;
+    if (f.silhouettes.length && !includesAny(style.silhouette, f.silhouettes)) continue;
+    if (f.sizeCategories.length && !includesAny(raw.size_category, f.sizeCategories)) continue;
+    if (f.colors.length && !includesAny(raw.exterior_colorway, f.colors)) continue;
+    if (f.materials.length && !(includesAny(material?.material_type, f.materials) || includesAny(material?.name, f.materials))) continue;
+    if (f.hardwareColors.length && !includesAny(raw.hardware_color, f.hardwareColors)) continue;
+    if (f.carryTypes.length) {
+      const possibleCarries = (raw.carry_method ?? []).filter((c) => c.possible !== "no");
+      if (!possibleCarries.some((c) => includesAny(c.carry_type, f.carryTypes))) continue;
+    }
+    if (f.maxWidthCm != null && !(widths.length > 0 && widths.some((w) => w <= f.maxWidthCm!))) continue;
+    if (f.minWidthCm != null && !(widths.length > 0 && widths.some((w) => w >= f.minWidthCm!))) continue;
+    if (f.keywords.length && !includesAny(style.name, f.keywords) && !includesAny(raw.exterior_colorway, f.keywords) && !includesAny(brandName, f.keywords)) continue;
+
+    let entry = grouped.get(style.style_id);
+    if (!entry) {
+      entry = { styleId: style.style_id, styleName: style.name, brandName, variants: [] };
+      grouped.set(style.style_id, entry);
+    }
+    entry.variants.push({
+      variantId: raw.variant_id,
+      sizeLabel: raw.size_label,
+      exteriorColorway: raw.exterior_colorway,
+      hardwareColor: raw.hardware_color,
+    });
+  }
+
+  return Array.from(grouped.values()).slice(0, 30);
+}
+
+/** Brand cards matching any of the named brands. */
+async function searchBrandsByName(names: string[]): Promise<BrandSearchResult[]> {
+  if (!names.length) return [];
+  const orFilter = names.map((n) => `name.ilike.%${n.replace(/[%,]/g, "")}%`).join(",");
+  const { data } = await getSupabase()
+    .from("brand")
+    .select("brand_id, name, tier, style(style_id, name, variant(variant_id))")
+    .or(orFilter);
+  return mapBrandRows(data ?? []);
+}
+
+function mapBrandRows(
+  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
+): BrandSearchResult[] {
+  return rows.map((b) => {
+    const styles = b.style ?? [];
+    return {
+      brandId: b.brand_id,
+      name: b.name,
+      tier: b.tier,
+      variantCount: styles.reduce((sum, s) => sum + (s.variant ?? []).length, 0),
+      styleNames: styles.map((s) => s.name),
+    };
+  });
+}
+
+/** Plain substring search over brand and style names — the fallback when Claude parsing is unavailable. */
+async function legacySearch(q: string): Promise<SearchResults> {
   const [brandRes, styleRes] = await Promise.all([
     getSupabase()
       .from("brand")
@@ -671,25 +879,12 @@ export async function searchCatalog(query: string): Promise<SearchResults> {
       .ilike("name", `%${q}%`),
     getSupabase()
       .from("style")
-      .select(
-        "style_id, name, brand:brand_id(name), variant(variant_id, size_label, exterior_colorway, hardware_color)"
-      )
+      .select("style_id, name, brand:brand_id(name), variant(variant_id, size_label, exterior_colorway, hardware_color)")
       .ilike("name", `%${q}%`)
       .limit(20),
   ]);
 
-  const brands: BrandSearchResult[] = (brandRes.data ?? []).map((b) => {
-    const styles = (b.style ?? []) as { style_id: number; name: string; variant: { variant_id: number }[] | null }[];
-    const variantCount = styles.reduce((sum, s) => sum + (s.variant ?? []).length, 0);
-    return {
-      brandId: b.brand_id,
-      name: b.name,
-      tier: b.tier,
-      variantCount,
-      styleNames: styles.map((s) => s.name),
-    };
-  });
-
+  const brands = mapBrandRows(brandRes.data ?? []);
   const styles: StyleSearchResult[] = (styleRes.data ?? []).map((s) => ({
     styleId: s.style_id,
     styleName: s.name,
@@ -702,5 +897,94 @@ export async function searchCatalog(query: string): Promise<SearchResults> {
     })),
   }));
 
-  return { brands, styles };
+  return { brands, styles, interpreted: [], usedNaturalLanguage: false };
+}
+
+/** Records a search that returned nothing so the team can see what users want that isn't in the catalog yet. */
+async function logMiss(query: string): Promise<void> {
+  try {
+    await getSupabase().from("searched_not_found").insert({ search_query: query, result_count: 0 });
+  } catch (err) {
+    console.error("Failed to log searched_not_found:", err);
+  }
+}
+
+/**
+ * Catalog search. Parses the query with Claude into structured filters and runs a
+ * brand + attribute-aware variant search; falls back to plain name matching when
+ * Claude is unavailable. Searches that find nothing are logged to `searched_not_found`.
+ */
+export async function searchCatalog(query: string): Promise<SearchResults> {
+  const q = query.trim();
+  if (!q) return { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
+
+  const filters = await parseSearchQuery(q);
+
+  // Fallback: no structured parse available — behave like a plain name search.
+  if (!filters) {
+    const result = await legacySearch(q);
+    if (result.brands.length === 0 && result.styles.length === 0) await logMiss(q);
+    return result;
+  }
+
+  const [brands, styles] = await Promise.all([
+    searchBrandsByName(filters.brands),
+    hasAttributeFilters(filters) ? searchVariantsByFilters(filters) : Promise.resolve([] as StyleSearchResult[]),
+  ]);
+
+  // If Claude extracted nothing usable, fall back to a plain name search over the raw text.
+  if (brands.length === 0 && styles.length === 0 && !hasAttributeFilters(filters) && filters.brands.length === 0) {
+    const result = await legacySearch(q);
+    if (result.brands.length === 0 && result.styles.length === 0) await logMiss(q);
+    return result;
+  }
+
+  if (brands.length === 0 && styles.length === 0) await logMiss(q);
+
+  return { brands, styles, interpreted: describeFilters(filters), usedNaturalLanguage: true };
+}
+
+/** A search query that returned no catalog results, aggregated for the admin dashboard. */
+export interface SearchedNotFound {
+  query: string;
+  count: number;
+  lastSearched: string;
+  source: "camera" | "search";
+  resolved: boolean;
+}
+
+/** Aggregated view of searches that returned nothing — the data roadmap for what to research next. */
+export async function getSearchedNotFound(limit = 200): Promise<SearchedNotFound[]> {
+  const { data, error } = await getSupabase()
+    .from("searched_not_found")
+    .select("search_query, date, resolved")
+    .order("date", { ascending: false })
+    .limit(1000);
+
+  if (error || !data) return [];
+
+  const byQuery = new Map<string, SearchedNotFound>();
+  for (const row of data as { search_query: string; date: string; resolved: boolean }[]) {
+    const isCamera = row.search_query.startsWith("[camera] ");
+    const cleanQuery = isCamera ? row.search_query.replace(/^\[camera\]\s*/, "") : row.search_query;
+    const key = `${isCamera ? "camera" : "search"}:${cleanQuery.toLowerCase()}`;
+    const existing = byQuery.get(key);
+    if (existing) {
+      existing.count += 1;
+      if (row.date > existing.lastSearched) existing.lastSearched = row.date;
+      existing.resolved = existing.resolved && row.resolved;
+    } else {
+      byQuery.set(key, {
+        query: cleanQuery,
+        count: 1,
+        lastSearched: row.date,
+        source: isCamera ? "camera" : "search",
+        resolved: row.resolved,
+      });
+    }
+  }
+
+  return Array.from(byQuery.values())
+    .sort((a, b) => b.count - a.count || b.lastSearched.localeCompare(a.lastSearched))
+    .slice(0, limit);
 }

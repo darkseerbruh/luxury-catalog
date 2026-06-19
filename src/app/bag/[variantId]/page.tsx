@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail } from "@/lib/queries";
+import FeedbackWidget from "./FeedbackWidget";
 
 export const dynamic = "force-dynamic";
 
@@ -487,6 +488,9 @@ export default async function BagDetailPage({
             </div>
           </Section>
         )}
+
+      {/* User feedback */}
+      <FeedbackWidget variantId={v.variantId} />
     </main>
   );
 }
