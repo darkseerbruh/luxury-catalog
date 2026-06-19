@@ -9,9 +9,12 @@
 - Downloaded `therealreal_data-1.csv` into `data/raw/` via Drive MCP
 - Added `SUPABASE_ACCESS_TOKEN` to `.env.local` (gitignored, not committed) for future CLI use
 
-**Open / blocked:**
-- Vercel project not yet linked/deployed — Arielle has the import screen open, walking through env var setup
+**Done (cont.):**
+- Vercel project deployed: https://luxury-catalog-qiu3ovzqt-luxury-catalog.vercel.app (env vars set, Vercel Authentication disabled for public access, confirmed 200 + real HTML response)
+
+**Open:**
 - `npm run dev` not yet verified running live in this session (build passes, which exercises the same code path)
+- Custom domain (luxurycatalog.com) not yet pointed at Vercel — deferred to Phase 6 per plan
 
 **Data finding (important for Phase 2 planning):**
 - `theluxurycloset_data.csv` (38.7 MB) exceeds Drive MCP's 10 MB raw-download limit. Pulled it as a Google Sheet export instead (`read_file_content`), which truncates at ~130k chars — recovered 63 usable rows, saved as `data/raw/theluxurycloset_data_partial.csv`. This is a small sample, not the full sheet.
