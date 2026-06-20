@@ -183,6 +183,38 @@ Per bag, generate a short *"What owners say"* synthesis + the top-N structured t
 
 ---
 
+## Next major workstream, part 2: the social / expert layer (stickiness)
+
+*Added 2026-06-20 (product discussion). Design + draft schema (`supabase/migrations/0004_social_expert_layer.sql`); not yet built or applied. Builds directly on the `user_bag`/`review` spine from part 1.*
+
+### The insight
+Badges alone don't retain collectors. **Poshmark proved the unit of stickiness is the closet** — a public, browsable, *followable* identity built from the bags you own. We already have the data (`user_bag` with `status='own'`); making it a public closet turns a private utility into a social graph. And a social graph compounds three ways that are unique to this product:
+
+1. **Coveted closets = our wishlist data, inverted.** We know which bags people `want`. So we can rank closets by **want-demand**: the sum, across the bags a user owns, of how many *other* users want that exact variant. "The most coveted closet on Luxury Catalog" is a real, data-backed leaderboard nobody else can compute — and it's pure status fuel for collectors. A second signal is closets others explicitly **favorite** (Poshmark's "love"/follow).
+2. **Experts are citation-shaped content creators.** Verified expert/authenticator profiles who write posts (eventually Je Suis Lou–style season reviews and video) produce exactly the fact-dense, named-author, E-E-A-T content the **marketing plan's GEO strategy** is built on. The social layer and the SEO/GEO engine are the same flywheel: experts make the content Google AI and ChatGPT cite, citations bring traffic, traffic makes expert profiles valuable, which attracts more experts.
+3. **Authenticators are the on-ramp to Revenue Stream 2.** Verified authenticator profiles (the brief's Thumbtack-model authentication marketplace) start as a trust badge + profile, then become the directory the marketplace monetizes. The profile is the foundation; build it now, monetize later.
+
+### What this is made of (draft migration 0004)
+- **`user_profile`** (1:1 with `auth.users`): `handle` (for `/u/[handle]` public closet URLs), `display_name`, `bio`, `avatar_url`, `closet_public` (opt-in; default private), and admin-granted trust flags `is_verified` / `is_expert` / `is_authenticator`. This is the missing "who is this user" table the whole social layer needs.
+- **`closet_favorite`**: user ↔ closet follow/love (`follower_user_id`, `owner_user_id`). Powers the favorites count and a "closets you follow" feed.
+- **`post`**: expert editorial (title, slug, markdown body, excerpt, status, optional `topic_brand_id`/`topic_style_id` for "what's coming this Chanel season"). Published posts are world-readable and become GEO content with a named author.
+- **`closet_stats` view**: per public closet — `owned_count`, `want_demand` (the coveted score), `favorite_count`. Drives the "most coveted closets" leaderboard from aggregates only (no private rows exposed).
+
+### Guardrails / decisions
+- **Privacy first:** closets are **private by default**, public only on opt-in (`closet_public`). Wishlists (`want`) stay private even for public closets — want-demand is exposed only as an *aggregate* via the view, never as "person X wants your bag."
+- **Trust flags are admin-granted**, never self-serve. `is_verified`/`is_expert`/`is_authenticator` are the trust spine; handing them out automatically would destroy the signal.
+- **RLS:** public closets relax `user_bag` SELECT to `own`/`had` rows of public profiles only; profiles' public fields are world-readable; posts readable when published.
+- Same hard prerequisite as part 1: **Supabase Auth.** And the leaderboard is only meaningful once there are real users — it's a months-in feature, but the schema should exist early so closets accrue followers from day one.
+
+### Suggested build order (after part 1 ships)
+1. `user_profile` + handle + public/private toggle → `/u/[handle]` public closet page (Poshmark-style grid of owned bags).
+2. `closet_favorite` → follow/love a closet; "closets you follow" feed.
+3. `closet_stats` view → "Most coveted closets" leaderboard (want-demand + favorites).
+4. `post` + expert authorship → expert blog (doubles as GEO content); gate behind `is_expert`.
+5. Authenticator profiles → directory → (later) the authentication marketplace (Revenue Stream 2).
+
+---
+
 ## Non-negotiable constraints (from product brief)
 
 - **Never invent** authentication markers, date codes, serial formats, or hardware details. Leave `null` + `confidence_level: low` if unverifiable.
