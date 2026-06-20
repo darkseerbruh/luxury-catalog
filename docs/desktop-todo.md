@@ -2,117 +2,111 @@
 
 *Created 2026-06-20. Consolidates every operator action that **cannot be done from a
 cloud Claude session** (no credentials, no dashboard access, outward-facing, or a
-business decision). Pulled from `handoff.md`, `additive-features-port.md`,
-`product-brief.md`, and `marketing-plan.md`. Work top-down: Section A unblocks the
-live product; nothing DB-backed works until A1–A3 are done.*
+business decision). Work top-down. Updated live during the 2026-06-20 working session.*
 
 Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 decision
 
----
-
-## A. Go-live blockers (do these first — in order)
-
-- [ ] ⛔🔧 **A1. Apply Supabase migrations** (SQL editor / CLI), in order:
-  `0002_user_features` → `0003_reviews_notifications` → `0004_resources_creators` →
-  `0005_closet_status_want_have_had` → `0006_social_expert_layer`. *(0001 already
-  applied.)* `0005` is data-migrating (collapses researching/wishlist→want, owned→have).
-- [ ] ⛔🔧 **A2. Create `.env.local`** with `NEXT_PUBLIC_SUPABASE_URL` +
-  `SUPABASE_SERVICE_ROLE_KEY`, then run the seeders (both idempotent):
-  `npx tsx supabase/seed/seed-hero-styles.ts` and `npx tsx supabase/seed/seed-breadth.ts`.
-  *(Live DB still has old seed data until this runs.)*
-- [ ] ⛔🔧 **A3. Set Vercel env vars** (Project → Settings → Environment Variables):
-  `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL`
-  (→ luxurycatalog.com once DNS is live), `NEXT_PUBLIC_AUTHOR_NAME` (your real name —
-  strengthens E-E-A-T), `CRON_SECRET`. See `.env.example` for the full list.
-- [ ] ⛔🔧 **A4. Supabase email-confirm template** → point at
-  `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email
-  Templates), or disable confirmation while testing.
-- [ ] ⛔ **A5. Smoke-test the full path on the live DB**: sign up → onboarding →
-  save to closet → watchlist → review → trigger a price alert. This is the one thing
-  the cloud sessions could never verify.
+> **⚠️ Security note (2026-06-20):** the Supabase **`service_role` key** and DB
+> password were pasted into a chat transcript during setup. **Rotate them** before
+> launch — see item **A6**.
 
 ---
 
-## B. DNS go-live (`luxurycatalog.com`, registered at Squarespace, points nowhere)
+## ✅ Done in the 2026-06-20 session
+- **Migrations 0002–0007 applied** to Supabase (via `supabase db push` on laptop; `0001` repaired-as-applied). Includes the new `0007_taste_and_social_links`.
+- **Catalog seeded** — `seed-hero-styles` (7 styles) + `seed-breadth` (120+56 styles / 218+ variants). `.env.local` created locally.
+- **Vercel env vars set** — `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL` (=`https://luxury-catalog-omega.vercel.app` for now), `NEXT_PUBLIC_AUTHOR_NAME`, `CRON_SECRET`. *(All saved "Sensitive" — cosmetic only; can't read back in dashboard.)*
+- **DNS configured** — domain moved off uniregistry parking to **Squarespace nameservers**; custom records added: `A @ → 216.198.79.1`, `CNAME www → da85d5fe69f1eefe.vercel-dns-017.com`. Vercel canonical = **www**. *Propagating; waiting on "Valid Configuration."*
+- **Auth configured** — Site URL + redirect URLs set; **email confirmation disabled** for now (free tier can't edit templates; re-enable with Resend before launch).
+- **App runs locally** against the live seeded DB on the feature branch.
+- **Georgia LLC filing submitted** (`Luxury Catalog, LLC`, NAICS 519130). Awaiting approval.
 
-- [ ] 🔧 **B1. Vercel** → Project → Domains → add `luxurycatalog.com` + `www`; note the
-  A record IP + CNAME target Vercel shows.
-- [ ] 🔧 **B2. Squarespace** (domains.squarespace.com → DNS): delete existing `@` A and
-  `www` CNAME; add A `@` → the IP Vercel shows (was `76.76.21.21` — **verify against
-  Vercel**) and CNAME `www` → `cname.vercel-dns.com.`
-- [ ] 🔧 **B3.** Wait 15–60 min for **"Valid Configuration"** in Vercel.
-- [ ] 🔧 **B4. Email forwarding** — test `hello@luxurycatalog.com`; re-add MX
-  `fwd1.squarespace.com.` (10) / `fwd2.squarespace.com.` (20) if they were wiped.
-- [ ] 🔧 **B5.** After DNS is live, update `NEXT_PUBLIC_SITE_URL` (A3) to the real domain.
+---
+
+## A. Go-live blockers
+
+- [x] ⛔🔧 **A1. Apply Supabase migrations 0002–0007.** Done via `db push`.
+- [x] ⛔🔧 **A2. Seed the catalog.** Done.
+- [x] ⛔🔧 **A3. Set Vercel env vars.** Done (six vars above).
+- [x] ⛔🔧 **A4. Auth URLs + confirmation.** Site/redirect URLs set; confirm-email disabled (interim).
+- [ ] ⛔ **A5. Smoke-test the full path** on the live DB: sign up → onboarding → save to closet → watchlist → review → quiz → recommendations → notifications. *(Partly testable locally now; finish after the branch is deployed.)*
+- [ ] 🔧 **A6. Rotate exposed secrets** *(NEW — security)* — regenerate the Supabase **`service_role` key** and **DB password** (Dashboard → Project Settings → API / Database), then update `.env.local` **and** the Vercel env var. Do before launch.
+- [ ] ⛔🔧 **A7. Merge feature branch → `main` + deploy** — the new social/taste features live on `claude/lucid-archimedes-1cyi21`, not `main`. (Claude will merge at end of session per instruction; then Vercel auto-deploys production.)
+
+---
+
+## B. DNS go-live (`luxurycatalog.com`)
+
+- [x] 🔧 **B1. Added domain in Vercel** (`luxurycatalog.com` + `www`, apex→www redirect).
+- [x] 🔧 **B2. Squarespace DNS** — switched to Squarespace nameservers; added `A @ → 216.198.79.1` and `CNAME www → da85d5fe69f1eefe.vercel-dns-017.com`.
+- [ ] 🔧 **B3.** Wait for Vercel to show **"Valid Configuration"** on both domains (nameserver change can take up to ~24–48h).
+- [ ] 🔧 **B4. Email forwarding (optional)** — set up `hello@luxurycatalog.com` (MX records) if/when you want branded email. Not needed for the site to work.
+- [ ] 🔧 **B5.** Once DNS validates, update Vercel **`NEXT_PUBLIC_SITE_URL` → `https://www.luxurycatalog.com`** and redeploy.
 
 ---
 
 ## C. Analytics, alerts & integrations
 
-- [ ] 🔧 **C1. PostHog** — set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`);
-  enable **"Cookieless server hash mode"**; optionally run `node scripts/setup-posthog.mjs`.
-- [ ] 🔧 **C2.** Add `.mcp.json` manually for the PostHog MCP (snippet in `handoff.md` /
-  `.env.example`). Set `POSTHOG_PERSONAL_API_KEY`.
-- [ ] 🔧 **C3. Price alerts** — confirm `CRON_SECRET` is set (Vercel injects it as the
-  cron Authorization header); `vercel.json` already schedules the daily job.
-- [ ] 🔧 **C4. Email delivery (Resend)** — sign up, **verify a sender domain**, set
-  `RESEND_API_KEY`. Without it, alerts are in-app only.
+- [ ] 🔧 **C1. PostHog** — set `NEXT_PUBLIC_POSTHOG_KEY`; enable **"Cookieless server hash mode"**; optionally run `node scripts/setup-posthog.mjs`.
+- [ ] 🔧 **C2.** Add `.mcp.json` for the PostHog MCP (snippet in `handoff.md`/`.env.example`); set `POSTHOG_PERSONAL_API_KEY`.
+- [ ] 🔧 **C3. Price alerts** — `CRON_SECRET` is set ✅; `vercel.json` already schedules the daily job. Verify it runs after deploy.
+- [ ] 🔧 **C4. Email delivery (Resend)** — sign up, **verify a sender domain**, set `RESEND_API_KEY`. Unlocks alert emails **and** Supabase email-template editing (so you can re-enable verified signup — A4).
 
 ---
 
-## D. SEO / GEO (the #1 marketing channel — see `marketing-plan.md`)
+## D. SEO / GEO (the #1 marketing channel)
 
-- [ ] 📣 **D1.** After deploy, **submit `/sitemap.xml`** to **Google Search Console**
-  *and* **Bing Webmaster Tools** (Bing powers ChatGPT search). Verify domain ownership in each.
-- [ ] 📣 **D2. Curate video resources** — add `creator` rows (vetted reviewers) +
-  `resource` rows (their best videos linked to styles) via admin/seed, to light up the
-  bag-page "Video reviews" sections.
+- [ ] 📣 **D1.** After the branch is deployed + DNS validates, **submit `/sitemap.xml`** to **Google Search Console** *and* **Bing Webmaster Tools** (Bing powers ChatGPT search). Verify domain ownership in each.
+- [ ] 📣 **D2. Curate video resources** — add `creator` + `resource` rows (vetted reviewers' best videos) to light up bag-page "Video reviews."
 
 ---
 
-## E. Monetization setup (outward-facing / business)
+## E. Monetization setup
 
-- [ ] ⚖️📣 **E1. Affiliate program applications** — sign up for **Fashionphile,
-  TheRealReal, Vestiaire** (and any others). Some require traffic/leverage first, so
-  start the applications now. Then set `NEXT_PUBLIC_AFFILIATE_*` codes /
-  `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` (A3).
-- [ ] ⚖️ **E2. Authenticator outreach** — begin recruiting professional authenticators
-  (the Marketplace, Rev #2). The contributor ladder + `is_authenticator` profiles feed
-  this; even pre-build, line up 3–5 willing pros.
+- [ ] ⚖️📣 **E1. Affiliate applications** *(started)* — fastest: an aggregator (**Sovrn/Skimlinks** or **Rakuten**) for instant multi-merchant coverage; then direct: **The RealReal** ([/affiliates](https://www.therealreal.com/affiliates)), **Vestiaire** (Awin/Partnerize), **Fashionphile** (Impact/ShareASale). Apply as sole prop (SSN) now; switch payee to the LLC later. Codes → `NEXT_PUBLIC_AFFILIATE_*` / `_WRAP_TEMPLATE` in Vercel.
+- [ ] ⚖️ **E2. Authenticator outreach** — line up 3–5 pro authenticators for the Marketplace (Rev #2).
 
 ---
 
 ## F. Data depth & integrity
 
-- [ ] 🔧 **F1. Brand depth** — drop the full Google Drive reseller CSV export into
-  `data/raw/` and re-run the seeder to auto-fill the 9 stub brands.
-- [ ] ⚖️ **F2. Re-verify hero-research accuracy** — Session-2 snippet-sourced data was
-  capped at `medium` confidence (WebFetch was blocked). Re-verify **Hermès blind-stamp**
-  and **Chanel serials** especially before presenting as fact (never-invent rule).
+- [ ] 🔧 **F1. Brand depth** — drop the full Google Drive reseller CSV into `data/raw/` and re-run the seeder to fill the 9 stub brands.
+- [ ] ⚖️ **F2. Re-verify hero-research accuracy** — re-check **Hermès blind-stamp** + **Chanel serials** before presenting as fact (never-invent rule).
 
 ---
 
-## G. Legal / compliance (founder + counsel)
+## G. Legal / compliance
 
-- [ ] ⚖️ **G1. Image rights / fair-use review** — the photo-contribution path needs a
-  **UGC license at upload + ownership attestation + a registered DMCA agent**. See
-  `image-strategy-research.md`. (AI-render path already ruled out.)
-- [ ] ⚖️ **G2. Trademark / brand usage** review for using brand + style names at scale.
-- [ ] ⚖️ **G3.** Confirm `luxurycatalog.com` auto-renew (~Aug 9 annually) and LLC standing.
+- [ ] ⚖️ **G1. Entity cleanup (Utah → Georgia)** *(in progress)*:
+  - [x] Filed **Georgia domestic LLC** (`Luxury Catalog, LLC`).
+  - [ ] **Check Utah LLC status** (businessregistration.utah.gov); if Active/Delinquent, file dissolution. If already admin-dissolved, no action.
+  - [ ] **Get a new EIN** (free, instant — irs.gov → EIN Assistant) once the GA Certificate of Organization is issued.
+  - [ ] **Open a business bank account** (EIN + Articles + operating agreement).
+  - [ ] **Set an April-1 reminder** for the GA Annual Registration (~$50/yr).
+  - [ ] Update affiliate/payment **W-9 / payee** info to the new LLC + EIN.
+  - [ ] *(Recommended)* 30-min CPA/attorney check to confirm dissolve-Utah-and-reform-GA vs. domestication, given taxes.
+- [ ] ⚖️ **G2. Image rights / fair-use** — UGC license + ownership attestation + registered **DMCA agent** before the photo-contribution feature ships.
+- [ ] ⚖️ **G3. Trademark / brand-usage** review for using brand + style names at scale.
+- [ ] ⚖️ **G4.** Confirm `luxurycatalog.com` domain auto-renew (~Aug 9 annually).
 
 ---
 
-## H. Decisions needed from you (unblock the next build sessions)
+## H. Decisions / future-build (mostly resolved this session)
 
-- [ ] 🧠 **H1. Social UI scope** — confirm the build order in
-  `engagement-strategy.md` §3 (social profiles → activity feed → taste quiz → recs).
-- [ ] 🧠 **H2. Taste quiz vs. photo-contributions** — which engagement feature do you
-  want built **first**? Both are spec'd; they're independent.
-- [ ] 🧠 **H3. Admin auth gate** — `/admin/*` is currently **unauthenticated**. Approve
-  gating it behind `profile.is_admin` (code task) before any sensitive data lands.
-- [ ] 🧠 **H4. Social links policy** — confirm the allowed networks (IG / TikTok /
-  YouTube / Poshmark / Substack) and the verified-link treatment from
-  `engagement-strategy.md` §1f.
+- [x] 🧠 **H1/H2. Build order + first feature** — DECIDED: build the full engagement track now (social UI → feed → taste quiz → recs → **Taste Map** → notifications). Built on the feature branch this session.
+- [ ] 🧠 **H3. Admin auth gate** — `/admin/*` is still **unauthenticated**; gate behind `profile.is_admin` before sensitive data lands. *(Code task — queue for a build session.)*
+- [ ] 🧠 **H4. Social links policy** — confirm allowed networks (IG/TikTok/YouTube/Poshmark/Substack) + verified-link treatment.
+- [ ] 🧠 **H5. Photo-contribution system** — still queued (the UGC engine the leaderboards reward). Build next?
+
+---
+
+## I. Permanent fix — make the cloud self-sufficient for DB work (optional, high-value)
+
+The cloud sandbox **can't reach Supabase** (network egress blocks all `*.supabase.*`
+hosts), which is why migrations/seeding had to run from the laptop. To let future
+cloud sessions do DB work directly (no laptop, no `.env.local` syncing):
+- [ ] 🔧 **I1.** Edit this environment (claude.ai/code → cloud icon → hover env → gear): **Network access → Custom**, add allowed domains `pewmdztviyrtbhtebcct.supabase.co` + `api.supabase.com`, and ✅ keep "Also include default list of common package managers."
+- [ ] 🔧 **I2.** In the same dialog, add env vars `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (note: stored in env config, visible to anyone who can edit it — no secrets store yet). Changes apply to **new** sessions.
 
 ---
 
@@ -120,10 +114,12 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 | Service | For | Where |
 |---|---|---|
-| Supabase | DB (`pewmdztviyrtbhtebcct`) | supabase.com |
-| Vercel | Hosting (team `darkseerbruh`) | vercel.com |
+| Supabase | DB (`pewmdztviyrtbhtebcct`, region us-west-2) | supabase.com |
+| Vercel | Hosting (team `darkseerbruh`, prod `luxury-catalog-omega.vercel.app`) | vercel.com |
 | Anthropic | Camera tool + NL search + analytics digest | console.anthropic.com |
 | PostHog | Analytics | posthog.com |
-| Squarespace Domains | `luxurycatalog.com` DNS | domains.squarespace.com |
-| Resend | Alert email delivery | resend.com |
+| Squarespace Domains | `luxurycatalog.com` DNS (now on Squarespace nameservers) | domains.squarespace.com |
+| Resend | Alert email + Supabase SMTP | resend.com |
+| GA Secretary of State | `Luxury Catalog, LLC` filing / annual registration | ecorp.sos.ga.gov |
+| IRS | EIN | irs.gov |
 </content>
