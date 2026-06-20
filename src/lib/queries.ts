@@ -1127,6 +1127,65 @@ export async function getUserBags(
   });
 }
 
+// ============ Curated resources (embedded video reviews) ============
+
+export interface CuratedResource {
+  resourceId: number;
+  resourceType: string;
+  title: string;
+  url: string;
+  youtubeVideoId: string | null;
+  description: string | null;
+  isFeatured: boolean;
+  creatorName: string | null;
+  creatorChannelUrl: string | null;
+  creatorTrusted: boolean;
+}
+
+/**
+ * Curated resources for a bag — videos attached to this variant or rolled up
+ * from its style. Returns [] if the table isn't present yet (migration 0005
+ * not applied), so the bag page degrades gracefully.
+ */
+export async function getResourcesForStyle(
+  styleId: number,
+  variantId?: number
+): Promise<CuratedResource[]> {
+  const ids = [styleId];
+  const { data, error } = await getSupabase()
+    .from("resource")
+    .select(
+      "resource_id, resource_type, title, url, youtube_video_id, description, is_featured, style_id, variant_id, creator:creator_id(name, channel_url, is_trusted)"
+    )
+    .eq("published", true)
+    .or(
+      `style_id.in.(${ids.join(",")})${variantId ? `,variant_id.eq.${variantId}` : ""}`
+    )
+    .order("is_featured", { ascending: false })
+    .order("sort_order", { ascending: true })
+    .limit(12);
+
+  if (error || !data) return [];
+
+  return data.map((r) => {
+    const c = (Array.isArray(r.creator) ? r.creator[0] : r.creator) as
+      | { name: string; channel_url: string | null; is_trusted: boolean }
+      | null;
+    return {
+      resourceId: r.resource_id,
+      resourceType: r.resource_type,
+      title: r.title,
+      url: r.url,
+      youtubeVideoId: r.youtube_video_id ?? null,
+      description: r.description ?? null,
+      isFeatured: !!r.is_featured,
+      creatorName: c?.name ?? null,
+      creatorChannelUrl: c?.channel_url ?? null,
+      creatorTrusted: !!c?.is_trusted,
+    };
+  });
+}
+
 // ============ Sitemap targets (programmatic SEO/GEO) ============
 
 /** All indexable entity IDs for sitemap.xml — bag variants + brands. */

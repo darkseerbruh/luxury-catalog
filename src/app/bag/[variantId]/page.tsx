@@ -2,7 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail, getUserBagFor } from "@/lib/queries";
+import { getVariantDetail, getUserBagFor, getResourcesForStyle } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import {
   AUTHOR_NAME,
@@ -20,6 +20,7 @@ import FeedbackWidget from "./FeedbackWidget";
 import CollectionButton from "./CollectionButton";
 import AffiliateLinks from "./AffiliateLinks";
 import PriceAlertSignup from "./PriceAlertSignup";
+import Resources from "./Resources";
 
 export const dynamic = "force-dynamic";
 
@@ -111,6 +112,7 @@ export default async function BagDetailPage({
 
   const user = await getCurrentUser();
   const userBag = user ? await getUserBagFor(user.id, v.variantId) : null;
+  const resources = await getResourcesForStyle(v.style.styleId, v.variantId);
 
   const leadAnswer = buildLeadAnswer(v);
   const faq = buildFaq(v);
@@ -189,6 +191,9 @@ export default async function BagDetailPage({
       {v.style.description && (
         <p className="text-sm leading-relaxed text-muted">{v.style.description}</p>
       )}
+
+      {/* Embedded video reviews — the visual layer while v1 is text-first */}
+      <Resources resources={resources} />
 
       {/* Core specs */}
       <Section title="Specifications">

@@ -215,6 +215,27 @@ Badges alone don't retain collectors. **Poshmark proved the unit of stickiness i
 
 ---
 
+## Embedded resources & curated creators (the visual layer)
+
+*Added 2026-06-20. **Built this session** (schema draft `0005` + bag-page UI) — unlike the social layer, this needs no auth and is live in the code, waiting only on curated data.*
+
+### Why this matters
+v1 is **text-first with no photos** (brief constraint, unresolved photo-licensing question). **Embedded YouTube reviews solve the visual gap without touching the copyright problem** — embedding is permitted, and the thumbnail is served from YouTube's CDN, so we get visuals (thumbnails + video) for free. It also operationalizes the creator idea: curate a roster of reviewers who consistently produce quality bag content and **highlight** them as trusted sources.
+
+### What's built
+- **Schema (`0005_resources_creators.sql`)**: `creator` (curated reviewers — platform, channel, `is_trusted`/`is_featured`, optional `linked_user_id` to a future expert profile) and `resource` (an embeddable item — type, url, `youtube_video_id`, attached to a brand/style/variant, `published`/`is_featured`). Public read, service-role (admin) write.
+- **Bag page**: a "Video reviews & resources" section renders curated videos for the bag's style (rolled up like reviews), as a **click-to-load facade** (`Resources.tsx`) — thumbnail first, iframe only on click (perf + privacy via `youtube-nocookie`). Trusted creators get a badge with a channel link. `getResourcesForStyle()` degrades to `[]` if the table/data isn't there, so it's safe before the migration is applied.
+
+### How it compounds
+- **Ties to the social/expert layer (part 2):** a curated `creator` is the pre-account version of an `is_expert` `user_profile`; `linked_user_id` connects them when a reviewer joins. The "highlight trusted creators" idea becomes a featured-creators directory.
+- **Ties to GEO:** embedded, attributed video raises time-on-page and richness — and a `VideoObject` JSON-LD block per embed is an easy future add for video rich results.
+
+### What's left
+- **Curate the data** (admin/seed): add `creator` rows for vetted channels and `resource` rows linking their best videos to styles. This is the operator/editorial task that lights the feature up.
+- Later: a `/creators` featured directory; `VideoObject` schema; optional user-suggested resources (moderated).
+
+---
+
 ## Non-negotiable constraints (from product brief)
 
 - **Never invent** authentication markers, date codes, serial formats, or hardware details. Leave `null` + `confidence_level: low` if unverifiable.
