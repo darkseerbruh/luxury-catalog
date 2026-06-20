@@ -102,12 +102,12 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 
 ## ✅ Action required before this is production-true
 
-1. **Apply the new migration** (Session 3) before anything else — the auth/closet/watchlist/feedback features depend on it:
+1. **Apply the new migrations** (Session 3) before anything else — most features depend on them:
    ```
-   # via Supabase SQL editor or CLI, run:
-   supabase/migrations/0002_user_features.sql
+   # via Supabase SQL editor or CLI, run in order:
+   supabase/migrations/0002_user_features.sql   # profile, closet, watchlist, bag_request, thrift_find (+ RLS, signup trigger)
+   supabase/migrations/0003_reviews_notifications.sql   # review, notification (+ RLS)
    ```
-   Adds `profile`, `closet_item`, `watchlist`, `bag_request`, `thrift_find` with RLS and a trigger that auto-creates a profile row on signup.
 2. **Point the Supabase email-confirm template** at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates → Confirm signup), or turn off email confirmation while testing. Without this, the signup confirmation link won't land in the app.
 3. **Run the seed scripts against Supabase** (needs `SUPABASE_SERVICE_ROLE_KEY` + URL in a local `.env`, which the cloud session does not have):
    ```
@@ -157,6 +157,11 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 - **Instrumented surfaces** (autocapture covers the rest): `variant_viewed` + `price_history_viewed` (bag page, `TrackBagView`), `search_performed`/`search_not_found` (`SearchTracker`), `item_saved` (closet + watchlist), `feedback_submitted`, and new `bag_requested` / `thrift_find_logged`.
 - **Not yet done**: client-side `identifyUser()`/`resetAnalytics()` on login/logout (Tier-2, consent-gated) — wire into the auth flow if you want post-auth identity stitching.
 
+### Revenue + community (Session 3b — use cases #1, #4, #5)
+- **Affiliate "where to buy"** (`src/lib/affiliate.ts`, `WhereToBuy.tsx`) — resale search deep-links on bag pages (Fashionphile / The RealReal / Vestiaire). Set `NEXT_PUBLIC_AFFILIATE_*` codes and/or `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` to monetize; plain links otherwise. Clicks fire `outbound_resale_clicked`. **Sign up for the affiliate programs to get real codes.**
+- **Price-alert delivery** — `/api/cron/price-alerts` (service-role, `CRON_SECRET`-gated) scans watchlists vs `price_history`, writes `notification` rows, dedupes via `watchlist.last_notified_at`, and optionally emails via Resend (`RESEND_API_KEY`). `vercel.json` runs it daily at 09:00 UTC. In-app feed at `/notifications` + header "Alerts" badge. **To activate: set `CRON_SECRET` (and optionally `RESEND_API_KEY` + verify a Resend sender). Alerts only fire when new, lower `price_history` rows are added** — static seed prices fire once then dedupe.
+- **Reviews & ratings** — `review` table; reviews section + star form on bag pages; aggregate average/count; one review per user per variant; `review_submitted` event. Powers the rating displays from the Figma. Authors shown as "Member"/"You" (other users' profiles aren't readable under RLS).
+
 ---
 
 ## The one outstanding infra item: DNS
@@ -191,7 +196,8 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 2. **Upgrade research confidence** — re-verify the snippet-sourced numbers from a real browser to move key fields to `verified`.
 3. **Remaining brand depth** — the 9 non-hero thrift/mid brands are still stubs. Fastest path: drop the full `theluxurycloset_data.csv` (Drive, 38.7 MB) into `data/raw/` and re-run `seed-breadth.ts` — the seeder now ingests every brand. A hero-style-depth research pass (like the 5 heroes got) is still the gold standard once a browser-capable session is available.
 4. **Fill more hero nulls** — opening dimensions, exact stamp fonts/screw types, interior storage configs, and device-fit data remain `null` across several styles (flagged in each file's notes / `research_gaps_flagged`).
-5. **Price-alert delivery (Session 3 left this)** — the watchlist stores `target_price` + `alert_enabled` and the UI flags when a recorded price is below target, but nothing *sends* alerts. Needs a scheduled job (e.g. Supabase cron / edge function) to compare new `price_history` rows against targets and email/notify; `watchlist.last_notified_at` exists for dedupe.
+5. **~~Price-alert delivery~~ — DONE (Session 3b).** Cron job + in-app notifications + optional Resend email shipped; just needs `CRON_SECRET`/`RESEND_API_KEY` wired and real `price_history` updates to fire on.
+8. **Use cases still unbuilt** (from the product brief): the **authentication marketplace** (Thumbtack model, post-launch); **premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI); **"vote to prioritize this brand"** (Figma; `bag_request` is adjacent); **settings & account management** (edit email/password, notification prefs, delete account). Affiliate links (#1) and reviews (#5) are now built — affiliate just needs real program sign-ups for codes.
 6. **Admin auth gate (Session 3 raised the stakes)** — `/admin/*` is still unauthenticated and `noindex`. Now that real auth exists, gate admin behind an `is_admin` flag on `profile` (or a Supabase role) before there's any sensitive data. `/admin/requests` reads via the service-role key, so it works regardless of viewer — i.e. currently anyone hitting the URL sees it.
 7. **Verify RLS end-to-end** — the closet/watchlist policies (`auth.uid() = user_id`) were written but not exercised against a live DB. Confirm a second user can't read another's closet after applying `0002`.
 
