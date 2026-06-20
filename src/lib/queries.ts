@@ -1055,3 +1055,88 @@ export async function getUserFeedback(limit = 200): Promise<UserFeedbackEntry[]>
     variant: r.record_type === "variant" ? variantsById.get(r.record_id) ?? null : null,
   }));
 }
+
+// ============ UGC: user collection / wishlist reads ============
+// These read the `user_bag` table (migration 0002). Because RLS scopes
+// user_bag to auth.uid(), the anon client returns nothing until real auth is
+// wired (see src/lib/auth.ts); the shapes/queries are correct ahead of that.
+
+export type UserBagStatus = "want" | "own" | "had" | "considering";
+
+export interface CollectionItem {
+  userBagId: number;
+  variantId: number;
+  status: UserBagStatus;
+  notifyOnAvailability: boolean;
+  acquisitionChannel: string | null;
+  acquiredAt: string | null;
+  paidPrice: number | null;
+  notes: string | null;
+  sizeLabel: string | null;
+  exteriorColorway: string | null;
+  hardwareColor: string | null;
+  styleName: string;
+  brandName: string;
+  stillInProduction: boolean | null;
+}
+
+/** Current user's bags filtered by status — drives /me/bags and /me/wishlist. */
+export async function getUserBags(
+  userId: string,
+  statuses: UserBagStatus[]
+): Promise<CollectionItem[]> {
+  const { data, error } = await getSupabase()
+    .from("user_bag")
+    .select(
+      "user_bag_id, status, notify_on_availability, acquisition_channel, acquired_at, paid_price, notes, variant:variant_id(variant_id, size_label, exterior_colorway, hardware_color, still_in_production, style:style_id(name, brand:brand_id(name)))"
+    )
+    .eq("user_id", userId)
+    .in("status", statuses)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) return [];
+
+  return data.flatMap((row) => {
+    const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) as {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null; still_in_production: boolean | null;
+      style: { name: string; brand: unknown } | { name: string; brand: unknown }[] | null;
+    } | null;
+    if (!v) return [];
+    const style = (Array.isArray(v.style) ? v.style[0] : v.style) as { name: string; brand: unknown } | null;
+    return [{
+      userBagId: row.user_bag_id,
+      variantId: v.variant_id,
+      status: row.status as UserBagStatus,
+      notifyOnAvailability: !!row.notify_on_availability,
+      acquisitionChannel: row.acquisition_channel ?? null,
+      acquiredAt: row.acquired_at ?? null,
+      paidPrice: row.paid_price ?? null,
+      notes: row.notes ?? null,
+      sizeLabel: v.size_label,
+      exteriorColorway: v.exterior_colorway,
+      hardwareColor: v.hardware_color,
+      styleName: style?.name ?? "",
+      brandName: style ? embeddedName(style.brand) : "",
+      stillInProduction: v.still_in_production,
+    }];
+  });
+}
+
+/** The current user's relationship to one variant — initial state for the bag-page button. */
+export async function getUserBagFor(
+  userId: string,
+  variantId: number
+): Promise<{ status: UserBagStatus; notifyOnAvailability: boolean } | null> {
+  const { data, error } = await getSupabase()
+    .from("user_bag")
+    .select("status, notify_on_availability")
+    .eq("user_id", userId)
+    .eq("variant_id", variantId)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return {
+    status: data.status as UserBagStatus,
+    notifyOnAvailability: !!data.notify_on_availability,
+  };
+}

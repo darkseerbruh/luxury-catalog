@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail } from "@/lib/queries";
+import { getVariantDetail, getUserBagFor } from "@/lib/queries";
+import { getCurrentUser } from "@/lib/auth";
 import FeedbackWidget from "./FeedbackWidget";
+import CollectionButton from "./CollectionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +65,9 @@ export default async function BagDetailPage({
 
   const v = await getVariantDetail(id);
   if (!v) notFound();
+
+  const user = await getCurrentUser();
+  const userBag = user ? await getUserBagFor(user.id, v.variantId) : null;
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -488,6 +493,16 @@ export default async function BagDetailPage({
             </div>
           </Section>
         )}
+
+      {/* Collection / wishlist */}
+      <CollectionButton
+        variantId={v.variantId}
+        signedIn={!!user}
+        initialStatus={
+          userBag && userBag.status !== "considering" ? userBag.status : null
+        }
+        initialNotify={userBag?.notifyOnAvailability ?? false}
+      />
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />

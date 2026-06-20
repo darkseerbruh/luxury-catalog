@@ -50,6 +50,12 @@ export default function RootLayout({
               >
                 Search
               </Link>
+              <Link
+                href="/me/bags"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                My Bags
+              </Link>
             </div>
           </div>
         </header>
@@ -61,6 +67,7 @@ export default function RootLayout({
               <Link href="/" className="hover:text-foreground">Home</Link>
               <Link href="/search" className="hover:text-foreground">Search</Link>
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
+              <Link href="/me/bags" className="hover:text-foreground">My Bags</Link>
             </nav>
             <p className="text-muted/60">
               The definitive reference for designer handbags.
