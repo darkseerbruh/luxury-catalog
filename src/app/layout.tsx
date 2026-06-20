@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
+import { getUnreadCount } from "@/lib/notifications";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
+  const unread = user ? await getUnreadCount() : 0;
   return (
     <html
       lang="en"
@@ -61,6 +63,17 @@ export default async function RootLayout({
                     className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                   >
                     Closet
+                  </Link>
+                  <Link
+                    href="/notifications"
+                    className="relative rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Alerts
+                    {unread > 0 && (
+                      <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
+                        {unread > 9 ? "9+" : unread}
+                      </span>
+                    )}
                   </Link>
                   <Link
                     href="/profile"

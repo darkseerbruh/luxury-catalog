@@ -6,6 +6,8 @@ import FeedbackWidget from "./FeedbackWidget";
 import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
 import TrackBagView from "./TrackBagView";
+import WhereToBuy from "./WhereToBuy";
+import Reviews from "./Reviews";
 
 export const dynamic = "force-dynamic";
 
@@ -505,6 +507,9 @@ export default async function BagDetailPage({
           </Section>
         )}
 
+      {/* Where to buy (affiliate resale links) */}
+      <WhereToBuy variantId={v.variantId} brand={v.brand.name} style={v.style.name} />
+
       {/* Save / watch actions */}
       <BagActions
         variantId={v.variantId}
@@ -512,6 +517,9 @@ export default async function BagDetailPage({
         initialClosetStatus={userState.closetStatus}
         initialWatching={userState.watching}
       />
+
+      {/* Reviews & ratings */}
+      <Reviews variantId={v.variantId} />
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />

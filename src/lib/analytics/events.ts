@@ -31,6 +31,8 @@ export const EVENTS = {
   outboundResaleClicked: "outbound_resale_clicked",
   /** User feedback was submitted. */
   feedbackSubmitted: "feedback_submitted",
+  /** A star rating / review was submitted. */
+  reviewSubmitted: "review_submitted",
   /** A contact/inquiry/lead form was submitted — a lead-revenue proxy. */
   inquirySubmitted: "inquiry_submitted",
   /** An item was saved/favorited. */
