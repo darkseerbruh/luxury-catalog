@@ -15,6 +15,9 @@ Built the four next-up use cases from the backlog. **App `next build` / `tsc` / 
 3. **Watchlist + price alerts** — watch a bag, set a target price, toggle alerts (`/watchlist`); price-trend sparkline on bag pages from `price_history`. (Alert *delivery* is not built — see open items.)
 4. **Feedback loop write-side** — "Request this bag be added" on dead-end searches; thrift-find logging (`/found`) + CTA from the camera tool; new `/admin/requests` dashboard.
 5. **Breadth seeding deepened** — reseller CSVs now map into variant + production + fits rows (not just colorway/price); seeder generalized to all brands so the full Drive export auto-populates the 9 stub brands when added.
+6. **PostHog analytics ported in** — the cookieless-first analytics foundation from the `luxury-catalog-analytics-plan-kiq8al` lineage was merged into this app and wired to its real surfaces (see "Analytics" below).
+
+> 🔱 **Lineage fork resolved this session.** There were two parallel apps: **Lineage A** (search/identify/admin/closet — this branch) and **Lineage B** (`luxury-catalog-analytics-plan-kiq8al`, a PostHog-instrumented prototype with a tier/silhouette filter home and Polène/Telfar/Longchamp seed). The user was running B locally and noticed "no search" — B never had it. **Decision: A is canonical; B's analytics were ported into A.** B can now be archived; its alternate home/`/bags/[id]` pages and sample-data were intentionally NOT brought over.
 
 > ⚠️ **Human-gated before this is "done" (carried forward + new):**
 > 1. **NEW — apply migration `0002_user_features.sql`** to Supabase (adds profile/closet/watchlist/bag_request/thrift_find + RLS + a new-user trigger). Nothing in items 1–4 works until this is applied.
@@ -113,8 +116,16 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
    ```
    Both are idempotent (clear + re-insert per style). The research JSON + deepened breadth are committed but the live DB still has the *previous* seed data until this runs.
 4. **Smoke-test the auth flow** once 1–3 are done: sign up → confirm → onboarding → save a bag → watchlist. This is the one path that couldn't be tested in the cloud session.
-5. **Review the accuracy-critical data** from Session 2 (see caveat below) — especially Hermès blind-stamp and Chanel serial details.
-6. **DNS go-live** (below).
+5. **Wire up PostHog** (analytics is inert until this is done):
+   - Set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`/`POSTHOG_HOST` for server events) in Vercel/`.env.local`. See `.env.example` and `docs/analytics-setup.md`.
+   - Enable "Cookieless server hash mode" in PostHog project settings (required for the Tier-1 baseline).
+   - **Add `.mcp.json` manually** — I did not auto-create it (it's agent startup config). To get the PostHog MCP server, add:
+     ```json
+     { "mcpServers": { "posthog": { "command": "npx", "args": ["-y","mcp-remote@latest","https://mcp.posthog.com/mcp","--header","Authorization:${POSTHOG_AUTH_HEADER}"], "env": { "POSTHOG_AUTH_HEADER": "Bearer ${POSTHOG_PERSONAL_API_KEY}" } } } }
+     ```
+   - Optional: run `node scripts/setup-posthog.mjs` to provision dashboards, and the weekly digest workflow (`.github/workflows/analytics-digest.yml`) needs `POSTHOG_PERSONAL_API_KEY`/`POSTHOG_PROJECT_ID` secrets.
+6. **Review the accuracy-critical data** from Session 2 (see caveat below) — especially Hermès blind-stamp and Chanel serial details.
+7. **DNS go-live** (below).
 
 ---
 
@@ -138,6 +149,13 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 ### Breadth (`supabase/seed/seed-breadth.ts`)
 - Maps reseller CSV columns into variant + production_record + fits (was colorway/price only). Skips hero style names. Idempotent per style. Brand allowlist generalized to all known brands.
 - **The 9 stub brands stay stubs**: both CSVs in `data/raw/` contain only Chanel/LV/Hermès. The full `theluxurycloset_data.csv` in Drive (38.7 MB, id `1WOtJIw_Y9By-7BjHZu4MgXkFZ00-hgeC`) is too large to pull into a cloud session — drop it into `data/raw/` and re-run the seeder and the 9 brands populate automatically.
+
+### Analytics (`src/lib/analytics/*`, ported from Lineage B)
+- **Cookieless-first**: Tier-1 baseline runs for every visitor with `persistence: "memory"` (nothing on device); Tier-2 (session replay, surveys, cross-session identity) only after opt-in via `ConsentNotice`.
+- `events.ts` — the single `track(event, props)` entry point + typed `EVENTS` taxonomy. `server.ts` — `captureServer()` for Route Handlers/server actions (available, not yet heavily used).
+- Init in `src/instrumentation-client.ts` (before hydration); `Providers` (in `layout.tsx`) supplies `PostHogProvider` + manual App Router pageviews + the consent notice. Reverse-proxied via `/ingest` (`next.config.ts`) to dodge ad-blockers.
+- **Instrumented surfaces** (autocapture covers the rest): `variant_viewed` + `price_history_viewed` (bag page, `TrackBagView`), `search_performed`/`search_not_found` (`SearchTracker`), `item_saved` (closet + watchlist), `feedback_submitted`, and new `bag_requested` / `thrift_find_logged`.
+- **Not yet done**: client-side `identifyUser()`/`resetAnalytics()` on login/logout (Tier-2, consent-gated) — wire into the auth flow if you want post-auth identity stitching.
 
 ---
 
