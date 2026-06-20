@@ -59,6 +59,12 @@ export default async function RootLayout({
               {user ? (
                 <>
                   <Link
+                    href="/feed"
+                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Feed
+                  </Link>
+                  <Link
                     href="/closet"
                     className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                   >
