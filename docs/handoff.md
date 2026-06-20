@@ -1,7 +1,7 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-20. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **Branch:** all current work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork" — there were two parallel apps; this is the canonical one.
+> **Branch:** the prior session's work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork." The **latest additive session** (GEO, embedded video, social/expert layer, closet-model simplification, reviews decoupling, LV/Gucci research) is on **`claude/port-geo-video-social-onto-main`** → **PR #2** into `main`. See "Latest session" immediately below.
 
 ---
 
@@ -16,13 +16,29 @@ The full catalog app (search, identify/camera, browse, admin, bag detail) now ha
 
 ---
 
+## TL;DR — latest additive session (PR #2: GEO + UGC depth)
+
+On top of the above, branch `claude/port-geo-video-social-onto-main` (→ **PR #2**) adds work `main` lacked. All verified by `tsc` / `eslint` / `next build`; **none runtime-tested** (no DB creds), and the new migrations are **not yet applied**.
+
+- **Breadth research:** **Louis Vuitton Neverfull** + **Gucci GG Marmont** added (beyond the 5 hero styles).
+- **GEO layer** (the marketing plan's #1 channel — see `docs/marketing-plan.md`): per-bag front-loaded fact-dense answer + FAQ (composed deterministically from real data, no LLM → honors "never invent"); dimensions in **cm + inches**; named-author byline + catalogued date; cited **Sources**; **JSON-LD** (Product/FAQPage/BreadcrumbList); `generateMetadata` (canonical/OG); **`/sitemap.xml`** + **`/robots.txt`**.
+- **Embedded video reviews + curated creators** (the visual layer for a text-first v1; embedding sidesteps image copyright): migration `0004`, `creator` + `resource` tables, a click-to-load YouTube facade on bag pages with a "trusted reviewer" badge.
+- **Closet model simplified to `want` / `have` / `had`** (migration `0005`): collapses the old `researching`/`wishlist`/`owned` enum (researching+wishlist → want, owned → have) and adds **had** (previously-owned).
+- **Reviews decoupled from the closet:** review any bag (rented/borrowed/tried in-store); a post-review prompt offers to add it to the closet; new **`/profile/reviews`** ("My reviews").
+- **Social / expert layer — schema only** (migration `0006`, UI is the next build): extends `profile` (handle, bio, `closet_public` opt-in, admin-granted `is_verified`/`is_expert`/`is_authenticator`); `closet_favorite` (follow a closet); `post` (expert blog); `closet_stats` view = "most coveted closets" (want-demand inverted + favorites). Full design + operator actions in **`docs/additive-features-port.md`**.
+
+---
+
 ## ⚙️ Human-gated setup checklist (nothing DB-backed works until these are done)
 
 1. **Apply migrations** (Supabase SQL editor / CLI), in order:
    - `0001_init_schema.sql` (already applied previously)
    - `0002_user_features.sql` — profile, closet_item, watchlist, bag_request, thrift_find (+ RLS, new-user trigger)
    - `0003_reviews_notifications.sql` — review, notification (+ RLS)
-   - `0004_*` — photo contributions (when the queued feature is built)
+   - `0004_resources_creators.sql` *(PR #2)* — creator + resource (embedded video reviews); public read / admin write
+   - `0005_closet_status_want_have_had.sql` *(PR #2)* — closet_status enum → `want`/`have`/`had` (data-migrating; collapses researching/wishlist→want, owned→have)
+   - `0006_social_expert_layer.sql` *(PR #2)* — extends `profile` (handle/social/trust flags), `closet_favorite`, `post`, `closet_stats` view
+   - `0007_*` — photo contributions (when the queued feature is built; was sketched as `0004`)
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
@@ -33,6 +49,8 @@ The full catalog app (search, identify/camera, browse, admin, bag detail) now ha
 4. **PostHog**: set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`); enable "Cookieless server hash mode"; optionally run `node scripts/setup-posthog.mjs`. **Add `.mcp.json` manually** (I don't auto-create startup config — snippet in `.env.example`/below).
 5. **Price alerts**: set `CRON_SECRET` (Vercel injects it as the cron Authorization header); optional `RESEND_API_KEY` + verified sender for email. `vercel.json` already schedules the job daily.
 6. **Affiliate**: sign up for programs; set `NEXT_PUBLIC_AFFILIATE_*` codes / `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE`.
+6a. **GEO (PR #2)**: set `NEXT_PUBLIC_SITE_URL` (→ luxurycatalog.com when DNS is live; defaults to the vercel.app URL) and `NEXT_PUBLIC_AUTHOR_NAME` (your real name strengthens the E-E-A-T signal). After deploy, **submit `/sitemap.xml`** to Google Search Console + Bing Webmaster Tools (Bing powers ChatGPT search).
+6b. **Curate video resources (PR #2)**: add `creator` rows for vetted reviewers + `resource` rows linking their best videos to styles (admin/seed) to light up the bag-page "Video reviews" sections.
 7. **DNS go-live** (below) — still outstanding from day one.
 8. **Smoke-test** the full auth + closet + watchlist + review + alert path against the live DB.
 
@@ -49,13 +67,13 @@ The full catalog app (search, identify/camera, browse, admin, bag detail) now ha
 - Pages: `/login`, `/signup`, `/onboarding` (persona capture), `/profile`, route handler `/auth/confirm`. Header nav + home are auth-aware.
 
 ### Closet, watchlist, price alerts
-- `collections.ts` + `collection-actions.ts`; `/closet` (grouped by status), `/watchlist` (target price + alert toggle).
+- `collections.ts` + `collection-actions.ts`; `/closet` (grouped by status), `/watchlist` (target price + alert toggle). *(PR #2: closet statuses are now `want` / `have` / `had`.)*
 - `BagActions` (save/watch) + `PriceTrend` (SVG sparkline) on bag pages.
 - **Price-alert delivery**: `/api/cron/price-alerts` (CRON_SECRET-gated, service-role) scans watchlists vs price_history → in-app `notification` rows (deduped via `last_notified_at`) + optional Resend email + `price_alert_triggered` event. `/notifications` feed + header "Alerts" badge.
 
 ### Feedback loop (write side) + reviews
 - `requestBag` (search dead-ends) + `logThriftFind` (`/found` + camera CTA); `/admin/requests` dashboard.
-- **Reviews & ratings**: `review` table; reviews section + star `ReviewForm` on bag pages; aggregate average/count; one per user per variant; `review_submitted` event.
+- **Reviews & ratings**: `review` table; reviews section + star `ReviewForm` on bag pages; aggregate average/count; one per user per variant; `review_submitted` event. *(PR #2: reviews are not closet-gated — review rented/borrowed/tried bags; post-review "add to closet?" prompt; `/profile/reviews` "My reviews".)*
 
 ### Affiliate "where to buy" (`affiliate.ts`, `WhereToBuy.tsx`)
 - Resale search deep-links (Fashionphile / The RealReal / Vestiaire) on bag pages; optional affiliate codes + network wrapper from env; `outbound_resale_clicked` event.
@@ -105,14 +123,15 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 **Why it serves strategy:** it's the **recruiting + credentialing pipeline for the Authenticator Marketplace** (revenue #2); the trusted tier **offloads moderation** so UGC scales; verified experts are a **trust moat vs PurseForum**; status + public closet drive **retention + virality**; quality-gating **protects data integrity**.
 
 ### Build sketch
-- Migration `0004`: `bag_photo` (variant_id, user_id, storage_path, caption, status [pending/approved/featured/rejected], owner_attested, created_at) + Supabase **Storage bucket** `bag-photos` + RLS (public read approved; insert/delete own); `profile` gains `tier` + `contribution_points` (or derive tier from points).
+- Migration `0007` (PR #2 took 0004–0006): `bag_photo` (variant_id, user_id, storage_path, caption, status [pending/approved/featured/rejected], owner_attested, created_at) + Supabase **Storage bucket** `bag-photos` + RLS (public read approved; insert/delete own); `profile` gains `tier` + `contribution_points` (or derive tier from points). *Note: PR #2 already added social/trust fields to `profile` (handle, `is_expert`/`is_authenticator`) — reconcile the contributor tier ladder with those.*
 - Upload component (auth-gated, attestation + license), gallery w/ byline + featured hero, `/admin/photos` approve/feature queue, "Most Wanted" page, `photo_submitted` event.
 - **Caveat:** file upload + Storage is the one piece that can't be runtime-tested here (no creds); bucket + migration are human-gated.
 
 ---
 
 ## Open backlog (after photo contributions)
-- **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder feeds it.
+- **Social UI (PR #2 schema is ready)** — `/u/[handle]` public closet (Poshmark-style), "most coveted closets" leaderboard (`closet_stats`), expert blog gated behind `is_expert`, and a "Verified owner" badge on reviews (derive from `closet_item` have/had). Trust flags are admin-granted.
+- **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder + `is_authenticator` profiles feed it.
 - **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free.
 - **Settings & account management** (edit email/password, notification prefs, delete account).
 - **Admin auth gate** — `/admin/*` is still unauthenticated; gate it (e.g. `profile.is_admin`) before sensitive data lands.
@@ -148,7 +167,7 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 
 ## Non-negotiable constraints (product brief)
 - **Never invent** authentication markers, date codes, serial formats, hardware details — leave `null` + `confidence_level: low` if unverifiable.
-- **No invented imagery** — realistic photos must be *sourced* (licensed/UGC/first-party), never AI-generated for real bags. (Updates the old "no photos in v1" line: photos are now in scope via the sourced paths above.)
+- **No invented imagery** — realistic photos must be *sourced* (licensed/UGC/first-party), never AI-generated for real bags. (Updates the old "no photos in v1" line: photos are now in scope via the sourced paths above.) *(PR #2: embedded YouTube reviews are the interim visual layer — embedding sidesteps the copyright issue entirely.)*
 - **Catalog is always free** — paywall only on search *capability*, never content.
 - **Coach must be in the catalog** — the viral thrift acquisition engine.
 - **Mobile-first** — every page works at 375px.
@@ -158,9 +177,12 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 |---|---|
 | Auth | `src/lib/supabase/*`, `src/proxy.ts`, `src/lib/auth*.ts`, `src/app/{login,signup,onboarding,profile,auth/confirm}` |
 | Closet/watchlist/alerts | `src/lib/collections.ts`, `collection-actions.ts`, `notifications*.ts`, `email.ts`, `src/app/{closet,watchlist,notifications}`, `src/app/api/cron/price-alerts`, `vercel.json` |
-| Reviews | `src/lib/reviews.ts`, `review-actions.ts`, `src/app/bag/[variantId]/{Reviews,ReviewForm}.tsx` |
+| Reviews | `src/lib/reviews.ts` (`getMyReviews`), `review-actions.ts`, `src/app/bag/[variantId]/{Reviews,ReviewForm}.tsx`, `src/app/profile/reviews` |
 | Affiliate | `src/lib/affiliate.ts`, `src/app/bag/[variantId]/WhereToBuy.tsx` |
+| GEO *(PR #2)* | `src/lib/geo.ts`, `src/app/sitemap.ts`, `src/app/robots.ts`, JSON-LD + `generateMetadata` in `src/app/bag/[variantId]/page.tsx` |
+| Video/creators *(PR #2)* | `src/lib/youtube.ts`, `getResourcesForStyle` in `queries.ts`, `src/app/bag/[variantId]/Resources.tsx` |
+| Social/expert *(PR #2, schema)* | `supabase/migrations/0006_social_expert_layer.sql` |
 | Analytics | `src/lib/analytics/*`, `src/app/providers.tsx`, `src/instrumentation-client.ts`, `scripts/*`, `.github/workflows/analytics-digest.yml` |
 | Feedback/admin | `src/lib/actions.ts`, `src/app/admin/*` |
-| Data | `supabase/migrations/000{1,2,3}_*.sql`, `supabase/seed/*`, `data/raw/*.csv` |
-| Docs | `docs/handoff.md` (this), `docs/image-strategy-research.md`, `docs/product-brief.md`, `docs/project-status.md` |
+| Data | `supabase/migrations/000{1..6}_*.sql`, `supabase/seed/*` (incl. research `louis-vuitton-neverfull.json`, `gucci-gg-marmont.json`), `data/raw/*.csv` |
+| Docs | `docs/handoff.md` (this), `docs/marketing-plan.md` + `docs/additive-features-port.md` *(PR #2)*, `docs/image-strategy-research.md`, `docs/product-brief.md`, `docs/project-status.md` |
