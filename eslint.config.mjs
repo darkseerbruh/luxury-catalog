@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Seed/import scripts ingest untyped CSV and JSON, where pinpoint `any` is
+  // pragmatic. These are build-time Node scripts, not shipped app code.
+  {
+    files: ["supabase/seed/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

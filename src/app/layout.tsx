@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
+import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -21,11 +22,12 @@ export const metadata: Metadata = {
     "The definitive reference database for designer handbags — production history, authentication markers, and resale intelligence across every brand.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getCurrentUser();
   return (
     <html
       lang="en"
@@ -50,6 +52,29 @@ export default function RootLayout({
               >
                 Search
               </Link>
+              {user ? (
+                <>
+                  <Link
+                    href="/closet"
+                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Closet
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Profile
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="rounded-full bg-gold px-4 py-1.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+                >
+                  Log in
+                </Link>
+              )}
             </div>
           </div>
         </header>
@@ -61,6 +86,9 @@ export default function RootLayout({
               <Link href="/" className="hover:text-foreground">Home</Link>
               <Link href="/search" className="hover:text-foreground">Search</Link>
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
+              <Link href="/closet" className="hover:text-foreground">Closet</Link>
+              <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
+              <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>
             <p className="text-muted/60">
               The definitive reference for designer handbags.

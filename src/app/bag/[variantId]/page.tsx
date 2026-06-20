@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail } from "@/lib/queries";
+import { getVariantUserState } from "@/lib/collections";
 import FeedbackWidget from "./FeedbackWidget";
+import BagActions from "./BagActions";
+import PriceTrend from "./PriceTrend";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +64,10 @@ export default async function BagDetailPage({
   const id = parseInt(variantId, 10);
   if (isNaN(id)) notFound();
 
-  const v = await getVariantDetail(id);
+  const [v, userState] = await Promise.all([
+    getVariantDetail(id),
+    getVariantUserState(id),
+  ]);
   if (!v) notFound();
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
@@ -448,7 +454,8 @@ export default async function BagDetailPage({
       {/* Price history */}
       {v.priceHistory.length > 0 && (
         <Section title="Price history">
-          <ul className="divide-y divide-border rounded-xl border border-border bg-surface">
+          <PriceTrend history={v.priceHistory} />
+          <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
             {v.priceHistory
               .slice()
               .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded))
@@ -488,6 +495,14 @@ export default async function BagDetailPage({
             </div>
           </Section>
         )}
+
+      {/* Save / watch actions */}
+      <BagActions
+        variantId={v.variantId}
+        signedIn={userState.signedIn}
+        initialClosetStatus={userState.closetStatus}
+        initialWatching={userState.watching}
+      />
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />

@@ -163,6 +163,18 @@ export default function IdentifyPage() {
         </div>
       </form>
 
+      {/* Thrift-find logging CTA */}
+      <Link
+        href={
+          id?.brand || id?.style
+            ? `/found?brand=${encodeURIComponent(id.brand ?? "")}&style=${encodeURIComponent(id.style ?? "")}`
+            : "/found"
+        }
+        className="rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 text-center text-sm text-muted transition-colors hover:border-gold/50 hover:text-foreground"
+      >
+        Bought it? <span className="text-gold">Log your thrift find →</span>
+      </Link>
+
       {/* Error */}
       {result?.error && (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">

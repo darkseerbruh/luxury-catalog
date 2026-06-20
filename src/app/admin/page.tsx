@@ -20,6 +20,12 @@ const SECTIONS = [
     description:
       "Accuracy reports submitted from bag detail pages — which records users say are wrong or incomplete.",
   },
+  {
+    href: "/admin/requests",
+    title: "Requests & finds",
+    description:
+      "Bag-addition requests and logged thrift finds — direct demand signal and real-world acquisition data.",
+  },
 ];
 
 export default function AdminIndexPage() {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { searchCatalog } from "@/lib/queries";
+import RequestBagForm from "./RequestBagForm";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,7 @@ export default async function SearchPage({
               This bag isn&rsquo;t in the catalog yet — searches like this
               help us decide what to research next.
             </p>
+            <RequestBagForm query={query} />
           </div>
         )}
 

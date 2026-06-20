@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "./supabase";
+import { getSupabaseAdmin } from "./supabase/admin";
 
 export interface BrandOverview {
   brandId: number;
@@ -1053,5 +1054,73 @@ export async function getUserFeedback(limit = 200): Promise<UserFeedbackEntry[]>
     resolved: r.resolved,
     resolutionNotes: r.resolution_notes,
     variant: r.record_type === "variant" ? variantsById.get(r.record_id) ?? null : null,
+  }));
+}
+
+/** A user request to add a bag the catalog doesn't have yet. */
+export interface BagRequestEntry {
+  requestId: number;
+  brand: string | null;
+  style: string | null;
+  searchQuery: string | null;
+  details: string | null;
+  date: string;
+  resolved: boolean;
+}
+
+/** Bag-addition requests, newest first. Reads via the service-role client (RLS has no public SELECT). */
+export async function getBagRequests(limit = 200): Promise<BagRequestEntry[]> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  const { data, error } = await getSupabaseAdmin()
+    .from("bag_request")
+    .select("request_id, brand, style, search_query, details, created_at, resolved")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+  return data.map((r) => ({
+    requestId: r.request_id,
+    brand: r.brand,
+    style: r.style,
+    searchQuery: r.search_query,
+    details: r.details,
+    date: r.created_at,
+    resolved: r.resolved,
+  }));
+}
+
+/** A logged thrift-store / estate-sale find. */
+export interface ThriftFindEntry {
+  findId: number;
+  brand: string | null;
+  style: string | null;
+  whereFound: string | null;
+  pricePaid: number | null;
+  currency: string | null;
+  condition: string | null;
+  note: string | null;
+  date: string;
+}
+
+/** Logged thrift finds, newest first. Reads via the service-role client. */
+export async function getThriftFinds(limit = 200): Promise<ThriftFindEntry[]> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  const { data, error } = await getSupabaseAdmin()
+    .from("thrift_find")
+    .select("find_id, brand, style, where_found, price_paid, currency, condition, note, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+  return data.map((r) => ({
+    findId: r.find_id,
+    brand: r.brand,
+    style: r.style,
+    whereFound: r.where_found,
+    pricePaid: r.price_paid != null ? Number(r.price_paid) : null,
+    currency: r.currency,
+    condition: r.condition,
+    note: r.note,
+    date: r.created_at,
   }));
 }
