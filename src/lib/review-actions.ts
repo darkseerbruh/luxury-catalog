@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import { notifyFollowersOfActivity } from "./notifications";
 
 export interface ReviewResult {
   ok: boolean;
@@ -57,7 +58,20 @@ export async function submitReview(input: {
     console.error("submitReview error:", error);
     return { ok: false, error: "Could not save your review. Please try again." };
   }
+
+  // Re-engagement: a review is feed-worthy → notify followers (best-effort).
+  const { data: prof } = await supabase
+    .from("profile")
+    .select("handle, display_name")
+    .eq("id", user.id)
+    .maybeSingle();
+  const label = prof?.handle
+    ? `@${prof.handle}`
+    : (prof?.display_name as string | undefined) ?? "A collector you follow";
+  await notifyFollowersOfActivity(user.id, label, "wrote a new review", input.variantId);
+
   revalidatePath(`/bag/${input.variantId}`);
+  revalidatePath("/feed");
   return { ok: true };
 }
 

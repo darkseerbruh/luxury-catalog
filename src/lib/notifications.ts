@@ -93,3 +93,40 @@ export async function notifyPhotoFeatured(
 ): Promise<void> {
   await insertNotificationFor(userId, "photo_featured", title, null, variantId);
 }
+
+/**
+ * Fan out a "new activity from a closet you follow" notification to everyone who
+ * favorites `actorUserId`. Best-effort; uses the service-role client (a user
+ * can't write to their followers' notification rows under RLS). No-ops without
+ * the service-role key. Capped to avoid runaway fan-out.
+ */
+export async function notifyFollowersOfActivity(
+  actorUserId: string,
+  actorLabel: string,
+  verb: string,
+  variantId: number | null
+): Promise<void> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return;
+  try {
+    const admin = getSupabaseAdmin();
+    const { data } = await admin
+      .from("closet_favorite")
+      .select("follower_user_id")
+      .eq("owner_user_id", actorUserId)
+      .limit(500);
+    const followers = (data ?? []).map((r) => r.follower_user_id as string);
+    if (followers.length === 0) return;
+
+    const title = `${actorLabel} ${verb}`;
+    const rows = followers.map((uid) => ({
+      user_id: uid,
+      type: "closet_activity" as const,
+      title,
+      body: null,
+      variant_id: variantId,
+    }));
+    await admin.from("notification").insert(rows);
+  } catch (err) {
+    console.error("notifyFollowersOfActivity error:", err);
+  }
+}
