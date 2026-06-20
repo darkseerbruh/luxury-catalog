@@ -119,6 +119,66 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 2. **Upgrade research confidence** — re-verify the snippet-sourced numbers from a real browser to move key fields to `verified`.
 3. **Remaining brand depth** — the 9 non-hero brands (LV, Kate Spade, Burberry, Gucci, Prada, Fendi, Celine, Dior, Bottega Veneta) are still stubs; each needs a research pass like the hero styles got.
 4. **Fill more hero nulls** — opening dimensions, exact stamp fonts/screw types, interior storage configs, and device-fit data remain `null` across several styles (flagged in each file's notes / `research_gaps_flagged`).
+5. **Build the UGC layer** — collection ↔ wishlist ↔ reviews, designed in the next section. This is the agreed next *big* push (needs Supabase Auth first). See **"Next major workstream"** below.
+
+---
+
+## Next major workstream: the UGC layer (collection ↔ wishlist ↔ reviews)
+
+*Added 2026-06-20 (product discussion). This is a designed direction, not yet built. No code or schema has been written for it — it is the agreed next big push. Read this whole section before opening a migration.*
+
+### The core insight
+Fragrantica and StoryGraph both let a user say *"I own this / I want this / I've tried this,"* but Fragrantica then **fails to connect those shelves to anything.** It knows which fragrances you own and never asks you to review them; it knows which you want and never tells you when they're buyable. That disconnect is the opportunity. For Luxury Catalog, **ownership, wishlist, and reviews are not three features — they are one relationship a user has with a bag, in different states.** Model them together or we inherit Fragrantica's mistake.
+
+```
+                 ┌─────────── one user_bag relationship per (user, variant) ──────────┐
+   WANT  ──────▶ │  status: want → own → had     (StoryGraph "shelf" / Fragrantica "I have/I want") │
+                 └────────┬───────────────────────────────────────────────┬──────────┘
+                          │                                                │
+              "notify me when available"                        "you own this — review it?"
+                          │                                                │
+                          ▼                                                ▼
+                 availability/price email                          REVIEW (rating + structured tags
+                 → affiliate "where to buy"  ◀── intent-to-purchase   + free text) → AI summary per bag
+```
+
+### What this is made of
+
+**1. `user_bag` — the single relationship table (the spine of the whole layer).**
+One row per (user, variant) with a `status` enum: `want | own | had | considering`. This one table is simultaneously the **collection** ("My Bags" = status `own`), the **wishlist** (status `want`), and the **flipper's sold history** (status `had`). Carry: `acquired_at`, `acquisition_channel` (`thrift | retail | resale | gift` — this *is* the brief's "thrift store find logging"), `paid_price`, `condition`, `notes`, and `notify_on_availability` (bool). Status transitions over time (want → own when they buy; own → had when they sell). **"Notify me when available" is not a standalone toggle — it is a `want` row with `notify_on_availability = true`.** No separate alerts table needed.
+
+**2. The review, tied to ownership.**
+A `review` row references the user, the bag, and ideally the user's `user_bag` row. Two payloads, per the two models the user cited:
+- **Structured tags (Fragrantica sliders / StoryGraph moods), bag-specific:** *holds its shape*, *heavier than it looks*, *leather softens / stays stiff*, *true to size*, *comfortable crossbody drop*, *hardware scratches easily*, *worth the price*, *everyday vs. occasion*. Controlled vocabulary so they aggregate. These tags are the soft, crowd-sourced cousins of our hard fields (`fits`, `carry_method`, `hardiness`) — and once aggregated they become **searchable facets** ("bags owners say hold their shape"), which feeds the NL search and helps every future searcher. *This is the "massively helpful to the system and to people searching" part — bake it in from the first version of reviews, not as a v2.*
+- **Free text + a 1–5 rating.**
+- **`verified_owner` badge** when the reviewer's `user_bag` shows they own/owned it — our equivalent of "verified purchase," and a real trust differentiator over PurseForum.
+
+**3. AI review summarization.**
+Per bag, generate a short *"What owners say"* synthesis + the top-N structured tags, using the `ANTHROPIC_API_KEY` already wired in prod. Cache it (a `review_summary` row per variant/style: `summary_text`, `top_tags` json, `source_review_count`, `computed_at`); recompute on a review-count threshold, not per page view.
+
+### How it plugs into what already exists
+- **Prompting owners to review** is a query, not a feature: `user_bag where status in (own, had) and no review yet` → a nudge on the My Bags page **and** an email. This is the connection Fragrantica never makes.
+- **Wishlist = intent-to-purchase = the affiliate engine.** Aggregate `want` rows are the highest-value signal in the product (the brief's most-monetizable collector, literally telling us what to sell them). The availability email lands them on the affiliate "where to buy" link (Revenue Stream 1). A **"most-wanted index"** also becomes a data-roadmap signal exactly like `searched_not_found`, and a market-intelligence asset in its own right.
+- **Reviews vs. `user_feedback`:** keep them separate. `user_feedback` is about *facts* ("is this accurate?"). Reviews are about *experience*. But a pattern of `true to size: no` tags should route into the research queue the same way searched-not-found does.
+
+### Guardrails (do not skip)
+- **The authentication-integrity rule wins.** Reviews and AI summaries are *opinion* and must be visually and semantically walled off from verified catalog facts. **Never let crowd sentiment or an AI summary flow into authentication markers, date codes, or `confidence_level`.** "Never invent" still governs the factual catalog; UGC lives in clearly-labeled, separate surfaces.
+- **Auth is the hard prerequisite.** None of this exists without user accounts, and the app has **no auth today**. Step 0 is enabling **Supabase Auth** (already the planned stack, free to 10k MAU). All `user_bag`/`review` tables key off `auth.users` and need RLS.
+- **Mobile-first (375px), catalog free forever** — the UGC layer is free; the existing planned paywall lever (price-drop alerts on a watchlist) sits naturally on top of `notify_on_availability` without gating the catalog.
+- **No photos in v1** still holds — review photos re-open the same copyright/licensing question, so text-and-tags first; user-submitted photos later, opt-in + licensed, pending the legal review the brief flags.
+
+### Open decisions for the human
+1. **Granularity: variant vs. style.** Recommend storing ownership/reviews at **variant** level (the Kelly 25 in epsom, not "the Kelly") and **rolling up to style** for display. Confirm — it shapes the whole schema.
+2. **Status set.** Is `want | own | had | considering` right, or do we want a lighter `want | own | had`?
+3. **Tag vocabulary.** The structured-tag list above is a starting proposal; lock the v1 vocabulary before building (changing it after launch fragments the aggregation).
+4. **Review moderation.** Public immediately, or queued? (Affects trust and abuse surface.)
+
+### Suggested build order
+1. Supabase Auth + minimal account UI (gates everything).
+2. `user_bag` table + RLS → "Add to My Bags / Wishlist" on `/bag/[variantId]` → `/me/bags` + `/me/wishlist` pages.
+3. Wire **"notify me when available"** to a `want` row; add the availability email job (and the `most-wanted` admin view, mirroring searched-not-found).
+4. `review` + `review_tag` tables → review form on bags the user owns → owner-review nudges (page + email).
+5. Aggregate tags into searchable facets + `review_summary` AI synthesis on the bag page.
 
 ---
 
