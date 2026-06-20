@@ -168,7 +168,7 @@ Per bag, generate a short *"What owners say"* synthesis + the top-N structured t
 - **No photos in v1** still holds — review photos re-open the same copyright/licensing question, so text-and-tags first; user-submitted photos later, opt-in + licensed, pending the legal review the brief flags.
 
 ### Open decisions for the human
-1. **Granularity: variant vs. style.** Recommend storing ownership/reviews at **variant** level (the Kelly 25 in epsom, not "the Kelly") and **rolling up to style** for display. Confirm — it shapes the whole schema.
+1. **Granularity: variant vs. style.** ✅ **DECIDED (2026-06-20): variant level.** Ownership/reviews attach to a **variant** (the Kelly 25 in epsom, not "the Kelly") and **roll up to style** for display. Schema should be built to this.
 2. **Status set.** Is `want | own | had | considering` right, or do we want a lighter `want | own | had`?
 3. **Tag vocabulary.** The structured-tag list above is a starting proposal; lock the v1 vocabulary before building (changing it after launch fragments the aggregation).
 4. **Review moderation.** Public immediately, or queued? (Affects trust and abuse surface.)
