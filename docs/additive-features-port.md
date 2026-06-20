@@ -19,13 +19,17 @@ Every `/bag/[variantId]` page now has:
 - A "Video reviews & resources" section on the bag page: click-to-load YouTube facade (thumbnail → `youtube-nocookie` iframe), trusted-creator badge. The visual layer for a no-photos v1; sidesteps image copyright. `getResourcesForStyle()` degrades to `[]` until the migration + data exist.
 
 ### 4. Social / expert layer — schema drafted (UI is the next build)
-- Migration **`0005_social_expert_layer.sql`**, adapted to main's schema: **extends `profile`** (handle, bio, avatar, `closet_public` opt-in, admin-granted `is_verified`/`is_expert`/`is_authenticator`), adds `closet_favorite` (follow a closet) and `post` (expert blog), and a `closet_stats` view = "most coveted closets" ranked by **wishlist demand inverted** (how many others want the bags you own) + favorites. Public closets expose only `owned` items of opted-in profiles; wishlists stay private; trust flags are admin-only.
+- Migration **`0006_social_expert_layer.sql`**, adapted to main's schema: **extends `profile`** (handle, bio, avatar, `closet_public` opt-in, admin-granted `is_verified`/`is_expert`/`is_authenticator`), adds `closet_favorite` (follow a closet) and `post` (expert blog), and a `closet_stats` view = "most coveted closets" ranked by **want-demand inverted** (how many others *want* the bags you *have*) + favorites. Public closets expose only `have` items of opted-in profiles; want/had stay private; trust flags are admin-only.
+
+### 5. Closet model simplified to want / have / had + reviews decoupled — built
+- Migration **`0005_closet_status_want_have_had.sql`**: collapses the old `researching`/`wishlist`/`owned` enum into **`want` / `have` / `had`**. "researching" was UX clutter and folds into a single **want** list (alerts via the existing `watchlist` table signal higher intent); **had** is new (previously-owned — flippers, and lets past owners still review). Updated `BagActions`, `/closet`, `collection-actions`, and home copy to match.
+- **Reviews no longer imply ownership.** Main's `review` RLS was already ownership-agnostic, so reviewing a rented/borrowed/tried-in-store bag works. Added: a post-submit prompt ("you reviewed this but it isn't in your closet — add it?" → quick Want/Have/Had) in `ReviewForm`, and a **`/profile/reviews`** "My reviews" page linked from the profile.
 
 ## Verified
 `tsc --noEmit`, `eslint` (new files), and `next build` all pass. `/sitemap.xml` and `/robots.txt` are registered routes.
 
 ## Needs the operator (outward-facing / data / infra)
-1. **Run migrations 0004 + 0005** against Supabase (service-role key).
+1. **Run migrations 0004, 0005, 0006** against Supabase (service-role key).
 2. **Set env vars** in Vercel: `NEXT_PUBLIC_SITE_URL` (→ luxurycatalog.com when DNS is live) and `NEXT_PUBLIC_AUTHOR_NAME` (your real name strengthens the E-E-A-T signal; defaults to "Luxury Catalog Research Desk").
 3. **Submit `/sitemap.xml`** to Google Search Console + Bing Webmaster Tools (Bing powers ChatGPT search).
 4. **Curate creator/resource data** — add vetted channels + their best videos (admin/seed task) to light up the video sections.

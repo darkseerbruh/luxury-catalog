@@ -10,10 +10,10 @@ import {
 } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
 
-const STATUS_LABELS: { value: "researching" | "wishlist" | "owned"; label: string }[] = [
-  { value: "researching", label: "Researching" },
-  { value: "wishlist", label: "Wishlist" },
-  { value: "owned", label: "I own this" },
+const STATUS_LABELS: { value: "want" | "have" | "had"; label: string }[] = [
+  { value: "want", label: "Want it" },
+  { value: "have", label: "Have it" },
+  { value: "had", label: "Had it" },
 ];
 
 export default function BagActions({
@@ -50,7 +50,7 @@ export default function BagActions({
     );
   }
 
-  function toggleCloset(status: "researching" | "wishlist" | "owned") {
+  function toggleCloset(status: "want" | "have" | "had") {
     setError(null);
     startTransition(async () => {
       // Clicking the active status removes it from the closet.

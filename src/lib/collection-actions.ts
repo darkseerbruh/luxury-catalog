@@ -9,7 +9,7 @@ export interface ActionResult {
   error?: string;
 }
 
-const CLOSET_STATUSES = ["researching", "wishlist", "owned"] as const;
+const CLOSET_STATUSES = ["want", "have", "had"] as const;
 type ClosetStatus = (typeof CLOSET_STATUSES)[number];
 
 function validVariant(id: unknown): id is number {
@@ -17,7 +17,7 @@ function validVariant(id: unknown): id is number {
 }
 
 /** Add a variant to the closet (or update its status if already saved). */
-export async function saveToCloset(variantId: number, status: ClosetStatus = "researching"): Promise<ActionResult> {
+export async function saveToCloset(variantId: number, status: ClosetStatus = "want"): Promise<ActionResult> {
   if (!validVariant(variantId)) return { ok: false, error: "Invalid item." };
   if (!CLOSET_STATUSES.includes(status)) return { ok: false, error: "Invalid status." };
 

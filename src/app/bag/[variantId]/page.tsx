@@ -594,7 +594,7 @@ export default async function BagDetailPage({
       />
 
       {/* Reviews & ratings */}
-      <Reviews variantId={v.variantId} />
+      <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
 
       {/* FAQ (GEO: mirrors the FAQPage structured data) */}
       {faq.length > 0 && (

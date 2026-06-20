@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "My closet · The Luxury Catalog" };
 
 const STATUS_LABELS: Record<string, string> = {
-  researching: "Researching",
-  wishlist: "Wishlist",
-  owned: "Owned",
+  want: "Want",
+  have: "Have",
+  had: "Had",
 };
 
 function formatPrice(amount: number | null, currency: string | null) {
@@ -24,9 +24,9 @@ export default async function ClosetPage() {
   const closet = await getCloset();
 
   const groups: { key: string; label: string }[] = [
-    { key: "owned", label: "Owned" },
-    { key: "wishlist", label: "Wishlist" },
-    { key: "researching", label: "Researching" },
+    { key: "have", label: "Have" },
+    { key: "want", label: "Want" },
+    { key: "had", label: "Had" },
   ];
 
   return (
@@ -35,7 +35,7 @@ export default async function ClosetPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Your closet</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Saved bags</h1>
         <p className="mt-2 text-muted">
-          Bags you&rsquo;re researching, want, or own — all in one place.
+          Bags you want, have, or have owned — all in one place.
         </p>
       </header>
 

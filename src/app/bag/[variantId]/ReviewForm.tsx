@@ -2,8 +2,15 @@
 
 import { useState, useTransition } from "react";
 import { submitReview, deleteReview } from "@/lib/review-actions";
+import { saveToCloset } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
 import type { ReviewItem } from "@/lib/reviews";
+
+const CLOSET_PROMPT_OPTIONS: { value: "want" | "have" | "had"; label: string }[] = [
+  { value: "have", label: "Have it" },
+  { value: "had", label: "Had it" },
+  { value: "want", label: "Want it" },
+];
 
 function Stars({ value, onChange }: { value: number; onChange: (n: number) => void }) {
   return (
@@ -29,12 +36,16 @@ export default function ReviewForm({
   variantId,
   signedIn,
   existing,
+  inCloset,
 }: {
   variantId: number;
   signedIn: boolean;
   existing: ReviewItem | null;
+  /** Whether the bag is already in the user's closet — gates the post-review add prompt. */
+  inCloset: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [closetPrompt, setClosetPrompt] = useState(false);
   const [rating, setRating] = useState(existing?.rating ?? 0);
   const [title, setTitle] = useState(existing?.title ?? "");
   const [body, setBody] = useState(existing?.body ?? "");
@@ -56,13 +67,17 @@ export default function ReviewForm({
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-      >
-        {existing ? "Edit your review" : "Write a review"}
-      </button>
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="self-start rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+        >
+          {existing ? "Edit your review" : "Write a review"}
+        </button>
+        {renderClosetPrompt()}
+        {error && <p className="text-sm text-red-400">{error}</p>}
+      </div>
     );
   }
 
@@ -84,10 +99,54 @@ export default function ReviewForm({
       if (res.ok) {
         track(EVENTS.reviewSubmitted, { variant_id: variantId, rating });
         setOpen(false);
+        // Reviewing a bag you don't track? Offer to add it to the closet.
+        if (!inCloset) setClosetPrompt(true);
       } else {
         setError(res.error ?? "Something went wrong.");
       }
     });
+  }
+
+  function addToCloset(status: "want" | "have" | "had") {
+    setError(null);
+    startTransition(async () => {
+      const res = await saveToCloset(variantId, status);
+      if (res.ok) {
+        track(EVENTS.itemSaved, { variant_id: variantId, status });
+        setClosetPrompt(false);
+      } else setError(res.error ?? "Something went wrong.");
+    });
+  }
+
+  function renderClosetPrompt() {
+    if (!closetPrompt) return null;
+    return (
+    <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+      <p className="text-sm text-foreground">
+        Thanks for your review! This bag isn&rsquo;t in your closet — add it?
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {CLOSET_PROMPT_OPTIONS.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => addToCloset(o.value)}
+            disabled={pending}
+            className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold disabled:opacity-40"
+          >
+            {o.label}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => setClosetPrompt(false)}
+          className="rounded-full px-3 py-1.5 text-sm text-muted/70 transition-colors hover:text-foreground"
+        >
+          No thanks
+        </button>
+      </div>
+    </div>
+    );
   }
 
   function remove() {

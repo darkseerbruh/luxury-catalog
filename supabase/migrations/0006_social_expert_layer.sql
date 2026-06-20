@@ -45,11 +45,11 @@ create trigger profile_set_updated_at
 create policy "profile_select_public" on profile
   for select using (closet_public or is_expert or is_authenticator or is_verified);
 
--- Public closets: expose only OWNED items of public profiles. Wishlist /
--- researching stay private. ORs with the owner-only policy from 0002.
+-- Public closets: expose only owned ('have') items of public profiles. Want /
+-- had stay private. ORs with the owner-only policy from 0002.
 create policy "closet_item_select_public" on closet_item
   for select using (
-    status = 'owned'
+    status = 'have'
     and exists (select 1 from profile p where p.id = closet_item.user_id and p.closet_public)
   );
 
@@ -128,16 +128,16 @@ from profile p
 cross join lateral (
   select count(*)::int as owned_count
   from closet_item c
-  where c.user_id = p.id and c.status = 'owned'
+  where c.user_id = p.id and c.status = 'have'
 ) owned
 cross join lateral (
   select count(*)::int as want_demand
   from closet_item mine
   join closet_item w
     on w.variant_id = mine.variant_id
-   and w.status = 'wishlist'
+   and w.status = 'want'
    and w.user_id <> p.id
-  where mine.user_id = p.id and mine.status = 'owned'
+  where mine.user_id = p.id and mine.status = 'have'
 ) demand
 cross join lateral (
   select count(*)::int as favorite_count

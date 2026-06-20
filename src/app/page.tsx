@@ -106,7 +106,7 @@ export default async function Home() {
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <h2 className="font-serif text-2xl text-foreground">Your closet</h2>
             <p className="mx-auto mt-2 max-w-sm text-muted">
-              Save bags you&rsquo;re researching or own and track their prices.
+              Save bags you want or have and track their prices.
             </p>
             <Link
               href="/signup"
