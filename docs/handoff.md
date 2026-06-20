@@ -1,10 +1,32 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-19 (feature + research session). Read this before doing anything in the next session.*
-*Supersedes the original end-of-build handoff; the still-outstanding items from it (DNS, credentials) are carried forward below.*
+*Updated 2026-06-20 (Session 3: user accounts + engagement features). Read this before doing anything in the next session.*
+*Supersedes the prior handoff; still-outstanding items (DNS, credentials, seed run) are carried forward below.*
 
 ---
 
-## TL;DR — what changed this session
+## TL;DR — Session 3 (2026-06-20)
+
+Branch: **`claude/adoring-mccarthy-0dnhvn`** (based on the active `claude/desktop-display-test-d621oc`, so it contains everything from Session 2 plus the below). Heads-up for next session: the Session-2 work lives on `desktop-display-test-d621oc`; this session's branch was forked from it — confirm which branch is "active" before building.
+
+Built the four next-up use cases from the backlog. **App `next build` / `tsc` / `eslint` all pass**, but none of it could be exercised against a live DB (cloud session has no Supabase creds), so treat it as reviewed-by-compile, not runtime-tested.
+
+1. **User accounts (Supabase Auth)** — email+password signup/login/logout, email-confirm route, onboarding (persona capture), profile. Cookie-based SSR via `@supabase/ssr` + Next 16 `proxy.ts` (Middleware was renamed to Proxy in v16).
+2. **Closet** — save bags as researching/wishlist/owned (`/closet`); Save buttons on bag pages; home "Your closet" is now real.
+3. **Watchlist + price alerts** — watch a bag, set a target price, toggle alerts (`/watchlist`); price-trend sparkline on bag pages from `price_history`. (Alert *delivery* is not built — see open items.)
+4. **Feedback loop write-side** — "Request this bag be added" on dead-end searches; thrift-find logging (`/found`) + CTA from the camera tool; new `/admin/requests` dashboard.
+5. **Breadth seeding deepened** — reseller CSVs now map into variant + production + fits rows (not just colorway/price); seeder generalized to all brands so the full Drive export auto-populates the 9 stub brands when added.
+
+> ⚠️ **Human-gated before this is "done" (carried forward + new):**
+> 1. **NEW — apply migration `0002_user_features.sql`** to Supabase (adds profile/closet/watchlist/bag_request/thrift_find + RLS + a new-user trigger). Nothing in items 1–4 works until this is applied.
+> 2. **NEW — set Supabase email-confirm template** to point at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates), or disable email confirmation for testing.
+> 3. **Run the seed scripts** (still pending from Session 2) — research JSON + breadth are committed but the live DB still has the *old* seed data.
+> 4. **DNS go-live** — `luxurycatalog.com` still points nowhere.
+
+See "Action required" and "Open decisions / what to do next" for details.
+
+---
+
+## TL;DR — Session 2 (2026-06-19)
 
 Built on top of the deployed app (branch `claude/desktop-display-test-d621oc`):
 
@@ -77,13 +99,45 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 
 ## ✅ Action required before this is production-true
 
-1. **Run the seed scripts against Supabase** (needs `SUPABASE_SERVICE_ROLE_KEY` + URL in a local `.env`, which the cloud session does not have):
+1. **Apply the new migration** (Session 3) before anything else — the auth/closet/watchlist/feedback features depend on it:
+   ```
+   # via Supabase SQL editor or CLI, run:
+   supabase/migrations/0002_user_features.sql
+   ```
+   Adds `profile`, `closet_item`, `watchlist`, `bag_request`, `thrift_find` with RLS and a trigger that auto-creates a profile row on signup.
+2. **Point the Supabase email-confirm template** at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates → Confirm signup), or turn off email confirmation while testing. Without this, the signup confirmation link won't land in the app.
+3. **Run the seed scripts against Supabase** (needs `SUPABASE_SERVICE_ROLE_KEY` + URL in a local `.env`, which the cloud session does not have):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
+   npx tsx supabase/seed/seed-breadth.ts
    ```
-   This is idempotent (it clears + re-inserts per style). The research JSON is committed but the live DB still has the *previous* seed data until this runs.
-2. **Review the accuracy-critical data** added this session (see caveat above) — especially Hermès blind-stamp and Chanel serial details.
-3. **DNS go-live** (below).
+   Both are idempotent (clear + re-insert per style). The research JSON + deepened breadth are committed but the live DB still has the *previous* seed data until this runs.
+4. **Smoke-test the auth flow** once 1–3 are done: sign up → confirm → onboarding → save a bag → watchlist. This is the one path that couldn't be tested in the cloud session.
+5. **Review the accuracy-critical data** from Session 2 (see caveat below) — especially Hermès blind-stamp and Chanel serial details.
+6. **DNS go-live** (below).
+
+---
+
+## Session 3 — features shipped (code, pending DB apply)
+
+### Auth (`@supabase/ssr`, Next 16 Proxy)
+- `src/lib/supabase/{server,client,admin}.ts` — cookie-aware server client, browser client, and a **service-role admin client** (server-only) used by admin dashboards to read RLS-protected tables.
+- `src/proxy.ts` — Next 16's renamed Middleware; refreshes the session each request. No-op without env.
+- `src/lib/auth.ts` (`getCurrentUser`, `getProfile`), `src/lib/auth-actions.ts` (`signIn`/`signUp`/`signOut`), `src/lib/profile-actions.ts` (`completeOnboarding`).
+- Pages: `/login`, `/signup`, `/onboarding`, `/profile`, route handler `/auth/confirm`. Header nav + home are auth-aware.
+
+### Closet & watchlist (`src/lib/collections.ts`, `collection-actions.ts`)
+- `/closet` (grouped by status), `/watchlist` (target price + alert toggle via `WatchControls`).
+- `BagActions` (save/watch) + `PriceTrend` (SVG sparkline) on `/bag/[variantId]`.
+- RLS scopes every row to `auth.uid()`.
+
+### Feedback write-side (`src/lib/actions.ts`)
+- `requestBag` (search dead-ends → `bag_request`), `logThriftFind` (`/found` + camera CTA → `thrift_find`). Both anonymous-friendly.
+- `/admin/requests` reads both via the service-role client; linked from `/admin`.
+
+### Breadth (`supabase/seed/seed-breadth.ts`)
+- Maps reseller CSV columns into variant + production_record + fits (was colorway/price only). Skips hero style names. Idempotent per style. Brand allowlist generalized to all known brands.
+- **The 9 stub brands stay stubs**: both CSVs in `data/raw/` contain only Chanel/LV/Hermès. The full `theluxurycloset_data.csv` in Drive (38.7 MB, id `1WOtJIw_Y9By-7BjHZu4MgXkFZ00-hgeC`) is too large to pull into a cloud session — drop it into `data/raw/` and re-run the seeder and the 9 brands populate automatically.
 
 ---
 
@@ -117,8 +171,11 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 
 1. **`/admin` link** — the dashboards are intentionally unlinked + `noindex` (no auth on the app yet). Decide: leave as-is (recommended), add a login/secret gate, or surface a link. **No action taken; awaiting your call.**
 2. **Upgrade research confidence** — re-verify the snippet-sourced numbers from a real browser to move key fields to `verified`.
-3. **Remaining brand depth** — the 9 non-hero brands (LV, Kate Spade, Burberry, Gucci, Prada, Fendi, Celine, Dior, Bottega Veneta) are still stubs; each needs a research pass like the hero styles got.
+3. **Remaining brand depth** — the 9 non-hero thrift/mid brands are still stubs. Fastest path: drop the full `theluxurycloset_data.csv` (Drive, 38.7 MB) into `data/raw/` and re-run `seed-breadth.ts` — the seeder now ingests every brand. A hero-style-depth research pass (like the 5 heroes got) is still the gold standard once a browser-capable session is available.
 4. **Fill more hero nulls** — opening dimensions, exact stamp fonts/screw types, interior storage configs, and device-fit data remain `null` across several styles (flagged in each file's notes / `research_gaps_flagged`).
+5. **Price-alert delivery (Session 3 left this)** — the watchlist stores `target_price` + `alert_enabled` and the UI flags when a recorded price is below target, but nothing *sends* alerts. Needs a scheduled job (e.g. Supabase cron / edge function) to compare new `price_history` rows against targets and email/notify; `watchlist.last_notified_at` exists for dedupe.
+6. **Admin auth gate (Session 3 raised the stakes)** — `/admin/*` is still unauthenticated and `noindex`. Now that real auth exists, gate admin behind an `is_admin` flag on `profile` (or a Supabase role) before there's any sensitive data. `/admin/requests` reads via the service-role key, so it works regardless of viewer — i.e. currently anyone hitting the URL sees it.
+7. **Verify RLS end-to-end** — the closet/watchlist policies (`auth.uid() = user_id`) were written but not exercised against a live DB. Confirm a second user can't read another's closet after applying `0002`.
 
 ---
 
