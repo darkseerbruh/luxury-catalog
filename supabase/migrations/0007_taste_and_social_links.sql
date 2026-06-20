@@ -34,9 +34,12 @@ comment on column profile.taste_completeness is
 -- ============ New re-engagement notification types ============
 -- Extends the notification_type enum from 0003 ('price_alert','system') with the
 -- two social re-engagement events from the strategy doc §1g / build-order #6.
--- Inserted by the closet-favorite / featured-photo flows (service role or the
--- acting user's own session). `closet_followed` links to no variant; the body
--- carries the actor handle. ALTER TYPE ... ADD VALUE is idempotent via IF NOT EXISTS.
+-- Inserted by the closet-activity fan-out / featured-photo flows (service role).
+--
+-- IMPORTANT: `ALTER TYPE ... ADD VALUE` cannot run inside a transaction block in
+-- Postgres. If your migration runner wraps each file in a transaction, run these
+-- two statements on their own (e.g. paste into the Supabase SQL editor directly),
+-- or split them into a separate non-transactional migration step.
 
 alter type notification_type add value if not exists 'closet_activity';
 alter type notification_type add value if not exists 'photo_featured';

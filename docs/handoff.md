@@ -29,6 +29,50 @@ On top of the above, branch `claude/port-geo-video-social-onto-main` (→ **PR #
 
 ---
 
+## TL;DR — engagement / social + recommendations track (this session)
+
+Branch `claude/lucid-archimedes-1cyi21`. Implements `docs/engagement-strategy.md` §3
+build order 1–7. All verified by `tsc --noEmit`, `eslint`, and `next build` (green);
+**none runtime-tested** (no DB creds). Migration **0007 is human-gated** (see checklist).
+
+1. **Social UI** — `/u/[handle]` public profile (curated `have` closet, tier/trust
+   badges, `rel="nofollow ugc"` social links, Follow-closet button); `/closets`
+   "Most Coveted Closets" leaderboard from `closet_stats`; verified-owner badge on
+   reviews (derived from `closet_item` have/had); profile-edit flow `/profile/edit`
+   (handle, bio, avatar, `closet_public`, socials). Files: `src/lib/social.ts`,
+   `social-actions.ts`, `src/components/TrustBadges.tsx`, `src/app/u/[handle]/*`,
+   `src/app/closets/page.tsx`, `src/app/profile/edit/*`; `getProfile` extended in `auth.ts`.
+2. **Activity feed** — `src/lib/feed.ts` (structured events from followed closets,
+   honoring 0006 privacy: only public `have` adds, plus reviews & published posts);
+   `/feed` route + logged-in home Activity strip + header link; `src/components/FeedItem.tsx`.
+3. **Taste quiz** — `src/lib/taste.ts` (model/questions/named-taste over real
+   catalogued attributes only), `taste-data.ts` (blends quiz+closet+watchlist),
+   `taste-actions.ts` (persists `profile.taste_vector`/`taste_completeness`);
+   `/quiz` + `QuizClient` either/or + shareable card.
+4. **Bags you might like** — `src/lib/recommendations.ts` content-based attribute
+   scoring with deterministic "why" string, cold-start stub; surfaced on home,
+   profile, and bag pages (`getSimilarBags`). `src/components/Recommendation*.tsx`.
+5. **Taste Map** — `src/components/TasteMap.tsx` + `TasteMapSection.tsx`: visual
+   region grid + completeness meter + "answer N more" on the profile.
+6. **Re-engagement notifications** — `notifications.ts` gains `notifyFollowersOfActivity`
+   (service-role fan-out) + `notifyClosetActivity`/`notifyPhotoFeatured`; wired into
+   `saveToCloset` (have), `submitReview`, and `favoriteCloset`. `photo_featured` helper
+   is the ready hook for the future photo system (no event point exists yet).
+7. **Collaborative recs** — item-item co-occurrence ("collectors who have X also want
+   Y") in `recommendations.ts`, blended BEHIND content-based; needs the service-role
+   key (degrades to content-only otherwise).
+
+Analytics: new events in `src/lib/analytics/events.ts` — `quiz_started`, `quiz_completed`,
+`recommendation_clicked`, `closet_favorited`, `taste_map_viewed`.
+
+**Human-gated for this track:** apply migration **0007** (see the note + the
+`ALTER TYPE` transaction caveat in the checklist); set `SUPABASE_SERVICE_ROLE_KEY`
+to enable follower notifications + collaborative recs (both no-op without it). No new
+env vars or Storage buckets otherwise. Smoke-test: handle/closet-public opt-in →
+public `/u/[handle]` → follow → feed → quiz → recs → notifications.
+
+---
+
 ## ⚙️ Human-gated setup checklist (nothing DB-backed works until these are done)
 
 1. **Apply migrations** (Supabase SQL editor / CLI), in order:
@@ -38,7 +82,8 @@ On top of the above, branch `claude/port-geo-video-social-onto-main` (→ **PR #
    - `0004_resources_creators.sql` *(PR #2)* — creator + resource (embedded video reviews); public read / admin write
    - `0005_closet_status_want_have_had.sql` *(PR #2)* — closet_status enum → `want`/`have`/`had` (data-migrating; collapses researching/wishlist→want, owned→have)
    - `0006_social_expert_layer.sql` *(PR #2)* — extends `profile` (handle/social/trust flags), `closet_favorite`, `post`, `closet_stats` view
-   - `0007_*` — photo contributions (when the queued feature is built; was sketched as `0004`)
+   - **`0007_taste_and_social_links.sql` *(engagement track — HUMAN-GATED, not yet applied)*** — adds `profile.social_links jsonb`, `profile.taste_vector jsonb`, `profile.taste_completeness int`; adds `closet_activity` + `photo_featured` values to the `notification_type` enum. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block in Postgres — if the migration tool wraps statements in a transaction, run the two `alter type` lines separately. Until this is applied, the new social/taste columns and the two new notification types don't exist; the app degrades gracefully (profile reads fall back, taste/recs return empty, follower notifications no-op).
+   - `0008_*` — photo contributions (when the queued feature is built; was sketched as `0004`)
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts

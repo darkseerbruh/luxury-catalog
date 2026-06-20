@@ -284,6 +284,12 @@ the simple, explainable engine underneath.
 
 ## 3. Suggested build order (engagement track)
 
+> **Build status (branch `claude/lucid-archimedes-1cyi21`):** steps **1–7 BUILT**
+> (compile/build verified, not runtime-tested; migration 0007 human-gated). Step 8
+> (authenticator inquiry threads) intentionally deferred to the marketplace. See
+> `docs/handoff.md` → "engagement / social + recommendations track" for the file map.
+
+
 1. **Social UI on the existing `0006` schema** — `/u/[handle]` public profile +
    curated closet, "Most Coveted Closets" leaderboard (`closet_stats`),
    verified-owner badge on reviews, social links on profile. *(Schema is ready; this
