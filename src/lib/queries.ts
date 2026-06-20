@@ -152,6 +152,7 @@ export interface VariantDetail {
   retailPriceOriginal: number | null;
   currency: string | null;
   authenticationMarkers: string | null;
+  createdAt: string | null;
   style: {
     styleId: number;
     name: string;
@@ -192,6 +193,7 @@ export interface VariantDetail {
     stampPlacement: string | null;
     stampFontNotes: string | null;
     knownAuthenticationMarkers: string | null;
+    sources: string | null;
     confidenceLevel: string;
   }[];
   knownColorCombinations: {
@@ -302,6 +304,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       retail_price_original,
       currency,
       authentication_markers,
+      created_at,
       style:style_id(
         style_id, name, silhouette, closure_type, year_introduced, description,
         brand:brand_id(brand_id, name, tier)
@@ -315,7 +318,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
         production_id, country_of_manufacture, production_year, production_season,
         dimensions_h_cm, dimensions_w_cm, dimensions_d_cm, opening_width_cm,
         date_code_format, stamp_placement, stamp_font_notes,
-        known_authentication_markers, confidence_level
+        known_authentication_markers, sources, confidence_level
       ),
       known_color_combination(
         combination_id, exterior_color, interior_color, stitching_color,
@@ -391,6 +394,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
     retailPriceOriginal: data.retail_price_original != null ? Number(data.retail_price_original) : null,
     currency: data.currency,
     authenticationMarkers: data.authentication_markers,
+    createdAt: data.created_at ?? null,
     style: style ? {
       styleId: style.style_id,
       name: style.name,
@@ -428,6 +432,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       stampPlacement: r.stamp_placement,
       stampFontNotes: r.stamp_font_notes,
       knownAuthenticationMarkers: r.known_authentication_markers,
+      sources: r.sources ?? null,
       confidenceLevel: r.confidence_level,
     })),
     knownColorCombinations: (data.known_color_combination ?? []).map((c) => ({
@@ -1120,6 +1125,23 @@ export async function getUserBags(
       stillInProduction: v.still_in_production,
     }];
   });
+}
+
+// ============ Sitemap targets (programmatic SEO/GEO) ============
+
+/** All indexable entity IDs for sitemap.xml — bag variants + brands. */
+export async function getSitemapTargets(): Promise<{
+  variantIds: number[];
+  brandIds: number[];
+}> {
+  const [variants, brands] = await Promise.all([
+    getSupabase().from("variant").select("variant_id").limit(50000),
+    getSupabase().from("brand").select("brand_id").limit(5000),
+  ]);
+  return {
+    variantIds: (variants.data ?? []).map((r) => r.variant_id as number),
+    brandIds: (brands.data ?? []).map((r) => r.brand_id as number),
+  };
 }
 
 /** The current user's relationship to one variant — initial state for the bag-page button. */

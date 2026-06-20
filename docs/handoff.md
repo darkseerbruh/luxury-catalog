@@ -120,6 +120,7 @@ All 5 hero styles were researched with a 5-angle deep-research pass and applied 
 3. **Remaining brand depth** — the 9 non-hero brands (LV, Kate Spade, Burberry, Gucci, Prada, Fendi, Celine, Dior, Bottega Veneta) are still stubs; each needs a research pass like the hero styles got.
 4. **Fill more hero nulls** — opening dimensions, exact stamp fonts/screw types, interior storage configs, and device-fit data remain `null` across several styles (flagged in each file's notes / `research_gaps_flagged`).
 5. **Build the UGC layer** — collection ↔ wishlist ↔ reviews, designed in the next section. This is the agreed next *big* push (needs Supabase Auth first). See **"Next major workstream"** below.
+6. **Marketing plan is implemented (code side)** — GEO bag pages, JSON-LD, sitemap/robots, affiliate buy/sell links, email alert capture. See `docs/marketing-plan-implementation.md` for what's built and the operator action list (apply to affiliate programs, run migrations, submit sitemaps, set env vars).
 
 ---
 

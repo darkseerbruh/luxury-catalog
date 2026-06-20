@@ -164,3 +164,42 @@ export async function setAvailabilityNotify(input: {
     return { ok: false, error: "Could not update your alert. Please try again." };
   }
 }
+
+// ============ Marketing: no-auth email price/availability alerts ============
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Captures an email against a specific bag for a price-drop / availability
+ * alert (docs/marketing-plan.md, Tier-2 owned-audience play). Works without an
+ * account; writes to bag_alert_subscription (migration 0003).
+ */
+export async function subscribeToBagAlert(input: {
+  variantId: number;
+  email: string;
+  kind?: "price_drop" | "availability";
+}): Promise<FeedbackResult> {
+  if (!validVariantId(input.variantId)) return { ok: false, error: "Invalid item." };
+  const email = input.email?.trim().toLowerCase() ?? "";
+  if (!EMAIL_RE.test(email) || email.length > 254) {
+    return { ok: false, error: "Please enter a valid email." };
+  }
+  const kind = input.kind === "availability" ? "availability" : "price_drop";
+
+  try {
+    const { error } = await getSupabase()
+      .from("bag_alert_subscription")
+      .upsert(
+        { email, variant_id: input.variantId, alert_kind: kind, unsubscribed: false },
+        { onConflict: "email,variant_id,alert_kind" }
+      );
+    if (error) {
+      console.error("subscribeToBagAlert error:", error);
+      return { ok: false, error: "Could not save your alert. Please try again." };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.error("subscribeToBagAlert exception:", err);
+    return { ok: false, error: "Could not save your alert. Please try again." };
+  }
+}

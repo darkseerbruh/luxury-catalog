@@ -1,11 +1,54 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail, getUserBagFor } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
+import {
+  AUTHOR_NAME,
+  SITE_URL,
+  buildLeadAnswer,
+  metaDescription,
+  buildFaq,
+  fullTitle,
+  dim,
+  productJsonLd,
+  faqJsonLd,
+  breadcrumbJsonLd,
+} from "@/lib/geo";
 import FeedbackWidget from "./FeedbackWidget";
 import CollectionButton from "./CollectionButton";
+import AffiliateLinks from "./AffiliateLinks";
+import PriceAlertSignup from "./PriceAlertSignup";
 
 export const dynamic = "force-dynamic";
+
+// Dedupe the (heavy) detail fetch across generateMetadata + the page render.
+const getVariant = cache(getVariantDetail);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ variantId: string }>;
+}): Promise<Metadata> {
+  const { variantId } = await params;
+  const id = parseInt(variantId, 10);
+  if (isNaN(id)) return {};
+  const v = await getVariant(id);
+  if (!v) return {};
+
+  const title = `${fullTitle(v)} — production, authentication & value`;
+  const description = metaDescription(v);
+  const url = `${SITE_URL}/bag/${v.variantId}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, type: "article" },
+    twitter: { card: "summary", title, description },
+  };
+}
 
 function formatPrice(amount: number | null, currency: string | null) {
   if (amount == null) return null;
@@ -63,11 +106,30 @@ export default async function BagDetailPage({
   const id = parseInt(variantId, 10);
   if (isNaN(id)) notFound();
 
-  const v = await getVariantDetail(id);
+  const v = await getVariant(id);
   if (!v) notFound();
 
   const user = await getCurrentUser();
   const userBag = user ? await getUserBagFor(user.id, v.variantId) : null;
+
+  const leadAnswer = buildLeadAnswer(v);
+  const faq = buildFaq(v);
+  const sources = Array.from(
+    new Set(
+      v.productionRecords
+        .flatMap((r) => (r.sources ? r.sources.split(/[;\n]+/) : []))
+        .map((s) => s.trim())
+        .filter((s) => /^https?:\/\//.test(s))
+    )
+  );
+  const updated = v.createdAt
+    ? new Date(v.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    : null;
+  const jsonLd = [
+    productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`),
+    faqJsonLd(faq),
+    breadcrumbJsonLd(v),
+  ].filter(Boolean);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -113,12 +175,20 @@ export default async function BagDetailPage({
           {v.style.name}
         </h1>
         <p className="mt-1 text-lg text-muted">{variantTitle}</p>
-        {v.style.description && (
-          <p className="mt-4 text-sm leading-relaxed text-muted">
-            {v.style.description}
-          </p>
-        )}
+        <p className="mt-2 text-xs text-muted/70">
+          By {AUTHOR_NAME}
+          {updated ? ` · Catalogued ${updated}` : ""}
+        </p>
       </header>
+
+      {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
+      <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
+        {leadAnswer}
+      </p>
+
+      {v.style.description && (
+        <p className="text-sm leading-relaxed text-muted">{v.style.description}</p>
+      )}
 
       {/* Core specs */}
       <Section title="Specifications">
@@ -208,9 +278,9 @@ export default async function BagDetailPage({
                     <SpecRow
                       label="Dimensions"
                       value={[
-                        r.dimensionsHCm ? `H ${r.dimensionsHCm} cm` : null,
-                        r.dimensionsWCm ? `W ${r.dimensionsWCm} cm` : null,
-                        r.dimensionsDCm ? `D ${r.dimensionsDCm} cm` : null,
+                        r.dimensionsHCm ? `H ${dim(r.dimensionsHCm)}` : null,
+                        r.dimensionsWCm ? `W ${dim(r.dimensionsWCm)}` : null,
+                        r.dimensionsDCm ? `D ${dim(r.dimensionsDCm)}` : null,
                       ]
                         .filter(Boolean)
                         .join(" × ")}
@@ -494,6 +564,26 @@ export default async function BagDetailPage({
           </Section>
         )}
 
+      {/* FAQ (GEO: mirrors the FAQPage structured data) */}
+      {faq.length > 0 && (
+        <Section title="Frequently asked questions">
+          <dl className="flex flex-col gap-4">
+            {faq.map((f, i) => (
+              <div key={i} className="rounded-xl border border-border bg-surface p-5">
+                <dt className="text-sm font-medium text-foreground">{f.question}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-muted">{f.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
+      )}
+
+      {/* Where to buy / sell — the affiliate decision point */}
+      <AffiliateLinks brand={v.brand.name} style={v.style.name} />
+
+      {/* Price-drop / availability email capture */}
+      <PriceAlertSignup variantId={v.variantId} />
+
       {/* Collection / wishlist */}
       <CollectionButton
         variantId={v.variantId}
@@ -504,8 +594,41 @@ export default async function BagDetailPage({
         initialNotify={userBag?.notifyOnAvailability ?? false}
       />
 
+      {/* Cited sources (E-E-A-T) */}
+      {sources.length > 0 && (
+        <Section title="Sources">
+          <ul className="flex flex-col gap-1.5 rounded-xl border border-border bg-surface px-5 py-4">
+            {sources.map((s) => (
+              <li key={s} className="truncate text-xs">
+                <a
+                  href={s}
+                  target="_blank"
+                  rel="nofollow noopener"
+                  className="text-muted hover:text-gold"
+                >
+                  {s}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted/60">
+            Authentication data is research-sourced and confidence-rated; verify
+            high-stakes details against an in-hand inspection.
+          </p>
+        </Section>
+      )}
+
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />
+
+      {/* Structured data for Google AI Overviews / ChatGPT citation */}
+      {jsonLd.map((obj, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }}
+        />
+      ))}
     </main>
   );
 }
