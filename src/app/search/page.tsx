@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { searchCatalog } from "@/lib/queries";
 import RequestBagForm from "./RequestBagForm";
+import SearchTracker from "./SearchTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,12 @@ export default async function SearchPage({
 
   return (
     <main className="flex flex-1 flex-col px-5 py-10">
+      {query && (
+        <SearchTracker
+          query={query}
+          resultCount={results.brands.length + results.styles.length}
+        />
+      )}
       <form method="GET" className="mx-auto flex w-full max-w-md items-center gap-2">
         <input
           name="q"

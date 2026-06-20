@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
+import { Providers } from "./providers";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -34,6 +35,7 @@ export default async function RootLayout({
       className={`${poppins.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-foreground font-sans">
+        <Providers>
         <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
             <Link href="/" className="font-serif text-xl tracking-wide text-foreground">
@@ -95,6 +97,7 @@ export default async function RootLayout({
             </p>
           </div>
         </footer>
+        </Providers>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitFeedback } from "@/lib/actions";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 type Mode = "idle" | "reporting" | "done" | "error";
 
@@ -16,6 +17,7 @@ export default function FeedbackWidget({ variantId }: { variantId: number }) {
     startTransition(async () => {
       const res = await submitFeedback({ variantId, feedbackType, note });
       if (res.ok) {
+        track(EVENTS.feedbackSubmitted, { variant_id: variantId, feedback_type: feedbackType });
         setMode("done");
       } else {
         setError(res.error ?? "Something went wrong.");

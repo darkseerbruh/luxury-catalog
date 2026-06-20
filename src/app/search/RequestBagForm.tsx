@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { requestBag } from "@/lib/actions";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 export default function RequestBagForm({ query }: { query: string }) {
   const [open, setOpen] = useState(false);
@@ -34,8 +35,10 @@ export default function RequestBagForm({ query }: { query: string }) {
     setError(null);
     startTransition(async () => {
       const res = await requestBag(formData);
-      if (res.ok) setDone(true);
-      else setError(res.error ?? "Something went wrong.");
+      if (res.ok) {
+        track(EVENTS.bagRequested, { query });
+        setDone(true);
+      } else setError(res.error ?? "Something went wrong.");
     });
   }
 

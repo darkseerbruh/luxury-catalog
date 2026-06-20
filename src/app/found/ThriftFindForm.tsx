@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { logThriftFind } from "@/lib/actions";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 const CONDITIONS = ["unknown", "new", "excellent", "very good", "good", "fair"];
 
@@ -40,8 +41,12 @@ export default function ThriftFindForm({
     setError(null);
     startTransition(async () => {
       const res = await logThriftFind(formData);
-      if (res.ok) setDone(true);
-      else setError(res.error ?? "Something went wrong.");
+      if (res.ok) {
+        track(EVENTS.thriftFindLogged, {
+          brand: String(formData.get("brand") ?? "") || undefined,
+        });
+        setDone(true);
+      } else setError(res.error ?? "Something went wrong.");
     });
   }
 

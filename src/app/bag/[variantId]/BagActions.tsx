@@ -8,6 +8,7 @@ import {
   addToWatchlist,
   removeFromWatchlist,
 } from "@/lib/collection-actions";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 const STATUS_LABELS: { value: "researching" | "wishlist" | "owned"; label: string }[] = [
   { value: "researching", label: "Researching" },
@@ -60,8 +61,10 @@ export default function BagActions({
         return;
       }
       const res = await saveToCloset(variantId, status);
-      if (res.ok) setClosetStatus(status);
-      else setError(res.error ?? "Something went wrong.");
+      if (res.ok) {
+        setClosetStatus(status);
+        track(EVENTS.itemSaved, { variant_id: variantId, status });
+      } else setError(res.error ?? "Something went wrong.");
     });
   }
 
@@ -69,8 +72,10 @@ export default function BagActions({
     setError(null);
     startTransition(async () => {
       const res = watching ? await removeFromWatchlist(variantId) : await addToWatchlist(variantId);
-      if (res.ok) setWatching(!watching);
-      else setError(res.error ?? "Something went wrong.");
+      if (res.ok) {
+        if (!watching) track(EVENTS.itemSaved, { variant_id: variantId, kind: "watchlist" });
+        setWatching(!watching);
+      } else setError(res.error ?? "Something went wrong.");
     });
   }
 

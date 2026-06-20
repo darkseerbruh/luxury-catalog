@@ -5,6 +5,7 @@ import { getVariantUserState } from "@/lib/collections";
 import FeedbackWidget from "./FeedbackWidget";
 import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
+import TrackBagView from "./TrackBagView";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +83,14 @@ export default async function BagDetailPage({
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
+      <TrackBagView
+        variantId={v.variantId}
+        brand={v.brand.name}
+        brandTier={(v.brand.tier as "thrift" | "mid" | "ultra-luxury") || null}
+        style={v.style.name}
+        silhouette={v.style.silhouette}
+        hasPriceHistory={v.priceHistory.length > 0}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">
