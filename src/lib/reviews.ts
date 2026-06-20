@@ -1,5 +1,6 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import { getVerifiedOwnerIds } from "./social";
 
 export interface MyReview {
   reviewId: number;
@@ -69,6 +70,8 @@ export interface ReviewItem {
   durabilityRating: number | null;
   createdAt: string;
   isMine: boolean;
+  /** Reviewer has/had this exact bag in their closet — a "verified owner". */
+  verifiedOwner: boolean;
 }
 
 export interface ReviewSummary {
@@ -105,6 +108,11 @@ export async function getReviews(variantId: number): Promise<ReviewSummary> {
     durability_rating: number | null; created_at: string;
   }[];
 
+  // Verified-owner derivation: which reviewers have/had this exact bag in their
+  // closet. Reads only the catalogued closet graph; RLS limits visibility to
+  // public closets + the viewer's own, so this never leaks private ownership.
+  const ownerIds = await getVerifiedOwnerIds(variantId);
+
   const reviews: ReviewItem[] = rows.map((r) => ({
     reviewId: r.review_id,
     rating: r.rating,
@@ -115,6 +123,7 @@ export async function getReviews(variantId: number): Promise<ReviewSummary> {
     durabilityRating: r.durability_rating,
     createdAt: r.created_at,
     isMine: !!user && r.user_id === user.id,
+    verifiedOwner: ownerIds.has(r.user_id),
   }));
 
   const average = reviews.length

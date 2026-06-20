@@ -1,5 +1,6 @@
 import { getReviews } from "@/lib/reviews";
 import { getCurrentUser } from "@/lib/auth";
+import { VerifiedOwnerBadge } from "@/components/TrustBadges";
 import ReviewForm from "./ReviewForm";
 
 function StarRow({ rating }: { rating: number }) {
@@ -72,7 +73,10 @@ function ReviewCard({ review }: { review: import("@/lib/reviews").ReviewItem }) 
   return (
     <li className="rounded-xl border border-border bg-surface p-5">
       <div className="flex items-center justify-between gap-3">
-        <StarRow rating={review.rating} />
+        <div className="flex items-center gap-2">
+          <StarRow rating={review.rating} />
+          {review.verifiedOwner && <VerifiedOwnerBadge />}
+        </div>
         <span className="text-xs text-muted/70">
           {review.isMine ? "You · " : "Member · "}
           {formatDate(review.createdAt)}

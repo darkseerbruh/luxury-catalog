@@ -1,4 +1,5 @@
 import { createServerSupabase } from "./supabase/server";
+import { getSupabaseAdmin } from "./supabase/admin";
 import { getCurrentUser } from "./auth";
 
 export interface NotificationItem {
@@ -47,4 +48,48 @@ export async function getUnreadCount(): Promise<number> {
     .eq("read", false);
 
   return count ?? 0;
+}
+
+/**
+ * Insert a notification for ANOTHER user (you can't write to someone else's
+ * notification row under RLS, so this uses the service-role client). Used for
+ * re-engagement events: "new activity from a closet you follow" and "your photo
+ * was featured". Best-effort and silent: never blocks the triggering action,
+ * and no-ops when the service-role key isn't configured.
+ */
+async function insertNotificationFor(
+  userId: string,
+  type: "closet_activity" | "photo_featured",
+  title: string,
+  body: string | null,
+  variantId: number | null
+): Promise<void> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return;
+  try {
+    await getSupabaseAdmin()
+      .from("notification")
+      .insert({ user_id: userId, type, title, body, variant_id: variantId });
+  } catch (err) {
+    // notification_type enum may not yet include the new values (0007 not
+    // applied) — degrade silently rather than failing the social action.
+    console.error("notify insert error:", err);
+  }
+}
+
+/** "New activity from a closet you follow" / "started following you". */
+export async function notifyClosetActivity(
+  userId: string,
+  title: string,
+  variantId: number | null
+): Promise<void> {
+  await insertNotificationFor(userId, "closet_activity", title, null, variantId);
+}
+
+/** "Your photo was featured". */
+export async function notifyPhotoFeatured(
+  userId: string,
+  title: string,
+  variantId: number | null
+): Promise<void> {
+  await insertNotificationFor(userId, "photo_featured", title, null, variantId);
 }
