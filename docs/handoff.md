@@ -1,237 +1,166 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-20 (Session 3: user accounts + engagement features). Read this before doing anything in the next session.*
-*Supersedes the prior handoff; still-outstanding items (DNS, credentials, seed run) are carried forward below.*
+*Updated 2026-06-20. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+> **Branch:** all current work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork" — there were two parallel apps; this is the canonical one.
 
 ---
 
-## TL;DR — Session 3 (2026-06-20)
+## TL;DR — where things stand
 
-Branch: **`claude/adoring-mccarthy-0dnhvn`** (based on the active `claude/desktop-display-test-d621oc`, so it contains everything from Session 2 plus the below). Heads-up for next session: the Session-2 work lives on `desktop-display-test-d621oc`; this session's branch was forked from it — confirm which branch is "active" before building.
+The full catalog app (search, identify/camera, browse, admin, bag detail) now has, added this session:
+- **User accounts** (Supabase Auth), **closet**, **watchlist + price-trend**, **price-alert delivery**, **feedback write-side** (request-a-bag, thrift-log), **reviews & ratings**, **affiliate "where to buy"**, and **PostHog analytics** (ported from the other lineage).
+- **Build health:** `next build`, `tsc --noEmit`, `eslint` all green.
+- **Big caveat:** none of the DB-backed features were runtime-tested — the cloud session has **no Supabase credentials**. Everything is verified by compile/build only. The auth → save → review → alert path must be smoke-tested after setup.
 
-Built the four next-up use cases from the backlog. **App `next build` / `tsc` / `eslint` all pass**, but none of it could be exercised against a live DB (cloud session has no Supabase creds), so treat it as reviewed-by-compile, not runtime-tested.
-
-1. **User accounts (Supabase Auth)** — email+password signup/login/logout, email-confirm route, onboarding (persona capture), profile. Cookie-based SSR via `@supabase/ssr` + Next 16 `proxy.ts` (Middleware was renamed to Proxy in v16).
-2. **Closet** — save bags as researching/wishlist/owned (`/closet`); Save buttons on bag pages; home "Your closet" is now real.
-3. **Watchlist + price alerts** — watch a bag, set a target price, toggle alerts (`/watchlist`); price-trend sparkline on bag pages from `price_history`. (Alert *delivery* is not built — see open items.)
-4. **Feedback loop write-side** — "Request this bag be added" on dead-end searches; thrift-find logging (`/found`) + CTA from the camera tool; new `/admin/requests` dashboard.
-5. **Breadth seeding deepened** — reseller CSVs now map into variant + production + fits rows (not just colorway/price); seeder generalized to all brands so the full Drive export auto-populates the 9 stub brands when added.
-6. **PostHog analytics ported in** — the cookieless-first analytics foundation from the `luxury-catalog-analytics-plan-kiq8al` lineage was merged into this app and wired to its real surfaces (see "Analytics" below).
-
-> 🔱 **Lineage fork resolved this session.** There were two parallel apps: **Lineage A** (search/identify/admin/closet — this branch) and **Lineage B** (`luxury-catalog-analytics-plan-kiq8al`, a PostHog-instrumented prototype with a tier/silhouette filter home and Polène/Telfar/Longchamp seed). The user was running B locally and noticed "no search" — B never had it. **Decision: A is canonical; B's analytics were ported into A.** B can now be archived; its alternate home/`/bags/[id]` pages and sample-data were intentionally NOT brought over.
-
-> ⚠️ **Human-gated before this is "done" (carried forward + new):**
-> 1. **NEW — apply migration `0002_user_features.sql`** to Supabase (adds profile/closet/watchlist/bag_request/thrift_find + RLS + a new-user trigger). Nothing in items 1–4 works until this is applied.
-> 2. **NEW — set Supabase email-confirm template** to point at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates), or disable email confirmation for testing.
-> 3. **Run the seed scripts** (still pending from Session 2) — research JSON + breadth are committed but the live DB still has the *old* seed data.
-> 4. **DNS go-live** — `luxurycatalog.com` still points nowhere.
-
-See "Action required" and "Open decisions / what to do next" for details.
+**Decided this session:** image strategy (see "Images"). **Queued to build next:** the photo-contribution + contributor-tier system (fully spec'd below — start here).
 
 ---
 
-## TL;DR — Session 2 (2026-06-19)
+## ⚙️ Human-gated setup checklist (nothing DB-backed works until these are done)
 
-Built on top of the deployed app (branch `claude/desktop-display-test-d621oc`):
-
-1. **Natural-language search** — `searchCatalog()` now parses queries with Claude into structured filters.
-2. **Two admin dashboards** — `/admin/searched-not-found` and `/admin/feedback` (+ `/admin` index).
-3. **Bag feedback loop** — "Is this accurate?" widget on `/bag/[variantId]` → `user_feedback`.
-4. **All 5 hero styles researched & applied** — filled production records, colorways, fits, auth markers.
-5. **Size variants added** — Kelly 25/32, Birkin 25/40, Chanel Small/Jumbo/Maxi.
-6. **`price_history` seed support** — loader extended; Chanel retail trajectory added.
-
-**Open PR:** [#1](https://github.com/darkseerbruh/luxury-catalog/pull/1) — focused review diff of features 1–3. It's a *review vehicle* (the code is already live on the active branch); close it once reviewed, don't merge.
-
-> ⚠️ **Two things need a human before this is "done":**
-> 1. **Run the seed scripts** — all the research data is committed to the seed JSON but was NOT applied to Supabase (the cloud session has no DB credentials). See "Action required" below.
-> 2. **DNS go-live** — `luxurycatalog.com` still points nowhere (unchanged from last session). See "The one outstanding infra item."
-
----
-
-## Current state
-
-- **App:** fully built, deployed on Vercel, live at **`luxury-catalog-omega.vercel.app`**.
-- **Active branch:** `claude/desktop-display-test-d621oc` (all code + data). `main` is the old empty scaffold — ignore it.
-- **Build health:** `next build`, `tsc --noEmit`, and `eslint` all pass as of this session.
-
----
-
-## 1. Features shipped this session (live in the branch)
-
-### Natural-language search (`src/lib/queries.ts`, `src/app/search/page.tsx`)
-- `searchCatalog()` calls Claude (`claude-sonnet-4-6`) via `parseSearchQuery()` to turn a free-text query into structured filters (brand, style, silhouette, size category, color, material, hardware color, carry type, width range), then runs an attribute-aware variant search grouped by style.
-- Example: *"structured black bag under 10 inches wide"* → `silhouette: structured`, `color: black`, `maxWidthCm: 25.4`.
-- **Graceful fallback:** if `ANTHROPIC_API_KEY` is missing or parsing fails, it falls back to the original `ilike` name matching — search never breaks.
-- **Honors "never invent":** width filters exclude variants with no measured dimensions rather than assuming they qualify.
-- The search page shows an "Interpreted as" chip row so users see how their query was read.
-- Misses (text **and** camera) are logged to `searched_not_found`.
-
-### Admin dashboards (unauthenticated, `noindex`, unlinked from public nav)
-- `/admin` — index linking the two dashboards.
-- `/admin/searched-not-found` — aggregates missed searches/camera misses by query (count, source, last-searched, resolved). Query fn: `getSearchedNotFound()`.
-- `/admin/feedback` — user feedback newest-first with type badges, flag/unresolved counts, links to the referenced bag. Query fn: `getUserFeedback()`.
-
-### Bag feedback (`src/app/bag/[variantId]/FeedbackWidget.tsx`, `src/lib/actions.ts`)
-- Client widget → server action `submitFeedback()` → `user_feedback` table (record_type `variant`).
-
----
-
-## 2. Hero-style research (applied to seed JSON)
-
-All 5 hero styles were researched with a 5-angle deep-research pass and applied to `supabase/seed/research/*.json`:
-
-| Style | Highlights of what was filled |
-|---|---|
-| Coach Tabby | 2 production records, 8 colorways, 6 source-backed fits, creed/auth markers (incl. the `CR652` fake tell + verified real style codes), price 475→450 |
-| Hermès Kelly | Filled the empty colorways (8); refined blind-stamp placement (~2016 relocation); added Kelly 25 & 32 |
-| Hermès Birkin | Dimensions for all sizes; colorways 1→5; chèvre lining; added Birkin 25 & 40 |
-| Coach Swagger | `discontinued=true` (refurb noted); $450 MSRP (disambiguated from the 21); 7 colorways |
-| Chanel Classic Flap | **Safety fix:** flagged the series→year sticker table as reseller-reconstructed + added the high-confidence digit-era timeline; microchip record → high; +3 colorways; Small/Jumbo/Maxi; price_history (2016→2025) |
-
-### ⚠️ Critical caveat on this data — REVIEW BEFORE TRUSTING
-- **Environmental limitation:** in the cloud session, `WebFetch` was HTTP 403-blocked on every primary/retail site (coach.com, Macy's, SEC, authentication blogs). All values were extracted from **WebSearch snippets**, not rendered pages.
-- Therefore **no field reaches `verified`** — confidence is capped at `medium`. Conflicts are flagged inline (e.g. leather Tabby height 6″ vs 5.5″; Chanel 2019 $5,800 vs the stored $6,500). Unverifiable fields are left `null` per the brief's "never invent" rule.
-- **Recommended:** a human should open the cited coach.com / reseller pages from a normal browser to upgrade key numbers (heights, prices, hardware tones) to `verified`, and sanity-check the Hermès/Chanel authentication details before they're presented to users as fact.
-- The original per-style research drafts are preserved in the session log; the Coach Tabby draft is at `docs/research-drafts/coach-tabby-26-auth-draft.md` as a worked example of the format.
-
-### Size variants & price_history (this session)
-- New size variants carry **cited dimensions only**; material/colorway/price are `null` at the size-archetype level (with notes). Explicit `variant_index` is set on all variants and production records so the loader's index mapping is unambiguous.
-- `seed-hero-styles.ts` now imports a `price_history` array (it omits `date_recorded` when absent so the column default applies). Only Chanel currently has price_history rows.
-
----
-
-## ✅ Action required before this is production-true
-
-1. **Apply the new migrations** (Session 3) before anything else — most features depend on them:
-   ```
-   # via Supabase SQL editor or CLI, run in order:
-   supabase/migrations/0002_user_features.sql   # profile, closet, watchlist, bag_request, thrift_find (+ RLS, signup trigger)
-   supabase/migrations/0003_reviews_notifications.sql   # review, notification (+ RLS)
-   ```
-2. **Point the Supabase email-confirm template** at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates → Confirm signup), or turn off email confirmation while testing. Without this, the signup confirmation link won't land in the app.
-3. **Run the seed scripts against Supabase** (needs `SUPABASE_SERVICE_ROLE_KEY` + URL in a local `.env`, which the cloud session does not have):
+1. **Apply migrations** (Supabase SQL editor / CLI), in order:
+   - `0001_init_schema.sql` (already applied previously)
+   - `0002_user_features.sql` — profile, closet_item, watchlist, bag_request, thrift_find (+ RLS, new-user trigger)
+   - `0003_reviews_notifications.sql` — review, notification (+ RLS)
+   - `0004_*` — photo contributions (when the queued feature is built)
+2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
    npx tsx supabase/seed/seed-breadth.ts
    ```
-   Both are idempotent (clear + re-insert per style). The research JSON + deepened breadth are committed but the live DB still has the *previous* seed data until this runs.
-4. **Smoke-test the auth flow** once 1–3 are done: sign up → confirm → onboarding → save a bag → watchlist. This is the one path that couldn't be tested in the cloud session.
-5. **Wire up PostHog** (analytics is inert until this is done):
-   - Set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`/`POSTHOG_HOST` for server events) in Vercel/`.env.local`. See `.env.example` and `docs/analytics-setup.md`.
-   - Enable "Cookieless server hash mode" in PostHog project settings (required for the Tier-1 baseline).
-   - **Add `.mcp.json` manually** — I did not auto-create it (it's agent startup config). To get the PostHog MCP server, add:
-     ```json
-     { "mcpServers": { "posthog": { "command": "npx", "args": ["-y","mcp-remote@latest","https://mcp.posthog.com/mcp","--header","Authorization:${POSTHOG_AUTH_HEADER}"], "env": { "POSTHOG_AUTH_HEADER": "Bearer ${POSTHOG_PERSONAL_API_KEY}" } } } }
-     ```
-   - Optional: run `node scripts/setup-posthog.mjs` to provision dashboards, and the weekly digest workflow (`.github/workflows/analytics-digest.yml`) needs `POSTHOG_PERSONAL_API_KEY`/`POSTHOG_PROJECT_ID` secrets.
-6. **Review the accuracy-critical data** from Session 2 (see caveat below) — especially Hermès blind-stamp and Chanel serial details.
-7. **DNS go-live** (below).
+   Both idempotent. The live DB still has the *old* seed data until these run.
+3. **Supabase email-confirm template** → point at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates), or disable confirmation while testing.
+4. **PostHog**: set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`); enable "Cookieless server hash mode"; optionally run `node scripts/setup-posthog.mjs`. **Add `.mcp.json` manually** (I don't auto-create startup config — snippet in `.env.example`/below).
+5. **Price alerts**: set `CRON_SECRET` (Vercel injects it as the cron Authorization header); optional `RESEND_API_KEY` + verified sender for email. `vercel.json` already schedules the job daily.
+6. **Affiliate**: sign up for programs; set `NEXT_PUBLIC_AFFILIATE_*` codes / `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE`.
+7. **DNS go-live** (below) — still outstanding from day one.
+8. **Smoke-test** the full auth + closet + watchlist + review + alert path against the live DB.
+
+`.env.example` documents every variable.
 
 ---
 
-## Session 3 — features shipped (code, pending DB apply)
+## What's built (this session)
 
-### Auth (`@supabase/ssr`, Next 16 Proxy)
-- `src/lib/supabase/{server,client,admin}.ts` — cookie-aware server client, browser client, and a **service-role admin client** (server-only) used by admin dashboards to read RLS-protected tables.
-- `src/proxy.ts` — Next 16's renamed Middleware; refreshes the session each request. No-op without env.
-- `src/lib/auth.ts` (`getCurrentUser`, `getProfile`), `src/lib/auth-actions.ts` (`signIn`/`signUp`/`signOut`), `src/lib/profile-actions.ts` (`completeOnboarding`).
-- Pages: `/login`, `/signup`, `/onboarding`, `/profile`, route handler `/auth/confirm`. Header nav + home are auth-aware.
+### Auth & accounts (`@supabase/ssr`, Next 16 Proxy)
+- `src/lib/supabase/{server,client,admin}.ts` — cookie-aware server client, browser client, service-role admin client (server-only; admin dashboards & cron).
+- `src/proxy.ts` — Next 16's renamed Middleware; refreshes the session per request (no-op without env).
+- `src/lib/auth.ts` (`getCurrentUser`, `getProfile`), `auth-actions.ts` (signIn/signUp/signOut), `profile-actions.ts` (onboarding).
+- Pages: `/login`, `/signup`, `/onboarding` (persona capture), `/profile`, route handler `/auth/confirm`. Header nav + home are auth-aware.
 
-### Closet & watchlist (`src/lib/collections.ts`, `collection-actions.ts`)
-- `/closet` (grouped by status), `/watchlist` (target price + alert toggle via `WatchControls`).
-- `BagActions` (save/watch) + `PriceTrend` (SVG sparkline) on `/bag/[variantId]`.
-- RLS scopes every row to `auth.uid()`.
+### Closet, watchlist, price alerts
+- `collections.ts` + `collection-actions.ts`; `/closet` (grouped by status), `/watchlist` (target price + alert toggle).
+- `BagActions` (save/watch) + `PriceTrend` (SVG sparkline) on bag pages.
+- **Price-alert delivery**: `/api/cron/price-alerts` (CRON_SECRET-gated, service-role) scans watchlists vs price_history → in-app `notification` rows (deduped via `last_notified_at`) + optional Resend email + `price_alert_triggered` event. `/notifications` feed + header "Alerts" badge.
 
-### Feedback write-side (`src/lib/actions.ts`)
-- `requestBag` (search dead-ends → `bag_request`), `logThriftFind` (`/found` + camera CTA → `thrift_find`). Both anonymous-friendly.
-- `/admin/requests` reads both via the service-role client; linked from `/admin`.
+### Feedback loop (write side) + reviews
+- `requestBag` (search dead-ends) + `logThriftFind` (`/found` + camera CTA); `/admin/requests` dashboard.
+- **Reviews & ratings**: `review` table; reviews section + star `ReviewForm` on bag pages; aggregate average/count; one per user per variant; `review_submitted` event.
 
-### Breadth (`supabase/seed/seed-breadth.ts`)
-- Maps reseller CSV columns into variant + production_record + fits (was colorway/price only). Skips hero style names. Idempotent per style. Brand allowlist generalized to all known brands.
-- **The 9 stub brands stay stubs**: both CSVs in `data/raw/` contain only Chanel/LV/Hermès. The full `theluxurycloset_data.csv` in Drive (38.7 MB, id `1WOtJIw_Y9By-7BjHZu4MgXkFZ00-hgeC`) is too large to pull into a cloud session — drop it into `data/raw/` and re-run the seeder and the 9 brands populate automatically.
+### Affiliate "where to buy" (`affiliate.ts`, `WhereToBuy.tsx`)
+- Resale search deep-links (Fashionphile / The RealReal / Vestiaire) on bag pages; optional affiliate codes + network wrapper from env; `outbound_resale_clicked` event.
 
-### Analytics (`src/lib/analytics/*`, ported from Lineage B)
-- **Cookieless-first**: Tier-1 baseline runs for every visitor with `persistence: "memory"` (nothing on device); Tier-2 (session replay, surveys, cross-session identity) only after opt-in via `ConsentNotice`.
-- `events.ts` — the single `track(event, props)` entry point + typed `EVENTS` taxonomy. `server.ts` — `captureServer()` for Route Handlers/server actions (available, not yet heavily used).
-- Init in `src/instrumentation-client.ts` (before hydration); `Providers` (in `layout.tsx`) supplies `PostHogProvider` + manual App Router pageviews + the consent notice. Reverse-proxied via `/ingest` (`next.config.ts`) to dodge ad-blockers.
-- **Instrumented surfaces** (autocapture covers the rest): `variant_viewed` + `price_history_viewed` (bag page, `TrackBagView`), `search_performed`/`search_not_found` (`SearchTracker`), `item_saved` (closet + watchlist), `feedback_submitted`, and new `bag_requested` / `thrift_find_logged`.
-- **Not yet done**: client-side `identifyUser()`/`resetAnalytics()` on login/logout (Tier-2, consent-gated) — wire into the auth flow if you want post-auth identity stitching.
+### Analytics (PostHog, cookieless-first — ported from Lineage B)
+- `src/lib/analytics/{config,events,posthog,server}.ts`; `providers.tsx`; `instrumentation-client.ts`; restyled `ConsentNotice`; `/ingest` reverse-proxy; weekly digest script + workflow.
+- Instrumented: variant_viewed, price_history_viewed, search_performed/not_found, item_saved, feedback_submitted, review_submitted, bag_requested, thrift_find_logged, outbound_resale_clicked.
 
-### Revenue + community (Session 3b — use cases #1, #4, #5)
-- **Affiliate "where to buy"** (`src/lib/affiliate.ts`, `WhereToBuy.tsx`) — resale search deep-links on bag pages (Fashionphile / The RealReal / Vestiaire). Set `NEXT_PUBLIC_AFFILIATE_*` codes and/or `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` to monetize; plain links otherwise. Clicks fire `outbound_resale_clicked`. **Sign up for the affiliate programs to get real codes.**
-- **Price-alert delivery** — `/api/cron/price-alerts` (service-role, `CRON_SECRET`-gated) scans watchlists vs `price_history`, writes `notification` rows, dedupes via `watchlist.last_notified_at`, and optionally emails via Resend (`RESEND_API_KEY`). `vercel.json` runs it daily at 09:00 UTC. In-app feed at `/notifications` + header "Alerts" badge. **To activate: set `CRON_SECRET` (and optionally `RESEND_API_KEY` + verify a Resend sender). Alerts only fire when new, lower `price_history` rows are added** — static seed prices fire once then dedupe.
-- **Reviews & ratings** — `review` table; reviews section + star form on bag pages; aggregate average/count; one review per user per variant; `review_submitted` event. Powers the rating displays from the Figma. Authors shown as "Member"/"You" (other users' profiles aren't readable under RLS).
+### Breadth seeding deepened
+- Reseller CSVs now map into variant + production + fits rows; hero style names skipped; idempotent per style; brand allowlist generalized so the full Drive export auto-fills the 9 stub brands when dropped into `data/raw/`.
 
 ---
 
-## The one outstanding infra item: DNS
-
-`luxurycatalog.com` still points nowhere. Registered at **Squarespace Domains**. This cannot be done from a cloud session — it needs dashboard access.
-
-**Step 1 — Vercel:** project → **Domains** → **Add Domain** → add `luxurycatalog.com` and `www.luxurycatalog.com`; note the A record IP and CNAME value Vercel shows.
-**Step 2 — Squarespace** (`domains.squarespace.com` → DNS Settings): delete existing `@` A record and `www` CNAME, then add:
-- A, host `@`, value `76.76.21.21` *(verify against what Vercel shows)*
-- CNAME, host `www`, value `cname.vercel-dns.com.`
-**Step 3 — Wait** 15–60 min for propagation; watch for "Valid Configuration" in Vercel.
-**Step 4 — Email forwarding:** test `hello@luxurycatalog.com`; if MX got wiped, re-add `fwd1.squarespace.com.` (pri 10) and `fwd2.squarespace.com.` (pri 20).
+## Lineage fork (resolved)
+Two parallel apps existed: **Lineage A** (this branch — full catalog app) and **Lineage B** (`luxury-catalog-analytics-plan-kiq8al` — a PostHog-instrumented prototype with a tier/silhouette filter home and Polène/Telfar/Longchamp seed). The user was running B locally and noticed "no search" — B never had it. **Decision: A is canonical; B's analytics were ported into A.** B can be archived; its alternate home/`/bags/[id]` pages were intentionally not brought over.
 
 ---
 
-## Accounts & credentials (unchanged)
+## Images — strategy decided
+Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
+- **AI photoreal renders of real bags = NO** — not copyrightable (Thaler/Copyright Office) *and* still infringing (Hermès "MetaBirkins"), and violates the "never invent" rule.
+- **Reference imagery must be real + rights-cleared**: first-party photos, **licensed affiliate-feed images (display + link-back)**, or **user-submitted (UGC license + DMCA)**.
+- **Decorative/browse imagery** may be non-photoreal **silhouette illustration** (Fashionpedia model).
+- **Sold-listing photos**: sometimes still reachable, but the affiliate license is tethered to a *live* listing+link — retaining sold photos re-creates copyright infringement. Own a **base layer** (UGC/first-party/CC) and treat live listings as a gap-filler.
+- **Buying photos**: commission your own (you own them); stock (Getty/iStock/etc., mostly *editorial* license for branded bags); free CC/Unsplash/Wikimedia for hero items. **Trap:** buying scraped image datasets — the seller usually can't license rights it never held.
 
+---
+
+## ▶ QUEUED NEXT BUILD: photo contributions + contributor tiers
+*Designed with the user this session. Decisions locked: **hybrid moderation** (trusted users auto-publish, new users queued) and **all** engagement mechanics.*
+
+### Mechanics
+- **Rare-find empty state** on bag pages with no photo: *"This bag is a rare find! Have a photo of one in the wild? Submit it and yours might show up here."*
+- **Contribution hooks** at moments users already have the bag/photo: closet-add ("add a photo"), thrift-find log, identify/camera tool (consent toggle), reviews ("show your bag").
+- **Recognition / "good feels"**: photo **byline** ("Photo by @you"), a **featured hero** photo, **contributor badges/counts**, and a **"Most Wanted Photos"** board surfacing high-interest no-photo bags (reuse closet/search demand data).
+- **Guardrail (auth product!):** ownership attestation + UGC license at upload; quality-gated rewards (accurate reference shots, not raw volume); DMCA agent + takedown; light moderation via `/admin/photos`.
+
+### Contributor tier ladder (luxury-coded, expertise-ascending — names matter)
+1. **Aficionado** — signed up.
+2. **Collector** — built a closet / marked bags owned.
+3. **Connoisseur** — contributing approved photos & knowledge.
+4. **Authenticator** — verified, accurate, sustained contributions → **the "trusted" tier whose uploads auto-publish** (this IS the hybrid-moderation reward) + verified badge.
+5. **Curator** — elite; shapes the catalog, featured, **first in line for the paid Authenticator Marketplace**, early access, comped premium.
+
+**XP (quality-weighted, anti-gaming):** approved photos (rarer bag = more), high-clarity reference shots (stamp/hardware/date code), accepted corrections/feedback, reviews, closet breadth. Removals/flags cost points. Ownership attestation required.
+
+**Why it serves strategy:** it's the **recruiting + credentialing pipeline for the Authenticator Marketplace** (revenue #2); the trusted tier **offloads moderation** so UGC scales; verified experts are a **trust moat vs PurseForum**; status + public closet drive **retention + virality**; quality-gating **protects data integrity**.
+
+### Build sketch
+- Migration `0004`: `bag_photo` (variant_id, user_id, storage_path, caption, status [pending/approved/featured/rejected], owner_attested, created_at) + Supabase **Storage bucket** `bag-photos` + RLS (public read approved; insert/delete own); `profile` gains `tier` + `contribution_points` (or derive tier from points).
+- Upload component (auth-gated, attestation + license), gallery w/ byline + featured hero, `/admin/photos` approve/feature queue, "Most Wanted" page, `photo_submitted` event.
+- **Caveat:** file upload + Storage is the one piece that can't be runtime-tested here (no creds); bucket + migration are human-gated.
+
+---
+
+## Open backlog (after photo contributions)
+- **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder feeds it.
+- **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free.
+- **Settings & account management** (edit email/password, notification prefs, delete account).
+- **Admin auth gate** — `/admin/*` is still unauthenticated; gate it (e.g. `profile.is_admin`) before sensitive data lands.
+- **Brand depth** — 9 stub brands (drop full Drive CSV into `data/raw/`, re-run seeder) + browser-based hero-style research passes.
+- **Hero-research accuracy** — re-verify Session-2 snippet-sourced data (capped at `medium`; WebFetch was blocked) before presenting as fact; Hermès blind-stamp + Chanel serials especially.
+- **RLS verification** — confirm a second user can't read another's closet/watchlist/notifications after 0002/0003 apply.
+- **Analytics identity** — wire `identifyUser()`/`resetAnalytics()` on login/logout (Tier-2, consent-gated).
+
+---
+
+## DNS go-live (outstanding)
+`luxurycatalog.com` registered at **Squarespace Domains**, points nowhere. Needs dashboard access (not doable from cloud).
+1. **Vercel** → project → Domains → add `luxurycatalog.com` + `www`; note the A IP + CNAME shown.
+2. **Squarespace** (domains.squarespace.com → DNS): delete existing `@` A + `www` CNAME; add A `@` → `76.76.21.21` *(verify vs Vercel)* and CNAME `www` → `cname.vercel-dns.com.`
+3. Wait 15–60 min for "Valid Configuration" in Vercel.
+4. Email forwarding: test `hello@luxurycatalog.com`; re-add MX `fwd1.squarespace.com.` (10) / `fwd2.squarespace.com.` (20) if wiped.
+
+## Accounts & credentials
 | Service | For | Where |
 |---|---|---|
 | Supabase | DB (`pewmdztviyrtbhtebcct`) | supabase.com |
 | Vercel | Hosting (team `darkseerbruh`) | vercel.com |
-| Anthropic | Camera tool + NL search | console.anthropic.com |
+| Anthropic | Camera tool + NL search + analytics digest | console.anthropic.com |
+| PostHog | Analytics (set up this session) | posthog.com |
 | Squarespace Domains | `luxurycatalog.com` DNS | domains.squarespace.com |
 
-**Vercel env vars set:** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`. *(NL search uses `ANTHROPIC_API_KEY` server-side — already set, so it works in prod.)*
+**`.mcp.json` to add manually (PostHog MCP):**
+```json
+{ "mcpServers": { "posthog": { "command": "npx", "args": ["-y","mcp-remote@latest","https://mcp.posthog.com/mcp","--header","Authorization:${POSTHOG_AUTH_HEADER}"], "env": { "POSTHOG_AUTH_HEADER": "Bearer ${POSTHOG_PERSONAL_API_KEY}" } } } }
+```
 
 ---
 
-## Open decisions / what to do next
-
-1. **`/admin` link** — the dashboards are intentionally unlinked + `noindex` (no auth on the app yet). Decide: leave as-is (recommended), add a login/secret gate, or surface a link. **No action taken; awaiting your call.**
-2. **Upgrade research confidence** — re-verify the snippet-sourced numbers from a real browser to move key fields to `verified`.
-3. **Remaining brand depth** — the 9 non-hero thrift/mid brands are still stubs. Fastest path: drop the full `theluxurycloset_data.csv` (Drive, 38.7 MB) into `data/raw/` and re-run `seed-breadth.ts` — the seeder now ingests every brand. A hero-style-depth research pass (like the 5 heroes got) is still the gold standard once a browser-capable session is available.
-4. **Fill more hero nulls** — opening dimensions, exact stamp fonts/screw types, interior storage configs, and device-fit data remain `null` across several styles (flagged in each file's notes / `research_gaps_flagged`).
-5. **~~Price-alert delivery~~ — DONE (Session 3b).** Cron job + in-app notifications + optional Resend email shipped; just needs `CRON_SECRET`/`RESEND_API_KEY` wired and real `price_history` updates to fire on.
-8. **Use cases still unbuilt** (from the product brief): the **authentication marketplace** (Thumbtack model, post-launch); **premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI); **"vote to prioritize this brand"** (Figma; `bag_request` is adjacent); **settings & account management** (edit email/password, notification prefs, delete account). Affiliate links (#1) and reviews (#5) are now built — affiliate just needs real program sign-ups for codes.
-6. **Admin auth gate (Session 3 raised the stakes)** — `/admin/*` is still unauthenticated and `noindex`. Now that real auth exists, gate admin behind an `is_admin` flag on `profile` (or a Supabase role) before there's any sensitive data. `/admin/requests` reads via the service-role key, so it works regardless of viewer — i.e. currently anyone hitting the URL sees it.
-7. **Verify RLS end-to-end** — the closet/watchlist policies (`auth.uid() = user_id`) were written but not exercised against a live DB. Confirm a second user can't read another's closet after applying `0002`.
-
----
-
-## Non-negotiable constraints (from product brief)
-
-- **Never invent** authentication markers, date codes, serial formats, or hardware details. Leave `null` + `confidence_level: low` if unverifiable.
-- **No photos in v1** — text-first.
-- **Catalog is always free** — no paywall.
-- **Coach must be in the catalog** — it's the viral thrift-store acquisition engine.
-- **Mobile-first** — every page must work at 375px width.
-
----
+## Non-negotiable constraints (product brief)
+- **Never invent** authentication markers, date codes, serial formats, hardware details — leave `null` + `confidence_level: low` if unverifiable.
+- **No invented imagery** — realistic photos must be *sourced* (licensed/UGC/first-party), never AI-generated for real bags. (Updates the old "no photos in v1" line: photos are now in scope via the sourced paths above.)
+- **Catalog is always free** — paywall only on search *capability*, never content.
+- **Coach must be in the catalog** — the viral thrift acquisition engine.
+- **Mobile-first** — every page works at 375px.
 
 ## Key files
-
-| File | What |
+| Area | Files |
 |---|---|
-| `src/lib/queries.ts` | All Supabase queries + NL search (`searchCatalog`, `parseSearchQuery`), `getSearchedNotFound`, `getUserFeedback` |
-| `src/lib/actions.ts` | `submitFeedback` server action |
-| `src/app/search/page.tsx` | Search page (NL chips, results) |
-| `src/app/bag/[variantId]/page.tsx` + `FeedbackWidget.tsx` | Item detail + feedback widget |
-| `src/app/admin/**` | Admin index + two dashboards |
-| `src/app/identify/page.tsx`, `src/app/api/identify/route.ts` | Camera tool UI + API |
-| `supabase/migrations/0001_init_schema.sql` | Full 15-table schema |
-| `supabase/seed/seed-hero-styles.ts` | Hero seed loader (idempotent; now imports `price_history`) |
-| `supabase/seed/research/*.json` | Per-hero-style researched data (the source of truth for hero content) |
-| `supabase/seed/lib/material-resolver.ts` | Free-text material → `material_id` (null-safe) |
-| `docs/research-drafts/coach-tabby-26-auth-draft.md` | Example research draft format |
-| `docs/product-brief.md` | Product vision — source of truth for decisions |
-
-### Notes for the next researcher (data model)
-- Hero content lives in `supabase/seed/research/<style>.json`, loaded by `seed-hero-styles.ts` into the 15 tables.
-- Child rows attach to a variant via `variant_index` (0-based). The loader auto-assigns by array position **only when every row in a section lacks `variant_index` and the count equals the number of variants**; otherwise it uses each row's explicit `variant_index ?? 0`. **When in doubt, set `variant_index` explicitly on every row** (as done for the size variants this session).
-- The loader maps a fixed set of fields per table — extra keys in the JSON (e.g. `variant_ref`, `notes`, `dimension_source_note`) are ignored by the DB insert but useful as documentation.
-- `confidence_level` must be one of `low|medium|high|verified`; `fits` must be `yes|no|tight`; `size_category` and other enums must match the schema.
+| Auth | `src/lib/supabase/*`, `src/proxy.ts`, `src/lib/auth*.ts`, `src/app/{login,signup,onboarding,profile,auth/confirm}` |
+| Closet/watchlist/alerts | `src/lib/collections.ts`, `collection-actions.ts`, `notifications*.ts`, `email.ts`, `src/app/{closet,watchlist,notifications}`, `src/app/api/cron/price-alerts`, `vercel.json` |
+| Reviews | `src/lib/reviews.ts`, `review-actions.ts`, `src/app/bag/[variantId]/{Reviews,ReviewForm}.tsx` |
+| Affiliate | `src/lib/affiliate.ts`, `src/app/bag/[variantId]/WhereToBuy.tsx` |
+| Analytics | `src/lib/analytics/*`, `src/app/providers.tsx`, `src/instrumentation-client.ts`, `scripts/*`, `.github/workflows/analytics-digest.yml` |
+| Feedback/admin | `src/lib/actions.ts`, `src/app/admin/*` |
+| Data | `supabase/migrations/000{1,2,3}_*.sql`, `supabase/seed/*`, `data/raw/*.csv` |
+| Docs | `docs/handoff.md` (this), `docs/image-strategy-research.md`, `docs/product-brief.md`, `docs/project-status.md` |
