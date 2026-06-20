@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
+import Recommendations from "@/components/Recommendations";
 
 export const dynamic = "force-dynamic";
 
@@ -167,6 +168,12 @@ export default async function Home() {
           </>
         )}
       </section>
+
+      {user && (
+        <section className="border-b border-border px-5 py-12">
+          <Recommendations source="home" layout="scroll" limit={8} />
+        </section>
+      )}
 
       <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>

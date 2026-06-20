@@ -23,6 +23,7 @@ import TrackBagView from "./TrackBagView";
 import WhereToBuy from "./WhereToBuy";
 import Reviews from "./Reviews";
 import Resources from "./Resources";
+import SimilarBags from "./SimilarBags";
 
 export const dynamic = "force-dynamic";
 
@@ -595,6 +596,9 @@ export default async function BagDetailPage({
 
       {/* Reviews & ratings */}
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
+
+      {/* Content-based "similar bags" over catalogued attributes */}
+      <SimilarBags variantId={v.variantId} />
 
       {/* FAQ (GEO: mirrors the FAQPage structured data) */}
       {faq.length > 0 && (

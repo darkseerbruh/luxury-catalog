@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
+import Recommendations from "@/components/Recommendations";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,8 @@ export default async function ProfilePage() {
           Edit preferences
         </Link>
       </div>
+
+      <Recommendations source="profile" layout="grid" limit={6} />
 
       <form action={signOut}>
         <button
