@@ -153,6 +153,7 @@ export interface VariantDetail {
   retailPriceOriginal: number | null;
   currency: string | null;
   authenticationMarkers: string | null;
+  createdAt: string | null;
   style: {
     styleId: number;
     name: string;
@@ -193,6 +194,7 @@ export interface VariantDetail {
     stampPlacement: string | null;
     stampFontNotes: string | null;
     knownAuthenticationMarkers: string | null;
+    sources: string | null;
     confidenceLevel: string;
   }[];
   knownColorCombinations: {
@@ -303,6 +305,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       retail_price_original,
       currency,
       authentication_markers,
+      created_at,
       style:style_id(
         style_id, name, silhouette, closure_type, year_introduced, description,
         brand:brand_id(brand_id, name, tier)
@@ -316,7 +319,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
         production_id, country_of_manufacture, production_year, production_season,
         dimensions_h_cm, dimensions_w_cm, dimensions_d_cm, opening_width_cm,
         date_code_format, stamp_placement, stamp_font_notes,
-        known_authentication_markers, confidence_level
+        known_authentication_markers, sources, confidence_level
       ),
       known_color_combination(
         combination_id, exterior_color, interior_color, stitching_color,
@@ -392,6 +395,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
     retailPriceOriginal: data.retail_price_original != null ? Number(data.retail_price_original) : null,
     currency: data.currency,
     authenticationMarkers: data.authentication_markers,
+    createdAt: data.created_at ?? null,
     style: style ? {
       styleId: style.style_id,
       name: style.name,
@@ -429,6 +433,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       stampPlacement: r.stamp_placement,
       stampFontNotes: r.stamp_font_notes,
       knownAuthenticationMarkers: r.known_authentication_markers,
+      sources: r.sources ?? null,
       confidenceLevel: r.confidence_level,
     })),
     knownColorCombinations: (data.known_color_combination ?? []).map((c) => ({
@@ -1123,4 +1128,77 @@ export async function getThriftFinds(limit = 200): Promise<ThriftFindEntry[]> {
     note: r.note,
     date: r.created_at,
   }));
+}
+
+// ============ Sitemap targets (programmatic SEO/GEO) ============
+
+/** All indexable entity IDs for sitemap.xml — bag variants + brands. */
+export async function getSitemapTargets(): Promise<{
+  variantIds: number[];
+  brandIds: number[];
+}> {
+  const [variants, brands] = await Promise.all([
+    getSupabase().from("variant").select("variant_id").limit(50000),
+    getSupabase().from("brand").select("brand_id").limit(5000),
+  ]);
+  return {
+    variantIds: (variants.data ?? []).map((r) => r.variant_id as number),
+    brandIds: (brands.data ?? []).map((r) => r.brand_id as number),
+  };
+}
+
+// ============ Curated resources (embedded video reviews) ============
+
+export interface CuratedResource {
+  resourceId: number;
+  resourceType: string;
+  title: string;
+  url: string;
+  youtubeVideoId: string | null;
+  description: string | null;
+  isFeatured: boolean;
+  creatorName: string | null;
+  creatorChannelUrl: string | null;
+  creatorTrusted: boolean;
+}
+
+/**
+ * Curated resources for a bag — videos attached to this variant or rolled up
+ * from its style. Returns [] if the table isn't present yet (migration for
+ * resources not applied), so the bag page degrades gracefully.
+ */
+export async function getResourcesForStyle(
+  styleId: number,
+  variantId?: number
+): Promise<CuratedResource[]> {
+  const { data, error } = await getSupabase()
+    .from("resource")
+    .select(
+      "resource_id, resource_type, title, url, youtube_video_id, description, is_featured, style_id, variant_id, creator:creator_id(name, channel_url, is_trusted)"
+    )
+    .eq("published", true)
+    .or(`style_id.eq.${styleId}${variantId ? `,variant_id.eq.${variantId}` : ""}`)
+    .order("is_featured", { ascending: false })
+    .order("sort_order", { ascending: true })
+    .limit(12);
+
+  if (error || !data) return [];
+
+  return data.map((r) => {
+    const c = (Array.isArray(r.creator) ? r.creator[0] : r.creator) as
+      | { name: string; channel_url: string | null; is_trusted: boolean }
+      | null;
+    return {
+      resourceId: r.resource_id,
+      resourceType: r.resource_type,
+      title: r.title,
+      url: r.url,
+      youtubeVideoId: r.youtube_video_id ?? null,
+      description: r.description ?? null,
+      isFeatured: !!r.is_featured,
+      creatorName: c?.name ?? null,
+      creatorChannelUrl: c?.channel_url ?? null,
+      creatorTrusted: !!c?.is_trusted,
+    };
+  });
 }
