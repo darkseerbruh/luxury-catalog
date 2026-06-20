@@ -182,6 +182,22 @@ export function topValue(vec: TasteVector, dim: TasteDimension): string | null {
   return best;
 }
 
+/** Top values for a dimension with normalized share (0..1), strongest first. */
+export function topValuesWithShare(
+  vec: TasteVector,
+  dim: TasteDimension,
+  max = 3
+): { value: string; share: number }[] {
+  const bucket = vec[dim];
+  if (!bucket) return [];
+  const total = Object.values(bucket).reduce((a, b) => a + b, 0);
+  if (total <= 0) return [];
+  return Object.entries(bucket)
+    .map(([value, w]) => ({ value, share: w / total }))
+    .sort((a, b) => b.share - a.share)
+    .slice(0, max);
+}
+
 /** The number of distinct catalog dimensions that have any signal. */
 export function dimensionsCovered(vec: TasteVector): number {
   return (Object.keys(vec) as TasteDimension[]).filter((d) => Object.keys(vec[d] ?? {}).length > 0).length;

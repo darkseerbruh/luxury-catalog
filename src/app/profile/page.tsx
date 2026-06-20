@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
 import Recommendations from "@/components/Recommendations";
+import TasteMapSection from "@/components/TasteMapSection";
 
 export const dynamic = "force-dynamic";
 
@@ -93,6 +94,8 @@ export default async function ProfilePage() {
           Edit preferences
         </Link>
       </div>
+
+      <TasteMapSection />
 
       <Recommendations source="profile" layout="grid" limit={6} />
 
