@@ -51,6 +51,12 @@ export default async function ProfilePage() {
           My watchlist
         </Link>
         <Link
+          href="/profile/reviews"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          My reviews
+        </Link>
+        <Link
           href="/onboarding"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >

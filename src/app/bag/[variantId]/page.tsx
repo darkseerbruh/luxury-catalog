@@ -1,15 +1,57 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail } from "@/lib/queries";
+import { getVariantDetail, getResourcesForStyle } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
+import {
+  AUTHOR_NAME,
+  SITE_URL,
+  buildLeadAnswer,
+  metaDescription,
+  buildFaq,
+  fullTitle,
+  dim,
+  productJsonLd,
+  faqJsonLd,
+  breadcrumbJsonLd,
+} from "@/lib/geo";
 import FeedbackWidget from "./FeedbackWidget";
 import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
 import TrackBagView from "./TrackBagView";
 import WhereToBuy from "./WhereToBuy";
 import Reviews from "./Reviews";
+import Resources from "./Resources";
 
 export const dynamic = "force-dynamic";
+
+// Dedupe the (heavy) detail fetch across generateMetadata + the page render.
+const getVariant = cache(getVariantDetail);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ variantId: string }>;
+}): Promise<Metadata> {
+  const { variantId } = await params;
+  const id = parseInt(variantId, 10);
+  if (isNaN(id)) return {};
+  const v = await getVariant(id);
+  if (!v) return {};
+
+  const title = `${fullTitle(v)} — production, authentication & value`;
+  const description = metaDescription(v);
+  const url = `${SITE_URL}/bag/${v.variantId}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, type: "article" },
+    twitter: { card: "summary", title, description },
+  };
+}
 
 function formatPrice(amount: number | null, currency: string | null) {
   if (amount == null) return null;
@@ -68,10 +110,12 @@ export default async function BagDetailPage({
   if (isNaN(id)) notFound();
 
   const [v, userState] = await Promise.all([
-    getVariantDetail(id),
+    getVariant(id),
     getVariantUserState(id),
   ]);
   if (!v) notFound();
+
+  const resources = await getResourcesForStyle(v.style.styleId, v.variantId);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -82,6 +126,25 @@ export default async function BagDetailPage({
       ? `${v.yearStart}–${v.yearEnd}`
       : v.yearStart.toString()
     : null;
+
+  const leadAnswer = buildLeadAnswer(v);
+  const faq = buildFaq(v);
+  const updated = v.createdAt
+    ? new Date(v.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    : null;
+  const sources = Array.from(
+    new Set(
+      v.productionRecords
+        .flatMap((r) => (r.sources ? r.sources.split(/[;\n]+/) : []))
+        .map((s) => s.trim())
+        .filter((s) => /^https?:\/\//.test(s))
+    )
+  );
+  const jsonLd = [
+    productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`),
+    faqJsonLd(faq),
+    breadcrumbJsonLd(v),
+  ].filter(Boolean);
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
@@ -125,12 +188,24 @@ export default async function BagDetailPage({
           {v.style.name}
         </h1>
         <p className="mt-1 text-lg text-muted">{variantTitle}</p>
+        <p className="mt-2 text-xs text-muted/70">
+          By {AUTHOR_NAME}
+          {updated ? ` · Catalogued ${updated}` : ""}
+        </p>
         {v.style.description && (
           <p className="mt-4 text-sm leading-relaxed text-muted">
             {v.style.description}
           </p>
         )}
       </header>
+
+      {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
+      <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
+        {leadAnswer}
+      </p>
+
+      {/* Embedded video reviews — the visual layer while v1 is text-first */}
+      <Resources resources={resources} />
 
       {/* Core specs */}
       <Section title="Specifications">
@@ -220,9 +295,9 @@ export default async function BagDetailPage({
                     <SpecRow
                       label="Dimensions"
                       value={[
-                        r.dimensionsHCm ? `H ${r.dimensionsHCm} cm` : null,
-                        r.dimensionsWCm ? `W ${r.dimensionsWCm} cm` : null,
-                        r.dimensionsDCm ? `D ${r.dimensionsDCm} cm` : null,
+                        r.dimensionsHCm ? `H ${dim(r.dimensionsHCm)}` : null,
+                        r.dimensionsWCm ? `W ${dim(r.dimensionsWCm)}` : null,
+                        r.dimensionsDCm ? `D ${dim(r.dimensionsDCm)}` : null,
                       ]
                         .filter(Boolean)
                         .join(" × ")}
@@ -519,10 +594,57 @@ export default async function BagDetailPage({
       />
 
       {/* Reviews & ratings */}
-      <Reviews variantId={v.variantId} />
+      <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
+
+      {/* FAQ (GEO: mirrors the FAQPage structured data) */}
+      {faq.length > 0 && (
+        <Section title="Frequently asked questions">
+          <dl className="flex flex-col gap-4">
+            {faq.map((f, i) => (
+              <div key={i} className="rounded-xl border border-border bg-surface p-5">
+                <dt className="text-sm font-medium text-foreground">{f.question}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-muted">{f.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
+      )}
+
+      {/* Cited sources (E-E-A-T) */}
+      {sources.length > 0 && (
+        <Section title="Sources">
+          <ul className="flex flex-col gap-1.5 rounded-xl border border-border bg-surface px-5 py-4">
+            {sources.map((s) => (
+              <li key={s} className="truncate text-xs">
+                <a
+                  href={s}
+                  target="_blank"
+                  rel="nofollow noopener"
+                  className="text-muted hover:text-gold"
+                >
+                  {s}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted/60">
+            Authentication data is research-sourced and confidence-rated; verify
+            high-stakes details against an in-hand inspection.
+          </p>
+        </Section>
+      )}
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />
+
+      {/* Structured data for Google AI Overviews / ChatGPT citation */}
+      {jsonLd.map((obj, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }}
+        />
+      ))}
     </main>
   );
 }

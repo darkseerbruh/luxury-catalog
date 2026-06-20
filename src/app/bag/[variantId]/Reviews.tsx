@@ -19,7 +19,13 @@ function formatDate(iso: string): string {
 }
 
 /** Reviews section: aggregate rating, the write/edit form, and the review list. */
-export default async function Reviews({ variantId }: { variantId: number }) {
+export default async function Reviews({
+  variantId,
+  inCloset,
+}: {
+  variantId: number;
+  inCloset: boolean;
+}) {
   const [summary, user] = await Promise.all([getReviews(variantId), getCurrentUser()]);
 
   // Show the user's own review first, then the rest.
@@ -38,7 +44,12 @@ export default async function Reviews({ variantId }: { variantId: number }) {
       </div>
 
       <div className="mb-6">
-        <ReviewForm variantId={variantId} signedIn={!!user} existing={summary.myReview} />
+        <ReviewForm
+          variantId={variantId}
+          signedIn={!!user}
+          existing={summary.myReview}
+          inCloset={inCloset}
+        />
       </div>
 
       {summary.count === 0 ? (
