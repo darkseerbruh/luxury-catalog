@@ -1,0 +1,129 @@
+{
+  "_meta": {
+    "purpose": "Curated, vetted YouTube luxury-bag review creators + embeddable video resources linked to the seeded hero styles. Feeds the bag-page 'Video reviews' section (migration 0004: creator + resource tables).",
+    "sourcing_rule": "Only REAL channels and REAL video IDs that appeared verbatim in web-search results were included (verified 2026-06). Video IDs are taken directly from youtube.com/watch?v= URLs returned by search. Where a video's CHANNEL could not be confidently matched from the search snippet, the resource is left with creator_handle:null rather than guessing an attribution (never-invent rule). Fewer high-confidence entries were preferred over fabricated volume.",
+    "human_gated": "Operator runs `npx tsx supabase/seed/seed-creators.ts` with NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY in .env.local. Idempotent (creators upsert on channel-or-name; resources upsert on youtube_video_id). 0004 must be applied and hero styles seeded first (resources link to style by brand+name).",
+    "caveat": "These are independent reviewer videos embedded under YouTube's standard embed terms; embedding sidesteps image-copyright (handoff 'Images' decision). Confirm each video still resolves before/after seeding; YouTube IDs can be removed by their uploader."
+  },
+  "creators": [
+    {
+      "name": "The Handbag Husband",
+      "platform": "youtube",
+      "channel_handle": "thehandbaghusband",
+      "channel_url": "https://www.youtube.com/results?search_query=The+Handbag+Husband",
+      "description": "Long-running handbag review channel covering Hermès, Chanel and other luxury houses with in-depth, episodic reviews.",
+      "is_trusted": true,
+      "is_featured": true
+    },
+    {
+      "name": "Katie Danger",
+      "platform": "youtube",
+      "channel_handle": "katiedanger",
+      "channel_url": "https://www.youtube.com/results?search_query=Katie+Danger+handbags",
+      "description": "Luxury handbag reviewer; detailed Hermès and designer bag reviews and mod shots.",
+      "is_trusted": true,
+      "is_featured": false
+    },
+    {
+      "name": "Armcandy Bag Co",
+      "platform": "youtube",
+      "channel_handle": "armcandybagco",
+      "channel_url": "https://www.youtube.com/results?search_query=Armcandy+Bag+Co",
+      "description": "Reviews of accessible-luxury and contemporary bags including Coach, with what-fits and quality breakdowns.",
+      "is_trusted": true,
+      "is_featured": false
+    }
+  ],
+  "resources": [
+    {
+      "brand": "Chanel",
+      "style": "Classic Flap",
+      "title": "UNBOXING FIRST CHANEL CLASSIC FLAP BAG | Is it worth it?",
+      "youtube_video_id": "e0mFmZ9ckVw",
+      "creator_handle": null,
+      "is_featured": true,
+      "sort_order": 0,
+      "source_note": "Surfaced verbatim in YouTube search for 'Chanel Classic Flap review worth it' (2026-06)."
+    },
+    {
+      "brand": "Hermès",
+      "style": "Birkin",
+      "title": "Hermès Birkin 25 vs 30 vs 35 | In depth Comparison & Review",
+      "youtube_video_id": "Il-y44Ob40Y",
+      "creator_handle": null,
+      "is_featured": true,
+      "sort_order": 0,
+      "source_note": "Surfaced verbatim in YouTube search for 'Hermès Birkin review' (2026-06)."
+    },
+    {
+      "brand": "Hermès",
+      "style": "Birkin",
+      "title": "HERMES BIRKIN 30 REVIEW! | KATIE DANGER",
+      "youtube_video_id": "aSlJMAizxdI",
+      "creator_handle": "katiedanger",
+      "is_featured": false,
+      "sort_order": 1,
+      "source_note": "Surfaced verbatim in YouTube search; title attributes it to the Katie Danger channel (2026-06)."
+    },
+    {
+      "brand": "Hermès",
+      "style": "Kelly",
+      "title": "Bag Review: Hermès Mini Kelly vs Kelly 25 vs Kelly 28 | Modshots, What Fits & More",
+      "youtube_video_id": "wLvxxGQqpk4",
+      "creator_handle": null,
+      "is_featured": true,
+      "sort_order": 0,
+      "source_note": "Surfaced verbatim in YouTube search for 'Hermès Kelly bag review' (2026-06)."
+    },
+    {
+      "brand": "Hermès",
+      "style": "Kelly",
+      "title": "The HandBag Husband EP.145: Hermès Kelly! Is it the right bag for you?",
+      "youtube_video_id": "8CXcglMxOkU",
+      "creator_handle": "thehandbaghusband",
+      "is_featured": false,
+      "sort_order": 1,
+      "source_note": "Surfaced verbatim in YouTube search; title attributes it to The Handbag Husband channel (2026-06)."
+    },
+    {
+      "brand": "Coach",
+      "style": "Tabby",
+      "title": "Coach Tabby 20 Bag Review",
+      "youtube_video_id": "_zpvxyNI_Sc",
+      "creator_handle": "armcandybagco",
+      "is_featured": true,
+      "sort_order": 0,
+      "source_note": "Surfaced verbatim in YouTube search; attributed to Armcandy Bag Co in the search result (2026-06)."
+    },
+    {
+      "brand": "Coach",
+      "style": "Tabby",
+      "title": "Coach Tabby 20 Review | What Fits, Pros & Cons, Quality",
+      "youtube_video_id": "aGlj_xbUu24",
+      "creator_handle": null,
+      "is_featured": false,
+      "sort_order": 1,
+      "source_note": "Surfaced verbatim in YouTube search for 'Coach Tabby bag review' (2026-06)."
+    },
+    {
+      "brand": "Coach",
+      "style": "Swagger",
+      "title": "Coach Swagger 20 Bag Review + Try On",
+      "youtube_video_id": "E_WyenDg-7g",
+      "creator_handle": null,
+      "is_featured": true,
+      "sort_order": 0,
+      "source_note": "Surfaced verbatim in YouTube search for 'Coach Swagger bag review' (2026-06)."
+    },
+    {
+      "brand": "Coach",
+      "style": "Swagger",
+      "title": "Coach Swagger 27 black pebbled leather handbag REVIEW",
+      "youtube_video_id": "k5iX9UsWdII",
+      "creator_handle": null,
+      "is_featured": false,
+      "sort_order": 1,
+      "source_note": "Surfaced verbatim in YouTube search for 'Coach Swagger bag review' (2026-06)."
+    }
+  ]
+}
