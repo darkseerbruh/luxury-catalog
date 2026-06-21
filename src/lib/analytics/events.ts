@@ -29,6 +29,8 @@ export const EVENTS = {
   priceHistoryViewed: "price_history_viewed",
   /** A click out to an external resale platform — an affiliate-revenue proxy. */
   outboundResaleClicked: "outbound_resale_clicked",
+  /** A click out to a consignment/sell platform — the consignor-referral revenue proxy. */
+  outboundConsignClicked: "outbound_consign_clicked",
   /** User feedback was submitted. */
   feedbackSubmitted: "feedback_submitted",
   /** A star rating / review was submitted. */

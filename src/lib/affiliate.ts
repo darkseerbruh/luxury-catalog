@@ -87,3 +87,64 @@ export function buildResaleLinks(brand: string, style: string): ResaleLink[] {
     url: applyAffiliate(p.search(q), p),
   }));
 }
+
+/**
+ * "Where to sell" consignment destinations — the highest-upside (consignor
+ * referral) revenue stream. Mirrors the buy-side `PLATFORMS`: each entry points
+ * at a reseller's sell/consign landing page and carries the same optional
+ * affiliate attribution (per-platform param + wrap template), so with no env set
+ * these are plain, never-broken sell links.
+ *
+ * `mode` lets the UI present the buyout-vs-consignment fork honestly: a "buyout"
+ * destination pays cash fast; a "consign" destination lists for more, later.
+ */
+export interface ConsignLink extends ResaleLink {
+  /** "buyout" = sell fast for cash; "consign" = list for more, paid on sale. */
+  mode: "buyout" | "consign";
+}
+
+interface ConsignPlatform extends Platform {
+  mode: "buyout" | "consign";
+}
+
+const CONSIGN_PLATFORMS: ConsignPlatform[] = [
+  {
+    key: "fashionphile",
+    name: "Fashionphile",
+    mode: "buyout",
+    // Fashionphile leads with an instant buyout quote (cash fast).
+    search: (q) => `https://www.fashionphile.com/sell?q=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_FASHIONPHILE",
+    paramName: "aff",
+  },
+  {
+    key: "therealreal",
+    name: "The RealReal",
+    mode: "consign",
+    // TheRealReal is consignment-first (tiered commission, paid on sale).
+    search: (q) => `https://www.therealreal.com/consign?keywords=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_THEREALREAL",
+    paramName: "aid",
+  },
+  {
+    key: "vestiaire",
+    name: "Vestiaire Collective",
+    mode: "consign",
+    // Vestiaire is peer-to-peer consignment (you list, they take a cut on sale).
+    search: (q) => `https://www.vestiairecollective.com/sell-online/?q=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_VESTIAIRE",
+    paramName: "utm_source",
+  },
+];
+
+/** Consignment/sell search links for a bag, with affiliate attribution applied when configured. */
+export function buildConsignmentLinks(brand: string, style: string): ConsignLink[] {
+  const q = encodeURIComponent([brand, style].filter(Boolean).join(" ").trim());
+  if (!q) return [];
+  return CONSIGN_PLATFORMS.map((p) => ({
+    key: p.key,
+    name: p.name,
+    mode: p.mode,
+    url: applyAffiliate(p.search(q), p),
+  }));
+}
