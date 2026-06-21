@@ -951,14 +951,24 @@ export async function searchCatalog(query: string): Promise<SearchResults> {
     hasAttributeFilters(filters) ? searchVariantsByFilters(filters) : Promise.resolve([] as StyleSearchResult[]),
   ]);
 
-  // If Claude extracted nothing usable, fall back to a plain name search over the raw text.
-  if (brands.length === 0 && styles.length === 0 && !hasAttributeFilters(filters) && filters.brands.length === 0) {
+  // If the structured search found nothing, fall back to a plain name match over
+  // the raw text before giving up. A query that's literally a catalogued brand or
+  // style name must always resolve — even when Claude over-extracts attributes
+  // (e.g. "tweed" -> material fabric) that exclude breadth-seeded variants missing
+  // that attribute data. Without this, clicking a catalogued style name (which
+  // re-searches by name) could dead-end at "no results".
+  if (brands.length === 0 && styles.length === 0) {
     const result = await legacySearch(q);
-    if (result.brands.length === 0 && result.styles.length === 0) await logMiss(q);
-    return result;
+    if (result.brands.length > 0 || result.styles.length > 0) {
+      return {
+        ...result,
+        interpreted: hasAttributeFilters(filters) ? describeFilters(filters) : [],
+        usedNaturalLanguage: hasAttributeFilters(filters),
+      };
+    }
+    await logMiss(q);
+    return { brands, styles, interpreted: describeFilters(filters), usedNaturalLanguage: true };
   }
-
-  if (brands.length === 0 && styles.length === 0) await logMiss(q);
 
   return { brands, styles, interpreted: describeFilters(filters), usedNaturalLanguage: true };
 }
