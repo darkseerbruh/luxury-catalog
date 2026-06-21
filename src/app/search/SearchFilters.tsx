@@ -10,6 +10,7 @@ import type {
 import { track, EVENTS } from "@/lib/analytics/events";
 
 type SortKey = "relevance" | "az" | "count";
+type Variant = StyleSearchResult["variants"][number];
 
 const TIER_LABEL: Record<string, string> = {
   thrift: "thrift",
@@ -17,64 +18,94 @@ const TIER_LABEL: Record<string, string> = {
   "ultra-luxury": "ultra luxury",
 };
 
-/** Result count contributed by a brand card (its variant count). */
+/** Attribute facets derived from the variants of the style results. */
+const VARIANT_FACETS: { key: string; label: string; get: (v: Variant) => string | null }[] = [
+  { key: "color", label: "Colour", get: (v) => v.exteriorColorway },
+  { key: "hardware", label: "Hardware", get: (v) => v.hardwareColor },
+  { key: "size", label: "Size", get: (v) => v.sizeLabel },
+];
+
 function brandWeight(b: BrandSearchResult): number {
   return b.variantCount;
 }
-
-/** Result count contributed by a style card (its variant count). */
 function styleWeight(s: StyleSearchResult): number {
   return s.variants.length;
+}
+
+/** Does a variant satisfy every active attribute facet (OR within a facet, AND across facets)? */
+function variantMatches(v: Variant, active: Record<string, Set<string>>): boolean {
+  for (const f of VARIANT_FACETS) {
+    const sel = active[f.key];
+    if (!sel || sel.size === 0) continue;
+    const value = f.get(v);
+    if (!value || !sel.has(value)) return false;
+  }
+  return true;
 }
 
 /**
  * Client-side faceted refinement over the already-fetched search results.
  *
- * Facets are derived ONLY from attributes present in `SearchResults`: brand
- * tier and brand. Sorting (relevance / A–Z / result count) reorders the visible
- * cards. On mobile the controls live in a sticky-triggered tray overlay so
- * results stay partly visible; on desktop they render inline.
+ * Facets are derived ONLY from attributes present in `SearchResults`: brand tier
+ * and brand (over brand/style cards), plus colour / hardware / size (over the
+ * variants of the style results). Selecting a facet narrows the visible cards and
+ * the variant rows within each style. Sorting reorders the cards. On mobile the
+ * controls live in a tray overlay so results stay partly visible; on desktop they
+ * render inline. Every facet shows a count and every applied filter is a one-tap
+ * removable chip (NN/g faceted-search guidance).
  */
 export default function SearchFilters({ results }: { results: SearchResults }) {
   const [activeTiers, setActiveTiers] = useState<Set<string>>(new Set());
   const [activeBrands, setActiveBrands] = useState<Set<string>>(new Set());
+  const [activeAttrs, setActiveAttrs] = useState<Record<string, Set<string>>>({});
   const [sort, setSort] = useState<SortKey>("relevance");
   const [trayOpen, setTrayOpen] = useState(false);
 
-  // Brand name -> tier, for filtering style cards (which only carry brandName).
   const brandTierByName = useMemo(() => {
     const map = new Map<string, BrandSearchResult["tier"]>();
     for (const b of results.brands) map.set(b.name, b.tier);
     return map;
   }, [results.brands]);
 
-  // Tier facet values with counts (over brand cards, the only tier-bearing data).
   const tierFacets = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const b of results.brands) {
-      counts.set(b.tier, (counts.get(b.tier) ?? 0) + 1);
-    }
+    for (const b of results.brands) counts.set(b.tier, (counts.get(b.tier) ?? 0) + 1);
     return Array.from(counts.entries())
       .map(([value, count]) => ({ value, count }))
       .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
   }, [results.brands]);
 
-  // Brand facet values with counts (brand cards + brands referenced by styles).
   const brandFacets = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const b of results.brands) {
-      counts.set(b.name, (counts.get(b.name) ?? 0) + 1);
-    }
+    for (const b of results.brands) counts.set(b.name, (counts.get(b.name) ?? 0) + 1);
     for (const s of results.styles) {
-      if (!s.brandName) continue;
-      counts.set(s.brandName, (counts.get(s.brandName) ?? 0) + 1);
+      if (s.brandName) counts.set(s.brandName, (counts.get(s.brandName) ?? 0) + 1);
     }
     return Array.from(counts.entries())
       .map(([value, count]) => ({ value, count }))
       .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
   }, [results.brands, results.styles]);
 
-  function toggle(set: Set<string>, value: string): Set<string> {
+  // Colour / hardware / size facet values + counts, over every variant in the
+  // style results.
+  const attrFacets = useMemo(() => {
+    const out: Record<string, { value: string; count: number }[]> = {};
+    for (const f of VARIANT_FACETS) {
+      const counts = new Map<string, number>();
+      for (const s of results.styles) {
+        for (const v of s.variants) {
+          const value = f.get(v);
+          if (value) counts.set(value, (counts.get(value) ?? 0) + 1);
+        }
+      }
+      out[f.key] = Array.from(counts.entries())
+        .map(([value, count]) => ({ value, count }))
+        .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+    }
+    return out;
+  }, [results.styles]);
+
+  function toggleIn(set: Set<string> | undefined, value: string): Set<string> {
     const next = new Set(set);
     if (next.has(value)) next.delete(value);
     else next.add(value);
@@ -82,40 +113,45 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
   }
 
   function toggleTier(value: string) {
-    setActiveTiers((prev) => {
-      const next = toggle(prev, value);
-      track(EVENTS.catalogFiltered, { filter: "brand_tier", value });
-      return next;
-    });
+    setActiveTiers((p) => toggleIn(p, value));
+    track(EVENTS.catalogFiltered, { filter: "brand_tier", value });
   }
-
   function toggleBrand(value: string) {
-    setActiveBrands((prev) => {
-      const next = toggle(prev, value);
-      track(EVENTS.catalogFiltered, { filter: "brand", value });
-      return next;
-    });
+    setActiveBrands((p) => toggleIn(p, value));
+    track(EVENTS.catalogFiltered, { filter: "brand", value });
   }
-
+  function toggleAttr(key: string, value: string) {
+    setActiveAttrs((p) => ({ ...p, [key]: toggleIn(p[key], value) }));
+    track(EVENTS.catalogFiltered, { filter: key, value });
+  }
   function clearAll() {
     setActiveTiers(new Set());
     setActiveBrands(new Set());
+    setActiveAttrs({});
   }
 
-  // Apply filters + sort.
+  const attrActiveCount = useMemo(
+    () => Object.values(activeAttrs).reduce((n, s) => n + (s?.size ?? 0), 0),
+    [activeAttrs],
+  );
+
   const visible = useMemo(() => {
     const tierFilter = (tier: string | undefined) =>
       activeTiers.size === 0 || (tier != null && activeTiers.has(tier));
     const brandFilter = (name: string) =>
       activeBrands.size === 0 || activeBrands.has(name);
 
-    let brands = results.brands.filter(
-      (b) => tierFilter(b.tier) && brandFilter(b.name),
-    );
-    let styles = results.styles.filter(
-      (s) =>
-        tierFilter(brandTierByName.get(s.brandName)) && brandFilter(s.brandName),
-    );
+    // Brand cards can't be attribute-filtered (no variant data) — hide them once
+    // any attribute facet is active so the result set stays honest.
+    let brands =
+      attrActiveCount > 0
+        ? []
+        : results.brands.filter((b) => tierFilter(b.tier) && brandFilter(b.name));
+
+    let styles = results.styles
+      .filter((s) => tierFilter(brandTierByName.get(s.brandName)) && brandFilter(s.brandName))
+      .map((s) => ({ ...s, variants: s.variants.filter((v) => variantMatches(v, activeAttrs)) }))
+      .filter((s) => s.variants.length > 0);
 
     if (sort === "az") {
       brands = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -126,16 +162,15 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
       brands = [...brands].sort((a, b) => brandWeight(b) - brandWeight(a));
       styles = [...styles].sort((a, b) => styleWeight(b) - styleWeight(a));
     }
-    // "relevance" keeps the server order.
 
     return { brands, styles };
-  }, [results.brands, results.styles, activeTiers, activeBrands, sort, brandTierByName]);
+  }, [results.brands, results.styles, activeTiers, activeBrands, activeAttrs, attrActiveCount, sort, brandTierByName]);
 
   const totalVisible = visible.brands.length + visible.styles.length;
-  const activeCount = activeTiers.size + activeBrands.size;
-  const hasFacets = tierFacets.length > 0 || brandFacets.length > 0;
+  const activeCount = activeTiers.size + activeBrands.size + attrActiveCount;
+  const hasAttrFacets = VARIANT_FACETS.some((f) => attrFacets[f.key]?.length > 1);
+  const hasFacets = tierFacets.length > 0 || brandFacets.length > 1 || hasAttrFacets;
 
-  // The controls panel — reused inline (desktop) and inside the tray (mobile).
   const controls = (
     <div className="flex flex-col gap-5">
       <div>
@@ -166,60 +201,35 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
         </div>
       </div>
 
-      {tierFacets.length > 0 && (
-        <div>
-          <label className="mb-1.5 block text-xs uppercase tracking-wide text-muted/70">
-            Brand tier
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {tierFacets.map(({ value, count }) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => toggleTier(value)}
-                className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                  activeTiers.has(value)
-                    ? "border-gold bg-gold/10 text-gold"
-                    : "border-border text-muted hover:border-gold hover:text-gold"
-                }`}
-              >
-                {TIER_LABEL[value] ?? value.replace("-", " ")}{" "}
-                <span className="text-muted">({count})</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <FacetGroup
+        label="Brand tier"
+        values={tierFacets}
+        isActive={(v) => activeTiers.has(v)}
+        onToggle={toggleTier}
+        display={(v) => TIER_LABEL[v] ?? v.replace("-", " ")}
+      />
 
-      {brandFacets.length > 1 && (
-        <div>
-          <label className="mb-1.5 block text-xs uppercase tracking-wide text-muted/70">
-            Brand
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {brandFacets.map(({ value, count }) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => toggleBrand(value)}
-                className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                  activeBrands.has(value)
-                    ? "border-gold bg-gold/10 text-gold"
-                    : "border-border text-muted hover:border-gold hover:text-gold"
-                }`}
-              >
-                {value} <span className="text-muted">({count})</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <FacetGroup
+        label="Brand"
+        values={brandFacets}
+        isActive={(v) => activeBrands.has(v)}
+        onToggle={toggleBrand}
+      />
+
+      {VARIANT_FACETS.map((f) => (
+        <FacetGroup
+          key={f.key}
+          label={f.label}
+          values={attrFacets[f.key] ?? []}
+          isActive={(v) => Boolean(activeAttrs[f.key]?.has(v))}
+          onToggle={(v) => toggleAttr(f.key, v)}
+        />
+      ))}
     </div>
   );
 
   return (
     <div>
-      {/* Sticky filter & sort trigger (mobile) + result count (all sizes). */}
       <div className="sticky top-0 z-20 -mx-5 mb-4 flex items-center justify-between gap-3 border-b border-border bg-bg/90 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
         <span className="text-sm text-muted">
           {totalVisible} {totalVisible === 1 ? "result" : "results"}
@@ -235,31 +245,25 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
         )}
       </div>
 
-      {/* Applied-filter chips — one-tap removable. */}
       {activeCount > 0 && (
         <div className="mb-4 flex flex-wrap items-center gap-2">
           {[...activeTiers].map((value) => (
-            <button
-              key={`tier-${value}`}
-              type="button"
-              onClick={() => toggleTier(value)}
-              className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-sm text-gold transition-colors hover:bg-gold/10"
-            >
+            <Chip key={`tier-${value}`} onClick={() => toggleTier(value)}>
               {TIER_LABEL[value] ?? value.replace("-", " ")}
-              <span aria-hidden>×</span>
-            </button>
+            </Chip>
           ))}
           {[...activeBrands].map((value) => (
-            <button
-              key={`brand-${value}`}
-              type="button"
-              onClick={() => toggleBrand(value)}
-              className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-sm text-gold transition-colors hover:bg-gold/10"
-            >
+            <Chip key={`brand-${value}`} onClick={() => toggleBrand(value)}>
               {value}
-              <span aria-hidden>×</span>
-            </button>
+            </Chip>
           ))}
+          {VARIANT_FACETS.flatMap((f) =>
+            [...(activeAttrs[f.key] ?? [])].map((value) => (
+              <Chip key={`${f.key}-${value}`} onClick={() => toggleAttr(f.key, value)}>
+                {value}
+              </Chip>
+            )),
+          )}
           <button
             type="button"
             onClick={clearAll}
@@ -270,14 +274,12 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
         </div>
       )}
 
-      {/* Inline controls (desktop only). */}
       {hasFacets && (
         <div className="mb-6 hidden rounded-2xl border border-border bg-surface p-5 sm:block">
           {controls}
         </div>
       )}
 
-      {/* Mobile tray overlay — results stay partly visible behind it. */}
       {trayOpen && (
         <div className="fixed inset-0 z-40 flex flex-col justify-end sm:hidden">
           <button
@@ -311,30 +313,21 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
         </div>
       )}
 
-      {/* Results */}
       {totalVisible === 0 && activeCount > 0 && (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-sm text-muted">
           No results match the current filters.{" "}
-          <button
-            type="button"
-            onClick={clearAll}
-            className="text-gold hover:underline"
-          >
+          <button type="button" onClick={clearAll} className="text-gold hover:underline">
             Clear filters
           </button>
         </div>
       )}
 
       {visible.brands.map((brand) => (
-        <div
-          key={brand.brandId}
-          className="mb-6 rounded-2xl border border-border bg-surface p-6"
-        >
+        <div key={brand.brandId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
           <div className="flex items-baseline justify-between">
             <h2 className="font-serif text-xl text-foreground">{brand.name}</h2>
             <span className="text-sm text-muted">
-              {brand.variantCount}{" "}
-              {brand.variantCount === 1 ? "result" : "results"}
+              {brand.variantCount} {brand.variantCount === 1 ? "result" : "results"}
             </span>
           </div>
           <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
@@ -357,22 +350,14 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
       ))}
 
       {visible.styles.map((style) => (
-        <div
-          key={style.styleId}
-          className="mb-6 rounded-2xl border border-border bg-surface p-6"
-        >
+        <div key={style.styleId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
           <div className="flex items-baseline justify-between">
             <div>
-              <p className="text-sm uppercase tracking-wide text-muted">
-                {style.brandName}
-              </p>
-              <h2 className="font-serif text-xl text-foreground">
-                {style.styleName}
-              </h2>
+              <p className="text-sm uppercase tracking-wide text-muted">{style.brandName}</p>
+              <h2 className="font-serif text-xl text-foreground">{style.styleName}</h2>
             </div>
             <span className="text-sm text-muted">
-              {style.variants.length}{" "}
-              {style.variants.length === 1 ? "result" : "results"}
+              {style.variants.length} {style.variants.length === 1 ? "result" : "results"}
             </span>
           </div>
           {style.variants.length > 0 && (
@@ -384,14 +369,11 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
                     className="flex items-center justify-between py-2 text-sm transition-colors hover:text-gold"
                   >
                     <span>
-                      {[variant.sizeLabel, variant.exteriorColorway]
-                        .filter(Boolean)
-                        .join(" · ") || "Variant"}
+                      {[variant.sizeLabel, variant.exteriorColorway].filter(Boolean).join(" · ") ||
+                        "Variant"}
                     </span>
                     {variant.hardwareColor && (
-                      <span className="text-muted">
-                        {variant.hardwareColor} hardware
-                      </span>
+                      <span className="text-muted">{variant.hardwareColor} hardware</span>
                     )}
                   </Link>
                 </li>
@@ -401,5 +383,57 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function FacetGroup({
+  label,
+  values,
+  isActive,
+  onToggle,
+  display = (v) => v,
+}: {
+  label: string;
+  values: { value: string; count: number }[];
+  isActive: (v: string) => boolean;
+  onToggle: (v: string) => void;
+  display?: (v: string) => string;
+}) {
+  if (values.length < 2) return null;
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs uppercase tracking-wide text-muted/70">
+        {label}
+      </label>
+      <div className="flex flex-wrap gap-2">
+        {values.map(({ value, count }) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => onToggle(value)}
+            className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+              isActive(value)
+                ? "border-gold bg-gold/10 text-gold"
+                : "border-border text-muted hover:border-gold hover:text-gold"
+            }`}
+          >
+            {display(value)} <span className="text-muted">({count})</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Chip({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-sm text-gold transition-colors hover:bg-gold/10"
+    >
+      {children}
+      <span aria-hidden>×</span>
+    </button>
   );
 }
