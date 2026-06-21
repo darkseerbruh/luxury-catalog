@@ -116,12 +116,20 @@ export default async function ClosetPage() {
             <Stat label="Had" count={portfolio.had.count} sub={null} />
           </div>
 
-          <Link
-            href="/recap"
-            className="mt-4 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
-          >
-            See your Year in Bags →
-          </Link>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm">
+            <Link
+              href="/closet/report"
+              className="text-gold transition-colors hover:text-gold-soft"
+            >
+              Collection report →
+            </Link>
+            <Link
+              href="/recap"
+              className="text-gold transition-colors hover:text-gold-soft"
+            >
+              See your Year in Bags →
+            </Link>
+          </div>
         </section>
       )}
 

@@ -40,7 +40,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-bg text-foreground font-sans">
         <Providers>
         <TasteFlusher signedIn={!!user} />
-        <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm">
+        <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
@@ -120,7 +120,7 @@ export default async function RootLayout({
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
-        <footer className="border-t border-border px-5 py-8 text-sm text-muted">
+        <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-serif text-foreground">The Luxury Catalog</p>
             <nav className="flex flex-wrap gap-x-5 gap-y-2">
