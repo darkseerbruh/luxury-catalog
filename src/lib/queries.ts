@@ -832,7 +832,20 @@ async function searchVariantsByFilters(f: SearchFilters): Promise<StyleSearchRes
     }
     if (f.maxWidthCm != null && !(widths.length > 0 && widths.some((w) => w <= f.maxWidthCm!))) continue;
     if (f.minWidthCm != null && !(widths.length > 0 && widths.some((w) => w >= f.minWidthCm!))) continue;
-    if (f.keywords.length && !includesAny(style.name, f.keywords) && !includesAny(raw.exterior_colorway, f.keywords) && !includesAny(brandName, f.keywords)) continue;
+    if (
+      f.keywords.length &&
+      !includesAny(style.name, f.keywords) &&
+      !includesAny(raw.exterior_colorway, f.keywords) &&
+      !includesAny(brandName, f.keywords) &&
+      // Descriptive keywords like "caviar" are material textures, not style names —
+      // match them against the material name/type and other attribute fields too,
+      // or a "black caviar bag" can never find a "Caviar Leather" variant.
+      !includesAny(material?.name, f.keywords) &&
+      !includesAny(material?.material_type, f.keywords) &&
+      !includesAny(raw.size_label, f.keywords) &&
+      !includesAny(style.silhouette, f.keywords)
+    )
+      continue;
 
     let entry = grouped.get(style.style_id);
     if (!entry) {
