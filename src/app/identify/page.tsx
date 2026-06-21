@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 interface IdentificationResult {
   brand: string | null;
@@ -50,6 +52,7 @@ export default function IdentifyPage() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ApiResponse | null>(null);
+  const [shareState, setShareState] = useState<"idle" | "copied">("idle");
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0] ?? null;
@@ -86,6 +89,7 @@ export default function IdentifyPage() {
     setFile(null);
     setPreview(null);
     setResult(null);
+    setShareState("idle");
     if (inputRef.current) inputRef.current.value = "";
   }
 
@@ -98,6 +102,42 @@ export default function IdentifyPage() {
       : match?.brandName
         ? `/search?q=${encodeURIComponent(match.brandName)}`
         : null;
+
+  // Best brand/style strings for resale/consign deep-links and the share card.
+  // Prefer the AI identification, fall back to the catalog match.
+  const shareBrand = (id?.brand || match?.brandName || "").trim();
+  const shareStyle = (id?.style || match?.styleName || "").trim();
+  const resaleLinks =
+    shareBrand || shareStyle ? buildResaleLinks(shareBrand, shareStyle) : [];
+  const consignLinks =
+    shareBrand || shareStyle ? buildConsignmentLinks(shareBrand, shareStyle) : [];
+
+  // Link to the bag page's above-the-fold value summary when we have a match.
+  const valueUrl = match?.variantId ? `/bag/${match.variantId}#price` : null;
+
+  const shareLabel = [shareBrand, shareStyle].filter(Boolean).join(" ") || "this bag";
+
+  async function handleShare() {
+    const text = `I found a ${shareLabel} — identified with Luxury Catalog.`;
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: "Luxury Catalog", text, url });
+      } catch {
+        // user cancelled or share failed — no-op
+      }
+      return;
+    }
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(`${text} ${url}`.trim());
+        setShareState("copied");
+        setTimeout(() => setShareState("idle"), 2000);
+      } catch {
+        // clipboard unavailable — no-op
+      }
+    }
+  }
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10">
@@ -236,6 +276,152 @@ export default function IdentifyPage() {
             </div>
           </div>
 
+          {/* Shareable result card — screenshot-ready for the thrift-reveal loop */}
+          {(id.brand || id.style) && (
+            <div className="flex flex-col gap-3">
+              <div
+                className="rounded-2xl border border-gold/40 bg-gradient-to-br from-surface-raised to-surface p-6 text-center"
+                aria-label="Shareable result card"
+              >
+                <p className="text-xs uppercase tracking-[0.2em] text-gold/80">
+                  I found a
+                </p>
+                <p className="mt-2 font-serif text-2xl text-foreground">
+                  {shareBrand || "designer bag"}
+                </p>
+                {shareStyle && (
+                  <p className="font-serif text-xl text-gold">{shareStyle}</p>
+                )}
+                <div className="mt-3 flex flex-wrap justify-center gap-1.5 text-xs text-muted">
+                  {[id.sizeLabel, id.colorway, id.materialType]
+                    .filter(Boolean)
+                    .map((spec) => (
+                      <span
+                        key={spec as string}
+                        className="rounded-full border border-border px-2.5 py-0.5"
+                      >
+                        {spec}
+                      </span>
+                    ))}
+                </div>
+                <p className="mt-4 text-xs uppercase tracking-widest text-muted/60">
+                  Luxury Catalog
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleShare}
+                className="flex items-center justify-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
+              >
+                <ShareIcon />
+                {shareState === "copied" ? "Copied to clipboard" : "Share this find"}
+              </button>
+            </div>
+          )}
+
+          {/* What it's worth — never fabricate a price; link to the value summary. */}
+          {valueUrl ? (
+            <Link
+              href={valueUrl}
+              className="flex items-center justify-between rounded-2xl border border-gold/40 bg-gold/5 px-5 py-4 transition-colors hover:border-gold"
+            >
+              <span>
+                <span className="block text-sm font-medium text-foreground">
+                  See what it&rsquo;s worth
+                </span>
+                <span className="block text-xs text-muted">
+                  Fair-market value range from real recorded sales
+                </span>
+              </span>
+              <span className="shrink-0 text-gold">→</span>
+            </Link>
+          ) : (
+            (id.brand || id.style) && (
+              <Link
+                href={`/search?q=${encodeURIComponent(shareLabel)}`}
+                className="flex items-center justify-between rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 transition-colors hover:border-gold/50"
+              >
+                <span>
+                  <span className="block text-sm font-medium text-foreground">
+                    Check the catalog for value data
+                  </span>
+                  <span className="block text-xs text-muted">
+                    We only show value ranges built from real sales
+                  </span>
+                </span>
+                <span className="shrink-0 text-gold">→</span>
+              </Link>
+            )
+          )}
+
+          {/* Where to buy / sell — monetize the highest-intent moment. */}
+          {(resaleLinks.length > 0 || consignLinks.length > 0) && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {resaleLinks.length > 0 && (
+                <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
+                  <h2 className="font-serif text-lg text-foreground">Where to buy</h2>
+                  <p className="mt-1 text-xs text-muted">
+                    Pre-filled searches on the major resale platforms.
+                  </p>
+                  <div className="mt-3 flex flex-col gap-2">
+                    {resaleLinks.map((l) => (
+                      <a
+                        key={l.key}
+                        href={l.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow sponsored"
+                        onClick={() =>
+                          track(EVENTS.outboundResaleClicked, {
+                            platform: l.key,
+                            brand: shareBrand,
+                            style: shareStyle,
+                            source: "identify",
+                          })
+                        }
+                        className="rounded-full border border-border px-4 py-2 text-center text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
+                      >
+                        Search on {l.name} →
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {consignLinks.length > 0 && (
+                <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
+                  <h2 className="font-serif text-lg text-foreground">Where to sell</h2>
+                  <p className="mt-1 text-xs text-muted">
+                    Sell fast for cash or consign for more.
+                  </p>
+                  <div className="mt-3 flex flex-col gap-2">
+                    {consignLinks.map((l) => (
+                      <a
+                        key={l.key}
+                        href={l.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow sponsored"
+                        onClick={() =>
+                          track(EVENTS.outboundConsignClicked, {
+                            platform: l.key,
+                            mode: l.mode,
+                            brand: shareBrand,
+                            style: shareStyle,
+                            source: "identify",
+                          })
+                        }
+                        className="rounded-full border border-border px-4 py-2 text-center text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
+                      >
+                        {l.mode === "buyout"
+                          ? `Get a quote on ${l.name}`
+                          : `Consign with ${l.name}`}{" "}
+                        →
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Auth markers */}
           {id.visibleAuthMarkers && id.visibleAuthMarkers.length > 0 && (
             <div className="rounded-2xl border border-border bg-surface p-6">
@@ -317,6 +503,29 @@ function SpecRow({ label, value }: { label: string; value: string }) {
       <span className="w-24 shrink-0 text-muted">{label}</span>
       <span className="text-foreground">{value}</span>
     </div>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+    </svg>
   );
 }
 

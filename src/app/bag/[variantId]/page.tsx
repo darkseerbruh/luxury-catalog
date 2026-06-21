@@ -371,8 +371,9 @@ export default async function BagDetailPage({
 
       {/* Above-the-fold decision summary: value range + key identity + retail. */}
       <section
+        id="price"
         aria-label="Value summary"
-        className="rounded-2xl border border-border bg-surface p-5"
+        className="scroll-mt-4 rounded-2xl border border-border bg-surface p-5"
       >
         <h2 className="font-serif text-xl text-foreground">What it&rsquo;s worth</h2>
         {fairMarket ? (

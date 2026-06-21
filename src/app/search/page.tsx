@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { searchCatalog } from "@/lib/queries";
 import RequestBagForm from "./RequestBagForm";
 import SearchTracker from "./SearchTracker";
+import SearchFilters from "./SearchFilters";
 
 export const dynamic = "force-dynamic";
 
@@ -78,83 +78,7 @@ export default async function SearchPage({
           </div>
         )}
 
-        {results.brands.map((brand) => (
-          <div
-            key={brand.brandId}
-            className="mb-6 rounded-2xl border border-border bg-surface p-6"
-          >
-            <div className="flex items-baseline justify-between">
-              <h2 className="font-serif text-xl text-foreground">
-                {brand.name}
-              </h2>
-              <span className="text-sm text-muted">
-                {brand.variantCount}{" "}
-                {brand.variantCount === 1 ? "result" : "results"}
-              </span>
-            </div>
-            <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-              {brand.tier.replace("-", " ")}
-            </p>
-            {brand.styleNames.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {brand.styleNames.map((name) => (
-                  <Link
-                    key={name}
-                    href={`/search?q=${encodeURIComponent(name)}`}
-                    className="rounded-full border border-border px-3 py-1 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    {name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-
-        {results.styles.map((style) => (
-          <div
-            key={style.styleId}
-            className="mb-6 rounded-2xl border border-border bg-surface p-6"
-          >
-            <div className="flex items-baseline justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-wide text-muted">
-                  {style.brandName}
-                </p>
-                <h2 className="font-serif text-xl text-foreground">
-                  {style.styleName}
-                </h2>
-              </div>
-              <span className="text-sm text-muted">
-                {style.variants.length}{" "}
-                {style.variants.length === 1 ? "result" : "results"}
-              </span>
-            </div>
-            {style.variants.length > 0 && (
-              <ul className="mt-4 divide-y divide-border">
-                {style.variants.map((variant) => (
-                  <li key={variant.variantId}>
-                    <Link
-                      href={`/bag/${variant.variantId}`}
-                      className="flex items-center justify-between py-2 text-sm transition-colors hover:text-gold"
-                    >
-                      <span>
-                        {[variant.sizeLabel, variant.exteriorColorway]
-                          .filter(Boolean)
-                          .join(" · ") || "Variant"}
-                      </span>
-                      {variant.hardwareColor && (
-                        <span className="text-muted">
-                          {variant.hardwareColor} hardware
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+        {hasResults && <SearchFilters results={results} />}
       </div>
     </main>
   );
