@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { createServerSupabase } from "./supabase/server";
 
 export interface CurrentUser {
@@ -123,4 +124,40 @@ export async function getProfile(): Promise<UserProfile | null> {
 
   if (!data) return EMPTY_PROFILE(user.id);
   return mapProfileRow(data as ProfileRow);
+}
+
+/**
+ * True only if the current request is an authenticated user whose
+ * `profile.is_admin` is true. FAILS CLOSED: returns false if signed out, if the
+ * profile row is missing, or if the `is_admin` column doesn't exist yet
+ * (pre-migration 0008) — any error path denies access rather than crashing.
+ */
+export async function isAdmin(): Promise<boolean> {
+  const user = await getCurrentUser();
+  if (!user) return false;
+
+  try {
+    const supabase = await createServerSupabase();
+    const { data, error } = await supabase
+      .from("profile")
+      .select("is_admin")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (error || !data) return false;
+    return Boolean((data as { is_admin?: boolean | null }).is_admin);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Server-side admin guard for /admin/* pages and admin server actions. Redirects
+ * non-admins to /login. Because it relies on `isAdmin()` (fail-closed), it denies
+ * access when the migration is unapplied or env is absent rather than crashing.
+ */
+export async function requireAdmin(): Promise<CurrentUser> {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+  if (!(await isAdmin())) redirect("/login");
+  return user;
 }
