@@ -2,16 +2,42 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { signIn, signUp, type AuthFormState } from "@/lib/auth-actions";
+import { signIn, signUp, signInWithProvider, type AuthFormState } from "@/lib/auth-actions";
 
 const initial: AuthFormState = {};
+
+const OAUTH = [
+  { provider: "google", label: "Continue with Google" },
+  { provider: "facebook", label: "Continue with Facebook" },
+];
 
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const action = mode === "login" ? signIn : signUp;
   const [state, formAction, pending] = useActionState(action, initial);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        {OAUTH.map((o) => (
+          <form key={o.provider} action={signInWithProvider}>
+            <input type="hidden" name="provider" value={o.provider} />
+            <button
+              type="submit"
+              className="w-full rounded-full border border-border bg-surface px-5 py-3 text-sm font-medium text-foreground transition-colors hover:border-gold hover:text-gold"
+            >
+              {o.label}
+            </button>
+          </form>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-3 text-xs text-muted">
+        <span className="h-px flex-1 bg-border" />
+        or {mode === "login" ? "log in" : "sign up"} with email
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <form action={formAction} className="flex flex-col gap-4">
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-muted">Email</span>
         <input
@@ -65,6 +91,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
           </>
         )}
       </p>
-    </form>
+      </form>
+    </div>
   );
 }
