@@ -65,6 +65,17 @@ build order 1–7. All verified by `tsc --noEmit`, `eslint`, and `next build` (g
 Analytics: new events in `src/lib/analytics/events.ts` — `quiz_started`, `quiz_completed`,
 `recommendation_clicked`, `closet_favorited`, `taste_map_viewed`.
 
+**Launch-hardening session (this one):** (1) admin auth gate (above + checklist 1);
+(2) `/auth/confirm` now handles the default free-tier PKCE `?code=` flow too
+(checklist 3); (3) quality pass on the engagement code — reviewed clean (privacy
+enforced server-side via RLS + filters, empty states handled, Next 16 params
+awaited), and the pure logic was extracted into no-DB cores (`taste-core.ts`,
+`recommendations-core.ts`, plus `buildVectorFromAnswers` in `taste.ts` and
+`sortFeedEvents`/`bagFrom` in `feed.ts`); (4) **unit tests added** — `vitest`
+devDependency + `vitest.config.ts` + `npm test`; 38 tests in `src/lib/__tests__/`
+covering taste-vector/folding/completeness, recommendation scoring + "why", and
+feed assembly/sort. All of `tsc`, `eslint`, `next build`, `npm test` green.
+
 **Human-gated for this track:** apply migration **0007** (see the note + the
 `ALTER TYPE` transaction caveat in the checklist); set `SUPABASE_SERVICE_ROLE_KEY`
 to enable follower notifications + collaborative recs (both no-op without it). No new
@@ -83,14 +94,14 @@ public `/u/[handle]` → follow → feed → quiz → recs → notifications.
    - `0005_closet_status_want_have_had.sql` *(PR #2)* — closet_status enum → `want`/`have`/`had` (data-migrating; collapses researching/wishlist→want, owned→have)
    - `0006_social_expert_layer.sql` *(PR #2)* — extends `profile` (handle/social/trust flags), `closet_favorite`, `post`, `closet_stats` view
    - **`0007_taste_and_social_links.sql` *(engagement track — HUMAN-GATED, not yet applied)*** — adds `profile.social_links jsonb`, `profile.taste_vector jsonb`, `profile.taste_completeness int`; adds `closet_activity` + `photo_featured` values to the `notification_type` enum. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block in Postgres — if the migration tool wraps statements in a transaction, run the two `alter type` lines separately. Until this is applied, the new social/taste columns and the two new notification types don't exist; the app degrades gracefully (profile reads fall back, taste/recs return empty, follower notifications no-op).
-   - `0008_*` — photo contributions (when the queued feature is built; was sketched as `0004`)
+   - **`0008_admin_flag.sql` *(security must-fix — HUMAN-GATED, not yet applied)*** — adds `profile.is_admin boolean not null default false` and revokes column-level UPDATE on `is_admin` + the 0006 trust flags from `anon`/`authenticated` (so they can't be self-granted via the row-level update policy). **After applying, the operator MUST set their own flag once via the Supabase SQL editor or they'll be locked out of `/admin`:** `update profile set is_admin = true where id = '<your-auth-user-uuid>';` The app guard (`requireAdmin()`/`isAdmin()` in `auth.ts`, enforced by `src/app/admin/layout.tsx`) **fails closed** — if the column is missing (pre-migration) or unreadable, admin access is DENIED, not crashed. (The photo-contributions migration that was sketched as `0008` will need a new number, e.g. `0009`.)
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
    npx tsx supabase/seed/seed-breadth.ts
    ```
    Both idempotent. The live DB still has the *old* seed data until these run.
-3. **Supabase email-confirm template** → point at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` (Auth → Email Templates), or disable confirmation while testing.
+3. **Supabase email-confirm** — `/auth/confirm` now handles BOTH flows, so the **free tier works with the DEFAULT (unedited) template**: `signUp` passes `emailRedirectTo=${origin}/auth/confirm` and the route exchanges the `?code=` (PKCE) for a session. No template edit required to re-enable "Confirm email". *(Optional, custom template:* point it at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` — that path still works too.)* Or disable confirmation while testing.
 4. **PostHog**: set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`); enable "Cookieless server hash mode"; optionally run `node scripts/setup-posthog.mjs`. **Add `.mcp.json` manually** (I don't auto-create startup config — snippet in `.env.example`/below).
 5. **Price alerts**: set `CRON_SECRET` (Vercel injects it as the cron Authorization header); optional `RESEND_API_KEY` + verified sender for email. `vercel.json` already schedules the job daily.
 6. **Affiliate**: sign up for programs; set `NEXT_PUBLIC_AFFILIATE_*` codes / `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE`.
@@ -179,7 +190,7 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 - **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder + `is_authenticator` profiles feed it.
 - **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free.
 - **Settings & account management** (edit email/password, notification prefs, delete account).
-- **Admin auth gate** — `/admin/*` is still unauthenticated; gate it (e.g. `profile.is_admin`) before sensitive data lands.
+- ~~**Admin auth gate** — `/admin/*` is still unauthenticated.~~ **DONE** (launch-hardening session): gated behind `profile.is_admin` via `requireAdmin()` + `src/app/admin/layout.tsx`, fail-closed. Human-gated: apply migration `0008` + self-set `is_admin` (see checklist item 1).
 - **Brand depth** — 9 stub brands (drop full Drive CSV into `data/raw/`, re-run seeder) + browser-based hero-style research passes.
 - **Hero-research accuracy** — re-verify Session-2 snippet-sourced data (capped at `medium`; WebFetch was blocked) before presenting as fact; Hermès blind-stamp + Chanel serials especially.
 - **RLS verification** — confirm a second user can't read another's closet/watchlist/notifications after 0002/0003 apply.
