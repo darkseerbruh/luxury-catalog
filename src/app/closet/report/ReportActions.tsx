@@ -6,6 +6,8 @@ type Row = {
   variant: string;
   value: number | null;
   currency: string | null;
+  paid?: number | null;
+  gain?: number | null;
 };
 
 /** Print-to-PDF + CSV export for the collection report. Client-only (uses
@@ -26,13 +28,17 @@ export default function ReportActions({
   function downloadCsv() {
     const esc = (s: unknown) => `"${String(s ?? "").replace(/"/g, '""')}"`;
     const row = (cells: unknown[]) => cells.map(esc).join(",");
+    const totalPaid = rows.reduce((s, r) => s + (r.paid ?? 0), 0);
+    const totalGain = rows.reduce((s, r) => s + (r.gain ?? 0), 0);
     const csv = [
       row([`Collection report — ${owner}`]),
       row([`As of ${asOf}`]),
       "",
-      row(["#", "Brand", "Style", "Variant", "Estimated value", "Currency"]),
-      ...rows.map((r, i) => row([i + 1, r.brand, r.style, r.variant, r.value ?? "", r.currency ?? ""])),
-      row(["", "", "", "Total", total, currency ?? ""]),
+      row(["#", "Brand", "Style", "Variant", "Estimated value", "Currency", "Paid", "Gain/loss"]),
+      ...rows.map((r, i) =>
+        row([i + 1, r.brand, r.style, r.variant, r.value ?? "", r.currency ?? "", r.paid ?? "", r.gain ?? ""]),
+      ),
+      row(["", "", "", "Total", total, currency ?? "", totalPaid, totalGain]),
     ].join("\n");
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });

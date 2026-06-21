@@ -58,6 +58,37 @@ export async function saveToCloset(variantId: number, status: ClosetStatus = "wa
   return { ok: true };
 }
 
+/** Set (or clear, with null) the acquisition price on an owned closet item — the
+ *  collection-report cost basis. Needs migration 0014; fails with a clear message
+ *  if the column is missing. */
+export async function setPurchasePrice(
+  variantId: number,
+  price: number | null,
+  currency: string | null,
+): Promise<ActionResult> {
+  if (!validVariant(variantId)) return { ok: false, error: "Invalid item." };
+  if (price != null && (!Number.isFinite(price) || price < 0)) {
+    return { ok: false, error: "Enter a valid amount." };
+  }
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, error: "Please log in." };
+
+  const supabase = await createServerSupabase();
+  const { error } = await supabase
+    .from("closet_item")
+    .update({
+      purchase_price: price,
+      purchase_currency: price != null ? currency ?? "USD" : null,
+    })
+    .eq("user_id", user.id)
+    .eq("variant_id", variantId);
+
+  if (error) return { ok: false, error: "Could not save — has migration 0014 been applied?" };
+  revalidatePath("/closet/report");
+  revalidatePath("/closet");
+  return { ok: true };
+}
+
 export async function removeFromCloset(variantId: number): Promise<ActionResult> {
   if (!validVariant(variantId)) return { ok: false, error: "Invalid item." };
   const user = await getCurrentUser();

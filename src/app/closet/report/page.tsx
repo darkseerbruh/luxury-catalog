@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
-import { getCloset } from "@/lib/collections";
+import { getCloset, getPurchaseInfo } from "@/lib/collections";
 import ReportActions from "./ReportActions";
+import PurchasePriceField from "./PurchasePriceField";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,11 @@ function fmt(amount: number | null, currency: string | null): string {
  */
 export default async function CollectionReportPage() {
   if (!(await getCurrentUser())) redirect("/login");
-  const [closet, profile] = await Promise.all([getCloset(), getProfile()]);
+  const [closet, profile, purchases] = await Promise.all([
+    getCloset(),
+    getProfile(),
+    getPurchaseInfo(),
+  ]);
 
   const owned = closet.filter((c) => c.status === "have");
   const priced = owned.filter((c) => c.retailPrice != null);
@@ -41,13 +46,25 @@ export default async function CollectionReportPage() {
   const asOf = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const ownerName = profile?.displayName || (profile?.handle ? `@${profile.handle}` : "Your");
 
-  const rows = owned.map((c) => ({
-    brand: c.brandName,
-    style: c.styleName,
-    variant: c.label ?? "",
-    value: c.retailPrice,
-    currency: c.currency,
-  }));
+  // Cost basis (what you paid) → gain/loss, where entered (migration 0014).
+  const rows = owned.map((c) => {
+    const paid = purchases[c.variantId]?.price ?? null;
+    const gain = c.retailPrice != null && paid != null ? c.retailPrice - paid : null;
+    return {
+      variantId: c.variantId,
+      brand: c.brandName,
+      style: c.styleName,
+      variant: c.label ?? "",
+      value: c.retailPrice,
+      currency: c.currency,
+      paid,
+      gain,
+    };
+  });
+  const paidCount = rows.filter((r) => r.paid != null).length;
+  const totalPaid = rows.reduce((s, r) => s + (r.paid ?? 0), 0);
+  const totalGain = rows.reduce((s, r) => s + (r.gain ?? 0), 0);
+  const hasCostBasis = paidCount > 0;
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-12">
@@ -90,9 +107,24 @@ export default async function CollectionReportPage() {
                 : ""}
               .
             </p>
+            {hasCostBasis && (
+              <div className="mt-4 flex flex-wrap gap-8 border-t border-border pt-4">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted/70">Total paid</p>
+                  <p className="mt-0.5 font-serif text-lg text-foreground">{fmt(totalPaid, currency)}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted/70">Unrealised gain / loss</p>
+                  <p className={`mt-0.5 font-serif text-lg ${totalGain >= 0 ? "text-gold" : "text-red-400"}`}>
+                    {totalGain >= 0 ? "+" : "−"}
+                    {fmt(Math.abs(totalGain), currency)}
+                  </p>
+                </div>
+              </div>
+            )}
           </section>
 
-          <section>
+          <section className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted/70">
@@ -101,21 +133,51 @@ export default async function CollectionReportPage() {
                   <th className="py-2 pr-3 font-normal">Style</th>
                   <th className="py-2 pr-3 font-normal">Variant</th>
                   <th className="py-2 pl-3 text-right font-normal">Est. value</th>
+                  <th className="py-2 pl-3 text-right font-normal">Paid</th>
+                  <th className="py-2 pl-3 text-right font-normal">Gain / loss</th>
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r, i) => (
-                  <tr key={i} className="border-b border-border/60">
-                    <td className="py-2 pr-3 text-muted/70">{i + 1}</td>
+                {rows.map((r) => (
+                  <tr key={r.variantId} className="border-b border-border/60">
+                    <td className="py-2 pr-3 text-muted/70">{rows.indexOf(r) + 1}</td>
                     <td className="py-2 pr-3 text-muted">{r.brand}</td>
                     <td className="py-2 pr-3 text-foreground">{r.style}</td>
                     <td className="py-2 pr-3 text-muted">{r.variant}</td>
                     <td className="py-2 pl-3 text-right text-foreground">{fmt(r.value, r.currency)}</td>
+                    <td className="py-2 pl-3 text-right">
+                      <PurchasePriceField
+                        variantId={r.variantId}
+                        initial={r.paid}
+                        currency={r.currency ?? currency}
+                      />
+                    </td>
+                    <td
+                      className={`py-2 pl-3 text-right ${
+                        r.gain == null ? "text-muted/50" : r.gain >= 0 ? "text-gold" : "text-red-400"
+                      }`}
+                    >
+                      {r.gain == null
+                        ? "—"
+                        : `${r.gain >= 0 ? "+" : "−"}${fmt(Math.abs(r.gain), r.currency)}`}
+                    </td>
                   </tr>
                 ))}
                 <tr className="font-medium">
                   <td className="py-3 pr-3" colSpan={4}>Total</td>
                   <td className="py-3 pl-3 text-right text-gold">{fmt(total, currency)}</td>
+                  <td className="py-3 pl-3 text-right text-foreground">
+                    {hasCostBasis ? fmt(totalPaid, currency) : "—"}
+                  </td>
+                  <td
+                    className={`py-3 pl-3 text-right ${
+                      !hasCostBasis ? "text-muted/50" : totalGain >= 0 ? "text-gold" : "text-red-400"
+                    }`}
+                  >
+                    {hasCostBasis
+                      ? `${totalGain >= 0 ? "+" : "−"}${fmt(Math.abs(totalGain), currency)}`
+                      : "—"}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -127,8 +189,8 @@ export default async function CollectionReportPage() {
               Estimated values are the bag&rsquo;s catalogued <em>original retail price</em>, provided as
               a record-keeping estimate — not a formal appraisal. Actual resale/replacement value varies
               by condition, year, market, and provenance. For insurance or tax filings, obtain a
-              professional appraisal. <span className="text-muted/70">Cost basis and gain/loss (for
-              capital-gains reporting) require entering what you paid per bag — a planned addition.</span>
+              professional appraisal. <span className="text-muted/70">Enter what you paid in the Paid
+              column to track unrealised gain/loss for capital-gains planning — it&rsquo;s private to you.</span>
             </p>
           </section>
         </>
