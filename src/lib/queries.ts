@@ -36,7 +36,8 @@ export interface BrandSearchResult {
   name: string;
   tier: "thrift" | "mid" | "ultra-luxury";
   variantCount: number;
-  styleNames: string[];
+  /** Styles under the brand, each with a representative variant id to link to its bag page. */
+  styles: { styleId: number; name: string; variantId: number | null }[];
 }
 
 export interface SearchResults {
@@ -522,6 +523,35 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
   };
 }
 
+export interface StyleVariantOption {
+  variantId: number;
+  sizeLabel: string | null;
+  sizeCategory: string | null;
+  exteriorColorway: string | null;
+  hardwareColor: string | null;
+}
+
+/**
+ * Sibling variants of a style — powers the Amazon-style variant selector on the
+ * bag page (pick a colourway / size / hardware), while each variant keeps its own
+ * indexable /bag/[id] URL for GEO.
+ */
+export async function getStyleVariants(styleId: number): Promise<StyleVariantOption[]> {
+  const { data, error } = await getSupabase()
+    .from("variant")
+    .select("variant_id, size_label, size_category, exterior_colorway, hardware_color")
+    .eq("style_id", styleId)
+    .order("variant_id");
+  if (error || !data) return [];
+  return data.map((v) => ({
+    variantId: v.variant_id,
+    sizeLabel: v.size_label,
+    sizeCategory: v.size_category,
+    exteriorColorway: v.exterior_colorway,
+    hardwareColor: v.hardware_color,
+  }));
+}
+
 export interface BrandDetail {
   brandId: number;
   name: string;
@@ -884,7 +914,11 @@ function mapBrandRows(
       name: b.name,
       tier: b.tier,
       variantCount: styles.reduce((sum, s) => sum + (s.variant ?? []).length, 0),
-      styleNames: styles.map((s) => s.name),
+      styles: styles.map((s) => ({
+        styleId: s.style_id,
+        name: s.name,
+        variantId: (s.variant ?? [])[0]?.variant_id ?? null,
+      })),
     };
   });
 }

@@ -2,7 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail, getResourcesForStyle } from "@/lib/queries";
+import { getVariantDetail, getResourcesForStyle, getStyleVariants } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import {
   AUTHOR_NAME,
@@ -28,6 +28,7 @@ import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
 import SimilarBags from "./SimilarBags";
+import VariantSelector from "./VariantSelector";
 
 export const dynamic = "force-dynamic";
 
@@ -200,7 +201,10 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const resources = await getResourcesForStyle(v.style.styleId, v.variantId);
+  const [resources, styleVariants] = await Promise.all([
+    getResourcesForStyle(v.style.styleId, v.variantId),
+    getStyleVariants(v.style.styleId),
+  ]);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -471,6 +475,14 @@ export default async function BagDetailPage({
           </div>
         </dl>
       </section>
+
+      {/* Amazon-style variant selector — pick a colourway / size / hardware of
+          this style; each links to its own indexable /bag/[id] page. */}
+      <VariantSelector
+        styleName={v.style.name}
+        variants={styleVariants}
+        currentVariantId={v.variantId}
+      />
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />

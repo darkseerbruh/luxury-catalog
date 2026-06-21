@@ -340,15 +340,15 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
           <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
             {brand.tier.replace("-", " ")}
           </p>
-          {brand.styleNames.length > 0 && (
+          {brand.styles.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {brand.styleNames.map((name) => (
+              {brand.styles.map((s) => (
                 <Link
-                  key={name}
-                  href={`/search?q=${encodeURIComponent(name)}`}
+                  key={s.styleId}
+                  href={s.variantId ? `/bag/${s.variantId}` : `/search?q=${encodeURIComponent(s.name)}`}
                   className="rounded-full border border-border px-3 py-1 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                 >
-                  {name}
+                  {s.name}
                 </Link>
               ))}
             </div>
