@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
+import { BagImage } from "@/components/BagImage";
 
 export const dynamic = "force-dynamic";
 
@@ -164,12 +165,18 @@ export default async function ClosetPage() {
                       href={`/bag/${c.variantId}`}
                       className="flex items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-surface-raised/40"
                     >
-                      <div>
+                      <div className="flex min-w-0 items-center gap-4">
+                        <BagImage
+                          brand={c.brandName}
+                          className="h-14 w-14 shrink-0 rounded-lg"
+                        />
+                        <div className="min-w-0">
                         <p className="text-sm uppercase tracking-wide text-muted">
                           {c.brandName}
                         </p>
                         <p className="font-serif text-foreground">{c.styleName}</p>
                         <p className="text-sm text-muted">{c.label}</p>
+                        </div>
                       </div>
                       <div className="shrink-0 text-right">
                         {formatPrice(c.retailPrice, c.currency) && (

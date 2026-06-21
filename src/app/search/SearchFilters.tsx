@@ -8,6 +8,7 @@ import type {
   StyleSearchResult,
 } from "@/lib/queries";
 import { track, EVENTS } from "@/lib/analytics/events";
+import { BagImage } from "@/components/BagImage";
 
 type SortKey = "relevance" | "az" | "count";
 type Variant = StyleSearchResult["variants"][number];
@@ -351,12 +352,18 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
 
       {visible.styles.map((style) => (
         <div key={style.styleId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
-          <div className="flex items-baseline justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-wide text-muted">{style.brandName}</p>
-              <h2 className="font-serif text-xl text-foreground">{style.styleName}</h2>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-4">
+              <BagImage
+                brand={style.brandName}
+                className="h-16 w-16 shrink-0 rounded-lg"
+              />
+              <div className="min-w-0">
+                <p className="text-sm uppercase tracking-wide text-muted">{style.brandName}</p>
+                <h2 className="font-serif text-xl text-foreground">{style.styleName}</h2>
+              </div>
             </div>
-            <span className="text-sm text-muted">
+            <span className="shrink-0 text-sm text-muted">
               {style.variants.length} {style.variants.length === 1 ? "result" : "results"}
             </span>
           </div>
