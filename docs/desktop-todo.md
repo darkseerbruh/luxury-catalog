@@ -31,7 +31,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 - [x] ⛔🔧 **A4. Auth URLs + confirmation.** Site/redirect URLs set; confirm-email disabled (interim).
 - [ ] ⛔ **A5. Smoke-test the full path** on the live DB: sign up → onboarding → save to closet → watchlist → review → quiz → recommendations → notifications. *(Partly testable locally now; finish after the branch is deployed.)*
 - [ ] 🔧 **A6. Rotate exposed secrets** *(NEW — security)* — regenerate the Supabase **`service_role` key** and **DB password** (Dashboard → Project Settings → API / Database), then update `.env.local` **and** the Vercel env var. Do before launch.
-- [ ] ⛔🔧 **A7. Merge feature branch → `main` + deploy** — the new social/taste features live on `claude/lucid-archimedes-1cyi21`, not `main`. (Claude will merge at end of session per instruction; then Vercel auto-deploys production.)
+- [x] ⛔🔧 **A7. Merge feature branch → `main`.** Done (2026-06-20, `--no-ff` merge; `tsc`/eslint/`next build`/50 tests green pre-merge). Vercel auto-deploys `main` to production. **Verify the deploy succeeds** in Vercel, then run A5 against it. Migrations `0008`–`0010` still need `supabase db push` for the new features (admin gate, corrections, settings) to work.
 
 ---
 
@@ -94,7 +94,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 ## H. Decisions / future-build (mostly resolved this session)
 
 - [x] 🧠 **H1/H2. Build order + first feature** — DECIDED: build the full engagement track now (social UI → feed → taste quiz → recs → **Taste Map** → notifications). Built on the feature branch this session.
-- [ ] 🧠 **H3. Admin auth gate** — `/admin/*` is still **unauthenticated**; gate behind `profile.is_admin` before sensitive data lands. *(Code task — queue for a build session.)*
+- [x] 🧠 **H3. Admin auth gate** — BUILT: `/admin/*` gated behind `profile.is_admin` (migration `0008`, fail-closed). **Operator:** after applying `0008`, set your own flag (`update profile set is_admin = true where id = '<your-id>';`) or you're locked out.
 - [ ] 🧠 **H4. Social links policy** — confirm allowed networks (IG/TikTok/YouTube/Poshmark/Substack) + verified-link treatment.
 - [ ] 🧠 **H5. Photo-contribution system** — still queued (the UGC engine the leaderboards reward). Build next?
 
