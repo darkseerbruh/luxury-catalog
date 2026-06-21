@@ -127,6 +127,45 @@ paths, so we know it's buildable now), and **the ask/cost**.
 > pilot Rung 3 with one or two aligned creators once attribution exists, and only
 > consider Rung 4 once revenue justifies it.
 
+### Quick reference — every way to collaborate (scannable menu)
+
+The ladder above as a flat checklist, lowest-commitment first. **Items 1–11 are
+buildable now with no new code; 15–18 need per-creator attribution (the main
+engineering gap); anything giving a creator something of value triggers FTC
+disclosure (§5).**
+
+**Featuring & status (non-cash, do-now)**
+1. Embed their videos/posts on relevant bag pages with a *Trusted reviewer* badge.
+2. Roster them as a standing "resident expert/authenticator" (badge + named presence).
+3. Link & elevate their socials with "verified link" treatment (trusted accounts only).
+4. Status tiers — a visible "house roster" ladder where elevation itself is the reward.
+5. Courtesy "we featured you" outreach — the no-cost relationship opener.
+
+**Content collaborations**
+6. Bylined expert article under their name (E-E-A-T byline + badge).
+7. Co-authored deep-dives — your database facts + their in-hand expertise/voice.
+8. "5 Questions With…" interview series — repeatable Q&A format you own.
+9. Recorded AMA / live Q&A, packaged into evergreen content.
+10. Creator-curated "collections" / grail lists mapped to catalog entities.
+11. Guest spots in a contributor newsletter (RealReal-style digest).
+
+**Audience & distribution**
+12. Cross-promotion — they share their feature; you surface them to your audience.
+13. Co-marketing on TikTok/IG (joint reveal or site walkthrough).
+14. Syndication — repost their content (with permission) across owned channels.
+
+**Commercial / performance (self-funding)**
+15. Creator-specific affiliate code on "where to buy."
+16. Consignor-referral partnership — they refer *sellers* (~$1,250/seller, top lever).
+17. Performance bonuses — pay on hit KPIs, not vanity metrics.
+18. Revenue share — ~5–10% of revenue their content generates, for ongoing ambassadors.
+
+**Deeper partnerships (later, when budget/revenue justifies)**
+19. Flat-fee sponsored content for agreed deliverables.
+20. Whitelisting — run ads from their handle with your budget (costs extra).
+21. Authentication Marketplace seats — earn per verified auth statement (when it ships).
+22. Marquee ambassador / equity — deep, long-term tie with a load-bearing creator (rare).
+
 ---
 
 ## 2. Novel ideas (tailored to a luxury reference catalog)
