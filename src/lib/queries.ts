@@ -580,6 +580,39 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
   }
 }
 
+export interface BrandResaleStats {
+  highestSale: number | null;
+  currency: string | null;
+  recordedSales: number;
+}
+
+/**
+ * Brand-level resale market stats from price_history (RESILIENT — returns zeros on
+ * any error, e.g. if the embedded filter isn't supported, so the brand page never
+ * breaks). Excludes retail/boutique/MSRP rows so "highest sale" is a real
+ * secondary-market figure, honestly "the highest we've recorded".
+ */
+export async function getBrandResaleStats(brandId: number): Promise<BrandResaleStats> {
+  try {
+    const { data, error } = await getSupabase()
+      .from("price_history")
+      .select("sale_price, currency, platform, variant:variant_id!inner(style:style_id!inner(brand_id))")
+      .eq("variant.style.brand_id", brandId)
+      .not("sale_price", "is", null);
+    if (error || !data) return { highestSale: null, currency: null, recordedSales: 0 };
+    const RETAIL = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+    const resale = (data as { sale_price: number | string | null; currency: string | null; platform: string | null }[]).filter(
+      (r) => r.sale_price != null && !(r.platform && RETAIL.test(r.platform)),
+    );
+    if (resale.length === 0) return { highestSale: null, currency: null, recordedSales: 0 };
+    let top = resale[0];
+    for (const r of resale) if (Number(r.sale_price) > Number(top.sale_price)) top = r;
+    return { highestSale: Number(top.sale_price), currency: top.currency, recordedSales: resale.length };
+  } catch {
+    return { highestSale: null, currency: null, recordedSales: 0 };
+  }
+}
+
 export interface BrandDetail {
   brandId: number;
   name: string;
@@ -598,6 +631,9 @@ export interface BrandDetail {
       sizeLabel: string | null;
       exteriorColorway: string | null;
       hardwareColor: string | null;
+      material: string | null;
+      retailPrice: number | null;
+      currency: string | null;
     }[];
   }[];
 }
@@ -606,7 +642,7 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
   const { data, error } = await getSupabase()
     .from("brand")
     .select(
-      "brand_id, name, tier, country_of_origin, founded_year, description, style(style_id, name, silhouette, year_introduced, discontinued, variant(variant_id, size_label, exterior_colorway, hardware_color))"
+      "brand_id, name, tier, country_of_origin, founded_year, description, style(style_id, name, silhouette, year_introduced, discontinued, variant(variant_id, size_label, exterior_colorway, hardware_color, retail_price_original, currency, exterior_material:exterior_material_id(name)))"
     )
     .eq("brand_id", brandId)
     .single();
@@ -616,7 +652,11 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
   const styles = ((data.style ?? []) as {
     style_id: number; name: string; silhouette: string | null;
     year_introduced: number | null; discontinued: boolean;
-    variant: { variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null }[] | null;
+    variant: {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null;
+      hardware_color: string | null; retail_price_original: number | null; currency: string | null;
+      exterior_material: { name: string } | { name: string }[] | null;
+    }[] | null;
   }[]).map((s) => ({
     styleId: s.style_id,
     name: s.name,
@@ -628,6 +668,11 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
       sizeLabel: v.size_label,
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
+      material:
+        (Array.isArray(v.exterior_material) ? v.exterior_material[0] : v.exterior_material)?.name ??
+        null,
+      retailPrice: v.retail_price_original != null ? Number(v.retail_price_original) : null,
+      currency: v.currency,
     })),
   }));
 
