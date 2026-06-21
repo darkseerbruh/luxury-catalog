@@ -396,6 +396,14 @@ export default async function BagDetailPage({
         )}
       </header>
 
+      {/* Amazon-style variant selector — placed at the very top, right under the
+          title. Each option links to its own indexable /bag/[id] page. */}
+      <VariantSelector
+        styleName={v.style.name}
+        variants={styleVariants}
+        currentVariantId={v.variantId}
+      />
+
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
       <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
         {leadAnswer}
@@ -475,14 +483,6 @@ export default async function BagDetailPage({
           </div>
         </dl>
       </section>
-
-      {/* Amazon-style variant selector — pick a colourway / size / hardware of
-          this style; each links to its own indexable /bag/[id] page. */}
-      <VariantSelector
-        styleName={v.style.name}
-        variants={styleVariants}
-        currentVariantId={v.variantId}
-      />
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
