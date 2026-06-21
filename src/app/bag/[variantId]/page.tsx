@@ -231,10 +231,16 @@ export default async function BagDetailPage({
     breadcrumbJsonLd(v),
   ].filter(Boolean);
 
-  // Fair Market Range — computed ONLY from recorded sales (no fabrication).
-  // KBB "Fair Market Range, not a single price" + StockX "Last Sale".
+  // Fair Market Range — computed ONLY from recorded RESALE sales (no fabrication).
+  // KBB "Fair Market Range, not a single price" + StockX "Last Sale". Exclude
+  // retail/boutique/MSRP rows so the range reflects the secondary market, not the
+  // first-sale price (WatchCharts deliberately separates Retail vs. Market price).
+  // Original retail is shown separately from `retailPriceOriginal`.
+  const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
   const recordedSales = v.priceHistory.filter(
-    (h): h is (typeof v.priceHistory)[number] & { salePrice: number } => h.salePrice != null,
+    (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
+      h.salePrice != null &&
+      !(h.platform != null && RETAIL_PLATFORM_RX.test(h.platform)),
   );
   const salePrices = recordedSales.map((h) => h.salePrice);
   const fairMarket =
@@ -381,7 +387,7 @@ export default async function BagDetailPage({
         {fairMarket ? (
           <>
             <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-              Fair Market Range · based on {fairMarket.count} recorded{" "}
+              Fair Market Range · based on {fairMarket.count} recorded resale{" "}
               {fairMarket.count === 1 ? "sale" : "sales"}
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
