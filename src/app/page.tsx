@@ -106,7 +106,7 @@ export default async function Home() {
             {heroCards.map((card) => (
               <Link
                 key={card.styleId}
-                href={`/search?q=${encodeURIComponent(card.styleName)}`}
+                href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
                 className="min-w-[220px] flex-shrink-0 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold"
               >
                 <p className="text-sm uppercase tracking-wide text-muted">

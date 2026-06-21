@@ -14,6 +14,7 @@ export interface HeroCard {
   styleId: number;
   styleName: string;
   brandName: string;
+  variantId: number | null;
   sizeLabel: string | null;
   priceFrom: number | null;
   currency: string | null;
@@ -96,7 +97,7 @@ export async function getHeroCarousel(): Promise<HeroCard[]> {
   const { data, error } = await getSupabase()
     .from("style")
     .select(
-      "style_id, name, brand:brand_id(name), variant(size_label, retail_price_original, currency)"
+      "style_id, name, brand:brand_id(name), variant(variant_id, size_label, retail_price_original, currency)"
     )
     .in(
       "name",
@@ -115,10 +116,12 @@ export async function getHeroCarousel(): Promise<HeroCard[]> {
       const cheapest = priced.sort(
         (a, b) => Number(a.retail_price_original) - Number(b.retail_price_original)
       )[0];
+      const primary = cheapest ?? variants[0];
       return {
         styleId: row.style_id,
         styleName: row.name,
         brandName: embeddedName(row.brand),
+        variantId: primary?.variant_id ?? null,
         sizeLabel: cheapest?.size_label ?? variants[0]?.size_label ?? null,
         priceFrom: cheapest ? Number(cheapest.retail_price_original) : null,
         currency: cheapest?.currency ?? null,
