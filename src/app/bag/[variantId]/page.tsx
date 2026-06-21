@@ -29,6 +29,7 @@ import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
 import SimilarBags from "./SimilarBags";
 import VariantSelector from "./VariantSelector";
+import { BagImage } from "@/components/BagImage";
 
 export const dynamic = "force-dynamic";
 
@@ -400,6 +401,14 @@ export default async function BagDetailPage({
           </p>
         )}
       </header>
+
+      {/* Hero visual — sourced photo when available, else a branded placeholder
+          so the page reads as complete (never an AI-faked or unlicensed photo). */}
+      <BagImage
+        brand={v.brand.name}
+        alt={`${v.brand.name} ${v.style.name}`}
+        className="aspect-[4/3] w-full rounded-2xl border border-border"
+      />
 
       {/* Amazon-style variant selector — placed at the very top, right under the
           title. Each option links to its own indexable /bag/[id] page. */}
