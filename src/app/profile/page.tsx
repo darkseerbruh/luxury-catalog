@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
 import { signOut } from "@/lib/auth-actions";
+import Recommendations from "@/components/Recommendations";
+import TasteMapSection from "@/components/TasteMapSection";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +37,18 @@ export default async function ProfilePage() {
           label="You are a"
           value={profile?.persona ? PERSONA_LABELS[profile.persona] ?? profile.persona : "Not set"}
         />
+        <Row label="Handle" value={profile?.handle ? `@${profile.handle}` : "Not set"} />
+        <Row label="Closet" value={profile?.closetPublic ? "Public" : "Private"} />
       </div>
+
+      {profile?.handle && (
+        <Link
+          href={`/u/${profile.handle}`}
+          className="rounded-2xl border border-gold/40 bg-gold/5 px-5 py-4 text-sm text-foreground transition-colors hover:border-gold"
+        >
+          View your public profile →
+        </Link>
+      )}
 
       <div className="flex flex-wrap gap-3">
         <Link
@@ -57,12 +70,48 @@ export default async function ProfilePage() {
           My reviews
         </Link>
         <Link
+          href="/profile/edit"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Edit public profile
+        </Link>
+        {profile?.isExpert && (
+          <Link
+            href="/profile/posts"
+            className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+          >
+            My articles
+          </Link>
+        )}
+        <Link
+          href="/settings"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Settings
+        </Link>
+        <Link
+          href="/quiz"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Taste quiz
+        </Link>
+        <Link
+          href="/closets"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Most coveted closets
+        </Link>
+        <Link
           href="/onboarding"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >
           Edit preferences
         </Link>
       </div>
+
+      <TasteMapSection />
+
+      <Recommendations source="profile" layout="grid" limit={6} />
 
       <form action={signOut}>
         <button

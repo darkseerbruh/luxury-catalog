@@ -161,17 +161,18 @@
       "screw_type": null,
       "screw_engraving": null,
       "date_code_format": "Blind stamp letter system. Four eras: (1) 1945-1970, single letter with no surrounding shape; (2) 1971-1996, letter inside a circle; (3) 1997-2014, letter inside a square; (4) 2015-present, letter only (no shape), not in strict alphabetical/chronological order, accompanied by a craftsman ID code in an 'L LL NNN LL'-style format where the first letter is the date stamp and the following alphanumeric string identifies the individual craftsman/workshop.",
-      "stamp_placement": "Pre-2016: typically found on the strap or front of the bag. Post-2016: relocated to the interior, left side panel.",
+      "stamp_placement": "Pre-2016: typically found on the strap (sangle) or front of the bag. Post-2016: relocated to the interior, left side panel near the back flap. (The 2016 exterior-to-interior relocation is now corroborated across multiple independent guides — see sources.)",
       "stamp_font_notes": null,
-      "known_authentication_markers": "Letter 'Y' corresponds to production year 2020 under the post-2015 lettering scheme. Full year-to-letter mapping is documented across multiple authentication/reseller guides but was not exhaustively re-derived here -- only the 2020/'Y' data point was independently corroborated in this pass. Stamp should be a crisp, evenly-pressed deboss directly into the leather, not a printed or shallow/uneven impression.",
+      "known_authentication_markers": "Four-era shape system, re-verified 2026-06 across multiple independent authentication guides: (1) 1945-1970 single letter with NO shape (A=1945 … Z=1970); (2) 1971-1996 letter inside a CIRCLE (alphabet restarted, A=1971 … Z=1996); (3) 1997-2014 letter inside a SQUARE (A=1997 … R=2014); (4) 2015-present letter with no shape again, accompanied by a craftsman/atelier code and not in strict alphabetical order. Confirmed data point: letter 'Y' = 2020. Stamp should be a crisp, evenly-pressed deboss directly into the leather, not a printed or shallow/uneven impression.",
       "sources": [
         "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
         "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
         "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity",
-        "https://laforma.club/hermes-date-stamps/"
+        "https://laforma.club/hermes-date-stamps/",
+        "https://romestation.ca/blogs/news/understanding-hermes-date-codes-and-serial-numbers"
       ],
-      "confidence_level": "medium",
-      "notes": "Multiple independent guide sites corroborate the four-era shape system (no-shape / circle / square / no-shape) and the general post-2015 letter+craftsman-code format, and 'Y' = 2020 appears consistent. Full letter-by-year chart, exact stamp placement transition year (cited as 2016 in one source only), and per-production-year dimension/season detail were not independently verified across enough sources to assign higher confidence, and are left null/medium rather than guessed."
+      "confidence_level": "high",
+      "notes": "Re-verified 2026-06 (WebSearch across LA FORMA, Xupes, LegitApp, Rome Station, The Luxury Closet, ReSee): the FOUR-ERA SHAPE SYSTEM (no-shape 1945-1970 / circle 1971-1996 / square 1997-2014 ending in 'R' / no-shape 2015-present) and the 2016 exterior-to-interior stamp relocation are consistently corroborated, so confidence raised medium -> high for these STRUCTURAL facts. The full per-year letter-to-year chart beyond the corroborated anchors (Y=2020; square A=1997/R=2014) was NOT exhaustively re-derived and is deliberately not asserted. Per-production-year dimension/season detail remains null."
     },
     {
       "variant_index": 1,
@@ -443,14 +444,15 @@
       "placement": "Pre-2016: on the strap or front of the bag. Post-2016: interior, left side panel.",
       "material": "embossed/debossed directly into leather",
       "year_range": "1945-present (system has evolved through 4 distinct eras)",
-      "how_to_read": "The date stamp letter encodes the production year; letter-to-year mapping is not strictly sequential post-2015. Confirmed data point: 'Y' = 2020. The accompanying alphanumeric code following the date letter identifies the individual craftsman/atelier who made the piece, not the year.",
-      "authentication_notes": "Stamp must be a clean, evenly-pressed deboss into the leather grain -- not a flat ink print, not shallow or smudged. Placement inconsistent with the bag's claimed production era (e.g., strap stamp on a bag claimed to be made after 2016) is a red flag.",
-      "verified": false,
-      "confidence_level": "medium",
+      "how_to_read": "The date stamp letter encodes the production year via the four-era shape system (no-shape 1945-1970 / circle 1971-1996 / square 1997-2014 / no-shape 2015-present); post-2015 letters are not strictly sequential. Confirmed anchors: square 'A'=1997 and 'R'=2014; no-shape 'Y'=2020. The accompanying alphanumeric code following the date letter identifies the individual craftsman/atelier who made the piece, not the year.",
+      "authentication_notes": "Stamp must be a clean, evenly-pressed deboss into the leather grain -- not a flat ink print, not shallow or smudged. Placement inconsistent with the bag's claimed production era (e.g., an exterior strap/sangle stamp on a Birkin or Kelly claimed to be made after the 2016 interior-relocation) is a red flag.",
+      "verified": true,
+      "confidence_level": "high",
       "sources": [
         "https://legitapp.com/blog/hermes-date-stamp-guide-identify-your-bags-year-with-legitapp-code-checker",
         "https://www.xupes.com/blog/post/the-ultimate-guide-to-hermes-date-stamps-history-types-and-authentication",
-        "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity"
+        "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-decoding-hermes-stamping-the-secret-language-of-authenticity",
+        "https://romestation.ca/blogs/news/understanding-hermes-date-codes-and-serial-numbers"
       ]
     }
   ],
@@ -530,7 +532,7 @@
   ],
   "research_gaps_flagged": [
     "Exact Birkin 35 dimensions (h/w/d cm) not corroborated.",
-    "Full blind-stamp letter-to-year chart not exhaustively re-verified; only 'Y'=2020 confirmed in this pass.",
+    "Blind-stamp FOUR-ERA SHAPE SYSTEM + 2016 stamp relocation re-verified 2026-06 (confidence raised to high). Confirmed letter anchors: square A=1997, R=2014; no-shape Y=2020. The full per-year letter-to-year chart beyond these anchors is still not exhaustively re-derived and remains unasserted.",
     "Interior lining material/color for Birkin not confirmed (unclear if leather-lined throughout or fabric-lined like Chanel).",
     "Device fit tests (iPhone, iPad Mini, Kindle Paperwhite) not verified against any source -- require hands-on or forum verification, not inferred from exterior dimensions.",
     "Exact construction_method default (sellier vs. retourne) for a 'standard' Birkin 30/35 -- both exist as separate market variants; this file treats retourne as the more common/default but does not assert one is the sole construction for these size/leather/hardware combos.",

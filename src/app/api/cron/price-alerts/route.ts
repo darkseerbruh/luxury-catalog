@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { captureServer } from "@/lib/analytics/server";
 import { sendEmail } from "@/lib/email";
+import { isOptedIn } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,9 @@ export async function GET(request: NextRequest) {
     const price = Number(best.sale_price);
     const currency = best.currency ?? row.currency;
 
+    // Respect the user's price-alert opt-out (default-on).
+    if (!(await isOptedIn(row.user_id, "price_alert"))) continue;
+
     const title = `Price drop: ${[brandName, styleName].filter(Boolean).join(" ")}`;
     const body = `Now ${money(price, currency)} — at or below your ${money(Number(row.target_price), row.currency)} target.`;
 
@@ -113,11 +117,12 @@ export async function GET(request: NextRequest) {
 
     await admin.from("watchlist").update({ last_notified_at: now }).eq("watch_id", row.watch_id);
 
-    // Optional email (no-op without RESEND_API_KEY).
+    // Optional email (no-op without RESEND_API_KEY). Honor the email opt-out.
     try {
+      const emailOptIn = await isOptedIn(row.user_id, "email");
       const { data: userRes } = await admin.auth.admin.getUserById(row.user_id);
       const email = userRes?.user?.email;
-      if (email) {
+      if (email && emailOptIn) {
         await sendEmail({
           to: email,
           subject: title,

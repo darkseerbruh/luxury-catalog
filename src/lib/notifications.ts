@@ -1,4 +1,5 @@
 import { createServerSupabase } from "./supabase/server";
+import { getSupabaseAdmin } from "./supabase/admin";
 import { getCurrentUser } from "./auth";
 
 export interface NotificationItem {
@@ -47,4 +48,125 @@ export async function getUnreadCount(): Promise<number> {
     .eq("read", false);
 
   return count ?? 0;
+}
+
+/**
+ * Notification opt-out keys. Absent/true = opted in (default-on); only an
+ * explicit `false` opts the user out. Mirrors `profile.notification_prefs` (0010).
+ */
+type PrefKey = "price_alert" | "closet_activity" | "photo_featured" | "email";
+
+/**
+ * Whether a user has opted in to a given notification channel. Defaults to TRUE
+ * (opted in) on any read failure or when the column/migration is absent, so
+ * notifications keep flowing rather than silently disappearing. Uses the
+ * service-role client because this is called from cross-user write paths.
+ */
+export async function isOptedIn(userId: string, key: PrefKey): Promise<boolean> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return true;
+  try {
+    const { data, error } = await getSupabaseAdmin()
+      .from("profile")
+      .select("notification_prefs")
+      .eq("id", userId)
+      .maybeSingle();
+    if (error || !data) return true;
+    const prefs = (data as { notification_prefs?: Record<string, unknown> | null })
+      .notification_prefs;
+    if (!prefs) return true;
+    return prefs[key] !== false;
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Insert a notification for ANOTHER user (you can't write to someone else's
+ * notification row under RLS, so this uses the service-role client). Used for
+ * re-engagement events: "new activity from a closet you follow" and "your photo
+ * was featured". Best-effort and silent: never blocks the triggering action,
+ * and no-ops when the service-role key isn't configured. Respects the
+ * recipient's notification preferences (default-on).
+ */
+async function insertNotificationFor(
+  userId: string,
+  type: "closet_activity" | "photo_featured",
+  title: string,
+  body: string | null,
+  variantId: number | null
+): Promise<void> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return;
+  if (!(await isOptedIn(userId, type))) return;
+  try {
+    await getSupabaseAdmin()
+      .from("notification")
+      .insert({ user_id: userId, type, title, body, variant_id: variantId });
+  } catch (err) {
+    // notification_type enum may not yet include the new values (0007 not
+    // applied) — degrade silently rather than failing the social action.
+    console.error("notify insert error:", err);
+  }
+}
+
+/** "New activity from a closet you follow" / "started following you". */
+export async function notifyClosetActivity(
+  userId: string,
+  title: string,
+  variantId: number | null
+): Promise<void> {
+  await insertNotificationFor(userId, "closet_activity", title, null, variantId);
+}
+
+/** "Your photo was featured". */
+export async function notifyPhotoFeatured(
+  userId: string,
+  title: string,
+  variantId: number | null
+): Promise<void> {
+  await insertNotificationFor(userId, "photo_featured", title, null, variantId);
+}
+
+/**
+ * Fan out a "new activity from a closet you follow" notification to everyone who
+ * favorites `actorUserId`. Best-effort; uses the service-role client (a user
+ * can't write to their followers' notification rows under RLS). No-ops without
+ * the service-role key. Capped to avoid runaway fan-out.
+ */
+export async function notifyFollowersOfActivity(
+  actorUserId: string,
+  actorLabel: string,
+  verb: string,
+  variantId: number | null
+): Promise<void> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return;
+  try {
+    const admin = getSupabaseAdmin();
+    const { data } = await admin
+      .from("closet_favorite")
+      .select("follower_user_id")
+      .eq("owner_user_id", actorUserId)
+      .limit(500);
+    const followers = (data ?? []).map((r) => r.follower_user_id as string);
+    if (followers.length === 0) return;
+
+    // Respect each follower's closet_activity opt-out (default-on).
+    const optedIn = (
+      await Promise.all(
+        followers.map(async (uid) => ((await isOptedIn(uid, "closet_activity")) ? uid : null))
+      )
+    ).filter((uid): uid is string => uid !== null);
+    if (optedIn.length === 0) return;
+
+    const title = `${actorLabel} ${verb}`;
+    const rows = optedIn.map((uid) => ({
+      user_id: uid,
+      type: "closet_activity" as const,
+      title,
+      body: null,
+      variant_id: variantId,
+    }));
+    await admin.from("notification").insert(rows);
+  } catch (err) {
+    console.error("notifyFollowersOfActivity error:", err);
+  }
 }

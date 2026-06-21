@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getBrandsOverview, getHeroCarousel } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
+import { getFeed } from "@/lib/feed";
+import { FeedItem } from "@/components/FeedItem";
+import Recommendations from "@/components/Recommendations";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +36,9 @@ export default async function Home() {
     getHeroCarousel(),
     getCurrentUser(),
   ]);
-  const closet = user ? await getCloset() : [];
+  const [closet, feed] = user
+    ? await Promise.all([getCloset(), getFeed(8)])
+    : [[], []];
 
   const liveBrands = brands.filter((b) => b.isLive);
   const comingSoonBrands = brands.filter((b) => !b.isLive);
@@ -101,6 +106,22 @@ export default async function Home() {
         </section>
       )}
 
+      {user && feed.length > 0 && (
+        <section className="border-b border-border px-5 py-12">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-serif text-2xl text-foreground">Activity</h2>
+            <Link href="/feed" className="text-sm text-muted transition-colors hover:text-gold">
+              View all
+            </Link>
+          </div>
+          <ul className="mt-6 flex flex-col gap-2.5">
+            {feed.map((e) => (
+              <FeedItem key={e.id} event={e} />
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="border-b border-border px-5 py-12">
         {!user ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
@@ -147,6 +168,12 @@ export default async function Home() {
           </>
         )}
       </section>
+
+      {user && (
+        <section className="border-b border-border px-5 py-12">
+          <Recommendations source="home" layout="scroll" limit={8} />
+        </section>
+      )}
 
       <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>

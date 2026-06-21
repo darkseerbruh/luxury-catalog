@@ -26,6 +26,12 @@ const SECTIONS = [
     description:
       "Bag-addition requests and logged thrift finds — direct demand signal and real-world acquisition data.",
   },
+  {
+    href: "/admin/corrections",
+    title: "Corrections",
+    description:
+      "User-submitted 'suggest an edit' corrections. Accept/reject triage; accepted edits are applied to the catalog manually.",
+  },
 ];
 
 export default function AdminIndexPage() {

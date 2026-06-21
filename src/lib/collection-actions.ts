@@ -3,6 +3,20 @@
 import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import { notifyFollowersOfActivity } from "./notifications";
+
+/** A short "@handle" / display-name label for the acting user, for notifications. */
+async function actorLabel(userId: string): Promise<string> {
+  const supabase = await createServerSupabase();
+  const { data } = await supabase
+    .from("profile")
+    .select("handle, display_name")
+    .eq("id", userId)
+    .maybeSingle();
+  const handle = data?.handle as string | undefined;
+  const name = data?.display_name as string | undefined;
+  return handle ? `@${handle}` : name ?? "A collector you follow";
+}
 
 export interface ActionResult {
   ok: boolean;
@@ -30,8 +44,17 @@ export async function saveToCloset(variantId: number, status: ClosetStatus = "wa
     .upsert({ user_id: user.id, variant_id: variantId, status }, { onConflict: "user_id,variant_id" });
 
   if (error) return { ok: false, error: "Could not save. Please try again." };
+
+  // Re-engagement: a public 'have' add is feed-worthy → notify followers.
+  // (Only 'have' is public per the 0006 privacy rule; want/had stay private.)
+  if (status === "have") {
+    const label = await actorLabel(user.id);
+    await notifyFollowersOfActivity(user.id, label, "added a bag to their closet", variantId);
+  }
+
   revalidatePath(`/bag/${variantId}`);
   revalidatePath("/closet");
+  revalidatePath("/feed");
   return { ok: true };
 }
 

@@ -366,11 +366,12 @@
       "placement": "Interior leather patch sewn into the bag, near the zip pocket",
       "material": "sticker, covered with clear security tape",
       "year_range": "Series 25 = 2018 (sticker system in general use 2005-2021/2022)",
-      "how_to_read": "First two digits indicate a series/year code. CAVEAT: the precise series-to-year mapping (24=2017, 25=2018, 26-27=2019, 28=2019-2020, 29=2020, 30=2020-2021, 31=2021) is RESELLER-RECONSTRUCTED and approximate -- it is widely repeated but not Chanel-published, and exact boundaries vary by source, so treat it as a guide, not an authoritative table. The HIGH-confidence, cross-corroborated system-level facts are: serial stickers introduced 1984 (earliest 6-digit, 1XXXXX); transitioned to 7-digit in 1986; 8-digit format used ~2005-2021 (10XXXXXX up to 31XXXXXX); 31XXXXXX is the last serial code used on handbags; SLG stickers continued to 32XXXXXX in 2021-2022.",
-      "authentication_notes": "Sticker has an X-shaped cut into it so it tears if peeled. Clear tape over the sticker is printed vertically with 'CHANEL' and has a dark line down one side plus faint iridescent flecks visible when tilted. Numeral '0' has a strikethrough; numeral '1' has small serifs/feet on authentic stickers. A flat, non-iridescent sticker or blurry/smudged printing is a red flag. Do NOT rely on the exact series-year mapping above to date a bag to a single year -- the digit-count era (6/7/8-digit) and the 1984/1986 milestones are the reliable, citable anchors.",
-      "verified": false,
-      "confidence_level": "medium",
-      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; italystation.com hologram guide; luxbags.fr serial-sticker era guide; romestation.ca; coutureusa.com"
+      "how_to_read": "First two digits indicate a series/year code. CAVEAT: the precise series-to-year mapping (24=2017, 25=2018, 26-27=2019, 28=2019-2020, 29=2020, 30=2020-2021, 31=2021) is RESELLER-RECONSTRUCTED and approximate -- it is widely repeated but not Chanel-published, and exact boundaries vary by source, so treat it as a guide, not an authoritative single-year table. The SYSTEM-LEVEL ERA FACTS below were re-verified 2026-06 across multiple independent guides (FASHIONPHILE, Xupes, Madison Avenue Couture, Rome Station) and are HIGH confidence: serial stickers introduced 1984 (earliest 6-digit, 1XXXXX); transitioned to 7-digit in 1986; 8-digit format used ~2005-2021 (10XXXXXX up to 31XXXXXX); 31XXXXXX is the last serial code used on handbags; SLG (small leather goods) stickers continued to 32XXXXXX in 2021-2022; the sticker+card system was replaced by an embedded NFC microchip from April 2021.",
+      "authentication_notes": "Sticker has an X-shaped cut into it so it tears if peeled. Clear tape over the sticker is printed vertically with 'CHANEL' and has a dark line down one side plus faint iridescent flecks visible when tilted. Numeral '0' has a strikethrough; numeral '1' has small serifs/feet on authentic stickers. A flat, non-iridescent sticker or blurry/smudged printing is a red flag. Do NOT rely on the exact series-year mapping above to date a bag to a single year -- the digit-count ERA (6/7/8-digit) and the 1984/1986/2005/2021 milestones are the reliable, citable anchors (re-verified 2026-06).",
+      "verified": true,
+      "confidence_level": "high",
+      "sources": "Xupes Chanel Date Codes Guide; FASHIONPHILE Chanel Serial Codes Decoded; Madison Avenue Couture 'Chanel Bags Switch from Serial Stickers to Microchips in 2021'; italystation.com hologram guide; luxbags.fr serial-sticker era guide; romestation.ca Chanel Serial Numbers Explained; coutureusa.com (system-level era facts re-verified 2026-06)",
+      "verification_note": "2026-06 re-verification (WebSearch across FASHIONPHILE, Xupes, Madison Avenue Couture, Rome Station, Ohmygoldness): the digit-count era system (6-digit from 1984 / 7-digit from 1986 / 8-digit 2005-2021 spanning 10XXXXXX-31XXXXXX, 31 last on handbags, 32 on SLGs through 2022) and the April-2021 microchip transition are consistently corroborated -> confidence raised medium->high for these STRUCTURAL facts. The fine-grained series-to-single-year table (e.g. 26-27=2019, 28=2019-2020) remains reseller-reconstructed and is intentionally NOT asserted as authoritative."
     },
     {
       "variant_index": null,
@@ -471,6 +472,8 @@
     "https://luxuryevermore.com/products/chanel-classic-flap-medium-caviar-25cm-quilted-beige-gold-hardware",
     "https://www.sellierknightsbridge.com/blogs/news/the-sellier-bible-to-authenticating-a-chanel-classic-flap-don-t-be-fooled-by-the-fakes",
     "https://legitcheck.app/guides/chanel/real-vs-fake-chanel-classic-flap/",
+    "https://romestation.ca/blogs/news/chanel-serial-numbers-explained-what-each-era-s-codes-tell-you",
+    "https://www.ohmygoldness.com/blogs/goldness-notes/the-complete-guide-to-chanel-stickers-from-hologram-serials-to-the-new-metal-plate-era",
     "/Users/ariellecoambes/Documents/luxury-catalog/docs/database-schema.md (existing vetted schema example, used as starting template, corrections noted inline)"
   ],
   "research_notes": {

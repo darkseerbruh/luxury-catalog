@@ -43,6 +43,20 @@ export const EVENTS = {
   thriftFindLogged: "thrift_find_logged",
   /** A fake-door / premium CTA was clicked — a direct willingness-to-pay signal. */
   monetizationInterest: "monetization_interest",
+  /** The find-your-taste quiz was started. */
+  quizStarted: "quiz_started",
+  /** The find-your-taste quiz was completed (include `completeness`). */
+  quizCompleted: "quiz_completed",
+  /** A "bags you might like" recommendation was clicked through. */
+  recommendationClicked: "recommendation_clicked",
+  /** A closet was favorited / followed. */
+  closetFavorited: "closet_favorited",
+  /** The Taste Map on the profile was viewed. */
+  tasteMapViewed: "taste_map_viewed",
+  /** An expert published an editorial post/article. */
+  postPublished: "post_published",
+  /** A structured catalog correction was submitted. */
+  correctionSubmitted: "correction_submitted",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

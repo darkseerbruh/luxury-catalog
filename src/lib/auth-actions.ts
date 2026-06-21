@@ -2,7 +2,30 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { createServerSupabase } from "./supabase/server";
+
+/**
+ * Best-effort request origin for building absolute redirect URLs (e.g. the
+ * email-confirmation landing page). Prefers the actual request host so it works
+ * across preview/prod deployments; falls back to NEXT_PUBLIC_SITE_URL.
+ */
+async function getOrigin(): Promise<string> {
+  try {
+    const h = await headers();
+    const host = h.get("x-forwarded-host") ?? h.get("host");
+    if (host) {
+      const proto = h.get("x-forwarded-proto") ?? "https";
+      return `${proto}://${host}`;
+    }
+  } catch {
+    // headers() unavailable — fall through to env.
+  }
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    "https://luxury-catalog-omega.vercel.app"
+  );
+}
 
 export interface AuthFormState {
   error?: string;
@@ -31,7 +54,14 @@ export async function signUp(
   if (invalid) return { error: invalid };
 
   const supabase = await createServerSupabase();
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const origin = await getOrigin();
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    // Land Supabase's DEFAULT (free-tier, unedited-template) confirmation email
+    // on our /auth/confirm route, which handles the ?code= PKCE exchange.
+    options: { emailRedirectTo: `${origin}/auth/confirm` },
+  });
   if (error) return { error: error.message };
 
   // When email confirmation is on, there's no active session yet.
