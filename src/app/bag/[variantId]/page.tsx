@@ -384,7 +384,12 @@ export default async function BagDetailPage({
         <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">
           {v.style.name}
         </h1>
-        <p className="mt-1 text-lg text-muted">{variantTitle}</p>
+        {/* The variant subtitle is redundant once the dimensional selector shows
+            the size/colour/hardware as chips — only show it for single-variant
+            styles (no selector). */}
+        {styleVariants.length < 2 && (
+          <p className="mt-1 text-lg text-muted">{variantTitle}</p>
+        )}
         <p className="mt-2 text-xs text-muted/70">
           By {AUTHOR_NAME}
           {updated ? ` · Catalogued ${updated}` : ""}

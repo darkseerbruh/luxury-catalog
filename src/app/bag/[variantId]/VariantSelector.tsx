@@ -105,7 +105,6 @@ export default function VariantSelector({
             <div key={dim.key}>
               <p className="mb-1.5 text-xs uppercase tracking-wide text-muted/70">
                 {dim.label}
-                {currentVal ? <span className="ml-2 text-foreground">{currentVal}</span> : null}
               </p>
               <div className="flex flex-wrap gap-2">
                 {values.map((value) => {
