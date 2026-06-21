@@ -57,7 +57,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 ## D. SEO / GEO (the #1 marketing channel)
 
 - [ ] 📣 **D1.** After the branch is deployed + DNS validates, **submit `/sitemap.xml`** to **Google Search Console** *and* **Bing Webmaster Tools** (Bing powers ChatGPT search). Verify domain ownership in each.
-- [ ] 📣 **D2. Curate video resources** — add `creator` + `resource` rows (vetted reviewers' best videos) to light up bag-page "Video reviews."
+- [x] 📣 **D2. Curate video resources** — BUILT: `supabase/seed/research/creators.json` (real channels + real video IDs verified from web search) + `supabase/seed/seed-creators.ts` (idempotent). **Operator action:** run `npx tsx supabase/seed/seed-creators.ts` (needs service-role key; 0004 applied + hero styles seeded first) to populate the bag-page "Video reviews."
 
 ---
 
@@ -71,7 +71,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 ## F. Data depth & integrity
 
 - [ ] 🔧 **F1. Brand depth** — drop the full Google Drive reseller CSV into `data/raw/` and re-run the seeder to fill the 9 stub brands.
-- [ ] ⚖️ **F2. Re-verify hero-research accuracy** — re-check **Hermès blind-stamp** + **Chanel serials** before presenting as fact (never-invent rule).
+- [x] ⚖️ **F2. Re-verify hero-research accuracy** — DONE (2026-06): re-verified the **Hermès blind-stamp four-era shape system** (no-shape 1945-1970 / circle 1971-1996 / square 1997-2014 / no-shape 2015-present + 2016 interior relocation) and **Chanel serial era system** (6-digit from 1984 / 7-digit from 1986 / 8-digit 2005-2021, 31 last on handbags / April-2021 microchip) across multiple independent guides. System-level facts raised medium→high with cited sources; fine-grained per-year letter/series tables left unasserted (never-invent). **Operator action:** re-run `seed-hero-styles.ts` to apply the corrected JSON.
 
 ---
 

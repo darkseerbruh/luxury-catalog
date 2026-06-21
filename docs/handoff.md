@@ -1,5 +1,5 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-20. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-06-21. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
 > **Branch:** the prior session's work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork." The **latest additive session** (GEO, embedded video, social/expert layer, closet-model simplification, reviews decoupling, LV/Gucci research) is on **`claude/port-geo-video-social-onto-main`** → **PR #2** into `main`. See "Latest session" immediately below.
 
@@ -84,6 +84,54 @@ public `/u/[handle]` → follow → feed → quiz → recs → notifications.
 
 ---
 
+## TL;DR — expert posts + corrections + settings session (this one)
+
+Branch `claude/lucid-archimedes-1cyi21` (continues the engagement track). All verified
+by `tsc --noEmit`, `eslint src`, `next build`, `npm test` (62 tests now); **none
+runtime-tested** (no DB creds). Two new migrations are **human-gated**.
+
+1. **Expert editorial posts** (Task 1) — uses the existing 0006 `post` table (NO
+   migration). Public `/posts` (list) + `/posts/[slug]` (Article JSON-LD with named
+   author byline + datePublished, `generateMetadata`/canonical/OG, related-catalog
+   "Sources" from topic_brand/topic_style). Authoring gated by `profile.is_expert`
+   server-side in every action AND hidden in UI: `/posts/new`, `/posts/[slug]/edit`,
+   `/profile/posts` dashboard. Draft→publish sets `published_at`; slug auto-generated
+   + de-duped (`posts-core.ts`, unit-tested). Files: `src/lib/posts.ts`,
+   `posts-core.ts`, `post-actions.ts`, `src/app/posts/*`, `src/app/profile/posts/*`.
+   "Articles" in header nav; author's posts on `/u/[handle]`; posts in sitemap;
+   `post_published` event.
+2. **Suggest-an-edit / corrections** (Task 2) — migration **`0009_corrections.sql`**
+   (`correction` table; RLS: authed INSERT/SELECT own, admin SELECT all + UPDATE
+   status, public can't read). "Suggest an edit" widget on `/bag/[variantId]`
+   (auth-gated); admin review queue `/admin/corrections` (accept/reject — accept does
+   NOT auto-write the catalog, applying is manual). Files: `correction-actions.ts`,
+   `corrections.ts`, `src/app/admin/corrections/*`, `SuggestEdit.tsx`;
+   `correction_submitted` event.
+3. **Settings & account** (Task 3) — `/settings`: email/password via the user's own
+   session; notification prefs (migration **`0010_notification_prefs.sql`** adds
+   `profile.notification_prefs jsonb`, default-on; wired into `insertNotificationFor`,
+   `notifyFollowersOfActivity`, and the price-alert cron via `isOptedIn()`); delete
+   account via service-role `admin.deleteUser` after email confirm (degrades clearly
+   without the key). Files: `settings-actions.ts`, `src/app/settings/*`; `getProfile`
+   extended with `notificationPrefs`.
+4. **Hero-research re-verification** (Task 4) — Hermès blind-stamp + Chanel serial
+   era systems re-verified; system-level facts raised medium→high with cited sources,
+   per-year tables left unasserted. JSON only; **re-run `seed-hero-styles.ts`**.
+5. **Video creator seed** (Task 5) — `supabase/seed/research/creators.json` +
+   `seed-creators.ts` (idempotent; real channels + real video IDs verified from web
+   search; 9 resources across the 5 hero styles). **Run `seed-creators.ts`** (needs
+   service-role key; 0004 + hero styles first).
+
+**Human-gated for this session:** apply **`0009_corrections.sql`** and
+**`0010_notification_prefs.sql`** (both degrade gracefully if absent). Set
+`SUPABASE_SERVICE_ROLE_KEY` for account deletion + cross-user notification opt-outs.
+Grant `profile.is_expert` (service role) to anyone who should author posts. Re-run
+`seed-hero-styles.ts` (corrected research) and `seed-creators.ts` (video resources).
+**Migration numbering note:** the future photo-contributions migration becomes
+**`0011`** (0009 = corrections, 0010 = notification_prefs).
+
+---
+
 ## ⚙️ Human-gated setup checklist (nothing DB-backed works until these are done)
 
 1. **Apply migrations** (Supabase SQL editor / CLI), in order:
@@ -94,13 +142,18 @@ public `/u/[handle]` → follow → feed → quiz → recs → notifications.
    - `0005_closet_status_want_have_had.sql` *(PR #2)* — closet_status enum → `want`/`have`/`had` (data-migrating; collapses researching/wishlist→want, owned→have)
    - `0006_social_expert_layer.sql` *(PR #2)* — extends `profile` (handle/social/trust flags), `closet_favorite`, `post`, `closet_stats` view
    - **`0007_taste_and_social_links.sql` *(engagement track — HUMAN-GATED, not yet applied)*** — adds `profile.social_links jsonb`, `profile.taste_vector jsonb`, `profile.taste_completeness int`; adds `closet_activity` + `photo_featured` values to the `notification_type` enum. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block in Postgres — if the migration tool wraps statements in a transaction, run the two `alter type` lines separately. Until this is applied, the new social/taste columns and the two new notification types don't exist; the app degrades gracefully (profile reads fall back, taste/recs return empty, follower notifications no-op).
-   - **`0008_admin_flag.sql` *(security must-fix — HUMAN-GATED, not yet applied)*** — adds `profile.is_admin boolean not null default false` and revokes column-level UPDATE on `is_admin` + the 0006 trust flags from `anon`/`authenticated` (so they can't be self-granted via the row-level update policy). **After applying, the operator MUST set their own flag once via the Supabase SQL editor or they'll be locked out of `/admin`:** `update profile set is_admin = true where id = '<your-auth-user-uuid>';` The app guard (`requireAdmin()`/`isAdmin()` in `auth.ts`, enforced by `src/app/admin/layout.tsx`) **fails closed** — if the column is missing (pre-migration) or unreadable, admin access is DENIED, not crashed. (The photo-contributions migration that was sketched as `0008` will need a new number, e.g. `0009`.)
+   - **`0008_admin_flag.sql` *(security must-fix — HUMAN-GATED, not yet applied)*** — adds `profile.is_admin boolean not null default false` and revokes column-level UPDATE on `is_admin` + the 0006 trust flags from `anon`/`authenticated` (so they can't be self-granted via the row-level update policy). **After applying, the operator MUST set their own flag once via the Supabase SQL editor or they'll be locked out of `/admin`:** `update profile set is_admin = true where id = '<your-auth-user-uuid>';` The app guard (`requireAdmin()`/`isAdmin()` in `auth.ts`, enforced by `src/app/admin/layout.tsx`) **fails closed** — if the column is missing (pre-migration) or unreadable, admin access is DENIED, not crashed. (The photo-contributions migration that was sketched as `0008` will need a new number — now **`0011`**, since 0009/0010 are taken below.)
+   - **`0009_corrections.sql` *(expert/corrections session — HUMAN-GATED, not yet applied)*** — adds the `correction` table for structured "suggest an edit" submissions. RLS: authenticated users INSERT + SELECT their own; admins (`profile.is_admin`) SELECT all + UPDATE status; public/anon cannot read. Depends on 0008 (`is_admin`). The app degrades gracefully if absent (submit fails with a clear message; admin queue shows empty).
+   - **`0010_notification_prefs.sql` *(settings session — HUMAN-GATED, not yet applied)*** — adds `profile.notification_prefs jsonb default '{}'` (per-channel opt-outs; absent key = opted-in). Wired into the notification creators + price-alert cron via `isOptedIn()` (fails OPEN — notifications keep flowing if the column is missing). No new RLS policy needed (covered by the 0002 own-row update policy; privileged columns stay revoked by 0008).
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
    npx tsx supabase/seed/seed-breadth.ts
+   npx tsx supabase/seed/seed-creators.ts   # video reviews → bag-page "Video reviews" (needs 0004 + hero styles first)
    ```
-   Both idempotent. The live DB still has the *old* seed data until these run.
+   All idempotent. The live DB still has the *old* seed data until these run.
+   **Re-run `seed-hero-styles.ts`** after this session to apply the corrected
+   Hermès blind-stamp / Chanel serial research (Task 4).
 3. **Supabase email-confirm** — `/auth/confirm` now handles BOTH flows, so the **free tier works with the DEFAULT (unedited) template**: `signUp` passes `emailRedirectTo=${origin}/auth/confirm` and the route exchanges the `?code=` (PKCE) for a session. No template edit required to re-enable "Confirm email". *(Optional, custom template:* point it at `/auth/confirm?token_hash={{ .TokenHash }}&type={{ .Type }}` — that path still works too.)* Or disable confirmation while testing.
 4. **PostHog**: set `NEXT_PUBLIC_POSTHOG_KEY` (+ optional `POSTHOG_KEY`); enable "Cookieless server hash mode"; optionally run `node scripts/setup-posthog.mjs`. **Add `.mcp.json` manually** (I don't auto-create startup config — snippet in `.env.example`/below).
 5. **Price alerts**: set `CRON_SECRET` (Vercel injects it as the cron Authorization header); optional `RESEND_API_KEY` + verified sender for email. `vercel.json` already schedules the job daily.
@@ -189,10 +242,11 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 - **Social UI (PR #2 schema is ready)** — `/u/[handle]` public closet (Poshmark-style), "most coveted closets" leaderboard (`closet_stats`), expert blog gated behind `is_expert`, and a "Verified owner" badge on reviews (derive from `closet_item` have/had). Trust flags are admin-granted.
 - **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder + `is_authenticator` profiles feed it.
 - **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free.
-- **Settings & account management** (edit email/password, notification prefs, delete account).
+- ~~**Settings & account management** (edit email/password, notification prefs, delete account).~~ **DONE** (expert/corrections/settings session) — `/settings`. Human-gated: apply `0010` (notification_prefs); delete-account needs the service-role key.
+- ~~**Expert blog gated behind `is_expert`**~~ **DONE** (same session) — `/posts` + `/posts/[slug]` (Article JSON-LD, named byline, related-catalog) + authoring under `/posts/new`, `/posts/[slug]/edit`, `/profile/posts`. Uses the existing 0006 `post` table (no migration).
 - ~~**Admin auth gate** — `/admin/*` is still unauthenticated.~~ **DONE** (launch-hardening session): gated behind `profile.is_admin` via `requireAdmin()` + `src/app/admin/layout.tsx`, fail-closed. Human-gated: apply migration `0008` + self-set `is_admin` (see checklist item 1).
 - **Brand depth** — 9 stub brands (drop full Drive CSV into `data/raw/`, re-run seeder) + browser-based hero-style research passes.
-- **Hero-research accuracy** — re-verify Session-2 snippet-sourced data (capped at `medium`; WebFetch was blocked) before presenting as fact; Hermès blind-stamp + Chanel serials especially.
+- ~~**Hero-research accuracy** — re-verify Hermès blind-stamp + Chanel serials.~~ **DONE** (expert/corrections/settings session) — system-level facts re-verified across multiple independent guides and raised medium→high with cited sources; per-year letter/series tables left unasserted (never-invent). **Re-run `seed-hero-styles.ts` to apply.**
 - **RLS verification** — confirm a second user can't read another's closet/watchlist/notifications after 0002/0003 apply.
 - **Analytics identity** — wire `identifyUser()`/`resetAnalytics()` on login/logout (Tier-2, consent-gated).
 
