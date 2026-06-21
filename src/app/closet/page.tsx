@@ -19,9 +19,47 @@ function formatPrice(amount: number | null, currency: string | null) {
   return `${symbol}${amount.toLocaleString()}`;
 }
 
+// TODO(migration): add closet_item.purchase_price for cost-basis + gain/loss.
+// Without an acquisition price column we can only show estimated value from the
+// catalogued retail_price_original — never realized/unrealized gain or loss.
+
+/**
+ * WatchCharts-style portfolio rollup computed purely from getCloset() data:
+ * sum of retail_price for 'have' items, aspirational sum for 'want' items, and
+ * counts per status. Values use the dominant currency among priced items so the
+ * symbol is honest; items with no catalogued price are excluded from the totals
+ * (but still counted) rather than treated as zero.
+ */
+function buildPortfolio(closet: { status: string; retailPrice: number | null; currency: string | null }[]) {
+  function summarize(status: string) {
+    const items = closet.filter((c) => c.status === status);
+    const priced = items.filter((c) => c.retailPrice != null);
+    const total = priced.reduce((sum, c) => sum + (c.retailPrice ?? 0), 0);
+    // Dominant currency among priced items, for an honest symbol.
+    const currencyCounts = new Map<string, number>();
+    for (const c of priced) {
+      const cur = c.currency ?? "USD";
+      currencyCounts.set(cur, (currencyCounts.get(cur) ?? 0) + 1);
+    }
+    let currency: string | null = null;
+    let best = -1;
+    for (const [cur, n] of currencyCounts) {
+      if (n > best) { best = n; currency = cur; }
+    }
+    return { count: items.length, pricedCount: priced.length, total, currency };
+  }
+  return {
+    have: summarize("have"),
+    want: summarize("want"),
+    had: summarize("had"),
+  };
+}
+
 export default async function ClosetPage() {
   if (!(await getCurrentUser())) redirect("/login");
   const closet = await getCloset();
+
+  const portfolio = buildPortfolio(closet);
 
   const groups: { key: string; label: string }[] = [
     { key: "have", label: "Have" },
@@ -38,6 +76,54 @@ export default async function ClosetPage() {
           Bags you want, have, or have owned — all in one place.
         </p>
       </header>
+
+      {closet.length > 0 && (
+        <section
+          className="rounded-2xl border border-border bg-surface p-5"
+          aria-label="Collection portfolio summary"
+        >
+          <p className="text-sm uppercase tracking-widest text-muted">
+            Your collection
+          </p>
+          <p className="mt-1 font-serif text-2xl text-foreground">
+            {formatPrice(portfolio.have.total, portfolio.have.currency) ?? "—"}{" "}
+            <span className="text-muted">
+              across {portfolio.have.count} {portfolio.have.count === 1 ? "bag" : "bags"} you have
+            </span>
+          </p>
+          {portfolio.have.pricedCount < portfolio.have.count && (
+            <p className="mt-1 text-xs text-muted/70">
+              Estimated from catalogued retail prices · {portfolio.have.count - portfolio.have.pricedCount} item
+              {portfolio.have.count - portfolio.have.pricedCount === 1 ? "" : "s"} without a price not counted
+            </p>
+          )}
+
+          <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+            <Stat
+              label="Have"
+              count={portfolio.have.count}
+              sub={formatPrice(portfolio.have.total, portfolio.have.currency)}
+            />
+            <Stat
+              label="Want"
+              count={portfolio.want.count}
+              sub={
+                portfolio.want.total > 0
+                  ? `${formatPrice(portfolio.want.total, portfolio.want.currency)} wishlist`
+                  : null
+              }
+            />
+            <Stat label="Had" count={portfolio.had.count} sub={null} />
+          </div>
+
+          <Link
+            href="/recap"
+            className="mt-4 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
+          >
+            See your Year in Bags →
+          </Link>
+        </section>
+      )}
 
       {closet.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
@@ -96,5 +182,23 @@ export default async function ClosetPage() {
         })
       )}
     </main>
+  );
+}
+
+function Stat({
+  label,
+  count,
+  sub,
+}: {
+  label: string;
+  count: number;
+  sub: string | null;
+}) {
+  return (
+    <div className="rounded-xl border border-border bg-surface-raised/40 px-3 py-3">
+      <p className="font-serif text-xl text-foreground">{count}</p>
+      <p className="text-xs uppercase tracking-wide text-muted">{label}</p>
+      {sub && <p className="mt-1 text-xs text-gold">{sub}</p>}
+    </div>
   );
 }

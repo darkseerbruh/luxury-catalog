@@ -96,10 +96,16 @@ export default async function ProfilePage() {
           Taste quiz
         </Link>
         <Link
+          href="/recap"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Year in Bags
+        </Link>
+        <Link
           href="/closets"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >
-          Most coveted closets
+          Leaderboards
         </Link>
         <Link
           href="/onboarding"
