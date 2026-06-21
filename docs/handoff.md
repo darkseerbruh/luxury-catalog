@@ -1,6 +1,32 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-21. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
+---
+
+## ⭐ LATEST SESSION — UX evaluation + full overhaul (PR #3) — READ FIRST
+
+**Branch:** `claude/luxury-catalog-ux-eval-uxrubk` → **PR #3** into `main` (open, ~33 commits, clean fast-forward, no conflicts). **Unlike prior sessions, the key flows were runtime smoke-tested against the live DB this session.**
+
+**Migrations: the live DB is now CURRENT through 0014** (operator applied 0008–0014 this session; 0011/0012/0013/0014 confirmed). New this session: `0011_four_grails`, `0012_bag_axis_votes`, `0013_variant_image` (variant.image_url + image_source), `0014_closet_purchase_price` (closet_item.purchase_price/currency/date). All new queries are **resilient** (`getVariantImages`, `getPurchaseInfo`, `getBrandResaleStats` return empty on a missing column) so nothing breaks pre-migration.
+
+**Shipped (grounded in `docs/ux/ux-evaluation.md` + `ux-research-brief.md`; teardowns of Goodreads/StoryGraph/Letterboxd/IMDb/Discogs/Fragrantica/WatchCharts/StockX/Fashionphile-TRR-Vestiaire/KBB):**
+- **Docs:** `docs/ux/ux-evaluation.md`, `ux-research-brief.md`, `sitemap-and-user-flows.md`, `ux-remaining-backlog-plan.md`.
+- **Discoverability/IA:** persona router + Explore strip on home; Quiz/Watchlist in nav; "It bags" + brand items link into the bag page (not search).
+- **Bag page:** Fair-Market-Range + Last-Sold, sticky action bar, **Where-to-sell** fork, jump-nav/accordions, price chart range toggles + %Δ, **resale-vs-retail split**, "How to authenticate" checklist, attribute cross-links, **dimensional Size/Colour/Hardware variant selector** (prefetch swap; instant in prod — `npm run dev` recompiles so it only *feels* like a reload in dev).
+- **Search:** colour/hardware/size facets + chips + mobile tray; fixed keyword→material matching and a name-fallback so catalogued bags never dead-end.
+- **Identify** monetization; **explainable recs** + cold-start fallback; **Four Grails**; **multi-axis owner voting**; **quiz pre-signup growth loop** (results free, save-on-signup via `TasteFlusher`); **Google/Facebook OAuth + usernames**; collection value; **Collection report** (`/closet/report` — insurance/estate + cost-basis/gain-loss); **Year-in-Bags recap**.
+- **Visuals:** `BagImage` (branded placeholder everywhere + resilient real-photo pipeline; falls back to placeholder on load error). Populate `variant.image_url` from a **licensed** source to show real photos.
+- **Brand hub:** `/brand/[id]` revamped — heritage, at-a-glance (retail ladder, highest recorded resale), "{brand} signatures" (top colours/materials/hardware/silhouettes), culture/buying-experience editorial slot, brand-level buy/sell links.
+
+**NEXT SESSION — pick up here (confirmed wants, not yet built):**
+1. **Real-photo sourcing** (user excited): build import tooling — a script to bulk-populate `variant.image_url` from a CSV / reseller affiliate feed with image rights. `BagImage` already consumes it. *Licensing is the operator's call — no AI/unlicensed per brief.*
+2. **Auth-marketplace on-ramp (Rev 3):** a "request authentication" flow from the bag page's auth module → verified authenticator → quote. Engagement-strategy deliberately deferred inquiry threads until the marketplace exists, so scope it fresh (own schema).
+3. **OAuth provider config (operator, human-gated):** enable Google/Facebook in Supabase Auth (client id/secret + `/auth/v1/callback`) or the buttons error.
+
+**Deferred / data-gated (honest):** brand price **index/ticker**, **most-coveted-by-demand** (needs a `want`-demand query; private per RLS), **trending** (PostHog proxy), **upcoming releases** (news feed); Tier 4 **Durability/Ages-Well** + **Resale-Retention index** (need resale condition/age data — see `ux-remaining-backlog-plan.md`); loose thread: **brand-name-search faceting** (a design call — compact overview vs. faceted style list).
+
+---
+
 > **Branch:** the prior session's work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork." The **latest additive session** (GEO, embedded video, social/expert layer, closet-model simplification, reviews decoupling, LV/Gucci research) is on **`claude/port-geo-video-social-onto-main`** → **PR #2** into `main`. See "Latest session" immediately below.
 
 ---
