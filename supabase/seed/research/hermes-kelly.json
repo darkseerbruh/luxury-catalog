@@ -117,12 +117,12 @@
       "hardware_vendor_notes": null,
       "screw_type": null,
       "screw_engraving": null,
-      "date_code_format": "Hermès blind stamp system, same letter-in-shape format used across Birkin and Kelly. No shape used 1945–1970 (letter alone). Circle-enclosed letter used 1971–1996. Square-enclosed letter used 1997 through the early-to-mid 2010s. A new blind stamp system began transitioning in late 2014, fully implemented by 2015; PurseBop and similar collector resources track the current letter assignment year by year but the exact post-2015 format (and the current 2025/2026 letter) was not independently re-verified in this pass.",
-      "stamp_placement": "Blind stamp (craftsman ID + date stamp) located inside the bag. Placement changed by era: pre-~2016 it was commonly heat/blind-stamped under or inside the left closure strap; from ~2016 onward it moved to the interior left side, upper area, close to the back flap. Sources are not perfectly consistent year-by-year, so treat as era-approximate. (The four-era shape system: no shape 1945-1970, circle 1971-1996, square 1997-2014, no shape again 2015-present.)",
+      "date_code_format": "Hermès blind stamp system, same letter-in-shape format used across Birkin and Kelly. Four-era shape system, re-verified 2026-06: NO shape 1945-1970 (A=1945 … Z=1970); CIRCLE-enclosed letter 1971-1996 (alphabet restarted, A=1971 … Z=1996); SQUARE-enclosed letter 1997-2014 (A=1997 … R=2014); NO shape again 2015-present, paired with a craftsman code and not in strict alphabetical order. The full per-year letter chart beyond the corroborated anchors (square A=1997/R=2014; no-shape Y=2020) was not exhaustively re-derived and is not asserted.",
+      "stamp_placement": "Blind stamp (craftsman ID + date stamp) located inside the bag. Placement changed by era: pre-2016 commonly heat/blind-stamped under or inside the left closure strap (sangle); from 2016 onward relocated to the interior left side near the back flap. The 2016 exterior-to-interior relocation for Birkin/Kelly is corroborated across multiple independent guides. (Four-era shape system: no shape 1945-1970, circle 1971-1996, square 1997-2014, no shape again 2015-present.)",
       "stamp_font_notes": null,
       "known_authentication_markers": "Sellier-specific markers beyond the general Hermès blind stamp system: crisp, perfectly even exterior saddle stitching with no skipped or uneven stitches; structured shape that holds itself upright without slumping; sharp, defined corners (vs. the rounded corners of retourne). Blind stamp should be small (a few millimeters), crisply embossed directly into the leather with no ink, and consistent in depth — a poorly stamped, oddly placed, or ink-filled stamp is a red flag for counterfeits.",
-      "sources": "myGemma Hermès Blind Stamps Explained; PurseBop Hermès date stamp guide; Xupes Hermès Date Stamps Guide; The Birkin's and Kelly's House blind stamp guide",
-      "confidence_level": "medium"
+      "sources": "myGemma Hermès Blind Stamps Explained; PurseBop Hermès date stamp guide; Xupes Hermès Date Stamps Guide; The Birkin's and Kelly's House blind stamp guide; Rome Station Understanding Hermès Date Codes (re-verified 2026-06)",
+      "confidence_level": "high"
     },
     {
       "variant_index": 1,
@@ -354,14 +354,14 @@
     {
       "variant_ref": "Kelly 28 Sellier Epsom",
       "tag_type": "creed stamp",
-      "format": "Blind stamp combining a craftsman ID (workshop/artisan identifier) and a date stamp encoded as a letter, historically enclosed in a shape that changed by era: no shape 1945–1970, circle 1971–1996, square 1997 to roughly 2014, with a new system transitioning in 2014–2015. The exact current (2025/2026) letter-year mapping was not independently re-verified in this pass.",
-      "placement": "Interior of the bag, near the turn-lock hardware mount or left interior wall near the back of the flap depending on era; exact placement is reported somewhat inconsistently across collector sources.",
+      "format": "Blind stamp combining a craftsman ID (workshop/artisan identifier) and a date stamp encoded as a letter, enclosed in a shape that changed by era (re-verified 2026-06): NO shape 1945-1970, CIRCLE 1971-1996, SQUARE 1997-2014 (A=1997 … R=2014), NO shape again 2015-present. Confirmed anchors: square A=1997/R=2014; no-shape Y=2020. The full per-year letter chart beyond these anchors is not asserted.",
+      "placement": "Interior of the bag. Pre-2016: under/inside the left closure strap (sangle). 2016-present: relocated to the interior left side near the back flap (the 2016 relocation is corroborated across multiple independent guides).",
       "material": "embossed directly into the leather, no ink",
       "year_range": "system in continuous use since 1945 with periodic shape changes; same general format used for Kelly and Birkin",
-      "how_to_read": "The letter indicates production year per Hermès's published (collector-reconstructed) date stamp tables; the surrounding shape (or lack of one) narrows the era. A separate craftsman number/code identifies the individual workshop or artisan.",
-      "authentication_notes": "Stamp should be small (a few millimeters), crisply and evenly embossed with consistent depth and no ink fill. Misplaced, oversized, ink-filled, or inconsistent stamps are a strong counterfeit indicator.",
-      "verified": false,
-      "confidence_level": "medium"
+      "how_to_read": "The letter indicates production year; the surrounding shape (or lack of one) narrows the era (no-shape 1945-1970 / circle 1971-1996 / square 1997-2014 / no-shape 2015-present). A separate craftsman number/code identifies the individual workshop or artisan, not the year.",
+      "authentication_notes": "Stamp should be small (a few millimeters), crisply and evenly embossed with consistent depth and no ink fill. Misplaced, oversized, ink-filled, or inconsistent stamps are a strong counterfeit indicator. An exterior-strap stamp on a Kelly claimed to be made after the 2016 interior relocation is a red flag.",
+      "verified": true,
+      "confidence_level": "high"
     }
   ],
   "locks_and_keys": [
@@ -449,9 +449,11 @@
     "https://www.pursebop.com/the-hermes-kelly-price-guide-2026/",
     "https://madisonavenuecouture.com/collections/kelly-28cm",
     "https://saclab.com/hermes-sizes/",
-    "https://madisonavenuecouture.com/blogs/news/hermes-hardware-guide-everything-you-need-to-know"
+    "https://madisonavenuecouture.com/blogs/news/hermes-hardware-guide-everything-you-need-to-know",
+    "https://romestation.ca/blogs/news/understanding-hermes-date-codes-and-serial-numbers"
   ],
   "research_gaps_flagged": [
+    "Blind-stamp FOUR-ERA SHAPE SYSTEM + 2016 stamp relocation re-verified 2026-06 (confidence raised to high); confirmed letter anchors square A=1997/R=2014 and no-shape Y=2020. Full per-year letter chart beyond anchors still not asserted.",
     "Exact current (2025/2026) blind stamp letter and shape — collector tables exist but were not individually re-verified character-by-character in this pass.",
     "Interior storage configuration (pocket count, placement, material) for Kelly 28 Sellier — not corroborated strongly enough across sources to record specifics.",
     "Device fit verification (iPhone, iPad Mini, Kindle Paperwhite) for Kelly 28 — commonly assumed by collectors but no verified source found in this pass; needs hands-on or contributor verification per schema's 'verified' field design.",
