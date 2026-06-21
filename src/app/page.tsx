@@ -5,6 +5,7 @@ import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import Recommendations from "@/components/Recommendations";
+import PersonaRouter from "@/components/PersonaRouter";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,8 @@ export default async function Home() {
           </button>
         </form>
       </section>
+
+      <PersonaRouter />
 
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
@@ -174,6 +177,30 @@ export default async function Home() {
           <Recommendations source="home" layout="scroll" limit={8} />
         </section>
       )}
+
+      <section className="border-b border-border px-5 py-12">
+        <h2 className="font-serif text-2xl text-foreground">Explore</h2>
+        <div className="mt-6 flex flex-wrap gap-3">
+          {[
+            { href: "/quiz", label: "Find your taste" },
+            { href: "/identify", label: "Identify a bag" },
+            { href: "/closets", label: "Most coveted closets" },
+            { href: "/posts", label: "Expert articles" },
+            ...(user
+              ? [{ href: "/watchlist", label: "Your watchlist" }]
+              : []),
+            { href: "/found", label: "Log a thrift find" },
+          ].map((l) => (
+            <Link
+              key={l.href + l.label}
+              href={l.href}
+              className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>

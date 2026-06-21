@@ -40,10 +40,10 @@ export default async function RootLayout({
         <Providers>
         <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-            <Link href="/" className="font-serif text-xl tracking-wide text-foreground">
+            <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-2 overflow-x-auto [&>a]:shrink-0">
               <Link
                 href="/identify"
                 className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
@@ -55,6 +55,12 @@ export default async function RootLayout({
                 className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
               >
                 Search
+              </Link>
+              <Link
+                href="/quiz"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Quiz
               </Link>
               <Link
                 href="/posts"
@@ -75,6 +81,12 @@ export default async function RootLayout({
                     className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                   >
                     Closet
+                  </Link>
+                  <Link
+                    href="/watchlist"
+                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Watchlist
                   </Link>
                   <Link
                     href="/notifications"
@@ -102,7 +114,7 @@ export default async function RootLayout({
                   Log in
                 </Link>
               )}
-            </div>
+            </nav>
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
