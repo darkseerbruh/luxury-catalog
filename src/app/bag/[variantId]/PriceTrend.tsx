@@ -24,9 +24,12 @@ const RANGE_YEARS: Record<RangeKey, number | null> = { "1Y": 1, "3Y": 3, ALL: nu
 export default function PriceTrend({
   history,
   retailPrice = null,
+  noun = "sale",
 }: {
   history: PricePoint[];
   retailPrice?: number | null;
+  /** What each data point is, for honest copy ("sale" for resale, "retail price" for MSRP). */
+  noun?: string;
 }) {
   const all = useMemo(
     () =>
@@ -108,7 +111,7 @@ export default function PriceTrend({
           </p>
           <p className="mt-0.5 text-sm text-muted">
             {formatPrice(first, currency)} → {formatPrice(last, currency)} across{" "}
-            {points.length} recorded {points.length === 1 ? "sale" : "sales"}
+            {points.length} recorded {points.length === 1 ? noun : `${noun}s`}
           </p>
         </div>
         <p className="text-xs uppercase tracking-wide text-muted/70">

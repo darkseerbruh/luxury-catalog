@@ -689,7 +689,7 @@ export default async function BagDetailPage({
                 </>
               )}
             </p>
-            <PriceTrend history={retailHistory} />
+            <PriceTrend history={retailHistory} noun="retail price" />
             <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
               {retailHistory
                 .slice()
