@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getRecommendations, getPopularBags } from "@/lib/recommendations";
 import { getUserTaste } from "@/lib/taste-data";
+import { getVariantImages } from "@/lib/queries";
 import { RecommendationCard } from "./RecommendationCard";
 
 /**
@@ -25,6 +26,7 @@ export default async function Recommendations({
   if (hasTaste && recommendations.length === 0) {
     const taste = await getUserTaste();
     const popular = await getPopularBags(taste.seenVariantIds, limit);
+    const popularImages = await getVariantImages(popular.map((r) => r.variantId));
     if (popular.length > 0) {
       return (
         <section className="px-0">
@@ -40,7 +42,12 @@ export default async function Recommendations({
             }
           >
             {popular.map((rec) => (
-              <RecommendationCard key={rec.variantId} rec={rec} source={source} />
+              <RecommendationCard
+                key={rec.variantId}
+                rec={rec}
+                source={source}
+                imageUrl={popularImages[rec.variantId]}
+              />
             ))}
           </div>
         </section>
@@ -87,6 +94,8 @@ export default async function Recommendations({
 
   if (recommendations.length === 0) return null;
 
+  const images = await getVariantImages(recommendations.map((r) => r.variantId));
+
   return (
     <section className="px-0">
       <h2 className="font-serif text-2xl text-foreground">Bags you might like</h2>
@@ -98,7 +107,12 @@ export default async function Recommendations({
         }
       >
         {recommendations.map((rec) => (
-          <RecommendationCard key={rec.variantId} rec={rec} source={source} />
+          <RecommendationCard
+            key={rec.variantId}
+            rec={rec}
+            source={source}
+            imageUrl={images[rec.variantId]}
+          />
         ))}
       </div>
     </section>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBrandsOverview, getHeroCarousel } from "@/lib/queries";
+import { getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
@@ -44,6 +44,12 @@ export default async function Home() {
 
   const liveBrands = brands.filter((b) => b.isLive);
   const comingSoonBrands = brands.filter((b) => !b.isLive);
+
+  // Real photos for the hero + closet cards when available; placeholders otherwise.
+  const images = await getVariantImages([
+    ...heroCards.map((c) => c.variantId),
+    ...closet.map((c) => c.variantId),
+  ].filter((n): n is number => n != null));
 
   return (
     <main className="flex flex-1 flex-col">
@@ -111,6 +117,7 @@ export default async function Home() {
                 className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
               >
                 <BagImage
+                  imageUrl={card.variantId != null ? images[card.variantId] : null}
                   brand={card.brandName}
                   className="mb-3 aspect-[4/3] w-full rounded-xl"
                 />
@@ -187,7 +194,7 @@ export default async function Home() {
                   href={`/bag/${c.variantId}`}
                   className="min-w-[200px] max-w-[220px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
                 >
-                  <BagImage brand={c.brandName} className="mb-3 aspect-square w-full rounded-xl" />
+                  <BagImage imageUrl={images[c.variantId]} brand={c.brandName} className="mb-3 aspect-square w-full rounded-xl" />
                   <p className="text-sm uppercase tracking-wide text-muted">{c.brandName}</p>
                   <p className="mt-1 font-serif text-lg text-foreground">{c.styleName}</p>
                   <p className="mt-2 text-sm text-muted">{c.label}</p>

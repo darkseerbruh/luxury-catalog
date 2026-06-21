@@ -2,7 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail, getResourcesForStyle, getStyleVariants } from "@/lib/queries";
+import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import {
   AUTHOR_NAME,
@@ -202,9 +202,10 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants] = await Promise.all([
+  const [resources, styleVariants, images] = await Promise.all([
     getResourcesForStyle(v.style.styleId, v.variantId),
     getStyleVariants(v.style.styleId),
+    getVariantImages([v.variantId]),
   ]);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
@@ -405,6 +406,7 @@ export default async function BagDetailPage({
       {/* Hero visual — sourced photo when available, else a branded placeholder
           so the page reads as complete (never an AI-faked or unlicensed photo). */}
       <BagImage
+        imageUrl={images[v.variantId]}
         brand={v.brand.name}
         alt={`${v.brand.name} ${v.style.name}`}
         className="aspect-[4/3] w-full rounded-2xl border border-border"

@@ -555,6 +555,31 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
   }));
 }
 
+/**
+ * Primary image URLs for a set of variants, keyed by variant id. RESILIENT: if the
+ * `image_url` column doesn't exist yet (migration 0013 not applied) or the query
+ * fails, it returns {} so callers fall back to the BagImage placeholder — it never
+ * breaks a page. Real photos appear once 0013 is applied and URLs are populated.
+ */
+export async function getVariantImages(variantIds: number[]): Promise<Record<number, string>> {
+  const ids = Array.from(new Set(variantIds.filter((n) => Number.isFinite(n))));
+  if (ids.length === 0) return {};
+  try {
+    const { data, error } = await getSupabase()
+      .from("variant")
+      .select("variant_id, image_url")
+      .in("variant_id", ids);
+    if (error || !data) return {};
+    const map: Record<number, string> = {};
+    for (const r of data as { variant_id: number; image_url: string | null }[]) {
+      if (r.image_url) map[r.variant_id] = r.image_url;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 export interface BrandDetail {
   brandId: number;
   name: string;

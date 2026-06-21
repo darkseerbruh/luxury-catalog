@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
+import { getVariantImages } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
 
 export const dynamic = "force-dynamic";
@@ -59,6 +60,7 @@ function buildPortfolio(closet: { status: string; retailPrice: number | null; cu
 export default async function ClosetPage() {
   if (!(await getCurrentUser())) redirect("/login");
   const closet = await getCloset();
+  const images = await getVariantImages(closet.map((c) => c.variantId));
 
   const portfolio = buildPortfolio(closet);
 
@@ -167,6 +169,7 @@ export default async function ClosetPage() {
                     >
                       <div className="flex min-w-0 items-center gap-4">
                         <BagImage
+                          imageUrl={images[c.variantId]}
                           brand={c.brandName}
                           className="h-14 w-14 shrink-0 rounded-lg"
                         />
