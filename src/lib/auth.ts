@@ -15,6 +15,14 @@ export interface SocialLinks {
   website?: string;
 }
 
+/** Per-channel notification opt-outs. Absent key = opted in (default-on). */
+export interface NotificationPrefs {
+  price_alert?: boolean;
+  closet_activity?: boolean;
+  photo_featured?: boolean;
+  email?: boolean;
+}
+
 export interface UserProfile {
   id: string;
   displayName: string | null;
@@ -29,6 +37,7 @@ export interface UserProfile {
   isAuthenticator: boolean;
   socialLinks: SocialLinks;
   tasteCompleteness: number;
+  notificationPrefs: NotificationPrefs;
 }
 
 /**
@@ -60,6 +69,7 @@ const EMPTY_PROFILE = (id: string): UserProfile => ({
   isAuthenticator: false,
   socialLinks: {},
   tasteCompleteness: 0,
+  notificationPrefs: {},
 });
 
 type ProfileRow = {
@@ -76,6 +86,7 @@ type ProfileRow = {
   is_authenticator?: boolean | null;
   social_links?: Record<string, unknown> | null;
   taste_completeness?: number | null;
+  notification_prefs?: Record<string, unknown> | null;
 };
 
 function mapProfileRow(row: ProfileRow): UserProfile {
@@ -93,6 +104,7 @@ function mapProfileRow(row: ProfileRow): UserProfile {
     isAuthenticator: Boolean(row.is_authenticator),
     socialLinks: (row.social_links as SocialLinks) ?? {},
     tasteCompleteness: row.taste_completeness ?? 0,
+    notificationPrefs: (row.notification_prefs as NotificationPrefs) ?? {},
   };
 }
 
@@ -107,7 +119,7 @@ export async function getProfile(): Promise<UserProfile | null> {
   const { data, error } = await supabase
     .from("profile")
     .select(
-      "id, display_name, persona, onboarded, handle, bio, avatar_url, closet_public, is_verified, is_expert, is_authenticator, social_links, taste_completeness"
+      "id, display_name, persona, onboarded, handle, bio, avatar_url, closet_public, is_verified, is_expert, is_authenticator, social_links, taste_completeness, notification_prefs"
     )
     .eq("id", user.id)
     .maybeSingle();

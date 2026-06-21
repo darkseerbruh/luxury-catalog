@@ -51,11 +51,42 @@ export async function getUnreadCount(): Promise<number> {
 }
 
 /**
+ * Notification opt-out keys. Absent/true = opted in (default-on); only an
+ * explicit `false` opts the user out. Mirrors `profile.notification_prefs` (0010).
+ */
+type PrefKey = "price_alert" | "closet_activity" | "photo_featured" | "email";
+
+/**
+ * Whether a user has opted in to a given notification channel. Defaults to TRUE
+ * (opted in) on any read failure or when the column/migration is absent, so
+ * notifications keep flowing rather than silently disappearing. Uses the
+ * service-role client because this is called from cross-user write paths.
+ */
+export async function isOptedIn(userId: string, key: PrefKey): Promise<boolean> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return true;
+  try {
+    const { data, error } = await getSupabaseAdmin()
+      .from("profile")
+      .select("notification_prefs")
+      .eq("id", userId)
+      .maybeSingle();
+    if (error || !data) return true;
+    const prefs = (data as { notification_prefs?: Record<string, unknown> | null })
+      .notification_prefs;
+    if (!prefs) return true;
+    return prefs[key] !== false;
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Insert a notification for ANOTHER user (you can't write to someone else's
  * notification row under RLS, so this uses the service-role client). Used for
  * re-engagement events: "new activity from a closet you follow" and "your photo
  * was featured". Best-effort and silent: never blocks the triggering action,
- * and no-ops when the service-role key isn't configured.
+ * and no-ops when the service-role key isn't configured. Respects the
+ * recipient's notification preferences (default-on).
  */
 async function insertNotificationFor(
   userId: string,
@@ -65,6 +96,7 @@ async function insertNotificationFor(
   variantId: number | null
 ): Promise<void> {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return;
+  if (!(await isOptedIn(userId, type))) return;
   try {
     await getSupabaseAdmin()
       .from("notification")
@@ -117,8 +149,16 @@ export async function notifyFollowersOfActivity(
     const followers = (data ?? []).map((r) => r.follower_user_id as string);
     if (followers.length === 0) return;
 
+    // Respect each follower's closet_activity opt-out (default-on).
+    const optedIn = (
+      await Promise.all(
+        followers.map(async (uid) => ((await isOptedIn(uid, "closet_activity")) ? uid : null))
+      )
+    ).filter((uid): uid is string => uid !== null);
+    if (optedIn.length === 0) return;
+
     const title = `${actorLabel} ${verb}`;
-    const rows = followers.map((uid) => ({
+    const rows = optedIn.map((uid) => ({
       user_id: uid,
       type: "closet_activity" as const,
       title,
