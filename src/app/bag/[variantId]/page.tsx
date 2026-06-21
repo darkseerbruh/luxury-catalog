@@ -65,7 +65,7 @@ function formatPrice(amount: number | null, currency: string | null) {
 
 function ConfidenceBadge({ level }: { level: string }) {
   const colors: Record<string, string> = {
-    low: "text-muted/60 border-border/50",
+    low: "text-muted border-border/50",
     medium: "text-muted border-border",
     high: "text-gold/80 border-gold/40",
     verified: "text-gold border-gold",
@@ -386,11 +386,11 @@ export default async function BagDetailPage({
               <span className="text-lg text-muted">
                 {formatPrice(fairMarket.min, fairMarket.currency)}
               </span>
-              <span className="text-muted/60">–</span>
+              <span className="text-muted">–</span>
               <span className="font-serif text-3xl text-gold">
                 {formatPrice(fairMarket.med, fairMarket.currency)}
               </span>
-              <span className="text-muted/60">–</span>
+              <span className="text-muted">–</span>
               <span className="text-lg text-muted">
                 {formatPrice(fairMarket.max, fairMarket.currency)}
               </span>
@@ -629,7 +629,7 @@ export default async function BagDetailPage({
                     {h.platform && (
                       <span className="text-muted/70">{h.platform}</span>
                     )}
-                    <span className="ml-auto shrink-0 text-muted/60">
+                    <span className="ml-auto shrink-0 text-muted">
                       {h.dateRecorded}
                     </span>
                   </li>
@@ -732,7 +732,7 @@ export default async function BagDetailPage({
             {v.carryMethods.map((c) => (
               <li key={c.carryId} className="flex items-center gap-3 px-5 py-3 text-sm">
                 <span
-                  className={`font-medium ${c.possible === "yes" ? "text-foreground" : c.possible === "depends" ? "text-muted" : "text-muted/50 line-through"}`}
+                  className={`font-medium ${c.possible === "yes" ? "text-foreground" : c.possible === "depends" ? "text-muted" : "text-muted line-through"}`}
                 >
                   {c.carryType}
                 </span>
@@ -763,7 +763,7 @@ export default async function BagDetailPage({
             {v.fits.map((f) => (
               <li key={f.fitsId} className="flex items-center gap-3 px-5 py-3 text-sm">
                 <span
-                  className={`${f.fits === "yes" ? "text-foreground" : f.fits === "tight" ? "text-muted" : "text-muted/50 line-through"}`}
+                  className={`${f.fits === "yes" ? "text-foreground" : f.fits === "tight" ? "text-muted" : "text-muted line-through"}`}
                 >
                   {f.itemName}
                 </span>
@@ -793,7 +793,7 @@ export default async function BagDetailPage({
               >
                 <div className="mb-2 flex items-center gap-2">
                   <span
-                    className={`text-sm font-medium ${c.produced ? "text-foreground" : "text-muted/60"}`}
+                    className={`text-sm font-medium ${c.produced ? "text-foreground" : "text-muted"}`}
                   >
                     {c.produced ? "Confirmed produced" : "Not confirmed"}
                   </span>
@@ -921,7 +921,7 @@ export default async function BagDetailPage({
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-xs text-muted/60">
+          <p className="mt-2 text-xs text-muted">
             Authentication data is research-sourced and confidence-rated; verify
             high-stakes details against an in-hand inspection.
           </p>

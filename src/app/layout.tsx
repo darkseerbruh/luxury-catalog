@@ -131,7 +131,7 @@ export default async function RootLayout({
               <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>
-            <p className="text-muted/60">
+            <p className="text-muted">
               The definitive reference for designer handbags.
             </p>
           </div>

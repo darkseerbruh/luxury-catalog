@@ -41,10 +41,18 @@ export default async function TasteMapSection() {
   const named = nameTaste(taste.vector);
   const regions = buildRegions(taste.vector);
 
+  // Endowed progress (goal-gradient): never display 0%. Having an account is the
+  // first real step, so we floor the *presentation* at a small baseline. The honest
+  // underlying completeness still drives the rest; we tell the user why it's not 0.
+  const BASELINE = 10;
+  const displayCompleteness = Math.max(BASELINE, taste.completeness);
+
   return (
     <TasteMap
       regions={regions}
       completeness={taste.completeness}
+      displayCompleteness={displayCompleteness}
+      baseline={BASELINE}
       remaining={dimensionsRemaining(taste.vector)}
       name={taste.completeness > 0 ? named.name : ""}
       tagline={taste.completeness > 0 ? named.tagline : "Take the quiz to start mapping your taste."}

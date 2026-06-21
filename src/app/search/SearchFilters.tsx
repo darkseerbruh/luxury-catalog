@@ -184,7 +184,7 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
                 }`}
               >
                 {TIER_LABEL[value] ?? value.replace("-", " ")}{" "}
-                <span className="text-muted/60">({count})</span>
+                <span className="text-muted">({count})</span>
               </button>
             ))}
           </div>
@@ -208,7 +208,7 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
                     : "border-border text-muted hover:border-gold hover:text-gold"
                 }`}
               >
-                {value} <span className="text-muted/60">({count})</span>
+                {value} <span className="text-muted">({count})</span>
               </button>
             ))}
           </div>

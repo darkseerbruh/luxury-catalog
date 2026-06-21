@@ -72,7 +72,7 @@ export function FeedItem({ event }: { event: FeedEvent }) {
   return (
     <li className="flex items-start justify-between gap-3 rounded-xl border border-border bg-surface px-5 py-3.5 text-sm">
       <p className="leading-relaxed text-muted">{body}</p>
-      <span className="shrink-0 text-xs text-muted/60">{timeAgo(event.createdAt)}</span>
+      <span className="shrink-0 text-xs text-muted">{timeAgo(event.createdAt)}</span>
     </li>
   );
 }

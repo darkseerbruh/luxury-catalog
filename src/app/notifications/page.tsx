@@ -64,7 +64,7 @@ export default async function NotificationsPage() {
                   {!n.read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-gold" />}
                 </div>
                 {n.body && <p className="mt-1 text-sm text-muted">{n.body}</p>}
-                <p className="mt-2 text-xs text-muted/60">{formatDate(n.createdAt)}</p>
+                <p className="mt-2 text-xs text-muted">{formatDate(n.createdAt)}</p>
               </div>
             );
             return (

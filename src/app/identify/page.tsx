@@ -43,7 +43,7 @@ const CONFIDENCE_LABEL: Record<string, string> = {
 const CONFIDENCE_COLOR: Record<string, string> = {
   high: "text-gold border-gold/40 bg-gold/10",
   medium: "text-muted border-border",
-  low: "text-muted/60 border-border/50",
+  low: "text-muted border-border/50",
 };
 
 export default function IdentifyPage() {
@@ -304,7 +304,7 @@ export default function IdentifyPage() {
                       </span>
                     ))}
                 </div>
-                <p className="mt-4 text-xs uppercase tracking-widest text-muted/60">
+                <p className="mt-4 text-xs uppercase tracking-widest text-muted">
                   Luxury Catalog
                 </p>
               </div>

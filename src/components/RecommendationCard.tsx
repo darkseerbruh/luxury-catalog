@@ -29,7 +29,7 @@ export function RecommendationCard({
       <p className="mt-1 font-serif text-lg text-foreground">{rec.styleName}</p>
       <p className="mt-1 text-sm text-muted">{rec.label}</p>
       {price && <p className="mt-2 text-sm text-gold">From {price}</p>}
-      {rec.why && <p className="mt-3 text-xs leading-relaxed text-muted/80">{rec.why}</p>}
+      {rec.why && <p className="mt-3 text-xs leading-relaxed text-muted">{rec.why}</p>}
     </Link>
   );
 }

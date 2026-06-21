@@ -85,7 +85,7 @@ export default async function AdminCorrectionsPage() {
                     <span className="text-muted/70">Suggested:</span> {c.suggestedValue}
                   </p>
                   {c.note && <p className="mt-1 text-sm italic text-muted">{c.note}</p>}
-                  <p className="mt-2 text-xs text-muted/60">{formatDate(c.createdAt)}</p>
+                  <p className="mt-2 text-xs text-muted">{formatDate(c.createdAt)}</p>
                 </div>
                 <CorrectionActions correctionId={c.correctionId} />
               </li>

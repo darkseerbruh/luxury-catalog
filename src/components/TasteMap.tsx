@@ -21,12 +21,18 @@ export interface TasteRegion {
 export default function TasteMap({
   regions,
   completeness,
+  displayCompleteness,
   remaining,
   name,
   tagline,
 }: {
   regions: TasteRegion[];
+  /** Real, honest completeness 0..100 (drives analytics + copy). */
   completeness: number;
+  /** Presentation value, floored at `baseline` so the meter never reads 0%. */
+  displayCompleteness: number;
+  /** The endowed-progress floor (e.g. "account created" step). */
+  baseline: number;
   remaining: number;
   name: string;
   tagline: string;
@@ -51,18 +57,24 @@ export default function TasteMap({
         </Link>
       </div>
 
-      {/* Completeness meter */}
+      {/* Completeness meter — endowed progress: never renders 0%. */}
       <div>
         <div className="flex items-center justify-between text-xs text-muted">
-          <span>{completeness}% mapped</span>
+          <span>{displayCompleteness}% mapped</span>
           {remaining > 0 && <span>Answer {remaining} more to sharpen recommendations</span>}
         </div>
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-border">
           <div
             className="h-full rounded-full bg-gold transition-all duration-500"
-            style={{ width: `${completeness}%` }}
+            style={{ width: `${displayCompleteness}%` }}
           />
         </div>
+        {completeness === 0 && (
+          <p className="mt-1.5 text-xs text-muted">
+            Your account is step one — take the quiz to map your taste and sharpen
+            every recommendation.
+          </p>
+        )}
       </div>
 
       {/* Region grid */}
@@ -94,7 +106,7 @@ export default function TasteMap({
                 ))}
               </ul>
             ) : (
-              <p className="mt-2 text-sm text-muted/60">Not mapped yet</p>
+              <p className="mt-2 text-sm text-muted">Not mapped yet</p>
             )}
           </div>
         ))}
