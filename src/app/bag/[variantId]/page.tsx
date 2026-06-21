@@ -17,6 +17,7 @@ import {
   breadcrumbJsonLd,
 } from "@/lib/geo";
 import FeedbackWidget from "./FeedbackWidget";
+import SuggestEdit, { type CorrectableField } from "./SuggestEdit";
 import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
 import TrackBagView from "./TrackBagView";
@@ -146,6 +147,23 @@ export default async function BagDetailPage({
     faqJsonLd(faq),
     breadcrumbJsonLd(v),
   ].filter(Boolean);
+
+  // Curated, user-correctable fields for the "Suggest an edit" widget.
+  const correctableFields: CorrectableField[] = [
+    { path: "size_label", label: "Size", current: v.sizeLabel },
+    { path: "exterior_colorway", label: "Exterior colorway", current: v.exteriorColorway },
+    { path: "exterior_material", label: "Exterior material", current: v.exteriorMaterial?.name ?? null },
+    { path: "hardware_color", label: "Hardware color", current: v.hardwareColor },
+    { path: "interior_color", label: "Interior color", current: v.interiorColor },
+    { path: "production_years", label: "Production years", current: yearRange },
+    {
+      path: "retail_price_original",
+      label: "Original retail price",
+      current: formatPrice(v.retailPriceOriginal, v.currency),
+    },
+    { path: "authentication_markers", label: "Authentication markers", current: v.authenticationMarkers },
+    { path: "other", label: "Something else", current: null },
+  ];
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
@@ -637,6 +655,13 @@ export default async function BagDetailPage({
           </p>
         </Section>
       )}
+
+      {/* Structured suggest-an-edit (corrections) */}
+      <SuggestEdit
+        variantId={v.variantId}
+        signedIn={userState.signedIn}
+        fields={correctableFields}
+      />
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />
