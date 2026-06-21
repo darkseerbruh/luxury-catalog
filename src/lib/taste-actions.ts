@@ -4,9 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import {
-  TASTE_QUESTIONS,
-  type TasteVector,
-  addWeight,
+  buildVectorFromAnswers,
   completeness as computeCompleteness,
 } from "./taste";
 
@@ -26,17 +24,7 @@ export async function saveQuizAnswers(answers: Record<string, string>): Promise<
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "Please log in to save your taste profile." };
 
-  const vector: TasteVector = {};
-  for (const q of TASTE_QUESTIONS) {
-    const chosen = answers[q.id];
-    if (!chosen) continue;
-    const opt = q.options.find((o) => o.value === chosen);
-    if (!opt) continue;
-    addWeight(vector, q.dimension, opt.value, 3); // explicit answer = strong signal
-    for (const extra of opt.also ?? []) {
-      addWeight(vector, extra.dimension, extra.value, 1.5);
-    }
-  }
+  const vector = buildVectorFromAnswers(answers);
 
   if (Object.keys(vector).length === 0) {
     return { ok: false, error: "No answers recorded." };

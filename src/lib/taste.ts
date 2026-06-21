@@ -150,6 +150,27 @@ export const TASTE_QUESTIONS: TasteQuizQuestion[] = [
   },
 ];
 
+/**
+ * Build a taste vector from quiz answers (question id -> chosen option value),
+ * using the canonical TASTE_QUESTIONS so weights are trustworthy and reference
+ * only catalogued values. Pure (no DB) so it is unit-testable and reusable by
+ * the server action. Explicit answers weight 3; secondary `also` hints weight 1.5.
+ */
+export function buildVectorFromAnswers(answers: Record<string, string>): TasteVector {
+  const vector: TasteVector = {};
+  for (const q of TASTE_QUESTIONS) {
+    const chosen = answers[q.id];
+    if (!chosen) continue;
+    const opt = q.options.find((o) => o.value === chosen);
+    if (!opt) continue;
+    addWeight(vector, q.dimension, opt.value, 3);
+    for (const extra of opt.also ?? []) {
+      addWeight(vector, extra.dimension, extra.value, 1.5);
+    }
+  }
+  return vector;
+}
+
 /** Price bands by retail price, for the price_band dimension. */
 export function priceBand(retail: number | null): string | null {
   if (retail == null) return null;

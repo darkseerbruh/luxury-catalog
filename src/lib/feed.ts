@@ -31,9 +31,10 @@ export interface FeedEvent {
   postSlug?: string | null;
 }
 
-type ActorMap = Map<string, { handle: string | null; name: string | null; closetPublic: boolean }>;
+export type Actor = { handle: string | null; name: string | null; closetPublic: boolean };
+type ActorMap = Map<string, Actor>;
 
-function bagFrom(variant: unknown): { variantId: number | null; brandName: string | null; styleName: string | null } {
+export function bagFrom(variant: unknown): { variantId: number | null; brandName: string | null; styleName: string | null } {
   const v = (Array.isArray(variant) ? variant[0] : variant) as
     | { variant_id: number; style: unknown }
     | null;
@@ -162,7 +163,15 @@ export async function getFeed(limit = 40): Promise<FeedEvent[]> {
     }
   }
 
-  // Merge + sort newest first.
-  events.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  return events.slice(0, limit);
+  return sortFeedEvents(events, limit);
+}
+
+/**
+ * Merge + order feed events newest-first and cap to `limit`. Pure (no DB) so the
+ * ordering is unit-testable. ISO-8601 createdAt strings sort lexically by time.
+ */
+export function sortFeedEvents(events: FeedEvent[], limit = 40): FeedEvent[] {
+  return [...events]
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, limit);
 }
