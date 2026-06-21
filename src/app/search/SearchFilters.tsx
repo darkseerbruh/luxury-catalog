@@ -55,7 +55,13 @@ function variantMatches(v: Variant, active: Record<string, Set<string>>): boolea
  * render inline. Every facet shows a count and every applied filter is a one-tap
  * removable chip (NN/g faceted-search guidance).
  */
-export default function SearchFilters({ results }: { results: SearchResults }) {
+export default function SearchFilters({
+  results,
+  images = {},
+}: {
+  results: SearchResults;
+  images?: Record<number, string>;
+}) {
   const [activeTiers, setActiveTiers] = useState<Set<string>>(new Set());
   const [activeBrands, setActiveBrands] = useState<Set<string>>(new Set());
   const [activeAttrs, setActiveAttrs] = useState<Record<string, Set<string>>>({});
@@ -355,6 +361,7 @@ export default function SearchFilters({ results }: { results: SearchResults }) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex min-w-0 items-center gap-4">
               <BagImage
+                imageUrl={style.variants[0] ? images[style.variants[0].variantId] : null}
                 brand={style.brandName}
                 className="h-16 w-16 shrink-0 rounded-lg"
               />

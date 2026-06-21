@@ -1,4 +1,4 @@
-import { searchCatalog } from "@/lib/queries";
+import { searchCatalog, getVariantImages } from "@/lib/queries";
 import RequestBagForm from "./RequestBagForm";
 import SearchTracker from "./SearchTracker";
 import SearchFilters from "./SearchFilters";
@@ -16,6 +16,16 @@ export default async function SearchPage({
     ? await searchCatalog(query)
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
+
+  // Representative photo per style (its first variant) for the result cards.
+  const images = hasResults
+    ? await getVariantImages([
+        ...results.styles.flatMap((s) => s.variants.map((v) => v.variantId)),
+        ...results.brands.flatMap((b) =>
+          b.styles.map((s) => s.variantId).filter((n): n is number => n != null),
+        ),
+      ])
+    : {};
 
   return (
     <main className="flex flex-1 flex-col px-5 py-10">
@@ -78,7 +88,7 @@ export default async function SearchPage({
           </div>
         )}
 
-        {hasResults && <SearchFilters results={results} />}
+        {hasResults && <SearchFilters results={results} images={images} />}
       </div>
     </main>
   );
