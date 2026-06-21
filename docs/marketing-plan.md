@@ -124,7 +124,7 @@ Secondary: authentication myth-busting, “fake vs real” by year, “what your
 Cadence: batch-film. One filming session → weeks of content. Protects your time and keeps the channel from becoming a daily obligation.
 Tier 2 — Layer in once Tier 1 is running
 Email/SMS capture via the watchlist + price alerts. “Watch this bag, we'll tell you when the price drops” is a genuine reason to give an email — not a newsletter nobody wants. This builds an owned audience you don't rent from an algorithm.
-Pinterest. Underrated for this niche: visual, search-driven, long content half-life, and the audience (collectors, aspirational buyers) is exactly yours. Low effort to repurpose existing pages.
+Pinterest. Underrated for this niche: visual, search-driven, long content half-life, and the audience (collectors, aspirational buyers) is exactly yours. Low effort to repurpose existing pages. Two compounding plays: Rich Pins that pull catalog data and link back, and creator **collaborative/group boards** where a featured creator co-pins alongside you (an outbound, non-cash collaboration — see `creator-collaboration-strategy.md`).
 Reddit / niche community seeding. Answer real authentication questions in r/handbags and similar, linking your page only when it's genuinely the best answer. Builds backlinks and the “trusted source” reputation that feeds GEO. Don't spam — the cost is your domain reputation.
 Tier 3 — Deliberately defer
 Paid ads. Skip at launch. For a solo founder, AI-written content that ranks beats paid ads on unit economics because there's no ongoing spend once it ranks. Revisit only after you know your per-visitor affiliate value and can buy traffic profitably.

@@ -157,6 +157,18 @@ isn't presented as a paid placement). `MEDIUM`
 | Our posture | Ship & expand | **Permission-first**, official oEmbed, facade-gated |
 | Risk | Low | Low–Medium (managed by permission + attribution) |
 
+### Out of scope: Pinterest (outbound-only, not an embed source)
+Pinterest is deliberately **not** an on-site embed layer like YouTube/Instagram.
+Its strength is *outbound* — a visual-search/shopping engine (~75% of users are
+actively shopping, long content half-life) that drives high-intent traffic **to**
+the catalog. So Pinterest is handled as a **distribution + creator-collaboration**
+channel (Rich Pins, creator shared/group boards), not embedded pins — which also
+means **no** Pinterest `frame-src`/CSP, `resource_type`, or `PinterestCard` work.
+See `docs/marketing-plan.md` (distribution) and
+`docs/creator-collaboration-strategy.md` (shared boards). If on-site pin embedding
+is ever wanted, Pinterest's own widget/oEmbed needs no auth token (unlike
+Instagram) — a low-lift future add.
+
 ---
 
 ## 3. Recommended architecture (what we built)

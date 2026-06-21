@@ -153,6 +153,8 @@ disclosure (§5).**
 12. Cross-promotion — they share their feature; you surface them to your audience.
 13. Co-marketing on TikTok/IG (joint reveal or site walkthrough).
 14. Syndication — repost their content (with permission) across owned channels.
+14a. Pinterest **collaborative/group board** — creator co-pins alongside you; pins link back to catalog pages (Pinterest's standout collab mechanic; outbound, non-cash).
+14b. Pinterest creator **cross-promotion** — they repin your pages / feature a board; you feature theirs. High-intent, long content half-life.
 
 **Commercial / performance (self-funding)**
 15. Creator-specific affiliate code on "where to buy."
@@ -189,6 +191,12 @@ disclosure (§5).**
   into contributors via an editorial Substack with guest interviews. A low-lift
   "from our experts" digest could syndicate creator articles and feature a creator
   per issue — owned audience (a `marketing-plan.md` Tier-2 channel) + creator spotlight.
+- **Brand × creator shared Pinterest board.** A co-owned board ("Birkin grails,"
+  "thrift-to-resale finds") where a creator co-pins alongside you and every pin
+  links back to the relevant catalog page. Pulls in their audience on a visual-
+  *search* engine where ~75% of users are actively shopping — outbound discovery +
+  creator spotlight at near-zero cost. (Outbound only; no on-site embedding —
+  see `social-embed-strategy.md` and `marketing-plan.md`.)
 - **Tiered "house roster" with status, not just cash.** Mirror the queued
   contributor ladder (Aficionado → … → Curator): elevate creators through visible
   status tiers; top tier gets first access to paid opportunities (Auth
@@ -265,6 +273,12 @@ risk: you're not betting cash on unproven funnel economics.
 creators into the **consignor-referral** funnel (`monetization-projections.md`'s
 dominant lever, ~$1,250/seller). A reseller-audience creator referring sellers is
 worth far more than a sponsored video, and you only pay when you earn.
+
+**Pinterest note (channel fit).** Pinterest pins carry tracked/affiliate links
+well and have an unusually long content half-life on a shopping-intent audience,
+so a creator's **shared board** or repins are a natural, low-cost home for
+creator-attributed "where to buy" links — an outbound complement to the affiliate/
+revenue-share models above (no on-site embedding; see `marketing-plan.md`).
 
 ---
 
