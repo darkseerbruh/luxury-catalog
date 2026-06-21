@@ -257,6 +257,25 @@ export default async function BagDetailPage({
         }
       : null;
 
+  // Retail price trajectory (MSRP over time) — the appreciation story, shown
+  // separately from the resale Fair Market Range and honestly labelled so retail
+  // is never read as resale/market value.
+  const retailHistory = v.priceHistory
+    .filter(
+      (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
+        h.salePrice != null && h.platform != null && RETAIL_PLATFORM_RX.test(h.platform),
+    )
+    .slice()
+    .sort((a, b) => a.dateRecorded.localeCompare(b.dateRecorded));
+  const retailChange =
+    retailHistory.length > 1
+      ? Math.round(
+          ((retailHistory[retailHistory.length - 1].salePrice - retailHistory[0].salePrice) /
+            retailHistory[0].salePrice) *
+            100,
+        )
+      : null;
+
   // "How to authenticate" checklist — enumerated from existing data only.
   const authChecks: { label: string; detail: string }[] = [];
   if (v.authenticationMarkers) {
@@ -295,7 +314,8 @@ export default async function BagDetailPage({
     { id: "specifications", label: "Specs" },
     authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
-    v.priceHistory.length > 0 ? { id: "price-history", label: "Price history" } : null,
+    recordedSales.length > 0 ? { id: "price-history", label: "Resale prices" } : null,
+    retailHistory.length > 1 ? { id: "retail-history", label: "Retail history" } : null,
     { id: "where-to-buy", label: "Buy" },
     { id: "where-to-sell", label: "Sell" },
     { id: "reviews", label: "Reviews" },
@@ -613,13 +633,15 @@ export default async function BagDetailPage({
         </Collapsible>
       )}
 
-      {/* Price history — moved high; the chart is the collector/flipper payload. */}
-      {v.priceHistory.length > 0 && (
+      {/* Resale price history — the collector/flipper payload (resale rows only;
+          retail/MSRP rows are shown separately below so they're never conflated
+          with market value). */}
+      {recordedSales.length > 0 && (
         <div id="price-history" className="scroll-mt-4">
-          <Section title="Price history">
-            <PriceTrend history={v.priceHistory} retailPrice={v.retailPriceOriginal} />
+          <Section title="Resale price history">
+            <PriceTrend history={recordedSales} retailPrice={v.retailPriceOriginal} />
             <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
-              {v.priceHistory
+              {recordedSales
                 .slice()
                 .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded))
                 .map((h) => (
@@ -640,6 +662,47 @@ export default async function BagDetailPage({
                     <span className="ml-auto shrink-0 text-muted">
                       {h.dateRecorded}
                     </span>
+                  </li>
+                ))}
+            </ul>
+          </Section>
+        </div>
+      )}
+
+      {/* Retail price over time (MSRP) — the appreciation story, clearly labelled
+          and kept distinct from resale so it's never read as market value. */}
+      {retailHistory.length > 1 && (
+        <div id="retail-history" className="scroll-mt-4">
+          <Section title="Retail price over time">
+            <p className="mb-4 text-sm leading-relaxed text-muted">
+              Original boutique price (MSRP) by year — not resale value.
+              {retailChange != null && retailChange > 0 && (
+                <>
+                  {" "}Up <span className="text-gold">{retailChange}%</span> from{" "}
+                  {formatPrice(retailHistory[0].salePrice, retailHistory[0].currency)} in{" "}
+                  {retailHistory[0].dateRecorded.slice(0, 4)} to{" "}
+                  {formatPrice(
+                    retailHistory[retailHistory.length - 1].salePrice,
+                    retailHistory[retailHistory.length - 1].currency,
+                  )}{" "}
+                  in {retailHistory[retailHistory.length - 1].dateRecorded.slice(0, 4)}.
+                </>
+              )}
+            </p>
+            <PriceTrend history={retailHistory} />
+            <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
+              {retailHistory
+                .slice()
+                .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded))
+                .map((h) => (
+                  <li
+                    key={h.priceId}
+                    className="flex items-center gap-3 px-5 py-3 text-sm"
+                  >
+                    <span className="text-foreground">
+                      {formatPrice(h.salePrice, h.currency)}
+                    </span>
+                    <span className="ml-auto shrink-0 text-muted">{h.dateRecorded}</span>
                   </li>
                 ))}
             </ul>
