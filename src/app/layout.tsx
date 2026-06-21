@@ -56,6 +56,12 @@ export default async function RootLayout({
               >
                 Search
               </Link>
+              <Link
+                href="/posts"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Articles
+              </Link>
               {user ? (
                 <>
                   <Link
@@ -109,6 +115,7 @@ export default async function RootLayout({
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
               <Link href="/closet" className="hover:text-foreground">Closet</Link>
               <Link href="/closets" className="hover:text-foreground">Coveted closets</Link>
+              <Link href="/posts" className="hover:text-foreground">Articles</Link>
               <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>

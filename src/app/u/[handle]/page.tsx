@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublicProfile, isFavoritingCloset } from "@/lib/social";
+import { listByAuthor } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { TrustBadges } from "@/components/TrustBadges";
 import FollowClosetButton from "./FollowClosetButton";
@@ -59,9 +60,10 @@ export default async function PublicProfilePage({
   const profile = await getPublicProfile(handle);
   if (!profile) notFound();
 
-  const [user, following] = await Promise.all([
+  const [user, following, posts] = await Promise.all([
     getCurrentUser(),
     isFavoritingCloset(profile.userId),
+    listByAuthor(profile.userId, true, 20),
   ]);
   const isOwn = user?.id === profile.userId;
   const socials = Object.entries(profile.socialLinks).filter(([, v]) => v);
@@ -130,6 +132,25 @@ export default async function PublicProfilePage({
             </a>
           ))}
         </div>
+      )}
+
+      {posts.length > 0 && (
+        <section>
+          <h2 className="font-serif text-xl text-foreground">Articles</h2>
+          <ul className="mt-4 flex flex-col gap-3">
+            {posts.map((p) => (
+              <li key={p.postId}>
+                <Link
+                  href={`/posts/${p.slug}`}
+                  className="block rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
+                >
+                  <p className="font-serif text-foreground">{p.title}</p>
+                  {p.excerpt && <p className="mt-1 text-sm text-muted">{p.excerpt}</p>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       <section>

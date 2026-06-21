@@ -53,6 +53,10 @@ export const EVENTS = {
   closetFavorited: "closet_favorited",
   /** The Taste Map on the profile was viewed. */
   tasteMapViewed: "taste_map_viewed",
+  /** An expert published an editorial post/article. */
+  postPublished: "post_published",
+  /** A structured catalog correction was submitted. */
+  correctionSubmitted: "correction_submitted",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

@@ -75,6 +75,20 @@ export default async function ProfilePage() {
         >
           Edit public profile
         </Link>
+        {profile?.isExpert && (
+          <Link
+            href="/profile/posts"
+            className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+          >
+            My articles
+          </Link>
+        )}
+        <Link
+          href="/settings"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          Settings
+        </Link>
         <Link
           href="/quiz"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
