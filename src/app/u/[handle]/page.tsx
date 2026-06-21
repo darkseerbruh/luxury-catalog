@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublicProfile, isFavoritingCloset } from "@/lib/social";
 import { listByAuthor } from "@/lib/posts";
+import { getFourGrails } from "@/lib/grails";
 import { getCurrentUser } from "@/lib/auth";
 import { TrustBadges } from "@/components/TrustBadges";
+import FourGrails from "@/components/FourGrails";
 import FollowClosetButton from "./FollowClosetButton";
 
 export const dynamic = "force-dynamic";
@@ -60,10 +62,11 @@ export default async function PublicProfilePage({
   const profile = await getPublicProfile(handle);
   if (!profile) notFound();
 
-  const [user, following, posts] = await Promise.all([
+  const [user, following, posts, grails] = await Promise.all([
     getCurrentUser(),
     isFavoritingCloset(profile.userId),
     listByAuthor(profile.userId, true, 20),
+    getFourGrails(profile.userId),
   ]);
   const isOwn = user?.id === profile.userId;
   const socials = Object.entries(profile.socialLinks).filter(([, v]) => v);
@@ -133,6 +136,8 @@ export default async function PublicProfilePage({
           ))}
         </div>
       )}
+
+      <FourGrails grails={grails} isOwn={isOwn} />
 
       {posts.length > 0 && (
         <section>

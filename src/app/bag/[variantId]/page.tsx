@@ -25,6 +25,7 @@ import WhereToBuy from "./WhereToBuy";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
 import Reviews from "./Reviews";
+import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
 import SimilarBags from "./SimilarBags";
 
@@ -292,6 +293,7 @@ export default async function BagDetailPage({
     { id: "where-to-buy", label: "Buy" },
     { id: "where-to-sell", label: "Sell" },
     { id: "reviews", label: "Reviews" },
+    { id: "owner-ratings", label: "Owner ratings" },
   ].filter((x): x is { id: string; label: string } => x !== null);
 
   // Curated, user-correctable fields for the "Suggest an edit" widget.
@@ -886,6 +888,9 @@ export default async function BagDetailPage({
 
       {/* Reviews & ratings */}
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
+
+      {/* Multi-axis owner ratings (Fragrantica-style character bars) */}
+      <AxisVotes variantId={v.variantId} />
 
       {/* Content-based "similar bags" over catalogued attributes */}
       <SimilarBags variantId={v.variantId} />

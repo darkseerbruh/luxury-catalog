@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
+import { getMyGrails } from "@/lib/grails";
 import { signOut } from "@/lib/auth-actions";
 import Recommendations from "@/components/Recommendations";
+import FourGrails from "@/components/FourGrails";
 import TasteMapSection from "@/components/TasteMapSection";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +22,7 @@ const PERSONA_LABELS: Record<string, string> = {
 export default async function ProfilePage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
-  const profile = await getProfile();
+  const [profile, grails] = await Promise.all([getProfile(), getMyGrails()]);
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-12">
@@ -114,6 +116,8 @@ export default async function ProfilePage() {
           Edit preferences
         </Link>
       </div>
+
+      <FourGrails grails={grails} isOwn />
 
       <TasteMapSection />
 
