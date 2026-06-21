@@ -1,11 +1,15 @@
+"use client";
+
+import { useState } from "react";
+
 /**
  * Bag visual. When a sourced `imageUrl` exists (licensed / UGC / first-party — we
  * never AI-generate or hotlink unlicensed photos, per the product brief), it
- * renders the photo. Otherwise it renders a deliberate, luxury-styled placeholder
- * (brand wordmark + a handbag silhouette on a dark/gold treatment) so the catalog
- * reads as intentional rather than broken — and real photos drop straight in once
- * sourced. Decorative by default (aria-hidden); pass a meaningful `alt` for real
- * photos.
+ * renders the photo. Otherwise — or if the photo fails to load (404 / dead link)
+ * — it renders a deliberate, luxury-styled placeholder (brand wordmark + a handbag
+ * silhouette on a dark/gold treatment) so the catalog reads as intentional rather
+ * than broken, and never shows the browser's broken-image icon. Decorative by
+ * default (aria-hidden on the placeholder); pass a meaningful `alt` for real photos.
  */
 export function BagImage({
   imageUrl,
@@ -18,13 +22,16 @@ export function BagImage({
   alt?: string;
   className?: string;
 }) {
-  if (imageUrl) {
+  const [failed, setFailed] = useState(false);
+
+  if (imageUrl && !failed) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={imageUrl}
         alt={alt ?? (brand ? `${brand} bag` : "bag")}
         loading="lazy"
+        onError={() => setFailed(true)}
         className={`object-cover ${className}`}
       />
     );
