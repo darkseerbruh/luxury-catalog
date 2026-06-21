@@ -75,6 +75,26 @@ export default async function Home() {
         </form>
       </section>
 
+      {!user && (
+        <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
+          <p className="text-sm uppercase tracking-widest text-gold">Find your taste</p>
+          <h2 className="mx-auto mt-2 max-w-xl font-serif text-2xl text-foreground sm:text-3xl">
+            Discover your handbag taste in 60 seconds
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-muted">
+            A few quick taps and we&rsquo;ll name your taste and match you to bags
+            you&rsquo;ll love — <span className="text-foreground">no account needed</span> to
+            see your result.
+          </p>
+          <Link
+            href="/quiz"
+            className="mt-6 inline-block rounded-full bg-gold px-6 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
+          >
+            Take the taste quiz →
+          </Link>
+        </section>
+      )}
+
       <PersonaRouter />
 
       {heroCards.length > 0 && (
