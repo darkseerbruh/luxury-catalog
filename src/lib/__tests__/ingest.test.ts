@@ -172,10 +172,10 @@ describe("MSRP dataset", () => {
       expect(o.price_type).toBe("retail_msrp");
       expect(o.source_url).toMatch(/^https?:\/\//);
     }
-    // Documented Chanel Medium flap trajectory.
+    // Documented Chanel Medium flap pre-2016 trajectory (seed covers 2016+).
     const flap2005 = obs.find((o) => o.observed_on.startsWith("2005"));
-    const flap2025 = obs.find((o) => o.observed_on.startsWith("2025"));
+    const flap2012 = obs.find((o) => o.observed_on.startsWith("2012"));
     expect(flap2005?.sale_price).toBe(1650);
-    expect(flap2025?.sale_price).toBe(11300);
+    expect(flap2012?.sale_price).toBe(4400);
   });
 });

@@ -249,11 +249,15 @@ export default async function BagDetailPage({
   // retail/boutique/MSRP rows so the range reflects the secondary market, not the
   // first-sale price (WatchCharts deliberately separates Retail vs. Market price).
   // Original retail is shown separately from `retailPriceOriginal`.
+  // Prefer the explicit price_type (migration 0021); fall back to the platform
+  // heuristic for legacy rows that predate it.
   const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+  const isRetailRow = (h: (typeof v.priceHistory)[number]) =>
+    h.priceType === "retail_msrp" ||
+    (h.priceType == null && h.platform != null && RETAIL_PLATFORM_RX.test(h.platform));
   const recordedSales = v.priceHistory.filter(
     (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
-      h.salePrice != null &&
-      !(h.platform != null && RETAIL_PLATFORM_RX.test(h.platform)),
+      h.salePrice != null && !isRetailRow(h),
   );
   const salePrices = recordedSales.map((h) => h.salePrice);
   const fairMarket =
@@ -276,10 +280,10 @@ export default async function BagDetailPage({
   const retailHistory = v.priceHistory
     .filter(
       (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
-        h.salePrice != null && h.platform != null && RETAIL_PLATFORM_RX.test(h.platform),
+        h.salePrice != null && isRetailRow(h),
     )
     .slice()
-    .sort((a, b) => a.dateRecorded.localeCompare(b.dateRecorded));
+    .sort((a, b) => (a.observedOn ?? a.dateRecorded).localeCompare(b.observedOn ?? b.dateRecorded));
   const retailChange =
     retailHistory.length > 1
       ? Math.round(
@@ -745,12 +749,12 @@ export default async function BagDetailPage({
                 <>
                   {" "}Up <span className="text-gold">{retailChange}%</span> from{" "}
                   {formatPrice(retailHistory[0].salePrice, retailHistory[0].currency)} in{" "}
-                  {retailHistory[0].dateRecorded.slice(0, 4)} to{" "}
+                  {(retailHistory[0].observedOn ?? retailHistory[0].dateRecorded).slice(0, 4)} to{" "}
                   {formatPrice(
                     retailHistory[retailHistory.length - 1].salePrice,
                     retailHistory[retailHistory.length - 1].currency,
                   )}{" "}
-                  in {retailHistory[retailHistory.length - 1].dateRecorded.slice(0, 4)}.
+                  in {(retailHistory[retailHistory.length - 1].observedOn ?? retailHistory[retailHistory.length - 1].dateRecorded).slice(0, 4)}.
                 </>
               )}
             </p>
@@ -758,7 +762,7 @@ export default async function BagDetailPage({
             <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
               {retailHistory
                 .slice()
-                .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded))
+                .sort((a, b) => (b.observedOn ?? b.dateRecorded).localeCompare(a.observedOn ?? a.dateRecorded))
                 .map((h) => (
                   <li
                     key={h.priceId}
@@ -767,7 +771,7 @@ export default async function BagDetailPage({
                     <span className="text-foreground">
                       {formatPrice(h.salePrice, h.currency)}
                     </span>
-                    <span className="ml-auto shrink-0 text-muted">{h.dateRecorded}</span>
+                    <span className="ml-auto shrink-0 text-muted">{(h.observedOn ?? h.dateRecorded).slice(0, 10)}</span>
                   </li>
                 ))}
             </ul>

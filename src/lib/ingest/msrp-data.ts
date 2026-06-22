@@ -28,9 +28,12 @@ export interface MsrpRecord {
 }
 
 /**
- * Chanel Classic Flap (Medium / "Timeless CC", US retail). Figures corroborated
- * across Sotheby's, LuxuryEvermore and Miloura price-history write-ups; the
- * near-doubling 2019->2025 is widely documented.
+ * Chanel Classic Flap (Medium / "Timeless CC", US retail), PRE-2016 history.
+ * The hero-style seed (supabase/seed/research/chanel-classic-flap.json) already
+ * carries the 2016->2025 MSRP series, so this only extends the timeline earlier
+ * (the 2005->2012 appreciation) to avoid duplicating those rows. Figures
+ * corroborated across LuxuryEvermore and Miloura price-history write-ups; the
+ * 2016 figure ($4,900) matches the seed, a useful cross-check.
  */
 const CHANEL_CLASSIC_FLAP_MEDIUM: MsrpRecord = {
   brand: "Chanel",
@@ -41,10 +44,6 @@ const CHANEL_CLASSIC_FLAP_MEDIUM: MsrpRecord = {
     { year: 2005, price: 1650, currency: "USD", source_url: "https://miloura.com/blogs/news/chanel-classic-flap-bag-price-history-then-vs-now-what-you-need-to-know" },
     { year: 2010, price: 2850, currency: "USD", source_url: "https://luxuryevermore.com/blogs/article/chanel-classic-flap-price-history" },
     { year: 2012, price: 4400, currency: "USD", source_url: "https://luxuryevermore.com/blogs/article/chanel-classic-flap-price-history" },
-    { year: 2016, price: 4900, currency: "USD", source_url: "https://luxuryevermore.com/blogs/article/chanel-classic-flap-price-history" },
-    { year: 2019, price: 5800, currency: "USD", source_url: "https://luxuryevermore.com/blogs/article/chanel-classic-flap-price-history" },
-    { year: 2021, price: 7800, currency: "USD", source_url: "https://luxuryevermore.com/blogs/article/chanel-classic-flap-price-history", note: "after two 2021 increases" },
-    { year: 2025, price: 11300, currency: "USD", source_url: "https://www.sothebys.com/en/articles/understanding-the-latest-2025-chanel-bag-price-hikes-and-the-resale-market", note: "Aug 2025" },
   ],
 };
 

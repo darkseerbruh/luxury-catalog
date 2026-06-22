@@ -5,6 +5,13 @@ import type { VariantDetail } from "@/lib/queries";
 
 type PricePoint = VariantDetail["priceHistory"][number];
 
+/**
+ * The date a point sits at on the time axis: when the price was true at source
+ * (observed_on) if known, else when we recorded it. Lets a backfilled retail/
+ * historical series (all ingested on the same day) plot across its real years.
+ */
+const pointDate = (p: PricePoint) => p.observedOn ?? p.dateRecorded;
+
 function formatPrice(amount: number | null, currency: string | null) {
   if (amount == null) return "—";
   const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
@@ -36,7 +43,7 @@ export default function PriceTrend({
       history
         .filter((h): h is PricePoint & { salePrice: number } => h.salePrice != null)
         .slice()
-        .sort((a, b) => a.dateRecorded.localeCompare(b.dateRecorded)),
+        .sort((a, b) => pointDate(a).localeCompare(pointDate(b))),
     [history],
   );
 
@@ -44,13 +51,13 @@ export default function PriceTrend({
   // earlier data than the next-smaller range (otherwise it's a duplicate view).
   const ranges = useMemo<RangeKey[]>(() => {
     if (all.length < 2) return ["ALL"];
-    const newest = new Date(all[all.length - 1].dateRecorded).getTime();
+    const newest = new Date(pointDate(all[all.length - 1])).getTime();
     const cutoff = (years: number) => newest - years * 365 * 24 * 60 * 60 * 1000;
     const out: RangeKey[] = [];
-    if (all.some((p) => new Date(p.dateRecorded).getTime() >= cutoff(1))) out.push("1Y");
+    if (all.some((p) => new Date(pointDate(p)).getTime() >= cutoff(1))) out.push("1Y");
     if (
-      all.some((p) => new Date(p.dateRecorded).getTime() < cutoff(1)) &&
-      all.some((p) => new Date(p.dateRecorded).getTime() >= cutoff(3))
+      all.some((p) => new Date(pointDate(p)).getTime() < cutoff(1)) &&
+      all.some((p) => new Date(pointDate(p)).getTime() >= cutoff(3))
     )
       out.push("3Y");
     out.push("ALL");
@@ -63,9 +70,9 @@ export default function PriceTrend({
   const points = useMemo(() => {
     const years = RANGE_YEARS[activeRange];
     if (years == null || all.length === 0) return all;
-    const newest = new Date(all[all.length - 1].dateRecorded).getTime();
+    const newest = new Date(pointDate(all[all.length - 1])).getTime();
     const cutoff = newest - years * 365 * 24 * 60 * 60 * 1000;
-    const inRange = all.filter((p) => new Date(p.dateRecorded).getTime() >= cutoff);
+    const inRange = all.filter((p) => new Date(pointDate(p)).getTime() >= cutoff);
     // Keep at least two points so the chart still draws.
     return inRange.length >= 2 ? inRange : all.slice(-2);
   }, [all, activeRange]);
@@ -115,7 +122,7 @@ export default function PriceTrend({
           </p>
         </div>
         <p className="text-xs uppercase tracking-wide text-muted/70">
-          {points[0].dateRecorded.slice(0, 7)} – {points[points.length - 1].dateRecorded.slice(0, 7)}
+          {pointDate(points[0]).slice(0, 7)} – {pointDate(points[points.length - 1]).slice(0, 7)}
         </p>
       </div>
 
@@ -173,8 +180,9 @@ export default function PriceTrend({
         </p>
       )}
       <p className="mt-3 text-xs text-muted/70">
-        Estimated from recorded resale prices · not an appraisal or investment forecast. Values can go
-        down as well as up.
+        {noun === "retail price"
+          ? "Original boutique prices (MSRP) from published sources · not resale value."
+          : "Estimated from recorded resale prices · not an appraisal or investment forecast. Values can go down as well as up."}
       </p>
     </div>
   );

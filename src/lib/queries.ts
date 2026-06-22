@@ -284,6 +284,9 @@ export interface VariantDetail {
     salePrice: number | null;
     currency: string | null;
     dateRecorded: string;
+    priceType: string | null;
+    observedOn: string | null;
+    sourceUrl: string | null;
   }[];
 }
 
@@ -354,7 +357,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       ),
       price_history(
         price_id, platform, condition, provenance_completeness,
-        sale_price, currency, date_recorded
+        sale_price, currency, date_recorded, price_type, observed_on, source_url
       )
     `)
     .eq("variant_id", variantId)
@@ -523,6 +526,9 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       salePrice: h.sale_price != null ? Number(h.sale_price) : null,
       currency: h.currency,
       dateRecorded: h.date_recorded,
+      priceType: h.price_type ?? null,
+      observedOn: h.observed_on ?? null,
+      sourceUrl: h.source_url ?? null,
     })),
   };
 }
