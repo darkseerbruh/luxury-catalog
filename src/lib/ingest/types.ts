@@ -27,6 +27,14 @@ export interface ObservationAttrs {
   production_year?: number | null;
   /** Collection/season label, e.g. "2011-2012". */
   season?: string | null;
+  /** Full condition/wear write-up from the listing (raw; LLM-enrichable). */
+  condition_detail?: string | null;
+  /** What the listing includes (box/dust bag/card) — full-set signal. */
+  inclusions?: string | null;
+  /** Listing/marketplace region for cross-currency fairness. */
+  region?: string | null;
+  /** Stable per-listing id (reseller SKU) for first-seen / days-on-market. */
+  listing_ref?: string | null;
 }
 
 /**
@@ -46,6 +54,8 @@ export interface PriceObservation {
   source_url: string; // REQUIRED — attribution + dedup
   confidence: Confidence;
   notes?: string | null;
+  /** Structured sub-signals extracted later (corner wear, tarnish, repaint…). */
+  enrichment?: Record<string, unknown> | null;
 }
 
 const PRICE_TYPES: ReadonlySet<string> = new Set([

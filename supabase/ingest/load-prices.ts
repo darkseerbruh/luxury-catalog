@@ -89,6 +89,11 @@ function toRow(o: PriceObservation, variantId: number) {
     hardware_color: o.attrs.hardware_color ?? null,
     production_year: o.attrs.production_year ?? null,
     season: o.attrs.season ?? null,
+    condition_detail: o.attrs.condition_detail ?? null,
+    inclusions: o.attrs.inclusions ?? null,
+    region: o.attrs.region ?? null,
+    listing_ref: o.attrs.listing_ref ?? null,
+    enrichment: o.enrichment ?? null,
   };
 }
 
