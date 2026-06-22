@@ -260,7 +260,10 @@ export default async function Home() {
             { href: "/closets", label: "Most coveted closets" },
             { href: "/posts", label: "Expert articles" },
             ...(user
-              ? [{ href: "/watchlist", label: "Your watchlist" }]
+              ? [
+                  { href: "/watchlist", label: "Your watchlist" },
+                  { href: "/taste", label: "Your taste profile" },
+                ]
               : []),
             { href: "/found", label: "Log a thrift find" },
           ].map((l) => (

@@ -11,6 +11,7 @@
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getUserProfile } from "./user-profile";
 import { rankVariants, type ScoredVariant } from "./ranker";
+import { generateWhyStrings } from "./taste-synthesis";
 import type { Recommendation } from "@/lib/recommendations-core";
 import type { VariantRow } from "@/lib/recommendations-core";
 
@@ -83,13 +84,18 @@ export async function computeAndStoreRecs(userId: string): Promise<number> {
   const ranked: ScoredVariant[] = rankVariants(profile, candidates, popularity, REC_LIMIT);
   if (ranked.length === 0) return 0;
 
+  // Phase-4: enrich the top recs with LLM-generated why strings (Haiku, fire-and-forget on failure).
+  const whyMap = profile
+    ? await generateWhyStrings(profile, ranked.slice(0, 12))
+    : new Map<number, string>();
+
   const now = new Date().toISOString();
   const rows = ranked.map((r, i) => ({
     user_id: userId,
     variant_id: r.variantId,
     rank: i + 1,
     score: r.score,
-    why: r.why ?? null,
+    why: whyMap.get(r.variantId) ?? r.why ?? null,
     algo: r.algo,
     computed_at: now,
   }));
