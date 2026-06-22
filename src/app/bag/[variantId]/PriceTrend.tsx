@@ -74,6 +74,10 @@ export default function PriceTrend({ history }: { history: PricePoint[] }) {
           <circle key={i} cx={x} cy={y} r="2.5" fill={lineColor} />
         ))}
       </svg>
+      <p className="mt-3 text-xs text-muted/70">
+        Estimated from recorded resale prices · not an appraisal or investment forecast. Values can go
+        down as well as up.
+      </p>
     </div>
   );
 }

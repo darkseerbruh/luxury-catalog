@@ -119,9 +119,18 @@ export default async function RootLayout({
               <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>
-            <p className="text-muted/60">
-              The definitive reference for designer handbags.
+          </div>
+          <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
+            <p className="max-w-xl text-muted/60">
+              Prices shown are estimates compiled from third-party resellers, for general information
+              only — not offers, appraisals, or financial advice. Some links are affiliate links; we may
+              earn a commission, at no extra cost to you.
             </p>
+            <nav className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+              <Link href="/disclosure" className="hover:text-foreground">Affiliate disclosure</Link>
+              <Link href="/disclaimer" className="hover:text-foreground">Disclaimer</Link>
+            </nav>
           </div>
         </footer>
         </Providers>
