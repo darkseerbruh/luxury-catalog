@@ -1,6 +1,7 @@
 "use client";
 
 import { buildResaleLinks } from "@/lib/affiliate";
+import { PLATFORMS } from "@/lib/platforms";
 import { track, EVENTS } from "@/lib/analytics/events";
 
 /**
@@ -30,26 +31,44 @@ export default function WhereToBuy({
         Affiliate links — we may earn a commission if you buy, at no extra cost to you.{" "}
         <a href="/disclosure" className="underline hover:text-foreground">Learn more</a>.
       </p>
-      <div className="flex flex-wrap gap-3">
-        {links.map((l) => (
-          <a
-            key={l.key}
-            href={l.url}
-            target="_blank"
-            rel="noopener noreferrer nofollow sponsored"
-            onClick={() =>
-              track(EVENTS.outboundResaleClicked, {
-                variant_id: variantId,
-                platform: l.key,
-                brand,
-                style,
-              })
-            }
-            className="rounded-full border border-border px-5 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
-          >
-            Search on {l.name} →
-          </a>
-        ))}
+      <div className="flex flex-col gap-3">
+        {links.map((l) => {
+          const p = PLATFORMS[l.key];
+          return (
+            <a
+              key={l.key}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer nofollow sponsored"
+              onClick={() =>
+                track(EVENTS.outboundResaleClicked, {
+                  variant_id: variantId,
+                  platform: l.key,
+                  brand,
+                  style,
+                })
+              }
+              className="group rounded-xl border border-border px-5 py-3 transition-colors hover:border-gold"
+            >
+              <span className="flex items-center justify-between text-sm text-foreground group-hover:text-gold">
+                Search on {l.name}
+                <span aria-hidden>→</span>
+              </span>
+              {p && (
+                <span className="mt-1 block text-xs text-muted/80">
+                  {p.authenticates === "all"
+                    ? "✓ Authenticates every item"
+                    : p.authenticates === "auction-house"
+                    ? "✓ Specialist-vetted"
+                    : p.authenticates === "optional"
+                    ? "Authentication available"
+                    : "Authenticity Guarantee on eligible items"}{" "}
+                  · {p.returns}
+                </span>
+              )}
+            </a>
+          );
+        })}
       </div>
     </section>
   );
