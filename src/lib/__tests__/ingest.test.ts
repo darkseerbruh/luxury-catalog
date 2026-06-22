@@ -229,6 +229,19 @@ describe("TheRealReal description parser", () => {
     expect(spec.productionYear).toBe(1994);
   });
 
+  it("extracts colour from its own segment, separate from the material (real caviar format)", () => {
+    const spec = parseTrrDescription(
+      "Chanel Shoulder Bag. | From the 2012-2013 Collection by Karl Lagerfeld. | Red. | Interlocking CC Logo, Caviar Leather, Quilted Pattern & Chain-Link Accent. | Silver-Tone Hardware. | Includes Dust Bag."
+    );
+    expect(spec).toMatchObject({ color: "Red", material: "Caviar Leather", hardwareColor: "silver", productionYear: 2012, includes: "Dust Bag" });
+  });
+
+  it("does not mistake hardware tone for colour", () => {
+    const spec = parseTrrDescription("Chanel Shoulder Bag. | Beige. | Lambskin. | Gold-Tone Hardware.");
+    expect(spec.color).toBe("Beige");
+    expect(spec.hardwareColor).toBe("gold");
+  });
+
   it("returns nulls for an empty description", () => {
     expect(parseTrrDescription("")).toMatchObject({ color: null, material: null, hardwareColor: null });
   });

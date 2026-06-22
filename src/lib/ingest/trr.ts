@@ -17,6 +17,16 @@ const MATERIALS = [
   "Lizard", "Python", "Velvet", "Denim", "Wool", "Canvas", "Leather",
 ];
 
+// Known colours, used to find the colour segment independently of the material
+// (TRR lists colour as its own fact, e.g. "Red.", separate from "Caviar Leather").
+// Gold/Silver are intentionally excluded — they collide with hardware tone.
+const COLORS = [
+  "Black", "White", "Beige", "Brown", "Red", "Blue", "Navy", "Pink", "Green",
+  "Grey", "Gray", "Burgundy", "Purple", "Yellow", "Orange", "Tan", "Khaki",
+  "Metallic", "Neutrals", "Cream", "Ivory", "Multicolor", "Coral", "Turquoise",
+  "Bordeaux", "Nude", "Taupe",
+];
+
 const HARDWARE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)(?:-Tone)?\s+Hardware/i;
 
 export interface TrrSpec {
@@ -61,16 +71,21 @@ export function parseTrrDescription(desc: string | null | undefined): TrrSpec {
   const inc = joined.match(/Includes ([^|]+)/i);
   if (inc) spec.includes = inc[1].trim();
 
-  // Colour + leather: the segment naming a known material; colour = words before it.
+  // Colour: first segment (excluding hardware/interior lines) whose first token is
+  // a known colour — colour is its own fact, separate from the material segment.
   for (const seg of segs) {
-    if (/Lining/i.test(seg)) continue; // interior line, not exterior colour
+    if (/Hardware|Lining/i.test(seg)) continue;
+    const first = seg.split(/[ ,]/)[0];
+    if (COLORS.includes(first)) {
+      spec.color = first;
+      break;
+    }
+  }
+  // Material: first segment naming a known material (independent of colour).
+  for (const seg of segs) {
     const mat = MATERIALS.find((m) => new RegExp(`\\b${m}\\b`, "i").test(seg));
     if (mat) {
       spec.material = mat;
-      const before = seg.slice(0, seg.toLowerCase().indexOf(mat.toLowerCase())).trim();
-      // colour is the trailing capitalised word(s) before the material
-      const colourMatch = before.match(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*$/);
-      if (colourMatch) spec.color = colourMatch[1];
       break;
     }
   }
