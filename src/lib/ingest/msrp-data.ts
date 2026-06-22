@@ -47,7 +47,55 @@ const CHANEL_CLASSIC_FLAP_MEDIUM: MsrpRecord = {
   ],
 };
 
-export const MSRP_HISTORY: MsrpRecord[] = [CHANEL_CLASSIC_FLAP_MEDIUM];
+/**
+ * Hermès Birkin / Kelly (US retail, Togo/standard leather). Figures from
+ * Sotheby's price-increase articles, PurseBop guides and BagUSeek's 2026 guide.
+ * Hermès paused increases ~2016–2019 then resumed; series are intentionally
+ * sparse (only firmly-cited, size-attributed points) per "accuracy over
+ * completeness". size_label matches the catalog hero variants exactly so they
+ * resolve cleanly.
+ */
+const HERMES_BIRKIN_35: MsrpRecord = {
+  brand: "Hermès",
+  style: "Birkin",
+  size_label: "Birkin 35",
+  platform: "Hermès (retail)",
+  history: [
+    { year: 2015, price: 10900, currency: "USD", source_url: "https://www.sothebys.com/en/articles/hermes-raises-the-birkin-bag-price-what-you-need-to-know" },
+    { year: 2018, price: 11900, currency: "USD", source_url: "https://www.pursebop.com/the-hermes-birkin-price-guide-2026/" },
+    { year: 2026, price: 16300, currency: "USD", source_url: "https://baguseek.com/hermes-birkin-price-guide-2026" },
+  ],
+};
+
+const HERMES_BIRKIN_30: MsrpRecord = {
+  brand: "Hermès",
+  style: "Birkin",
+  size_label: "Birkin 30",
+  platform: "Hermès (retail)",
+  history: [
+    { year: 2025, price: 13900, currency: "USD", source_url: "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-the-2026-u-s-hermes-price-increase-real-numbers-real-impact" },
+    { year: 2026, price: 14900, currency: "USD", source_url: "https://baguseek.com/hermes-birkin-price-guide-2026" },
+  ],
+};
+
+const HERMES_KELLY_28: MsrpRecord = {
+  brand: "Hermès",
+  style: "Kelly",
+  size_label: "Kelly 28",
+  platform: "Hermès (retail)",
+  history: [
+    { year: 2023, price: 10200, currency: "USD", source_url: "https://www.sothebys.com/en/articles/hermes-raises-kelly-bag-prices-what-you-need-to-know", note: "pre-Feb-2024" },
+    { year: 2024, price: 11560, currency: "USD", source_url: "https://www.sothebys.com/en/articles/hermes-raises-kelly-bag-prices-what-you-need-to-know", note: "post-Feb-2024 +~$1,360" },
+    { year: 2026, price: 15400, currency: "USD", source_url: "https://www.pursebop.com/the-hermes-kelly-price-guide-2026/", note: "Togo/Epsom" },
+  ],
+};
+
+export const MSRP_HISTORY: MsrpRecord[] = [
+  CHANEL_CLASSIC_FLAP_MEDIUM,
+  HERMES_BIRKIN_35,
+  HERMES_BIRKIN_30,
+  HERMES_KELLY_28,
+];
 
 /** Expand one MSRP record into per-year retail_msrp observations. */
 export function msrpObservations(record: MsrpRecord): PriceObservation[] {

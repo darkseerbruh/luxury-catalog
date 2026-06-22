@@ -26,6 +26,12 @@ export function writeObservations(
   const kept = observations.filter((o) => validateObservation(o).length === 0);
   const dir = sourceDir(source);
   fs.mkdirSync(dir, { recursive: true });
+  // Each run is the canonical snapshot for this source — clear prior files so the
+  // loader doesn't double-count stale captures (the DB index would dedup on
+  // write, but a clean landing keeps dry-run counts honest).
+  for (const f of fs.readdirSync(dir)) {
+    if (f.endsWith(".json")) fs.rmSync(path.join(dir, f));
+  }
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const file = path.join(dir, `${stamp}.json`);
   fs.writeFileSync(file, JSON.stringify(kept, null, 2));
