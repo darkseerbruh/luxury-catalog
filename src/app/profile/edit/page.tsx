@@ -67,8 +67,8 @@ export default async function EditProfilePage() {
         <div>
           <h2 className="font-serif text-2xl text-foreground">My Four Grails</h2>
           <p className="mt-1 text-sm text-muted">
-            Pin exactly four bags from your closet — your taste, in one screenshot. The scarcity is
-            the point.
+            Pin four bags from your closet — your taste in one screenshot. You
+            only get four, so make them count.
           </p>
         </div>
         <GrailPicker

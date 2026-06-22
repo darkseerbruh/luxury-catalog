@@ -83,7 +83,7 @@ export async function setPurchasePrice(
     .eq("user_id", user.id)
     .eq("variant_id", variantId);
 
-  if (error) return { ok: false, error: "Could not save — has migration 0014 been applied?" };
+  if (error) return { ok: false, error: "Could not save. Please try again." };
   revalidatePath("/closet/report");
   revalidatePath("/closet");
   return { ok: true };

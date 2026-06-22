@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Leaderboards · The Luxury Catalog",
   description:
-    "The most-coveted closets and most-active reviewers on The Luxury Catalog — boards that move as the community contributes.",
+    "The most-coveted closets and most-active reviewers on The Luxury Catalog. The boards shift as collectors add bags, follow each other, and review.",
 };
 
 export default async function LeaderboardsPage() {
@@ -24,9 +24,10 @@ export default async function LeaderboardsPage() {
           Who&rsquo;s rising this season
         </h1>
         <p className="mt-2 max-w-prose text-muted">
-          These boards reward movement — keep collecting, follow the closets you
-          love, and write honest reviews, and you climb. Make your closet public
-          in your profile to be eligible.
+          Two boards, both live: the closets people covet most, and the
+          collectors writing the most reviews. Add bags, follow the closets you
+          love, and review the ones you&rsquo;ve carried, and you move up. Make
+          your closet public in your profile to land on the board.
         </p>
       </header>
 
