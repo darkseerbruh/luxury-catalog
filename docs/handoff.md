@@ -1,9 +1,67 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **Latest session (2026-06-22):** photo-contributions + contributor-tier system (the queued UGC
-> engine — now BUILT). See the TL;DR block immediately below. (Same date, earlier: monetization-moment
-> placement audit; voice & tone rewrite; finance/money compliance — next blocks down.)
+> **Latest session (2026-06-22):** Personalization Phase 1 — `user_profile` feature store +
+> deterministic aggregation (migration `0018`). See TL;DR immediately below.
+> Prior session: photo-contributions + contributor-tier system. Earlier: monetization-moment audit,
+> voice & tone rewrite, finance/money compliance.
+
+## TL;DR — Personalization Phase 1: feature store + deterministic aggregation (latest session)
+
+Branch `claude/intelligent-lamport-7dazm6` → merged to `main`.
+`tsc --noEmit`, `eslint src`, `next build`, **110/110 tests** green.
+**HUMAN-GATED:** apply migration `0018` (see below); set `SUPABASE_SERVICE_ROLE_KEY` for the cron.
+
+### What was built
+
+**Spec:** Phase 1 of `docs/personalization-best-practices.md` (A4–A7, B8).
+
+1. **Migration `0018_user_profile_feature_store.sql`** — `user_profile` feature table:
+   - Typed columns: `persona` (synced from profile), `budget_band` (entry/mid/grail/mixed),
+     `intent` (buying/selling/collecting/browsing/both), `top_affinities` jsonb (top-10 brands).
+   - JSONB columns: `brand_affinities` (full brand→score map), `attribute_affinities`
+     (dimension→{value:score}), `signal_counts` (want/have/had/watchlist/review counts + quiz
+     completeness), `taste_vector_snapshot` (quiz+closet TasteVector — Phase 3 adds pgvector here).
+   - RLS: users read own row only. Service role writes all (no service_role policy — it bypasses
+     RLS by design). `user_id` is the PK (implicitly indexed).
+   - SQL functions for pg_cron: `rebuild_user_profile(uuid)` (one user, same decay/weight logic
+     as TypeScript) and `rebuild_all_user_profiles()` (batch, error-per-user, safe).
+   - pg_cron schedule (apply manually in Supabase): `select cron.schedule('rebuild-profiles', '0 3 * * *', 'select rebuild_all_user_profiles()');`
+
+2. **`src/lib/personalization/`** — the TypeScript feature-store layer:
+   - `types.ts` — `PersonalizationProfile`, `RawUserSignals`, `ClosetSignal`, `WatchlistSignal`, etc.
+   - `aggregation-core.ts` — pure functions (no DB): `decayWeight`, `itemWeight`, `inferBudgetBand`,
+     `inferIntent`, `computeBrandAffinities`, `topAffinities`, `computeAttributeAffinities`,
+     `aggregateSignals`. Status weights: have=3.0, want=1.5, had=1.0. Decay: ≤7d→1.0, ≤30d→0.8,
+     ≤90d→0.6, ≤365d→0.4, older→0.2. Budget band: 60%+ in one bin wins, else 'mixed'.
+   - `aggregation.ts` — DB read layer (closet_item JOIN variant attrs, watchlist, review count,
+     profile taste_vector snapshot) → calls aggregation-core.
+   - `user-profile.ts` — `getUserProfile(userId)` (fast read from `user_profile`; triggers
+     synchronous rebuild on first access if no row) + `rebuildUserProfile(userId)` (compute +
+     upsert). Both degrade gracefully (return null) if migration absent or service-role key unset.
+
+3. **`/api/cron/rebuild-profiles`** — Vercel cron endpoint (CRON_SECRET-gated); iterates all
+   profile rows, calls `rebuildUserProfile()`, returns `{total, rebuilt, failed}`. Scheduled at
+   03:00 UTC daily in `vercel.json`.
+
+4. **38 new unit tests** (`src/lib/__tests__/personalization.test.ts`) covering every pure function
+   and the full `aggregateSignals` integration (cold-start, normal, grail buyer, seller, collector).
+
+### Human-gated steps
+- **Apply migration `0018_user_profile_feature_store.sql`** in Supabase SQL editor (or CLI).
+  Depends on nothing new — safe to apply right after 0017. Degrades gracefully if absent
+  (all helpers return null, no app surface broken).
+- **Set `SUPABASE_SERVICE_ROLE_KEY`** — required for the cron and first-access rebuild; no-ops without it.
+- **Optional pg_cron:** `select cron.schedule('rebuild-profiles', '0 3 * * *', 'select rebuild_all_user_profiles()');` — an alternative to the Vercel cron for in-DB scheduling.
+
+### Next: Phase 2
+Phase 2 is: server-side personalization gated by PostHog — precompute per-user recs table,
+attribute/affinity ranker + Bayesian cold-start + epsilon-greedy + MMR diversity, PostHog flag
+evaluated server-side targeting a persona *person property*, bootstrapped to client (no flicker),
+wrapped in an Experiment. Apply to 1–2 real surfaces (home "bags you might like", search ranking).
+Spec: `docs/personalization-best-practices.md` A14, B9–B15, C16–C21.
+
+---
 
 ## TL;DR — photo contributions + contributor tiers (latest session)
 
