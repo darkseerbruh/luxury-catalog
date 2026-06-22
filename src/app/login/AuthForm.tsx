@@ -8,7 +8,6 @@ const initial: AuthFormState = {};
 
 const OAUTH = [
   { provider: "google", label: "Continue with Google" },
-  { provider: "facebook", label: "Continue with Facebook" },
 ];
 
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {

@@ -104,7 +104,7 @@ export async function signIn(
 }
 
 /**
- * OAuth sign-in (Google / Facebook / …). The provider button posts its name in
+ * OAuth sign-in (Google / …). The provider button posts its name in
  * the form data. Supabase returns a URL to redirect the browser to; the provider
  * sends the user back to /auth/confirm, which exchanges the ?code= for a session
  * (the same PKCE handler the email flow uses) and lands them on /onboarding.
@@ -112,7 +112,7 @@ export async function signIn(
  * NOTE: each provider must be enabled in the Supabase dashboard (Authentication →
  * Providers) with its OAuth client id/secret before the button works.
  */
-const OAUTH_PROVIDERS = ["google", "facebook"] as const;
+const OAUTH_PROVIDERS = ["google"] as const;
 type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
 export async function signInWithProvider(formData: FormData): Promise<void> {
