@@ -15,10 +15,17 @@
 - She **starts new chats often to save context/tokens** — so keep `main` the single source of truth and push there at the end of every session.
 - She responds well to **enthusiastic, organized replies that end with a clear question or next step.** Tables and short sections land well.
 - She enjoys **creative/strategic brainstorming** and will push you to "consider any possible creative solution" — go wide, then recommend.
+- **Cloud-first, anti-friction.** She works from the web/cloud, not a local machine, and dislikes manual dashboard work — *"pasting into Vercel is a terrible experience."* She'll ask **"can that be done through AI?"** Default to automating setup/deploy/config steps for her rather than handing her a checklist. Note the honest constraint when it exists (e.g. a step needs a credential the environment doesn't have) and say what to add to make it automatable — don't silently fall back to "do it yourself."
+- She **expects continuity across sessions** and may reference past work ("we already discussed this, you made a file"). Remember the container is ephemeral and local/gitignored files (e.g. `.env*`) don't survive — durable setup must live on `main` or in the cloud **environment config**, never a local file. If she's misremembering where something lives, gently correct with evidence.
 
 ## Git / workflow (locked)
 - **`main` is the single source of truth.** Sync from `main` at session start, merge back to `main` at end (see AGENTS.md "Branch & sync workflow"). Never build off old per-session branches.
 - She prefers **automation and guardrails** so she doesn't have to remember process.
+
+## Infra & deployment (how she wants it handled)
+- **Hosting = Vercel** (team `darkseerbruh`); production tracks the `main` branch, so pushing to `main` is what ships code. Explain deploys in these plain terms.
+- She wants **deploy/config done through AI, not dashboards** — Vercel env vars, Supabase migrations/seeds, etc. The cloud-friendly pattern she prefers: real secrets live in the **environment's secret store / config** (set once, persist across sessions, never in git), so you can script `vercel`/`supabase` actions each session instead of her pasting. Build the automation; tell her exactly which credential to drop into the env config to unlock it.
+- **Never put live secrets in a committed file or in chat.** `.env*` is gitignored on purpose. When a needed credential is missing/invalid in the environment, surface that plainly (with evidence) before claiming a step is done.
 
 ## Product decisions she's locked
 - **Canonical app = the full catalog lineage** (search/identify/admin/closet/watchlist/reviews/etc.). A separate analytics-prototype lineage was merged in and retired.
