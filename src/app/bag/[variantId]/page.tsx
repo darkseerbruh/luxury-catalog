@@ -23,6 +23,7 @@ import FeedbackWidget from "./FeedbackWidget";
 import SuggestEdit, { type CorrectableField } from "./SuggestEdit";
 import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
+import ValueModule, { type ValueFraming } from "./ValueModule";
 import TrackBagView from "./TrackBagView";
 import WhereToBuy from "./WhereToBuy";
 import WhereToSell from "./WhereToSell";
@@ -279,6 +280,50 @@ export default async function BagDetailPage({
         }
       : null;
 
+  // Adaptive value module (M0): reframe the value summary by the viewer's
+  // relationship to the bag (closet want/have/had → buyer/owner/collector), plot
+  // current asking listings on the range, and instrument which framing converts.
+  // All derived from the resale rows above — no new data source.
+  const valueFraming: ValueFraming =
+    userState.closetStatus === "have"
+      ? "owner"
+      : userState.closetStatus === "had"
+        ? "collector"
+        : "buyer";
+  const valueRange = fairMarket
+    ? {
+        low: fairMarket.min,
+        median: fairMarket.med,
+        high: fairMarket.max,
+        currency: fairMarket.currency,
+        count: fairMarket.count,
+      }
+    : null;
+  const listedComps = recordedSales
+    .filter((h) => h.priceType === "listed")
+    .map((h) => ({
+      price: h.salePrice,
+      platform: h.platform,
+      condition: h.condition,
+      url: h.sourceUrl,
+    }));
+  const salesByDate = recordedSales
+    .slice()
+    .sort((a, b) => (a.observedOn ?? a.dateRecorded).localeCompare(b.observedOn ?? b.dateRecorded));
+  const resaleTrendPct =
+    salesByDate.length > 1 && salesByDate[0].salePrice > 0
+      ? Math.round(
+          ((salesByDate[salesByDate.length - 1].salePrice - salesByDate[0].salePrice) /
+            salesByDate[0].salePrice) *
+            100,
+        )
+      : null;
+  const resaleAsOf =
+    salesByDate.length > 0
+      ? salesByDate[salesByDate.length - 1].observedOn ??
+        salesByDate[salesByDate.length - 1].dateRecorded
+      : null;
+
   // Retail price trajectory (MSRP over time) — the appreciation story, shown
   // separately from the resale Fair Market Range and honestly labelled so retail
   // is never read as resale/market value.
@@ -464,45 +509,16 @@ export default async function BagDetailPage({
         aria-label="Value summary"
         className="scroll-mt-4 rounded-2xl border border-border bg-surface p-5"
       >
-        <h2 className="font-serif text-xl text-foreground">What it&rsquo;s worth</h2>
-        {fairMarket ? (
-          <>
-            <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-              Fair Market Range · based on {fairMarket.count} recorded resale{" "}
-              {fairMarket.count === 1 ? "sale" : "sales"}
-            </p>
-            <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="text-lg text-muted">
-                {formatPrice(fairMarket.min, fairMarket.currency)}
-              </span>
-              <span className="text-muted">–</span>
-              <span className="font-serif text-3xl text-gold">
-                {formatPrice(fairMarket.med, fairMarket.currency)}
-              </span>
-              <span className="text-muted">–</span>
-              <span className="text-lg text-muted">
-                {formatPrice(fairMarket.max, fairMarket.currency)}
-              </span>
-              <span className="ml-1 text-xs text-muted/70">low · median · high</span>
-            </div>
-            <p className="mt-2 text-sm text-muted">
-              Last sold{" "}
-              <span className="text-foreground">
-                {formatPrice(fairMarket.last.salePrice, fairMarket.last.currency)}
-              </span>{" "}
-              ({fairMarket.last.dateRecorded}
-              {fairMarket.last.platform ? ` · ${fairMarket.last.platform}` : ""}).{" "}
-              <a href="#price-history" className="text-gold hover:underline">
-                See price history
-              </a>
-            </p>
-          </>
-        ) : (
-          <p className="mt-2 text-sm text-muted">
-            No recorded resale data yet for this exact variant — we only show
-            ranges built from real sales.
-          </p>
-        )}
+        <ValueModule
+          variantId={v.variantId}
+          framing={valueFraming}
+          range={valueRange}
+          listed={listedComps}
+          retailOriginal={v.retailPriceOriginal}
+          retailCurrency={v.currency}
+          trendPct={resaleTrendPct}
+          asOf={resaleAsOf}
+        />
         <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-border pt-4 text-sm">
           {v.retailPriceOriginal != null && (
             <div>
