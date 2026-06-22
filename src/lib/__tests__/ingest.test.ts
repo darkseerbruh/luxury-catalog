@@ -11,6 +11,7 @@ import {
 } from "../ingest/wayback";
 import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
+import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 
 const valid: PriceObservation = {
   brand: "Chanel",
@@ -160,6 +161,47 @@ describe("html helpers", () => {
     expect(extractDate("on 2012-05-14")).toBe("2012-05-14");
     expect(extractDate("05/14/2012")).toBe("2012-05-14");
     expect(extractDate("no date here")).toBeNull();
+  });
+});
+
+describe("eBay Browse helpers", () => {
+  it("builds a search URL with price band + category", () => {
+    const u = buildBrowseSearchUrl("Chanel Classic Flap", {
+      limit: 50,
+      categoryIds: "169291",
+      minPrice: 1500,
+      maxPrice: 25000,
+    });
+    expect(u).toContain("q=Chanel+Classic+Flap");
+    expect(u).toContain("category_ids=169291");
+    expect(u).toContain("limit=50");
+    expect(decodeURIComponent(u)).toContain("price:[1500..25000]");
+    expect(decodeURIComponent(u)).toContain("priceCurrency:USD");
+  });
+
+  it("maps eBay conditions to resale grades", () => {
+    expect(normalizeEbayCondition("Pre-owned")).toBe("good");
+    expect(normalizeEbayCondition("New with tags")).toBe("new");
+    expect(normalizeEbayCondition("Excellent")).toBe("excellent");
+    expect(normalizeEbayCondition(null)).toBeNull();
+    expect(normalizeEbayCondition("Parts only")).toBeNull();
+  });
+
+  it("parses item summaries, dropping priceless/urless rows", () => {
+    const items = parseBrowseItems({
+      itemSummaries: [
+        { title: "Chanel Flap", price: { value: "4200.00", currency: "USD" }, condition: "Pre-owned", itemWebUrl: "https://ebay.com/itm/1", itemId: "1" },
+        { title: "No price", itemWebUrl: "https://ebay.com/itm/2" },
+        { title: "No url", price: { value: "999", currency: "USD" } },
+      ],
+    });
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({ price: 4200, currency: "USD", condition: "good", url: "https://ebay.com/itm/1" });
+  });
+
+  it("returns [] for a malformed response", () => {
+    expect(parseBrowseItems({})).toEqual([]);
+    expect(parseBrowseItems(null)).toEqual([]);
   });
 });
 
