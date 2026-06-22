@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { getTastePageData } from "@/lib/personalization/taste-profile-page";
 import { ResetTasteButton } from "./ResetTasteButton";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 export const dynamic = "force-dynamic";
 
@@ -137,6 +138,8 @@ export default async function TastePage() {
           ))}
         </dl>
       </section>
+
+      <NewsletterSignup source="taste_page" className="mt-8" />
 
       <p className="mt-8 text-xs text-muted">
         Your taste profile is built from bags you&rsquo;ve saved, watched, and reviewed —

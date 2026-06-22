@@ -9,6 +9,7 @@ import PersonalizedRecs from "@/components/PersonalizedRecs";
 import PersonaRouter from "@/components/PersonaRouter";
 import { BagImage } from "@/components/BagImage";
 import { PostHogFlagBootstrap } from "@/components/PostHogFlagBootstrap";
+import { ExperimentExposure } from "@/components/ExperimentExposure";
 import { getUserProfile } from "@/lib/personalization/user-profile";
 import { evaluatePersonalizationFlag, getBootstrapFlags, PERSONALIZED_HOME_FLAG } from "@/lib/analytics/flags";
 
@@ -249,6 +250,12 @@ export default async function Home() {
           flag-evaluation flicker and to track experiment exposure correctly. */}
       {user && Object.keys(bootstrapFlags).length > 0 && (
         <PostHogFlagBootstrap flags={bootstrapFlags} />
+      )}
+      {user && (
+        <ExperimentExposure
+          flag="personalized_home"
+          variant={showPersonalized ? "test" : "control"}
+        />
       )}
 
       <section className="border-b border-border px-5 py-12">

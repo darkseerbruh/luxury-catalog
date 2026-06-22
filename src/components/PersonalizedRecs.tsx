@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPersonalizedRecs } from "@/lib/personalization/recs";
 import { getVariantImages } from "@/lib/queries";
 import { RecommendationCard } from "./RecommendationCard";
+import { PersonalizedRecsTracker } from "./PersonalizedRecsTracker";
 
 /**
  * Phase-2 personalized "Bags you might like" rail.
@@ -65,6 +66,7 @@ export default async function PersonalizedRecs({
           />
         ))}
       </div>
+      <PersonalizedRecsTracker count={recs.length} />
     </section>
   );
 }
