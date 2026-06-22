@@ -5,6 +5,7 @@ import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import Recommendations from "@/components/Recommendations";
+import PersonaRouter from "@/components/PersonaRouter";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,8 @@ export default async function Home() {
           </button>
         </form>
       </section>
+
+      <PersonaRouter />
 
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
