@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
@@ -18,6 +19,9 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
 });
+
+// Skimlinks publisher ID — overridable per environment, defaults to our account.
+const SKIMLINKS_ID = process.env.NEXT_PUBLIC_SKIMLINKS_ID ?? "305125X1793317";
 
 export const metadata: Metadata = {
   title: "The Luxury Catalog",
@@ -151,6 +155,16 @@ export default async function RootLayout({
           </div>
         </footer>
         </Providers>
+        {/* Skimlinks: auto-affiliates outbound merchant links (revenue on
+            "where to buy" clicks). ID overridable via env; defaults to our
+            account. Affiliate tracking is covered by /privacy + /disclosure. */}
+        {SKIMLINKS_ID && (
+          <Script
+            id="skimlinks"
+            strategy="afterInteractive"
+            src={`https://s.skimresources.com/js/${SKIMLINKS_ID}.skimlinks.js`}
+          />
+        )}
       </body>
     </html>
   );
