@@ -30,7 +30,13 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 - [x] ⛔🔧 **A3. Set Vercel env vars.** Done (six vars above).
 - [x] ⛔🔧 **A4. Auth URLs + confirmation.** Site/redirect URLs set; confirm-email disabled (interim).
 - [ ] ⛔ **A5. Smoke-test the full path** on the live DB: sign up → onboarding → save to closet → watchlist → review → quiz → recommendations → notifications. *(Partly testable locally now; finish after the branch is deployed.)*
-- [ ] 🔧 **A6. Rotate exposed secrets** *(NEW — security)* — regenerate the Supabase **`service_role` key** and **DB password** (Dashboard → Project Settings → API / Database), then update `.env.local` **and** the Vercel env var. Do before launch.
+- [ ] 🔧 **A6. Rotate exposed secrets — DEFERRED to before full launch** (owner, 2026-06-22). The old Supabase `service_role` key + DB password were pasted in a transcript. **Plan worked out (do this before going truly public):** the project now has Supabase's **new key system** (Publishable + Secret keys) alongside the legacy `anon`/`service_role`. Migrate off the leaked legacy key:
+  1. Supabase → Settings → API → **Secret keys** → create **Key A** (`app-server`). Copy the **Publishable key** too.
+  2. In **Vercel** env vars (keep names, swap values): `SUPABASE_SERVICE_ROLE_KEY` → Key A; `NEXT_PUBLIC_SUPABASE_ANON_KEY` → Publishable key. **Redeploy.**
+  3. **Verify the live site works** (log in, browse) on the new keys.
+  4. Then **reset the DB password** (Settings → Database) and **disable the legacy keys** — this kills the leaked one.
+  5. Update local `.env.local` with the new values so the CLI/dev still work.
+  - **Pairs with cloud access (I1/I2):** create a SEPARATE secret key **Key B** (`cloud-agent`) for the cloud workspace, so a future leak there is revocable without touching the live site. **⚠️ Do NOT paste key values into chat** — they go straight into Vercel / the cloud env config.
 - [x] ⛔🔧 **A7. Merge feature branch → `main`.** Done (2026-06-20, `--no-ff` merge; `tsc`/eslint/`next build`/50 tests green pre-merge). Vercel auto-deploys `main` to production. **Verify the deploy succeeds** in Vercel, then run A5 against it. Migrations `0008`–`0010` still need `supabase db push` for the new features (admin gate, corrections, settings) to work.
 
 ---
