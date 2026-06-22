@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
+import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import {
   AUTHOR_NAME,
   SITE_URL,
@@ -315,6 +316,11 @@ export default async function BagDetailPage({
     });
   }
 
+  // Whether the outbound resale / consignor links resolve (drives the top
+  // action cluster's Buy/Sell CTAs and the jump-nav entries).
+  const hasBuyLinks = buildResaleLinks(v.brand.name, v.style.name).length > 0;
+  const hasSellLinks = buildConsignmentLinks(v.brand.name, v.style.name).length > 0;
+
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
     { id: "specifications", label: "Specs" },
@@ -322,8 +328,8 @@ export default async function BagDetailPage({
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
     recordedSales.length > 0 ? { id: "price-history", label: "Resale prices" } : null,
     retailHistory.length > 1 ? { id: "retail-history", label: "Retail history" } : null,
-    { id: "where-to-buy", label: "Buy" },
-    { id: "where-to-sell", label: "Sell" },
+    hasBuyLinks ? { id: "where-to-buy", label: "Buy" } : null,
+    hasSellLinks ? { id: "where-to-sell", label: "Sell" } : null,
     { id: "reviews", label: "Reviews" },
     { id: "owner-ratings", label: "Owner ratings" },
   ].filter((x): x is { id: string; label: string } => x !== null);
@@ -499,6 +505,18 @@ export default async function BagDetailPage({
           </div>
         </dl>
       </section>
+
+      {/* Decision cluster at the value moment: closet intent (want/have/had) +
+          price watch + the Buy/Sell outbound CTAs — the monetization moments,
+          above the fold rather than 600 lines down. */}
+      <BagActions
+        variantId={v.variantId}
+        signedIn={userState.signedIn}
+        hasBuyLinks={hasBuyLinks}
+        hasSellLinks={hasSellLinks}
+        initialClosetStatus={userState.closetStatus}
+        initialWatching={userState.watching}
+      />
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
@@ -974,14 +992,6 @@ export default async function BagDetailPage({
 
       {/* Where to sell — buyout vs. consignment fork (consignor-referral revenue). */}
       <WhereToSell variantId={v.variantId} brand={v.brand.name} style={v.style.name} />
-
-      {/* Save / watch actions */}
-      <BagActions
-        variantId={v.variantId}
-        signedIn={userState.signedIn}
-        initialClosetStatus={userState.closetStatus}
-        initialWatching={userState.watching}
-      />
 
       {/* Reviews & ratings */}
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />

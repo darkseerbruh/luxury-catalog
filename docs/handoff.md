@@ -1,9 +1,35 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **Latest session (2026-06-22):** voice & tone rewrite of all user-facing copy. See the TL;DR block
-> immediately below. (Prior session this date: finance/money compliance doc + Phase A legal UX —
-> next block down.)
+> **Latest session (2026-06-22):** monetization-moment placement audit + housekeeping. See the
+> TL;DR block immediately below. (Earlier this date: voice & tone rewrite; finance/money compliance —
+> next blocks down.)
+
+## TL;DR — monetization-moment placement audit (latest session)
+
+On branch `claude/daily-review-planning-hqj3hg` (not yet merged to `main`). Code + docs;
+**no DB migrations, env vars, or seed changes.** `tsc`, `eslint src`, `next build`, **60/60 tests** green.
+
+1. **New doc `docs/monetization-moments-audit.md`** — maps each of the 4 revenue streams to the
+   feature/moment that triggers it, audits placement, records the changes. Key finding: the
+   **consignor referral (~$1,250/seller) is the model's biggest swing, and its triggers — closet
+   `had`/`have` + the thrift `/found` log — did nothing with that intent.**
+2. **Bag page (`/bag/[variantId]`):** rebuilt `BagActions` into an **above-the-fold decision cluster**
+   placed under the "What it's worth" value card — want/have/had + watch **and** the Buy/Sell CTAs,
+   with contextual bridges (`had` → leads with Sell; `want` → watch price). Was buried ~600 lines down,
+   order Buy→Sell→Save. Detailed `WhereToBuy`/`WhereToSell` stay near price history; jump-nav Buy/Sell
+   now gate on whether links resolve.
+3. **Thrift `/found`:** the success screen now surfaces a **"Flipping it?"** consignor CTA (buyout +
+   consign links from the logged brand/style, FTC disclosure, `outbound_consign_clicked` w/
+   `source:"thrift_find"`) — the literal consignor-referral moment.
+4. **Closet `/closet`:** light sell-routing nudge on the **have** group (consignor supply).
+5. **Housekeeping:** renamed duplicate migration `0012_instagram_resources.sql` → **`0015`** (collided
+   with `0012_bag_axis_votes.sql`; was never applied, so safe). Closed stale **PR #1** (review-only
+   snapshot; code long since shipped).
+
+**Follow-ups:** validate via PostHog (`outbound_consign_clicked` esp. `thrift_find`, `item_saved` by
+status); add a desktop sticky bar only if desktop buy/sell CTR lags mobile. **Photo-contributions build
+(the big queued feature) is still open** — not started this session.
 
 ## TL;DR — voice & tone rewrite (latest session)
 
@@ -243,7 +269,7 @@ Grant `profile.is_expert` (service role) to anyone who should author posts. Re-r
    - **`0008_admin_flag.sql` *(security must-fix — HUMAN-GATED, not yet applied)*** — adds `profile.is_admin boolean not null default false` and revokes column-level UPDATE on `is_admin` + the 0006 trust flags from `anon`/`authenticated` (so they can't be self-granted via the row-level update policy). **After applying, the operator MUST set their own flag once via the Supabase SQL editor or they'll be locked out of `/admin`:** `update profile set is_admin = true where id = '<your-auth-user-uuid>';` The app guard (`requireAdmin()`/`isAdmin()` in `auth.ts`, enforced by `src/app/admin/layout.tsx`) **fails closed** — if the column is missing (pre-migration) or unreadable, admin access is DENIED, not crashed. (The photo-contributions migration that was sketched as `0008` will need a new number — now **`0011`**, since 0009/0010 are taken below.)
    - **`0009_corrections.sql` *(expert/corrections session — HUMAN-GATED, not yet applied)*** — adds the `correction` table for structured "suggest an edit" submissions. RLS: authenticated users INSERT + SELECT their own; admins (`profile.is_admin`) SELECT all + UPDATE status; public/anon cannot read. Depends on 0008 (`is_admin`). The app degrades gracefully if absent (submit fails with a clear message; admin queue shows empty).
    - **`0010_notification_prefs.sql` *(settings session — HUMAN-GATED, not yet applied)*** — adds `profile.notification_prefs jsonb default '{}'` (per-channel opt-outs; absent key = opted-in). Wired into the notification creators + price-alert cron via `isOptedIn()` (fails OPEN — notifications keep flowing if the column is missing). No new RLS policy needed (covered by the 0002 own-row update policy; privileged columns stay revoked by 0008).
-   - **`0012_instagram_resources.sql` *(social-embed session — HUMAN-GATED, not yet applied)*** — extends the YouTube embed model (0004) to Instagram. Adds `'instagram'` to the `resource_type` enum + nullable cache columns (`embed_html`, `thumbnail_url`, `author_name`) on `resource`. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block — run separately if your tool wraps statements. App degrades gracefully if absent (the YouTube path is unchanged; Instagram rows just won't exist). *(0011 stays reserved for the queued photo-contributions migration.)* See **`docs/social-embed-strategy.md`**.
+   - **`0015_instagram_resources.sql` *(social-embed session — HUMAN-GATED, not yet applied)*** — extends the YouTube embed model (0004) to Instagram. Adds `'instagram'` to the `resource_type` enum + nullable cache columns (`embed_html`, `thumbnail_url`, `author_name`) on `resource`. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block — run separately if your tool wraps statements. App degrades gracefully if absent (the YouTube path is unchanged; Instagram rows just won't exist). *(Renumbered from `0012` → `0015` on 2026-06-22 to resolve a duplicate-`0012` collision with `0012_bag_axis_votes.sql`; it was never applied, so the rename is safe.)* See **`docs/social-embed-strategy.md`**.
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
