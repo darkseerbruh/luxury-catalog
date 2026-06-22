@@ -27,6 +27,7 @@ import WhereToBuy from "./WhereToBuy";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
+import RequestAuthentication from "./RequestAuthentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
@@ -618,6 +619,9 @@ export default async function BagDetailPage({
           </Section>
         </div>
       )}
+
+      {/* Authentication-marketplace on-ramp (lead capture — no money on-platform). */}
+      <RequestAuthentication variantId={v.variantId} signedIn={userState.signedIn} />
 
       {/* Exterior material detail */}
       {v.exteriorMaterial && (

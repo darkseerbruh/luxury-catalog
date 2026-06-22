@@ -64,7 +64,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 ## E. Monetization setup
 
 - [ ] ⚖️📣 **E1. Affiliate applications** *(started)* — fastest: an aggregator (**Sovrn/Skimlinks** or **Rakuten**) for instant multi-merchant coverage; then direct: **The RealReal** ([/affiliates](https://www.therealreal.com/affiliates)), **Vestiaire** (Awin/Partnerize), **Fashionphile** (Impact/ShareASale). Apply as sole prop (SSN) now; switch payee to the LLC later. Codes → `NEXT_PUBLIC_AFFILIATE_*` / `_WRAP_TEMPLATE` in Vercel.
-- [ ] ⚖️ **E2. Authenticator outreach** — line up 3–5 pro authenticators for the Marketplace (Rev #2).
+- [ ] ⚖️ **E2. Authenticator outreach** — line up 3–5 pro authenticators for the Marketplace (Rev #2). **The v1 on-ramp is now built** (lead capture, money-free): apply migration `0017`, then grant each pro `is_authenticator` (`update profile set is_authenticator = true where id = '<their-id>';` — same flag that auto-publishes their photos). They'll then see the claim queue at **/authenticate**. Requests come in from the bag-page "Want a pro to check it?" CTA. Pricing/payment is arranged off-platform in v1 (on-platform payments = Phase C, attorney-gated — don't enable yet).
 
 ---
 
@@ -96,7 +96,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 - [x] 🧠 **H1/H2. Build order + first feature** — DECIDED: build the full engagement track now (social UI → feed → taste quiz → recs → **Taste Map** → notifications). Built on the feature branch this session.
 - [x] 🧠 **H3. Admin auth gate** — BUILT: `/admin/*` gated behind `profile.is_admin` (migration `0008`, fail-closed). **Operator:** after applying `0008`, set your own flag (`update profile set is_admin = true where id = '<your-id>';`) or you're locked out.
 - [ ] 🧠 **H4. Social links policy** — confirm allowed networks (IG/TikTok/YouTube/Poshmark/Substack) + verified-link treatment.
-- [x] 🧠 **H5. Photo-contribution system** — BUILT (2026-06-22): `bag_photo` + contributor tiers, hybrid moderation, bag-page gallery/upload, `/admin/photos`, `/photos/most-wanted`, profile tier card. **Operator actions:** (1) apply **`0016_photo_contributions.sql`** (`supabase db push` — it also creates the public `bag-photos` Storage bucket + policies); (2) ensure `SUPABASE_SERVICE_ROLE_KEY` is set (admin queue + auto-publish + Most-Wanted demand ranking need it); (3) grant `is_authenticator` to vetted contributors so they auto-publish; (4) **register a DMCA agent before promoting UGC widely** (see G2). Galleries/upload degrade gracefully until 0016 is applied.
+- [x] 🧠 **H5. Photo-contribution system** — BUILT (2026-06-22): `bag_photo` + contributor tiers, hybrid moderation, bag-page gallery/upload, `/admin/photos`, `/photos/most-wanted`, profile tier card. **Operator actions:** (1) apply **`0016_photo_contributions.sql`** (`supabase db push` — it also creates the public `bag-photos` Storage bucket + policies); (2) ensure `SUPABASE_SERVICE_ROLE_KEY` is set (admin queue + auto-publish + Most-Wanted demand ranking need it); (3) grant `is_authenticator` to vetted contributors so they auto-publish; (4) **register a DMCA agent before promoting UGC widely** (see G2). Galleries/upload degrade gracefully until 0016 is applied. **Smoke-test checklist: `docs/photo-smoke-test.md`** (run on your laptop after applying 0016).
 
 ---
 
