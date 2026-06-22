@@ -52,6 +52,11 @@
 - **Reference creators she loves (learn-from, don't copy):** **Je Suis Lou** (primary tonal model — informed-but-warm, anti-snobbery, transparency-as-mission, joy/memory-led value, "we don't judge"); @relaxitsonlyfashion (deadpan + deep passion); @AlexandraAnele (approachable + exacting); @juliareingoldproductions (human-on-the-other-side; the founder-persona model). Brand canon: Mr Porter ("would you say it in the pub?"), Mailchimp-minus-quirk (clear over clever), Aesop (no superlatives), Ffern (make the mechanics feel human).
 - **Content channels chosen** (canonical: `docs/social-content-calendar.md`): Pinterest, Email/Newsletter, Instagram, TikTok/YouTube Shorts. Evaluate formats by **revenue proximity × solo-operator effort**; every post drives to a real page; **batch the video**; the newsletter opt-in is a known unbuilt dependency.
 
+## Surfacing features on the home/entry pages (UX copy)
+- **Lead with the value prop, not a list.** On entry surfaces (home, nav), a flat list of feature links/chips is *"not a good experience."* Each use case needs a **hook that sells why it's for you** and drives traffic to the feature — motivate the click, don't just enumerate.
+- **One entry per destination — dedupe overlapping flows.** If two use cases point at the same place (e.g. two chips both linking to `/identify`), **show it once** as a single combined value-prop block with copy that speaks to *both* audiences. Never surface duplicate links to the same flow.
+- **Offer a few copy/positioning options to choose from.** She'll ask you to *"suggest a few options for how to best highlight"* something — give 2–3 distinct angles per item, ship a sensible default, and record the alternatives where sessions can reuse/swap them (e.g. `docs/ux/home-use-case-value-props.md`). Treat copy as A/B-swappable, not final.
+
 ## What she's drawn to
 - "Good feels," status, and recognition mechanics for users; gamification **tied to strategy**.
 - Language that makes the reader feel *let into the club* via real knowledge — **warm, precise, and unpretentious**, never ornate luxury-speak or empty superlatives (see "Brand voice & tone" above).
