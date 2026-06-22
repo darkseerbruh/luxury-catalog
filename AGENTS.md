@@ -28,4 +28,6 @@ so separate Claude sessions/chats don't drift into parallel copies.
    `claude/catalog-enhancements-*`). They are stale/archived — always base off
    `main`.
 4. The current handoff lives at `docs/handoff.md` on `main`. Read it first.
+5. Read `docs/preferences.md` — the owner's working preferences and locked
+   decisions — at the start of every session, and keep it updated as you learn more.
 
