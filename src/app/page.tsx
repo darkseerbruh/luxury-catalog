@@ -5,8 +5,12 @@ import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import Recommendations from "@/components/Recommendations";
+import PersonalizedRecs from "@/components/PersonalizedRecs";
 import PersonaRouter from "@/components/PersonaRouter";
 import { BagImage } from "@/components/BagImage";
+import { PostHogFlagBootstrap } from "@/components/PostHogFlagBootstrap";
+import { getUserProfile } from "@/lib/personalization/user-profile";
+import { evaluatePersonalizationFlag, getBootstrapFlags, PERSONALIZED_HOME_FLAG } from "@/lib/analytics/flags";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +45,26 @@ export default async function Home() {
   const [closet, feed] = user
     ? await Promise.all([getCloset(), getFeed(8)])
     : [[], []];
+
+  // Phase-2 personalization: evaluate the PostHog flag server-side so the
+  // decision is baked into the initial HTML (no flicker). Bootstrap the
+  // evaluated values to the client so PostHog JS stays in sync for event tracking.
+  let showPersonalized = false;
+  let bootstrapFlags: Record<string, string | boolean> = {};
+  if (user) {
+    const personProfile = await getUserProfile(user.id);
+    const personProps = {
+      persona: personProfile?.persona ?? null,
+      budget_band: personProfile?.budgetBand ?? null,
+      intent: personProfile?.intent ?? null,
+    };
+    const [flagValue, flagBootstrap] = await Promise.all([
+      evaluatePersonalizationFlag(user.id, personProps),
+      getBootstrapFlags(user.id, personProps),
+    ]);
+    showPersonalized = flagValue === true || flagValue === "test";
+    bootstrapFlags = flagBootstrap?.flags ?? {};
+  }
 
   const liveBrands = brands.filter((b) => b.isLive);
   const comingSoonBrands = brands.filter((b) => !b.isLive);
@@ -208,8 +232,23 @@ export default async function Home() {
 
       {user && (
         <section className="border-b border-border px-5 py-12">
-          <Recommendations source="home" layout="scroll" limit={8} />
+          {showPersonalized ? (
+            <PersonalizedRecs
+              userId={user.id}
+              source="home_personalized"
+              layout="scroll"
+              limit={8}
+            />
+          ) : (
+            <Recommendations source="home" layout="scroll" limit={8} />
+          )}
         </section>
+      )}
+
+      {/* Bootstrap PostHog flag state from the server to the client to prevent
+          flag-evaluation flicker and to track experiment exposure correctly. */}
+      {user && Object.keys(bootstrapFlags).length > 0 && (
+        <PostHogFlagBootstrap flags={bootstrapFlags} />
       )}
 
       <section className="border-b border-border px-5 py-12">
