@@ -13,6 +13,7 @@ import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 import { parseTrrDescription } from "../ingest/trr";
+import { buildEnrichmentPrompt, parseEnrichmentResponse } from "../ingest/enrich";
 
 const valid: PriceObservation = {
   brand: "Chanel",
@@ -230,6 +231,26 @@ describe("TheRealReal description parser", () => {
 
   it("returns nulls for an empty description", () => {
     expect(parseTrrDescription("")).toMatchObject({ color: null, material: null, hardwareColor: null });
+  });
+});
+
+describe("condition enrichment parser", () => {
+  it("validates good JSON (incl. code fences) and coerces bad values to null", () => {
+    const out = parseEnrichmentResponse('```json\n{"corner_wear":"minor","hardware_tarnish":true,"odor":false,"full_set":true,"interior_staining":"bogus","authenticity_card":null}\n```');
+    expect(out).toMatchObject({ corner_wear: "minor", hardware_tarnish: true, odor: false, full_set: true });
+    expect(out!.interior_staining).toBeNull(); // invalid enum -> null
+  });
+
+  it("returns null for non-JSON", () => {
+    expect(parseEnrichmentResponse("sorry, I can't")).toBeNull();
+    expect(parseEnrichmentResponse("")).toBeNull();
+  });
+
+  it("prompt instructs JSON-only and no inference", () => {
+    const p = buildEnrichmentPrompt("Light corner wear. Includes box and dust bag.");
+    expect(p).toMatch(/JSON only/i);
+    expect(p).toMatch(/Do NOT guess/i);
+    expect(p).toContain("Light corner wear");
   });
 });
 

@@ -16,7 +16,8 @@
     "ingest:auction": "tsx supabase/ingest/sources/auction.ts",
     "ingest:ebay": "tsx supabase/ingest/sources/ebay.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
-    "summary:refresh": "tsx supabase/ingest/refresh-summary.ts"
+    "summary:refresh": "tsx supabase/ingest/refresh-summary.ts",
+    "enrich:conditions": "tsx supabase/ingest/enrich-conditions.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
