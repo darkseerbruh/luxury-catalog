@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createServerSupabase } from "./supabase/server";
+import { identifyUserToPostHog } from "./analytics/flags";
+import { getUserProfile } from "./personalization/user-profile";
 
 /**
  * Best-effort request origin for building absolute redirect URLs (e.g. the
@@ -82,8 +84,20 @@ export async function signIn(
   if (!email || !password) return { error: "Email and password are required." };
 
   const supabase = await createServerSupabase();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: "Incorrect email or password." };
+
+  // Stitch anonymous → identified in PostHog and write persona as a person
+  // property so the personalized_home flag can target it.
+  if (signInData.user) {
+    const userId = signInData.user.id;
+    const profile = await getUserProfile(userId);
+    identifyUserToPostHog(userId, {
+      persona: profile?.persona ?? null,
+      budget_band: profile?.budgetBand ?? null,
+      intent: profile?.intent ?? null,
+    }).catch(() => undefined); // fire-and-forget, never block sign-in
+  }
 
   revalidatePath("/", "layout");
   redirect("/closet");
