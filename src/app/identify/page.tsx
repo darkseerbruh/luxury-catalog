@@ -328,10 +328,10 @@ export default function IdentifyPage() {
             >
               <span>
                 <span className="block text-sm font-medium text-foreground">
-                  See what it&rsquo;s worth
+                  See what it actually sells for
                 </span>
                 <span className="block text-xs text-muted">
-                  Fair-market value range from real recorded sales
+                  A resale range built from recorded sales, on the catalog page
                 </span>
               </span>
               <span className="shrink-0 text-gold">→</span>
@@ -344,10 +344,10 @@ export default function IdentifyPage() {
               >
                 <span>
                   <span className="block text-sm font-medium text-foreground">
-                    Check the catalog for value data
+                    Look it up in the catalog
                   </span>
                   <span className="block text-xs text-muted">
-                    We only show value ranges built from real sales
+                    The only resale ranges we show are built from recorded sales
                   </span>
                 </span>
                 <span className="shrink-0 text-gold">→</span>

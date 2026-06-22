@@ -41,8 +41,8 @@ export default async function RecapPage() {
           <p className="text-foreground">Log a few bags first.</p>
           <p className="mx-auto mt-2 max-w-sm text-muted">
             Once you&rsquo;ve saved at least {RECAP_MIN_ITEMS} bags to your
-            closet, we&rsquo;ll build your personal Year in Bags recap — top
-            brands, your taste, and more.{" "}
+            closet, we&rsquo;ll build your Year in Bags recap — your top
+            brands, your taste, and what you&rsquo;ve been tracking.{" "}
             {recap.totalCloset > 0 && (
               <>You have {recap.totalCloset} so far.</>
             )}

@@ -547,10 +547,10 @@ export default async function BagDetailPage({
         <div id="authentication" className="scroll-mt-4">
           <Section title="How to authenticate this bag">
             <p className="mb-4 text-sm text-muted">
-              A scannable checklist drawn from the catalogued production records,
-              serial tags, and authentication notes for this variant. Specificity
-              is the point — but these checks support, they don&rsquo;t replace, an
-              in-hand inspection by a qualified authenticator.
+              A checklist drawn from the catalogued production records, serial
+              tags, and authentication notes for this variant. These checks help
+              you know what to look for; they don&rsquo;t replace an in-hand
+              inspection by a qualified authenticator.
             </p>
             <ol className="flex flex-col gap-3">
               {authChecks.map((c, i) => (

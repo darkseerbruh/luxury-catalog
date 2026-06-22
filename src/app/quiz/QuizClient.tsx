@@ -114,12 +114,12 @@ export default function QuizClient({
           <div className="rounded-2xl border border-gold/30 bg-gold/5 p-5 text-center">
             <p className="text-foreground">
               Your <span className="font-medium text-gold">{result.name}</span> profile
-              is ready — don&rsquo;t lose it.
+              is ready.
             </p>
             <p className="mx-auto mt-1 max-w-sm text-sm text-muted">
-              Create a free account to unlock the bags matched to your taste, save
-              your Taste Map, and get a price-drop alert when one you love hits your
-              target. We&rsquo;ll keep these results.
+              Make a free account and we&rsquo;ll keep it — plus the bags matched to
+              your taste, your saved Taste Map, and a heads-up when one you love drops
+              to your target price.
             </p>
           </div>
         )}
