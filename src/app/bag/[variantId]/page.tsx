@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
+import { getVariantDemand } from "@/lib/demand";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
 import {
@@ -244,6 +245,10 @@ export default async function BagDetailPage({
     breadcrumbJsonLd(v),
   ].filter(Boolean);
 
+  // Demand signal (privacy-safe counts of wants + watchers) — powers the timing
+  // read; renders only when there's real signal.
+  const demand = await getVariantDemand(v.variantId);
+
   // Fair Market Range — computed ONLY from recorded RESALE sales (no fabrication).
   // KBB "Fair Market Range, not a single price" + StockX "Last Sale". Exclude
   // retail/boutique/MSRP rows so the range reflects the secondary market, not the
@@ -416,6 +421,17 @@ export default async function BagDetailPage({
         {v.style.description && (
           <p className="mt-4 text-sm leading-relaxed text-muted">
             {v.style.description}
+          </p>
+        )}
+        {demand.label && (
+          <p
+            className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${
+              demand.level === "hot"
+                ? "border-gold bg-gold/10 text-gold"
+                : "border-border text-muted"
+            }`}
+          >
+            {demand.level === "hot" ? "🔥 High demand" : "Collector demand"} · {demand.label}
           </p>
         )}
       </header>
