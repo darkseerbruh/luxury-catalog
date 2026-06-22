@@ -1,4 +1,6 @@
+import { cache } from "react";
 import { createServerSupabase } from "./supabase/server";
+import { getSupabaseAdmin } from "./supabase/admin";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
@@ -45,7 +47,7 @@ type Row = {
   variant?: unknown;
 };
 
-function bagOf(row: Row): { brandName: string | null; styleName: string | null } {
+function bagOf(row: { variant?: unknown }): { brandName: string | null; styleName: string | null } {
   const v = Array.isArray(row.variant) ? row.variant[0] : row.variant;
   const s = (v as { style?: unknown } | null)?.style;
   const so = (Array.isArray(s) ? s[0] : s) as { name?: string | null; brand?: unknown } | null;
@@ -82,6 +84,66 @@ function mapRow(r: Row, handles: Map<string, string | null>, withContact: boolea
     styleName,
     claimedByHandle: r.claimed_by ? handles.get(r.claimed_by) ?? null : null,
   };
+}
+
+/**
+ * Whether any verified authenticators exist yet. Drives the bag-page CTA: until
+ * this is true the on-ramp is a "coming soon — notify me" fake door; once a real
+ * authenticator is flagged it flips to the live request form. Cached per request.
+ * The `profile_select_public` policy (0006) exposes rows where is_authenticator
+ * is true, so the normal client can count them — no service-role key needed.
+ */
+export const hasActiveAuthenticators = cache(async (): Promise<boolean> => {
+  if (!hasSupabase()) return false;
+  const supabase = await createServerSupabase();
+  const { count, error } = await supabase
+    .from("profile")
+    .select("id", { count: "exact", head: true })
+    .eq("is_authenticator", true);
+  if (error) return false;
+  return (count ?? 0) > 0;
+});
+
+export interface InterestStats {
+  total: number;
+  uniqueUsers: number;
+  topBags: { variantId: number; brandName: string | null; styleName: string | null; count: number }[];
+}
+
+/**
+ * Admin readout of authentication demand (the fake-door metric): how many "notify
+ * me" / request rows, from how many distinct people, and which bags draw the most
+ * interest. Service-role (cross-user aggregate); empty without the key.
+ */
+export async function getInterestStats(): Promise<InterestStats> {
+  const empty: InterestStats = { total: 0, uniqueUsers: 0, topBags: [] };
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return empty;
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from("authentication_request")
+    .select(`variant_id, user_id, ${BAG_EMBED}`)
+    .order("created_at", { ascending: false })
+    .limit(2000);
+  type StatRow = { variant_id: number | null; user_id: string | null; variant?: unknown };
+  const rows = (data as unknown as StatRow[] | null) ?? [];
+  if (rows.length === 0) return empty;
+
+  const users = new Set<string>();
+  const byBag = new Map<number, { count: number; brandName: string | null; styleName: string | null }>();
+  for (const r of rows) {
+    if (r.user_id) users.add(r.user_id);
+    if (r.variant_id == null) continue;
+    const { brandName, styleName } = bagOf(r);
+    const cur = byBag.get(r.variant_id) ?? { count: 0, brandName, styleName };
+    cur.count += 1;
+    byBag.set(r.variant_id, cur);
+  }
+  const topBags = [...byBag.entries()]
+    .map(([variantId, v]) => ({ variantId, count: v.count, brandName: v.brandName, styleName: v.styleName }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
+
+  return { total: rows.length, uniqueUsers: users.size, topBags };
 }
 
 /** The signed-in user's own requests (newest first). */
