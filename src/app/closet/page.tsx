@@ -160,6 +160,13 @@ export default async function ClosetPage() {
                 {g.label}{" "}
                 <span className="text-sm text-muted">({items.length})</span>
               </h2>
+              {g.key === "have" && (
+                <p className="mb-3 text-sm text-muted">
+                  Thinking of parting with one? Open it for buyout &amp;
+                  consignment quotes under{" "}
+                  <span className="text-foreground">Where to sell</span>.
+                </p>
+              )}
               <ul className="divide-y divide-border rounded-2xl border border-border bg-surface">
                 {items.map((c) => (
                   <li key={c.variantId}>

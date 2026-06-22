@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { logThriftFind } from "@/lib/actions";
+import { buildConsignmentLinks } from "@/lib/affiliate";
 import { track, EVENTS } from "@/lib/analytics/events";
 
 const CONDITIONS = ["unknown", "new", "excellent", "very good", "good", "fair"];
@@ -14,11 +15,15 @@ export default function ThriftFindForm({
   defaultBrand?: string;
   defaultStyle?: string;
 }) {
-  const [done, setDone] = useState(false);
+  const [submitted, setSubmitted] = useState<{ brand: string; style: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  if (done) {
+  if (submitted) {
+    // The find is logged — and a thrift find is a flipper's strongest sell
+    // signal, so this is the consignor-referral moment (the highest-value
+    // outbound link in the model). Surface it when we know the brand.
+    const sellLinks = buildConsignmentLinks(submitted.brand, submitted.style);
     return (
       <div className="rounded-2xl border border-gold/30 bg-gold/5 p-8 text-center">
         <p className="font-serif text-xl text-foreground">Logged. Nice find.</p>
@@ -26,9 +31,46 @@ export default function ThriftFindForm({
           Thanks — that&rsquo;s one more data point on what&rsquo;s turning up and
           what it actually sells for.
         </p>
+
+        {sellLinks.length > 0 && (
+          <div className="mx-auto mt-6 max-w-sm rounded-xl border border-border bg-surface p-5 text-left">
+            <p className="font-serif text-base text-foreground">Flipping it?</p>
+            <p className="mt-1 text-sm text-muted">
+              Get a buyout quote (cash now) or consign it (listed for you, paid on
+              sale). Quotes and splits are set by each platform.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {sellLinks.map((l) => (
+                <a
+                  key={l.key}
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow sponsored"
+                  onClick={() =>
+                    track(EVENTS.outboundConsignClicked, {
+                      platform: l.key,
+                      mode: l.mode,
+                      brand: submitted.brand,
+                      style: submitted.style,
+                      source: "thrift_find",
+                    })
+                  }
+                  className="rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
+                >
+                  {l.mode === "buyout" ? `Quote on ${l.name}` : `Consign with ${l.name}`} →
+                </a>
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted/70">
+              Affiliate links — we may earn a commission, at no cost to you.{" "}
+              <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
+            </p>
+          </div>
+        )}
+
         <button
           type="button"
-          onClick={() => setDone(false)}
+          onClick={() => setSubmitted(null)}
           className="mt-5 rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >
           Log another find
@@ -42,10 +84,10 @@ export default function ThriftFindForm({
     startTransition(async () => {
       const res = await logThriftFind(formData);
       if (res.ok) {
-        track(EVENTS.thriftFindLogged, {
-          brand: String(formData.get("brand") ?? "") || undefined,
-        });
-        setDone(true);
+        const brand = String(formData.get("brand") ?? "").trim();
+        const style = String(formData.get("style") ?? "").trim();
+        track(EVENTS.thriftFindLogged, { brand: brand || undefined });
+        setSubmitted({ brand, style });
       } else setError(res.error ?? "Something went sideways — try again.");
     });
   }
