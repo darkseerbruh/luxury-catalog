@@ -49,7 +49,12 @@ export default async function PersonalizedRecs({
 
   return (
     <section className="px-0">
-      <h2 className="font-serif text-2xl text-foreground">Bags you might like</h2>
+      <div className="flex items-baseline gap-3">
+        <h2 className="font-serif text-2xl text-foreground">Bags you might like</h2>
+        <Link href="/taste" className="text-xs text-muted hover:text-gold hover:underline">
+          How we got this
+        </Link>
+      </div>
       <div
         className={
           layout === "grid"
