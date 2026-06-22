@@ -56,6 +56,24 @@ export interface ValueModuleProps {
   retailTrendPct?: number | null;
   /** M2 — recorded resale grouped into condition tiers for the like-for-like ladder. */
   byCondition?: CompRow[];
+  /**
+   * Variant-level production era (the honest year signal we have today). Per-
+   * listing era (the era×condition matrix) activates once date-code extraction
+   * populates price_history.production_year.
+   */
+  era?: { productionYears: string | null; discontinued: boolean; vintage: boolean };
+}
+
+/** A neutral, non-invented note on how the production era bears on value. */
+function eraNote(era: { productionYears: string | null; discontinued: boolean; vintage: boolean }): string | null {
+  const years = era.productionYears ? ` (${era.productionYears})` : "";
+  if (era.vintage) {
+    return `Vintage production${years} — no longer made, so condition and a complete set tend to matter more to value.`;
+  }
+  if (era.discontinued) {
+    return `Discontinued${years} — no longer in production, so resale is the only way to buy it.`;
+  }
+  return null;
 }
 
 /**
@@ -121,6 +139,7 @@ export default function ValueModule({
   demandLabel = null,
   retailTrendPct = null,
   byCondition,
+  era,
 }: ValueModuleProps) {
   const ladder = !!byCondition && byCondition.length >= 2;
   useEffect(() => {
@@ -227,15 +246,27 @@ export default function ValueModule({
   }
 
   const note = timingNote(framing, demandLevel, trendPct, retailTrendPct);
+  const eraText = era ? eraNote(era) : null;
 
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 className="font-serif text-xl text-foreground">{HEADINGS[framing]}</h2>
-        <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
-          This exact variant · {count} recorded {count === 1 ? "price" : "prices"}
-          {count < 4 ? " · limited data" : ""}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          {era?.vintage ? (
+            <span className="rounded-full border border-gold/40 px-2.5 py-0.5 text-xs text-gold">
+              Vintage
+            </span>
+          ) : era?.discontinued ? (
+            <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted">
+              Discontinued
+            </span>
+          ) : null}
+          <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
+            This exact variant · {count} recorded {count === 1 ? "price" : "prices"}
+            {count < 4 ? " · limited data" : ""}
+          </span>
+        </div>
       </div>
 
       <p className="mt-2 text-base leading-relaxed text-foreground">{verdict}</p>
@@ -246,6 +277,8 @@ export default function ValueModule({
           {demandLabel ? <span className="text-muted/70"> · {demandLabel}</span> : null}
         </p>
       )}
+
+      {eraText && <p className="mt-1.5 text-sm text-muted">{eraText}</p>}
 
       <div className="mt-4">
         {ladder ? (

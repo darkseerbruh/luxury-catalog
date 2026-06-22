@@ -11,6 +11,7 @@ Reworked the bag page's "What it's worth" block into an **adaptive value module*
 - **M0** — `CompScale` gauge + adaptive `ValueModule` + instrumentation. *On `main` (merge `732f59c`).*
 - **M1** — demand signal (`getVariantDemand`, wants/watchers) + retail-hike catalyst (`retailChange`) → a descriptive, framing-aware **timing note** ("waiting hasn't paid off lately"). Never advice.
 - **M2** — **condition ladder**: groups recorded resale into the canonical `sale_condition` tiers (already enum-typed at the DB; eBay already normalizes via `normalizeEbayCondition`), grading *within* tier so a cheaper-but-worn bag can't masquerade as a deal. Shows when ≥2 tiers have data, else falls back to the gauge.
+- **Year (era context)** — a `Vintage`/`Discontinued` chip + a neutral note in the module, from the variant's `year_start/year_end`. This is the *honest* year signal we have today: per-listing era (the era×condition matrix) is **deferred** because no resale feed carries a reliable item year — `price_history.production_year` (migration `0022`) exists but no adapter populates it. The matrix activates once the LLM date-code extraction pass lands (`CompScale` already supports the grouping).
 
 **Honesty rails (locked):** every number is a real recorded price; copy is descriptive + dated, never an appraisal/advice; degrades to "no recorded resale data yet" when empty. Thin-data posture chosen = **broaden scope, clearly labeled** (the scope chip is in place; cross-variant broadening is a later data step).
 

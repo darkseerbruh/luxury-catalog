@@ -350,6 +350,16 @@ export default async function BagDetailPage({
     };
   }).filter((r): r is NonNullable<typeof r> => r !== null);
 
+  // Production-era context for the value module (honest year signal we have
+  // today): the variant's own production range + discontinued/vintage status,
+  // from year_start/year_end. Per-listing era (the era×condition matrix) waits on
+  // date-code extraction — no resale feed carries a reliable item year yet.
+  const era = {
+    productionYears: yearRange,
+    discontinued: !v.stillInProduction,
+    vintage: !v.stillInProduction && v.yearStart != null && v.yearStart <= new Date().getFullYear() - 20,
+  };
+
   // Retail price trajectory (MSRP over time) — the appreciation story, shown
   // separately from the resale Fair Market Range and honestly labelled so retail
   // is never read as resale/market value.
@@ -548,6 +558,7 @@ export default async function BagDetailPage({
           demandLabel={demand.label}
           retailTrendPct={retailChange}
           byCondition={byCondition}
+          era={era}
         />
         <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-border pt-4 text-sm">
           {v.retailPriceOriginal != null && (
