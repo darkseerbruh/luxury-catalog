@@ -42,13 +42,13 @@ export default async function EditProfilePage() {
         <p className="mt-2 text-muted">
           Set your handle, bio and links. {profile?.handle ? (
             <>
-              Your public page:{" "}
+              This is how you show up at{" "}
               <Link href={`/u/${profile.handle}`} className="text-gold hover:underline">
                 /u/{profile.handle}
               </Link>
             </>
           ) : (
-            "Pick a handle to get a public page."
+            "Pick a handle and you get a public page."
           )}
         </p>
       </header>

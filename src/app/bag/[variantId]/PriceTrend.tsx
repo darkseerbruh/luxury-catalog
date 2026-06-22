@@ -172,6 +172,10 @@ export default function PriceTrend({
             : `Recent sales trade ${(((retailPrice - last) / retailPrice) * 100).toFixed(0)}% below retail.`}
         </p>
       )}
+      <p className="mt-3 text-xs text-muted/70">
+        Estimated from recorded resale prices · not an appraisal or investment forecast. Values can go
+        down as well as up.
+      </p>
     </div>
   );
 }

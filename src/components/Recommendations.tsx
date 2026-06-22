@@ -78,8 +78,8 @@ export default async function Recommendations({
         <h2 className="font-serif text-2xl text-foreground">Bags you might like</h2>
         <div className="mt-5 rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
           <p className="mx-auto max-w-sm text-muted">
-            Take the 60-second taste quiz and we&rsquo;ll recommend bags matched to
-            your style — using only real catalog attributes.
+            Take the 60-second taste quiz and we&rsquo;ll point you at bags that fit
+            your eye — matched on real catalog attributes, nothing made up.
           </p>
           <Link
             href="/quiz"

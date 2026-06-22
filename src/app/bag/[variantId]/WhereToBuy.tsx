@@ -22,9 +22,13 @@ export default function WhereToBuy({
   return (
     <section id="where-to-buy" className="scroll-mt-4 border-t border-border pt-8">
       <h2 className="mb-2 font-serif text-xl text-foreground">Where to buy</h2>
-      <p className="mb-4 text-sm text-muted">
+      <p className="mb-1 text-sm text-muted">
         Pre-filled searches on the major resale platforms. Listings and prices
         are set by each reseller.
+      </p>
+      <p className="mb-4 text-xs text-muted/70">
+        Affiliate links — we may earn a commission if you buy, at no extra cost to you.{" "}
+        <a href="/disclosure" className="underline hover:text-foreground">Learn more</a>.
       </p>
       <div className="flex flex-wrap gap-3">
         {links.map((l) => (

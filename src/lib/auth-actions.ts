@@ -39,7 +39,7 @@ function readCredentials(formData: FormData) {
 }
 
 function validate(email: string, password: string): string | null {
-  if (!email || !email.includes("@")) return "Please enter a valid email.";
+  if (!email || !email.includes("@")) return "Enter a valid email address.";
   if (password.length < 8) return "Password must be at least 8 characters.";
   return null;
 }

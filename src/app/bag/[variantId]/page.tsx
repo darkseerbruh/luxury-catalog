@@ -47,7 +47,7 @@ export async function generateMetadata({
   const v = await getVariant(id);
   if (!v) return {};
 
-  const title = `${fullTitle(v)} — production, authentication & value`;
+  const title = `${fullTitle(v)} — production, authentication, and value`;
   const description = metaDescription(v);
   const url = `${SITE_URL}/bag/${v.variantId}`;
 
@@ -962,9 +962,9 @@ export default async function BagDetailPage({
         !v.authenticationMarkers && (
           <Section title="Research depth">
             <div className="rounded-xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">
-              Detailed authentication data for this variant hasn&rsquo;t been
-              researched yet. Use the search feature to find bags by style — searches
-              like this help us prioritize what to research next.
+              We haven&rsquo;t researched the authentication details for this
+              variant yet. Search by style to find other bags — what people look
+              for tells us what to dig into next.
             </div>
           </Section>
         )}
@@ -1023,9 +1023,9 @@ export default async function BagDetailPage({
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-xs text-muted">
-            Authentication data is research-sourced and confidence-rated; verify
-            high-stakes details against an in-hand inspection.
+          <p className="mt-2 text-xs text-muted/60">
+            Authentication data is research-sourced and confidence-rated. For
+            anything that costs you money, check it against the bag in hand.
           </p>
         </Section>
       )}

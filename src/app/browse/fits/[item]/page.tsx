@@ -39,7 +39,7 @@ export default async function BrowseFitsPage({
         <p className="mt-2 text-muted">
           {variants.length > 0
             ? `${variants.length} ${variants.length === 1 ? "variant" : "variants"} in the catalog`
-            : "No variants cataloged for this yet."}
+            : "Nothing cataloged for this yet."}
         </p>
       </header>
 
@@ -76,8 +76,8 @@ export default async function BrowseFitsPage({
         </ul>
       ) : (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-sm text-muted">
-          We haven&rsquo;t cataloged fit data for this item yet. Searches like
-          this help us prioritize what to research next.
+          We haven&rsquo;t mapped fit data for this one yet. Searches like this
+          are how we decide what to research next.
           <br />
           <Link
             href="/search"

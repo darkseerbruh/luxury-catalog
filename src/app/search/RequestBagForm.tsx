@@ -13,8 +13,8 @@ export default function RequestBagForm({ query }: { query: string }) {
   if (done) {
     return (
       <p className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm text-gold">
-        Thanks — we&rsquo;ve logged your request. The most-requested bags get
-        researched first.
+        Got it — your request is in. The most-requested bags get researched
+        first, so you just moved this one up.
       </p>
     );
   }
@@ -26,7 +26,7 @@ export default function RequestBagForm({ query }: { query: string }) {
         onClick={() => setOpen(true)}
         className="mt-4 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
       >
-        Request this bag be added
+        Ask us to add this bag
       </button>
     );
   }
@@ -38,7 +38,7 @@ export default function RequestBagForm({ query }: { query: string }) {
       if (res.ok) {
         track(EVENTS.bagRequested, { query });
         setDone(true);
-      } else setError(res.error ?? "Something went wrong.");
+      } else setError(res.error ?? "Something went sideways — try again.");
     });
   }
 
@@ -61,7 +61,7 @@ export default function RequestBagForm({ query }: { query: string }) {
         name="details"
         rows={2}
         maxLength={1000}
-        placeholder="Anything else? (size, year, color you're after)"
+        placeholder="Anything else? Size, year, the exact color you're after"
         className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
       />
       {error && <p className="text-sm text-red-400">{error}</p>}

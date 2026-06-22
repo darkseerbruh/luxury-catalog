@@ -279,7 +279,8 @@ export default async function BrandPage({
         <section>
           <h2 className="mb-2 font-serif text-xl text-foreground">More {brand.name} styles</h2>
           <p className="mb-4 text-sm text-muted">
-            These styles are in our catalog but haven&rsquo;t been fully researched yet.
+            These are in the catalog but we haven&rsquo;t fully researched them
+            yet — names and years for now, the full detail to come.
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {stubStyles.map((style) => (
@@ -299,7 +300,7 @@ export default async function BrandPage({
 
       {brand.styles.length === 0 && (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-          No styles cataloged for {brand.name} yet.
+          No {brand.name} styles in the catalog yet — they&rsquo;re on the list.
         </div>
       )}
     </main>

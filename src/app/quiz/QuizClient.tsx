@@ -184,7 +184,11 @@ export default function QuizClient({
 
       {!signedIn && (
         <p className="text-center text-sm text-muted">
-          No sign-up needed to see your result — answer and it&rsquo;s yours.
+          No sign-up needed to see your result.{" "}
+          <Link href="/login" className="text-gold hover:underline">
+            Log in
+          </Link>{" "}
+          to save it and get bag recommendations.
         </p>
       )}
       {error && <p className="text-center text-sm text-red-400">{error}</p>}

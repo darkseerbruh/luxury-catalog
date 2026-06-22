@@ -142,7 +142,7 @@ export async function getRecommendations(limit = 8): Promise<RecommendationResul
       const rec = rowToRec(x.scored);
       rec.score = x.total;
       // If a co-occurrence signal exists but no attribute "why", explain it.
-      if (!rec.why && x.co > 0) rec.why = "Collectors with your taste also want this";
+      if (!rec.why && x.co > 0) rec.why = "Collectors who share your taste are after this one too";
       // Honest generic basis when the real matched attributes can't be phrased —
       // never fabricate specific attributes, but never leave a rec unexplained.
       if (!rec.why) rec.why = "Matched to your taste";
@@ -227,7 +227,7 @@ export async function getSimilarBags(variantId: number, limit = 6): Promise<Reco
     .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
-    .map((s) => rowToRec(s, "Shares"));
+    .map((s) => rowToRec(s, "Shares its"));
 }
 
 /** A compact, presentational summary of the user's dominant taste, for headers. */

@@ -287,6 +287,6 @@ export function nameTaste(vec: TasteVector): NamedTaste {
     size ? `${size} size` : null,
   ].filter(Boolean);
 
-  const tagline = traits.length ? traits.join(" · ") : "Tell us more to sharpen your taste";
+  const tagline = traits.length ? traits.join(" · ") : "Answer a few more and we'll sharpen this";
   return { name, tagline };
 }

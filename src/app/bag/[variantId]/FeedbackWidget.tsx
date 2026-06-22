@@ -30,7 +30,7 @@ export default function FeedbackWidget({ variantId }: { variantId: number }) {
     return (
       <section className="border-t border-border pt-8">
         <div className="rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-foreground">
-          Thank you — your feedback helps us prioritize what to research next.
+          Thanks — this tells us what to research next.
         </div>
       </section>
     );

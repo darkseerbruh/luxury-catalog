@@ -82,8 +82,8 @@ export default function Resources({ resources }: { resources: CuratedResource[] 
     <section className="border-t border-border pt-8">
       <h2 className="mb-1 font-serif text-xl text-foreground">Video reviews & resources</h2>
       <p className="mb-4 text-sm text-muted">
-        Hand-picked reviews from creators we trust — the closest thing to seeing
-        the bag in hand.
+        Reviews from creators we trust — the next best thing to handling the bag
+        yourself.
       </p>
 
       {videos.length > 0 && (

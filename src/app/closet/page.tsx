@@ -76,7 +76,7 @@ export default async function ClosetPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Your closet</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Saved bags</h1>
         <p className="mt-2 text-muted">
-          Bags you want, have, or have owned — all in one place.
+          The ones you want, the ones you have, the ones you used to — all in one place.
         </p>
       </header>
 
@@ -138,10 +138,10 @@ export default async function ClosetPage() {
 
       {closet.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
-          <p className="text-foreground">Your closet is empty.</p>
+          <p className="text-foreground">Nothing in your closet yet.</p>
           <p className="mx-auto mt-2 max-w-sm text-muted">
-            Browse the catalog and use <span className="text-gold">Save this bag</span> on
-            any bag to add it here.
+            Found one you love? Hit <span className="text-gold">Save this bag</span> on
+            any bag and it lands here.
           </p>
           <Link
             href="/search"

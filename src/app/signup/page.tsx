@@ -13,8 +13,8 @@ export default async function SignupPage() {
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-5 py-16">
       <h1 className="font-serif text-3xl text-foreground">Create your account</h1>
       <p className="mt-2 mb-8 text-muted">
-        Build your closet, watch prices, and help shape the catalog. The catalog
-        itself is always free.
+        Build a closet, watch what prices do, and help shape the catalog. The
+        catalog itself is always free.
       </p>
       <AuthForm mode="signup" />
     </main>

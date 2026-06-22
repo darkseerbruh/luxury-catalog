@@ -44,7 +44,7 @@ export default async function BrowseCarryPage({
         <p className="mt-2 text-muted">
           {variants.length > 0
             ? `${variants.length} ${variants.length === 1 ? "variant" : "variants"} in the catalog`
-            : "No variants cataloged for this carry style yet."}
+            : "Nothing cataloged for this carry style yet."}
         </p>
       </header>
 
@@ -81,8 +81,8 @@ export default async function BrowseCarryPage({
         </ul>
       ) : (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-sm text-muted">
-          We haven&rsquo;t cataloged carry data for this style yet. Searches
-          like this help us prioritize what to research next.
+          We haven&rsquo;t mapped carry data for this style yet. Searches like
+          this are how we decide what to research next.
           <br />
           <Link
             href="/search"

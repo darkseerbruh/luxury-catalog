@@ -55,12 +55,12 @@ export default async function Home() {
     <main className="flex flex-1 flex-col">
       <section className="border-b border-border px-5 py-16 text-center">
         <h1 className="mx-auto max-w-xl font-serif text-4xl leading-tight text-foreground sm:text-5xl">
-          The Luxury Catalog knows style.
+          Know what it&rsquo;s worth — and what it&rsquo;s worth to you.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-muted">
-          The definitive reference for designer handbags — production
-          history, authentication markers, and resale intelligence in one
-          place.
+          The reference for designer handbags: production history,
+          authentication markers, and what they actually resell for, all in
+          one place.
         </p>
         <form
           action="/search"
@@ -70,7 +70,7 @@ export default async function Home() {
           <input
             name="q"
             type="search"
-            placeholder="Search a brand or style…"
+            placeholder="Find a brand or style…"
             className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
           />
           <button
@@ -107,7 +107,7 @@ export default async function Home() {
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
           <h2 className="font-serif text-2xl text-foreground">
-            It bags of all time
+            The bags everyone keeps coming back to
           </h2>
           <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
             {heroCards.map((card) => (
@@ -162,7 +162,8 @@ export default async function Home() {
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <h2 className="font-serif text-2xl text-foreground">Your closet</h2>
             <p className="mx-auto mt-2 max-w-sm text-muted">
-              Save bags you want or have and track their prices.
+              Keep the bags you own and the ones you&rsquo;re after in one
+              place, and watch what they&rsquo;re worth.
             </p>
             <Link
               href="/signup"
@@ -175,8 +176,8 @@ export default async function Home() {
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <h2 className="font-serif text-2xl text-foreground">Your closet</h2>
             <p className="mx-auto mt-2 max-w-sm text-muted">
-              Your closet is empty. Use <span className="text-gold">Save this bag</span> on
-              any bag to add it here.
+              Nothing here yet. Hit <span className="text-gold">Save this bag</span> on
+              any bag and it lands in your closet.
             </p>
           </div>
         ) : (
