@@ -20,7 +20,7 @@ export default function WhereToBuy({
   if (links.length === 0) return null;
 
   return (
-    <section className="border-t border-border pt-8">
+    <section id="where-to-buy" className="scroll-mt-4 border-t border-border pt-8">
       <h2 className="mb-2 font-serif text-xl text-foreground">Where to buy</h2>
       <p className="mb-1 text-sm text-muted">
         Pre-filled searches on the major resale platforms. Listings and prices

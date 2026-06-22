@@ -78,6 +78,48 @@ export async function getCloset(): Promise<ClosetEntry[]> {
   });
 }
 
+export interface PurchaseInfo {
+  price: number;
+  currency: string | null;
+  date: string | null;
+}
+
+/**
+ * Acquisition price per owned variant for the signed-in user (collection-report
+ * cost basis). RESILIENT: if the purchase_* columns don't exist yet (migration
+ * 0014 not applied) or the query fails, returns {} so the report just omits the
+ * Paid / Gain-loss columns — never breaks.
+ */
+export async function getPurchaseInfo(): Promise<Record<number, PurchaseInfo>> {
+  const user = await getCurrentUser();
+  if (!user) return {};
+  try {
+    const supabase = await createServerSupabase();
+    const { data, error } = await supabase
+      .from("closet_item")
+      .select("variant_id, purchase_price, purchase_currency, purchase_date");
+    if (error || !data) return {};
+    const map: Record<number, PurchaseInfo> = {};
+    for (const r of data as {
+      variant_id: number;
+      purchase_price: number | string | null;
+      purchase_currency: string | null;
+      purchase_date: string | null;
+    }[]) {
+      if (r.purchase_price != null) {
+        map[r.variant_id] = {
+          price: Number(r.purchase_price),
+          currency: r.purchase_currency,
+          date: r.purchase_date,
+        };
+      }
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 /** The current user's watchlist, newest first. Empty when signed out. */
 export async function getWatchlist(): Promise<WatchlistEntry[]> {
   const user = await getCurrentUser();

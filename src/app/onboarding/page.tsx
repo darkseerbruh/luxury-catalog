@@ -40,6 +40,26 @@ export default async function OnboardingPage() {
           />
         </label>
 
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="text-muted">Pick a username</span>
+          <div className="flex items-center rounded-xl border border-border bg-surface focus-within:border-gold">
+            <span className="pl-4 text-muted">@</span>
+            <input
+              name="handle"
+              type="text"
+              defaultValue={profile?.handle ?? ""}
+              maxLength={30}
+              pattern="[A-Za-z0-9_]{3,30}"
+              className="flex-1 rounded-xl bg-transparent px-2 py-3 text-foreground placeholder:text-muted focus:outline-none"
+              placeholder="yourname"
+            />
+          </div>
+          <span className="text-xs text-muted">
+            3–30 letters, numbers or underscores. Your public profile lives at
+            /u/yourname — you can change it later.
+          </span>
+        </label>
+
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-1 text-sm text-muted">Which best describes you?</legend>
           {PERSONAS.map((p, i) => (

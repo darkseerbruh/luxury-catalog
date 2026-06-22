@@ -79,7 +79,7 @@ export default async function FeedbackAdminPage() {
                     {e.recordType} #{e.recordId}
                   </span>
                 )}
-                <span className="ml-auto text-xs text-muted/60">{formatDate(e.date)}</span>
+                <span className="ml-auto text-xs text-muted">{formatDate(e.date)}</span>
                 {e.resolved ? (
                   <span className="text-xs text-gold/80">resolved</span>
                 ) : (

@@ -181,6 +181,97 @@ export async function getCovetedClosets(limit = 50): Promise<CovetedCloset[]> {
     .slice(0, limit);
 }
 
+export interface TopReviewer {
+  userId: string;
+  handle: string | null;
+  displayName: string | null;
+  isVerified: boolean;
+  isExpert: boolean;
+  isAuthenticator: boolean;
+  reviewCount: number;
+  /** Average star rating across this reviewer's published reviews (1 dp), or null. */
+  averageRating: number | null;
+}
+
+/**
+ * The "Top Reviewers" leaderboard — published review count per user, ranked.
+ * Reads the `review` table joined to public-readable `profile` rows (same RLS
+ * surface getPublicProfile relies on), then aggregates in JS exactly like
+ * getCovetedClosets composes its score client-side. Only profiles that are
+ * world-readable (opted-in / notable) surface, so a private reviewer never
+ * appears. Empty when env/migrations are absent or no public reviews exist.
+ *
+ * TODO(migration): contribution XP/points — a real points economy (XP-for-value,
+ * resettable seasons) needs new tables (e.g. contribution_event / xp_ledger).
+ * This board ranks on existing review rows only and invents no score.
+ */
+export async function getTopReviewers(limit = 25): Promise<TopReviewer[]> {
+  if (!hasSupabase()) return [];
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("review")
+    .select(
+      "user_id, rating, author:user_id(id, handle, display_name, closet_public, is_verified, is_expert, is_authenticator)"
+    )
+    .limit(2000);
+
+  if (error || !data) return [];
+
+  type Row = {
+    user_id: string;
+    rating: number | null;
+    author:
+      | {
+          id: string; handle: string | null; display_name: string | null;
+          closet_public: boolean | null; is_verified: boolean | null;
+          is_expert: boolean | null; is_authenticator: boolean | null;
+        }
+      | {
+          id: string; handle: string | null; display_name: string | null;
+          closet_public: boolean | null; is_verified: boolean | null;
+          is_expert: boolean | null; is_authenticator: boolean | null;
+        }[]
+      | null;
+  };
+
+  const byUser = new Map<string, { reviewer: TopReviewer; ratingSum: number; rated: number }>();
+  for (const row of data as Row[]) {
+    const a = (Array.isArray(row.author) ? row.author[0] : row.author) ?? null;
+    // Only world-readable profiles come back from the anon-keyed join; skip rows
+    // whose author the RLS policy didn't expose.
+    if (!a) continue;
+    const existing = byUser.get(row.user_id);
+    const rating = row.rating ?? null;
+    if (existing) {
+      existing.reviewer.reviewCount += 1;
+      if (rating != null) { existing.ratingSum += rating; existing.rated += 1; }
+    } else {
+      byUser.set(row.user_id, {
+        reviewer: {
+          userId: row.user_id,
+          handle: a.handle,
+          displayName: a.display_name,
+          isVerified: Boolean(a.is_verified),
+          isExpert: Boolean(a.is_expert),
+          isAuthenticator: Boolean(a.is_authenticator),
+          reviewCount: 1,
+          averageRating: null,
+        },
+        ratingSum: rating != null ? rating : 0,
+        rated: rating != null ? 1 : 0,
+      });
+    }
+  }
+
+  return [...byUser.values()]
+    .map(({ reviewer, ratingSum, rated }) => ({
+      ...reviewer,
+      averageRating: rated > 0 ? Math.round((ratingSum / rated) * 10) / 10 : null,
+    }))
+    .sort((a, b) => b.reviewCount - a.reviewCount)
+    .slice(0, limit);
+}
+
 /** Whether the current user is following (favoriting) the given closet owner. */
 export async function isFavoritingCloset(ownerUserId: string): Promise<boolean> {
   if (!hasSupabase()) return false;
