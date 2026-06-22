@@ -1,10 +1,77 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **Latest session (2026-06-22):** Personalization Phase 1 — `user_profile` feature store +
+> **Latest session (2026-06-22):** Personalization Phase 2 — precomputed recs + PostHog flag gate
+> (migration `0019`). See TL;DR immediately below. Phase 1 (migration `0018`) is the block below that.
+
+## TL;DR — Personalization Phase 2: server-side recs + PostHog flag gate (latest session)
+
+Branch `claude/intelligent-lamport-7dazm6` → merged to `main`.
+`tsc --noEmit`, `eslint src`, `next build`, **144/144 tests** green.
+**HUMAN-GATED:** apply migration `0019`; create the `personalized_home` flag in PostHog (see below).
+
+### What was built
+
+**Spec:** Phase 2 of `docs/personalization-best-practices.md` (A14, B9–B15, C16–C21).
+
+1. **Migration `0019_user_recs.sql`** — `user_recs` precomputed recs table:
+   - `(user_id, variant_id)` PK; `rank`, `score`, `why`, `algo` (affinity/popularity/explore).
+   - RLS: users read own rows. Service role writes.
+   - Index on `(user_id, rank)` for fast per-user reads ordered by rank.
+
+2. **`src/lib/personalization/ranker.ts`** — pure Phase-2 ranking pipeline (34 unit tests):
+   - **Affinity score**: brand (40%) + silhouette (25%) + material (15%) + hardware (12%) + size (8%) against Phase-1 profile.
+   - **Bayesian popularity prior**: `count/(count+10)` — handles cold-start without raw counts.
+   - **Combined score**: 70% affinity + 30% popularity.
+   - **Epsilon-greedy exploration**: ε=0.1 → 1 explore slot per 10 recs (prevents filter bubble).
+   - **MMR diversity re-rank**: λ=0.7 — prevents one dominant brand filling all slots.
+
+3. **`src/lib/personalization/recs.ts`** — DB layer:
+   - `computeAndStoreRecs(userId)` — full pipeline (candidates from catalog, popularity counts, Phase-1 profile → rank → upsert into `user_recs`).
+   - `getPersonalizedRecs(userId, limit)` — read stored recs; synchronous first-access compute if empty.
+   - Both degrade gracefully when table/key absent.
+
+4. **`src/lib/analytics/flags.ts`** — PostHog server-side flag layer:
+   - `identifyUserToPostHog(userId, {persona, budget_band, intent})` — writes persona as a PostHog **PERSON PROPERTY** (the targeting surface). Called at login via `auth-actions.ts` to stitch anonymous→identified.
+   - `evaluatePersonalizationFlag(userId, personProps)` — server-side eval of `personalized_home` flag via posthog-node (`flushAt:1`, `await shutdown`), passing `personProperties` explicitly.
+   - `getBootstrapFlags(userId, personProps)` — evaluates ALL flags server-side for client bootstrap.
+
+5. **Home page (`src/app/page.tsx`)** — flag gate on the recommendations rail:
+   - Server-side: evaluates `personalized_home` flag → renders `<PersonalizedRecs>` (test variant) or existing `<Recommendations>` (control). Decision baked into SSR HTML — no flicker.
+   - `<PostHogFlagBootstrap flags={...} />` — client component that calls `posthog.featureFlags.override()` on mount, keeping the client SDK in sync for experiment event tracking.
+
+6. **`src/components/PersonalizedRecs.tsx`** — personalized rail (reads from `user_recs`; falls back to quiz CTA). Same `RecommendationCard` as control.
+
+7. **`/api/cron/rebuild-recs`** — nightly batch at 04:00 UTC (after profiles rebuild at 03:00). Added to `vercel.json`.
+
+### Human-gated steps
+
+1. **Apply `0019_user_recs.sql`** in Supabase SQL editor. Safe after 0018.
+
+2. **Create `personalized_home` flag in PostHog** (app.posthog.com → Feature Flags → New):
+   - Key: `personalized_home`
+   - Rollout: **Multi-variant experiment** — variant `control` (50%) and `test` (50%).
+   - Targeting condition: `persona IS SET` (person property, not a cohort).
+   - Guardrail metrics: `recommendation_clicked` (CTR) and `item_saved` (conversion).
+   - Leave at 0% rollout until you're ready to experiment; the code degrades to the control (existing recs) when the flag returns false.
+
+3. **Trigger first recs rebuild** (optional but recommended — otherwise waits for 04:00 cron):
+   ```
+   curl -H "Authorization: Bearer $CRON_SECRET" https://your-domain.vercel.app/api/cron/rebuild-recs
+   ```
+   Or hit it from Vercel's cron dashboard.
+
+4. **Experiment is self-contained**: if PostHog key is unset or the flag doesn't exist, the home page falls through to the existing content-based `<Recommendations>` — nothing breaks.
+
+### Next: Phase 3
+Phase 3 is: Voyage embeddings + hybrid search (BM25 + dense vector + RRF rerank). Enables semantic search ("something for evening", "very structured, minimal hardware") and replaces the attribute ranker with a learned embedding space. Requires enabling pgvector, a VOYAGE_API_KEY, and a backfill job.
+
+---
+
+> **Prior session (2026-06-22):** Personalization Phase 1 — `user_profile` feature store +
 > deterministic aggregation (migration `0018`). See TL;DR immediately below.
-> Prior session: photo-contributions + contributor-tier system. Earlier: monetization-moment audit,
-> voice & tone rewrite, finance/money compliance.
+> Earlier: photo-contributions + contributor-tier system; monetization-moment audit;
+> voice & tone rewrite; finance/money compliance.
 
 ## TL;DR — Personalization Phase 1: feature store + deterministic aggregation (latest session)
 
