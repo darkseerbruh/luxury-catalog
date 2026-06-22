@@ -65,6 +65,12 @@ export const EVENTS = {
   authenticationRequested: "authentication_requested",
   /** A user raised their hand for the (not-yet-live) authentication service — fake-door demand. */
   authenticationInterest: "authentication_interest",
+  /** Experiment exposure — user was assigned to a personalization experiment variant. */
+  experimentExposed: "experiment_exposed",
+  /** A personalized rec section was viewed (impression, not click). */
+  personalizedRecsViewed: "personalized_recs_viewed",
+  /** A user subscribed to the newsletter. */
+  newsletterSubscribed: "newsletter_subscribed",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

@@ -585,6 +585,9 @@ export interface BrandResaleStats {
   highestSale: number | null;
   currency: string | null;
   recordedSales: number;
+  avgSale: number | null;
+  /** "up" | "down" | "flat" | null — compare oldest half vs newest half of sales */
+  trend: "up" | "down" | "flat" | null;
 }
 
 /**
@@ -594,23 +597,44 @@ export interface BrandResaleStats {
  * secondary-market figure, honestly "the highest we've recorded".
  */
 export async function getBrandResaleStats(brandId: number): Promise<BrandResaleStats> {
+  const EMPTY: BrandResaleStats = { highestSale: null, currency: null, recordedSales: 0, avgSale: null, trend: null };
   try {
     const { data, error } = await getSupabase()
       .from("price_history")
-      .select("sale_price, currency, platform, variant:variant_id!inner(style:style_id!inner(brand_id))")
+      .select("sale_price, currency, platform, date_recorded, variant:variant_id!inner(style:style_id!inner(brand_id))")
       .eq("variant.style.brand_id", brandId)
       .not("sale_price", "is", null);
-    if (error || !data) return { highestSale: null, currency: null, recordedSales: 0 };
+    if (error || !data) return EMPTY;
     const RETAIL = /retail|boutique|msrp|in[-\s]?store|flagship/i;
-    const resale = (data as { sale_price: number | string | null; currency: string | null; platform: string | null }[]).filter(
+    const resale = (data as { sale_price: number | string | null; currency: string | null; platform: string | null; date_recorded: string | null }[]).filter(
       (r) => r.sale_price != null && !(r.platform && RETAIL.test(r.platform)),
     );
-    if (resale.length === 0) return { highestSale: null, currency: null, recordedSales: 0 };
+    if (resale.length === 0) return EMPTY;
     let top = resale[0];
     for (const r of resale) if (Number(r.sale_price) > Number(top.sale_price)) top = r;
-    return { highestSale: Number(top.sale_price), currency: top.currency, recordedSales: resale.length };
+
+    // avgSale
+    const sum = resale.reduce((acc, r) => acc + Number(r.sale_price), 0);
+    const avgSale = sum / resale.length;
+
+    // trend: split by date_recorded if available
+    let trend: "up" | "down" | "flat" | null = null;
+    const dated = resale.filter((r) => r.date_recorded != null) as { sale_price: number | string | null; date_recorded: string }[];
+    if (dated.length >= 2) {
+      dated.sort((a, b) => a.date_recorded.localeCompare(b.date_recorded));
+      const half = Math.floor(dated.length / 2);
+      const oldHalf = dated.slice(0, half);
+      const newHalf = dated.slice(dated.length - half);
+      const avgOld = oldHalf.reduce((a, r) => a + Number(r.sale_price), 0) / oldHalf.length;
+      const avgNew = newHalf.reduce((a, r) => a + Number(r.sale_price), 0) / newHalf.length;
+      if (avgNew > avgOld * 1.05) trend = "up";
+      else if (avgNew < avgOld * 0.95) trend = "down";
+      else trend = "flat";
+    }
+
+    return { highestSale: Number(top.sale_price), currency: top.currency, recordedSales: resale.length, avgSale, trend };
   } catch {
-    return { highestSale: null, currency: null, recordedSales: 0 };
+    return EMPTY;
   }
 }
 

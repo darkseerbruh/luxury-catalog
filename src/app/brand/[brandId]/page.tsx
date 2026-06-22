@@ -102,7 +102,7 @@ export default async function BrandPage({
       </header>
 
       {/* At a glance */}
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
         <Stat label="Styles" value={brand.styles.length.toString()} />
         <Stat label="Variants" value={allVariants.length.toString()} />
         <Stat
@@ -116,6 +116,16 @@ export default async function BrandPage({
           label="Highest resale"
           value={resale.highestSale != null ? (fmt(resale.highestSale, resale.currency) ?? "—") : "—"}
           sub={resale.recordedSales > 0 ? `recorded · ${resale.recordedSales} sales` : "no data yet"}
+        />
+        <Stat
+          label="Avg resale"
+          value={resale.avgSale != null ? (fmt(resale.avgSale, resale.currency) ?? "—") : "—"}
+          sub={
+            resale.trend === "up" ? "↑ trending up" :
+            resale.trend === "down" ? "↓ trending down" :
+            resale.trend === "flat" ? "→ steady" :
+            undefined
+          }
         />
       </section>
 
