@@ -1,4 +1,6 @@
 import ThriftFindForm from "./ThriftFindForm";
+import { getCurrentUser } from "@/lib/auth";
+import { hasActiveAuthenticators } from "@/lib/authentication";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +12,7 @@ export default async function FoundPage({
   searchParams: Promise<{ brand?: string; style?: string }>;
 }) {
   const { brand = "", style = "" } = await searchParams;
+  const [user, authLive] = await Promise.all([getCurrentUser(), hasActiveAuthenticators()]);
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-12">
@@ -23,7 +26,12 @@ export default async function FoundPage({
         </p>
       </header>
 
-      <ThriftFindForm defaultBrand={brand} defaultStyle={style} />
+      <ThriftFindForm
+        defaultBrand={brand}
+        defaultStyle={style}
+        signedIn={!!user}
+        authComingSoon={!authLive}
+      />
     </main>
   );
 }

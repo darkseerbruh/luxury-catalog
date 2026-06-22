@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getVariantImages } from "@/lib/queries";
+import { hasActiveAuthenticators } from "@/lib/authentication";
 import { BagImage } from "@/components/BagImage";
+import AuthInterestButton from "@/components/AuthInterestButton";
 
 export const dynamic = "force-dynamic";
 
@@ -61,6 +63,7 @@ export default async function ClosetPage() {
   if (!(await getCurrentUser())) redirect("/login");
   const closet = await getCloset();
   const images = await getVariantImages(closet.map((c) => c.variantId));
+  const authComingSoon = !(await hasActiveAuthenticators());
 
   const portfolio = buildPortfolio(closet);
 
@@ -133,6 +136,17 @@ export default async function ClosetPage() {
               See your Year in Bags →
             </Link>
           </div>
+        </section>
+      )}
+
+      {closet.length > 0 && authComingSoon && (
+        <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
+          <p className="font-serif text-lg text-foreground">Authenticate your collection</p>
+          <p className="mt-1 mb-3 text-sm text-muted">
+            Pro authentication is coming soon — handy before you sell, insure, or just for peace
+            of mind. Want first access?
+          </p>
+          <AuthInterestButton signedIn source="closet" />
         </section>
       )}
 
