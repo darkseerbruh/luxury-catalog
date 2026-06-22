@@ -1,14 +1,44 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **Latest session (2026-06-22):** monetization-moment placement audit + housekeeping. See the
-> TL;DR block immediately below. (Earlier this date: voice & tone rewrite; finance/money compliance —
-> next blocks down.)
+> **Latest session (2026-06-22):** photo-contributions + contributor-tier system (the queued UGC
+> engine — now BUILT). See the TL;DR block immediately below. (Same date, earlier: monetization-moment
+> placement audit; voice & tone rewrite; finance/money compliance — next blocks down.)
 
-## TL;DR — monetization-moment placement audit (latest session)
+## TL;DR — photo contributions + contributor tiers (latest session)
 
-On branch `claude/daily-review-planning-hqj3hg` (not yet merged to `main`). Code + docs;
-**no DB migrations, env vars, or seed changes.** `tsc`, `eslint src`, `next build`, **60/60 tests** green.
+Branch `claude/daily-review-planning-hqj3hg`. The queued UGC engine from "▶ QUEUED NEXT BUILD" (below)
+is now built. `tsc`, `eslint src`, `next build`, **72/72 tests** green. **HUMAN-GATED:** migration
+**`0016`** + a Storage bucket + the service-role key (see checklist). File upload could not be
+runtime-tested here (no creds); everything degrades gracefully if 0016/bucket/key are absent.
+
+1. **Migration `0016_photo_contributions.sql`** — `bag_photo` table (variant_id, user_id,
+   storage_path, caption, status [pending/approved/featured/rejected], owner_attested, points_awarded)
+   + RLS (public read published; insert own as pending+attested; delete own; admin update);
+   `profile.contribution_points int` (UPDATE revoked from clients — anti-gaming); **Storage bucket
+   `bag-photos`** (public read) + storage RLS. No `ALTER TYPE` caveat (fresh enum).
+2. **Tiers are DERIVED, not stored** — `src/lib/contributions-core.ts` (pure, 12 unit tests):
+   Aficionado → Collector (has closet) → Connoisseur (approved photo) → **Authenticator**
+   (`is_authenticator`, admin-granted → **auto-publish**) → Curator (Authenticator + ≥500 pts). XP is
+   rarity-weighted (first photo of an uncovered bag = most) with reversal on removal.
+3. **Hybrid moderation** — trusted tiers (Authenticator/admin) auto-publish via service-role;
+   everyone else is queued. `src/lib/photo-actions.ts` (`submitPhoto` upload+insert, `reviewPhoto`
+   approve/feature/reject with XP + hero promotion + `notifyPhotoFeatured`, `deleteOwnPhoto`);
+   `src/lib/photos.ts` (resilient reads). Featuring promotes the shot to `variant.image_url`
+   (`image_source:'ugc'`), demoting any prior featured (one-featured-per-variant unique index).
+4. **UI** — bag page `PhotoContributions` (gallery w/ byline + rare-find empty state + attested
+   upload, on `#photos` + jump-nav); admin `/admin/photos` moderation queue (+ admin index link);
+   `/photos/most-wanted` board (demand-ranked photoless bags; needs service role); profile
+   `ContributorCard` (tier + points + next-tier hint). New event `photo_submitted`.
+
+**Follow-ups:** grant `is_authenticator` to vetted contributors so they auto-publish; **register a
+DMCA agent before promoting UGC widely** (`docs/desktop-todo.md` G2); the "Most Wanted" board is
+demand-ranked only with the service-role key (else empty state).
+
+## TL;DR — monetization-moment placement audit (this session, earlier — MERGED to `main`)
+
+Merged to `main`. Code + docs; **no DB migrations, env vars, or seed changes.**
+`tsc`, `eslint src`, `next build`, **60/60 tests** green.
 
 1. **New doc `docs/monetization-moments-audit.md`** — maps each of the 4 revenue streams to the
    feature/moment that triggers it, audits placement, records the changes. Key finding: the
@@ -270,6 +300,7 @@ Grant `profile.is_expert` (service role) to anyone who should author posts. Re-r
    - **`0009_corrections.sql` *(expert/corrections session — HUMAN-GATED, not yet applied)*** — adds the `correction` table for structured "suggest an edit" submissions. RLS: authenticated users INSERT + SELECT their own; admins (`profile.is_admin`) SELECT all + UPDATE status; public/anon cannot read. Depends on 0008 (`is_admin`). The app degrades gracefully if absent (submit fails with a clear message; admin queue shows empty).
    - **`0010_notification_prefs.sql` *(settings session — HUMAN-GATED, not yet applied)*** — adds `profile.notification_prefs jsonb default '{}'` (per-channel opt-outs; absent key = opted-in). Wired into the notification creators + price-alert cron via `isOptedIn()` (fails OPEN — notifications keep flowing if the column is missing). No new RLS policy needed (covered by the 0002 own-row update policy; privileged columns stay revoked by 0008).
    - **`0015_instagram_resources.sql` *(social-embed session — HUMAN-GATED, not yet applied)*** — extends the YouTube embed model (0004) to Instagram. Adds `'instagram'` to the `resource_type` enum + nullable cache columns (`embed_html`, `thumbnail_url`, `author_name`) on `resource`. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block — run separately if your tool wraps statements. App degrades gracefully if absent (the YouTube path is unchanged; Instagram rows just won't exist). *(Renumbered from `0012` → `0015` on 2026-06-22 to resolve a duplicate-`0012` collision with `0012_bag_axis_votes.sql`; it was never applied, so the rename is safe.)* See **`docs/social-embed-strategy.md`**.
+   - **`0016_photo_contributions.sql` *(photo-contributions session — HUMAN-GATED, not yet applied)*** — adds the `bag_photo` table (+ RLS: public read published, insert-own-as-pending-and-attested, delete own, admin update), `profile.contribution_points` (client UPDATE revoked — anti-gaming), and a **public Storage bucket `bag-photos`** with storage RLS (public read; insert/delete own). Depends on 0008 (`is_admin`) + 0013 (`variant.image_url`, the hero a featured photo promotes into). No `ALTER TYPE` caveat (fresh enum). App degrades gracefully if absent (galleries empty; submit fails with a clear message; the admin queue + Most-Wanted board need `SUPABASE_SERVICE_ROLE_KEY`). **After applying:** grant `is_authenticator` (service role) to vetted contributors so their uploads auto-publish, and **register a DMCA agent before promoting UGC widely**.
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
    npx tsx supabase/seed/seed-hero-styles.ts
@@ -336,7 +367,10 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 
 ---
 
-## ▶ QUEUED NEXT BUILD: photo contributions + contributor tiers
+## ✅ BUILT: photo contributions + contributor tiers (2026-06-22)
+*Now implemented — see the photo-contributions TL;DR at the top. Migration `0016` + Storage bucket +
+service-role key are human-gated (checklist item below). The original spec is kept here for reference.*
+
 *Designed with the user this session. Decisions locked: **hybrid moderation** (trusted users auto-publish, new users queued) and **all** engagement mechanics.*
 
 ### Mechanics

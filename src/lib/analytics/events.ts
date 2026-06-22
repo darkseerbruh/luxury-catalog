@@ -59,6 +59,8 @@ export const EVENTS = {
   postPublished: "post_published",
   /** A structured catalog correction was submitted. */
   correctionSubmitted: "correction_submitted",
+  /** A user submitted a photo of a bag (UGC contribution). */
+  photoSubmitted: "photo_submitted",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
