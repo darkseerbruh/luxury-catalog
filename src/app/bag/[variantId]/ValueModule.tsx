@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import CompScale, { type Comp } from "./CompScale";
+import CompScale, { type Comp, type CompRow } from "./CompScale";
 import { track, EVENTS } from "@/lib/analytics/events";
 
 /**
@@ -49,6 +49,62 @@ export interface ValueModuleProps {
   trendPct: number | null;
   /** Latest date any shown price was true at source. */
   asOf: string | null;
+  /** M1 timing inputs — demand (from wants/watchers) + retail-hike catalyst. */
+  demandLevel?: "quiet" | "warm" | "hot";
+  demandLabel?: string | null;
+  /** MSRP change over time — resale floors tend to follow brand retail hikes. */
+  retailTrendPct?: number | null;
+  /** M2 — recorded resale grouped into condition tiers for the like-for-like ladder. */
+  byCondition?: CompRow[];
+  /**
+   * Variant-level production era (the honest year signal we have today). Per-
+   * listing era (the era×condition matrix) activates once date-code extraction
+   * populates price_history.production_year.
+   */
+  era?: { productionYears: string | null; discontinued: boolean; vintage: boolean };
+}
+
+/** A neutral, non-invented note on how the production era bears on value. */
+function eraNote(era: { productionYears: string | null; discontinued: boolean; vintage: boolean }): string | null {
+  const years = era.productionYears ? ` (${era.productionYears})` : "";
+  if (era.vintage) {
+    return `Vintage production${years} — no longer made, so condition and a complete set tend to matter more to value.`;
+  }
+  if (era.discontinued) {
+    return `Discontinued${years} — no longer in production, so resale is the only way to buy it.`;
+  }
+  return null;
+}
+
+/**
+ * M1 timing note: a descriptive, framing-aware read synthesized from demand +
+ * how prices have moved. Never advice — states what's observed and lets the
+ * reader draw the conclusion. Returns null when there's no real signal.
+ */
+function timingNote(
+  framing: ValueFraming,
+  demandLevel: "quiet" | "warm" | "hot",
+  trendPct: number | null,
+  retailTrendPct: number | null,
+): string | null {
+  const climbing = (trendPct != null && trendPct > 2) || (retailTrendPct != null && retailTrendPct > 0);
+  const softening = trendPct != null && trendPct < -2;
+  const hot = demandLevel === "hot";
+  const quiet = demandLevel === "quiet";
+
+  if (framing === "buyer") {
+    if (hot && climbing) return "Demand is strong and prices have been climbing — waiting hasn't paid off lately.";
+    if (quiet && softening) return "Demand is light and prices are soft — little pressure to move fast.";
+    if (climbing) return "Prices have been trending up over the tracked window.";
+    if (softening) return "Prices have been easing over the tracked window.";
+    return null;
+  }
+  // owner / collector — the sell/hold read.
+  if (hot && climbing) return "Demand is strong and prices are rising — a seller's window.";
+  if (quiet && softening) return "Demand is light and prices are soft right now.";
+  if (climbing) return "Prices have trended up — it's been holding or gaining.";
+  if (softening) return "Prices have eased over the tracked window.";
+  return null;
 }
 
 function fmt(amount: number | null, currency: string | null) {
@@ -79,7 +135,13 @@ export default function ValueModule({
   retailCurrency,
   trendPct,
   asOf,
+  demandLevel = "quiet",
+  demandLabel = null,
+  retailTrendPct = null,
+  byCondition,
+  era,
 }: ValueModuleProps) {
+  const ladder = !!byCondition && byCondition.length >= 2;
   useEffect(() => {
     track(EVENTS.valueModuleViewed, {
       variant_id: variantId,
@@ -87,9 +149,11 @@ export default function ValueModule({
       listed_count: listed.length,
       recorded_count: range?.count ?? 0,
       has_listed: listed.length > 0,
+      has_ladder: ladder,
+      demand_level: demandLevel,
       scope: "exact",
     });
-  }, [variantId, framing, listed.length, range?.count]);
+  }, [variantId, framing, listed.length, range?.count, ladder, demandLevel]);
 
   // Honest empty state — mirrors the catalog's "we only show real ranges" rule.
   if (!range) {
@@ -181,20 +245,52 @@ export default function ValueModule({
     );
   }
 
+  const note = timingNote(framing, demandLevel, trendPct, retailTrendPct);
+  const eraText = era ? eraNote(era) : null;
+
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 className="font-serif text-xl text-foreground">{HEADINGS[framing]}</h2>
-        <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
-          This exact variant · {count} recorded {count === 1 ? "price" : "prices"}
-          {count < 4 ? " · limited data" : ""}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          {era?.vintage ? (
+            <span className="rounded-full border border-gold/40 px-2.5 py-0.5 text-xs text-gold">
+              Vintage
+            </span>
+          ) : era?.discontinued ? (
+            <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted">
+              Discontinued
+            </span>
+          ) : null}
+          <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
+            This exact variant · {count} recorded {count === 1 ? "price" : "prices"}
+            {count < 4 ? " · limited data" : ""}
+          </span>
+        </div>
       </div>
 
       <p className="mt-2 text-base leading-relaxed text-foreground">{verdict}</p>
 
+      {note && (
+        <p className="mt-1.5 text-sm text-muted">
+          {note}
+          {demandLabel ? <span className="text-muted/70"> · {demandLabel}</span> : null}
+        </p>
+      )}
+
+      {eraText && <p className="mt-1.5 text-sm text-muted">{eraText}</p>}
+
       <div className="mt-4">
-        <CompScale low={low} median={median} high={high} currency={currency} comps={listed} />
+        {ladder ? (
+          <>
+            <p className="mb-2 text-xs uppercase tracking-wide text-muted/70">
+              By condition · compared like-for-like
+            </p>
+            <CompScale low={low} median={median} high={high} currency={currency} rows={byCondition} />
+          </>
+        ) : (
+          <CompScale low={low} median={median} high={high} currency={currency} comps={listed} />
+        )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
