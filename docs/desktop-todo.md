@@ -114,6 +114,11 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 ## I. Permanent fix — make the cloud self-sufficient for DB work (optional, high-value)
 
+- [ ] 🔧 **I0. One-button migrations via GitHub Action — BUILT (2026-06-22), needs 2 secrets.** `.github/workflows/db-migrate.yml` runs `supabase db push` in GitHub's cloud — no laptop/CLI. **One-time setup (do once):** repo → **Settings → Secrets and variables → Actions → New repository secret**, add:
+  - `SUPABASE_ACCESS_TOKEN` — generate at supabase.com/dashboard/account/tokens
+  - `SUPABASE_DB_PASSWORD` — Supabase → Project Settings → Database (the DB password)
+  Then to apply migrations: repo → **Actions** tab → **"Apply database migrations"** → **Run workflow**. (It dry-runs first, then applies.) To make it fully automatic on every migration change, uncomment the `push:` trigger in the workflow.
+
 The cloud sandbox **can't reach Supabase** (network egress blocks all `*.supabase.*`
 hosts), which is why migrations/seeding had to run from the laptop. To let future
 cloud sessions do DB work directly (no laptop, no `.env.local` syncing):

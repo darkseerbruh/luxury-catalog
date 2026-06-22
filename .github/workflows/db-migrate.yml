@@ -1,0 +1,52 @@
+name: Apply database migrations
+
+# One-button migration runner. Click "Run workflow" in the Actions tab to apply
+# any pending Supabase migrations to the production database — runs here in
+# GitHub's cloud, so no laptop or command line is needed. (Background: the cloud
+# Claude workspace is network-walled from Supabase, so migrations can't run from
+# there; this is the hands-off replacement. See docs/desktop-todo.md I1/I2.)
+#
+# REQUIRED one-time setup — add two repo secrets
+# (Settings → Secrets and variables → Actions → New repository secret):
+#   • SUPABASE_ACCESS_TOKEN  — supabase.com/dashboard/account/tokens (generate one)
+#   • SUPABASE_DB_PASSWORD   — Supabase → Project Settings → Database (the DB password)
+#
+# To add the "apply automatically on every migration change" behaviour later,
+# uncomment the `push:` trigger below.
+
+on:
+  workflow_dispatch: {}
+  # push:
+  #   branches: [main]
+  #   paths: ["supabase/migrations/**"]
+
+# Never let two migration runs overlap.
+concurrency:
+  group: db-migrate
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      # Public project ref (it's part of your Supabase URL — not a secret).
+      SUPABASE_PROJECT_REF: pewmdztviyrtbhtebcct
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Install the Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link to the Supabase project
+        run: supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Show what will be applied (dry run)
+        run: supabase db push --dry-run
+
+      - name: Apply pending migrations
+        run: supabase db push
