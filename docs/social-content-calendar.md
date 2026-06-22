@@ -95,7 +95,10 @@ effort, the affiliate-revenue path, the AI-assist boundary, and UTM usage.
     with where-to-buy. Highest-intent moment we have.
   - **The "Ledger" (recurring newsletter, Ffern-inspired)** — a monthly/biweekly
     note: "what showed up secondhand under retail," a price move worth knowing, one
-    authentication tip, one it-bag history. Human, specific, names the things.
+    authentication tip, one it-bag history. Human, specific, names the things. Open
+    it in the **"grab a coffee, let's talk bags" register** (the Je Suis Lou
+    settle-in pattern — see `docs/voice-and-tone.md` §2): warm, informed, with you
+    not at you.
   - **Re-engagement** — "bags matching your taste dropped" / "your watched bag moved."
   - **Price-trend digest** — for the premium/collector segment: comps and movers.
 - **Cadence:** Ledger monthly to start (batchable); transactional/triggered fire
@@ -286,6 +289,8 @@ revenue, ignore vanity).
 - **Coach/thrift leads acquisition; ultra-luxury monetizes.**
 - **Build dependency:** stand up the newsletter opt-in (at quiz completion) before
   the email plan can run.
-- **Voice:** one voice, register flexed by surface — see `docs/voice-and-tone.md`.
+- **Voice:** deeply informed, warmly told; one voice, register flexed by surface —
+  see `docs/voice-and-tone.md`. Founder-persona (on-camera, first-person gush) vs.
+  brand-system (everywhere else, no empty superlatives) per its §5.
 - **No obviously-AI video. Ever.**
 </content>
