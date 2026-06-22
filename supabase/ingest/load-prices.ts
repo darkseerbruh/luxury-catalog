@@ -83,6 +83,12 @@ function toRow(o: PriceObservation, variantId: number) {
     source_url: o.source_url,
     confidence_level: o.confidence,
     notes: o.notes ?? null,
+    // Per-listing resale spec (migration 0022); harmless nulls for retail rows.
+    colorway: o.attrs.exterior_colorway ?? null,
+    material: o.attrs.exterior_material ?? null,
+    hardware_color: o.attrs.hardware_color ?? null,
+    production_year: o.attrs.production_year ?? null,
+    season: o.attrs.season ?? null,
   };
 }
 

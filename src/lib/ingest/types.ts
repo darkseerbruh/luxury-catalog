@@ -23,6 +23,10 @@ export interface ObservationAttrs {
   exterior_colorway?: string | null;
   hardware_color?: string | null;
   exterior_material?: string | null;
+  /** Production/collection start year of the specific listing (resale spec). */
+  production_year?: number | null;
+  /** Collection/season label, e.g. "2011-2012". */
+  season?: string | null;
 }
 
 /**

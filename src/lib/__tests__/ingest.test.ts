@@ -12,6 +12,7 @@ import {
 import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
+import { parseTrrDescription } from "../ingest/trr";
 
 const valid: PriceObservation = {
   brand: "Chanel",
@@ -202,6 +203,33 @@ describe("eBay Browse helpers", () => {
   it("returns [] for a malformed response", () => {
     expect(parseBrowseItems({})).toEqual([]);
     expect(parseBrowseItems(null)).toEqual([]);
+  });
+});
+
+describe("TheRealReal description parser", () => {
+  it("extracts colour, leather, hardware, year from a real description", () => {
+    const spec = parseTrrDescription(
+      "Chanel Shoulder Bag. | From the 2011-2012 Collection by Karl Lagerfeld. | Brown Leather. | Interlocking CC Logo, Quilted Pattern & Chain-Link Accent. | Gold-Tone Hardware. | Leather Lining & Dual Interior Pockets. | Turn-Lock Closure at Front. | Includes Dust Bag."
+    );
+    expect(spec).toMatchObject({
+      color: "Brown", material: "Leather", hardwareColor: "gold",
+      productionYear: 2011, season: "2011-2012", vintage: false, includes: "Dust Bag",
+    });
+  });
+
+  it("handles vintage + black caviar + silver", () => {
+    const spec = parseTrrDescription(
+      "Chanel Shoulder Bag.\nFrom the 1994-1996 Collection.\nVintage.\nBlack Caviar Leather.\nSilver-Tone Hardware.\nLeather Lining & Five Interior Pockets."
+    );
+    expect(spec.vintage).toBe(true);
+    expect(spec.color).toBe("Black");
+    expect(spec.material).toBe("Caviar Leather");
+    expect(spec.hardwareColor).toBe("silver");
+    expect(spec.productionYear).toBe(1994);
+  });
+
+  it("returns nulls for an empty description", () => {
+    expect(parseTrrDescription("")).toMatchObject({ color: null, material: null, hardwareColor: null });
   });
 });
 
