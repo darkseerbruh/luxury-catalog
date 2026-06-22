@@ -74,6 +74,29 @@ give pages depth on day one.
   rate-limited). Mine the **filter sidebars** (color / hardware / size / material /
   leather) to enumerate the variant universe — the product brief's data-source #1.
 
+### 3.1a Reseller capture recon (browser same-origin, 2026-06-22)
+
+All three are bot-blocked to plain server fetch but readable via Claude-in-Chrome
+(real logged-in session). Each is a parser to the shared `PriceObservation`
+contract — no new architecture. Verified data shapes:
+
+- **The RealReal** — Algolia search; product pages carry **JSON-LD `Product`**
+  with `offers.price/condition` + a period-separated `description` (colour,
+  leather, hardware, collection year, inclusions). SKU = stable `listing_ref`.
+  Parser: `src/lib/ingest/trr.ts`. **Status: built.**
+- **Fashionphile** — Shopify + Algolia. Same-origin `/products/<handle>.json`
+  returns `price`, `price_currency`, `sku`, `body_html`, `tags`. Colour/hardware
+  live in tags + description + the on-page spec section. **Lift: TRR-easy.**
+- **Vestiaire Collective** — Next.js; search page embeds `__NEXT_DATA__` + JSON-LD
+  `Product`. Rich attributes confirmed present: brand, colour, material,
+  condition, **country/region**, seller, price (hardware/year on the detail page).
+  Best source for the cross-currency **region** field. **Lift: moderate** (locate
+  the product array / use its JSON API).
+
+Recommended sequence: finish the TRR vertical slice (capture → spec → load →
+price-by-spec UI) to lock the contract + UI, then add Fashionphile and Vestiaire
+as thin parser plug-ins.
+
 ### 3.2 eBay sold (recent realized)
 - **Marketplace Insights API** gives sold/realized prices but is a **Limited
   Release** — must apply to eBay Developer Support and be approved
