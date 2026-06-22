@@ -143,6 +143,35 @@ best variant by attrs). Ambiguous matches are **skipped, not guessed**.
 
 ---
 
+## 4a. Pilot findings (Chanel Classic Flap, 2026-06-22)
+
+What the first end-to-end run proved and what it exposed:
+
+- **MSRP source works cleanly.** `npm run ingest:msrp` → `load:prices` resolved all
+  7 cited retail figures to the real catalog variant (Chanel Classic Flap Medium)
+  in a dry run against the live DB. This is real, clean, cited 20-yr **retail**
+  history available now.
+- **The pipeline mechanics are proven** — CDX query → parse → keyword-filter →
+  snapshot fetch → price extraction → landing → variant resolution all run and are
+  unit-tested.
+- **Live reseller history is NOT a quick win.** Fashionphile migrated to **Shopify**;
+  the Wayback archive for it returns mostly homepage snapshots, search-result pages,
+  blog posts, and `/cdn/shop/…` image assets — not a clean per-product price series.
+  Two concrete lessons baked into the code:
+  1. Filter archived URLs on the **path only** (drop the query string) — a homepage
+     tagged `?utm_content=chanel-flap-guide` is a false positive (`urlPathKey` in
+     `src/lib/ingest/wayback.ts`).
+  2. A homepage's "lowest in-band price" is an unrelated cheap item, not the style's
+     price — per-product targeting is required.
+- **Implication:** clean historical reseller series need **per-site URL-pattern
+  engineering** (precise CDX queries against each reseller's historical product-URL
+  scheme, or — better — the affiliate datafeed once approved). Treat per-reseller
+  Wayback backfill as a scoped follow-up, not a one-shot. Until then the live
+  reseller adapters (`fashionphile.ts`) and `wayback.ts` are correct in shape but
+  should be pointed at verified product-URL patterns before their output is loaded.
+- **Auction archives** remain the better historical-realized source for Hermès and
+  are wired (`auction.ts`) but unverified against live house markup.
+
 ## 5. Open TODOs (operator / human-gated)
 - [ ] Verify TheRealReal + Vestiaire affiliate networks & whether feeds carry price.
 - [ ] Apply for eBay Marketplace Insights API access (or pick a sold-data stopgap).
