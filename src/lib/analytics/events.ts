@@ -63,6 +63,8 @@ export const EVENTS = {
   photoSubmitted: "photo_submitted",
   /** A user requested professional authentication — a marketplace-demand / lead signal. */
   authenticationRequested: "authentication_requested",
+  /** A user raised their hand for the (not-yet-live) authentication service — fake-door demand. */
+  authenticationInterest: "authentication_interest",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

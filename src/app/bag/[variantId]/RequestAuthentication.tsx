@@ -2,21 +2,94 @@
 
 import { useState, useTransition, useRef } from "react";
 import Link from "next/link";
-import { submitAuthRequest } from "@/lib/authentication-actions";
+import { submitAuthRequest, registerAuthInterest } from "@/lib/authentication-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
 
 /**
- * "Get it authenticated by a pro" on-ramp on the bag page — the lead-capture
- * entry to the authentication marketplace. No payment here: a verified
- * Authenticator claims the request and arranges the service off-platform.
+ * "Get it authenticated by a pro" on the bag page.
+ *
+ * Two phases, chosen by `live` (whether any verified authenticators exist):
+ *  - live=false → a COMING-SOON fake door: a one-tap "notify me" that records
+ *    demand (analytics for everyone; a saved notify-list row for signed-in users)
+ *    without promising a service no one can fulfil yet.
+ *  - live=true  → the real lead-capture request form (a verified authenticator
+ *    claims it and arranges the review off-platform).
  */
 export default function RequestAuthentication({
   variantId,
   signedIn,
+  live,
 }: {
   variantId: number;
   signedIn: boolean;
+  live: boolean;
 }) {
+  return (
+    <section id="get-authenticated" className="mt-4 rounded-2xl border border-gold/30 bg-gold/5 p-5">
+      {live ? (
+        <LiveRequest variantId={variantId} signedIn={signedIn} />
+      ) : (
+        <ComingSoon variantId={variantId} signedIn={signedIn} />
+      )}
+    </section>
+  );
+}
+
+function ComingSoon({ variantId, signedIn }: { variantId: number; signedIn: boolean }) {
+  const [state, setState] = useState<"idle" | "registered" | "needsLogin">("idle");
+  const [pending, startTransition] = useTransition();
+
+  function notifyMe() {
+    // Always record the demand signal — works for logged-out visitors too.
+    track(EVENTS.authenticationInterest, { variant_id: variantId, signed_in: signedIn });
+    if (!signedIn) {
+      setState("needsLogin");
+      return;
+    }
+    startTransition(async () => {
+      const res = await registerAuthInterest(variantId);
+      if (res.ok) setState("registered");
+    });
+  }
+
+  return (
+    <>
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="font-serif text-lg text-foreground">Get it authenticated by a pro</p>
+        <span className="rounded-full border border-gold/40 px-2.5 py-0.5 text-xs uppercase tracking-wide text-gold/90">
+          Coming soon
+        </span>
+      </div>
+      <p className="mt-1 text-sm text-muted">
+        We&rsquo;re lining up verified authenticators to inspect bags in hand. Want first
+        access when it launches?
+      </p>
+
+      {state === "registered" ? (
+        <p className="mt-4 rounded-xl border border-gold/30 bg-surface px-4 py-3 text-sm text-foreground">
+          ✓ You&rsquo;re on the list — we&rsquo;ll email you the moment it&rsquo;s live.
+        </p>
+      ) : state === "needsLogin" ? (
+        <p className="mt-4 rounded-xl border border-gold/30 bg-surface px-4 py-3 text-sm text-foreground">
+          Noted — thanks!{" "}
+          <Link href="/login" className="text-gold hover:underline">Log in</Link> so we can
+          actually reach you when it opens.
+        </p>
+      ) : (
+        <button
+          type="button"
+          onClick={notifyMe}
+          disabled={pending}
+          className="mt-4 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft disabled:opacity-40"
+        >
+          {pending ? "Adding you…" : "Notify me when it's live"}
+        </button>
+      )}
+    </>
+  );
+}
+
+function LiveRequest({ variantId, signedIn }: { variantId: number; signedIn: boolean }) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +110,7 @@ export default function RequestAuthentication({
   }
 
   return (
-    <section id="get-authenticated" className="mt-4 rounded-2xl border border-gold/30 bg-gold/5 p-5">
+    <>
       <p className="font-serif text-lg text-foreground">Want a pro to check it?</p>
       <p className="mt-1 text-sm text-muted">
         Request a hands-on review from one of our verified authenticators. We&rsquo;ll match
@@ -109,6 +182,6 @@ export default function RequestAuthentication({
           Log in to request authentication
         </Link>
       )}
-    </section>
+    </>
   );
 }

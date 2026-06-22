@@ -40,6 +40,44 @@ export async function submitAuthRequest(formData: FormData): Promise<AuthRequest
   return { ok: true };
 }
 
+/**
+ * Register "notify me when authentication launches" interest (the fake-door
+ * capture, used while no authenticators exist yet). Stored as an
+ * authentication_request row so it becomes the warm launch list / the first
+ * authenticator's backlog. Deduped per user+bag so re-clicks don't pile up.
+ */
+export async function registerAuthInterest(
+  variantId: number,
+): Promise<AuthRequestResult & { already?: boolean }> {
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, error: "Please log in so we can let you know." };
+  const vId = Number.isInteger(variantId) && variantId > 0 ? variantId : null;
+
+  const supabase = await createServerSupabase();
+  // Dedupe: one standing interest row per user+bag.
+  const existing = await supabase
+    .from("authentication_request")
+    .select("request_id")
+    .eq("user_id", user.id)
+    .eq("variant_id", vId)
+    .eq("status", "open")
+    .maybeSingle();
+  if (existing.data) return { ok: true, already: true };
+
+  const { error } = await supabase.from("authentication_request").insert({
+    variant_id: vId,
+    user_id: user.id,
+    contact_email: user.email,
+    details: null,
+  });
+  if (error) {
+    console.error("registerAuthInterest error:", error);
+    return { ok: false, error: "Could not add you. Please try again." };
+  }
+  if (vId) revalidatePath(`/bag/${vId}`);
+  return { ok: true, already: false };
+}
+
 /** Verified Authenticator claims an open request (reveals the requester's contact). */
 export async function claimAuthRequest(requestId: number): Promise<AuthRequestResult> {
   const user = await getCurrentUser();

@@ -28,6 +28,7 @@ import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
 import RequestAuthentication from "./RequestAuthentication";
+import { hasActiveAuthenticators } from "@/lib/authentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
@@ -206,11 +207,12 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images, photos] = await Promise.all([
+  const [resources, styleVariants, images, photos, authMarketplaceLive] = await Promise.all([
     getResourcesForStyle(v.style.styleId, v.variantId),
     getStyleVariants(v.style.styleId),
     getVariantImages([v.variantId]),
     getApprovedPhotos(v.variantId),
+    hasActiveAuthenticators(),
   ]);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
@@ -621,7 +623,7 @@ export default async function BagDetailPage({
       )}
 
       {/* Authentication-marketplace on-ramp (lead capture — no money on-platform). */}
-      <RequestAuthentication variantId={v.variantId} signedIn={userState.signedIn} />
+      <RequestAuthentication variantId={v.variantId} signedIn={userState.signedIn} live={authMarketplaceLive} />
 
       {/* Exterior material detail */}
       {v.exteriorMaterial && (

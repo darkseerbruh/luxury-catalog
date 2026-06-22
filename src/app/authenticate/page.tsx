@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser, getProfile } from "@/lib/auth";
-import { getMyAuthRequests, getOpenAuthRequests, getMyClaims, type AuthRequest } from "@/lib/authentication";
+import { getMyAuthRequests, getOpenAuthRequests, getMyClaims, hasActiveAuthenticators, type AuthRequest } from "@/lib/authentication";
 import { ClaimButton, CloseButton } from "./AuthRequestActions";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function AuthenticatePage() {
     isAuthenticator ? getOpenAuthRequests() : Promise.resolve([]),
     isAuthenticator && user ? getMyClaims(user.id) : Promise.resolve([]),
   ]);
+  const live = await hasActiveAuthenticators();
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-5 py-12">
@@ -46,11 +47,21 @@ export default async function AuthenticatePage() {
         <h1 className="mt-1 font-serif text-3xl text-foreground">Get a bag authenticated</h1>
         <p className="mt-2 max-w-xl text-muted">
           Want a real person to check a bag before you buy, sell, or insure it? Open any bag
-          and use <span className="text-foreground">&ldquo;Want a pro to check it?&rdquo;</span> to
-          send a request. A verified authenticator picks it up and reaches out — pricing and the
-          review itself are arranged directly with them.
+          and use <span className="text-foreground">&ldquo;Get it authenticated by a pro&rdquo;</span>{" "}
+          {live ? "to send a request — a verified authenticator picks it up and reaches out." : "to get on the list."}
         </p>
       </header>
+
+      {!live && (
+        <div className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
+          <p className="font-serif text-lg text-foreground">Coming soon</p>
+          <p className="mt-1 text-sm text-muted">
+            We&rsquo;re lining up verified authenticators. Tap{" "}
+            <span className="text-foreground">&ldquo;Notify me&rdquo;</span> on any bag and we&rsquo;ll
+            tell you the moment it&rsquo;s live. Anything below is your saved interest.
+          </p>
+        </div>
+      )}
 
       {!user && (
         <div className="rounded-2xl border border-border bg-surface p-6 text-center">

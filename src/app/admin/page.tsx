@@ -38,6 +38,12 @@ const SECTIONS = [
     description:
       "User-submitted reference photos awaiting review. Approve to publish, feature to make it the hero, or reject. Trusted contributors auto-publish.",
   },
+  {
+    href: "/admin/authentication",
+    title: "Authentication demand",
+    description:
+      "How many people raised their hand for the (coming-soon) pro authentication service — the fake-door signal and your warm launch list.",
+  },
 ];
 
 export default function AdminIndexPage() {
