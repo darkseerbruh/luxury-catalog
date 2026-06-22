@@ -1,4 +1,7 @@
 import { searchCatalog, getVariantImages } from "@/lib/queries";
+import { hybridSearch } from "@/lib/hybrid-search";
+import { getCurrentUser } from "@/lib/auth";
+import { getUserProfile } from "@/lib/personalization/user-profile";
 import RequestBagForm from "./RequestBagForm";
 import SearchTracker from "./SearchTracker";
 import SearchFilters from "./SearchFilters";
@@ -12,8 +15,25 @@ export default async function SearchPage({
 }) {
   const { q = "" } = await searchParams;
   const query = q.trim();
+
+  // Phase-3 hybrid search: fetch user profile in parallel with hybrid search candidates.
+  // Falls back to plain searchCatalog when VOYAGE_API_KEY is absent or user is logged out.
+  const user = query ? await getCurrentUser() : null;
+  const profile = user ? await getUserProfile(user.id) : null;
+
   const results = query
-    ? await searchCatalog(query)
+    ? process.env.VOYAGE_API_KEY
+      ? await hybridSearch(query, profile).then(async (hybridStyles) => {
+          // Hybrid search only returns styles — run the existing brand search in parallel.
+          const base = await searchCatalog(query);
+          return {
+            brands: base.brands,
+            styles: hybridStyles.length > 0 ? hybridStyles : base.styles,
+            interpreted: base.interpreted,
+            usedNaturalLanguage: base.usedNaturalLanguage,
+          };
+        })
+      : await searchCatalog(query)
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
 
