@@ -96,7 +96,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 - [x] 🧠 **H1/H2. Build order + first feature** — DECIDED: build the full engagement track now (social UI → feed → taste quiz → recs → **Taste Map** → notifications). Built on the feature branch this session.
 - [x] 🧠 **H3. Admin auth gate** — BUILT: `/admin/*` gated behind `profile.is_admin` (migration `0008`, fail-closed). **Operator:** after applying `0008`, set your own flag (`update profile set is_admin = true where id = '<your-id>';`) or you're locked out.
 - [ ] 🧠 **H4. Social links policy** — confirm allowed networks (IG/TikTok/YouTube/Poshmark/Substack) + verified-link treatment.
-- [ ] 🧠 **H5. Photo-contribution system** — still queued (the UGC engine the leaderboards reward). Build next?
+- [x] 🧠 **H5. Photo-contribution system** — BUILT (2026-06-22): `bag_photo` + contributor tiers, hybrid moderation, bag-page gallery/upload, `/admin/photos`, `/photos/most-wanted`, profile tier card. **Operator actions:** (1) apply **`0016_photo_contributions.sql`** (`supabase db push` — it also creates the public `bag-photos` Storage bucket + policies); (2) ensure `SUPABASE_SERVICE_ROLE_KEY` is set (admin queue + auto-publish + Most-Wanted demand ranking need it); (3) grant `is_authenticator` to vetted contributors so they auto-publish; (4) **register a DMCA agent before promoting UGC widely** (see G2). Galleries/upload degrade gracefully until 0016 is applied.
 
 ---
 

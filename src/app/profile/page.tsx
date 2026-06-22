@@ -6,6 +6,7 @@ import { signOut } from "@/lib/auth-actions";
 import Recommendations from "@/components/Recommendations";
 import FourGrails from "@/components/FourGrails";
 import TasteMapSection from "@/components/TasteMapSection";
+import ContributorCard from "@/components/ContributorCard";
 
 export const dynamic = "force-dynamic";
 
@@ -116,6 +117,8 @@ export default async function ProfilePage() {
           Edit preferences
         </Link>
       </div>
+
+      <ContributorCard userId={user.id} />
 
       <FourGrails grails={grails} isOwn />
 

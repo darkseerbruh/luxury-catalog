@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
+import { getApprovedPhotos } from "@/lib/photos";
 import {
   AUTHOR_NAME,
   SITE_URL,
@@ -25,6 +26,7 @@ import TrackBagView from "./TrackBagView";
 import WhereToBuy from "./WhereToBuy";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
+import PhotoContributions from "./PhotoContributions";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
@@ -203,10 +205,11 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images] = await Promise.all([
+  const [resources, styleVariants, images, photos] = await Promise.all([
     getResourcesForStyle(v.style.styleId, v.variantId),
     getStyleVariants(v.style.styleId),
     getVariantImages([v.variantId]),
+    getApprovedPhotos(v.variantId),
   ]);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
@@ -323,6 +326,7 @@ export default async function BagDetailPage({
 
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
+    photos.length > 0 ? { id: "photos", label: "Photos" } : null,
     { id: "specifications", label: "Specs" },
     authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
@@ -523,6 +527,15 @@ export default async function BagDetailPage({
 
       {/* Embedded video reviews — the visual layer while v1 is text-first */}
       <Resources resources={resources} />
+
+      {/* User photo contributions — real, owned reference shots + the rare-find
+          recruiting empty state (the UGC engine the tier ladder rewards). */}
+      <PhotoContributions
+        variantId={v.variantId}
+        brand={v.brand.name}
+        photos={photos}
+        signedIn={userState.signedIn}
+      />
 
       {/* Core specs */}
       <div id="specifications" className="scroll-mt-4">

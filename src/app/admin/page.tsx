@@ -32,6 +32,12 @@ const SECTIONS = [
     description:
       "User-submitted 'suggest an edit' corrections. Accept/reject triage; accepted edits are applied to the catalog manually.",
   },
+  {
+    href: "/admin/photos",
+    title: "Photos",
+    description:
+      "User-submitted reference photos awaiting review. Approve to publish, feature to make it the hero, or reject. Trusted contributors auto-publish.",
+  },
 ];
 
 export default function AdminIndexPage() {
