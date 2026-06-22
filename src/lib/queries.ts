@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
+import { getInstagramOEmbed } from "./instagram";
 
 export interface BrandOverview {
   brandId: number;
@@ -1290,6 +1291,11 @@ export interface CuratedResource {
   creatorName: string | null;
   creatorChannelUrl: string | null;
   creatorTrusted: boolean;
+  // Instagram embed fields (null for non-instagram resources). embedHtml is the
+  // official Meta oEmbed Read markup; it powers the click-to-load facade.
+  embedHtml: string | null;
+  thumbnailUrl: string | null;
+  authorName: string | null;
 }
 
 /**
@@ -1304,7 +1310,7 @@ export async function getResourcesForStyle(
   const { data, error } = await getSupabase()
     .from("resource")
     .select(
-      "resource_id, resource_type, title, url, youtube_video_id, description, is_featured, style_id, variant_id, creator:creator_id(name, channel_url, is_trusted)"
+      "resource_id, resource_type, title, url, youtube_video_id, description, is_featured, embed_html, thumbnail_url, author_name, style_id, variant_id, creator:creator_id(name, channel_url, is_trusted)"
     )
     .eq("published", true)
     .or(`style_id.eq.${styleId}${variantId ? `,variant_id.eq.${variantId}` : ""}`)
@@ -1314,7 +1320,7 @@ export async function getResourcesForStyle(
 
   if (error || !data) return [];
 
-  return data.map((r) => {
+  const resources = data.map((r) => {
     const c = (Array.isArray(r.creator) ? r.creator[0] : r.creator) as
       | { name: string; channel_url: string | null; is_trusted: boolean }
       | null;
@@ -1329,6 +1335,26 @@ export async function getResourcesForStyle(
       creatorName: c?.name ?? null,
       creatorChannelUrl: c?.channel_url ?? null,
       creatorTrusted: !!c?.is_trusted,
+      embedHtml: (r.embed_html as string | null) ?? null,
+      thumbnailUrl: (r.thumbnail_url as string | null) ?? null,
+      authorName: (r.author_name as string | null) ?? null,
     };
   });
+
+  // Enrich Instagram rows that lack a cached embed via the official Meta oEmbed
+  // Read API (server-only token). Cached for a week; degrades to attribution
+  // link-out when the token is missing. YouTube rows are untouched.
+  await Promise.all(
+    resources.map(async (r) => {
+      if (r.resourceType !== "instagram" || r.embedHtml) return;
+      const oembed = await getInstagramOEmbed(r.url);
+      if (oembed) {
+        r.embedHtml = oembed.html;
+        r.thumbnailUrl = r.thumbnailUrl ?? oembed.thumbnailUrl;
+        r.authorName = r.authorName ?? oembed.authorName;
+      }
+    })
+  );
+
+  return resources;
 }
