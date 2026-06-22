@@ -90,11 +90,47 @@ const HERMES_KELLY_28: MsrpRecord = {
   ],
 };
 
+/**
+ * Louis Vuitton Neverfull MM (Monogram, US retail). One of the best-documented
+ * appreciation stories — roughly tripled 2007->2024. Figures from PurseBop's
+ * Neverfull pricing history and Sotheby's; the 2024 $2,030 matches the catalog.
+ */
+const LV_NEVERFULL_MM: MsrpRecord = {
+  brand: "Louis Vuitton",
+  style: "Neverfull",
+  size_label: "Neverfull MM Monogram",
+  platform: "Louis Vuitton (retail)",
+  history: [
+    { year: 2007, price: 645, currency: "USD", source_url: "https://lvbagaholic.com/blogs/lv_bagaholic/louis-vuitton-neverfull-pm-mm-gm" },
+    { year: 2012, price: 870, currency: "USD", source_url: "https://www.pursebop.com/the-pricing-history-of-the-louis-vuitton-neverfull/" },
+    { year: 2022, price: 1690, currency: "USD", source_url: "https://www.pursebop.com/the-pricing-history-of-the-louis-vuitton-neverfull/" },
+    { year: 2023, price: 2023, currency: "USD", source_url: "https://www.pursebop.com/the-pricing-history-of-the-louis-vuitton-neverfull/", note: "June 2023 +17%" },
+    { year: 2024, price: 2030, currency: "USD", source_url: "https://www.sothebys.com/en/articles/buying-a-classic-louis-vuitton-neverfull-just-got-a-lot-harder" },
+  ],
+};
+
+/**
+ * Gucci GG Marmont Small matelassé flap (US retail). Sparse — only firmly-cited
+ * recent points (Bragmybag / LeeLine). Marmont has risen ~5-10%/yr since 2020.
+ */
+const GUCCI_GG_MARMONT_SMALL: MsrpRecord = {
+  brand: "Gucci",
+  style: "GG Marmont",
+  size_label: "GG Marmont Small",
+  platform: "Gucci (retail)",
+  history: [
+    { year: 2023, price: 2100, currency: "USD", source_url: "https://www.bragmybag.com/gucci-gg-marmont-bag/" },
+    { year: 2025, price: 2300, currency: "USD", source_url: "https://www.leelinebags.com/gucci-bag-price-list/" },
+  ],
+};
+
 export const MSRP_HISTORY: MsrpRecord[] = [
   CHANEL_CLASSIC_FLAP_MEDIUM,
   HERMES_BIRKIN_35,
   HERMES_BIRKIN_30,
   HERMES_KELLY_28,
+  LV_NEVERFULL_MM,
+  GUCCI_GG_MARMONT_SMALL,
 ];
 
 /** Expand one MSRP record into per-year retail_msrp observations. */
