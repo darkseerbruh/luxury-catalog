@@ -27,6 +27,13 @@ export const EVENTS = {
   authSectionEngaged: "auth_section_engaged",
   /** The price-history chart was viewed or interacted with. */
   priceHistoryViewed: "price_history_viewed",
+  /**
+   * The value module (gauge + verdict) was shown. Carries the `framing` it was
+   * shown under (buyer/owner/collector) + comp count, so we can later learn —
+   * from real usage — which user type is most common and most monetizable
+   * (cross-referenced with the outbound buy/sell click that follows).
+   */
+  valueModuleViewed: "value_module_viewed",
   /** A click out to an external resale platform — an affiliate-revenue proxy. */
   outboundResaleClicked: "outbound_resale_clicked",
   /** A click out to a consignment/sell platform — the consignor-referral revenue proxy. */
