@@ -45,15 +45,15 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 - [x] 🔧 **B1. Added domain in Vercel** (`luxurycatalog.com` + `www`, apex→www redirect).
 - [x] 🔧 **B2. Squarespace DNS** — switched to Squarespace nameservers; added `A @ → 216.198.79.1` and `CNAME www → da85d5fe69f1eefe.vercel-dns-017.com`.
-- [ ] 🔧 **B3.** Wait for Vercel to show **"Valid Configuration"** on both domains (nameserver change can take up to ~24–48h).
+- [x] 🔧 **B3. DNS validated** (2026-06-22) — Vercel shows "Valid Configuration"; `luxurycatalog.com` loads over HTTPS.
 - [ ] 🔧 **B4. Email forwarding (optional)** — set up `hello@luxurycatalog.com` (MX records) if/when you want branded email. Not needed for the site to work.
-- [ ] 🔧 **B5.** Once DNS validates, update Vercel **`NEXT_PUBLIC_SITE_URL` → `https://www.luxurycatalog.com`** and redeploy.
+- [x] 🔧 **B5. `NEXT_PUBLIC_SITE_URL` set to `https://www.luxurycatalog.com`** + redeployed (2026-06-22).
 
 ---
 
 ## C. Analytics, alerts & integrations
 
-- [ ] 🔧 **C1. PostHog** — set `NEXT_PUBLIC_POSTHOG_KEY`; enable **"Cookieless server hash mode"**; optionally run `node scripts/setup-posthog.mjs`.
+- [x] 🔧 **C1. PostHog live** (2026-06-22) — `NEXT_PUBLIC_POSTHOG_KEY` set (US region), redeployed, events verified flowing in incognito. *(Note: events are blocked by ad-blockers in your everyday browser — test in incognito + the PostHog "Live" tab.)*
 - [ ] 🔧 **C2.** Add `.mcp.json` for the PostHog MCP (snippet in `handoff.md`/`.env.example`); set `POSTHOG_PERSONAL_API_KEY`.
 - [ ] 🔧 **C3. Price alerts** — `CRON_SECRET` is set ✅; `vercel.json` already schedules the daily job. Verify it runs after deploy.
 - [ ] 🔧 **C4. Email delivery (Resend)** — sign up, **verify a sender domain**, set `RESEND_API_KEY`. Unlocks alert emails **and** Supabase email-template editing (so you can re-enable verified signup — A4).
@@ -62,7 +62,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 ## D. SEO / GEO (the #1 marketing channel)
 
-- [ ] 📣 **D1.** After the branch is deployed + DNS validates, **submit `/sitemap.xml`** to **Google Search Console** *and* **Bing Webmaster Tools** (Bing powers ChatGPT search). Verify domain ownership in each.
+- [x] 📣 **D1. Sitemap submitted to Google + Bing** (2026-06-22) — GSC Domain property (DNS TXT verified) + `https://www.luxurycatalog.com/sitemap.xml` submitted; Bing imported from GSC + sitemap submitted. Indexing is the slow part (~8–16 wks) — check GSC→Pages / Bing→Site Explorer in a couple weeks.
 - [x] 📣 **D2. Curate video resources** — BUILT: `supabase/seed/research/creators.json` (real channels + real video IDs verified from web search) + `supabase/seed/seed-creators.ts` (idempotent). **Operator action:** run `npx tsx supabase/seed/seed-creators.ts` (needs service-role key; 0004 applied + hero styles seeded first) to populate the bag-page "Video reviews."
 
 ---

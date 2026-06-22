@@ -1,6 +1,25 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
+## TL;DR — operator LAUNCH session + photo/auth fixes (2026-06-22)
+
+A parallel, operator-driven session (ran alongside the Personalization work below). **The app is now LIVE in production on the real domain.** Code changes are on `main` (`tsc`/`eslint`/`next build`/tests green at each merge).
+
+**Operator milestones (done today, see `docs/desktop-todo.md`):**
+- 🌐 **Live on `https://www.luxurycatalog.com`** (DNS validated; `NEXT_PUBLIC_SITE_URL` updated; redeployed).
+- 📊 **PostHog analytics live** (`NEXT_PUBLIC_POSTHOG_KEY`, US region; verified). *Events are eaten by ad-blockers in everyday browsers — test in incognito + PostHog "Live" tab.*
+- 🔍 **Sitemap submitted to Google Search Console + Bing** (indexing clock started; ~8–16 wks).
+- 🖼️ Operator applied migrations **0015/0016/0017**, set self `is_admin`, and **runtime-tested the photo flow end-to-end (works).**
+- 💰 **Affiliate apps in flight:** TRR Real Partners (consignor, call pending) + TRR affiliate (Impact) + Awin (Vestiaire **and** Fashionphile — ShareASale merged into Awin). When codes arrive → wire `NEXT_PUBLIC_AFFILIATE_*`.
+
+**Code shipped this session:**
+1. **Photo gallery byline bugfix** — `getApprovedPhotos`/`getPhotosForReview` (and the auth-request reads) used a PostgREST embed `profile:user_id(...)` that can't resolve (the tables FK to `auth.users`, not `profile`), so they errored → empty gallery even though photos published. Fixed with a **separate profile lookup** merged in JS (`src/lib/photos.ts`, `authentication.ts`). Also `router.refresh()` after a photo upload.
+2. **Authentication marketplace = coming-soon fake door** until real authenticators exist. `hasActiveAuthenticators()` gates it: 0 authenticators → a **"Notify me when it's live"** demand-capture (analytics `authentication_interest` for everyone + a saved `authentication_request` row for signed-in users = warm launch list). Flips to the real request form automatically once any `is_authenticator` exists. Doors on **bag page, thrift `/found` success, and `/closet`** (shared `src/components/AuthInterestButton.tsx`). New **`/admin/authentication`** demand dashboard. *(To SEE the coming-soon state, the operator should drop their own test `is_authenticator` flag.)*
+
+**Deferred / flagged:** 🔒 key rotation (A6 — plan saved, do before full public launch); ⚠️ **`/identify` camera tool isn't real yet** — make it work or give it the coming-soon treatment before public launch (desktop-todo H6); DMCA agent before promoting UGC widely (G2). **New backlog idea:** multi-source verification evidence (listing URLs + guided photos) — see Open backlog.
+
+---
+
 > **Latest session (2026-06-22):** Personalization Phase 2 — precomputed recs + PostHog flag gate
 > (migration `0019`). See TL;DR immediately below. Phase 1 (migration `0018`) is the block below that.
 
