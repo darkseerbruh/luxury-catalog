@@ -3,7 +3,8 @@
 *For the owner of Luxury Catalog (Arielle). Complements `docs/handoff.md` (project state). This file = how she likes to work + decisions she's locked. Keep it updated as you learn more; confirm new preferences before treating them as standing rules.*
 
 ## Who she is
-- **Arielle Coambes** — founder/owner of **Luxury Catalog LLC**. Product owner, **not an engineer**.
+- **Arielle Coambes** — founder/owner of **Luxury Catalog**. Product owner, **not an engineer**.
+- **Based in Georgia** (relocated from Utah). The original **Utah LLC lapsed**, so the entity is being re-formed as a **Georgia LLC** ("Luxury Catalog, LLC", filed 2026-06). Use the **GA entity + new EIN** for go-forward business setup (affiliate W-9s, banking); affiliate programs can be started as a sole prop in the meantime.
 - Thinks like a founder: evaluates ideas by **engagement, virality, monetization, and strategic fit**, not just whether they work.
 
 ## How she likes to work with you (interaction style)
@@ -61,6 +62,8 @@
 - **Auth: social login + usernames.** Wants **Google/Facebook OAuth** and a **custom username** captured at signup for lower-friction onboarding (provider setup is operator/human-gated).
 - **Brand pages = intelligence hubs, not style lists.** Surface heritage, at-a-glance stats, a price **index/ticker** + **highest recorded resale** + hero-price-over-years, the brand's most-common **colours/materials/hardware/silhouettes**, recent/upcoming releases, and a **culture & buying-experience** editorial layer that **acknowledges brand lore** (e.g. the "Hermès game" / quota-bag dynamic — "we need to acknowledge stuff like that"). Lore/editorial is **curated & sourced, never invented**; data she doesn't have (live virality, upcoming releases) is **omitted, not faked**.
 - **Closet stays a top-level destination** (kept separate from `/profile` and the public `/u/[handle]`) — collection is high-frequency, like Goodreads "My Books"; **don't bury it inside profile.**
+- **Social layer is bounded — reference DB *with* community, not a social network** (canonical: `docs/engagement-strategy.md`; framing: *monetization is the end goal, engagement is the flywheel*). Judge every social feature by "builds trust + drives return visits **without** PurseForum chaos." **DON'T build:** open 1:1 DMs (fraud/moderation/leakage), free-form public posting/status updates, universal comment threads, or vanity likes — messaging only later as **structured, monetized authenticator inquiries.** **DO:** structured **activity feed** (derived events, no free text), follow/favorite closets, status profiles + **leaderboards with XP tied to value-producing UGC (never vanity)**, expert-gated articles, verified-owner badges, suggest-an-edit corrections.
+- **"Taste Map" is the engagement + data-moat concept she loved** — a personal taste profile that visibly fills in as users interact (completeness meter, EyeWire-style "watch it build") plus a collective taste graph; seeded by the (never-gatekept) quiz. **Recommendations: content-based over real catalogued attributes first** (explainable, honors never-invent), collaborative later — **no ML infra; the clean structured catalog is the edge.**
 
 ## Finance, money & compliance (locked stance)
 - **She is deliberately cautious about handling money:** *"I don't want to mess with people's money without the education and proper backing."* Before any money-handling feature, she expects **compliance research first** and a **one-time attorney/CPA review**. "Proper backing" to her = the LLC kept separate, business insurance (general/E&O/cyber), and published **Terms of Service + Privacy Policy** as shields.
