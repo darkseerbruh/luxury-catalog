@@ -61,8 +61,8 @@ export default function SuggestEdit({
     return (
       <section className="border-t border-border pt-8">
         <div className="rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-foreground">
-          Thank you — your suggestion was submitted for review. Accepted edits are applied
-          by our team after verification.
+          Thanks — your suggestion is in for review. We apply accepted edits once
+          we&rsquo;ve verified them.
         </div>
       </section>
     );

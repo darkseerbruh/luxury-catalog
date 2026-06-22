@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Most Coveted Closets · The Luxury Catalog",
-  description: "The most-followed and most-wanted handbag closets on The Luxury Catalog.",
+  description: "The most-followed handbag closets on The Luxury Catalog, and the bags everyone else wants.",
 };
 
 export default async function CovetedClosetsPage() {
@@ -18,14 +18,14 @@ export default async function CovetedClosetsPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Leaderboard</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Most Coveted Closets</h1>
         <p className="mt-2 max-w-prose text-muted">
-          Ranked by followers and how often their bags appear on other collectors&rsquo;
-          wishlists. Make your closet public in your profile to be eligible.
+          Ranked by followers and how often their bags turn up on other collectors&rsquo;
+          wishlists. Make your closet public in your profile to land on the board.
         </p>
       </header>
 
       {closets.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-10 text-center text-muted">
-          No public closets yet. Be the first — make your closet public and start collecting.
+          No public closets yet. Be the first — make yours public and start the board.
         </div>
       ) : (
         <ol className="flex flex-col gap-3">

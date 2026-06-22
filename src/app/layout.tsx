@@ -21,7 +21,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "The Luxury Catalog",
   description:
-    "The definitive reference database for designer handbags — production history, authentication markers, and resale intelligence across every brand.",
+    "The reference for designer handbags: production history, authentication markers, and what they actually resell for, brand by brand.",
 };
 
 export default async function RootLayout({

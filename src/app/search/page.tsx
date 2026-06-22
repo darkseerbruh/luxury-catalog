@@ -45,9 +45,9 @@ export default async function SearchPage({
       <div className="mx-auto mt-10 w-full max-w-2xl">
         {!query && (
           <p className="text-center text-muted">
-            Search by brand (e.g. &ldquo;Chanel&rdquo;), style (e.g.
-            &ldquo;Birkin&rdquo;), or describe what you want — &ldquo;structured
-            black crossbody under 10 inches wide&rdquo;.
+            Search by brand (&ldquo;Chanel&rdquo;), by style
+            (&ldquo;Birkin&rdquo;), or just describe what you&rsquo;re after —
+            &ldquo;structured black crossbody under 10 inches wide&rdquo;.
           </p>
         )}
 
@@ -68,11 +68,11 @@ export default async function SearchPage({
         {query && !hasResults && (
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <p className="text-foreground">
-              No results for &ldquo;{query}&rdquo;.
+              Nothing for &ldquo;{query}&rdquo; yet.
             </p>
             <p className="mt-2 text-sm text-muted">
-              This bag isn&rsquo;t in the catalog yet — searches like this
-              help us decide what to research next.
+              We haven&rsquo;t researched this one yet. Ask for it and you bump
+              it up the list — the most-requested bags get done first.
             </p>
             <RequestBagForm query={query} />
           </div>

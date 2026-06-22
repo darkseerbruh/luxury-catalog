@@ -14,8 +14,8 @@ export default function PrivacyPage() {
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-muted">
         <p>
-          This policy explains what we collect and how we use it. We aim to collect as little as
-          possible. You can browse the catalog without an account.
+          Here&rsquo;s what we collect and how we use it. We keep it to as little as we can, and you
+          can browse the whole catalog without an account.
         </p>
 
         <section className="space-y-3">
@@ -38,8 +38,8 @@ export default function PrivacyPage() {
           </ul>
           <p>
             We do <span className="text-foreground">not</span> collect or store payment card numbers.
-            If we add paid features in the future, payments will be handled by a PCI-compliant processor
-            and card data will never touch our servers.
+            If we add paid features later, a PCI-compliant processor handles payments and card data
+            never touches our servers.
           </p>
         </section>
 

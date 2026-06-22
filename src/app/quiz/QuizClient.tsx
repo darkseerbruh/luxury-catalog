@@ -139,7 +139,7 @@ export default function QuizClient({
           <Link href="/login" className="text-gold hover:underline">
             Log in
           </Link>{" "}
-          to save your result and get recommendations.
+          to save your result and get bag recommendations.
         </p>
       )}
       {error && <p className="text-center text-sm text-red-400">{error}</p>}

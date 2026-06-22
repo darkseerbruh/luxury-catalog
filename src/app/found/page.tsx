@@ -17,9 +17,9 @@ export default async function FoundPage({
         <p className="text-sm uppercase tracking-widest text-muted">Thrift log</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Log a find</h1>
         <p className="mt-2 text-muted">
-          Found something in the wild? Tell us what it was and what you paid. It
-          helps everyone understand what&rsquo;s out there and what it&rsquo;s worth.
-          No account required.
+          Found something in the wild? Tell us what it was and what you paid.
+          Every find sharpens what we all know is out there and what it sells
+          for. No account needed.
         </p>
       </header>
 

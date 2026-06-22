@@ -36,7 +36,7 @@ export default function SocialProfileForm({
     startTransition(async () => {
       const res = await saveSocialProfile(formData);
       if (!res.ok) {
-        setError(res.error ?? "Something went wrong.");
+        setError(res.error ?? "That didn't save. Try again.");
         return;
       }
       setSaved(true);
@@ -66,7 +66,7 @@ export default function SocialProfileForm({
           defaultValue={initial.bio ?? ""}
           maxLength={500}
           rows={3}
-          placeholder="A line about your collecting taste."
+          placeholder="A line about what you collect and why."
           className="rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
       </label>

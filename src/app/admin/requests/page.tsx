@@ -34,8 +34,8 @@ export default async function RequestsPage() {
         </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Requests &amp; finds</h1>
         <p className="mt-2 max-w-2xl text-muted">
-          User-submitted bag-addition requests and logged thrift finds — direct
-          demand signal and real-world acquisition data.
+          User-submitted bag-addition requests and logged thrift finds — what people
+          want added, and what they&rsquo;re paying in the wild.
         </p>
       </header>
 

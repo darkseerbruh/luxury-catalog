@@ -88,7 +88,7 @@ export default function PostForm({
           rows={2}
           maxLength={300}
           defaultValue={initial?.excerpt ?? ""}
-          placeholder="A one- or two-line summary."
+          placeholder="A line or two on what the reader walks away knowing."
           className="rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
       </label>
@@ -100,7 +100,7 @@ export default function PostForm({
           rows={16}
           maxLength={50000}
           defaultValue={initial?.body ?? ""}
-          placeholder="Write your article. Separate paragraphs with a blank line. Only verifiable facts — never invent authentication details."
+          placeholder="Write it the way you'd tell a friend who knows bags. Separate paragraphs with a blank line. Stick to what you can verify — never invent authentication details."
           className="rounded-xl border border-border bg-surface px-4 py-3 font-sans text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
       </label>

@@ -21,10 +21,10 @@ export default function ThriftFindForm({
   if (done) {
     return (
       <div className="rounded-2xl border border-gold/30 bg-gold/5 p-8 text-center">
-        <p className="font-serif text-xl text-foreground">Logged — nice find!</p>
+        <p className="font-serif text-xl text-foreground">Logged. Nice find.</p>
         <p className="mx-auto mt-2 max-w-sm text-muted">
-          Thanks for contributing. Find data helps us understand what&rsquo;s out
-          there and what it sells for.
+          Thanks — that&rsquo;s one more data point on what&rsquo;s turning up and
+          what it actually sells for.
         </p>
         <button
           type="button"
@@ -46,7 +46,7 @@ export default function ThriftFindForm({
           brand: String(formData.get("brand") ?? "") || undefined,
         });
         setDone(true);
-      } else setError(res.error ?? "Something went wrong.");
+      } else setError(res.error ?? "Something went sideways — try again.");
     });
   }
 
