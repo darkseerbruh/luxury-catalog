@@ -322,7 +322,7 @@ export default function SearchFilters({
 
       {totalVisible === 0 && activeCount > 0 && (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-sm text-muted">
-          No results match the current filters.{" "}
+          Nothing matches all of those at once. Drop a filter and try again.{" "}
           <button type="button" onClick={clearAll} className="text-gold hover:underline">
             Clear filters
           </button>

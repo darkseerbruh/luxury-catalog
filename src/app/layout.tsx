@@ -134,7 +134,7 @@ export default async function RootLayout({
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>
             <p className="text-muted">
-              The definitive reference for designer handbags.
+              Production history, authentication markers, and resale prices for designer handbags.
             </p>
           </div>
           <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">

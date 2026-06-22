@@ -149,8 +149,9 @@ export default async function BrandPage({
       <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
         <h2 className="font-serif text-xl text-foreground">Culture &amp; buying experience</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          Expert articles on collecting {brand.name} — heritage, the buying experience
-          (waitlists, boutique relationships), price history and what holds value.
+          What it&rsquo;s actually like to buy {brand.name}: the history, the waitlists
+          and boutique relationships, what it&rsquo;s resold for, and which pieces hold
+          their value.
         </p>
         <Link
           href={`/posts?brand=${encodeURIComponent(brand.name)}`}
