@@ -47,11 +47,11 @@ export async function submitAuthRequest(formData: FormData): Promise<AuthRequest
  * authenticator's backlog. Deduped per user+bag so re-clicks don't pile up.
  */
 export async function registerAuthInterest(
-  variantId: number,
+  variantId: number | null,
 ): Promise<AuthRequestResult & { already?: boolean }> {
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "Please log in so we can let you know." };
-  const vId = Number.isInteger(variantId) && variantId > 0 ? variantId : null;
+  const vId = variantId != null && Number.isInteger(variantId) && variantId > 0 ? variantId : null;
 
   const supabase = await createServerSupabase();
   // Dedupe: one standing interest row per user+bag.

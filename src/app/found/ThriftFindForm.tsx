@@ -5,15 +5,20 @@ import Link from "next/link";
 import { logThriftFind } from "@/lib/actions";
 import { buildConsignmentLinks } from "@/lib/affiliate";
 import { track, EVENTS } from "@/lib/analytics/events";
+import AuthInterestButton from "@/components/AuthInterestButton";
 
 const CONDITIONS = ["unknown", "new", "excellent", "very good", "good", "fair"];
 
 export default function ThriftFindForm({
   defaultBrand = "",
   defaultStyle = "",
+  signedIn = false,
+  authComingSoon = false,
 }: {
   defaultBrand?: string;
   defaultStyle?: string;
+  signedIn?: boolean;
+  authComingSoon?: boolean;
 }) {
   const [submitted, setSubmitted] = useState<{ brand: string; style: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +70,19 @@ export default function ThriftFindForm({
               Affiliate links — we may earn a commission, at no cost to you.{" "}
               <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
             </p>
+          </div>
+        )}
+
+        {/* Authenticity is the thrift hunter's #1 question — capture demand for
+            the (coming-soon) pro authentication service right at the find moment. */}
+        {authComingSoon && (
+          <div className="mx-auto mt-4 max-w-sm rounded-xl border border-gold/30 bg-surface p-5 text-left">
+            <p className="font-serif text-base text-foreground">Is it the real deal?</p>
+            <p className="mt-1 mb-3 text-sm text-muted">
+              Pro authentication is coming soon — get on the list and we&rsquo;ll tell you when
+              you can have a find checked by a verified expert.
+            </p>
+            <AuthInterestButton signedIn={signedIn} source="thrift_find" />
           </div>
         )}
 

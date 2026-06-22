@@ -41,7 +41,7 @@ function ComingSoon({ variantId, signedIn }: { variantId: number; signedIn: bool
 
   function notifyMe() {
     // Always record the demand signal — works for logged-out visitors too.
-    track(EVENTS.authenticationInterest, { variant_id: variantId, signed_in: signedIn });
+    track(EVENTS.authenticationInterest, { variant_id: variantId, signed_in: signedIn, source: "bag" });
     if (!signedIn) {
       setState("needsLogin");
       return;
