@@ -3,7 +3,8 @@
     "purpose": "Curated, vetted YouTube luxury-bag review creators + embeddable video resources linked to the seeded hero styles. Feeds the bag-page 'Video reviews' section (migration 0004: creator + resource tables).",
     "sourcing_rule": "Only REAL channels and REAL video IDs that appeared verbatim in web-search results were included (verified 2026-06). Video IDs are taken directly from youtube.com/watch?v= URLs returned by search. Where a video's CHANNEL could not be confidently matched from the search snippet, the resource is left with creator_handle:null rather than guessing an attribution (never-invent rule). Fewer high-confidence entries were preferred over fabricated volume.",
     "human_gated": "Operator runs `npx tsx supabase/seed/seed-creators.ts` with NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY in .env.local. Idempotent (creators upsert on channel-or-name; resources upsert on youtube_video_id). 0004 must be applied and hero styles seeded first (resources link to style by brand+name).",
-    "caveat": "These are independent reviewer videos embedded under YouTube's standard embed terms; embedding sidesteps image-copyright (handoff 'Images' decision). Confirm each video still resolves before/after seeding; YouTube IDs can be removed by their uploader."
+    "caveat": "These are independent reviewer videos embedded under YouTube's standard embed terms; embedding sidesteps image-copyright (handoff 'Images' decision). Confirm each video still resolves before/after seeding; YouTube IDs can be removed by their uploader.",
+    "instagram_note": "Instagram creators added 2026-06 (handles verified verbatim in web search). They are rostered now so attribution exists, but individual Instagram POST resource rows are deliberately omitted: the sourcing_rule forbids guessing post URLs/IDs, and Instagram embeds rely on the OFFICIAL authenticated Meta oEmbed Read API + a permission-first posture (NOT YouTube's standard-embed terms — see docs/social-embed-strategy.md). Add `resource_type:'instagram'` rows only with real, verified `https://www.instagram.com/p/<shortcode>/` URLs and (for featured partners) creator permission."
   },
   "creators": [
     {
@@ -30,6 +31,42 @@
       "channel_handle": "armcandybagco",
       "channel_url": "https://www.youtube.com/results?search_query=Armcandy+Bag+Co",
       "description": "Reviews of accessible-luxury and contemporary bags including Coach, with what-fits and quality breakdowns.",
+      "is_trusted": true,
+      "is_featured": false
+    },
+    {
+      "name": "Je suis Lou",
+      "platform": "youtube",
+      "channel_handle": "jesuislou",
+      "channel_url": "https://www.youtube.com/c/JesuisLou",
+      "description": "Barcelona-based luxury handbag collector (~170K YouTube, ~121K Instagram @je.suis.lou). Hermès Birkin/Kelly and Louis Vuitton collection videos, styling and reviews. Featured partner candidate (permission-first).",
+      "is_trusted": true,
+      "is_featured": true
+    },
+    {
+      "name": "Redeluxe (Georgia Swain)",
+      "platform": "instagram",
+      "channel_handle": "redeluxe",
+      "channel_url": "https://www.instagram.com/redeluxe/",
+      "description": "Pre-owned luxury reseller founded by Georgia Swain; authentication-forward, lifetime authenticity guarantee. Strong Instagram visuals of Hermès/Chanel/LV in hand. Reseller-angle partner candidate (permission-first).",
+      "is_trusted": true,
+      "is_featured": true
+    },
+    {
+      "name": "PurseBop (Monika Arora)",
+      "platform": "instagram",
+      "channel_handle": "pursebop",
+      "channel_url": "https://www.instagram.com/pursebop/",
+      "description": "Major luxury-handbag community authority (PurseBop.com). Hermès/Chanel/LV education, pricing and market commentary across Instagram and web.",
+      "is_trusted": true,
+      "is_featured": true
+    },
+    {
+      "name": "Handbag Holic (Steph Turton)",
+      "platform": "instagram",
+      "channel_handle": "handbag_holic",
+      "channel_url": "https://www.instagram.com/handbag_holic/",
+      "description": "Reviews, comparisons and investment-value handbag content across Instagram (@handbag_holic) and YouTube. Strong fit for 'is it worth it' commentary.",
       "is_trusted": true,
       "is_featured": false
     }
