@@ -10,8 +10,9 @@ import PersonaRouter from "@/components/PersonaRouter";
 import { BagImage } from "@/components/BagImage";
 import { PostHogFlagBootstrap } from "@/components/PostHogFlagBootstrap";
 import { ExperimentExposure } from "@/components/ExperimentExposure";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { getUserProfile } from "@/lib/personalization/user-profile";
-import { evaluatePersonalizationFlag, getBootstrapFlags, PERSONALIZED_HOME_FLAG } from "@/lib/analytics/flags";
+import { evaluatePersonalizationFlag, getBootstrapFlags } from "@/lib/analytics/flags";
 
 export const dynamic = "force-dynamic";
 
@@ -283,6 +284,15 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="border-b border-border px-5 py-12">
+        <h2 className="font-serif text-2xl text-foreground">Stay in the loop</h2>
+        <p className="mt-2 max-w-xl text-sm text-muted">
+          New brands, price drops, and authentication guides — a few times a month,
+          never spam.
+        </p>
+        <NewsletterSignup source="homepage" className="mt-6 max-w-md" />
       </section>
 
       <section id="brands" className="border-b border-border px-5 py-12">
