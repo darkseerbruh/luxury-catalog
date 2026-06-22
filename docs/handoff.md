@@ -1,5 +1,51 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-21. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+> **This session (2026-06-22):** finance/money compliance doc + Phase A legal UX. See the TL;DR block
+> immediately below.
+
+## TL;DR — finance/money compliance + Phase A legal UX (this session)
+
+Merged to `main`. No DB migrations, no env vars, no seed changes — all additive docs + UI.
+
+1. **New doc `docs/finance-compliance.md`** — plain-language guide to the entire "money" side of the
+   app: what handles money today vs. what's planned, and the requirements + cautions per phase. The
+   core mental model is a **burden ladder keyed to one question: do you ever take custody of other
+   people's money?**
+   - **Phase A — today (LOW):** affiliate/referral links + price data. Obligations = FTC disclosure,
+     honest pricing, a privacy policy. *You are not handling anyone's money today.*
+   - **Phase B — subscriptions (MEDIUM):** Stripe merchant. PCI-via-Stripe (SAQ A), auto-renewal law
+     (build to **ROSCA + California ARL**; the FTC "Click-to-Cancel" rule was **vacated** July 2025),
+     SaaS sales tax.
+   - **Phase C — authentication marketplace (HIGH, avoidable):** the "people's money" line. **Use
+     Stripe Connect and never custody funds** → Stripe is the money transmitter, not you. 1099-K
+     (OBBBA restored the **$20K / 200-txn** threshold), marketplace-facilitator sales tax, OFAC is
+     *your* duty.
+   - **Phase D — collection-as-investment / insurance / tax (the feature the user actually asked
+     about):** three sub-features, different risk. **Value tracking** = fine (not securities advice).
+     **Insurance** = inventory-export + flat-fee referral, **never act as an agent** (would need a
+     producer license). **Tax** = a cost-basis/holding-period **records export**, **not** a calculator
+     or advice (handbags are **collectibles → max 28%**; "dealer vs. investor" trap). Across all: your
+     value is an **estimate, not an appraisal**, and the data is a theft-target → extra security.
+   - **Caveat in the doc:** some citations rest on cross-corroborated search summaries (several .gov/
+     Stripe pages couldn't be fetched directly); time-sensitive items flagged. Not legal/tax advice —
+     get one attorney + CPA review before any money feature.
+
+2. **Phase A compliance UX shipped** (the gaps the doc found in the live build):
+   - **Footer** (`layout.tsx`): site-wide affiliate + price-estimate disclaimer line + links to the
+     three legal pages.
+   - **`WhereToBuy.tsx`**: inline "affiliate links — we may earn a commission" notice next to the
+     resale links (FTC clear-and-conspicuous; the old `rel="sponsored"` is technical-only).
+   - **`PriceTrend.tsx`**: "estimate, not an appraisal or forecast" caption.
+   - **New pages** `/privacy`, `/disclosure`, `/disclaimer` (Privacy grounded in what the app actually
+     stores; points to `/settings` for access/delete; mentions GPC). **`next build` green; routes
+     render.**
+
+**Follow-ups left open:** (a) swap the placeholder `hello@luxurycatalog.com` in the legal pages for the
+real address once email forwarding is live; (b) **Terms of Service page is still needed before the
+first payment** (deferred to Phase B/C — not required while no money moves); (c) honor GPC in the
+actual analytics flow (copy claims it; verify `ConsentNotice`/PostHog wiring); (d) Phase B/C/D feature
+work itself is unbuilt — `docs/finance-compliance.md` is the spec.
 
 > **Branch:** the prior session's work is on **`claude/adoring-mccarthy-0dnhvn`**, forked from the active app lineage `claude/desktop-display-test-d621oc`. See "Lineage fork." The **latest additive session** (GEO, embedded video, social/expert layer, closet-model simplification, reviews decoupling, LV/Gucci research) is on **`claude/port-geo-video-social-onto-main`** → **PR #2** into `main`. See "Latest session" immediately below.
 
@@ -240,8 +286,10 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 
 ## Open backlog (after photo contributions)
 - **Social UI (PR #2 schema is ready)** — `/u/[handle]` public closet (Poshmark-style), "most coveted closets" leaderboard (`closet_stats`), expert blog gated behind `is_expert`, and a "Verified owner" badge on reviews (derive from `closet_item` have/had). Trust flags are admin-granted.
-- **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder + `is_authenticator` profiles feed it.
-- **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free.
+- **Authentication Marketplace** (Thumbtack model; revenue #2) — the tier ladder + `is_authenticator` profiles feed it. **Compliance spec: `docs/finance-compliance.md` Phase C** (Stripe Connect, never custody funds, 1099-K, marketplace sales tax, OFAC).
+- **Premium tools / search-capability paywall** (Figma "Plan selector"; `monetization_interest` event exists, no UI). Catalog stays free. **Compliance spec: `docs/finance-compliance.md` Phase B** (PCI-via-Stripe, ROSCA + CA ARL auto-renewal, SaaS sales tax). **A Terms of Service page is required before the first payment.**
+- **Collection-as-investment / insurance / tax premium feature** *(user-requested this session; unbuilt)* — value tracking + insurance-inventory export + cost-basis/tax records export. **Full design + cautions: `docs/finance-compliance.md` Phase D** (estimate-not-appraisal, insurance-by-referral-only, tax-records-not-advice, elevated data security).
+- ~~**Affiliate-disclosure + price-data legal UX**~~ **DONE** (this session) — inline affiliate disclosure on `WhereToBuy`, footer disclaimer + legal links, "estimate not appraisal" on `PriceTrend`, and `/privacy` + `/disclosure` + `/disclaimer` pages. *Follow-up: real contact email; honor GPC in the live analytics flow.*
 - ~~**Settings & account management** (edit email/password, notification prefs, delete account).~~ **DONE** (expert/corrections/settings session) — `/settings`. Human-gated: apply `0010` (notification_prefs); delete-account needs the service-role key.
 - ~~**Expert blog gated behind `is_expert`**~~ **DONE** (same session) — `/posts` + `/posts/[slug]` (Article JSON-LD, named byline, related-catalog) + authoring under `/posts/new`, `/posts/[slug]/edit`, `/profile/posts`. Uses the existing 0006 `post` table (no migration).
 - ~~**Admin auth gate** — `/admin/*` is still unauthenticated.~~ **DONE** (launch-hardening session): gated behind `profile.is_admin` via `requireAdmin()` + `src/app/admin/layout.tsx`, fail-closed. Human-gated: apply migration `0008` + self-set `is_admin` (see checklist item 1).
@@ -288,11 +336,12 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 | Auth | `src/lib/supabase/*`, `src/proxy.ts`, `src/lib/auth*.ts`, `src/app/{login,signup,onboarding,profile,auth/confirm}` |
 | Closet/watchlist/alerts | `src/lib/collections.ts`, `collection-actions.ts`, `notifications*.ts`, `email.ts`, `src/app/{closet,watchlist,notifications}`, `src/app/api/cron/price-alerts`, `vercel.json` |
 | Reviews | `src/lib/reviews.ts` (`getMyReviews`), `review-actions.ts`, `src/app/bag/[variantId]/{Reviews,ReviewForm}.tsx`, `src/app/profile/reviews` |
-| Affiliate | `src/lib/affiliate.ts`, `src/app/bag/[variantId]/WhereToBuy.tsx` |
+| Affiliate | `src/lib/affiliate.ts`, `src/app/bag/[variantId]/WhereToBuy.tsx` (inline affiliate disclosure) |
+| Legal/compliance UX *(this session)* | footer in `src/app/layout.tsx` (disclaimer line + legal links), `src/app/{privacy,disclosure,disclaimer}/page.tsx`, "estimate not appraisal" caption in `src/app/bag/[variantId]/PriceTrend.tsx` |
 | GEO *(PR #2)* | `src/lib/geo.ts`, `src/app/sitemap.ts`, `src/app/robots.ts`, JSON-LD + `generateMetadata` in `src/app/bag/[variantId]/page.tsx` |
 | Video/creators *(PR #2)* | `src/lib/youtube.ts`, `getResourcesForStyle` in `queries.ts`, `src/app/bag/[variantId]/Resources.tsx` |
 | Social/expert *(PR #2, schema)* | `supabase/migrations/0006_social_expert_layer.sql` |
 | Analytics | `src/lib/analytics/*`, `src/app/providers.tsx`, `src/instrumentation-client.ts`, `scripts/*`, `.github/workflows/analytics-digest.yml` |
 | Feedback/admin | `src/lib/actions.ts`, `src/app/admin/*` |
 | Data | `supabase/migrations/000{1..6}_*.sql`, `supabase/seed/*` (incl. research `louis-vuitton-neverfull.json`, `gucci-gg-marmont.json`), `data/raw/*.csv` |
-| Docs | `docs/handoff.md` (this), `docs/marketing-plan.md` + `docs/additive-features-port.md` *(PR #2)*, `docs/monetization-projections.md` (12-mo take-home model, re-run vs. updated UX/marketing), `docs/image-strategy-research.md`, `docs/product-brief.md`, `docs/project-status.md` |
+| Docs | `docs/handoff.md` (this), `docs/finance-compliance.md` *(this session — the money/legal spec for Phases A–D)*, `docs/marketing-plan.md` + `docs/additive-features-port.md` *(PR #2)*, `docs/monetization-projections.md` (12-mo take-home model, re-run vs. updated UX/marketing), `docs/image-strategy-research.md`, `docs/product-brief.md`, `docs/project-status.md` |
