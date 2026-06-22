@@ -4,7 +4,13 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { TasteQuizQuestion } from "@/lib/taste";
+import {
+  buildVectorFromAnswers,
+  nameTaste,
+  completeness as computeCompleteness,
+} from "@/lib/taste";
 import { saveQuizAnswers } from "@/lib/taste-actions";
+import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
 import { track, EVENTS } from "@/lib/analytics/events";
 
 interface ResultCard {
@@ -50,13 +56,32 @@ export default function QuizClient({
 
   function submit(finalAnswers: Record<string, string>) {
     setError(null);
+
+    // No gatekeeping: a logged-out visitor gets their full result immediately,
+    // computed client-side from the same canonical questions. We stash the
+    // answers so we can persist them the instant they create an account (the
+    // value-prop CTA below), instead of walling the result behind sign-up.
+    if (!signedIn) {
+      const vector = buildVectorFromAnswers(finalAnswers);
+      const named = nameTaste(vector);
+      const pct = computeCompleteness(vector);
+      try {
+        localStorage.setItem(PENDING_QUIZ_KEY, JSON.stringify(finalAnswers));
+      } catch {
+        /* private mode / storage disabled — result still shows, just not saved */
+      }
+      track(EVENTS.quizCompleted, { completeness: pct, signed_in: false });
+      setResult({ name: named.name, tagline: named.tagline, completeness: pct });
+      return;
+    }
+
     startTransition(async () => {
       const res = await saveQuizAnswers(finalAnswers);
       if (!res.ok) {
         setError(res.error ?? "Something went wrong.");
         return;
       }
-      track(EVENTS.quizCompleted, { completeness: res.completeness ?? 0 });
+      track(EVENTS.quizCompleted, { completeness: res.completeness ?? 0, signed_in: true });
       // Refresh to read back the named taste from the server-derived vector.
       router.refresh();
       router.push("/quiz?done=1");
@@ -85,13 +110,36 @@ export default function QuizClient({
           <p className="mt-2 text-xs text-muted">{result.completeness}% mapped</p>
         </div>
 
+        {!signedIn && (
+          <div className="rounded-2xl border border-gold/30 bg-gold/5 p-5 text-center">
+            <p className="text-foreground">
+              Your <span className="font-medium text-gold">{result.name}</span> profile
+              is ready — don&rsquo;t lose it.
+            </p>
+            <p className="mx-auto mt-1 max-w-sm text-sm text-muted">
+              Create a free account to unlock the bags matched to your taste, save
+              your Taste Map, and get a price-drop alert when one you love hits your
+              target. We&rsquo;ll keep these results.
+            </p>
+          </div>
+        )}
+
         <div className="flex flex-wrap justify-center gap-3">
-          <Link
-            href="/profile"
-            className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-          >
-            See my Taste Map
-          </Link>
+          {signedIn ? (
+            <Link
+              href="/profile"
+              className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+            >
+              See my Taste Map
+            </Link>
+          ) : (
+            <Link
+              href="/signup?from=quiz"
+              className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+            >
+              Save my profile &amp; see my matches →
+            </Link>
+          )}
           <button
             type="button"
             onClick={restart}
@@ -136,10 +184,11 @@ export default function QuizClient({
 
       {!signedIn && (
         <p className="text-center text-sm text-muted">
+          No sign-up needed to see your result.{" "}
           <Link href="/login" className="text-gold hover:underline">
             Log in
           </Link>{" "}
-          to save your result and get recommendations.
+          to save it and get bag recommendations.
         </p>
       )}
       {error && <p className="text-center text-sm text-red-400">{error}</p>}

@@ -1,4 +1,5 @@
 import { getSimilarBags } from "@/lib/recommendations";
+import { getVariantImages } from "@/lib/queries";
 import { RecommendationCard } from "@/components/RecommendationCard";
 
 /**
@@ -9,13 +10,19 @@ import { RecommendationCard } from "@/components/RecommendationCard";
 export default async function SimilarBags({ variantId }: { variantId: number }) {
   const similar = await getSimilarBags(variantId, 6);
   if (similar.length === 0) return null;
+  const images = await getVariantImages(similar.map((r) => r.variantId));
 
   return (
     <section className="border-t border-border pt-8">
       <h2 className="mb-4 font-serif text-xl text-foreground">Similar bags</h2>
       <div className="flex gap-4 overflow-x-auto pb-2">
         {similar.map((rec) => (
-          <RecommendationCard key={rec.variantId} rec={rec} source="bag" />
+          <RecommendationCard
+            key={rec.variantId}
+            rec={rec}
+            source="bag"
+            imageUrl={images[rec.variantId]}
+          />
         ))}
       </div>
     </section>

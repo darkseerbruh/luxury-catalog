@@ -37,8 +37,8 @@ export function ConsentNotice() {
       className="fixed bottom-4 left-4 z-50 max-w-sm rounded-xl border border-border bg-surface/95 p-4 text-sm shadow-lg backdrop-blur"
     >
       <p className="text-muted">
-        We measure anonymous, cookieless usage by default. May we also enable
-        session replay and short surveys to improve the catalog?
+        We track anonymous, cookieless usage by default. Mind if we also turn on
+        session replay and short surveys to make the catalog better?
       </p>
       <div className="mt-3 flex gap-2">
         <button

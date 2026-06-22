@@ -7,14 +7,14 @@ import { SITE_URL } from "@/lib/geo";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Articles — expert guides & authentication notes · The Luxury Catalog",
+  title: "Articles — how to spot the real thing, and what it's worth · The Luxury Catalog",
   description:
-    "Editorial guides on designer handbag authentication, production history, and collecting — written by The Luxury Catalog's verified experts.",
+    "Guides on authenticating designer handbags, their production history, and what holds value — written straight by The Luxury Catalog's verified experts.",
   alternates: { canonical: `${SITE_URL}/posts` },
   openGraph: {
     title: "Articles · The Luxury Catalog",
     description:
-      "Expert guides on designer handbag authentication, production history, and collecting.",
+      "Guides on authenticating designer handbags, their production history, and what holds value.",
     url: `${SITE_URL}/posts`,
     type: "website",
   },
@@ -37,8 +37,8 @@ export default async function PostsPage() {
           <p className="text-sm uppercase tracking-widest text-muted">Editorial</p>
           <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">Articles</h1>
           <p className="mt-2 max-w-prose text-muted">
-            Authentication deep-dives, production histories, and collecting guides from our
-            verified experts.
+            How to spot the real thing, where a bag came from, and what it actually holds in
+            resale — from our verified experts.
           </p>
         </div>
         {profile?.isExpert && (
@@ -53,7 +53,7 @@ export default async function PostsPage() {
 
       {posts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-          No articles published yet. Check back soon.
+          No articles yet. The first ones are being written — check back soon.
         </div>
       ) : (
         <ul className="flex flex-col gap-4">

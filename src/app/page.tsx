@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { getBrandsOverview, getHeroCarousel } from "@/lib/queries";
+import { getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import Recommendations from "@/components/Recommendations";
+import PersonaRouter from "@/components/PersonaRouter";
+import { BagImage } from "@/components/BagImage";
 
 export const dynamic = "force-dynamic";
 
@@ -43,16 +45,22 @@ export default async function Home() {
   const liveBrands = brands.filter((b) => b.isLive);
   const comingSoonBrands = brands.filter((b) => !b.isLive);
 
+  // Real photos for the hero + closet cards when available; placeholders otherwise.
+  const images = await getVariantImages([
+    ...heroCards.map((c) => c.variantId),
+    ...closet.map((c) => c.variantId),
+  ].filter((n): n is number => n != null));
+
   return (
     <main className="flex flex-1 flex-col">
       <section className="border-b border-border px-5 py-16 text-center">
         <h1 className="mx-auto max-w-xl font-serif text-4xl leading-tight text-foreground sm:text-5xl">
-          The Luxury Catalog knows style.
+          Know what it&rsquo;s worth — and what it&rsquo;s worth to you.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-muted">
-          The definitive reference for designer handbags — production
-          history, authentication markers, and resale intelligence in one
-          place.
+          The reference for designer handbags: production history,
+          authentication markers, and what they actually resell for, all in
+          one place.
         </p>
         <form
           action="/search"
@@ -62,7 +70,7 @@ export default async function Home() {
           <input
             name="q"
             type="search"
-            placeholder="Search a brand or style…"
+            placeholder="Find a brand or style…"
             className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
           />
           <button
@@ -74,18 +82,45 @@ export default async function Home() {
         </form>
       </section>
 
+      {!user && (
+        <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
+          <p className="text-sm uppercase tracking-widest text-gold">Find your taste</p>
+          <h2 className="mx-auto mt-2 max-w-xl font-serif text-2xl text-foreground sm:text-3xl">
+            Discover your handbag taste in 60 seconds
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-muted">
+            A few quick taps and we&rsquo;ll name your taste and match you to bags
+            you&rsquo;ll love — <span className="text-foreground">no account needed</span> to
+            see your result.
+          </p>
+          <Link
+            href="/quiz"
+            className="mt-6 inline-block rounded-full bg-gold px-6 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
+          >
+            Take the taste quiz →
+          </Link>
+        </section>
+      )}
+
+      <PersonaRouter />
+
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
           <h2 className="font-serif text-2xl text-foreground">
-            It bags of all time
+            The bags everyone keeps coming back to
           </h2>
           <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
             {heroCards.map((card) => (
               <Link
                 key={card.styleId}
-                href={`/search?q=${encodeURIComponent(card.styleName)}`}
-                className="min-w-[220px] flex-shrink-0 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold"
+                href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
+                className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
               >
+                <BagImage
+                  imageUrl={card.variantId != null ? images[card.variantId] : null}
+                  brand={card.brandName}
+                  className="mb-3 aspect-[4/3] w-full rounded-xl"
+                />
                 <p className="text-sm uppercase tracking-wide text-muted">
                   {card.brandName}
                 </p>
@@ -127,7 +162,8 @@ export default async function Home() {
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <h2 className="font-serif text-2xl text-foreground">Your closet</h2>
             <p className="mx-auto mt-2 max-w-sm text-muted">
-              Save bags you want or have and track their prices.
+              Keep the bags you own and the ones you&rsquo;re after in one
+              place, and watch what they&rsquo;re worth.
             </p>
             <Link
               href="/signup"
@@ -140,8 +176,8 @@ export default async function Home() {
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <h2 className="font-serif text-2xl text-foreground">Your closet</h2>
             <p className="mx-auto mt-2 max-w-sm text-muted">
-              Your closet is empty. Use <span className="text-gold">Save this bag</span> on
-              any bag to add it here.
+              Nothing here yet. Hit <span className="text-gold">Save this bag</span> on
+              any bag and it lands in your closet.
             </p>
           </div>
         ) : (
@@ -157,8 +193,9 @@ export default async function Home() {
                 <Link
                   key={c.variantId}
                   href={`/bag/${c.variantId}`}
-                  className="min-w-[200px] flex-shrink-0 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold"
+                  className="min-w-[200px] max-w-[220px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
                 >
+                  <BagImage imageUrl={images[c.variantId]} brand={c.brandName} className="mb-3 aspect-square w-full rounded-xl" />
                   <p className="text-sm uppercase tracking-wide text-muted">{c.brandName}</p>
                   <p className="mt-1 font-serif text-lg text-foreground">{c.styleName}</p>
                   <p className="mt-2 text-sm text-muted">{c.label}</p>
@@ -174,6 +211,30 @@ export default async function Home() {
           <Recommendations source="home" layout="scroll" limit={8} />
         </section>
       )}
+
+      <section className="border-b border-border px-5 py-12">
+        <h2 className="font-serif text-2xl text-foreground">Explore</h2>
+        <div className="mt-6 flex flex-wrap gap-3">
+          {[
+            { href: "/quiz", label: "Find your taste" },
+            { href: "/identify", label: "Identify a bag" },
+            { href: "/closets", label: "Most coveted closets" },
+            { href: "/posts", label: "Expert articles" },
+            ...(user
+              ? [{ href: "/watchlist", label: "Your watchlist" }]
+              : []),
+            { href: "/found", label: "Log a thrift find" },
+          ].map((l) => (
+            <Link
+              key={l.href + l.label}
+              href={l.href}
+              className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>

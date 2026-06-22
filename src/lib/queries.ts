@@ -15,6 +15,7 @@ export interface HeroCard {
   styleId: number;
   styleName: string;
   brandName: string;
+  variantId: number | null;
   sizeLabel: string | null;
   priceFrom: number | null;
   currency: string | null;
@@ -37,7 +38,8 @@ export interface BrandSearchResult {
   name: string;
   tier: "thrift" | "mid" | "ultra-luxury";
   variantCount: number;
-  styleNames: string[];
+  /** Styles under the brand, each with a representative variant id to link to its bag page. */
+  styles: { styleId: number; name: string; variantId: number | null }[];
 }
 
 export interface SearchResults {
@@ -96,7 +98,7 @@ export async function getHeroCarousel(): Promise<HeroCard[]> {
   const { data, error } = await getSupabase()
     .from("style")
     .select(
-      "style_id, name, brand:brand_id(name), variant(size_label, retail_price_original, currency)"
+      "style_id, name, brand:brand_id(name), variant(variant_id, size_label, retail_price_original, currency)"
     )
     .in(
       "name",
@@ -115,10 +117,12 @@ export async function getHeroCarousel(): Promise<HeroCard[]> {
       const cheapest = priced.sort(
         (a, b) => Number(a.retail_price_original) - Number(b.retail_price_original)
       )[0];
+      const primary = cheapest ?? variants[0];
       return {
         styleId: row.style_id,
         styleName: row.name,
         brandName: embeddedName(row.brand),
+        variantId: primary?.variant_id ?? null,
         sizeLabel: cheapest?.size_label ?? variants[0]?.size_label ?? null,
         priceFrom: cheapest ? Number(cheapest.retail_price_original) : null,
         currency: cheapest?.currency ?? null,
@@ -523,6 +527,93 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
   };
 }
 
+export interface StyleVariantOption {
+  variantId: number;
+  sizeLabel: string | null;
+  sizeCategory: string | null;
+  exteriorColorway: string | null;
+  hardwareColor: string | null;
+}
+
+/**
+ * Sibling variants of a style — powers the Amazon-style variant selector on the
+ * bag page (pick a colourway / size / hardware), while each variant keeps its own
+ * indexable /bag/[id] URL for GEO.
+ */
+export async function getStyleVariants(styleId: number): Promise<StyleVariantOption[]> {
+  const { data, error } = await getSupabase()
+    .from("variant")
+    .select("variant_id, size_label, size_category, exterior_colorway, hardware_color")
+    .eq("style_id", styleId)
+    .order("variant_id");
+  if (error || !data) return [];
+  return data.map((v) => ({
+    variantId: v.variant_id,
+    sizeLabel: v.size_label,
+    sizeCategory: v.size_category,
+    exteriorColorway: v.exterior_colorway,
+    hardwareColor: v.hardware_color,
+  }));
+}
+
+/**
+ * Primary image URLs for a set of variants, keyed by variant id. RESILIENT: if the
+ * `image_url` column doesn't exist yet (migration 0013 not applied) or the query
+ * fails, it returns {} so callers fall back to the BagImage placeholder — it never
+ * breaks a page. Real photos appear once 0013 is applied and URLs are populated.
+ */
+export async function getVariantImages(variantIds: number[]): Promise<Record<number, string>> {
+  const ids = Array.from(new Set(variantIds.filter((n) => Number.isFinite(n))));
+  if (ids.length === 0) return {};
+  try {
+    const { data, error } = await getSupabase()
+      .from("variant")
+      .select("variant_id, image_url")
+      .in("variant_id", ids);
+    if (error || !data) return {};
+    const map: Record<number, string> = {};
+    for (const r of data as { variant_id: number; image_url: string | null }[]) {
+      if (r.image_url) map[r.variant_id] = r.image_url;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+export interface BrandResaleStats {
+  highestSale: number | null;
+  currency: string | null;
+  recordedSales: number;
+}
+
+/**
+ * Brand-level resale market stats from price_history (RESILIENT — returns zeros on
+ * any error, e.g. if the embedded filter isn't supported, so the brand page never
+ * breaks). Excludes retail/boutique/MSRP rows so "highest sale" is a real
+ * secondary-market figure, honestly "the highest we've recorded".
+ */
+export async function getBrandResaleStats(brandId: number): Promise<BrandResaleStats> {
+  try {
+    const { data, error } = await getSupabase()
+      .from("price_history")
+      .select("sale_price, currency, platform, variant:variant_id!inner(style:style_id!inner(brand_id))")
+      .eq("variant.style.brand_id", brandId)
+      .not("sale_price", "is", null);
+    if (error || !data) return { highestSale: null, currency: null, recordedSales: 0 };
+    const RETAIL = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+    const resale = (data as { sale_price: number | string | null; currency: string | null; platform: string | null }[]).filter(
+      (r) => r.sale_price != null && !(r.platform && RETAIL.test(r.platform)),
+    );
+    if (resale.length === 0) return { highestSale: null, currency: null, recordedSales: 0 };
+    let top = resale[0];
+    for (const r of resale) if (Number(r.sale_price) > Number(top.sale_price)) top = r;
+    return { highestSale: Number(top.sale_price), currency: top.currency, recordedSales: resale.length };
+  } catch {
+    return { highestSale: null, currency: null, recordedSales: 0 };
+  }
+}
+
 export interface BrandDetail {
   brandId: number;
   name: string;
@@ -541,6 +632,9 @@ export interface BrandDetail {
       sizeLabel: string | null;
       exteriorColorway: string | null;
       hardwareColor: string | null;
+      material: string | null;
+      retailPrice: number | null;
+      currency: string | null;
     }[];
   }[];
 }
@@ -549,7 +643,7 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
   const { data, error } = await getSupabase()
     .from("brand")
     .select(
-      "brand_id, name, tier, country_of_origin, founded_year, description, style(style_id, name, silhouette, year_introduced, discontinued, variant(variant_id, size_label, exterior_colorway, hardware_color))"
+      "brand_id, name, tier, country_of_origin, founded_year, description, style(style_id, name, silhouette, year_introduced, discontinued, variant(variant_id, size_label, exterior_colorway, hardware_color, retail_price_original, currency, exterior_material:exterior_material_id(name)))"
     )
     .eq("brand_id", brandId)
     .single();
@@ -559,7 +653,11 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
   const styles = ((data.style ?? []) as {
     style_id: number; name: string; silhouette: string | null;
     year_introduced: number | null; discontinued: boolean;
-    variant: { variant_id: number; size_label: string | null; exterior_colorway: string | null; hardware_color: string | null }[] | null;
+    variant: {
+      variant_id: number; size_label: string | null; exterior_colorway: string | null;
+      hardware_color: string | null; retail_price_original: number | null; currency: string | null;
+      exterior_material: { name: string } | { name: string }[] | null;
+    }[] | null;
   }[]).map((s) => ({
     styleId: s.style_id,
     name: s.name,
@@ -571,6 +669,11 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
       sizeLabel: v.size_label,
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
+      material:
+        (Array.isArray(v.exterior_material) ? v.exterior_material[0] : v.exterior_material)?.name ??
+        null,
+      retailPrice: v.retail_price_original != null ? Number(v.retail_price_original) : null,
+      currency: v.currency,
     })),
   }));
 
@@ -833,7 +936,20 @@ async function searchVariantsByFilters(f: SearchFilters): Promise<StyleSearchRes
     }
     if (f.maxWidthCm != null && !(widths.length > 0 && widths.some((w) => w <= f.maxWidthCm!))) continue;
     if (f.minWidthCm != null && !(widths.length > 0 && widths.some((w) => w >= f.minWidthCm!))) continue;
-    if (f.keywords.length && !includesAny(style.name, f.keywords) && !includesAny(raw.exterior_colorway, f.keywords) && !includesAny(brandName, f.keywords)) continue;
+    if (
+      f.keywords.length &&
+      !includesAny(style.name, f.keywords) &&
+      !includesAny(raw.exterior_colorway, f.keywords) &&
+      !includesAny(brandName, f.keywords) &&
+      // Descriptive keywords like "caviar" are material textures, not style names —
+      // match them against the material name/type and other attribute fields too,
+      // or a "black caviar bag" can never find a "Caviar Leather" variant.
+      !includesAny(material?.name, f.keywords) &&
+      !includesAny(material?.material_type, f.keywords) &&
+      !includesAny(raw.size_label, f.keywords) &&
+      !includesAny(style.silhouette, f.keywords)
+    )
+      continue;
 
     let entry = grouped.get(style.style_id);
     if (!entry) {
@@ -872,7 +988,11 @@ function mapBrandRows(
       name: b.name,
       tier: b.tier,
       variantCount: styles.reduce((sum, s) => sum + (s.variant ?? []).length, 0),
-      styleNames: styles.map((s) => s.name),
+      styles: styles.map((s) => ({
+        styleId: s.style_id,
+        name: s.name,
+        variantId: (s.variant ?? [])[0]?.variant_id ?? null,
+      })),
     };
   });
 }
@@ -939,14 +1059,24 @@ export async function searchCatalog(query: string): Promise<SearchResults> {
     hasAttributeFilters(filters) ? searchVariantsByFilters(filters) : Promise.resolve([] as StyleSearchResult[]),
   ]);
 
-  // If Claude extracted nothing usable, fall back to a plain name search over the raw text.
-  if (brands.length === 0 && styles.length === 0 && !hasAttributeFilters(filters) && filters.brands.length === 0) {
+  // If the structured search found nothing, fall back to a plain name match over
+  // the raw text before giving up. A query that's literally a catalogued brand or
+  // style name must always resolve — even when Claude over-extracts attributes
+  // (e.g. "tweed" -> material fabric) that exclude breadth-seeded variants missing
+  // that attribute data. Without this, clicking a catalogued style name (which
+  // re-searches by name) could dead-end at "no results".
+  if (brands.length === 0 && styles.length === 0) {
     const result = await legacySearch(q);
-    if (result.brands.length === 0 && result.styles.length === 0) await logMiss(q);
-    return result;
+    if (result.brands.length > 0 || result.styles.length > 0) {
+      return {
+        ...result,
+        interpreted: hasAttributeFilters(filters) ? describeFilters(filters) : [],
+        usedNaturalLanguage: hasAttributeFilters(filters),
+      };
+    }
+    await logMiss(q);
+    return { brands, styles, interpreted: describeFilters(filters), usedNaturalLanguage: true };
   }
-
-  if (brands.length === 0 && styles.length === 0) await logMiss(q);
 
   return { brands, styles, interpreted: describeFilters(filters), usedNaturalLanguage: true };
 }

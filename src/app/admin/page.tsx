@@ -12,7 +12,7 @@ const SECTIONS = [
     href: "/admin/searched-not-found",
     title: "Searched, not found",
     description:
-      "Searches and camera identifications that returned no match — the data roadmap for what to research and add next.",
+      "Searches and camera identifications that returned no match. Shows what to research and add next.",
   },
   {
     href: "/admin/feedback",
@@ -24,7 +24,7 @@ const SECTIONS = [
     href: "/admin/requests",
     title: "Requests & finds",
     description:
-      "Bag-addition requests and logged thrift finds — direct demand signal and real-world acquisition data.",
+      "Bag-addition requests and logged thrift finds — what people want added, and what they're paying in the wild.",
   },
   {
     href: "/admin/corrections",
@@ -41,7 +41,7 @@ export default function AdminIndexPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Admin</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Catalog operations</h1>
         <p className="mt-2 text-muted">
-          Internal dashboards that turn user signals into a research roadmap.
+          Internal dashboards. What users are asking for, flagging, and finding.
         </p>
       </header>
 

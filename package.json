@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "analytics:digest": "tsx scripts/analytics-digest.ts"
+    "analytics:digest": "tsx scripts/analytics-digest.ts",
+    "import:images": "tsx supabase/seed/import-variant-images.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",

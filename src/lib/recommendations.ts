@@ -142,11 +142,61 @@ export async function getRecommendations(limit = 8): Promise<RecommendationResul
       const rec = rowToRec(x.scored);
       rec.score = x.total;
       // If a co-occurrence signal exists but no attribute "why", explain it.
-      if (!rec.why && x.co > 0) rec.why = "Collectors with your taste also want this";
+      if (!rec.why && x.co > 0) rec.why = "Collectors who share your taste are after this one too";
+      // Honest generic basis when the real matched attributes can't be phrased —
+      // never fabricate specific attributes, but never leave a rec unexplained.
+      if (!rec.why) rec.why = "Matched to your taste";
       return rec;
     });
 
   return { recommendations: scored, hasTaste: true };
+}
+
+/**
+ * Popular / most-wanted bags, for the "never an empty rail" fallback when a user
+ * HAS taste but scoring returns nothing (every candidate already seen, or no
+ * overlap). Tallies real `want` signals across closets via the read-only
+ * service-role client; returns [] when that's unavailable so the caller can show
+ * an honest message instead. Excludes bags the user has already seen. No invented
+ * data — only real demand counts.
+ */
+export async function getPopularBags(seenVariantIds: number[], limit = 8): Promise<Recommendation[]> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  try {
+    const admin = getSupabaseAdmin();
+    const { data: wants } = await admin
+      .from("closet_item")
+      .select("variant_id")
+      .eq("status", "want")
+      .limit(5000);
+    const seen = new Set(seenVariantIds);
+    const tally = new Map<number, number>();
+    for (const row of wants ?? []) {
+      const vid = row.variant_id as number;
+      if (seen.has(vid)) continue;
+      tally.set(vid, (tally.get(vid) ?? 0) + 1);
+    }
+    if (tally.size === 0) return [];
+    const topIds = [...tally.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit)
+      .map(([vid]) => vid);
+
+    const { data, error } = await getSupabase().from("variant").select(SELECT).in("variant_id", topIds);
+    if (error || !data) return [];
+    const byId = new Map((data as VariantRow[]).map((r) => [r.variant_id, r]));
+    return topIds
+      .map((vid) => byId.get(vid))
+      .filter((r): r is VariantRow => Boolean(r))
+      .map((r) => {
+        const rec = rowToRec({ row: r, score: 0, matches: [] });
+        rec.why = "Most wanted by collectors right now";
+        return rec;
+      });
+  } catch (err) {
+    console.error("popular bags error:", err);
+    return [];
+  }
 }
 
 /**
@@ -177,7 +227,7 @@ export async function getSimilarBags(variantId: number, limit = 6): Promise<Reco
     .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
-    .map((s) => rowToRec(s, "Shares"));
+    .map((s) => rowToRec(s, "Shares its"));
 }
 
 /** A compact, presentational summary of the user's dominant taste, for headers. */

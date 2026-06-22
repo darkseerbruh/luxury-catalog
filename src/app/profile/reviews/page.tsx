@@ -26,7 +26,7 @@ export default async function MyReviewsPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Profile</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">My reviews</h1>
         <p className="mt-2 text-muted">
-          Every bag you&rsquo;ve reviewed — whether or not it&rsquo;s in your closet.
+          Every bag you&rsquo;ve reviewed — in your closet or not.
         </p>
       </header>
 

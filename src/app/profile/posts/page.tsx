@@ -26,8 +26,8 @@ export default async function MyPostsPage() {
       <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-5 py-12">
         <h1 className="font-serif text-3xl text-foreground">Articles</h1>
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-          Authoring is limited to verified experts. If you write about authentication or
-          collecting and want contributor access, reach out from your{" "}
+          Writing here is open to verified experts. If you know authentication or
+          collecting and want to contribute, reach out from your{" "}
           <Link href="/profile" className="text-gold hover:underline">profile</Link>.
         </div>
       </main>
@@ -53,7 +53,7 @@ export default async function MyPostsPage() {
 
       {posts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-          You haven&rsquo;t written any articles yet.
+          No articles yet. When you write one, it&rsquo;ll show up here.
         </div>
       ) : (
         <ul className="flex flex-col gap-3">

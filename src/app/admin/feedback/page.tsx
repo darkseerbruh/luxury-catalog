@@ -37,8 +37,8 @@ export default async function FeedbackAdminPage() {
         </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">User feedback</h1>
         <p className="mt-2 max-w-2xl text-muted">
-          Accuracy reports submitted from bag detail pages. Flags for inaccurate or
-          missing information point straight at the records most worth a research pass.
+          Accuracy reports submitted from bag detail pages. Inaccurate or missing-info
+          flags point at the records most worth checking first.
         </p>
       </header>
 
@@ -79,7 +79,7 @@ export default async function FeedbackAdminPage() {
                     {e.recordType} #{e.recordId}
                   </span>
                 )}
-                <span className="ml-auto text-xs text-muted/60">{formatDate(e.date)}</span>
+                <span className="ml-auto text-xs text-muted">{formatDate(e.date)}</span>
                 {e.resolved ? (
                   <span className="text-xs text-gold/80">resolved</span>
                 ) : (

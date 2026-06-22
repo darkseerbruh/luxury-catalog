@@ -37,7 +37,7 @@ export default function BagActions({
       <section className="border-t border-border pt-8">
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted">
-            Save this bag to your closet or track its price.
+            Save it to your closet, or watch the price and we&rsquo;ll track it for you.
           </p>
           <Link
             href="/login"
@@ -113,7 +113,7 @@ export default function BagActions({
       </div>
       {watching && (
         <p className="mt-3 text-sm text-muted">
-          Set a target price on your{" "}
+          Set the price you&rsquo;d buy at on your{" "}
           <Link href="/watchlist" className="text-gold hover:underline">
             watchlist
           </Link>

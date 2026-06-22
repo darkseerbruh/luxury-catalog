@@ -19,6 +19,34 @@ function formatDate(iso: string): string {
     : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }
 
+/** Star-distribution histogram (5★ → 1★), IMDb-style, from the loaded reviews. */
+function RatingHistogram({
+  reviews,
+}: {
+  reviews: import("@/lib/reviews").ReviewItem[];
+}) {
+  const counts = [5, 4, 3, 2, 1].map(
+    (star) => reviews.filter((r) => r.rating === star).length,
+  );
+  const max = Math.max(...counts, 1);
+  return (
+    <dl className="flex flex-col gap-1.5 rounded-xl border border-border bg-surface p-5">
+      {[5, 4, 3, 2, 1].map((star, i) => (
+        <div key={star} className="flex items-center gap-3 text-xs">
+          <dt className="w-8 shrink-0 text-muted">{star}★</dt>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-border/60">
+            <div
+              className="h-full rounded-full bg-gold"
+              style={{ width: `${(counts[i] / max) * 100}%` }}
+            />
+          </div>
+          <dd className="w-6 shrink-0 text-right text-muted/70">{counts[i]}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 /** Reviews section: aggregate rating, the write/edit form, and the review list. */
 export default async function Reviews({
   variantId,
@@ -29,11 +57,15 @@ export default async function Reviews({
 }) {
   const [summary, user] = await Promise.all([getReviews(variantId), getCurrentUser()]);
 
-  // Show the user's own review first, then the rest.
-  const others = summary.reviews.filter((r) => !r.isMine);
+  // Show the user's own review first, then the rest — verified owners ahead of
+  // anonymous members (weighted social proof; IMDb verified-volume sort).
+  const others = summary.reviews
+    .filter((r) => !r.isMine)
+    .slice()
+    .sort((a, b) => Number(b.verifiedOwner) - Number(a.verifiedOwner));
 
   return (
-    <section className="border-t border-border pt-8">
+    <section id="reviews" className="border-t border-border pt-8">
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <h2 className="font-serif text-xl text-foreground">Reviews</h2>
         {summary.count > 0 && summary.average != null && (
@@ -43,6 +75,12 @@ export default async function Reviews({
           </p>
         )}
       </div>
+
+      {summary.count > 0 && (
+        <div className="mb-6">
+          <RatingHistogram reviews={summary.reviews} />
+        </div>
+      )}
 
       <div className="mb-6">
         <ReviewForm
@@ -55,7 +93,7 @@ export default async function Reviews({
 
       {summary.count === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface/50 px-5 py-6 text-center text-sm text-muted">
-          No reviews yet. Be the first to share how this bag wears.
+          No reviews yet. If you own one, tell us how it wears — you&rsquo;d be the first.
         </p>
       ) : (
         <ul className="flex flex-col gap-3">

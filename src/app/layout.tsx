@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/notifications";
 import { Providers } from "./providers";
+import TasteFlusher from "./TasteFlusher";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -21,7 +22,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "The Luxury Catalog",
   description:
-    "The definitive reference database for designer handbags — production history, authentication markers, and resale intelligence across every brand.",
+    "The reference for designer handbags: production history, authentication markers, and what they actually resell for, brand by brand.",
 };
 
 export default async function RootLayout({
@@ -38,12 +39,13 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-bg text-foreground font-sans">
         <Providers>
-        <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm">
+        <TasteFlusher signedIn={!!user} />
+        <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-            <Link href="/" className="font-serif text-xl tracking-wide text-foreground">
+            <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-2 overflow-x-auto [&>a]:shrink-0">
               <Link
                 href="/identify"
                 className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
@@ -55,6 +57,12 @@ export default async function RootLayout({
                 className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
               >
                 Search
+              </Link>
+              <Link
+                href="/quiz"
+                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Quiz
               </Link>
               <Link
                 href="/posts"
@@ -75,6 +83,12 @@ export default async function RootLayout({
                     className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                   >
                     Closet
+                  </Link>
+                  <Link
+                    href="/watchlist"
+                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                  >
+                    Watchlist
                   </Link>
                   <Link
                     href="/notifications"
@@ -102,11 +116,11 @@ export default async function RootLayout({
                   Log in
                 </Link>
               )}
-            </div>
+            </nav>
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
-        <footer className="border-t border-border px-5 py-8 text-sm text-muted">
+        <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-serif text-foreground">The Luxury Catalog</p>
             <nav className="flex flex-wrap gap-x-5 gap-y-2">
@@ -119,9 +133,21 @@ export default async function RootLayout({
               <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </nav>
-            <p className="text-muted/60">
+            <p className="text-muted">
               The definitive reference for designer handbags.
             </p>
+          </div>
+          <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
+            <p className="max-w-xl text-muted/60">
+              Prices shown are estimates compiled from third-party resellers, for general information
+              only — not offers, appraisals, or financial advice. Some links are affiliate links; we may
+              earn a commission, at no extra cost to you.
+            </p>
+            <nav className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+              <Link href="/disclosure" className="hover:text-foreground">Affiliate disclosure</Link>
+              <Link href="/disclaimer" className="hover:text-foreground">Disclaimer</Link>
+            </nav>
           </div>
         </footer>
         </Providers>
