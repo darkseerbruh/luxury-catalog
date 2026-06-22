@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Recommendation } from "@/lib/recommendations";
 import { track, EVENTS } from "@/lib/analytics/events";
