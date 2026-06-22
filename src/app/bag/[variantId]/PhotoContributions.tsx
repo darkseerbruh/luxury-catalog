@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BagImage } from "@/components/BagImage";
 import { submitPhoto } from "@/lib/photo-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
@@ -28,6 +29,7 @@ export default function PhotoContributions({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   function action(formData: FormData) {
     setError(null);
@@ -38,6 +40,8 @@ export default function PhotoContributions({
         setDone(res.status ?? "pending");
         setOpen(false);
         formRef.current?.reset();
+        // Pull the freshly published photo into the gallery without a manual reload.
+        router.refresh();
       } else setError(res.error ?? "Something went wrong.");
     });
   }

@@ -1,11 +1,16 @@
 import { createServerSupabase } from "./supabase/server";
 import { getSupabaseAdmin } from "./supabase/admin";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { deriveTier, type Tier } from "./contributions-core";
 
 /**
  * Reads for the user-photo system. Everything degrades to empty on a missing
  * env / unapplied 0016 migration (the gallery just shows the rare-find empty
  * state), so nothing breaks pre-migration.
+ *
+ * Uploader bylines are resolved with a SEPARATE profile lookup (not a PostgREST
+ * embed): bag_photo.user_id references auth.users, so there's no direct FK to
+ * `profile` for PostgREST to embed through. Two cheap queries, merged in JS.
  */
 
 const BUCKET = "bag-photos";
@@ -36,14 +41,31 @@ type PhotoRow = {
   status: "pending" | "approved" | "featured" | "rejected";
   user_id: string;
   created_at?: string;
-  profile?: { handle?: string | null; display_name?: string | null } | { handle?: string | null; display_name?: string | null }[] | null;
 };
 
-function bylineOf(row: PhotoRow): { byline: string; handle: string | null } {
-  const p = Array.isArray(row.profile) ? row.profile[0] : row.profile;
-  const handle = p?.handle ?? null;
-  const name = handle ? `@${handle}` : p?.display_name ?? "A collector";
-  return { byline: name, handle };
+interface Byline {
+  byline: string;
+  handle: string | null;
+}
+
+/** Map of user_id → display byline, fetched in one query. */
+async function bylinesFor(
+  supabase: SupabaseClient,
+  userIds: string[],
+): Promise<Map<string, Byline>> {
+  const ids = [...new Set(userIds.filter(Boolean))];
+  const out = new Map<string, Byline>();
+  if (ids.length === 0) return out;
+  const { data } = await supabase.from("profile").select("id, handle, display_name").in("id", ids);
+  for (const r of (data as { id: string; handle: string | null; display_name: string | null }[] | null) ?? []) {
+    const handle = r.handle ?? null;
+    out.set(r.id, { handle, byline: handle ? `@${handle}` : r.display_name ?? "A collector" });
+  }
+  return out;
+}
+
+function bylineFor(map: Map<string, Byline>, userId: string): Byline {
+  return map.get(userId) ?? { byline: "A collector", handle: null };
 }
 
 /** Published (approved + featured) photos for a variant, featured first. */
@@ -52,25 +74,25 @@ export async function getApprovedPhotos(variantId: number): Promise<BagPhoto[]> 
   const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("bag_photo")
-    .select("photo_id, variant_id, storage_path, caption, status, user_id, profile:user_id(handle, display_name)")
+    .select("photo_id, variant_id, storage_path, caption, status, user_id")
     .eq("variant_id", variantId)
     .in("status", ["approved", "featured"])
-    .order("status", { ascending: false }) // 'featured' > 'approved' alphabetically? no — handled below
     .order("created_at", { ascending: false });
   if (error || !data) return [];
 
   const rows = data as unknown as PhotoRow[];
+  const bylines = await bylinesFor(supabase, rows.map((r) => r.user_id));
   return rows
     .map((r) => {
-      const { byline, handle } = bylineOf(r);
+      const b = bylineFor(bylines, r.user_id);
       return {
         photoId: r.photo_id,
         variantId: r.variant_id,
         url: supabase.storage.from(BUCKET).getPublicUrl(r.storage_path).data.publicUrl,
         caption: r.caption,
         featured: r.status === "featured",
-        byline,
-        handle,
+        byline: b.byline,
+        handle: b.handle,
       };
     })
     .sort((a, b) => Number(b.featured) - Number(a.featured));
@@ -94,7 +116,6 @@ export async function getPhotosForReview(
     .from("bag_photo")
     .select(
       "photo_id, variant_id, storage_path, caption, status, user_id, created_at, " +
-        "profile:user_id(handle, display_name), " +
         "variant:variant_id(style:style_id(name, brand:brand_id(name)))",
     )
     .eq("status", status)
@@ -102,8 +123,10 @@ export async function getPhotosForReview(
     .limit(limit);
   if (error || !data) return [];
 
-  return (data as unknown as (PhotoRow & { variant?: unknown })[]).map((r) => {
-    const { byline, handle } = bylineOf(r);
+  const rows = data as unknown as (PhotoRow & { variant?: unknown })[];
+  const bylines = await bylinesFor(supabase, rows.map((r) => r.user_id));
+  return rows.map((r) => {
+    const b = bylineFor(bylines, r.user_id);
     const v = Array.isArray(r.variant) ? r.variant[0] : r.variant;
     const s = (v as { style?: unknown } | null)?.style;
     const so = (Array.isArray(s) ? s[0] : s) as { name?: string | null; brand?: unknown } | null;
@@ -115,8 +138,8 @@ export async function getPhotosForReview(
       url: supabase.storage.from(BUCKET).getPublicUrl(r.storage_path).data.publicUrl,
       caption: r.caption,
       featured: r.status === "featured",
-      byline,
-      handle,
+      byline: b.byline,
+      handle: b.handle,
       brandName: bo?.name ?? null,
       styleName: so?.name ?? null,
       createdAt: r.created_at ?? null,
