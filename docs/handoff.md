@@ -1,6 +1,26 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
+## TL;DR — adaptive value module (M0–M2) on the bag page (2026-06-22)
+
+Reworked the bag page's "What it's worth" block into an **adaptive value module**, synthesizing inspiration from Google Shopping (merchant rows + "best price"), KBB (good/great grade), and Google Flights (timing verdict, best-vs-cheapest, flex grid). All `tsc`/`eslint`/`next build`/`199 tests` green.
+
+**Architecture decision:** every complex price viz is *one primitive* — `CompScale` (`src/app/bag/[variantId]/CompScale.tsx`): comps on a shared price axis, optionally grouped into rows. Gauge = ungrouped; condition ladder = grouped by tier; year lens / flex grid = later groupings. The `ValueModule` (`ValueModule.tsx`) is one skeleton reframed by closet state (want/have/had → buyer/owner/collector); only headline/verdict/CTA change. Fires `value_module_viewed` (framing + comp counts + demand level) so usage data — not a guess — picks which user type is most common/monetizable.
+
+**Shipped (all from data we already have — no migration):**
+- **M0** — `CompScale` gauge + adaptive `ValueModule` + instrumentation. *On `main` (merge `732f59c`).*
+- **M1** — demand signal (`getVariantDemand`, wants/watchers) + retail-hike catalyst (`retailChange`) → a descriptive, framing-aware **timing note** ("waiting hasn't paid off lately"). Never advice.
+- **M2** — **condition ladder**: groups recorded resale into the canonical `sale_condition` tiers (already enum-typed at the DB; eBay already normalizes via `normalizeEbayCondition`), grading *within* tier so a cheaper-but-worn bag can't masquerade as a deal. Shows when ≥2 tiers have data, else falls back to the gauge.
+
+**Honesty rails (locked):** every number is a real recorded price; copy is descriptive + dated, never an appraisal/advice; degrades to "no recorded resale data yet" when empty. Thin-data posture chosen = **broaden scope, clearly labeled** (the scope chip is in place; cross-variant broadening is a later data step).
+
+**Caveats:** listing dots only render where `price_type='listed'` rows exist — today only the eBay adapter produces those (6 hero targets), and only once migration `0021` (the `price_type` column) is applied. Until then the range/verdict still render; dots are simply absent. Resilient — nothing 404s.
+
+**Roadmap for the value module (next):**
+- **M3 — ingestion breadth:** live `listed` rows from TRR/Fashionphile/Vestiaire (currently search-links only) → the multi-site merchant grid + the colorway × condition **flex grid** become real.
+- **M4 — gated/premium:** realized **sold** prices (eBay Marketplace Insights API — gated), condition-adjusted "effective price," FX/region normalization.
+- **Data gaps to chase** (highest leverage first): broaden live listings beyond eBay; wire per-listing structured attributes via an LLM extraction pass (inclusions/hardware/year — `ObservationAttrs` already has the fields); then sold prices. Full analysis lives in this session's chat + `docs/data-sourcing-research.md`.
+
 ## TL;DR — operator LAUNCH session + photo/auth fixes (2026-06-22)
 
 A parallel, operator-driven session (ran alongside the Personalization work below). **The app is now LIVE in production on the real domain.** Code changes are on `main` (`tsc`/`eslint`/`next build`/tests green at each merge).

@@ -323,6 +323,32 @@ export default async function BagDetailPage({
       ? salesByDate[salesByDate.length - 1].observedOn ??
         salesByDate[salesByDate.length - 1].dateRecorded
       : null;
+  // M2 condition ladder: group the recorded resale into canonical condition
+  // tiers (already enum-typed at the DB), best (least-worn) first. Each tier
+  // carries its own range + listed comps so the gauge grades within tier and a
+  // cheaper-but-worn bag can't masquerade as a deal. ValueModule only shows the
+  // ladder when ≥2 tiers have data; otherwise it falls back to the single gauge.
+  const CONDITION_ORDER = ["new", "excellent", "very good", "good", "fair"];
+  const byCondition = CONDITION_ORDER.map((tier) => {
+    const tierRows = recordedSales.filter((h) => h.condition === tier);
+    if (tierRows.length === 0) return null;
+    const tierPrices = tierRows.map((h) => h.salePrice);
+    return {
+      label: tier,
+      low: Math.min(...tierPrices),
+      median: Math.round(median(tierPrices)),
+      high: Math.max(...tierPrices),
+      count: tierPrices.length,
+      comps: tierRows
+        .filter((h) => h.priceType === "listed")
+        .map((h) => ({
+          price: h.salePrice,
+          platform: h.platform,
+          condition: h.condition,
+          url: h.sourceUrl,
+        })),
+    };
+  }).filter((r): r is NonNullable<typeof r> => r !== null);
 
   // Retail price trajectory (MSRP over time) — the appreciation story, shown
   // separately from the resale Fair Market Range and honestly labelled so retail
@@ -518,6 +544,10 @@ export default async function BagDetailPage({
           retailCurrency={v.currency}
           trendPct={resaleTrendPct}
           asOf={resaleAsOf}
+          demandLevel={demand.level}
+          demandLabel={demand.label}
+          retailTrendPct={retailChange}
+          byCondition={byCondition}
         />
         <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-border pt-4 text-sm">
           {v.retailPriceOriginal != null && (
