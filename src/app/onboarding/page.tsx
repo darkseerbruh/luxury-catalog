@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Welcome · The Luxury Catalog" };
 
 const PERSONAS: { value: string; label: string; description: string }[] = [
-  { value: "collector", label: "Collector / investor", description: "Buying to keep or appreciate in value." },
+  { value: "collector", label: "Collector / investor", description: "Buying to keep, and to hold value over time." },
   { value: "flipper", label: "Resale flipper", description: "Buying to resell at a profit." },
-  { value: "first-purchase", label: "First serious purchase", description: "Saving for my first designer bag." },
-  { value: "authentication", label: "Authentication-focused", description: "Mostly here to verify what's real." },
-  { value: "thrift-hunter", label: "Thrift / estate hunter", description: "Finding deals in the wild." },
+  { value: "first-purchase", label: "First serious purchase", description: "Saving for your first designer bag." },
+  { value: "authentication", label: "Authentication-focused", description: "Mostly here to tell real from fake." },
+  { value: "thrift-hunter", label: "Thrift / estate hunter", description: "Finding the steal in the wild." },
 ];
 
 export default async function OnboardingPage() {
@@ -23,8 +23,8 @@ export default async function OnboardingPage() {
     <main className="mx-auto flex w-full max-w-lg flex-col px-5 py-16">
       <h1 className="font-serif text-3xl text-foreground">Welcome to the catalog</h1>
       <p className="mt-2 mb-8 text-muted">
-        A couple of quick questions so we can tailor what you see. You can change
-        these later.
+        Two quick questions so what you see fits how you shop. Change them any
+        time.
       </p>
 
       <form action={completeOnboarding} className="flex flex-col gap-6">

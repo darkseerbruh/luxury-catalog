@@ -24,16 +24,16 @@ export default async function WatchlistPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Watchlist</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Price tracking</h1>
         <p className="mt-2 text-muted">
-          Set a target price on any bag. When recorded sale prices drop below it,
-          we&rsquo;ll flag it here.
+          Name your number on any bag. When a recorded sale price hits or drops below it,
+          we&rsquo;ll tell you here.
         </p>
       </header>
 
       {watchlist.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
-          <p className="text-foreground">You&rsquo;re not watching any bags yet.</p>
+          <p className="text-foreground">You&rsquo;re not tracking any prices yet.</p>
           <p className="mx-auto mt-2 max-w-sm text-muted">
-            Open any bag and tap <span className="text-gold">Watch price</span> to track it.
+            Open any bag and tap <span className="text-gold">Watch price</span> to follow what it sells for.
           </p>
           <Link
             href="/search"

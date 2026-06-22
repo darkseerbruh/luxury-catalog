@@ -47,7 +47,7 @@ export async function generateMetadata({
   const name = profile.displayName || `@${profile.handle}`;
   return {
     title: `${name} · The Luxury Catalog`,
-    description: profile.bio || `${name}'s curated handbag closet on The Luxury Catalog.`,
+    description: profile.bio || `${name}'s handbag closet on The Luxury Catalog.`,
   };
 }
 
@@ -161,7 +161,7 @@ export default async function PublicProfilePage({
           </p>
         ) : profile.closet.length === 0 ? (
           <p className="mt-3 rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-6 text-sm text-muted">
-            No bags marked as owned yet.
+            No bags in the closet yet.
           </p>
         ) : (
           <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Find your taste · The Luxury Catalog",
-  description: "A quick visual quiz to map your handbag taste and unlock recommendations.",
+  description: "A quick visual quiz to read your handbag taste and point you at bags worth a look.",
 };
 
 export default async function QuizPage({
@@ -31,8 +31,8 @@ export default async function QuizPage({
         <p className="text-sm uppercase tracking-widest text-muted">Find your taste</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">This or that</h1>
         <p className="mt-2 text-muted">
-          A few quick taps. We map your taste from real catalog attributes — then
-          recommend bags you might love.
+          A few quick taps. We read your taste off real catalog attributes — then
+          point you at bags worth a look.
         </p>
       </header>
 

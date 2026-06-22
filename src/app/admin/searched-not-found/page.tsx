@@ -31,7 +31,7 @@ export default async function SearchedNotFoundPage() {
         <h1 className="mt-1 font-serif text-3xl text-foreground">Searched, not found</h1>
         <p className="mt-2 max-w-2xl text-muted">
           Every search and camera identification that returned no catalog match. The
-          most-requested bags here are the data roadmap — what to research and add next.
+          most-requested bags here are what to research and add next.
         </p>
       </header>
 

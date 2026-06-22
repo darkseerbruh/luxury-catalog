@@ -41,13 +41,13 @@ export default async function NotificationsPage() {
 
       {items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
-          <p className="text-foreground">No notifications yet.</p>
+          <p className="text-foreground">Nothing here yet.</p>
           <p className="mx-auto mt-2 max-w-sm text-muted">
-            Set a target price on a bag in your{" "}
+            Name your price on a bag in your{" "}
             <Link href="/watchlist" className="text-gold hover:underline">
               watchlist
             </Link>{" "}
-            and we&rsquo;ll alert you when the price drops.
+            and we&rsquo;ll tell you the moment it drops to it.
           </p>
         </div>
       ) : (

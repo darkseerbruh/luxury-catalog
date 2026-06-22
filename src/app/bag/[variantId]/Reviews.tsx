@@ -55,7 +55,7 @@ export default async function Reviews({
 
       {summary.count === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface/50 px-5 py-6 text-center text-sm text-muted">
-          No reviews yet. Be the first to share how this bag wears.
+          No reviews yet. If you own one, tell us how it wears — you&rsquo;d be the first.
         </p>
       ) : (
         <ul className="flex flex-col gap-3">

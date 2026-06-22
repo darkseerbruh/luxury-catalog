@@ -30,8 +30,8 @@ export default async function NewPostPage() {
         </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Write an article</h1>
         <p className="mt-2 text-muted">
-          Save a draft or publish straight away. Only verifiable facts — never invent
-          authentication markers, date codes or serial formats.
+          Save a draft or publish straight away. Stick to what you can verify — never invent
+          authentication markers, date codes, or serial formats. A wrong call costs a reader real money.
         </p>
       </header>
       <PostForm brands={brands} />

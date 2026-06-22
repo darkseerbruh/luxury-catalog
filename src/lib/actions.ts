@@ -73,7 +73,7 @@ export async function requestBag(formData: FormData): Promise<FeedbackResult> {
   const details = clean(formData.get("details"), 1000);
 
   if (!brand && !style && !searchQuery) {
-    return { ok: false, error: "Tell us at least a brand or style." };
+    return { ok: false, error: "Give us at least a brand or a style to go on." };
   }
 
   try {
@@ -88,7 +88,7 @@ export async function requestBag(formData: FormData): Promise<FeedbackResult> {
     });
     if (error) {
       console.error("requestBag error:", error);
-      return { ok: false, error: "Could not submit your request. Please try again." };
+      return { ok: false, error: "That didn't go through — give it another try." };
     }
     return { ok: true };
   } catch (err) {
@@ -131,7 +131,7 @@ export async function logThriftFind(formData: FormData): Promise<FeedbackResult>
     });
     if (error) {
       console.error("logThriftFind error:", error);
-      return { ok: false, error: "Could not log your find. Please try again." };
+      return { ok: false, error: "That didn't log — give it another try." };
     }
     return { ok: true };
   } catch (err) {

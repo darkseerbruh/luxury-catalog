@@ -104,8 +104,9 @@ export default function IdentifyPage() {
       <header>
         <h1 className="font-serif text-3xl text-foreground">Identify a bag</h1>
         <p className="mt-2 text-muted">
-          Point your camera at any designer bag and we&rsquo;ll tell you what it
-          is, what to check for authentication, and what it&rsquo;s worth.
+          Point your camera at any designer bag. We&rsquo;ll tell you what it
+          is, what to check before you trust it, and where it sits in the
+          catalog. We flag what we can see and hedge what we can&rsquo;t.
         </p>
       </header>
 
@@ -129,7 +130,7 @@ export default function IdentifyPage() {
           ) : (
             <div className="flex flex-col items-center gap-3 p-8 text-center">
               <CameraIcon />
-              <p className="text-foreground">Tap to take a photo or choose from library</p>
+              <p className="text-foreground">Tap to shoot a photo or pick one from your library</p>
               <p className="text-sm text-muted">JPEG, PNG, WebP · max 5 MB</p>
             </div>
           )}
@@ -172,7 +173,7 @@ export default function IdentifyPage() {
         }
         className="rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 text-center text-sm text-muted transition-colors hover:border-gold/50 hover:text-foreground"
       >
-        Bought it? <span className="text-gold">Log your thrift find →</span>
+        Already snagged it? <span className="text-gold">Log your find →</span>
       </Link>
 
       {/* Error */}
@@ -217,7 +218,7 @@ export default function IdentifyPage() {
               </>
             ) : (
               <p className="font-serif text-xl text-foreground">
-                Could not identify this bag
+                Couldn&rsquo;t place this one
               </p>
             )}
 
@@ -286,8 +287,8 @@ export default function IdentifyPage() {
           {/* No catalog match */}
           {!match && (id.brand || id.style) && (
             <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-5 text-sm text-muted">
-              This bag isn&rsquo;t in the catalog yet. We&rsquo;ve noted the
-              search — it helps us decide what to research next.{" "}
+              Not in the catalog yet. We&rsquo;ve noted it — that&rsquo;s how we
+              decide what to research next.{" "}
               {id.style && (
                 <Link
                   href={`/search?q=${encodeURIComponent(id.style)}`}

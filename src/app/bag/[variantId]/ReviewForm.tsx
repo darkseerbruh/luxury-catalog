@@ -123,7 +123,7 @@ export default function ReviewForm({
     return (
     <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
       <p className="text-sm text-foreground">
-        Thanks for your review! This bag isn&rsquo;t in your closet — add it?
+        Thanks for the review. It&rsquo;s not in your closet yet — want to add it?
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {CLOSET_PROMPT_OPTIONS.map((o) => (
@@ -181,7 +181,7 @@ export default function ReviewForm({
         onChange={(e) => setBody(e.target.value)}
         rows={3}
         maxLength={2000}
-        placeholder="What did you think? Wear, durability, sizing…"
+        placeholder="How does it actually wear? Durability, sizing, what fits…"
         className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
       />
       <div className="flex flex-wrap items-center gap-4 text-sm">

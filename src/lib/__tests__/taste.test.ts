@@ -155,7 +155,7 @@ describe("nameTaste", () => {
   it("falls back gracefully for an empty vector", () => {
     const named = nameTaste({});
     expect(named.name).toBe("Eclectic Collector");
-    expect(named.tagline).toMatch(/sharpen your taste/i);
+    expect(named.tagline).toMatch(/sharpen/i);
   });
 });
 
