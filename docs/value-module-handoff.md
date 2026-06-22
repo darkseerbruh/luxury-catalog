@@ -68,7 +68,7 @@ All shipped from data already on the page — **no migration**. Verified green a
 
 ## 5. Built but gated
 
-**Item-spec extraction pass** — branch `claude/spec-extraction` (commit `8444778`), awaiting merge. The unlock for the era×condition matrix + attribute (inclusions/hardware/material) grading.
+**Item-spec extraction pass** — ✅ **MERGED to `main`** (merge `925eb47`, 2026-06-22). The unlock for the era×condition matrix + attribute (inclusions/hardware/material) grading. Code is live in the repo; activation is still operator-gated (see chain below).
 - `src/lib/ingest/spec-extract.ts` — pure prompt + validated parser (out-of-range years / junk → `null`).
 - `supabase/ingest/enrich-specs.ts` — Claude Haiku runner, mirrors the proven `enrich-conditions.ts`; dry-run by default.
 - 5 new parser tests. **Runtime-inert** (CLI tool — no app/migration change), zero live risk to merge.
@@ -109,6 +109,6 @@ All shipped from data already on the page — **no migration**. Verified green a
 ## 8. Start here next session
 
 1. Sync `main`. Read this doc + `docs/preferences.md`.
-2. If `claude/spec-extraction` is unmerged and the owner approves → merge it (zero runtime risk).
+2. ~~Merge `claude/spec-extraction`~~ — **done** (merge `925eb47`). The extraction code is on `main`; the activation chain in §5 is still operator-gated.
 3. Pick the lever: **M3 (broaden live listings)** is the compounding one; the **era×condition matrix wiring** is the quickest visible win *once the operator has run the extraction pass*.
 4. Keep the build green (`tsc`/`eslint`/`next build`/`npm test`) and present finished work on a branch with git proof — **merge to `main` is the owner's deploy gate** (it ships live to luxurycatalog.com).

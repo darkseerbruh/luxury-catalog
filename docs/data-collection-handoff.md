@@ -123,7 +123,7 @@ When eBay keys land: add them, `npm run ingest:ebay` → `load:prices -- ebay --
 
 ## 9. Open items / recommended next steps
 
-1. **Scale TheRealReal** for Chanel flap medium (search has ~120 listings; we loaded 13) and other hero variants (Birkin/Kelly/Neverfull/Marmont) via the §5 flow.
+1. **Scale TheRealReal** for Chanel flap medium (search has ~120 listings; we loaded 13) and other hero variants (Birkin/Kelly/Neverfull/Marmont) via the §5 flow. The browser-paste adapter for this is now committed: [supabase/ingest/sources/trr-paste.ts](../supabase/ingest/sources/trr-paste.ts) — `npx tsx supabase/ingest/sources/trr-paste.ts <results.txt> chanel-classic-flap-medium` parses captured TRR search text → `listed` rows (add a `TARGETS` entry per new hero variant).
 2. **Add Vestiaire** (region data) then **Fashionphile** as parser plug-ins.
 3. **Capture `condition_detail`** from product-page condition sections → `npm run enrich:conditions --write` to fill the `enrichment` sub-signals (corner wear, full-set, etc.).
 4. **eBay** once approved → automated live resale (cron-able).
