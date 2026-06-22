@@ -14,6 +14,7 @@ import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 import { parseTrrDescription } from "../ingest/trr";
 import { buildEnrichmentPrompt, parseEnrichmentResponse } from "../ingest/enrich";
+import { buildSpecPrompt, parseSpecResponse } from "../ingest/spec-extract";
 
 const valid: PriceObservation = {
   brand: "Chanel",
@@ -264,6 +265,44 @@ describe("condition enrichment parser", () => {
     expect(p).toMatch(/JSON only/i);
     expect(p).toMatch(/Do NOT guess/i);
     expect(p).toContain("Light corner wear");
+  });
+});
+
+describe("item-spec parser", () => {
+  it("validates good JSON (incl. code fences) and keeps stated spec", () => {
+    const out = parseSpecResponse(
+      '```json\n{"production_year":2016,"season":"2016","colorway":"Black","material":"Caviar","hardware_color":"gold"}\n```',
+    );
+    expect(out).toMatchObject({
+      production_year: 2016,
+      colorway: "Black",
+      material: "Caviar",
+      hardware_color: "gold",
+    });
+  });
+
+  it("drops out-of-range / non-numeric years to null", () => {
+    expect(parseSpecResponse('{"production_year":1700}')!.production_year).toBeNull();
+    expect(parseSpecResponse('{"production_year":3000}')!.production_year).toBeNull();
+    expect(parseSpecResponse('{"production_year":"2016"}')!.production_year).toBeNull(); // string, not number
+  });
+
+  it("coerces empty / oversized strings to null", () => {
+    const out = parseSpecResponse(`{"colorway":"  ","material":"${"x".repeat(80)}"}`);
+    expect(out!.colorway).toBeNull();
+    expect(out!.material).toBeNull();
+  });
+
+  it("returns null for non-JSON", () => {
+    expect(parseSpecResponse("no spec here")).toBeNull();
+    expect(parseSpecResponse("")).toBeNull();
+  });
+
+  it("prompt instructs JSON-only and no inference", () => {
+    const p = buildSpecPrompt("Chanel Classic Flap Medium black caviar gold hw, 2016");
+    expect(p).toMatch(/JSON only/i);
+    expect(p).toMatch(/Do NOT guess/i);
+    expect(p).toContain("2016");
   });
 });
 
