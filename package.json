@@ -9,7 +9,12 @@
     "lint": "eslint",
     "test": "vitest run",
     "analytics:digest": "tsx scripts/analytics-digest.ts",
-    "import:images": "tsx supabase/seed/import-variant-images.ts"
+    "import:images": "tsx supabase/seed/import-variant-images.ts",
+    "ingest:msrp": "tsx supabase/ingest/sources/msrp.ts",
+    "ingest:wayback": "tsx supabase/ingest/sources/wayback.ts",
+    "ingest:fashionphile": "tsx supabase/ingest/sources/fashionphile.ts",
+    "ingest:auction": "tsx supabase/ingest/sources/auction.ts",
+    "load:prices": "tsx supabase/ingest/load-prices.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",

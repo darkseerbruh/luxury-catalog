@@ -114,10 +114,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 ## I. Permanent fix — make the cloud self-sufficient for DB work (optional, high-value)
 
-- [ ] 🔧 **I0. One-button migrations via GitHub Action — BUILT (2026-06-22), needs 2 secrets.** `.github/workflows/db-migrate.yml` runs `supabase db push` in GitHub's cloud — no laptop/CLI. **One-time setup (do once):** repo → **Settings → Secrets and variables → Actions → New repository secret**, add:
-  - `SUPABASE_ACCESS_TOKEN` — generate at supabase.com/dashboard/account/tokens
-  - `SUPABASE_DB_PASSWORD` — Supabase → Project Settings → Database (the DB password)
-  Then to apply migrations: repo → **Actions** tab → **"Apply database migrations"** → **Run workflow**. (It dry-runs first, then applies.) To make it fully automatic on every migration change, uncomment the `push:` trigger in the workflow.
+- [x] 🔧 **I0. One-button migrations via GitHub Action — BUILT & WORKING (2026-06-22).** `.github/workflows/db-migrate.yml` runs `supabase db push` in GitHub's cloud — no laptop/CLI. Secrets `SUPABASE_ACCESS_TOKEN` + `SUPABASE_DB_PASSWORD` are set. **DB is now reconciled & current through `0020`** (0018/0019/0020 existed out-of-band → marked applied via the workflow's `repair_versions` input). **Going forward:** repo → **Actions** → **"Apply database migrations"** → **Run workflow** (leave the repair box blank). If a future migration is already in the DB but errors "already exists," put its number in the repair box. *(Harmless run warning: checkout/setup-cli target Node 20 — GitHub runs them on 24; ignore.)*
 
 The cloud sandbox **can't reach Supabase** (network egress blocks all `*.supabase.*`
 hosts), which is why migrations/seeding had to run from the laptop. To let future
