@@ -73,6 +73,12 @@ export default async function ProfilePage() {
           My reviews
         </Link>
         <Link
+          href="/authenticate"
+          className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+        >
+          {profile?.isAuthenticator ? "Authenticator queue" : "Authentication"}
+        </Link>
+        <Link
           href="/profile/edit"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >

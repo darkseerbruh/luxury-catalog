@@ -35,6 +35,30 @@ runtime-tested here (no creds); everything degrades gracefully if 0016/bucket/ke
 DMCA agent before promoting UGC widely** (`docs/desktop-todo.md` G2); the "Most Wanted" board is
 demand-ranked only with the service-role key (else empty state).
 
+## TL;DR — authentication-marketplace on-ramp, v1 (latest session)
+
+Branch `claude/daily-review-planning-hqj3hg`. The marketplace was **PAUSED**; resumed this session
+at the **lead-capture scope (Recommended)** — explicitly **money-free**, so it stays out of
+`finance-compliance.md` **Phase C** (on-platform payments = a separate, attorney-gated build).
+`tsc`, `eslint src`, `next build`, **72/72 tests** green. **HUMAN-GATED:** migration **`0017`**.
+
+1. **Migration `0017_authentication_requests.sql`** — `authentication_request` (variant_id,
+   requester user_id, contact_email, details, status [open/claimed/closed], claimed_by) + RLS:
+   requester insert/read own; **verified Authenticators** (`is_authenticator`) read the open queue +
+   their claims and may claim/close; admins read all. Contact email is withheld from the open queue
+   (revealed only on claim).
+2. **Flow:** bag page → **"Want a pro to check it?"** (`RequestAuthentication`, in the How-to-
+   authenticate area, always rendered) → lead row. **`/authenticate` hub** shows the requester their
+   requests and gives Authenticators the **claim queue** + their claimed requests (with contact). The
+   two arrange pricing/service **off-platform** (no custody → no money-transmitter burden). Profile
+   gets an "Authentication / Authenticator queue" link. New event `authentication_requested`.
+3. **Ties to the tier ladder:** the `is_authenticator` tier (auto-publish on photos) is the same
+   verified cohort that staffs this queue — the contributor pipeline now has a destination.
+
+**Follow-ups / deferred to Phase C (needs your go-ahead + an attorney):** on-platform quoting threads,
+Stripe Connect payments, the 25% platform take, 1099-K/OFAC. v1 deliberately stops short of all of it.
+**Operator:** apply `0017`; grant `is_authenticator` to vetted pros (same flag as photo auto-publish).
+
 ## TL;DR — monetization-moment placement audit (this session, earlier — MERGED to `main`)
 
 Merged to `main`. Code + docs; **no DB migrations, env vars, or seed changes.**
@@ -148,7 +172,7 @@ work itself is unbuilt — `docs/finance-compliance.md` is the spec.
 
 **NEXT SESSION — pick up here (confirmed wants, not yet built):**
 1. ~~**Real-photo sourcing**~~ **DONE (this session).** Import tooling: `supabase/seed/import-variant-images.ts` (`npm run import:images`) bulk-populates `variant.image_url` + `image_source` from a CSV / reseller feed. Two auto-detected modes: **direct** (curated `variant_id,image_url[,image_source]`) and **feed** (reseller export — `Designer`/`Bag name`/`Photos`/`Url` like `data/raw/*.csv`; resolves brand→style→best-variant, takes the first photo, records the listing URL as `image_source` for link-back). **Licensing enforced at the tool boundary:** default is a no-write **dry run**; persisting needs `--write --licensed` (asserts display rights — see `docs/image-strategy-research.md`). Idempotent (fills blanks unless `--overwrite`); preflight aborts loudly on a bad key or a missing 0013 column. Pure matching logic in `src/lib/image-import-core.ts` (10 unit tests). `BagImage` already consumes `image_url`. *Build/test-verified; not runtime-run here (sandbox key is invalid — operator's live DB is current through 0014).*
-2. **Auth-marketplace on-ramp (Rev 3) — PAUSED by user (2026-06-22), nothing built yet.** Intended: a "request authentication" flow from the bag page's auth module → verified authenticator → quote; own schema (Engagement-strategy deferred inquiry threads until the marketplace exists). Deliberately on hold — don't start without a fresh go-ahead. Open scoping question when resumed: how far the two-sided loop goes for v1 (requester lead-capture only / request + authenticator queue + quote / full quoting threads), given no onboarded authenticators or payments yet.
+2. **Auth-marketplace on-ramp (Rev 3) — v1 BUILT (2026-06-22).** Resumed at the **lead-capture** scope (the recommended, money-free slice): bag-page "Want a pro to check it?" → `authentication_request` → `/authenticate` hub where verified Authenticators claim from a queue and arrange the service **off-platform**. See the auth-marketplace TL;DR up top + migration `0017`. **Deferred to Phase C (PAUSED, needs a fresh go-ahead + an attorney):** on-platform quoting threads, Stripe-Connect payments, the platform take, 1099-K/OFAC.
 3. **OAuth provider config (operator, human-gated):** enable Google/Facebook in Supabase Auth (client id/secret + `/auth/v1/callback`) or the buttons error.
 
 **Deferred / data-gated (honest):** brand price **index/ticker**, **most-coveted-by-demand** (needs a `want`-demand query; private per RLS), **trending** (PostHog proxy), **upcoming releases** (news feed); Tier 4 **Durability/Ages-Well** + **Resale-Retention index** (need resale condition/age data — see `ux-remaining-backlog-plan.md`); loose thread: **brand-name-search faceting** (a design call — compact overview vs. faceted style list).
@@ -300,6 +324,7 @@ Grant `profile.is_expert` (service role) to anyone who should author posts. Re-r
    - **`0009_corrections.sql` *(expert/corrections session — HUMAN-GATED, not yet applied)*** — adds the `correction` table for structured "suggest an edit" submissions. RLS: authenticated users INSERT + SELECT their own; admins (`profile.is_admin`) SELECT all + UPDATE status; public/anon cannot read. Depends on 0008 (`is_admin`). The app degrades gracefully if absent (submit fails with a clear message; admin queue shows empty).
    - **`0010_notification_prefs.sql` *(settings session — HUMAN-GATED, not yet applied)*** — adds `profile.notification_prefs jsonb default '{}'` (per-channel opt-outs; absent key = opted-in). Wired into the notification creators + price-alert cron via `isOptedIn()` (fails OPEN — notifications keep flowing if the column is missing). No new RLS policy needed (covered by the 0002 own-row update policy; privileged columns stay revoked by 0008).
    - **`0015_instagram_resources.sql` *(social-embed session — HUMAN-GATED, not yet applied)*** — extends the YouTube embed model (0004) to Instagram. Adds `'instagram'` to the `resource_type` enum + nullable cache columns (`embed_html`, `thumbnail_url`, `author_name`) on `resource`. **NOTE:** `ALTER TYPE … ADD VALUE` cannot run inside a transaction block — run separately if your tool wraps statements. App degrades gracefully if absent (the YouTube path is unchanged; Instagram rows just won't exist). *(Renumbered from `0012` → `0015` on 2026-06-22 to resolve a duplicate-`0012` collision with `0012_bag_axis_votes.sql`; it was never applied, so the rename is safe.)* See **`docs/social-embed-strategy.md`**.
+   - **`0017_authentication_requests.sql` *(auth-marketplace v1 — HUMAN-GATED, not yet applied)*** — adds the `authentication_request` table (lead capture) + RLS (requester own; verified Authenticators read open queue + claims and may claim/close; admins read all). Depends on 0006 (`is_authenticator`) + 0008 (`is_admin`). **Money-free** — no Phase C obligations. After applying, grant `is_authenticator` to vetted pros so they see the queue. App degrades gracefully if absent.
    - **`0016_photo_contributions.sql` *(photo-contributions session — HUMAN-GATED, not yet applied)*** — adds the `bag_photo` table (+ RLS: public read published, insert-own-as-pending-and-attested, delete own, admin update), `profile.contribution_points` (client UPDATE revoked — anti-gaming), and a **public Storage bucket `bag-photos`** with storage RLS (public read; insert/delete own). Depends on 0008 (`is_admin`) + 0013 (`variant.image_url`, the hero a featured photo promotes into). No `ALTER TYPE` caveat (fresh enum). App degrades gracefully if absent (galleries empty; submit fails with a clear message; the admin queue + Most-Wanted board need `SUPABASE_SERVICE_ROLE_KEY`). **After applying:** grant `is_authenticator` (service role) to vetted contributors so their uploads auto-publish, and **register a DMCA agent before promoting UGC widely**.
 2. **Run seed scripts** (need `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`):
    ```
