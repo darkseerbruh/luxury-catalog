@@ -1,10 +1,36 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
-> **This session (2026-06-22):** finance/money compliance doc + Phase A legal UX. See the TL;DR block
-> immediately below.
+> **Latest session (2026-06-22):** voice & tone rewrite of all user-facing copy. See the TL;DR block
+> immediately below. (Prior session this date: finance/money compliance doc + Phase A legal UX —
+> next block down.)
 
-## TL;DR — finance/money compliance + Phase A legal UX (this session)
+## TL;DR — voice & tone rewrite (latest session)
+
+Merged to `main`. **Copy-only** — no DB migrations, env vars, seed, schema, or logic changes; 46 files,
+display strings only.
+
+1. **Applied `docs/voice-and-tone.md`** across every user-facing surface: home/landing + global
+   layout/footer, bag detail (incl. GEO/auth/price captions), search, identify, thrift `/found`,
+   browse, brand pages, closet/watchlist/feed/notifications, quiz/recommendations,
+   auth/onboarding/profile/settings, posts & social, the legal pages, and admin. The voice flexes by
+   register (voice guide §4) — warmer in discovery & empty states, tightest at the money &
+   authentication moments.
+2. **Guardrails honored:** no invented facts (prices, date codes, markers, dimensions, stats); every
+   hedge and legal disclosure preserved verbatim in substance; no hype superlatives, gatekeeping, or
+   AI-slop; code/routes/classNames/JSX structure/analytics events/enum values untouched.
+3. **Notable calls:** home hero now leads with the manifesto tagline (*"Know what it's worth — and what
+   it's worth to you."*); the `/identify` intro **dropped the "what it's worth" overpromise** (the
+   tool returns no value field — never-invent). Updated one taste-tagline unit test to match new copy.
+4. **Verification:** `tsc --noEmit`, `next build`, `eslint src`, and **50/50 vitest tests** all green.
+   No runtime test (no DB creds) — but changes are display-string-only, so no runtime behavior changed.
+
+**Follow-ups left open:** none functional. If/when brand voice evolves, the spec is
+`docs/voice-and-tone.md`; this pass already touched everything user-facing.
+
+---
+
+## TL;DR — finance/money compliance + Phase A legal UX (prior session, same date)
 
 Merged to `main`. No DB migrations, no env vars, no seed changes — all additive docs + UI.
 
