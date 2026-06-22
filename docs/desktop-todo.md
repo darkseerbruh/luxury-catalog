@@ -69,7 +69,12 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 ## E. Monetization setup
 
-- [ ] ⚖️📣 **E1. Affiliate applications** *(started)* — fastest: an aggregator (**Sovrn/Skimlinks** or **Rakuten**) for instant multi-merchant coverage; then direct: **The RealReal** ([/affiliates](https://www.therealreal.com/affiliates)), **Vestiaire** (Awin/Partnerize), **Fashionphile** (Impact/ShareASale). Apply as sole prop (SSN) now; switch payee to the LLC later. Codes → `NEXT_PUBLIC_AFFILIATE_*` / `_WRAP_TEMPLATE` in Vercel.
+- [ ] ⚖️📣 **E1. Affiliate applications** *(in progress — direct-first)* — decided to skip aggregators and go direct (higher rates, esp. the consignor lever). **Status (2026-06-22):**
+  - ✅ **The RealReal — Real Partners** (consignor referral, the ~$1,250 lever): applied; **they'll email to schedule an onboarding call — TAKE IT.**
+  - ✅ **The RealReal — affiliate** (buyer side): applied via **Impact**, in review.
+  - ✅ **Awin** (the network Vestiaire is on): applied, in review. **⚠️ Next: once Awin approves, log in → Advertisers → search "Vestiaire Collective" → Join** (network ≠ brand).
+  - ⬜ **Fashionphile — affiliate**: still to do via **ShareASale** (merchant #53801). NOT the "Partners Program" (that's reseller/wholesale — needs a resale certificate; wrong door).
+  - Apply as sole prop (SSN) now; switch payee to the LLC + EIN later. **When codes/tracking-links arrive → send them to Claude to wire into `NEXT_PUBLIC_AFFILIATE_THEREALREAL` / `_VESTIAIRE` / `_FASHIONPHILE` (and the consignor referral may need a small custom touch in `WhereToSell`).**
 - [ ] ⚖️ **E2. Authenticator outreach** — line up 3–5 pro authenticators for the Marketplace (Rev #2). **The v1 on-ramp is now built** (lead capture, money-free): apply migration `0017`, then grant each pro `is_authenticator` (`update profile set is_authenticator = true where id = '<their-id>';` — same flag that auto-publishes their photos). They'll then see the claim queue at **/authenticate**. Requests come in from the bag-page "Want a pro to check it?" CTA. Pricing/payment is arranged off-platform in v1 (on-platform payments = Phase C, attorney-gated — don't enable yet).
 
 ---
