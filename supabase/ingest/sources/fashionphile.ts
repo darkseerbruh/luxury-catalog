@@ -69,6 +69,17 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 25000,
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   },
+  // Hero bags — Fashionphile handles: hermes-<leather>-birkin-<size>-, ...-kelly-<size>-,
+  // louis-vuitton-...-neverfull-<mm|pm>, gucci-...-matelasse-<small|medium>-gg-marmont-...
+  { brand: "Hermès", style: "Birkin", size_label: "25", requireTokens: ["hermes", "birkin-25"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  { brand: "Hermès", style: "Birkin", size_label: "30", requireTokens: ["hermes", "birkin-30"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  { brand: "Hermès", style: "Birkin", size_label: "35", requireTokens: ["hermes", "birkin-35"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  { brand: "Hermès", style: "Kelly", size_label: "28", requireTokens: ["hermes", "kelly-28"], minPrice: 7000, maxPrice: 100000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  { brand: "Hermès", style: "Kelly", size_label: "32", requireTokens: ["hermes", "kelly-32"], minPrice: 7000, maxPrice: 100000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  { brand: "Louis Vuitton", style: "Neverfull", size_label: "MM", requireTokens: ["neverfull-mm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull-pm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["gg-marmont", "small"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
+  { brand: "Gucci", style: "GG Marmont", size_label: "Medium", requireTokens: ["gg-marmont", "medium"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
