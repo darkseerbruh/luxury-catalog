@@ -35,16 +35,33 @@ hardware / year / source_url), feeding the bag-page value module:
 style (the matcher scores an exact style name 100 vs ~56 for verbose one-offs, so the
 backbone target wins; the messy duplicates are bypassed, not used):
 
-| Icon | Style # | Rows | Size variants |
-|---|---|---|---|
-| LV **Speedy** | 433 | 109 | 20/25/30/35/40/Nano/HL |
-| LV **Alma** | 434 | 105 | BB/PM/MM/GM/Mini/Nano |
-| Dior **Book Tote** (cross-brand) | 454 | 82 | Mini/Small/Medium/Large |
+| Icon | Style # | Rows | Sources | Size variants |
+|---|---|---|---|---|
+| LV **Speedy** | 433 | 109 | TRR | 20/25/30/35/40/Nano/HL |
+| LV **Alma** | 434 | 105 | TRR | BB/PM/MM/GM/Mini/Nano |
+| Dior **Book Tote** (cross-brand) | 454 | 82 | TRR | Mini/Small/Medium/Large |
+| Chanel **Boy** | 424 | 599 | TRR+FP | Mini/Small/Medium/Large |
+| Gucci **Jackie 1961** | 446 | 177 | TRR+FP | Mini/Small/Medium/Large |
+| Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
+| YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-Adapter targets: `lv-speedy-*`, `lv-alma-*`, `dior-book-tote-*` in `trr-jsonld.ts`
-(generic `modelSize()` whole-word size predicate; `rawKey` shares one capture across an
-icon's sizes). **Remaining Tier-1 icon queue:** Chanel Boy, Gucci Jackie 1961, Celine
-Luggage, YSL Loulou (+ go wide from there).
+**Prod total: ~2,910 listed rows** (TRR ~1,660 · Fashionphile ~1,235) as of 2026-06-23 PM.
+This session added Boy/Jackie/Celine/Loulou (+~1,123 rows) across TRR + the new Fashionphile
+Node path. **Vestiaire not added this session** (browser-gated, ~15 rows/search — deprioritized;
+opportunistic future add).
+
+Adapter targets: `lv-speedy-*`, `lv-alma-*`, `dior-book-tote-*`, `chanel-boy-*`,
+`gucci-jackie-*`, `celine-luggage-*`, `ysl-loulou-*` in `trr-jsonld.ts` (generic
+`modelSize(model, size, siblings, notTokens?)` whole-word predicate; `notTokens` excludes
+adjacent sub-models like Luggage **Phantom**; `rawKey` shares one capture across an icon's
+sizes). Fashionphile targets in `fashionphile.ts` gained an `excludeTokens` field (keep a
+style's size buckets clean of Boy-line accessories / Loulou Puffer / Luggage Phantom / SLGs).
+**Remaining Tier-1 icon queue:** finish Loulou TRR, then go wide (Hermès Constance, Chanel
+19/Gabrielle/WOC, Gucci Dionysus/Horsebit, Celine Triomphe, YSL Sac de Jour/Kate, …).
+
+⚠️ **Celine near-duplicate style** — `#207 "Luggage"` (pre-existing) vs `#484 "Luggage Tote"`
+(backbone). Loaded onto the backbone canonical **#484**; queue an owner-gated merge of #207→#484
+in the catalog-cleanup pass.
 
 **Hero variants loaded** (TRR, all 12 sizes; Fashionphile on most; Vestiaire Chanel+Birkin30):
 Chanel Classic Flap Medium; Hermès Birkin 25/30/35/40, Kelly 25/28/32; LV Neverfull MM/PM;
@@ -58,12 +75,24 @@ styles — see §5). Several brand catalogs are messy; the backbone (§4) is the
 
 ## 2. Capture is browser-gated (read this before promising "overnight")
 
-The captures run through the **owner's logged-in Chrome** (Claude-in-Chrome MCP) on
-TRR/Fashionphile/Vestiaire — same-origin `fetch` defeats their bot-blocking. **This needs
-the owner's Mac awake + Chrome logged in.** Risks on a long unattended run: the site
-**session can expire** or **rate-limit**, and you **cannot log the owner back in**
-(their credentials — off-limits). So sustained capture is **fragile** — it can stall and
-not self-heal. The **catalog build (§4–5) needs no browser** (pure DB/code).
+Only **TheRealReal and Vestiaire** still need the **owner's logged-in Chrome** (Claude-in-Chrome
+MCP) — same-origin `fetch` defeats their bot-blocking. (**Fashionphile no longer needs the
+browser** — see §3.) **This needs the owner's Mac awake + Chrome logged in.** Risks: the site
+**session can expire** or **rate-limit**, and you **cannot log the owner back in** (off-limits).
+
+**⚠️ TRR rate-limit pattern (learned 2026-06-23):** TheRealReal (PerimeterX) tolerates roughly
+**~120 same-origin product fetches per window**, then returns **403 "Access to this page has
+been denied"** on the fetch endpoint (the search *results* page still renders + you stay logged
+in — it is a rate-limit, NOT a logout, so don't stop). Two rules that worked:
+1. **Fetch GENTLY** — sequential, ~450ms apart (`__fetchGentle`), NOT `Promise.all` bursts of 15
+   (the bursts are what trip PX). The async loop keeps running in-page past the JS-tool's 45s
+   CDP timeout — fire it once, then poll `window.__data` until `done===total`.
+2. **One icon (~120 fetches) per window, then COOL DOWN ~8–12 min** before the next icon. Probe a
+   single fetch (expect `status:200`, `ld≥1`) before resuming; if still 403, wait longer.
+   Hammering while blocked extends the block.
+
+So sustained TRR capture is **fragile + slow** (one icon per ~10 min). The **catalog build (§4–5)
+and Fashionphile capture need no browser** (pure DB/code/Node).
 
 ---
 
@@ -78,9 +107,17 @@ Chunk ≤20–25 fetches/call (tool times out ~45s). Parse with the **canonical*
 colours, `-Plated` hw). Adapter: `supabase/ingest/sources/trr-jsonld.ts <targetKey>`.
 
 **Fashionphile** — Shopify. The on-site search is useless; the unlock is the **collection
-JSON**: `fetch('/collections/<brand>/products.json?limit=250&page=N')` returns FULL product
-objects (title, body_html, variants). Filter handles for the bag. Parser reads **title +
-body_html** (NOT tags — tags are junk like "Cardi B"). Recipe: `docs/research-drafts/fashionphile-capture.md`.
+JSON**: `/collections/<brand>/products.json?limit=250&page=N` returns FULL product objects
+(title, body_html, variants). Filter handles for the bag. Parser reads **title + body_html**
+(NOT tags — tags are junk like "Cardi B"). Recipe: `docs/research-drafts/fashionphile-capture.md`.
+
+**⚡ Fashionphile needs NO browser (verified 2026-06-23).** The collection `products.json` is
+CDN-served and answers a plain **server-side Node fetch** (200 + full JSON) — only the on-site
+*search* is bot-blocked. So Fashionphile capture is now a committed CLI, not a browser dance:
+`npx tsx supabase/ingest/sources/fashionphile-collection.ts <brand-slug> [token ...]` pages the
+brand collection, filters by token, and MERGES (dedup by url) into `data/ingest/_raw/fashionphile.json`;
+then `fashionphile.ts --raw` maps → landing. This is reliable + parallelizable (no Chrome, no
+rate-limit). Brand slugs: `chanel gucci celine saint-laurent louis-vuitton hermes dior`.
 
 **Vestiaire** — Next.js. Search `https://www.vestiairecollective.com/search/?q=<bag>` →
 collect `*.shtml` product URLs → `fetch` each → parse `<script id="__NEXT_DATA__">` →
