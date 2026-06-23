@@ -1176,7 +1176,10 @@ export interface SearchedNotFound {
 
 /** Aggregated view of searches that returned nothing — the data roadmap for what to research next. */
 export async function getSearchedNotFound(limit = 200): Promise<SearchedNotFound[]> {
-  const { data, error } = await getSupabase()
+  // Reads via the service-role client: searched_not_found has RLS on with no
+  // public SELECT policy (anon may only INSERT misses). Admin-only surface.
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  const { data, error } = await getSupabaseAdmin()
     .from("searched_not_found")
     .select("search_query, date, resolved")
     .order("date", { ascending: false })
@@ -1226,7 +1229,10 @@ export interface UserFeedbackEntry {
 
 /** Feedback submitted from bag detail pages, newest first, with the referenced bag resolved for display. */
 export async function getUserFeedback(limit = 200): Promise<UserFeedbackEntry[]> {
-  const { data, error } = await getSupabase()
+  // Reads via the service-role client: user_feedback has RLS on with no public
+  // SELECT policy (anon may only INSERT feedback). Admin-only surface.
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  const { data, error } = await getSupabaseAdmin()
     .from("user_feedback")
     .select("feedback_id, record_type, record_id, feedback_type, user_note, date, resolved, resolution_notes")
     .order("date", { ascending: false })
