@@ -203,6 +203,18 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── LV Bumbag (#445) ──────────────────────────────────────────────────────────
+// Two backbone variants: Mini / Standard. TRR titles it "Bumbag" or "Bum Bag" (both
+// matched); other LV belt/utility bags lack "bumbag" so requiring it excludes them.
+export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/bum.?bag/.test(n) || /charm/.test(n)) return false;
+    const isMini = /\bmini\b/.test(n);
+    return label === "Mini" ? isMini : !isMini;
+  };
+}
+
 // ── LV OnTheGo (#437) ─────────────────────────────────────────────────────────
 // Letter sizes PM / MM / GM + East-West. TRR titles it "OnTheGo" or "On The Go" —
 // both matched. Letter sizes whole-word (\b, so "mm" can't hide in "monogram"); the
@@ -611,6 +623,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── LV Bumbag (#445) — Mini / Standard, share one "lv-bumbag" capture. ──
+  "lv-bumbag-mini": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Mini",
+    namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+  "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
+    namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
 
   // ── LV OnTheGo (#437) — letter sizes + East-West, share one "lv-onthego" capture. ──
   "lv-onthego-pm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "PM",
