@@ -238,6 +238,19 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Gucci Attache (#452) ──────────────────────────────────────────────────────
+// Backbone Small / Large (TRR carries very few). Large = "large"; everything else
+// non-Mini is the Small (incl. the unsized standard). The Attache Mini isn't a
+// backbone variant and drops; SLGs guarded.
+export function attacheSize(label: "Small" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("attache") || /charm|wallet|card/.test(n)) return false;
+    if (/\bmini\b/.test(n)) return false; // Mini not a backbone variant
+    return label === "Large" ? /\blarge\b/.test(n) : !/\blarge\b/.test(n);
+  };
+}
+
 // ── Hermès Roulis (#419) ──────────────────────────────────────────────────────
 // Backbone Mini / 23. A Roulis search returns the Roulis Slim WALLET + Roulis Double
 // Tour BRACELET (jewelry/SLG) — guarded out. Mini = mini token; everything else (incl.
@@ -900,6 +913,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Gucci Attache (#452) — Small / Large, share one "gucci-attache" capture. ──
+  "gucci-attache-small": { brand: "Gucci", style: "Attache", size_label: "Small",
+    namePredicate: attacheSize("Small"), minPrice: 400, maxPrice: 6000, rawKey: "gucci-attache" },
+  "gucci-attache-large": { brand: "Gucci", style: "Attache", size_label: "Large",
+    namePredicate: attacheSize("Large"), minPrice: 400, maxPrice: 6000, rawKey: "gucci-attache" },
 
   // ── Hermès Roulis (#419) — Mini / 23, share one "hermes-roulis" capture. ──
   "hermes-roulis-mini": { brand: "Hermès", style: "Roulis", size_label: "Mini",
