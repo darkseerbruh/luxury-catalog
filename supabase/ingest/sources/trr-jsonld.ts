@@ -205,6 +205,25 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+/**
+ * Gucci Diana size predicate (#451). Backbone sizes Mini / Small / Medium / Maxi.
+ * TRR labels the largest tote "Large" (not "Maxi"), so the Maxi bucket matches
+ * "maxi" OR "large" — same physical bag, different marketplace label. The Diana
+ * "jumbo" token is the GG-monogram SCALE, not a size, so it's never a bucket.
+ * Footwear/SLGs guarded; whole-word sibling exclusion.
+ */
+const DIANA_SIZES = ["mini", "small", "medium", "maxi", "large"];
+export function dianaSize(label: "Mini" | "Small" | "Medium" | "Maxi"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("diana") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    const wants = label === "Maxi" ? ["maxi", "large"] : [label.toLowerCase()];
+    const others = DIANA_SIZES.filter((s) => !wants.includes(s)).map((s) => new RegExp(`\\b${s}\\b`));
+    if (others.some((re) => re.test(n))) return false;
+    return wants.some((w) => new RegExp(`\\b${w}\\b`).test(n));
+  };
+}
+
 // ── LV Bumbag (#445) ──────────────────────────────────────────────────────────
 // Two backbone variants: Mini / Standard. TRR titles it "Bumbag" or "Bum Bag" (both
 // matched); other LV belt/utility bags lack "bumbag" so requiring it excludes them.
@@ -748,6 +767,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── Gucci Diana (#451) — Mini/Small/Medium/Maxi(=TRR "Large"), one "gucci-diana" capture. ──
+  "gucci-diana-mini": { brand: "Gucci", style: "Diana", size_label: "Mini",
+    namePredicate: dianaSize("Mini"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-small": { brand: "Gucci", style: "Diana", size_label: "Small",
+    namePredicate: dianaSize("Small"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-medium": { brand: "Gucci", style: "Diana", size_label: "Medium",
+    namePredicate: dianaSize("Medium"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-maxi": { brand: "Gucci", style: "Diana", size_label: "Maxi",
+    namePredicate: dianaSize("Maxi"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
 
   // ── Gucci Blondie (#453) — share one "gucci-blondie" capture. ──
   "gucci-blondie-mini": { brand: "Gucci", style: "Blondie", size_label: "Mini",
