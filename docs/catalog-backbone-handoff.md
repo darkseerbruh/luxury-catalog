@@ -22,20 +22,29 @@ currently for sale, then deepen (colours/leathers/eras) and broaden (more styles
 
 ## 1. What's live right now (prod Supabase)
 
-**~1,600 `listed` resale rows across 3 marketplaces** (per-listing colour / leather /
+**~1,787 `listed` resale rows across 3 marketplaces** (per-listing colour / leather /
 hardware / year / source_url), feeding the bag-page value module:
 
 | Source | Rows | How captured |
 |---|---|---|
-| TheRealReal | ~1,125 | browser same-origin JSON-LD (§3) |
+| TheRealReal | ~1,312 | browser same-origin JSON-LD (§3) |
 | Fashionphile | ~432 | collection `products.json` (§3) |
 | Vestiaire | ~15 | `__NEXT_DATA__` product node (§3) |
 
-**First top-down icon done (2026-06-23):** LV **Speedy** (backbone style #433) — 120
-captured from TRR, **109 loaded** across 7 size variants (20/25/30/35/40/Nano/HL), all
-resolving to the *clean* canonical Speedy (the matcher scores exact "Speedy" 100 vs ~56
-for verbose one-offs, so the backbone target wins). Proves backbone → capture → load →
-summary end-to-end. Adapter targets: `lv-speedy-*` in `trr-jsonld.ts`.
+**Top-down icons done (2026-06-23)** — each resolves to the *clean* canonical backbone
+style (the matcher scores an exact style name 100 vs ~56 for verbose one-offs, so the
+backbone target wins; the messy duplicates are bypassed, not used):
+
+| Icon | Style # | Rows | Size variants |
+|---|---|---|---|
+| LV **Speedy** | 433 | 109 | 20/25/30/35/40/Nano/HL |
+| LV **Alma** | 434 | 105 | BB/PM/MM/GM/Mini/Nano |
+| Dior **Book Tote** (cross-brand) | 454 | 82 | Mini/Small/Medium/Large |
+
+Adapter targets: `lv-speedy-*`, `lv-alma-*`, `dior-book-tote-*` in `trr-jsonld.ts`
+(generic `modelSize()` whole-word size predicate; `rawKey` shares one capture across an
+icon's sizes). **Remaining Tier-1 icon queue:** Chanel Boy, Gucci Jackie 1961, Celine
+Luggage, YSL Loulou (+ go wide from there).
 
 **Hero variants loaded** (TRR, all 12 sizes; Fashionphile on most; Vestiaire Chanel+Birkin30):
 Chanel Classic Flap Medium; Hermès Birkin 25/30/35/40, Kelly 25/28/32; LV Neverfull MM/PM;
@@ -79,12 +88,21 @@ collect `*.shtml` product URLs → `fetch` each → parse `<script id="__NEXT_DA
 `condition.description` (OBJECT not string), `price.cents`, `model.name` (carries size).
 Recipe: `docs/research-drafts/vestiaire-capture.md`. Yields only ~15/search (no easy pagination).
 
-**TRANSPORT GOTCHA (important):** to get captured JSON out of the browser, a Blob download
-works the FIRST time per origin, then **Chrome blocks further downloads from that origin**
-(persists). Fallback that always works: write the data into the page body
-(`document.body.innerHTML = '<article>'+text+'</article>'`) and read it whole with
-`get_page_text` (it does NOT truncate, unlike the JS tool's ~1.8KB return cap). The
-`data:` URL navigation trick is blocked — don't bother.
+**TRANSPORT (updated 2026-06-23):** the **Blob download is the preferred path** — it
+worked repeatedly this session for TRR (Speedy via body-transport, but Alma + Book Tote
+via `a.download` Blob → landed in `~/Downloads/<name>.json`, read directly with Node, zero
+hand-transcription). Trigger it in-page (`const a=document.createElement('a'); a.href=
+URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'})); a.download
+='x.json'; a.click()`), then `cp ~/Downloads/x.json data/ingest/_raw/<key>.json`. If a site
+ever blocks downloads, **fallback** = write the data into the page body
+(`document.body.innerHTML='<article>'+text+'</article>'`) and read it whole with
+`get_page_text` (no truncation, unlike the JS tool's ~1.8KB return cap; split >50KB into
+halves). The localhost sink (`scripts/capture-sink.mjs`) is a third option but TRR's CSP
+blocks it. The `data:` URL navigation trick is blocked — don't bother.
+
+**Parallel fetch (fast):** fetch product pages in `Promise.all` batches of ~10–12; the JS
+tool returns `{}` for the async but the loop keeps filling `window.__data` — re-call the
+idempotent fetcher (skips already-captured URLs) until `collected === total`.
 
 **Pipeline:** raw → `data/ingest/_raw/<key>.json` (gitignored) → adapter writes landing
 `data/ingest/<source>/*.json` → `npm run load:prices -- <source> --write` (resolves
@@ -113,19 +131,26 @@ backbone brands. Re-runs are idempotent: 0 to create.)
 
 ---
 
-## 5. Architecture decision STILL PENDING (get owner's call before mass-broadening)
+## 5. Architecture decision — RESOLVED: model B, BUILT (2026-06-23)
 
-To capture *every* bag, the pipeline must stop dropping listings that don't match a curated
-variant. Three storage models were presented; **owner has not yet chosen**:
+Owner chose **B (two-tier)**. **Built + merged to `main`:** migration
+`0026_discovered_listings.sql` (a raw `discovered_listing` table) + the loader now writes
+any listing it can't place on a curated variant (no brand/style/variant match) into that
+table instead of dropping it — full parsed spec + partial match + raw title preserved for
+a later promotion pass. The curated catalog stays clean.
 
-- **A** auto-create a style/variant per listing — fast but pollutes the clean catalog (messy).
-- **B (recommended)** two-tier: a raw `discovered_listing` layer captures everything; the
-  curated catalog stays clean; recurring normalized models get *promoted* up over time.
-  Needs one new table (migration, human-gated) + a normalization/promotion pass.
-- **C** auto-create with heavy title→canonical normalization (per-brand model dictionaries).
+⚠️ **HUMAN-GATED — migration 0026 not yet applied.** Apply via GitHub → Actions → "Apply
+database migrations" (it's on `main`), then re-run the loads to capture the discovered
+layer. Until then the loader degrades gracefully (logs `42P01`, captures nothing — today's
+behaviour), so nothing is broken.
 
-**Recommendation B** — matches the phasing (sample now → every bag eventually) without
-degrading the curated catalog. Build only after the owner picks.
+**Known gap (next enhancement):** the discovered layer currently only catches *loader*-level
+misses. Listings dropped at the *adapter* predicate stage (e.g. a generic "Alma" with no
+size in the title, or "Book"-truncated names without a size) never reach the loader, so
+they're still not captured. To truly get "every bag," add a **catch-all capture mode**
+(emit every search result with a best-guess style/size → discovered_listing) alongside the
+curated size-targets. **The promotion/normalization pass** (recurring discovered models →
+curated styles/variants) is also still TODO.
 
 **Catalog cleanup (separate, DESTRUCTIVE — owner-gated):** Chanel/Hermès/LV have 65–73
 styles each, many verbose one-off names; this is why Birkin 40 mis-resolves. A cleanup pass
@@ -151,7 +176,8 @@ unattended; prepare a dry-run plan for the owner.
 
 ## 7. Next steps (prioritized)
 
-1. **Get the owner's architecture call (§5: A/B/C — recommend B).** Gates everything broad.
+1. ~~Owner's architecture call (§5)~~ **DONE — chose B, built.** Now: **apply migration
+   0026** (GitHub Action), then re-run loads to start filling `discovered_listing`.
 2. ~~Apply the backbone~~ **DONE** (see §4).
 3. **Per Tier-1 style:** add variant scaffolds (sizes) + capture-filter, then pull listings
    across all 3 sites *filtered to that style* (depth per icon). **Speedy is the worked
