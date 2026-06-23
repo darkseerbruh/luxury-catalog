@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { getReviewLeaderboards, type LeaderboardEntry } from "@/lib/leaderboards";
+import {
+  getReviewLeaderboards,
+  getValueRetentionLeaders,
+  getBestLaptopTotes,
+  type LeaderboardEntry,
+} from "@/lib/leaderboards";
 
 /**
  * "What the community knows" — homepage section powered by real review data
@@ -40,30 +45,39 @@ function Board({ title, note, entries }: { title: string; note: string; entries:
 }
 
 export default async function CommunityLeaderboards() {
-  const boards = await getReviewLeaderboards();
+  const [boards, valueRetention, laptopTotes] = await Promise.all([
+    getReviewLeaderboards(),
+    getValueRetentionLeaders(),
+    getBestLaptopTotes(),
+  ]);
   const hasAny =
     boards.mostDurable.length > 0 ||
     boards.highestRated.length > 0 ||
     boards.mostWorthIt.length > 0 ||
-    boards.byOccasion.length > 0;
+    boards.byOccasion.length > 0 ||
+    valueRetention.length > 0 ||
+    laptopTotes.length > 0;
 
   return (
     <section className="border-b border-border px-5 py-12">
       <p className="text-sm uppercase tracking-widest text-gold">Powered by real owners</p>
       <h2 className="mt-1 font-serif text-2xl text-foreground">What the community knows</h2>
       <p className="mt-2 max-w-xl text-sm text-muted">
-        Leaderboards built from real reviews. Rate a bag you have carried and you
-        sharpen the boards, your recommendations, and the photos everyone sees.
+        Leaderboards built from real reviews and resale data. Rate a bag you have
+        carried and you sharpen the boards, your recommendations, and the photos
+        everyone sees.
       </p>
 
       {hasAny && (
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Board title="Most durable" note="from durability ratings" entries={boards.mostDurable} />
           <Board title="Highest rated" note="from overall ratings" entries={boards.highestRated} />
           <Board title="Most worth it" note="from worth-it votes" entries={boards.mostWorthIt} />
           {boards.byOccasion.map((b) => (
             <Board key={b.occasion} title={b.title} note="rated by owners who carried it there" entries={b.entries} />
           ))}
+          <Board title="Best laptop totes" note="fits a laptop, by rating" entries={laptopTotes} />
+          <Board title="Best value retention" note="resale median vs original retail" entries={valueRetention} />
         </div>
       )}
 

@@ -178,6 +178,148 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
   }
 }
 
+// ============ Data-derived board: value retention (price_history, not votes) ============
+// Value retention is a market FACT (resale median ÷ original retail), never a crowd
+// vote — see the "facts aren't votes" rule in docs/ux/review-data-leaderboards.md.
+
+const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+
+function median(nums: number[]): number {
+  const s = nums.slice().sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+function embeddedStyleName(
+  style:
+    | { name: string; brand: { name: string } | { name: string }[] | null }
+    | { name: string; brand: { name: string } | { name: string }[] | null }[]
+    | null
+): { brandName: string; styleName: string } {
+  const s = Array.isArray(style) ? style[0] : style;
+  if (!s) return { brandName: "", styleName: "" };
+  const b = Array.isArray(s.brand) ? s.brand[0] : s.brand;
+  return { brandName: b?.name ?? "", styleName: s.name ?? "" };
+}
+
+/**
+ * Bags that hold their value best: resale median as a percent of original retail,
+ * ranked high to low. Mirrors the deals.ts resale/retail split exactly. Resilient:
+ * any missing env / pre-0021 column / query error yields [].
+ */
+export async function getValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
+  try {
+    const sb = getSupabase();
+    const { data, error } = await sb
+      .from("price_history")
+      .select(
+        "variant_id, sale_price, platform, price_type, variant:variant_id(retail_price_original, style:style_id(name, brand:brand_id(name)))"
+      )
+      .not("sale_price", "is", null)
+      .limit(50000);
+    if (error || !data) return [];
+
+    type G = { variantId: number; resale: number[]; retail: number | null; brandName: string; styleName: string };
+    const groups = new Map<number, G>();
+    for (const row of data as {
+      variant_id: number;
+      sale_price: number | string | null;
+      platform: string | null;
+      price_type: string | null;
+      variant:
+        | { retail_price_original: number | string | null; style: Parameters<typeof embeddedStyleName>[0] }
+        | { retail_price_original: number | string | null; style: Parameters<typeof embeddedStyleName>[0] }[]
+        | null;
+    }[]) {
+      const price = row.sale_price != null ? Number(row.sale_price) : null;
+      if (price == null || !Number.isFinite(price) || price <= 0) continue;
+
+      let g = groups.get(row.variant_id);
+      if (!g) {
+        const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) ?? null;
+        const retail = v?.retail_price_original != null ? Number(v.retail_price_original) : null;
+        const { brandName, styleName } = embeddedStyleName(v?.style ?? null);
+        g = { variantId: row.variant_id, resale: [], retail, brandName, styleName };
+        groups.set(row.variant_id, g);
+      }
+
+      const isRetail =
+        row.price_type === "retail_msrp" ||
+        (row.price_type == null && row.platform != null && RETAIL_PLATFORM_RX.test(row.platform));
+      if (isRetail) continue; // retail/MSRP is the denominator, not part of resale
+      g.resale.push(price);
+    }
+
+    return [...groups.values()]
+      .map((g) => {
+        if (g.retail == null || g.retail <= 0 || g.resale.length < MIN_RATINGS) return null;
+        const med = median(g.resale);
+        if (med <= 0) return null;
+        const pct = Math.round((med / g.retail) * 100);
+        return { entry: { variantId: g.variantId, brandName: g.brandName, styleName: g.styleName, value: `${pct}% of retail`, count: g.resale.length }, pct };
+      })
+      .filter((x): x is { entry: LeaderboardEntry; pct: number } => x !== null)
+      .sort((a, b) => b.pct - a.pct)
+      .slice(0, perBoard)
+      .map((x) => x.entry)
+      .filter((e) => e.brandName || e.styleName);
+  } catch {
+    return [];
+  }
+}
+
+// ============ Catalog × opinion board: best laptop totes ============
+// "Best for X" = a verified catalog attribute (fits a laptop) ranked by review
+// rating. No extra review field needed — just data we already have.
+
+export async function getBestLaptopTotes(perBoard = 5): Promise<LeaderboardEntry[]> {
+  try {
+    const sb = getSupabase();
+    const { data: fitRows, error: fitErr } = await sb
+      .from("fits")
+      .select("variant_id")
+      .ilike("item_name", "%laptop%")
+      .neq("fits", "no")
+      .limit(2000);
+    if (fitErr || !fitRows || fitRows.length === 0) return [];
+    const laptopIds = [...new Set((fitRows as { variant_id: number }[]).map((r) => r.variant_id))];
+
+    const { data: reviews, error: revErr } = await sb
+      .from("review")
+      .select("variant_id, rating")
+      .in("variant_id", laptopIds);
+    if (revErr || !reviews) return [];
+
+    const agg = new Map<number, { sum: number; count: number }>();
+    for (const r of reviews as { variant_id: number; rating: number | null }[]) {
+      if (typeof r.rating !== "number") continue;
+      const a = agg.get(r.variant_id) ?? { sum: 0, count: 0 };
+      a.sum += r.rating;
+      a.count += 1;
+      agg.set(r.variant_id, a);
+    }
+
+    const ranked = [...agg.entries()]
+      .filter(([, a]) => a.count >= MIN_RATINGS)
+      .sort(([, a], [, b]) => b.sum / b.count - a.sum / a.count)
+      .slice(0, perBoard);
+    if (ranked.length === 0) return [];
+
+    const names = await resolveVariantNames(ranked.map(([id]) => id));
+    return ranked
+      .map(([id, a]) => {
+        const n = names.get(id);
+        return n
+          ? { variantId: id, brandName: n.brandName, styleName: n.styleName, value: (a.sum / a.count).toFixed(1), count: a.count }
+          : null;
+      })
+      .filter((x): x is LeaderboardEntry => x !== null);
+  } catch {
+    return [];
+  }
+}
+
 async function resolveVariantNames(
   ids: number[]
 ): Promise<Map<number, { brandName: string; styleName: string }>> {
