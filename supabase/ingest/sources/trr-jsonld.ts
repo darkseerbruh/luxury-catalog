@@ -203,6 +203,24 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── LV OnTheGo (#437) ─────────────────────────────────────────────────────────
+// Letter sizes PM / MM / GM + East-West. TRR titles it "OnTheGo" or "On The Go" —
+// both matched. Letter sizes whole-word (\b, so "mm" can't hide in "monogram"); the
+// EW format is checked first so it can't fall into a letter bucket.
+const ONTHEGO_SIZES = ["pm", "mm", "gm"];
+export function onTheGoSize(label: "PM" | "MM" | "GM" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/on.?the.?go|onthego/.test(n) || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    if (label === "East-West") return isEW;
+    if (isEW) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = ONTHEGO_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV Pochette Métis (#438) ──────────────────────────────────────────────────
 // Two backbone variants: Standard / East-West. TRR drops the accent ("Pochette
 // Metis"); other LV Pochettes (Eva, Félicie, Accessoires, Orsay) lack "metis" so
@@ -593,6 +611,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── LV OnTheGo (#437) — letter sizes + East-West, share one "lv-onthego" capture. ──
+  "lv-onthego-pm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "PM",
+    namePredicate: onTheGoSize("PM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-mm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "MM",
+    namePredicate: onTheGoSize("MM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-gm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "GM",
+    namePredicate: onTheGoSize("GM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-east-west": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "East-West",
+    namePredicate: onTheGoSize("East-West"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
 
   // ── LV Pochette Métis (#438) — share one "lv-pochette-metis" capture. ──
   "lv-pochette-metis-standard": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "Standard",
