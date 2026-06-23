@@ -36,8 +36,11 @@ async function main() {
     if (!brand) {
       brandsToCreate++; newBrands.push(brandName);
       if (WRITE) {
+        // `tier` is a NOT-NULL enum (thrift|mid|ultra-luxury). New backbone brands
+        // (currently only Saint Laurent) are peer luxury houses → "mid", matching
+        // Dior/Celine/Bottega/Fendi/Prada.
         const { data, error } = await supabaseAdmin.from("brand")
-          .insert({ name: brandName, country_of_origin: "France" }).select("brand_id, name").single();
+          .insert({ name: brandName, country_of_origin: "France", tier: "mid" }).select("brand_id, name").single();
         if (error) throw new Error(`brand ${brandName}: ${error.message}`);
         brand = data!; brandByNorm.set(norm(brandName), brand);
       } else {

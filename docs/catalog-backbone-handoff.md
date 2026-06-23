@@ -22,14 +22,20 @@ currently for sale, then deepen (colours/leathers/eras) and broaden (more styles
 
 ## 1. What's live right now (prod Supabase)
 
-**~1,463 `listed` resale rows across 3 marketplaces** (per-listing colour / leather /
+**~1,600 `listed` resale rows across 3 marketplaces** (per-listing colour / leather /
 hardware / year / source_url), feeding the bag-page value module:
 
 | Source | Rows | How captured |
 |---|---|---|
-| TheRealReal | ~1,016 | browser same-origin JSON-LD (§3) |
+| TheRealReal | ~1,125 | browser same-origin JSON-LD (§3) |
 | Fashionphile | ~432 | collection `products.json` (§3) |
 | Vestiaire | ~15 | `__NEXT_DATA__` product node (§3) |
+
+**First top-down icon done (2026-06-23):** LV **Speedy** (backbone style #433) — 120
+captured from TRR, **109 loaded** across 7 size variants (20/25/30/35/40/Nano/HL), all
+resolving to the *clean* canonical Speedy (the matcher scores exact "Speedy" 100 vs ~56
+for verbose one-offs, so the backbone target wins). Proves backbone → capture → load →
+summary end-to-end. Adapter targets: `lv-speedy-*` in `trr-jsonld.ts`.
 
 **Hero variants loaded** (TRR, all 12 sizes; Fashionphile on most; Vestiaire Chanel+Birkin30):
 Chanel Classic Flap Medium; Hermès Birkin 25/30/35/40, Kelly 25/28/32; LV Neverfull MM/PM;
@@ -100,9 +106,10 @@ tier-1 (perennial icons, build first) + tier-2 (permanent, secondary). Owner dec
 **Saint Laurent** brand; skips styles that already exist (exact-normalized match — verbose
 per-item seed styles like "…Birkin 30 Bag" do NOT block the canonical "Birkin").
 
-**Dry-run result (2026-06-23):** 15 styles already exist, **93 to create** + 1 brand
-(Saint Laurent). HUMAN-GATED: run `npx tsx supabase/seed/seed-catalog-backbone.ts --write`
-to apply (writes to prod catalog — clean/additive/reversible, owner-approved).
+**APPLIED 2026-06-23.** Ran `--write`: created the **Saint Laurent** brand (tier `mid`,
+France) + **93 canonical styles**. Catalog now **13 brands / 315 styles**. (One fix along
+the way: the seed omitted the NOT-NULL `brand.tier` enum — now set to `mid` for new
+backbone brands. Re-runs are idempotent: 0 to create.)
 
 ---
 
@@ -145,11 +152,18 @@ unattended; prepare a dry-run plan for the owner.
 ## 7. Next steps (prioritized)
 
 1. **Get the owner's architecture call (§5: A/B/C — recommend B).** Gates everything broad.
-2. **Apply the backbone** (`seed-catalog-backbone.ts --write`) — creates the ~93 canonical
-   styles + Saint Laurent. Do prod-affecting work on a **branch** for code; the DB write is
-   owner-approved + reversible.
-3. **Per Tier-1 style:** add variant scaffolds (sizes) + a capture-filter, then pull listings
-   across all 3 sites *filtered to that style* (depth per icon).
+2. ~~Apply the backbone~~ **DONE** (see §4).
+3. **Per Tier-1 style:** add variant scaffolds (sizes) + capture-filter, then pull listings
+   across all 3 sites *filtered to that style* (depth per icon). **Speedy is the worked
+   example (§1).** Recipe per icon: (a) browser-capture the TRR search, transport via the
+   `get_page_text` body trick (§3), merge+dedup to `data/ingest/_raw/<key>.json`; (b) add
+   size targets to `trr-jsonld.ts` (share one capture via `rawKey`; whole-word size
+   predicates so years don't collide); (c) create the size variants on the canonical
+   style (loader DROPS rows for a style with zero variants — scaffolds are required, and
+   real sizes are NOT "inventing"); (d) run ALL targets in ONE adapter call (it clears the
+   landing dir per run); (e) `load:prices --write` then `refresh-summary` (no `--write`
+   flag — its only arg is an optional variant_id). Next icons: LV Alma, Chanel Boy, Dior
+   Book Tote, Gucci Jackie 1961, Celine Luggage, YSL Loulou.
 4. **Catalog cleanup** (§5) — owner-gated, destructive; dry-run plan first.
 5. **Enrichment:** condition-detail capture (Fashionphile collection pages render condition
    grades) → `enrich-conditions` (ANTHROPIC_API_KEY is in `.env.local`).

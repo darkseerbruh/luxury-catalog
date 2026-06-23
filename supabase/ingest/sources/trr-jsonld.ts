@@ -49,6 +49,13 @@ export interface TrrJsonLdTarget {
   namePredicate: (name: string) => boolean;
   minPrice: number;
   maxPrice: number;
+  /**
+   * Optional: read the capture from data/ingest/_raw/<rawKey>.json instead of
+   * <targetKey>.json. Lets several size-targets share ONE capture (e.g. all the
+   * Speedy sizes come from a single "lv-speedy" search) — each target's predicate
+   * selects its own size out of the shared file.
+   */
+  rawKey?: string;
 }
 
 /** Build a name predicate: all `must` tokens present, none of the `not` tokens. */
@@ -56,6 +63,31 @@ function predicate(must: string[], not: string[] = []): (name: string) => boolea
   return (name: string) => {
     const n = name.toLowerCase();
     return must.every((t) => n.includes(t)) && !not.some((t) => n.includes(t));
+  };
+}
+
+// ── Speedy size predicates ──────────────────────────────────────────────────
+// The Speedy comes in numeric sizes (20/25/30/35/40/50) plus Nano/HL/Mini, and
+// the Bandoulière strap version of each size. We bucket by size with WHOLE-WORD
+// matching (\b) so a year in the name ("Speedy 30 2025") never collides with a
+// size token ("2025" does not contain a standalone "25"/"20"). Bandoulière folds
+// into its numeric size — the per-listing strap detail is kept in the row's desc.
+const SPEEDY_SIZES = ["20", "25", "30", "35", "40", "50"];
+function speedySize(size: string): (name: string) => boolean {
+  const others = SPEEDY_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+  const want = new RegExp(`\\b${size}\\b`);
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/speedy/.test(n) || /charm/.test(n)) return false; // exclude bag charms
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+/** Non-numeric Speedy formats (Nano, HL): require "speedy" + the format word. */
+function speedyWord(word: string): (name: string) => boolean {
+  const want = new RegExp(`\\b${word}\\b`);
+  return (name: string) => {
+    const n = name.toLowerCase();
+    return /speedy/.test(n) && want.test(n) && !/charm/.test(n);
   };
 }
 
@@ -135,6 +167,40 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: predicate(["marmont", "medium"], ["small", "mini", "large"]),
     minPrice: 600, maxPrice: 4000,
   },
+
+  // ── LV Speedy (backbone Tier-1) — all sizes share the one "lv-speedy" capture ─
+  // Resolves to the clean canonical "Speedy" style (backbone); size_label routes
+  // each listing to the matching variant. Wide price band keeps real outliers
+  // (vintage canvas ~$440 → exotic/collab Bandoulière ~$15k) — the value module
+  // grades within condition, so genuine listings should not be pre-filtered out.
+  "lv-speedy-20": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "20",
+    namePredicate: speedySize("20"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-25": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "25",
+    namePredicate: speedySize("25"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-30": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "30",
+    namePredicate: speedySize("30"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-35": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "35",
+    namePredicate: speedySize("35"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-40": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "40",
+    namePredicate: speedySize("40"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-nano": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "Nano",
+    namePredicate: speedyWord("nano"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+  "lv-speedy-hl": {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "HL",
+    namePredicate: speedyWord("hl"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
 };
 
 /** Last path segment of a TRR product URL — the stable per-listing slug. */
@@ -201,46 +267,66 @@ function rawFile(targetKey: string): string {
   return path.resolve(__dirname, "../../../data/ingest/_raw", `${targetKey}.json`);
 }
 
-function main() {
-  const args = process.argv.slice(2);
-  const targetKey = args.find((a) => !a.startsWith("--"));
-  const dateFlag = args.find((a) => a.startsWith("--date="));
-  if (!targetKey || !TARGETS[targetKey]) {
-    console.error(`Usage: tsx trr-jsonld.ts <targetKey> [--date=YYYY-MM-DD]`);
-    console.error(`  targetKey: ${Object.keys(TARGETS).join(" | ")}`);
-    process.exit(1);
-  }
-  const target = TARGETS[targetKey];
-  const observedOn = dateFlag ? dateFlag.slice("--date=".length) : new Date().toISOString().slice(0, 10);
-
-  const file = rawFile(targetKey);
-  if (!fs.existsSync(file)) {
-    console.error(`No capture at ${file}. Capture it in the browser first (see file header).`);
-    process.exit(1);
-  }
-  const records: TrrRecord[] = JSON.parse(fs.readFileSync(file, "utf8"));
-
-  const obs: PriceObservation[] = [];
-  let skipped = 0;
-  for (const rec of records) {
-    const o = recordToObservation(rec, target, observedOn);
-    if (o) obs.push(o);
-    else skipped++;
-  }
-
-  const { file: out, kept, dropped } = writeObservations("therealreal", obs);
-
-  // Spec coverage + price spread, so the operator can sanity-check a capture.
+/** Per-target coverage/spread line so the operator can sanity-check a capture. */
+function report(targetKey: string, capturedFrom: number, obs: PriceObservation[], skipped: number) {
   const cov = (pick: (o: PriceObservation) => unknown) =>
     obs.length ? Math.round((obs.filter((o) => pick(o) != null).length / obs.length) * 100) : 0;
   const prices = obs.map((o) => o.sale_price).sort((a, b) => a - b);
-  console.log(`trr-jsonld [${targetKey}]: ${records.length} captured -> ${kept} kept, ${skipped} skipped${dropped ? `, ${dropped} dropped (invalid)` : ""} -> ${out}`);
+  console.log(`  [${targetKey}]: ${capturedFrom} captured -> ${obs.length} kept, ${skipped} skipped`);
   if (obs.length) {
     console.log(
-      `  spec coverage: colour ${cov((o) => o.attrs.exterior_colorway)}% · material ${cov((o) => o.attrs.exterior_material)}% · hardware ${cov((o) => o.attrs.hardware_color)}% · year ${cov((o) => o.attrs.production_year)}%`
+      `    spec coverage: colour ${cov((o) => o.attrs.exterior_colorway)}% · material ${cov((o) => o.attrs.exterior_material)}% · hardware ${cov((o) => o.attrs.hardware_color)}% · year ${cov((o) => o.attrs.production_year)}%`
     );
-    console.log(`  price spread: min $${prices[0]} · median $${median(prices)} · max $${prices[prices.length - 1]}`);
+    console.log(`    price spread: min $${prices[0]} · median $${median(prices)} · max $${prices[prices.length - 1]}`);
   }
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const targetKeys = args.filter((a) => !a.startsWith("--"));
+  const dateFlag = args.find((a) => a.startsWith("--date="));
+  const unknown = targetKeys.filter((k) => !TARGETS[k]);
+  if (targetKeys.length === 0 || unknown.length) {
+    if (unknown.length) console.error(`Unknown target(s): ${unknown.join(", ")}`);
+    console.error(`Usage: tsx trr-jsonld.ts <targetKey> [<targetKey> ...] [--date=YYYY-MM-DD]`);
+    console.error(`  Pass several keys to combine shared-capture sizes (e.g. all lv-speedy-*)`);
+    console.error(`  into ONE landing batch — each adapter run clears the source's landing dir.`);
+    console.error(`  targetKey: ${Object.keys(TARGETS).join(" | ")}`);
+    process.exit(1);
+  }
+  const observedOn = dateFlag ? dateFlag.slice("--date=".length) : new Date().toISOString().slice(0, 10);
+
+  // Accumulate across ALL requested targets, then write the landing batch ONCE —
+  // writeObservations() clears the source dir per call, so multiple targets that
+  // share a source (the Speedy sizes) must be produced together.
+  const rawCache = new Map<string, TrrRecord[]>();
+  const allObs: PriceObservation[] = [];
+  console.log(`trr-jsonld: ${targetKeys.length} target(s)`);
+  for (const targetKey of targetKeys) {
+    const target = TARGETS[targetKey];
+    const rawKey = target.rawKey ?? targetKey;
+    if (!rawCache.has(rawKey)) {
+      const file = rawFile(rawKey);
+      if (!fs.existsSync(file)) {
+        console.error(`No capture at ${file}. Capture it in the browser first (see file header).`);
+        process.exit(1);
+      }
+      rawCache.set(rawKey, JSON.parse(fs.readFileSync(file, "utf8")));
+    }
+    const records = rawCache.get(rawKey)!;
+    const obs: PriceObservation[] = [];
+    let skipped = 0;
+    for (const rec of records) {
+      const o = recordToObservation(rec, target, observedOn);
+      if (o) obs.push(o);
+      else skipped++;
+    }
+    report(targetKey, records.length, obs, skipped);
+    allObs.push(...obs);
+  }
+
+  const { file: out, kept, dropped } = writeObservations("therealreal", allObs);
+  console.log(`-> ${kept} observation(s) written${dropped ? `, ${dropped} dropped (invalid)` : ""} -> ${out}`);
 }
 
 // Run only as a CLI (keep importable for tests).
