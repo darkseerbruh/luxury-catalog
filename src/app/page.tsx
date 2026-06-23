@@ -97,7 +97,7 @@ export default async function Home() {
             name="q"
             type="search"
             placeholder="Look up any bag: prices, authentication, history"
-            className="min-w-0 flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
+            className="min-w-0 flex-1 truncate rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
           />
           <button
             type="submit"
