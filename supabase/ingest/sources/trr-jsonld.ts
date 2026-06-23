@@ -197,6 +197,23 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── Hermès Picotin Lock (#414) ────────────────────────────────────────────────
+// Numeric sizes 18 / 22 / 26 (+ a rare Micro). Whole-word (\b) numeric; a seller
+// typo ("Pictoin") and the larger 31cm both drop (clean per-size split). Adds year
+// + a 2nd source to the FP Picotin rows.
+const PICOTIN_SIZES = ["18", "22", "26"];
+export function picotinSize(size: "18" | "22" | "26" | "Micro"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("picotin") || /charm/.test(n)) return false;
+    if (size === "Micro") return /\bmicro\b/.test(n);
+    if (/\bmicro\b/.test(n)) return false;
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = PICOTIN_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV Keepall (#440) ─────────────────────────────────────────────────────────
 // Numeric sizes 25 / 45 / 50 / 55 / 60, often with a "Bandoulière" strap that folds
 // into its size (the strap detail stays in the row's desc). Whole-word (\b) so a year
@@ -556,6 +573,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── Hermès Picotin Lock (#414) — numeric sizes, share one "hermes-picotin" capture. ──
+  "hermes-picotin-18": { brand: "Hermès", style: "Picotin Lock", size_label: "18",
+    namePredicate: picotinSize("18"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-22": { brand: "Hermès", style: "Picotin Lock", size_label: "22",
+    namePredicate: picotinSize("22"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-26": { brand: "Hermès", style: "Picotin Lock", size_label: "26",
+    namePredicate: picotinSize("26"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-micro": { brand: "Hermès", style: "Picotin Lock", size_label: "Micro",
+    namePredicate: picotinSize("Micro"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
 
   // ── LV Keepall (#440) — numeric sizes, share one "lv-keepall" capture. ──
   "lv-keepall-25": { brand: "Louis Vuitton", style: "Keepall", size_label: "25",
