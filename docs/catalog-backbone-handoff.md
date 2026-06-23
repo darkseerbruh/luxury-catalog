@@ -40,14 +40,16 @@ currently for sale, then deepen (colours/leathers/eras) and broaden (more styles
 
 ## 1. What's live right now (prod Supabase)
 
-**~1,787 `listed` resale rows across 3 marketplaces** (per-listing colour / leather /
-hardware / year / source_url), feeding the bag-page value module:
+⚠️ *The 1,787 figure below is a HISTORICAL snapshot — current prod is **~6,260** (see the
+top banner + the "Prod total" line further down). The per-source split is kept only to
+show the capture method per marketplace.* Each row carries per-listing colour / leather /
+hardware / year / source_url and feeds the bag-page value module:
 
-| Source | Rows | How captured |
-|---|---|---|
-| TheRealReal | ~1,312 | browser same-origin JSON-LD (§3) |
-| Fashionphile | ~432 | collection `products.json` (§3) |
-| Vestiaire | ~15 | `__NEXT_DATA__` product node (§3) |
+| Source | How captured |
+|---|---|
+| TheRealReal | browser same-origin JSON-LD (§3) — now the bulk of rows |
+| Fashionphile | collection `products.json`, server-side Node, no browser (§3) |
+| Vestiaire | `__NEXT_DATA__` product node (§3) — deprioritized, ~15 rows only |
 
 **Top-down icons done (2026-06-23)** — each resolves to the *clean* canonical backbone
 style (the matcher scores an exact style name 100 vs ~56 for verbose one-offs, so the
