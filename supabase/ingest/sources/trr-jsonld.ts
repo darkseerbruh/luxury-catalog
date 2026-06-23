@@ -646,6 +646,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
 
+  // ── Chanel Deauville (#429) — share one "chanel-deauville" capture. ──
+  "chanel-deauville-mini": { brand: "Chanel", style: "Deauville", size_label: "Mini",
+    namePredicate: modelSize("deauville", "mini", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-small": { brand: "Chanel", style: "Deauville", size_label: "Small",
+    namePredicate: modelSize("deauville", "small", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-medium": { brand: "Chanel", style: "Deauville", size_label: "Medium",
+    namePredicate: modelSize("deauville", "medium", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-large": { brand: "Chanel", style: "Deauville", size_label: "Large",
+    namePredicate: modelSize("deauville", "large", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+
   // ── Chanel Vanity Case (#430) — share one "chanel-vanity" capture. ──
   "chanel-vanity-mini": { brand: "Chanel", style: "Vanity Case", size_label: "Mini",
     namePredicate: modelSize("vanity", "mini", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
