@@ -498,6 +498,236 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 9000,
     searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // NEXT ICONS 2026-06-23 (batch 2) — more Fashionphile-first permanent icons (no
+  // browser). Sizes + tokens validated against the live collection JSON before
+  // writing (handle distributions inspected; traps caught & documented per block).
+  // requireTokens anchor the size in the handle; excludeTokens drop SLGs / belts /
+  // footwear / clutch & pouch sub-models / weave-not-size tokens that share the name.
+  // Ambiguous-size stock (no size token) intentionally falls through to
+  // discovered_listing rather than being mislabeled.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Hermès Garden Party (#413) — sizes 30 (TPM) / 36 (MM) / 49 (GM). The size is
+  // anchored as "-NN-" in the handle (e.g. "garden-party-30-tpm" / "garden-party-tpm-30").
+  // require "garden-party" already drops the distinct "Neo Garden" 2023 redesign
+  // (handle "neo-garden-23", no "party"); excludeTokens also drop the larger TGM +
+  // wallets so those route to discovered rather than folding into a classic size.
+  ...(["30", "36", "49"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Garden Party",
+    size_label: size,
+    requireTokens: ["garden-party", `-${size}-`],
+    excludeTokens: ["neo", "tgm", "wallet", "pouch"],
+    minPrice: 1000,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+
+  // Hermès Evelyne (#412) — sizes TPM (16) / PM (29) / GM (33). The generation
+  // numerals (I/II/III) are NOT sizes. "tpm" CONTAINS "pm", so the PM bucket anchors
+  // on "-pm" (dash-prefixed, handle-only) and GM on "-gm"; excludeTokens drop the
+  // Evelyne wallet / cuff bracelet / sandals / airpods & bill pouches.
+  {
+    brand: "Hermès", style: "Evelyne", size_label: "TPM",
+    requireTokens: ["evelyne", "tpm"],
+    excludeTokens: ["wallet", "cuff", "bracelet", "sandal", "airpods", "pouch", "bill"],
+    minPrice: 1500, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  {
+    brand: "Hermès", style: "Evelyne", size_label: "PM",
+    requireTokens: ["evelyne", "-pm"],
+    excludeTokens: ["wallet", "cuff", "bracelet", "sandal", "airpods", "pouch", "bill"],
+    minPrice: 1500, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  {
+    brand: "Hermès", style: "Evelyne", size_label: "GM",
+    requireTokens: ["evelyne", "-gm"],
+    excludeTokens: ["wallet", "cuff", "bracelet", "sandal", "airpods", "pouch", "bill"],
+    minPrice: 1500, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+
+  // Celine Belt Bag (#485) — the knot/Belt bag, sizes Nano / Micro / Mini / Pico.
+  // TRAP: "belt" alone also matches Triomphe waist BELTS (an accessory, e.g.
+  // "...triomphe-belt-85-34") and the Cabas Phantom belt; requiring the literal
+  // "belt-bag" handle token excludes every waist belt cleanly. The Crécy/checker
+  // "belt-bag" sub-models carry no size token and fall through to discovered.
+  ...(["nano", "micro", "mini", "pico"] as const).map((size) => ({
+    brand: "Celine",
+    style: "Belt Bag",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["belt-bag", size],
+    excludeTokens: ["triomphe", "cabas", "phantom", "crecy", "checker", "wallet", "card"],
+    minPrice: 700,
+    maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  })),
+
+  // Celine Ava (#487) — the Ava Triomphe shoulder bag, sizes Mini / Standard (the
+  // "medium strap" is a strap width, folded into Standard). require "ava"+"shoulder"
+  // drops the "ava"-bearing sunglasses (no "shoulder"); TRAP: the colour "havana"
+  // contains "ava" — excludeTokens drop it too.
+  {
+    brand: "Celine", style: "Ava", size_label: "Mini",
+    requireTokens: ["ava", "shoulder", "mini"],
+    excludeTokens: ["havana", "sunglass", "wallet", "card"],
+    minPrice: 700, maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  },
+  {
+    brand: "Celine", style: "Ava", size_label: "Standard",
+    requireTokens: ["ava", "shoulder"],
+    excludeTokens: ["mini", "havana", "sunglass", "wallet", "card"],
+    minPrice: 700, maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  },
+
+  // Saint Laurent Niki (#463) — the Niki chain satchel, sizes Baby / Mini / Medium /
+  // Large. excludeTokens drop the Niki body bag / shopping tote / chain wallet / bill
+  // pouch / airpods holder / sandals that share the name.
+  ...(["baby", "mini", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Niki",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["niki", size],
+    excludeTokens: ["body-bag", "shopping", "shopper", "tote", "wallet", "pouch", "airpods", "sandal", "multipocket"],
+    minPrice: 900,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Saint Laurent Le 5 à 7 (#467) — the Le 5 à 7 hobo, sizes Baby / Mini / Small /
+  // Large. Handle token is "5-a-7". The size-less "le-5-a-7-hobo" (standard) is
+  // size-ambiguous and routes to discovered rather than guessing.
+  ...(["baby", "mini", "small", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Le 5 à 7",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["5-a-7", size],
+    excludeTokens: ["wallet", "pouch"],
+    minPrice: 900,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Bottega Veneta Andiamo (#472) — sizes Mini / Small / Medium / Large. excludeTokens
+  // drop the Andiamo "long ... top-handle clutch" + the Andiamo pouch-on-strap/chain
+  // (distinct sub-models). "with chain" small/medium remain the shoulder bag (kept).
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Andiamo",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["andiamo", size],
+    excludeTokens: ["clutch", "top-handle", "pouch", "wallet"],
+    minPrice: 1500,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Bottega Veneta Arco (#473) — sizes Mini / Small / Medium / Large. TRAP:
+  // "maxi-intrecciato" is the WEAVE, never a size (the size is the word before
+  // "arco"). excludeTokens drop the Arco basket + Arco camera bag sub-models.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Arco",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["arco", size],
+    excludeTokens: ["basket", "camera", "wallet", "pouch"],
+    minPrice: 800,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Fendi First (#479) — sizes Small / Medium. The "nano" First is only a bag CHARM
+  // (excluded, not scaffolded). excludeTokens drop the First sunglasses + sandals.
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "First",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["fendi-first", size],
+    excludeTokens: ["sunglass", "sandal", "charm", "wallet"],
+    minPrice: 1000,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
+
+  // Fendi Sunshine Shopper (#478) — sizes Mini / Small / Medium / Large.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "Sunshine Shopper",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["sunshine-shopper", size],
+    excludeTokens: ["wallet", "charm"],
+    minPrice: 800,
+    maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
+
+  // Prada Galleria (#203) — the Galleria double-zip tote, sizes Micro / Mini / Small /
+  // Medium / Large / Extra Large. "large" matches "extra-large", so the Large bucket
+  // excludes "extra"; Extra Large anchors on "extra-large". The size-less "galleria
+  // shopping tote" routes to discovered.
+  ...(["micro", "mini", "small", "medium"] as const).map((size) => ({
+    brand: "Prada",
+    style: "Galleria",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["galleria", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 600,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  })),
+  {
+    brand: "Prada", style: "Galleria", size_label: "Large",
+    requireTokens: ["galleria", "large"],
+    excludeTokens: ["extra", "wallet", "card"],
+    minPrice: 600, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Galleria", size_label: "Extra Large",
+    requireTokens: ["galleria", "extra-large"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 600, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+
+  // Prada Re-Edition 2005 (#202) — the iconic nylon hobo, sizes Mini / Standard.
+  // The Re-Edition LINE has distinct year sub-models (2000 / 1978 / 1995) that are
+  // SEPARATE bags, not sizes — they are NOT matched here (require "re-edition-2005")
+  // and route to discovered. Mini anchors on "mini"; Standard excludes "mini".
+  {
+    brand: "Prada", style: "Re-Edition 2005", size_label: "Mini",
+    requireTokens: ["re-edition-2005", "mini"],
+    excludeTokens: ["wallet", "pouch", "sandal"],
+    minPrice: 500, maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Re-Edition 2005", size_label: "Standard",
+    requireTokens: ["re-edition-2005"],
+    excludeTokens: ["mini", "wallet", "pouch", "sandal"],
+    minPrice: 500, maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+
+  // Dior Lady D-Joy (#458) — sizes Micro / Mini / Small / Medium. TRAP: "d-joy"
+  // also matches the "D-Joy ballet flats" (shoes); require the literal "lady-d-joy"
+  // and exclude ballet/flats. Dior's collection slug is "christian-dior".
+  ...(["micro", "mini", "small", "medium"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Lady D-Joy",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["lady-d-joy", size],
+    excludeTokens: ["ballet", "flats", "wallet", "charm"],
+    minPrice: 2000,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
