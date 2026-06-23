@@ -5,6 +5,7 @@ import { submitReview, deleteReview } from "@/lib/review-actions";
 import { saveToCloset } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
 import type { ReviewItem } from "@/lib/reviews";
+import { OCCASIONS } from "@/lib/occasions";
 
 const CLOSET_PROMPT_OPTIONS: { value: "want" | "have" | "had"; label: string }[] = [
   { value: "have", label: "Have it" },
@@ -184,29 +185,35 @@ export default function ReviewForm({
         placeholder="How does it actually wear? Durability, sizing, what fits…"
         className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
       />
-      <div className="flex flex-wrap items-center gap-4 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-muted">Worth it?</span>
-          {([["Yes", true], ["No", false]] as const).map(([label, val]) => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => setWorthIt(worthIt === val ? null : val)}
-              className={`rounded-full border px-3 py-1 transition-colors ${
-                worthIt === val ? "border-gold text-gold" : "border-border text-muted hover:border-gold/50"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <input
-          value={occasion}
-          onChange={(e) => setOccasion(e.target.value)}
-          maxLength={80}
-          placeholder="Occasion (everyday, evening…)"
-          className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
-        />
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted">Worth it?</span>
+        {([["Yes", true], ["No", false]] as const).map(([label, val]) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => setWorthIt(worthIt === val ? null : val)}
+            className={`rounded-full border px-3 py-1 transition-colors ${
+              worthIt === val ? "border-gold text-gold" : "border-border text-muted hover:border-gold/50"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted">Carried it for?</span>
+        {OCCASIONS.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => setOccasion(occasion === o.value ? "" : o.value)}
+            className={`rounded-full border px-3 py-1 transition-colors ${
+              occasion === o.value ? "border-gold text-gold" : "border-border text-muted hover:border-gold/50"
+            }`}
+          >
+            {o.chip}
+          </button>
+        ))}
       </div>
 
       {error && <p className="text-sm text-red-400">{error}</p>}

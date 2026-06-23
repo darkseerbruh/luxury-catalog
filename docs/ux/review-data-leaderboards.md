@@ -51,13 +51,21 @@ Opinion axes capture only lived experience; facts come from the catalogue/price 
 - Best crossbody for everyday — carry=crossbody × `everyday_wearability`
 - Best night-out bag — *needs structured `occasion`* (see gap)
 
-## Gap to close: structure `occasion` (DECIDED — do it)
+## Gap to close: structure `occasion` (DONE 2026-06-23)
 
-`occasion` is free text today, so it can't rank cleanly. **Decision (2026-06-23):
-migrate it to a closed enum** (evening / work / travel / everyday / special),
-captured as low-effort taps, same pattern as the axis vocabulary. Additive,
-human-gated migration; backfill/parse existing free-text values where possible.
-Unlocks the night-out/work/travel boards.
+`occasion` was free text, so it couldn't rank cleanly. **Now structured** into a
+closed set captured as low-effort taps: `everyday / work / evening / travel /
+special`. Canonical source of truth: `src/lib/occasions.ts` (shared by the review
+form, the write-validation, the review display, and the leaderboards). The DB
+column stays `text`; **migration `0028_review_occasion_enum.sql`** best-effort
+backfills legacy free text into the buckets, nulls anything ambiguous (never
+invent a category), and adds a CHECK constraint. **HUMAN-GATED** but the app
+enforces the set immediately, so the feature is correct before the migration runs
+(it just adds DB-level enforcement + cleans up old rows). The homepage "What the
+community knows" section now renders **Best for evening / work / travel** boards
+(`getReviewLeaderboards().byOccasion`), each hidden until it clears the same
+MIN_RATINGS honesty gate. `everyday`/`special` are captured too (feed recs +
+future boards) but not surfaced as boards yet.
 
 ## The flywheel (why this matters even though it isn't monetizable)
 
@@ -84,9 +92,11 @@ invented ranking. All numbers labeled and dated.
 
 1. **Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
    `worth_the_price` vs review `worth_it`. (Edit the migration; it's not yet applied.)
-2. **New migration:** convert `review.occasion` free text → enum (+ backfill).
-3. **Leaderboard queries:** aggregate per board, resilient reads (empty until data),
-   minimum-N threshold before a board renders.
+2. ~~**New migration:** convert `review.occasion` free text → enum (+ backfill).~~
+   **DONE** — `0028_review_occasion_enum.sql` + `src/lib/occasions.ts`.
+3. ~~**Leaderboard queries:** aggregate per board, resilient reads (empty until data),
+   minimum-N threshold before a board renders.~~ **DONE** for the occasion boards
+   (`byOccasion` in `leaderboards.ts`, gated by MIN_RATINGS).
 4. **Homepage "What the community knows" section** + the contribution driver
    (axis bars, worth-it, add-a-photo, tier progress).
 5. **Value-retention board** computed from `price_history` (data, not votes).

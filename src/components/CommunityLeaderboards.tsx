@@ -44,7 +44,8 @@ export default async function CommunityLeaderboards() {
   const hasAny =
     boards.mostDurable.length > 0 ||
     boards.highestRated.length > 0 ||
-    boards.mostWorthIt.length > 0;
+    boards.mostWorthIt.length > 0 ||
+    boards.byOccasion.length > 0;
 
   return (
     <section className="border-b border-border px-5 py-12">
@@ -60,6 +61,9 @@ export default async function CommunityLeaderboards() {
           <Board title="Most durable" note="from durability ratings" entries={boards.mostDurable} />
           <Board title="Highest rated" note="from overall ratings" entries={boards.highestRated} />
           <Board title="Most worth it" note="from worth-it votes" entries={boards.mostWorthIt} />
+          {boards.byOccasion.map((b) => (
+            <Board key={b.occasion} title={b.title} note="rated by owners who carried it there" entries={b.entries} />
+          ))}
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import { getReviews } from "@/lib/reviews";
 import { getCurrentUser } from "@/lib/auth";
 import { VerifiedOwnerBadge } from "@/components/TrustBadges";
+import { occasionLabel } from "@/lib/occasions";
 import ReviewForm from "./ReviewForm";
 
 function StarRow({ rating }: { rating: number }) {
@@ -131,7 +132,7 @@ function ReviewCard({ review }: { review: import("@/lib/reviews").ReviewItem }) 
           )}
           {review.occasion && (
             <span className="rounded-full border border-border px-2 py-0.5 text-muted">
-              {review.occasion}
+              For {occasionLabel(review.occasion)?.toLowerCase()}
             </span>
           )}
         </div>
