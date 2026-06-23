@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import { notifyFollowersOfActivity } from "./notifications";
+import { isOccasion } from "./occasions";
 
 export interface ReviewResult {
   ok: boolean;
@@ -47,7 +48,9 @@ export async function submitReview(input: {
       title: input.title?.trim().slice(0, 120) || null,
       body: input.body?.trim().slice(0, 2000) || null,
       worth_it: input.worthIt ?? null,
-      occasion: input.occasion?.trim().slice(0, 80) || null,
+      // Only the canonical closed set is stored; anything else (incl. legacy free
+      // text) is dropped to null so the column stays rankable (occasions.ts).
+      occasion: isOccasion(input.occasion) ? input.occasion : null,
       durability_rating: durability,
       updated_at: new Date().toISOString(),
     },

@@ -1,4 +1,7 @@
 import { getSupabase } from "./supabase";
+import { HOMEPAGE_OCCASION_BOARDS, OCCASIONS, type Occasion } from "./occasions";
+
+const OCCASION_TITLE = new Map<Occasion, string>(OCCASIONS.map((o) => [o.value, o.board]));
 
 /**
  * Review-powered leaderboards for the homepage "What the community knows" section
@@ -27,9 +30,16 @@ export interface ReviewLeaderboards {
   mostDurable: LeaderboardEntry[];
   highestRated: LeaderboardEntry[];
   mostWorthIt: LeaderboardEntry[];
+  /** "Best for {occasion}" boards keyed by occasion (only those with data appear). */
+  byOccasion: { occasion: Occasion; title: string; entries: LeaderboardEntry[] }[];
 }
 
-const EMPTY: ReviewLeaderboards = { mostDurable: [], highestRated: [], mostWorthIt: [] };
+const EMPTY: ReviewLeaderboards = {
+  mostDurable: [],
+  highestRated: [],
+  mostWorthIt: [],
+  byOccasion: [],
+};
 
 interface Agg {
   variantId: number;
@@ -39,6 +49,8 @@ interface Agg {
   durabilityCount: number;
   worthItYes: number;
   worthItCount: number;
+  /** Per-occasion rating sums/counts → "best for evening/work/travel" boards. */
+  occasion: Map<Occasion, { sum: number; count: number }>;
 }
 
 export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards> {
@@ -46,7 +58,7 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
     const sb = getSupabase();
     const { data, error } = await sb
       .from("review")
-      .select("variant_id, rating, worth_it, durability_rating");
+      .select("variant_id, rating, worth_it, durability_rating, occasion");
     if (error || !data || data.length === 0) return EMPTY;
 
     // Aggregate per variant in JS (the supabase-js client has no group-by),
@@ -57,6 +69,7 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
       rating: number | null;
       worth_it: boolean | null;
       durability_rating: number | null;
+      occasion: string | null;
     }[]) {
       let a = byVariant.get(r.variant_id);
       if (!a) {
@@ -68,12 +81,22 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
           durabilityCount: 0,
           worthItYes: 0,
           worthItCount: 0,
+          occasion: new Map(),
         };
         byVariant.set(r.variant_id, a);
       }
       if (typeof r.rating === "number") {
         a.ratingSum += r.rating;
         a.ratingCount += 1;
+        // An occasion board ranks bags by rating among reviews tagged that
+        // occasion ("best night-out bag" = highest-rated by evening reviewers).
+        if (r.occasion && HOMEPAGE_OCCASION_BOARDS.includes(r.occasion as Occasion)) {
+          const occ = r.occasion as Occasion;
+          const o = a.occasion.get(occ) ?? { sum: 0, count: 0 };
+          o.sum += r.rating;
+          o.count += 1;
+          a.occasion.set(occ, o);
+        }
       }
       if (typeof r.durability_rating === "number") {
         a.durabilitySum += r.durability_rating;
@@ -99,8 +122,26 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
       .sort((a, b) => b.worthItYes / b.worthItCount - a.worthItYes / a.worthItCount)
       .slice(0, perBoard);
 
+    // Per-occasion: rank variants by their average rating among reviews tagged
+    // that occasion, same MIN_RATINGS honesty gate as the other boards.
+    const occasionAggs = new Map<Occasion, { agg: Agg; avg: number; count: number }[]>();
+    for (const occ of HOMEPAGE_OCCASION_BOARDS) {
+      const ranked = aggs
+        .map((a) => {
+          const o = a.occasion.get(occ);
+          return o && o.count >= MIN_RATINGS ? { agg: a, avg: o.sum / o.count, count: o.count } : null;
+        })
+        .filter((x): x is { agg: Agg; avg: number; count: number } => x !== null)
+        .sort((a, b) => b.avg - a.avg)
+        .slice(0, perBoard);
+      if (ranked.length > 0) occasionAggs.set(occ, ranked);
+    }
+
     // Resolve names for the union of variants that made any board.
-    const ids = [...new Set([...durable, ...rated, ...worthIt].map((a) => a.variantId))];
+    const occasionVariantIds = [...occasionAggs.values()].flat().map((r) => r.agg.variantId);
+    const ids = [
+      ...new Set([...durable, ...rated, ...worthIt].map((a) => a.variantId).concat(occasionVariantIds)),
+    ];
     if (ids.length === 0) return EMPTY;
     const names = await resolveVariantNames(ids);
 
@@ -123,6 +164,14 @@ export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderb
           entry(a, `${Math.round((a.worthItYes / a.worthItCount) * 100)}% worth it`, a.worthItCount)
         )
       ),
+      byOccasion: HOMEPAGE_OCCASION_BOARDS.flatMap((occ) => {
+        const ranked = occasionAggs.get(occ);
+        if (!ranked) return [];
+        const entries = clean(ranked.map((r) => entry(r.agg, r.avg.toFixed(1), r.count)));
+        return entries.length > 0
+          ? [{ occasion: occ, title: OCCASION_TITLE.get(occ) ?? "Best for this", entries }]
+          : [];
+      }),
     };
   } catch {
     return EMPTY;
