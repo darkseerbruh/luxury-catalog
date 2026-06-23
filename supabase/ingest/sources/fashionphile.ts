@@ -136,6 +136,169 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 8000,
     searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // WIDE BATCH 2026-06-23 — go-wide Tier-1 backbone icons (Fashionphile, no browser).
+  // Each block validated against the live collection JSON: requireTokens anchor the
+  // size in the handle (e.g. "constance-18"), excludeTokens drop SLGs / sub-models /
+  // non-bags that share the style name. Price bands keep real outliers in band while
+  // letting token-excluded accessories drop. Brand/style names match the canonical
+  // backbone catalog rows so the loader resolves to the clean style.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Hermès Constance (#411) — sizes 18 / 24. The size is anchored in the handle
+  // ("constance-18"); price ≥ $6k drops the Constance Slim/To-Go/Long wallets, and
+  // excludeTokens drop the elongated Élan sub-model.
+  ...(["18", "24"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Constance",
+    size_label: size,
+    requireTokens: [`constance-${size}`],
+    excludeTokens: ["wallet", "slim", "to-go", "compact", "elan", "belt", "long"],
+    minPrice: 6000,
+    maxPrice: 45000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+
+  // Chanel 19 (#425) — sizes Small / Medium / Large / Maxi. Handle: "chanel-19-flap".
+  // excludeTokens drop the 19 WOC / card holder / phone holder accessories.
+  ...(["small", "medium", "large", "maxi"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Chanel 19",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["19-flap", size],
+    excludeTokens: ["woc", "wallet", "card", "coin", "phone", "holder", "pouch"],
+    minPrice: 2500,
+    maxPrice: 15000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+
+  // Chanel Gabrielle (#426) — sizes Small / Medium / Large (hobo + structured). The
+  // size sits before the model in the handle ("...quilted-medium-gabrielle-hobo").
+  // excludeTokens drop the Gabrielle-line accessories (cosmetic/vanity case, backpack,
+  // wallet, card holder, clutch).
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Gabrielle",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["gabrielle", size],
+    excludeTokens: ["cosmetic", "case", "backpack", "wallet", "card", "clutch", "vanity", "coin", "pouch", "belt"],
+    minPrice: 1500,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+
+  // Chanel Wallet on Chain (#427) — the classic CC WOC (one size). excludeTokens
+  // route the line-specific WOCs (Boy / 19 / Gabrielle / Reissue 2.55) to their own
+  // styles, leaving the timeless CC Turnlock WOC here.
+  {
+    brand: "Chanel",
+    style: "Wallet on Chain",
+    size_label: "WOC",
+    requireTokens: ["wallet-on-chain"],
+    excludeTokens: ["boy", "19", "gabrielle", "reissue", "2.55", "handle", "phone", "coco", "business"],
+    minPrice: 1200,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  },
+
+  // Gucci Dionysus (#201) — sizes Super Mini / Mini / Small / Medium. "Super Mini"
+  // contains "mini", so the Mini target excludes "super"; the Super Mini target
+  // anchors on the handle token "super-mini-dionysus". excludeTokens drop the chain
+  // wallet / card case SLGs.
+  {
+    brand: "Gucci", style: "Dionysus", size_label: "Super Mini",
+    requireTokens: ["super-mini-dionysus"],
+    excludeTokens: ["wallet", "card", "pouch", "key"],
+    minPrice: 700, maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Dionysus",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["dionysus", size],
+    excludeTokens: size === "mini"
+      ? ["super", "wallet", "card", "pouch", "belt", "key"]
+      : ["wallet", "card", "pouch", "belt", "key"],
+    minPrice: 700,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+
+  // Gucci Horsebit 1955 (#447) — sizes Mini / Small / Shoulder (the standard unsized
+  // "Horsebit 1955 Shoulder Bag"). require "horsebit-1955" (drops the Horsebit Chain
+  // model + Horsebit loafers/sandals/boots); excludeTokens drop SLGs + the chain/tote/
+  // bucket/top-handle sub-models. The Shoulder target is "horsebit-1955 minus a size".
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Horsebit 1955",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["horsebit-1955", size],
+    excludeTokens: ["wallet", "wristlet", "card", "pouch", "belt", "chain", "tote", "bucket", "loafer", "sandal", "boot", "pump", "mule", "slide"],
+    minPrice: 900,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+  {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Shoulder",
+    requireTokens: ["horsebit-1955"],
+    excludeTokens: ["mini", "small", "wallet", "wristlet", "card", "pouch", "belt", "chain", "tote", "bucket", "top-handle", "loafer", "sandal", "boot", "pump", "mule", "slide"],
+    minPrice: 900, maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+
+  // Celine Triomphe (#206) — sizes Nano / Mini / Small / Medium / Teen. excludeTokens
+  // drop the SLGs + the distinct Triomphe-canvas sub-models (Honorine, Half Moon,
+  // Bonnie, Folco, Cabas, Cylinder, Multipochette, Ava, Claude) that share branding.
+  ...(["nano", "mini", "small", "medium", "teen"] as const).map((size) => ({
+    brand: "Celine",
+    style: "Triomphe",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["triomphe", size],
+    excludeTokens: ["card", "wallet", "holder", "ava", "cabas", "claude", "clutch", "pouch", "belt", "besace", "sunglass", "honorine", "half-moon", "halfmoon", "bonnie", "folco", "cylinder", "multipochette", "messenger", "backpack", "shopper", "tote", "heart", "couer", "soft", "shopping"],
+    minPrice: 900,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  })),
+
+  // Celine Classic Box (#486) — sizes Small / Medium / Teen. require "classic-box"
+  // (the bag) — drops the "box calfskin" leather belts/SLGs which contain "box".
+  ...(["small", "medium", "teen"] as const).map((size) => ({
+    brand: "Celine",
+    style: "Classic Box",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["classic-box", size],
+    excludeTokens: ["belt", "wallet", "card"],
+    minPrice: 1500,
+    maxPrice: 15000,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  })),
+
+  // Saint Laurent Sac de Jour (#461) — sizes Nano / Baby / Small / Medium / Large.
+  ...(["nano", "baby", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Sac de Jour",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["sac-de-jour", size],
+    excludeTokens: ["wallet", "card", "pouch", "belt"],
+    minPrice: 800,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Saint Laurent Kate (#462) — sizes Small / Medium / Large. excludeTokens drop the
+  // Kate clutch / tassel chain wallet (WOC) + non-bags (boots/pumps that carry "kate").
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Kate",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["kate", size],
+    excludeTokens: ["boot", "clutch", "wallet", "card", "belt", "pump", "sandal", "mule", "sunglass", "tassel-chain"],
+    minPrice: 700,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------

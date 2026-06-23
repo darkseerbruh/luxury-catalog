@@ -64,7 +64,14 @@ export interface FeedAttrs {
 
 /** Weighted attribute-overlap score between a reseller row and a variant. */
 export function scoreVariantMatch(v: VariantAttrs, row: FeedAttrs): number {
+  // An EXACT (normalized) size match must beat a mere token overlap, so a row
+  // sized "Mini" lands on the "Mini" variant and never ties with a SUPERSET size
+  // like "Super Mini" (which also contains the "mini" token and would otherwise
+  // tie on tokenOverlap, then win on insertion order). The bonus only needs to
+  // clear a one-token overlap gap; +10 keeps the resulting scores readable.
+  const sizeExact = norm(v.size_label) !== "" && norm(v.size_label) === norm(row.size) ? 10 : 0;
   return (
+    sizeExact +
     tokenOverlap(v.size_label, row.size) * 3 +
     tokenOverlap(v.exterior_colorway, row.colors) * 2 +
     tokenOverlap(v.hardware_color, row.hardware) +
