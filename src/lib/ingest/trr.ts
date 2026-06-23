@@ -11,7 +11,20 @@
  * browser (Claude-in-Chrome, same-origin) since TRR is bot-blocked to plain fetch.
  */
 
+// Ordered MOST-SPECIFIC-FIRST: the parser returns the first entry that matches a
+// segment, so multi-word leathers must precede the generic "Leather"/"Canvas".
 const MATERIALS = [
+  // Hermès leathers & skins (grounded in real TRR captures: "Noir Togo Leather",
+  // "Rose Tyrien Epsom Leather", "Chevre Mysore Goatskin"…).
+  "Epsom Leather", "Togo Leather", "Clemence Leather", "Swift Leather",
+  "Box Leather", "Barenia Leather", "Evercolor Leather", "Fjord Leather",
+  "Chevre Mysore Goatskin", "Chevre Goatskin",
+  "Epsom", "Togo", "Clemence", "Swift", "Barenia", "Evercolor", "Fjord",
+  "Chevre", "Goatskin", "Ostrich", "Crocodile", "Alligator",
+  // Louis Vuitton / Gucci canvases.
+  "Monogram Canvas", "Damier Ebene", "Damier Azur", "Damier",
+  "GG Supreme Canvas", "GG Canvas", "Microguccissima", "Matelassé", "Matelasse",
+  // Chanel & general.
   "Caviar Leather", "Lambskin Leather", "Patent Leather", "Calfskin Leather",
   "Caviar", "Lambskin", "Patent", "Suede", "Tweed", "Jersey", "Calfskin",
   "Lizard", "Python", "Velvet", "Denim", "Wool", "Canvas", "Leather",
@@ -25,9 +38,14 @@ const COLORS = [
   "Grey", "Gray", "Burgundy", "Purple", "Yellow", "Orange", "Tan", "Khaki",
   "Metallic", "Neutrals", "Cream", "Ivory", "Multicolor", "Coral", "Turquoise",
   "Bordeaux", "Nude", "Taupe",
+  // Hermès / French colour names (the colour prefixes a leather segment, e.g.
+  // "Noir Togo Leather"; hardware segments are skipped before this scan so a
+  // "Gold" colourway won't be confused with gold hardware).
+  "Noir", "Blanc", "Craie", "Etoupe", "Étoupe", "Etain", "Étain", "Gris",
+  "Bleu", "Rouge", "Vert", "Rose", "Jaune", "Marron", "Fauve", "Gold",
 ];
 
-const HARDWARE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)(?:-Tone)?\s+Hardware/i;
+const HARDWARE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)(?:[- ](?:Tone|Plated))?\s+Hardware/i;
 
 export interface TrrSpec {
   color: string | null;

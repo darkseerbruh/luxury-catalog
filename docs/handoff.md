@@ -1,5 +1,17 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-22. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-06-23. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+## TL;DR — real resale data + fidelity + parallel features (2026-06-23)
+
+Two prior chats (value-module UI + data-collection pipeline) were reconciled and their stranded work landed; then a real data + feature push. **Companion briefs: `docs/data-collection-handoff.md` and `docs/value-module-handoff.md` (both current).**
+
+- **Real resale data live** — captured **116 TheRealReal listings** for the Chanel Classic Flap Medium (variant 199) via Claude-in-Chrome (same-origin JSON-LD), parsed through the canonical `parseTrrDescription`, loaded to prod: fair-market range **$1,975–$11,000**, median $5,700, retention 87.7%, full per-listing colour/leather/hardware/year. Spec spread is real (Caviar/gold ~$7,200 vs Lambskin/silver ~$4,700).
+- **True per-listing fidelity** — migrations **0024** (`listing_ref` in the dedup index) + **0025** (legacy backfill), applied to prod; loader writes `listing_ref ?? source_url`. Distinct same-price listings no longer collapse (94→116).
+- **Three features shipped via parallel background agents** (worktree-isolated, then merged): per-listing dedup + **reusable `trr-jsonld.ts` adapter** (hero scaffolds), **resale-by-era lens** on the bag page, **Vestiaire + Fashionphile** parsers/adapters. 266 tests green.
+- **Multi-brand parser** (branch `claude/multibrand-parser`, awaiting merge) — Hermès leathers/colours + `-Plated` hardware + LV/Gucci canvases; Birkin 30 coverage colour 5%→74%, material/hardware →100%. **Hermès Birkin 30 (102 rows) captured & ready to load** once merged.
+- **`ANTHROPIC_API_KEY`** set in local `.env.local` (**rotate it**) — arms the condition-enrichment pass, which still needs `condition_detail` captured from TRR product pages (browser).
+
+**Next:** merge `claude/multibrand-parser` → load Birkin 30 → capture remaining heroes (Kelly/Neverfull/Marmont) + condition_detail + first Vestiaire/Fashionphile dumps → run enrichment → era×condition matrix gets its condition axis.
 
 ## TL;DR — adaptive value module (M0–M2) on the bag page (2026-06-22)
 

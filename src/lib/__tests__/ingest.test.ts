@@ -246,6 +246,25 @@ describe("TheRealReal description parser", () => {
   it("returns nulls for an empty description", () => {
     expect(parseTrrDescription("")).toMatchObject({ color: null, material: null, hardwareColor: null });
   });
+
+  it("parses Hermès leather, colour, and -Plated hardware (real Birkin format)", () => {
+    const spec = parseTrrDescription(
+      "Hermès Top Handle Bag.\nFrom the 2012 Collection.\nNoir Togo Leather.\nPalladium-Plated Hardware.\nChevre Goatskin & Dual Interior Pockets.\nIncludes Lock, Keys & Clochette."
+    );
+    expect(spec).toMatchObject({
+      color: "Noir", material: "Togo Leather", hardwareColor: "palladium", productionYear: 2012,
+    });
+    expect(spec.includes).toContain("Lock");
+  });
+
+  it("prefers the specific Hermès leather over the generic 'Leather' and reads Gold-Plated", () => {
+    const spec = parseTrrDescription(
+      "Hermès Top Handle Bag.\nCraie Epsom Leather.\nGold-Plated Hardware."
+    );
+    expect(spec.material).toBe("Epsom Leather");
+    expect(spec.color).toBe("Craie");
+    expect(spec.hardwareColor).toBe("gold");
+  });
 });
 
 describe("condition enrichment parser", () => {

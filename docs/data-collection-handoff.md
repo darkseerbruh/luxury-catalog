@@ -50,13 +50,20 @@ All price data lives in **`price_history`**. Columns by migration:
 
 ---
 
-## 4. What's loaded right now (41 rows)
+## 4. What's loaded right now
 
 - **Retail MSRP (28 rows, confidence medium, cited):** Chanel Classic Flap Medium 2005→2025; Hermès Birkin 35 (2015/18/26), Birkin 30 (2025/26), Kelly 28 (2023/24/26); LV Neverfull MM 2007→2024 & PM (2007/2025); Gucci GG Marmont Small 2023/25.
-- **Resale (13 rows, confidence high):** Chanel Classic Flap Medium from TheRealReal — each with **colour + leather + hardware + year + inclusions + per-item URL** (100% spec coverage). Shows the value spread, e.g. Caviar/gold ~$11k vs Caviar/silver ~$5.9k; Lambskin/gold ~$7.25k vs silver ~$4.4k.
+- **Resale — Chanel Classic Flap Medium (variant 199): 116 live TheRealReal rows** (2026-06-22 capture, confidence high), each with **colour + leather + hardware + year + inclusions + per-listing URL**. Fair-market range $1,975–$11,000, median $5,700, retention 87.7%. Spec spread is real: Caviar/gold median ~$7,200 vs Lambskin/silver ~$4,700. *(Scaled from the original 13 via the §5 flow; per-listing fidelity restored once migrations 0024/0025 landed — see below.)*
+- **Captured, ready to load — Hermès Birkin 30: 102 rows** (`data/ingest/_raw/hermes-birkin-30.json`), $8,500–$66,500, median ~$18k. Pending the multi-brand parser merge (branch `claude/multibrand-parser`) so colour/leather land — coverage after the fix: colour 74% · material 100% · hardware 100% · year 69%.
 
-The retail-price-history chart is **live on the hero bag pages**. Resale rows feed the
-fair-market range / value module.
+**New since the original brief (all on `main` unless noted):**
+- **Per-listing fidelity** — migrations **0024** (adds `listing_ref` to the dedup unique index) + **0025** (backfills legacy NULL `listing_ref` = `source_url`). `load-prices.ts` now writes `listing_ref ?? source_url`, so distinct listings never collapse on a shared price. APPLIED to prod.
+- **Reusable TRR adapter** — `supabase/ingest/sources/trr-jsonld.ts`: `npx tsx … <targetKey>` reads `data/ingest/_raw/<targetKey>.json` → landing. `TARGETS` has the proven Chanel entry + scaffolds for Birkin 25/30/35/40, Kelly 25/28/32, Neverfull PM/MM, GG Marmont Small/Medium.
+- **Multi-brand parser vocab** (branch `claude/multibrand-parser`, awaiting merge) — Hermès leathers (Epsom/Togo/Clemence/Swift/Chevre), French colours (Noir/Craie/Blanc…), `-Plated` hardware, LV/Gucci canvases. Grounded in real Birkin captures.
+- **Vestiaire + Fashionphile parsers + adapters** — `src/lib/ingest/{vestiaire,fashionphile}.ts` + `supabase/ingest/sources/{vestiaire,fashionphile}.ts`. Vestiaire carries region/country. Need browser/API captures to feed them (raw-dump shapes documented in each adapter header).
+- **Enrichment armed** — `ANTHROPIC_API_KEY` is set in local `.env.local` (rotate it). The condition pass still needs `condition_detail` captured from TRR product pages (separate page section, not in JSON-LD).
+
+The retail-price-history chart + the Chanel value module are **live on the hero bag pages**.
 
 ---
 
@@ -123,7 +130,8 @@ When eBay keys land: add them, `npm run ingest:ebay` → `load:prices -- ebay --
 
 ## 9. Open items / recommended next steps
 
-1. **Scale TheRealReal** for Chanel flap medium (search has ~120 listings; we loaded 13) and other hero variants (Birkin/Kelly/Neverfull/Marmont) via the §5 flow. The browser-paste adapter for this is now committed: [supabase/ingest/sources/trr-paste.ts](../supabase/ingest/sources/trr-paste.ts) — `npx tsx supabase/ingest/sources/trr-paste.ts <results.txt> chanel-classic-flap-medium` parses captured TRR search text → `listed` rows (add a `TARGETS` entry per new hero variant).
+0. **MERGE `claude/multibrand-parser`**, then **load Birkin 30**: `npx tsx supabase/ingest/sources/trr-jsonld.ts hermes-birkin-30` → `npm run load:prices -- therealreal --write` → `npm run summary:refresh`. (Raw already captured.)
+1. **Scale TheRealReal** to the remaining heroes (Kelly 25/28/32, Neverfull PM/MM, GG Marmont S/M) via the §5 capture flow → the reusable `trr-jsonld.ts` adapter (one command per `targetKey`; tune each `TARGETS` predicate/bounds against the capture). *Chanel (116) + Birkin 30 (102, ready) done.* The older search-text adapter `trr-paste.ts` remains for the paste flow.
 2. **Add Vestiaire** (region data) then **Fashionphile** as parser plug-ins.
 3. **Capture `condition_detail`** from product-page condition sections → `npm run enrich:conditions --write` to fill the `enrichment` sub-signals (corner wear, full-set, etc.).
 4. **eBay** once approved → automated live resale (cron-able).
