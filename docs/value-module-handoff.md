@@ -61,8 +61,9 @@ The throughline: **show evidence first, assert second** — the more the UI clai
 | **M1** | Demand signal + retail-hike catalyst → a framing-aware **timing note** ("waiting hasn't paid off lately") — descriptive, never advice | merge `d9efdf2` |
 | **M2** | **Condition ladder** — groups recorded resale into the canonical `sale_condition` tiers (enum already at DB; eBay normalizes on ingest via `normalizeEbayCondition`), grades *within* tier so a cheaper-but-worn bag can't pose as a deal. Shows at ≥2 populated tiers, else the gauge | merge `d9efdf2` |
 | **Era context** | `Vintage`/`Discontinued` chip + neutral note from the variant's `year_start/year_end` — the honest year signal available today | merge `d9efdf2` |
+| **Era lens** | **Resale-by-era** — `CompScale` grouped by production *decade*, from per-listing `production_year` (resilient read; shows at ≥2 bands, else the gauge). `src/lib/queries.ts:getVariantEraComps`. Real Chanel data (1986–2025) populates it. era×**condition** matrix still scaffolded (needs per-listing condition). | merge `9848909` (2026-06-23) |
 
-All shipped from data already on the page — **no migration**. Verified green at each merge (`tsc`/`eslint`/`next build`/tests).
+All shipped from data already on the page (M0–M2) plus, for the era lens, the per-listing `production_year` now loaded on resale rows. Verified green at each merge (`tsc`/`eslint`/`next build`/tests).
 
 ---
 
