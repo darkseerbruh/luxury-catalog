@@ -173,6 +173,30 @@ export function horsebitSize(size: "mini" | "small" | null): (name: string) => b
   };
 }
 
+/**
+ * Gucci Ophidia size predicate — Super Mini / Mini / Small / Medium / Large / Jumbo
+ * (backbone #448). Like Dionysus, "Super Mini" CONTAINS "mini", so plain Mini rejects
+ * any "super mini" name and Super Mini requires the phrase. TRR titles the size at the
+ * end ("Web Ophidia Large", "GG Supreme Ophidia Medium"); ~40% of Ophidia listings are
+ * UNSIZED ("GG Supreme Ophidia") — those match no size bucket and DROP (the clean
+ * per-size pattern; the high-confidence FP load already covers the icon, this TRR pass
+ * adds year + a 2nd source per size). Footwear/SLGs and the Ophidia backpack/belt bag
+ * (different silhouettes, not backbone size variants) are guarded out.
+ */
+const OPHIDIA_SIZES = ["mini", "small", "medium", "large", "jumbo"];
+const GUCCI_OPHIDIA_NOT = /loafer|sandal|boot|pump|mule|slide|sneaker|wallet|card case|cardholder|card holder|key case|key pouch|belt bag|backpack/;
+export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "large" | "jumbo"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("ophidia") || GUCCI_OPHIDIA_NOT.test(n)) return false;
+    if (size === "super mini") return /super[\s-]*mini/.test(n);
+    if (size === "mini" && /super[\s-]*mini/.test(n)) return false; // plain Mini ≠ Super Mini
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = OPHIDIA_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Coach (the viral thrift engine) ───────────────────────────────────────────
 // TRR carries Coach's model + numeric size in the JSON-LD name for CONTEMPORARY
 // Coach ("Leather Tabby 26", "Rogue 17", "Brooklyn 28"); VINTAGE Coach is
@@ -481,6 +505,21 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     brand: "Saint Laurent", style: "Loulou", size_label: "Large",
     namePredicate: modelSize("loulou", "large", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
+
+  // ── Gucci Ophidia (#448) — curated per-size, share one "gucci-ophidia" capture. ──
+  // Adds year + a 2nd source to the FP Ophidia rows. Unsized listings drop (clean split).
+  "gucci-ophidia-super-mini": { brand: "Gucci", style: "Ophidia", size_label: "Super Mini",
+    namePredicate: ophidiaSize("super mini"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-mini": { brand: "Gucci", style: "Ophidia", size_label: "Mini",
+    namePredicate: ophidiaSize("mini"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-small": { brand: "Gucci", style: "Ophidia", size_label: "Small",
+    namePredicate: ophidiaSize("small"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-medium": { brand: "Gucci", style: "Ophidia", size_label: "Medium",
+    namePredicate: ophidiaSize("medium"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-large": { brand: "Gucci", style: "Ophidia", size_label: "Large",
+    namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
+    namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
 
   // ── Coach (the viral thrift engine) — curated per-model; all share "coach-models". ──
   // Tabby (#3) — sizes 12 / 20 / 26 + Standard. Excludes Pillow Tabby (own style).
