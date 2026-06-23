@@ -6,6 +6,10 @@ import {
   detectSizeLabel,
   catchAllStyle,
   recordToCatchAllObservation,
+  dionysusSize,
+  horsebitSize,
+  coachModelSize,
+  coachPillowTabby,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -206,5 +210,116 @@ describe("recordToCatchAllObservation", () => {
     expect(recordToCatchAllObservation({ ...rec, price: 0 }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
     expect(recordToCatchAllObservation({ ...rec, price: -5 }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
     expect(recordToCatchAllObservation({ ...rec, price: NaN }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
+  });
+});
+
+// ── Gucci curated Super-Mini-aware predicates ────────────────────────────────
+
+describe("dionysusSize (Super-Mini-aware)", () => {
+  const superMini = dionysusSize("super mini");
+  const mini = dionysusSize("mini");
+  const small = dionysusSize("small");
+  const medium = dionysusSize("medium");
+
+  it("routes 'Super Mini' to the Super Mini bucket, never to Mini", () => {
+    expect(superMini("Gucci Super Mini Dionysus Bag")).toBe(true);
+    expect(superMini("Gucci GG Supreme Super-Mini Dionysus")).toBe(true); // hyphenated
+    // The whole point of the fix: a Super Mini must NOT also land in the plain Mini bucket.
+    expect(mini("Gucci Super Mini Dionysus Bag")).toBe(false);
+    expect(mini("Gucci GG Supreme Super-Mini Dionysus")).toBe(false);
+  });
+
+  it("routes a plain Mini to Mini only", () => {
+    expect(mini("Gucci Mini Dionysus Shoulder Bag")).toBe(true);
+    expect(superMini("Gucci Mini Dionysus Shoulder Bag")).toBe(false);
+    expect(small("Gucci Mini Dionysus Shoulder Bag")).toBe(false);
+  });
+
+  it("separates Small and Medium by whole word", () => {
+    expect(small("Gucci Small Dionysus Bag")).toBe(true);
+    expect(medium("Gucci Small Dionysus Bag")).toBe(false);
+    expect(medium("Gucci Medium Dionysus Shoulder Bag")).toBe(true);
+    expect(small("Gucci Medium Dionysus Shoulder Bag")).toBe(false);
+  });
+
+  it("drops Dionysus footwear / SLGs from every bucket", () => {
+    expect(mini("Gucci Mini Dionysus Loafer")).toBe(false);
+    expect(superMini("Gucci Super Mini Dionysus Wallet")).toBe(false);
+    expect(small("Gucci Dionysus Card Holder Small")).toBe(false);
+  });
+
+  it("rejects non-Dionysus names", () => {
+    expect(mini("Gucci Mini GG Marmont Bag")).toBe(false);
+  });
+});
+
+describe("horsebitSize (Mini / Small / Shoulder)", () => {
+  const mini = horsebitSize("mini");
+  const small = horsebitSize("small");
+  const shoulder = horsebitSize(null);
+
+  it("requires both 'horsebit' and '1955' (drops Horsebit Chain + loafers)", () => {
+    expect(shoulder("Gucci Horsebit 1955 Shoulder Bag")).toBe(true);
+    expect(shoulder("Gucci Horsebit Chain Shoulder Bag")).toBe(false); // no 1955
+    expect(shoulder("Gucci Horsebit 1955 Loafer")).toBe(false); // footwear
+  });
+
+  it("buckets Mini and Small by whole word", () => {
+    expect(mini("Gucci Mini Horsebit 1955 Bag")).toBe(true);
+    expect(small("Gucci Mini Horsebit 1955 Bag")).toBe(false);
+    expect(small("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(true);
+    expect(mini("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(false);
+  });
+
+  it("Shoulder = horsebit-1955 with no size token (even though the name says 'shoulder')", () => {
+    expect(shoulder("Gucci Horsebit 1955 Shoulder Bag")).toBe(true);
+    // A sized listing must NOT fall into the unsized Shoulder bucket.
+    expect(shoulder("Gucci Mini Horsebit 1955 Bag")).toBe(false);
+    expect(shoulder("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(false);
+  });
+});
+
+// ── Coach curated predicates (numeric sizes + Standard bucket; Pillow split) ──
+
+describe("coachModelSize", () => {
+  const TABBY = ["12", "20", "26"];
+  const tabby26 = coachModelSize("tabby", "26", TABBY, ["pillow"]);
+  const tabby20 = coachModelSize("tabby", "20", TABBY, ["pillow"]);
+  const tabbyStd = coachModelSize("tabby", null, TABBY, ["pillow"]);
+
+  it("buckets numeric Coach sizes by whole word", () => {
+    expect(tabby26("Coach Leather Tabby 26")).toBe(true);
+    expect(tabby20("Coach Leather Tabby 26")).toBe(false);
+    expect(tabby20("Coach Signature Tabby 20")).toBe(true);
+  });
+
+  it("routes a model named with NO numeric size to the Standard bucket", () => {
+    expect(tabbyStd("Coach Leather Tabby")).toBe(true);
+    expect(tabbyStd("Coach Leather Tabby 26")).toBe(false); // sized → not Standard
+    expect(tabby26("Coach Leather Tabby")).toBe(false); // unsized → not the 26 bucket
+  });
+
+  it("excludes Pillow Tabby from the plain Tabby buckets (distinct backbone style)", () => {
+    expect(tabby26("Coach Signature Pillow Tabby 26")).toBe(false);
+    expect(tabbyStd("Coach Pillow Tabby")).toBe(false);
+  });
+
+  it("drops Coach SLGs (wallets, card cases, wristlets)", () => {
+    expect(tabby26("Coach Tabby 26 Wristlet")).toBe(false);
+    expect(coachModelSize("rogue", null, ["17", "25", "30", "39"])("Coach Rogue Card Case")).toBe(false);
+  });
+
+  it("does not cross-match a different model", () => {
+    expect(tabby26("Coach Leather Brooklyn 28")).toBe(false);
+  });
+});
+
+describe("coachPillowTabby", () => {
+  const p18 = coachPillowTabby("18");
+  const pStd = coachPillowTabby(null);
+  it("requires BOTH 'pillow' and 'tabby'", () => {
+    expect(p18("Coach Signature Pillow Tabby 18")).toBe(true);
+    expect(p18("Coach Leather Tabby 18")).toBe(false); // not pillow
+    expect(pStd("Coach Pillow Tabby")).toBe(true);
   });
 });

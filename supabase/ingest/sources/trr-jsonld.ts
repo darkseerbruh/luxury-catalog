@@ -126,6 +126,95 @@ const LUGGAGE_SIZES = ["nano", "micro", "mini", "medium"];
 // Saint Laurent Loulou: Toy / Small / Medium / Large.
 const LOULOU_SIZES = ["toy", "small", "medium", "large"];
 
+// ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
+// A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
+// detectSizeLabel word-list hits "mini" first) and pollute the clean FP split, so
+// Gucci gets CURATED per-size TRR predicates instead. A broad Gucci search also
+// pulls in Gucci footwear/SLGs that carry a model name (Dionysus loafers, Horsebit
+// loafers), so both predicates exclude footwear + small leather goods.
+const GUCCI_FOOTWEAR_SLG = /loafer|sandal|boot|pump|mule|slide|sneaker|espadrille|wallet|card holder|cardholder|key case|key pouch/;
+
+/**
+ * Gucci Dionysus size predicate. "Super Mini" CONTAINS "mini", so the plain Mini
+ * bucket rejects any "super mini" name, and the Super Mini bucket requires the
+ * "super mini" phrase (TRR may hyphenate or space it). Small/Medium use whole-word
+ * sibling exclusion. Footwear/SLGs are dropped up front.
+ */
+const DIONYSUS_SIZES = ["mini", "small", "medium"];
+export function dionysusSize(size: "super mini" | "mini" | "small" | "medium"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("dionysus") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    if (size === "super mini") return /super[\s-]*mini/.test(n);
+    if (size === "mini" && /super[\s-]*mini/.test(n)) return false; // plain Mini ≠ Super Mini
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = DIONYSUS_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+/**
+ * Gucci Horsebit 1955 size predicate — Mini / Small / Shoulder (the standard,
+ * unsized "Horsebit 1955 Shoulder Bag"). Requires both "horsebit" and "1955" so the
+ * Horsebit CHAIN model and the Horsebit loafers/sandals never leak in. A null size
+ * is the Shoulder bucket: horsebit-1955 with NO mini/small token.
+ */
+const HORSEBIT_SIZES = ["mini", "small"];
+export function horsebitSize(size: "mini" | "small" | null): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("horsebit") || !n.includes("1955") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    if (size) {
+      const want = new RegExp(`\\b${size}\\b`);
+      const others = HORSEBIT_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+      return want.test(n) && !others.some((re) => re.test(n));
+    }
+    return !HORSEBIT_SIZES.some((s) => new RegExp(`\\b${s}\\b`).test(n)); // Shoulder = no size token
+  };
+}
+
+// ── Coach (the viral thrift engine) ───────────────────────────────────────────
+// TRR carries Coach's model + numeric size in the JSON-LD name for CONTEMPORARY
+// Coach ("Leather Tabby 26", "Rogue 17", "Brooklyn 28"); VINTAGE Coach is
+// generic-named ("Leather Shoulder Bag") with a model-less description and is NOT
+// curatable from TRR structured data (a real limitation — the model is on the
+// visible card but not the JSON-LD). Curated per-model targets share one
+// "coach-models" capture (per-model searches: coach tabby / rogue / brooklyn / …).
+// A null size = the model's Standard bucket (the model named with NO numeric size).
+// Bands are thrift-wide (min ~$40) — low prices are the point for Coach.
+const COACH_SLG = /wallet|card case|cardholder|wristlet|belt bag|sandal|loafer|pump|mule/;
+export function coachModelSize(
+  model: string,
+  size: string | null,
+  allSizes: string[],
+  notTokens: string[] = []
+): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes(model) || COACH_SLG.test(n)) return false;
+    if (notTokens.some((t) => n.includes(t))) return false;
+    if (size === null) return !allSizes.some((s) => new RegExp(`\\b${s}\\b`).test(n));
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = allSizes.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+/** Pillow Tabby is a distinct backbone style (#500) — require BOTH "pillow" + "tabby". */
+export function coachPillowTabby(size: string | null): (name: string) => boolean {
+  const allSizes = ["18", "26"];
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("pillow") || !n.includes("tabby") || COACH_SLG.test(n)) return false;
+    if (size === null) return !allSizes.some((s) => new RegExp(`\\b${s}\\b`).test(n));
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = allSizes.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+const TABBY_SIZES = ["12", "20", "26"];
+const ROGUE_SIZES = ["17", "25", "30", "39"];
+const BROOKLYN_SIZES = ["28", "39"];
+
 /**
  * Targets. The Chanel Classic Flap Medium entry is PROVEN (loaded from a real
  * 120-record capture). The rest are SCAFFOLDS — best-effort brand/style/size_label/
@@ -195,12 +284,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "gucci-gg-marmont-small": {
     brand: "Gucci", style: "GG Marmont", size_label: "Small",
     namePredicate: predicate(["marmont", "small"], ["medium", "mini", "large"]),
-    minPrice: 600, maxPrice: 4000,
+    minPrice: 600, maxPrice: 4000, rawKey: "gucci-wide",
   },
   "gucci-gg-marmont-medium": {
     brand: "Gucci", style: "GG Marmont", size_label: "Medium",
     namePredicate: predicate(["marmont", "medium"], ["small", "mini", "large"]),
-    minPrice: 600, maxPrice: 4000,
+    minPrice: 600, maxPrice: 4000, rawKey: "gucci-wide",
   },
 
   // ── LV Speedy (backbone Tier-1) — all sizes share the one "lv-speedy" capture ─
@@ -301,22 +390,60 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: modelSize("boy", "large", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
   },
 
-  // ── Gucci Jackie 1961 (backbone Tier-1) — Mini/Small/Medium/Large, one capture ──
+  // ── Gucci Jackie 1961 (backbone Tier-1) — Mini/Small/Medium/Large. Shares the
+  // one broad "gucci-wide" capture with Dionysus / Horsebit / Marmont. ──
   "gucci-jackie-mini": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Mini",
-    namePredicate: modelSize("jackie", "mini", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "mini", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-small": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Small",
-    namePredicate: modelSize("jackie", "small", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "small", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-medium": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Medium",
-    namePredicate: modelSize("jackie", "medium", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "medium", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-large": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Large",
-    namePredicate: modelSize("jackie", "large", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "large", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+
+  // ── Gucci Dionysus (backbone Tier-1) — Super Mini / Mini / Small / Medium.
+  // CURATED (not catch-all) because Super Mini contains "mini": the catch-all
+  // detectSizeLabel would mislabel Super Mini → Mini and pollute the FP split.
+  // Shares the "gucci-wide" capture. ──
+  "gucci-dionysus-super-mini": {
+    brand: "Gucci", style: "Dionysus", size_label: "Super Mini",
+    namePredicate: dionysusSize("super mini"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-mini": {
+    brand: "Gucci", style: "Dionysus", size_label: "Mini",
+    namePredicate: dionysusSize("mini"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-small": {
+    brand: "Gucci", style: "Dionysus", size_label: "Small",
+    namePredicate: dionysusSize("small"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-medium": {
+    brand: "Gucci", style: "Dionysus", size_label: "Medium",
+    namePredicate: dionysusSize("medium"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+
+  // ── Gucci Horsebit 1955 (backbone Tier-1) — Mini / Small / Shoulder. Requires
+  // "horsebit" + "1955" so the Horsebit Chain model + loafers never leak. Shares
+  // the "gucci-wide" capture. ──
+  "gucci-horsebit-mini": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Mini",
+    namePredicate: horsebitSize("mini"), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-horsebit-small": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Small",
+    namePredicate: horsebitSize("small"), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-horsebit-shoulder": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Shoulder",
+    namePredicate: horsebitSize(null), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
   },
 
   // ── Celine Luggage (backbone Tier-1, canonical "Luggage Tote") — Nano/Micro/Mini/Medium ──
@@ -354,6 +481,51 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     brand: "Saint Laurent", style: "Loulou", size_label: "Large",
     namePredicate: modelSize("loulou", "large", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
+
+  // ── Coach (the viral thrift engine) — curated per-model; all share "coach-models". ──
+  // Tabby (#3) — sizes 12 / 20 / 26 + Standard. Excludes Pillow Tabby (own style).
+  "coach-tabby-12": { brand: "Coach", style: "Tabby", size_label: "12",
+    namePredicate: coachModelSize("tabby", "12", TABBY_SIZES, ["pillow"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-tabby-20": { brand: "Coach", style: "Tabby", size_label: "20",
+    namePredicate: coachModelSize("tabby", "20", TABBY_SIZES, ["pillow"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-tabby-26": { brand: "Coach", style: "Tabby", size_label: "26",
+    namePredicate: coachModelSize("tabby", "26", TABBY_SIZES, ["pillow"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-tabby-standard": { brand: "Coach", style: "Tabby", size_label: "Standard",
+    namePredicate: coachModelSize("tabby", null, TABBY_SIZES, ["pillow"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+
+  // Pillow Tabby (#500) — sizes 18 / 26 + Standard.
+  "coach-pillow-tabby-18": { brand: "Coach", style: "Pillow Tabby", size_label: "18",
+    namePredicate: coachPillowTabby("18"), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-pillow-tabby-26": { brand: "Coach", style: "Pillow Tabby", size_label: "26",
+    namePredicate: coachPillowTabby("26"), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-pillow-tabby-standard": { brand: "Coach", style: "Pillow Tabby", size_label: "Standard",
+    namePredicate: coachPillowTabby(null), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+
+  // Rogue (#498) — sizes 17 / 25 / 30 / 39 + Standard.
+  "coach-rogue-17": { brand: "Coach", style: "Rogue", size_label: "17",
+    namePredicate: coachModelSize("rogue", "17", ROGUE_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-rogue-25": { brand: "Coach", style: "Rogue", size_label: "25",
+    namePredicate: coachModelSize("rogue", "25", ROGUE_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-rogue-30": { brand: "Coach", style: "Rogue", size_label: "30",
+    namePredicate: coachModelSize("rogue", "30", ROGUE_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-rogue-39": { brand: "Coach", style: "Rogue", size_label: "39",
+    namePredicate: coachModelSize("rogue", "39", ROGUE_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-rogue-standard": { brand: "Coach", style: "Rogue", size_label: "Standard",
+    namePredicate: coachModelSize("rogue", null, ROGUE_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+
+  // Brooklyn (#501) — sizes 28 / 39 + Standard (the Brooklyn 'large' folds to Standard).
+  "coach-brooklyn-28": { brand: "Coach", style: "Brooklyn", size_label: "28",
+    namePredicate: coachModelSize("brooklyn", "28", BROOKLYN_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-brooklyn-39": { brand: "Coach", style: "Brooklyn", size_label: "39",
+    namePredicate: coachModelSize("brooklyn", "39", BROOKLYN_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-brooklyn-standard": { brand: "Coach", style: "Brooklyn", size_label: "Standard",
+    namePredicate: coachModelSize("brooklyn", null, BROOKLYN_SIZES), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+
+  // Willow (#499) — thin on TRR (Small + Standard).
+  "coach-willow-small": { brand: "Coach", style: "Willow", size_label: "Small",
+    namePredicate: coachModelSize("willow", "small", ["small"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
+  "coach-willow-standard": { brand: "Coach", style: "Willow", size_label: "Standard",
+    namePredicate: coachModelSize("willow", null, ["small"]), minPrice: 40, maxPrice: 3000, rawKey: "coach-models" },
 };
 
 /** Last path segment of a TRR product URL — the stable per-listing slug. */

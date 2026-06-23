@@ -368,6 +368,136 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 12000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // NEXT ICONS 2026-06-23 — Fashionphile-first Tier-1 backbone icons (no browser).
+  // Sizes + tokens validated against the live collection JSON (handle distributions
+  // inspected before writing). requireTokens anchor the size in the handle;
+  // excludeTokens drop SLGs / clutch-WOC sub-models / footwear that share the name.
+  // Ambiguous-size listings (no size token) intentionally fall through to
+  // discovered_listing rather than being mislabeled.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Chanel Coco Handle (#428) — Extra Mini / Mini / Small / Medium / Large. Handle:
+  // "<size>-coco-handle-flap". The plain Mini bucket excludes "extra" (extra-mini
+  // CONTAINS mini); the Coco Handle clutch-with-chain + shopping tote are dropped.
+  {
+    brand: "Chanel", style: "Coco Handle", size_label: "Extra Mini",
+    requireTokens: ["extra-mini-coco-handle"],
+    excludeTokens: ["clutch", "shopping", "wallet", "card"],
+    minPrice: 2000, maxPrice: 15000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  },
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Coco Handle",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["coco-handle", size],
+    excludeTokens: size === "mini"
+      ? ["extra", "clutch", "shopping", "wallet", "card"]
+      : ["clutch", "shopping", "wallet", "card"],
+    minPrice: 2000,
+    maxPrice: 15000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+
+  // Dior Lady Dior (#208) — Nano / Micro / Mini / Small / Medium / Large. Handle:
+  // "<size>-lady-dior". excludeTokens drop the Lady Dior wallet / clutch / chain
+  // pouch / charm SLGs. Dior's collection slug is "christian-dior".
+  ...(["nano", "micro", "mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Lady Dior",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["lady-dior", size],
+    excludeTokens: ["wallet", "clutch", "chain", "charm", "pouch", "card"],
+    minPrice: 700,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
+
+  // Dior Saddle (#209) — Mini / Medium (the standard, unsized "Saddle Bag"). require
+  // "saddle-bag" so the Saddle belt bag / chain wallet / pouch SLGs drop; the Medium
+  // bucket is "saddle-bag minus a Mini token".
+  {
+    brand: "Dior", style: "Saddle", size_label: "Mini",
+    requireTokens: ["mini-saddle-bag"],
+    excludeTokens: ["belt", "chain", "pouch", "wallet"],
+    minPrice: 900, maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  },
+  {
+    brand: "Dior", style: "Saddle", size_label: "Medium",
+    requireTokens: ["saddle-bag"],
+    excludeTokens: ["mini", "belt", "chain", "pouch", "wallet", "clutch"],
+    minPrice: 900, maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  },
+
+  // Bottega Veneta Jodie (#210) — Mini / Small / Teen. Handle: "<size>-jodie".
+  ...(["mini", "small", "teen"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Jodie",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["jodie", size],
+    excludeTokens: ["wallet", "pouch", "card"],
+    minPrice: 700,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Bottega Veneta Cassette (#211) — Extra Mini / Mini / Small (explicit-size only;
+  // the no-size "padded cassette crossbody" stock is size-ambiguous and routes to
+  // discovered_listing rather than being mislabeled). "maxi-intrecciato" in handles
+  // is the WEAVE, not a size — never matched here. excludeTokens drop the Cassette
+  // camera bag / tri-fold wallet / belt bag.
+  {
+    brand: "Bottega Veneta", style: "Cassette", size_label: "Extra Mini",
+    requireTokens: ["extra-mini-cassette"],
+    excludeTokens: ["camera", "wallet", "tri-fold", "belt", "card"],
+    minPrice: 300, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Cassette",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["cassette", size],
+    excludeTokens: size === "mini"
+      ? ["extra", "camera", "wallet", "tri-fold", "belt", "card"]
+      : ["camera", "wallet", "tri-fold", "belt", "card"],
+    minPrice: 300,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Fendi Peekaboo (#205) — Nano / Micro / Petite / Mini / Small / Medium / Large.
+  // Handle: "<size>-peekaboo-..." (the "I See U" and "Iconic" sub-lines both fold to
+  // the Peekaboo style). excludeTokens drop Peekaboo SLGs.
+  ...(["nano", "micro", "petite", "mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "Peekaboo",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["peekaboo", size],
+    excludeTokens: ["wallet", "charm", "pouch", "card"],
+    minPrice: 700,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
+
+  // Fendi Baguette (#204) — Nano / Mini / Medium / Large / Maxi (explicit-size only).
+  // The Baguette has a noisy line (Mama Baguette, charms, baguette sandals/slides,
+  // belt baguette) — excludeTokens drop all of them; the no-size standard Baguette
+  // routes to discovered_listing rather than guessing its size.
+  ...(["nano", "mini", "medium", "large", "maxi"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "Baguette",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["baguette", size],
+    excludeTokens: ["charm", "sandal", "slide", "mule", "pump", "mama", "belt", "wallet", "pouch"],
+    minPrice: 600,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
