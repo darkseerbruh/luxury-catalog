@@ -217,6 +217,26 @@ export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolea
   };
 }
 
+// ── LV Capucines (#436) ───────────────────────────────────────────────────────
+// Mini + letter sizes BB / MM / GM + East-West. EW is checked first (its own backbone
+// variant), then Mini, then the letter buckets (whole-word \b so "mm" can't hide in
+// "monogram"). Unsized listings drop.
+const CAPUCINES_LETTERS = ["bb", "mm", "gm"];
+export function capucinesSize(label: "Mini" | "BB" | "MM" | "GM" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("capucines") || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    if (label === "East-West") return isEW;
+    if (isEW) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = CAPUCINES_LETTERS.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV OnTheGo (#437) ─────────────────────────────────────────────────────────
 // Letter sizes PM / MM / GM + East-West. TRR titles it "OnTheGo" or "On The Go" —
 // both matched. Letter sizes whole-word (\b, so "mm" can't hide in "monogram"); the
@@ -631,6 +651,18 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
   "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
     namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+
+  // ── LV Capucines (#436) — Mini/BB/MM/GM/East-West, share one "lv-capucines" capture. ──
+  "lv-capucines-mini": { brand: "Louis Vuitton", style: "Capucines", size_label: "Mini",
+    namePredicate: capucinesSize("Mini"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-bb": { brand: "Louis Vuitton", style: "Capucines", size_label: "BB",
+    namePredicate: capucinesSize("BB"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-mm": { brand: "Louis Vuitton", style: "Capucines", size_label: "MM",
+    namePredicate: capucinesSize("MM"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-gm": { brand: "Louis Vuitton", style: "Capucines", size_label: "GM",
+    namePredicate: capucinesSize("GM"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-east-west": { brand: "Louis Vuitton", style: "Capucines", size_label: "East-West",
+    namePredicate: capucinesSize("East-West"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
 
   // ── LV OnTheGo (#437) — letter sizes + East-West, share one "lv-onthego" capture. ──
   "lv-onthego-pm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "PM",
