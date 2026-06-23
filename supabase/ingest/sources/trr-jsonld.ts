@@ -224,6 +224,20 @@ export function dianaSize(label: "Mini" | "Small" | "Medium" | "Maxi"): (name: s
   };
 }
 
+// ── LV Coussin (#442) ─────────────────────────────────────────────────────────
+// Letter sizes BB / MM / PM. Whole-word (\b) so a letter can't hide in another word;
+// require "coussin" to exclude other LV bags in a broad search.
+const COUSSIN_SIZES = ["bb", "mm", "pm"];
+export function coussinSize(label: "BB" | "MM" | "PM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("coussin") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = COUSSIN_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV Bumbag (#445) ──────────────────────────────────────────────────────────
 // Two backbone variants: Mini / Standard. TRR titles it "Bumbag" or "Bum Bag" (both
 // matched); other LV belt/utility bags lack "bumbag" so requiring it excludes them.
@@ -767,6 +781,14 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── LV Coussin (#442) — BB / MM / PM, share one "lv-coussin" capture. ──
+  "lv-coussin-bb": { brand: "Louis Vuitton", style: "Coussin", size_label: "BB",
+    namePredicate: coussinSize("BB"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
+  "lv-coussin-mm": { brand: "Louis Vuitton", style: "Coussin", size_label: "MM",
+    namePredicate: coussinSize("MM"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
+  "lv-coussin-pm": { brand: "Louis Vuitton", style: "Coussin", size_label: "PM",
+    namePredicate: coussinSize("PM"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
 
   // ── Gucci Diana (#451) — Mini/Small/Medium/Maxi(=TRR "Large"), one "gucci-diana" capture. ──
   "gucci-diana-mini": { brand: "Gucci", style: "Diana", size_label: "Mini",
