@@ -3,7 +3,9 @@
  * (data/ingest/<source>/*.json) and upsert them into price_history. Resolves
  * brand -> style -> variant by REUSING the proven matcher in
  * src/lib/image-import-core.ts (no new matching logic). Idempotent via the
- * 0021 dedup index (variant_id, platform, price_type, observed_on, sale_price).
+ * 0024 dedup index (variant_id, platform, price_type, observed_on, sale_price,
+ * listing_ref) — listing_ref is populated with a deterministic fallback below so
+ * distinct listings never collapse while re-ingests still dedup.
  *
  * Mirrors supabase/seed/import-variant-images.ts: dry run by default, --write to
  * persist. Needs .env.local with NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY.
@@ -92,7 +94,11 @@ function toRow(o: PriceObservation, variantId: number) {
     condition_detail: o.attrs.condition_detail ?? null,
     inclusions: o.attrs.inclusions ?? null,
     region: o.attrs.region ?? null,
-    listing_ref: o.attrs.listing_ref ?? null,
+    // Per-listing dedup key (migration 0024). Deterministic fallback to source_url
+    // so listing_ref is NEVER null at write time: distinct listings (distinct
+    // listing_ref) stay distinct, while non-listing sources (retail_msrp/wayback)
+    // dedup idempotently on their stable source_url.
+    listing_ref: o.attrs.listing_ref ?? o.source_url,
     enrichment: o.enrichment ?? null,
   };
 }
@@ -153,7 +159,7 @@ async function main() {
 
   const { error } = await supabaseAdmin
     .from("price_history")
-    .upsert(rows, { onConflict: "variant_id,platform,price_type,observed_on,sale_price", ignoreDuplicates: true });
+    .upsert(rows, { onConflict: "variant_id,platform,price_type,observed_on,sale_price,listing_ref", ignoreDuplicates: true });
   if (error) throw error;
   console.log(`Upserted ${rows.length} price row(s). Refresh variant_price_summary to surface them.`);
 }
