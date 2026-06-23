@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/notifications";
 import { Providers } from "./providers";
 import TasteFlusher from "./TasteFlusher";
+import HeaderNav from "@/components/HeaderNav";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -45,82 +46,11 @@ export default async function RootLayout({
         <Providers>
         <TasteFlusher signedIn={!!user} />
         <header className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm print:hidden">
-          <div className="mx-auto flex max-w-5xl items-center justify-between border-b border-border px-5 py-4">
+          <div className="relative mx-auto flex max-w-5xl items-center justify-between border-b border-border px-5 py-4">
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <nav className="flex items-center gap-2 overflow-x-auto [&>a]:shrink-0">
-              <Link
-                href="/identify"
-                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-              >
-                Identify
-              </Link>
-              <Link
-                href="/search"
-                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-              >
-                Search
-              </Link>
-              <Link
-                href="/quiz"
-                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-              >
-                Quiz
-              </Link>
-              <Link
-                href="/posts"
-                className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-              >
-                Articles
-              </Link>
-              {user ? (
-                <>
-                  <Link
-                    href="/feed"
-                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    Feed
-                  </Link>
-                  <Link
-                    href="/closet"
-                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    Closet
-                  </Link>
-                  <Link
-                    href="/watchlist"
-                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    Watchlist
-                  </Link>
-                  <Link
-                    href="/notifications"
-                    className="relative rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    Alerts
-                    {unread > 0 && (
-                      <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
-                        {unread > 9 ? "9+" : unread}
-                      </span>
-                    )}
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                  >
-                    Profile
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  className="rounded-full bg-gold px-4 py-1.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-                >
-                  Log in
-                </Link>
-              )}
-            </nav>
+            <HeaderNav signedIn={!!user} unread={unread} />
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
