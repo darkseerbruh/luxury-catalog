@@ -1,10 +1,31 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (25-icon TRR higher-fidelity pass + Chanel
-Reissue, 4 batches). Companion: `docs/data-collection-handoff.md` (capture
-techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (TRR higher-fidelity
+pass + Chanel Reissue + NEW Loewe brand + YSL Cassandre, 5 batches). Companion:
+`docs/data-collection-handoff.md` (capture techniques) + `docs/data-sourcing-research.md`.*
 
-> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,321
+> **🚀 Batch 5 (2026-06-23 — Loewe brand + 2 deferred icons resolved, prod 11,321 →
+> 11,605, now 14 brands / 325 styles / 665 variants):** Owner said "add all that" →
+> - **NEW BRAND: Loewe (#399, Spain/1846)** — seeded 10 backbone styles (T1 Puzzle/Hammock/
+>   Flamenco/Gate/Goya/Amazona, T2 Puzzle Edge/Squeeze/Basket/Paseo), scaffolded 27 variants
+>   (#809-836), FP-loaded **180 rows** (Puzzle is the hero, 77). **Puzzle made 2-source**
+>   (TRR `loewePuzzleSize`, +75 rows, 62% yr — TRR DOES name Loewe Puzzle model+size). Added
+>   to `catalog-backbone.json`; seed defaults new brands to France/mid so country was patched
+>   to Spain/1846 post-seed.
+> - **YSL Cassandre Envelope (#466) RESOLVED** — FP is ~99% SLGs (only 2 unpriced bags), so
+>   loaded from **TRR's "envelope bag" search** (`cassandreEnvelopeSize`, SLG-guarded): 29 rows
+>   (Small 5/Medium 13/Large 11), 73% yr. Scaffolded Small/Medium/Large (#837-839). FP target
+>   added (catches bags only, future-proof).
+> - **⛔ FINAL dead-end confirmed — Kate Spade (Knott/Sam) + Coach (Field/Bandit):** model-less
+>   in **every available structured feed** — TRR JSON-LD = generic ("Leather Tote"), FP = empty
+>   (Kate Spade) / generic (Coach Field), and **Vestiaire's `model.name` is also EMPTY** ("Leather
+>   tote"); the model appears only in unstructured seller text. Clean sourcing needs the **eBay
+>   Browse API** (`EBAY_APP_ID`/`EBAY_CERT_ID` — NOT set, owner must create an eBay dev app) or a
+>   description-text NLP pass (rejected — risks the never-invent rule). **These 4 styles stay
+>   variant-less until eBay creds exist.**
+> - 385 tests green (81 in `trr-jsonld.test.ts`); tsc/eslint/build green; 5 commits merged.
+
+> **🚀 Earlier this session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,321
 > listed rows (+2,234), TRR now 4,473 rows, 4 batches merged to `main`):**
 > Mission #1 + the full curated-TRR tail (25 icons) + the deferred Chanel 2.55 Reissue
 > made 2-source (batch 4, below) — added a 2nd source (TheRealReal) + per-listing
@@ -158,11 +179,11 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: 11,321 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
-25-icon TRR higher-fidelity pass + the Chanel 2.55 Reissue 2-source add = +2,234 rows
-across 4 batches — see the top banner; TheRealReal is now 4,473 rows). **315 styles /
-634 variants** (the only new variants this session were the 5 scaffolded Reissue sizes
-#804-808). Before this the 62-icon Fashionphile go-wide reached 9,059; earlier ~6,260.
+**Prod total: 11,605 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
+25-icon TRR pass + Chanel Reissue + the NEW Loewe brand + YSL Cassandre = +2,518 rows
+across 5 batches — see the top banner; TheRealReal is now 4,577 rows). **14 brands /
+325 styles / 665 variants** (Loewe brand #399 + 10 styles + 27 variants; Reissue 5 +
+Cassandre Envelope 3 scaffolded). Before this the 62-icon Fashionphile go-wide reached 9,059.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**

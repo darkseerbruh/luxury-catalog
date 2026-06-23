@@ -238,6 +238,38 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Saint Laurent Cassandre Envelope (#466) ──────────────────────────────────
+// Backbone Small / Medium / Large. The YSL Envelope is the Cassandre matelassé/chevron
+// quilted flap. FP is ~99% SLGs (wallets/clutches/pouches) so this loads from TRR's
+// "envelope bag" search instead — guard the same SLG tokens, size whole-word. Unsized
+// envelopes drop (clean per-size split).
+const ENVELOPE_SLG = /wallet|card|coin|pouch|cosmetic|clutch|tablet|pochon|bi-fold|case|continental|zip|key/;
+const ENVELOPE_SIZES = ["small", "medium", "large"];
+export function cassandreEnvelopeSize(label: "Small" | "Medium" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("envelope") || ENVELOPE_SLG.test(n) || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = ENVELOPE_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── Loewe Puzzle (#504) ───────────────────────────────────────────────────────
+// Backbone Mini / Small / Medium / Large. TRR names it "Leather Puzzle Small" etc.
+// (model+size present, unlike Kate Spade/Coach-Field). Exclude "edge" so Puzzle Edge
+// (#510) stays separate; SLG tokens drop accessories. Unsized + nano drop.
+const LOEWE_PUZZLE_SIZES = ["mini", "small", "medium", "large"];
+export function loewePuzzleSize(label: "Mini" | "Small" | "Medium" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("puzzle") || /edge/.test(n) || /charm|wallet|card|coin/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = LOEWE_PUZZLE_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Chanel 2.55 Reissue (#423) ────────────────────────────────────────────────
 // Backbone 224 / 225 / 226 / 227 / Mini. TRR names "Reissue 226 Double Flap" etc.;
 // require "reissue", numeric sizes whole-word + Mini. Reissue-LINE non-flaps (WOC /
@@ -932,6 +964,24 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Saint Laurent Cassandre Envelope (#466) — Small/Medium/Large, share one "ysl-envelope" capture. ──
+  "ysl-envelope-small": { brand: "Saint Laurent", style: "Cassandre Envelope", size_label: "Small",
+    namePredicate: cassandreEnvelopeSize("Small"), minPrice: 500, maxPrice: 6000, rawKey: "ysl-envelope" },
+  "ysl-envelope-medium": { brand: "Saint Laurent", style: "Cassandre Envelope", size_label: "Medium",
+    namePredicate: cassandreEnvelopeSize("Medium"), minPrice: 500, maxPrice: 6000, rawKey: "ysl-envelope" },
+  "ysl-envelope-large": { brand: "Saint Laurent", style: "Cassandre Envelope", size_label: "Large",
+    namePredicate: cassandreEnvelopeSize("Large"), minPrice: 500, maxPrice: 6000, rawKey: "ysl-envelope" },
+
+  // ── Loewe Puzzle (#504) — Mini/Small/Medium/Large, share one "loewe-puzzle" capture. ──
+  "loewe-puzzle-mini": { brand: "Loewe", style: "Puzzle", size_label: "Mini",
+    namePredicate: loewePuzzleSize("Mini"), minPrice: 500, maxPrice: 8000, rawKey: "loewe-puzzle" },
+  "loewe-puzzle-small": { brand: "Loewe", style: "Puzzle", size_label: "Small",
+    namePredicate: loewePuzzleSize("Small"), minPrice: 500, maxPrice: 8000, rawKey: "loewe-puzzle" },
+  "loewe-puzzle-medium": { brand: "Loewe", style: "Puzzle", size_label: "Medium",
+    namePredicate: loewePuzzleSize("Medium"), minPrice: 500, maxPrice: 8000, rawKey: "loewe-puzzle" },
+  "loewe-puzzle-large": { brand: "Loewe", style: "Puzzle", size_label: "Large",
+    namePredicate: loewePuzzleSize("Large"), minPrice: 500, maxPrice: 8000, rawKey: "loewe-puzzle" },
 
   // ── Chanel 2.55 Reissue (#423) — 224/225/226/227/Mini, share one "chanel-reissue" capture. ──
   "chanel-reissue-224": { brand: "Chanel", style: "2.55 Reissue", size_label: "224",

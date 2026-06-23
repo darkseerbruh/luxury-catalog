@@ -33,6 +33,8 @@ import {
   roulisSize,
   attacheSize,
   reissueSize,
+  loewePuzzleSize,
+  cassandreEnvelopeSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -579,6 +581,23 @@ describe("attacheSize (Small / Large)", () => {
     expect(attacheSize("Large")("GG Supreme Attache Large")).toBe(true);
     expect(attacheSize("Small")("GG Supreme Attache")).toBe(true);
     expect(attacheSize("Small")("Web Attache Mini")).toBe(false);
+  });
+});
+
+describe("cassandreEnvelopeSize (Small/Medium/Large, SLG-guarded)", () => {
+  it("buckets the Envelope bag by size and drops SLGs", () => {
+    expect(cassandreEnvelopeSize("Medium")("Leather Envelope Medium")).toBe(true);
+    expect(cassandreEnvelopeSize("Small")("Leather Envelope Medium")).toBe(false);
+    expect(cassandreEnvelopeSize("Medium")("Monogram Envelope Chain Wallet")).toBe(false);
+    expect(cassandreEnvelopeSize("Small")("Cassandre Envelope Pouch")).toBe(false);
+  });
+});
+
+describe("loewePuzzleSize (Mini/Small/Medium/Large, excludes Edge)", () => {
+  it("buckets by whole-word size and keeps Puzzle Edge out", () => {
+    expect(loewePuzzleSize("Small")("Leather Puzzle Small")).toBe(true);
+    expect(loewePuzzleSize("Medium")("Leather Puzzle Small")).toBe(false);
+    expect(loewePuzzleSize("Small")("Calfskin Small Puzzle Edge Bag")).toBe(false);
   });
 });
 
