@@ -29,6 +29,29 @@ flag/`ExperimentExposure` infra already wired into `src/app/page.tsx`.*
   a real price range on a featured bag and links into that bag. This removes the
   duplicate search input and gives the "click into an individual bag" path.
 - **Tiles SHOW value, they don't describe it** (the whole point of the rework).
+- **Tile 4 = ephemeral quiz that feeds a persistent profile.** The homepage quiz is
+  framed as "what do you want, and for what?" (momentary, occasion-aware, no
+  commitment). Every answer quietly enriches the durable taste profile (`/taste`,
+  the Taste Map) in the background. The quiz is today's input; the profile is the
+  accumulation. Resolves the "one blended taste vs. different bags for different
+  occasions" tension without dropping the data-moat profile.
+- **Coveted bags vs. coveted closets are separate surfaces.** Tile 6 = **Most
+  coveted bags** (ranked by want-count, links to bag pages — discovery + GEO).
+  **Coveted closets** stays the social leaderboard on `/closets`. Cross-linked,
+  never conflated.
+
+## Build dependencies (these tiles need backing built first)
+
+- **`/deals` page does not exist yet.** Tile 5 ("See today's deals") needs it.
+  Derivable from existing price data: catalog listings priced under their variant's
+  resale median. Until built, tile 5 is a fake-door ("Notify me") or links to a
+  filtered view, never a dead link.
+- **A global "most-wanted bags" ranking does not exist yet.** Tile 6 needs it
+  (want-counts aggregated across closets). Only a per-user "My Four Grails" feature
+  exists today. Until built, tile 6 is a fake-door or hidden.
+- **Tile 4** needs the quiz answers to persist into the taste profile even when
+  taken from the homepage card (the persistence path exists for `/quiz`; confirm it
+  fires from the inline card too).
 
 ---
 
