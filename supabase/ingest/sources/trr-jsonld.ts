@@ -217,6 +217,23 @@ export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolea
   };
 }
 
+// ── Hermès Herbag (#417) ──────────────────────────────────────────────────────
+// Backbone PM / MM. TRR sizes it mostly by NUMERIC cm (31=PM, 39=MM, "Herbag Zip 31")
+// with a few literal PM/MM. Map both; the opposite size's tokens exclude. The Garden
+// Party and other models in a broad search lack "herbag" so they drop.
+export function herbagSize(label: "PM" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("herbag") || /charm/.test(n)) return false;
+    const wantNum = label === "PM" ? "31" : "39";
+    const otherNum = label === "PM" ? "39" : "31";
+    const wantLetter = label.toLowerCase();
+    const otherLetter = label === "PM" ? "mm" : "pm";
+    if (new RegExp(`\\b${otherNum}\\b`).test(n) || new RegExp(`\\b${otherLetter}\\b`).test(n)) return false;
+    return new RegExp(`\\b${wantNum}\\b`).test(n) || new RegExp(`\\b${wantLetter}\\b`).test(n);
+  };
+}
+
 // ── Hermès Lindy (#416) ───────────────────────────────────────────────────────
 // Mini + numeric 26 / 30 / 34. Mini is checked first (a "Mini Lindy 26" is the Mini
 // variant, not the 26); numerics whole-word. Other Hermès models in a broad Lindy
@@ -681,6 +698,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
   "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
     namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+
+  // ── Hermès Herbag (#417) — PM / MM (numeric 31/39), share one "hermes-herbag" capture. ──
+  "hermes-herbag-pm": { brand: "Hermès", style: "Herbag", size_label: "PM",
+    namePredicate: herbagSize("PM"), minPrice: 500, maxPrice: 12000, rawKey: "hermes-herbag" },
+  "hermes-herbag-mm": { brand: "Hermès", style: "Herbag", size_label: "MM",
+    namePredicate: herbagSize("MM"), minPrice: 500, maxPrice: 12000, rawKey: "hermes-herbag" },
 
   // ── Hermès Lindy (#416) — Mini / 26 / 30 / 34, share one "hermes-lindy" capture. ──
   "hermes-lindy-mini": { brand: "Hermès", style: "Lindy", size_label: "Mini",
