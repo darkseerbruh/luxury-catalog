@@ -4,10 +4,11 @@
 Reissue, 4 batches). Companion: `docs/data-collection-handoff.md` (capture
 techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
 
-> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,139
-> listed rows (+2,052), TRR now 4,391 rows, 3 batches merged to `main`):**
-> Mission #1 + the full curated-TRR tail — added a 2nd source (TheRealReal) + per-listing
-> year to **25 icons** (every backbone icon with meaningful TRR inventory) via **curated
+> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,321
+> listed rows (+2,234), TRR now 4,473 rows, 4 batches merged to `main`):**
+> Mission #1 + the full curated-TRR tail (25 icons) + the deferred Chanel 2.55 Reissue
+> made 2-source (batch 4, below) — added a 2nd source (TheRealReal) + per-listing
+> year to **26 icons total** via **curated
 > per-size TRR targets** (the §3 browser-gated JSON-LD flow; all 25 captures clean,
 > **0 rate-limit blocks** the entire session, gentle ~450ms sequential, one icon per
 > ~5-min window with load/code work between as the cooldown). Every one is now **2-source**.
