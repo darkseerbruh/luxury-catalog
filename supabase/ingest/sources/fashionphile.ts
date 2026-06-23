@@ -1456,6 +1456,36 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 7000,
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // BURBERRY ICONS 2026-06-23 (batch 8) — Burberry permanent icons (Fashionphile-
+  // first, no browser). Validated against the live Burberry collection JSON.
+  // (Kate Spade has an empty FP collection — not an FP source, like Coach.)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Burberry Knight (#198) — the crossbody/shoulder, size Small. TRAP: "knight" is
+  // also a Burberry COLORWAY ("...duffle-bag-knight") and appears on scarves + the
+  // "rose clutch"; require a size + excludeTokens drop scarf/duffle/clutch/peg.
+  {
+    brand: "Burberry", style: "The Knight", size_label: "Small",
+    requireTokens: ["knight", "small"],
+    excludeTokens: ["scarf", "duffle", "clutch", "rose", "peg", "wallet"],
+    minPrice: 400, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  },
+
+  // Burberry Lola (#199) — the quilted camera bag, sizes Mini / Small. excludeTokens
+  // drop the Lola bum bag + wallets.
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Burberry",
+    style: "Lola",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["lola", size],
+    excludeTokens: ["bum", "wallet", "card"],
+    minPrice: 400,
+    maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
