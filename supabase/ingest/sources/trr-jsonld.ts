@@ -238,6 +238,15 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── LV Petite Malle (#443) ────────────────────────────────────────────────────
+// One backbone variant (Standard). Require the full "petite malle" phrase — a broad
+// search returns Montaigne/Carmel/Métis/Trunk Clutch + a "Petit Malle" typo. The
+// Souple soft version folds into Standard (same icon, no separate variant).
+export function petiteMalleStandard(name: string): boolean {
+  const n = name.toLowerCase();
+  return n.includes("petite malle") && !/charm/.test(n);
+}
+
 // ── LV Dauphine (#441) ────────────────────────────────────────────────────────
 // Micro / Mini / MM / GM. Micro & Mini are distinct whole words; a broad Dauphine
 // search pulls many other LV bags so require "dauphine".
@@ -876,6 +885,10 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── LV Petite Malle (#443) — single Standard variant. ──
+  "lv-petite-malle-standard": { brand: "Louis Vuitton", style: "Petite Malle", size_label: "Standard",
+    namePredicate: petiteMalleStandard, minPrice: 400, maxPrice: 15000, rawKey: "lv-petite-malle" },
 
   // ── LV Dauphine (#441) — Micro/Mini/MM/GM, share one "lv-dauphine" capture. ──
   "lv-dauphine-micro": { brand: "Louis Vuitton", style: "Dauphine", size_label: "Micro",
