@@ -1,8 +1,26 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23. Companion:
-`docs/data-collection-handoff.md` (capture techniques in depth) +
-`docs/data-sourcing-research.md` (legal posture).*
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (Gucci-TRR +
+next-icons + Coach batch). Companion: `docs/data-collection-handoff.md` (capture
+techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
+
+> **Latest batch (2026-06-23, this session) — prod 5,130 → 6,260 listed rows:**
+> - **Gucci curated TRR** (the deferred #1): Super-Mini-aware `dionysusSize` +
+>   1955-anchored `horsebitSize` predicates (footwear/SLG guarded). Captured
+>   `gucci-wide` (477 records) → Dionysus 49/57/93/45 · Horsebit 66/44/107 · Jackie +
+>   Marmont refreshed. **Super Mini stayed correctly separate** (the whole point).
+>   Floors lowered (Dio $350, Horsebit $450) to keep TRR's real worn low-end.
+> - **7 Fashionphile next-icons** (no browser, ~701 rows): Coco Handle · Lady Dior ·
+>   Saddle · Jodie · Cassette · Peekaboo · Baguette. Ambiguous-size stock
+>   (Cassette/Baguette no-size, weave-vs-size traps) routed to `discovered_listing`.
+> - **Coach curated TRR** (the viral thrift engine): Tabby/Pillow Tabby/Rogue/Brooklyn/
+>   Willow, ~200 rows. ⚠️ **TRR limitation found:** TRR exposes Coach's model+size in
+>   the JSON-LD name only for CONTEMPORARY Coach; **vintage Coach is generic-named**
+>   ("Leather Shoulder Bag", model-less desc) and NOT curatable from TRR structured
+>   data. Use per-MODEL searches (`coach tabby`, not generic `coach`) to surface
+>   model-named listings. Variants #563–610 scaffolded.
+> - **TRR rate limit held at ~799 gentle fetches, 0 blocks** this session (sequential
+>   ~450ms `__fetchGentle`, localStorage accumulator across navigations + cooldowns).
 
 > **Sync first:** `git fetch origin && git checkout main && git pull`. Read this +
 > `docs/preferences.md`. Everything below is on `main` unless marked otherwise.
@@ -45,7 +63,9 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: ~5,102 listed rows + 209 `discovered_listing`** as of 2026-06-23 (late PM).
+**Prod total: ~6,260 listed rows + 209 `discovered_listing`** as of 2026-06-23 (this
+batch added ~1,130: Gucci TRR + 7 FP next-icons + Coach — see the banner at the top).
+Earlier in the day it was ~5,102.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**
@@ -256,7 +276,10 @@ unattended; prepare a dry-run plan for the owner.
   per-icon size variants). Icon variant_ids: Boy 513-516, Jackie 517-520, Luggage Tote 521-524,
   Loulou 525-528. **Wide batch (529-562):** Constance 529-530 · Gabrielle 531-533 · WOC 534 ·
   Dionysus 535-538 · Horsebit 1955 539-541 · Triomphe 542-546 · Classic Box 547-549 · Sac de
-  Jour 550-554 · Kate 555-557 · Chanel 19 558-561 · Kelly 35 562.
+  Jour 550-554 · Kate 555-557 · Chanel 19 558-561 · Kelly 35 562. **This batch (563-610):**
+Coco Handle 563-567 · Lady Dior 568-573 · Saddle 574-575 · Jodie 576-578 · Cassette 579-581 ·
+Peekaboo 582-588 · Baguette 589-593 · Coach Tabby 594-597 · Pillow Tabby 598-600 ·
+Rogue 601-605 · Brooklyn 606-608 · Willow 609-610.
 
 ---
 
@@ -268,14 +291,19 @@ unattended; prepare a dry-run plan for the owner.
    ~~Demonstrate `discovered_listing`~~ **DONE** (§5). ~~Celine #207→#484 merge plan~~ **DONE**
    (`docs/celine-luggage-merge-plan.md`, owner-gated).
 2b. ~~TRR brand-wide catch-all for Celine / Hermès / Saint Laurent / Chanel~~ **DONE** (§1; 480
-    fetches, 0 blocks, +TRR year on the new icons, discovered → 209). **Remaining TRR:**
-    - **Gucci curated TRR** (Dionysus needs a Super-Mini-aware predicate — do NOT catch-all it,
-      it would mislabel Super Mini → Mini and pollute the FP split). Add curated `trr-jsonld.ts`
-      TARGETS for Dionysus/Horsebit 1955 (+ refresh Jackie/Marmont) and capture a `gucci-wide`.
-    - **Optional higher-fidelity re-do:** the 4 brands' new icons currently have *catch-all*
-      (low-confidence, best-effort size) TRR. If per-size precision matters, add curated TRR
-      targets for Constance/19/Gabrielle/WOC/Sac de Jour/Kate and re-capture (the FP per-size
-      data is already high-confidence, so this is polish, not a blocker).
+    fetches, 0 blocks, +TRR year on the new icons, discovered → 209).
+2c. ~~**Gucci curated TRR** (Super-Mini-aware Dionysus + Horsebit)~~ **DONE** this session.
+2d. ~~**Coach full depth**~~ **DONE** this session (curated per-model; see the TRR Coach
+    limitation in the top banner — vintage Coach is generic-named & not curatable from TRR).
+    **Remaining TRR (still open, all OPTIONAL polish):**
+    - **Higher-fidelity re-do of the 4 catch-all brands' new icons:** Constance/19/Gabrielle/
+      WOC/Sac de Jour/Kate currently have *catch-all* (low-confidence) TRR. Curated TRR targets
+      would add per-size precision + year. FP per-size data is already high-confidence → polish.
+    - **More Coach models** (Field, Bandit, Swagger, vintage Willis/Rambler/Station): Field/Bandit
+      are thin on TRR; vintage models are model-LESS in TRR JSON-LD (see banner) → would need a
+      non-TRR source. Tabby/Rogue/Brooklyn (the hyped modern ones) are the high-value ones, done.
+    - **Coco Handle / Lady Dior / Saddle / Jodie / Cassette / Peekaboo / Baguette** have FP only
+      (high-confidence per-size); a TRR pass would add year + 2nd source (polish).
 3. **Go wide — next icons (the proven per-icon recipe, now faster):**
    - **(a) Fashionphile FIRST (no browser, fast):** `tsx supabase/ingest/sources/fashionphile-collection.ts
      <brand-slug> <token>` → `tsx supabase/ingest/sources/fashionphile.ts --raw`.
