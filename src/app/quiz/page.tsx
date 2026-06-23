@@ -13,9 +13,9 @@ export const metadata = {
 export default async function QuizPage({
   searchParams,
 }: {
-  searchParams: Promise<{ done?: string }>;
+  searchParams: Promise<{ done?: string; seed?: string }>;
 }) {
-  const { done } = await searchParams;
+  const { done, seed } = await searchParams;
   const [user, taste] = await Promise.all([getCurrentUser(), getUserTaste()]);
 
   // Show the result card when they just finished, or already have a taste profile.
@@ -24,6 +24,14 @@ export default async function QuizPage({
   const initialResult = showResult && taste.hasQuiz
     ? { name: named.name, tagline: named.tagline, completeness: taste.completeness }
     : null;
+
+  // A `seed` deep link from the homepage tile pre-answers the first question.
+  // Validate it against that question's real options before trusting it.
+  const firstQuestion = TASTE_QUESTIONS[0];
+  const seedAnswer =
+    seed && firstQuestion.options.some((o) => o.value === seed)
+      ? { questionId: firstQuestion.id, value: seed }
+      : null;
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-8 px-5 py-12">
@@ -40,6 +48,7 @@ export default async function QuizPage({
         questions={TASTE_QUESTIONS}
         signedIn={Boolean(user)}
         initialResult={initialResult}
+        seedAnswer={seedAnswer}
       />
     </main>
   );

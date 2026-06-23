@@ -23,17 +23,32 @@ export default function QuizClient({
   questions,
   signedIn,
   initialResult,
+  seedAnswer,
 }: {
   questions: TasteQuizQuestion[];
   signedIn: boolean;
   initialResult: ResultCard | null;
+  /** First answer carried in from the homepage "Find the bag for me" tile. */
+  seedAnswer?: { questionId: string; value: string } | null;
 }) {
   const router = useRouter();
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  // The homepage tile renders the first question inline; tapping an option deep
+  // links here with that answer so the quiz opens on question two rather than
+  // restarting. We seed the INITIAL state (no effect) to avoid cascading renders,
+  // and ignore the seed if the visitor already has a result to show.
+  const seedIndex = seedAnswer ? questions.findIndex((q) => q.id === seedAnswer.questionId) : -1;
+  const validSeed = seedAnswer && seedIndex !== -1 && !initialResult ? seedAnswer : null;
+
+  const [step, setStep] = useState(() =>
+    validSeed ? Math.min(seedIndex + 1, questions.length - 1) : 0
+  );
+  const [answers, setAnswers] = useState<Record<string, string>>(() =>
+    validSeed ? { [validSeed.questionId]: validSeed.value } : {}
+  );
   const [result, setResult] = useState<ResultCard | null>(initialResult);
   const [error, setError] = useState<string | null>(null);
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(() => validSeed !== null);
   const [pending, startTransition] = useTransition();
 
   const total = questions.length;

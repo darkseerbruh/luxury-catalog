@@ -21,6 +21,13 @@
 - **She supplies her own source material and wants analysis grounded in it**, not your assumptions — e.g. she pasted full YouTube transcripts so you'd extract her favorite creators' *actual* phrasing. Prefer real sources over guessing; if a source can't be fetched (e.g. transcript host blocks it), say so plainly and ask her for it rather than characterizing from memory.
 - **Wants honest go/no-go verdicts, not just yes-and.** She'll ask *"is that even worth doing?"* — give a candid recommendation with the tradeoff, even if the answer is "marginal" (e.g. she accepted that collection tax-tracking is valuable to flippers but minor for most users). Don't oversell a feature just because it's buildable. **This holds even after she's said "build it":** if the data can't honestly support the full feature, **trim it to what's real and say so** (e.g. shipped variant-level era context but deferred the per-listing year matrix because no feed carries a reliable item year) rather than fabricating to fill the design.
 - **Designs from pasted competitor screenshots, iterated visually.** She drops UI screenshots (Google Shopping, KBB, Google Flights, etc.) as *design briefs* and wants the patterns **synthesized into one coherent, glanceable story** — not each cloned separately. During brainstorm, **render concepts as visual mockups she can react to** (inline widgets) in the product's own dark/gold/serif look, then converge through her reactions. Prose-only design proposals under-serve her.
+- **A/B tests isolate ONE variable (locked 2026-06-23).** She corrected a test that
+  changed both the headline and the interaction at once: *"this is poor testing
+  practice... we can't know which variable drove the change."* Every experiment
+  variant must differ from its control by exactly one thing (copy OR layout OR
+  mechanic, never several), so the result is attributable. She also frames feature
+  ideas as explicit **hypotheses** ("We believe X will cause Y because Z, measured
+  by [metric]") for multivariate learning.
 - **When she can't yet pick a priority, instrument and let usage data decide** — don't force the call. She declined to choose the "most common / most monetizable" user for the value module ("not sure without usage data") and chose to build it **adaptive + instrumented** so real behavior answers it. Default to measurable designs (an impression/intent event paired with the downstream conversion) over speculative prioritization, and say what the data will later reveal.
 - **She may open broad, then narrow to the specific feature she actually means** mid-task (*"I'm specifically talking about…"*) — follow the refined intent, don't keep answering the wider question.
 - **She likes the research → documentation → shipped guardrails pipeline.** When you research a risk, also turn the findings into concrete changes (the finance-compliance research led directly to footer disclosures + legal pages). After a doc lands she'll often ask *"anything we need to do to the UX?"* — anticipate the build step.
@@ -108,6 +115,15 @@
 - **Reference creators she loves (learn-from, don't copy):** **Je Suis Lou** (primary tonal model — informed-but-warm, anti-snobbery, transparency-as-mission, joy/memory-led value, "we don't judge"); @relaxitsonlyfashion (deadpan + deep passion); @AlexandraAnele (approachable + exacting); @juliareingoldproductions (human-on-the-other-side; the founder-persona model). Brand canon: Mr Porter ("would you say it in the pub?"), Mailchimp-minus-quirk (clear over clever), Aesop (no superlatives), Ffern (make the mechanics feel human).
 - **Content channels chosen** (canonical: `docs/social-content-calendar.md`): Pinterest, Email/Newsletter, Instagram, TikTok/YouTube Shorts. Evaluate formats by **revenue proximity × solo-operator effort**; every post drives to a real page; **batch the video**; the newsletter opt-in is a known unbuilt dependency.
 - **Pinterest is an *outbound* channel only** — a visual-search/shopping engine for *driving* high-intent shoppers to bag pages (Rich Pins) and for **creator collaborative/group boards**; she explicitly decided it is **not** an on-site embed source like YouTube/Instagram ("no need to consider embedding").
+- **No em dashes (—), ever (locked 2026-06-23).** She called this out directly:
+  em dashes are out across all user-facing copy. Use a period, comma, colon, or
+  parentheses instead (rationale + replacement guidance now in `docs/voice-and-tone.md`
+  §7–8). The one deliberate exception she approved: the tagline *"Know what it's
+  worth — and what it's worth to you"* keeps its dash; everything else obeys the rule.
+- **Apply the FULL `docs/voice-and-tone.md`, not the summary.** She asked point-blank
+  whether the voice guide was being used when drafting copy; draft against the
+  canonical guide (run the §8 slop sweep + the human-review checklist), don't rely
+  on the condensed voice notes in this file.
 - **The voice is a standing gate, not a one-time pass.** Parallel feature sessions ship user-facing copy *without* the guide and reintroduce banned patterns — a later overhaul re-added the hype word *"definitive"* in the footer and leaked an internal *"migration 0014"* string into a user-facing error. So when `main` moves or you reconcile sessions, **re-check new/changed user-facing copy against `docs/voice-and-tone.md`** and fix the drift. Mechanics that held up well: a copy-only pass touching *only* display strings (headings, labels, empty states, errors, metadata) while leaving code/structure/data untouched, **preserving every hedge & legal disclosure verbatim**, and **never inventing facts** (e.g. dropped an "what it's worth" CTA on `/identify` because the tool returns no value).
 
 ## Surfacing features on the home/entry pages (UX copy)
