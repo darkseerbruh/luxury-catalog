@@ -133,7 +133,7 @@ export default async function Home() {
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
           <h2 className="font-serif text-2xl text-foreground">
-            The bags everyone keeps coming back to
+            It bags of all time
           </h2>
           <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
             {heroCards.map((card) => (
