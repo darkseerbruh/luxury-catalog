@@ -866,6 +866,132 @@ const TARGETS: FashionphileTarget[] = [
     minPrice: 1500, maxPrice: 6000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
   },
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // HERMÈS ICONS 2026-06-23 (batch 4) — Hermès permanent non-Birkin/Kelly icons
+  // (Fashionphile-first, no browser). Numeric cm sizes match the existing Birkin/
+  // Kelly/Constance convention and are anchored "-NN-" so a product-id digit can't
+  // false-match. Validated against the live Hermès collection JSON.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Picotin Lock (#414) — sizes 18 (PM) / 22 (MM) / 26 (GM) + Micro. excludeTokens
+  // drop the Picotin charm / strap.
+  ...(["18", "22", "26"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Picotin Lock",
+    size_label: size,
+    requireTokens: ["picotin", `-${size}-`],
+    excludeTokens: ["charm", "wallet", "strap"],
+    minPrice: 1500,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+  {
+    brand: "Hermès", style: "Picotin Lock", size_label: "Micro",
+    requireTokens: ["picotin", "micro"],
+    excludeTokens: ["charm", "wallet", "strap"],
+    minPrice: 1500, maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+
+  // Bolide (#415) — sizes Mini / 25 / 27 / 31 / 35. The "1923" in "bolide-1923-31"
+  // is the LINE name, not a size (the real size is the anchored "-31-"). excludeTokens
+  // drop the Bolide on-wheels charm / à dos backpack / slim wallet.
+  {
+    brand: "Hermès", style: "Bolide", size_label: "Mini",
+    requireTokens: ["bolide", "mini"],
+    excludeTokens: ["charm", "wallet", "wheels", "backpack", "a-dos", "slim"],
+    minPrice: 2500, maxPrice: 14000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  ...(["25", "27", "31", "35"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Bolide",
+    size_label: size,
+    requireTokens: ["bolide", `-${size}-`],
+    excludeTokens: ["charm", "wallet", "wheels", "backpack", "a-dos", "slim"],
+    minPrice: 2500,
+    maxPrice: 14000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+
+  // Lindy (#416) — sizes Mini (20) / 26 / 30 / 34. excludeTokens drop the Lindy charm/
+  // wallet.
+  {
+    brand: "Hermès", style: "Lindy", size_label: "Mini",
+    requireTokens: ["lindy", "mini"],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 3000, maxPrice: 13000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  ...(["26", "30", "34"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Lindy",
+    size_label: size,
+    requireTokens: ["lindy", `-${size}-`],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 3000,
+    maxPrice: 13000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+
+  // Herbag (#417) — sizes PM (31) / MM (39); the "Zip" is the same bag's closure
+  // variant, folded into its size. excludeTokens drop the Herbag charm/wallet.
+  ...(["pm", "mm"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Herbag",
+    size_label: size.toUpperCase(),
+    requireTokens: ["herbag", size],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 1200,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
+
+  // Kelly Pochette (#418) — the evening clutch, one size (Standard). Very high band
+  // (a coveted exotic-adjacent clutch). excludeTokens drop any wallet.
+  {
+    brand: "Hermès", style: "Kelly Pochette", size_label: "Standard",
+    requireTokens: ["kelly-pochette"],
+    excludeTokens: ["wallet"],
+    minPrice: 8000, maxPrice: 45000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+
+  // Roulis (#419) — sizes Mini / 23. excludeTokens drop the Roulis slim wallet.
+  {
+    brand: "Hermès", style: "Roulis", size_label: "Mini",
+    requireTokens: ["roulis", "mini"],
+    excludeTokens: ["wallet", "slim"],
+    minPrice: 3000, maxPrice: 10000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  {
+    brand: "Hermès", style: "Roulis", size_label: "23",
+    requireTokens: ["roulis", "-23-"],
+    excludeTokens: ["wallet", "slim"],
+    minPrice: 3000, maxPrice: 10000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+
+  // Jypsière (#420) — sizes Mini / 28 / 31 / 34. excludeTokens drop any wallet.
+  {
+    brand: "Hermès", style: "Jypsière", size_label: "Mini",
+    requireTokens: ["jypsiere", "mini"],
+    excludeTokens: ["wallet"],
+    minPrice: 2500, maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  },
+  ...(["28", "31", "34"] as const).map((size) => ({
+    brand: "Hermès",
+    style: "Jypsière",
+    size_label: size,
+    requireTokens: ["jypsiere", `-${size}-`],
+    excludeTokens: ["wallet"],
+    minPrice: 2500,
+    maxPrice: 9000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
