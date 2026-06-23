@@ -7,6 +7,7 @@ import { FeedItem } from "@/components/FeedItem";
 import Recommendations from "@/components/Recommendations";
 import PersonalizedRecs from "@/components/PersonalizedRecs";
 import PersonaRouter from "@/components/PersonaRouter";
+import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
 import { PostHogFlagBootstrap } from "@/components/PostHogFlagBootstrap";
 import { ExperimentExposure } from "@/components/ExperimentExposure";
@@ -96,7 +97,7 @@ export default async function Home() {
           <input
             name="q"
             type="search"
-            placeholder="Find a brand or style…"
+            placeholder="Look up any bag: prices, authentication, history"
             className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
           />
           <button
@@ -129,6 +130,8 @@ export default async function Home() {
       )}
 
       <PersonaRouter />
+
+      <CommunityLeaderboards />
 
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">

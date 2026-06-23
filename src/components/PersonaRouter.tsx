@@ -1,99 +1,164 @@
 import Link from "next/link";
+import { TASTE_QUESTIONS } from "@/lib/taste";
 
 /**
- * Persona router — leads with the value prop for each of the catalog's use cases
- * so a stranger arriving from search/GEO/social is hooked by *why* a feature is
- * for them, not just handed a list. Grounded in NN/g information-scent and the
- * "lead with the use case" model (see docs/ux/home-use-case-value-props.md).
+ * "What brings you in?" — the homepage goal-picker. Each tile SHOWS its value
+ * (a visual, a real interaction) rather than describing it, and leads a distinct
+ * audience to the right surface. Grounded in NN/g information-scent and
+ * docs/ux/home-use-case-value-props.md + docs/ux/homepage-experiments.md.
  *
- * The two image-upload use cases — "is this authentic?" (the cautious buyer) and
- * "I found one thrifting" (the bargain hunter) — share one destination (`/identify`),
- * so they're shown ONCE as a single combined hook instead of two chips that go to
- * the same place.
+ * Search lives ONCE, in the page hero (Option 1 of the search-IA review), so no
+ * tile repeats a search box. Tiles that point at data pages (deals, most-wanted)
+ * pitch the value here and deliver the real data on the linked page. We never put
+ * fabricated figures on these tiles (never-invent): visuals are illustrative and
+ * unlabeled, real numbers appear on the destination page.
  */
 
-type UseCase = {
-  label: string;
-  blurb: string;
-  href: string;
-  cta: string;
-};
+const Q1 = TASTE_QUESTIONS[0];
 
-// The combined image-upload hook. Its value prop has to land for BOTH the
-// authentication-anxious buyer and the thrift/estate-sale hunter, because the
-// same photo-scan flow serves both.
-const SCAN: UseCase = {
-  label: "Is it real — and what's it worth?",
-  blurb:
-    "Snap a photo of any bag — a thrift-store score or a resale listing you're about to trust — and match it against the catalog's authentication markers, date codes, and real resale prices. Whether it's a $20 estate-sale find or a five-figure buy, one scan tells you if it's genuine and what it actually sells for.",
-  href: "/identify",
-  cta: "Scan a bag",
-};
+function Check({ className = "text-gold" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={`h-4 w-4 flex-shrink-0 ${className}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 8.5l3 3 7-8" />
+    </svg>
+  );
+}
+function Cross({ className = "text-muted" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={`h-4 w-4 flex-shrink-0 ${className}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M4 4l8 8M12 4l-8 8" />
+    </svg>
+  );
+}
+function Bag({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M4 8h16l-1.2 11.2a1 1 0 0 1-1 .8H6.2a1 1 0 0 1-1-.8L4 8z" />
+      <path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8" />
+    </svg>
+  );
+}
 
-const USE_CASES: UseCase[] = [
-  {
-    label: "Collect & invest",
-    blurb:
-      "Production history, materials, and what each piece actually resells for — the detail you need to buy and hold with confidence.",
-    href: "/#brands",
-    cta: "Browse the catalog",
-  },
-  {
-    label: "Buy & resell",
-    blurb:
-      "Price trends and where to buy — and where to sell — so you know a fair number before you spend or list.",
-    href: "/search",
-    cta: "Check prices",
-  },
-  {
-    label: "My first designer bag",
-    blurb:
-      "New to this? Find your taste in 60 seconds, then research the markers, sizes, and prices before you commit.",
-    href: "/quiz",
-    cta: "Find your taste",
-  },
-];
+const CTA = "mt-4 text-sm font-medium text-gold transition-colors group-hover:text-gold-soft";
+const TILE = "group flex flex-col rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold";
 
 export default function PersonaRouter() {
   return (
     <section className="border-b border-border px-5 py-12">
       <h2 className="font-serif text-2xl text-foreground">What brings you in?</h2>
-      <p className="mt-1 text-sm text-muted">
-        Pick a goal — we&rsquo;ll take you straight to the part built for it.
-      </p>
+      <p className="mt-1 text-sm text-muted">Pick a goal. We&rsquo;ll take you straight there.</p>
 
-      {/* Featured combined hook: the photo-scan that serves both the
-          "is it authentic?" buyer and the thrift hunter. */}
-      <Link
-        href={SCAN.href}
-        className="group mt-6 flex flex-col rounded-2xl border border-gold/40 bg-gold/5 p-6 transition-colors hover:border-gold sm:p-7"
-      >
-        <p className="text-xs uppercase tracking-widest text-gold">
-          Spotted one in the wild?
-        </p>
-        <p className="mt-2 font-serif text-xl text-foreground sm:text-2xl">
-          {SCAN.label}
-        </p>
-        <p className="mt-2 max-w-2xl text-sm text-muted">{SCAN.blurb}</p>
-        <p className="mt-4 text-sm font-medium text-gold transition-colors group-hover:text-gold-soft">
-          {SCAN.cta} &rarr;
-        </p>
-      </Link>
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {/* Tile 1 — Is it real? (the photographable authentication hook) */}
+        <Link href="/identify" className={`${TILE} border-gold/40 bg-gold/5 hover:border-gold`}>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-serif text-xl text-foreground">Is it real?</h3>
+              <p className="mt-1 text-sm text-muted">Found a bag in the wild? We can help.</p>
+            </div>
+            {/* phone photographing a bag — makes the camera action obvious */}
+            <svg viewBox="0 0 44 64" className="h-16 w-11 flex-shrink-0 text-gold" fill="none" stroke="currentColor" aria-hidden>
+              <rect x="2" y="2" width="40" height="60" rx="7" strokeWidth="1.5" />
+              <rect x="7" y="9" width="30" height="40" rx="3" className="text-border" strokeWidth="1.2" />
+              <g strokeWidth="1.2" strokeLinecap="round">
+                <path d="M12 16v-3h3M32 13h3v3M12 45h3M32 45h3" />
+              </g>
+              <g transform="translate(15,22)" strokeWidth="0.9" opacity="0.8">
+                <path d="M1 4h12l-1 9a1 1 0 0 1-1 .9H4a1 1 0 0 1-1-.9z" />
+                <path d="M4.5 4V3a3 3 0 0 1 6 0v1" />
+              </g>
+              <circle cx="22" cy="55" r="3.5" strokeWidth="1.5" />
+            </svg>
+          </div>
+          <ul className="mt-3 space-y-1.5 text-sm">
+            <li className="flex items-center gap-2 text-foreground"><Check /> Even stitching</li>
+            <li className="flex items-center gap-2 text-foreground"><Check /> Date code checks out</li>
+            <li className="flex items-center gap-2 text-muted"><Cross /> Crooked logo? Fake.</li>
+          </ul>
+          <span className={CTA}>Scan a bag &rarr;</span>
+        </Link>
 
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {USE_CASES.map((p) => (
-          <Link
-            key={p.label}
-            href={p.href}
-            className="group flex flex-col rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold"
-          >
-            <p className="font-serif text-lg text-foreground">{p.label}</p>
-            <p className="mt-1 flex-1 text-sm text-muted">{p.blurb}</p>
-            <p className="mt-3 text-sm text-gold transition-colors group-hover:text-gold-soft">
-              {p.cta} &rarr;
-            </p>
-          </Link>
-        ))}
+        {/* Tile 2 — Collect & invest (track a whole collection) */}
+        <Link href="/closet" className={TILE}>
+          <h3 className="font-serif text-xl text-foreground">Collect &amp; invest</h3>
+          <p className="mt-1 text-sm text-muted">Track what you own. Watch what it&rsquo;s worth.</p>
+          <div className="mt-4 flex flex-1 items-center gap-3">
+            <Bag className="h-10 w-10 text-gold/50" />
+            <Bag className="h-12 w-12 text-gold/80" />
+            <Bag className="h-10 w-10 text-gold/50" />
+            <svg viewBox="0 0 90 40" className="ml-auto h-10 w-24 text-gold" fill="none" aria-hidden>
+              <path d="M2 34 L20 30 L38 24 L56 22 L74 12 L88 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              <circle cx="88" cy="4" r="3" fill="currentColor" className="text-gold-soft" />
+            </svg>
+          </div>
+          <span className={CTA}>Track your closet &rarr;</span>
+        </Link>
+
+        {/* Tile 3 — What's it worth? (worth demo, not a search box) */}
+        <Link href="/bag/199" className={TILE}>
+          <h3 className="font-serif text-xl text-foreground">What&rsquo;s it worth?</h3>
+          <p className="mt-1 text-sm text-muted">A peek at the full price story behind any bag.</p>
+          <div className="mt-5 flex-1">
+            <div className="relative">
+              <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[11px] text-foreground">median</span>
+              <div className="h-2.5 rounded-full bg-gradient-to-r from-border via-gold/40 to-gold" />
+              <span className="absolute -top-1 left-1/2 h-4 w-0.5 -translate-x-1/2 bg-foreground" />
+            </div>
+            <div className="mt-1.5 flex justify-between text-[11px] text-muted"><span>low</span><span>high</span></div>
+            <p className="mt-4 text-[11px] text-muted">price over time</p>
+            <svg viewBox="0 0 320 40" className="mt-1 h-10 w-full text-gold" fill="none" aria-hidden>
+              <path d="M2 36 L60 32 L120 28 L180 20 L240 14 L318 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </div>
+          <span className={CTA}>See the full price story &rarr;</span>
+        </Link>
+
+        {/* Tile 4 — Find the bag for me (the quiz starts inline) */}
+        <div className={`${TILE} hover:border-border`}>
+          <h3 className="font-serif text-xl text-foreground">Find the bag for me</h3>
+          <p className="mt-1 text-sm text-muted">{Q1.prompt}</p>
+          <div className="mt-3 flex flex-1 flex-col gap-2">
+            {Q1.options.map((opt) => (
+              <Link
+                key={opt.value}
+                href={`/quiz?seed=${encodeURIComponent(opt.value)}`}
+                className="rounded-xl border border-border bg-surface-raised px-4 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold-soft"
+              >
+                {opt.label}
+              </Link>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-muted">
+            Question 1 of {TASTE_QUESTIONS.length}.{" "}
+            <span className="text-gold">No account needed.</span>
+          </p>
+        </div>
+
+        {/* Tile 5 — Best deals right now (pitch; /deals delivers the live data) */}
+        <Link href="/deals" className={TILE}>
+          <h3 className="font-serif text-xl text-foreground">Best deals right now</h3>
+          <p className="mt-1 text-sm text-muted">Listings priced under the resale median.</p>
+          <div className="mt-4 flex flex-1 items-center">
+            <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs text-gold-soft">under median</span>
+            <svg viewBox="0 0 60 24" className="ml-3 h-6 w-16 text-gold" fill="none" aria-hidden>
+              <path d="M2 4 L20 10 L38 16 L58 22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M58 22 l-6 -2 m6 2 l-2 -6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </div>
+          <span className={CTA}>See today&rsquo;s deals &rarr;</span>
+        </Link>
+
+        {/* Tile 6 — Most coveted bags (distinct from coveted closets; /coveted ranks) */}
+        <Link href="/coveted" className={TILE}>
+          <h3 className="font-serif text-xl text-foreground">Most coveted bags</h3>
+          <p className="mt-1 text-sm text-muted">The bags the most people want right now.</p>
+          <div className="mt-4 flex flex-1 items-center gap-2 text-muted">
+            <Bag className="h-8 w-8 text-gold/70" />
+            <Bag className="h-8 w-8 text-gold/45" />
+            <Bag className="h-8 w-8 text-gold/30" />
+          </div>
+          <span className={CTA}>See the most-wanted bags &rarr;</span>
+        </Link>
       </div>
     </section>
   );
