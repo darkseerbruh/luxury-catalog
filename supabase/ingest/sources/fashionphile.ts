@@ -236,6 +236,17 @@ const TARGETS: FashionphileTarget[] = [
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   },
 
+  // ── Saint Laurent Cassandre Envelope (#466) — the matelassé Envelope BAG. FP's YSL
+  // "envelope" is ~99% SLGs (wallet/clutch/pouch/chain-wallet/card/cosmetic), so the
+  // excludeTokens are aggressive; primary source is TRR (see trr-jsonld.ts). This catches
+  // the rare actual bag + future-proofs as FP bag stock appears. ──
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent", style: "Cassandre Envelope", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["envelope", size],
+    excludeTokens: ["wallet", "clutch", "pouch", "card", "coin", "cosmetic", "tablet", "pochon", "bi-fold", "continental", "key", "zip", "chain-wallet", "case"],
+    minPrice: 500, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
   // ── Loewe (#399, brand added 2026-06-23) — Spanish house; all share the loewe
   // collection. Sizes are word-form at the handle head ("mini-puzzle", "small-hammock").
   // Validated against the live collection: Puzzle is the hero (88, excl. Edge). The plain
