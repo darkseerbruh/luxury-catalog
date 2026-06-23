@@ -95,9 +95,11 @@ function speedyWord(word: string): (name: string) => boolean {
  * Generic LV size predicate: a listing is this size of this model when its name
  * contains the model, the size as a WHOLE word (\b, so letter codes like "mm" never
  * match inside "monogram"), and none of the SIBLING sizes — and isn't a bag charm.
- * Reusable across LV models whose sizes are letter codes (Alma BB/PM/MM/GM, …).
+ * Reusable across models with letter-code OR word sizes (Alma BB/PM/MM/GM, Book Tote
+ * Small/Medium/Large, …). Note TRR sometimes truncates the model name (Book Tote →
+ * "Book"), so pass the shortest reliable token as `model`.
  */
-function lvSize(model: string, size: string, siblings: string[]): (name: string) => boolean {
+function modelSize(model: string, size: string, siblings: string[]): (name: string) => boolean {
   const want = new RegExp(`\\b${size}\\b`, "i");
   const others = siblings.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`, "i"));
   return (name: string) => {
@@ -107,6 +109,7 @@ function lvSize(model: string, size: string, siblings: string[]): (name: string)
   };
 }
 const ALMA_SIZES = ["bb", "pm", "mm", "gm", "mini", "nano"];
+const BOOK_TOTE_SIZES = ["mini", "small", "medium", "large"];
 
 /**
  * Targets. The Chanel Classic Flap Medium entry is PROVEN (loaded from a real
@@ -222,27 +225,45 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   // ── LV Alma (backbone Tier-1) — sizes BB/PM/MM/GM + Mini/Nano, one capture ────
   "lv-alma-bb": {
     brand: "Louis Vuitton", style: "Alma", size_label: "BB",
-    namePredicate: lvSize("alma", "bb", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "bb", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
   "lv-alma-pm": {
     brand: "Louis Vuitton", style: "Alma", size_label: "PM",
-    namePredicate: lvSize("alma", "pm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "pm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
   "lv-alma-mm": {
     brand: "Louis Vuitton", style: "Alma", size_label: "MM",
-    namePredicate: lvSize("alma", "mm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "mm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
   "lv-alma-gm": {
     brand: "Louis Vuitton", style: "Alma", size_label: "GM",
-    namePredicate: lvSize("alma", "gm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "gm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
   "lv-alma-mini": {
     brand: "Louis Vuitton", style: "Alma", size_label: "Mini",
-    namePredicate: lvSize("alma", "mini", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "mini", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
   "lv-alma-nano": {
     brand: "Louis Vuitton", style: "Alma", size_label: "Nano",
-    namePredicate: lvSize("alma", "nano", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+    namePredicate: modelSize("alma", "nano", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+
+  // ── Dior Book Tote (backbone Tier-1) — cross-brand; TRR truncates name to "Book" ─
+  "dior-book-tote-mini": {
+    brand: "Dior", style: "Book Tote", size_label: "Mini",
+    namePredicate: modelSize("book", "mini", BOOK_TOTE_SIZES), minPrice: 800, maxPrice: 8000, rawKey: "dior-book-tote",
+  },
+  "dior-book-tote-small": {
+    brand: "Dior", style: "Book Tote", size_label: "Small",
+    namePredicate: modelSize("book", "small", BOOK_TOTE_SIZES), minPrice: 800, maxPrice: 8000, rawKey: "dior-book-tote",
+  },
+  "dior-book-tote-medium": {
+    brand: "Dior", style: "Book Tote", size_label: "Medium",
+    namePredicate: modelSize("book", "medium", BOOK_TOTE_SIZES), minPrice: 800, maxPrice: 8000, rawKey: "dior-book-tote",
+  },
+  "dior-book-tote-large": {
+    brand: "Dior", style: "Book Tote", size_label: "Large",
+    namePredicate: modelSize("book", "large", BOOK_TOTE_SIZES), minPrice: 800, maxPrice: 8000, rawKey: "dior-book-tote",
   },
 };
 
