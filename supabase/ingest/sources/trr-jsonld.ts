@@ -272,6 +272,107 @@ export function listingRefFromUrl(url: string): string {
   return url.split(/[?#]/)[0].split("/").filter(Boolean).pop() ?? url;
 }
 
+// ── Catch-all size detection ─────────────────────────────────────────────────
+// Best-effort size token parser for the catch-all mode. Unlike the curated
+// per-size predicates (which DROP non-matching listings), this NEVER drops — it
+// just labels what it can and returns null when no size is recognisable, letting
+// the loader route the listing (curated variant if the size lands, else
+// discovered_listing). Order matters: word-sizes before bare numerics so
+// "Mini" / "Nano" win over a stray number, and we use whole-word (\b) matching so
+// a year ("2025") never reads as a "25" size and a letter code ("mm") never
+// matches inside "monogram".
+//
+// Word sizes are matched case-insensitively and emitted in their canonical
+// catalog casing (Mini, BB, …). Numeric sizes (20/25/30/35/40/45/50/55) cover the
+// LV Speedy / Hermès Birkin·Kelly families. Letter codes (BB/PM/MM/GM/MM) cover
+// LV Alma/Neverfull/Speedy etc.
+const CATCH_ALL_WORD_SIZES: Array<{ token: string; label: string }> = [
+  { token: "nano", label: "Nano" },
+  { token: "micro", label: "Micro" },
+  { token: "mini", label: "Mini" },
+  { token: "small", label: "Small" },
+  { token: "medium", label: "Medium" },
+  { token: "large", label: "Large" },
+  { token: "jumbo", label: "Jumbo" },
+  { token: "maxi", label: "Maxi" },
+];
+const CATCH_ALL_LETTER_SIZES = ["BB", "PM", "MM", "GM", "HL"];
+const CATCH_ALL_NUMERIC_SIZES = ["20", "25", "28", "30", "32", "35", "40", "45", "50", "55"];
+
+/**
+ * Best-effort: pull a single size token out of a listing name, or null if none.
+ * Letter codes and word sizes are preferred over bare numerics (a name like
+ * "Alma BB 25cm" is a BB, not a "25"); among numerics the FIRST whole-word match
+ * wins. Returns the canonical catalog label (Mini, BB, "30", …).
+ */
+export function detectSizeLabel(name: string): string | null {
+  const n = name.toLowerCase();
+  for (const { token, label } of CATCH_ALL_WORD_SIZES) {
+    if (new RegExp(`\\b${token}\\b`, "i").test(n)) return label;
+  }
+  for (const code of CATCH_ALL_LETTER_SIZES) {
+    if (new RegExp(`\\b${code}\\b`, "i").test(n)) return code;
+  }
+  for (const size of CATCH_ALL_NUMERIC_SIZES) {
+    if (new RegExp(`\\b${size}\\b`).test(n)) return size;
+  }
+  return null;
+}
+
+/**
+ * Best-guess style for catch-all mode: prefer the operator-supplied guess; if
+ * none, fall back to the raw listing name (stripped of a trailing "Bag"), so the
+ * loader's style matcher still has something to score against. Never empty.
+ */
+export function catchAllStyle(name: string, styleGuess?: string | null): string {
+  const guess = styleGuess?.trim();
+  if (guess) return guess;
+  const fallback = name.replace(/\bbag\b/i, "").replace(/\s+/g, " ").trim();
+  return fallback || name.trim();
+}
+
+/**
+ * Catch-all mapping: emit EVERY captured record as a best-guess PriceObservation
+ * (no curated size predicate, no narrow price band). The loader places what it can
+ * on curated variants and routes the rest into discovered_listing — nothing is
+ * dropped at the adapter stage. `brand` and `styleGuess` come from the CLI; the
+ * size is parsed from the name (null when unrecognisable). A non-positive/absent
+ * price is the ONLY drop (it can't be a valid observation) — returns null then.
+ */
+export function recordToCatchAllObservation(
+  rec: TrrRecord,
+  brand: string,
+  styleGuess: string | null | undefined,
+  observedOn: string
+): PriceObservation | null {
+  if (typeof rec.price !== "number" || !Number.isFinite(rec.price) || rec.price <= 0) return null;
+
+  const spec = parseTrrDescription(normalizeDesc(rec.desc ?? ""));
+  return {
+    brand,
+    style: catchAllStyle(rec.name, styleGuess),
+    attrs: {
+      size_label: detectSizeLabel(rec.name),
+      exterior_colorway: spec.color,
+      exterior_material: spec.material,
+      hardware_color: spec.hardwareColor,
+      production_year: spec.productionYear,
+      season: spec.season,
+      inclusions: spec.includes,
+      listing_ref: listingRefFromUrl(rec.url),
+    },
+    platform: "The RealReal",
+    price_type: "listed",
+    sale_price: rec.price,
+    currency: rec.currency ?? "USD",
+    condition: null,
+    observed_on: observedOn,
+    source_url: rec.url,
+    confidence: "low", // best-guess identity — lower confidence than a curated target
+    notes: rec.name,
+  };
+}
+
 /**
  * Recover fact-segment boundaries before parsing: a capture that flattened the
  * JSON-LD newlines leaves ". " between facts, but parseTrrDescription splits on
@@ -345,10 +446,81 @@ function report(targetKey: string, capturedFrom: number, obs: PriceObservation[]
   }
 }
 
+/** Read a raw capture file (array of TrrRecord) or exit with a clear message. */
+function readRawCapture(rawKey: string): TrrRecord[] {
+  const file = rawFile(rawKey);
+  if (!fs.existsSync(file)) {
+    console.error(`No capture at ${file}. Capture it in the browser first (see file header).`);
+    process.exit(1);
+  }
+  return JSON.parse(fs.readFileSync(file, "utf8"));
+}
+
+/**
+ * Pull an option value out of argv. Supports BOTH `--flag value` (space) and
+ * `--flag=value` (equals) forms, so `--brand "Louis Vuitton"` and
+ * `--brand=Louis\ Vuitton` both work.
+ */
+function optValue(args: string[], flag: string): string | undefined {
+  const eq = args.find((a) => a.startsWith(`${flag}=`));
+  if (eq) return eq.slice(flag.length + 1);
+  const i = args.indexOf(flag);
+  if (i >= 0 && i + 1 < args.length && !args[i + 1].startsWith("--")) return args[i + 1];
+  return undefined;
+}
+
+/**
+ * Catch-all run: emit one PriceObservation per record from <rawKey>.json with a
+ * best-guess brand/style/size, no curated predicate and no narrow price band, so
+ * the loader routes everything (curated variant or discovered_listing). Mode:
+ *   tsx trr-jsonld.ts --catch-all --brand "<Brand>" [--style-guess "<style>"] <rawKey>
+ */
+function runCatchAll(args: string[], observedOn: string) {
+  const brand = optValue(args, "--brand");
+  const styleGuess = optValue(args, "--style-guess") ?? null;
+  // Positional rawKeys = non-flag tokens that aren't the VALUE of a space-form
+  // option (`--brand "Louis Vuitton"` → "Louis Vuitton" is consumed, not a key).
+  const spaceFormFlags = new Set(["--brand", "--style-guess", "--date"]);
+  const rawKeys = args.filter(
+    (a, idx) => !a.startsWith("--") && !(idx > 0 && spaceFormFlags.has(args[idx - 1]))
+  );
+  if (!brand || rawKeys.length === 0) {
+    console.error(`Usage: tsx trr-jsonld.ts --catch-all --brand "<Brand>" [--style-guess "<style>"] <rawKey> [<rawKey> ...]`);
+    console.error(`  Emits EVERY captured record (best-guess style/size) — nothing dropped at the adapter.`);
+    process.exit(1);
+  }
+  console.log(`trr-jsonld: CATCH-ALL — brand="${brand}"${styleGuess ? ` style-guess="${styleGuess}"` : ""}, ${rawKeys.length} capture(s)`);
+
+  const allObs: PriceObservation[] = [];
+  for (const rawKey of rawKeys) {
+    const records = readRawCapture(rawKey);
+    let skipped = 0;
+    const obs: PriceObservation[] = [];
+    for (const rec of records) {
+      const o = recordToCatchAllObservation(rec, brand, styleGuess, observedOn);
+      if (o) obs.push(o);
+      else skipped++;
+    }
+    const withSize = obs.filter((o) => o.attrs.size_label != null).length;
+    console.log(`  [${rawKey}]: ${records.length} captured -> ${obs.length} emitted (${withSize} with a size), ${skipped} skipped (no/invalid price)`);
+    allObs.push(...obs);
+  }
+
+  const { file: out, kept, dropped } = writeObservations("therealreal", allObs);
+  console.log(`-> ${kept} observation(s) written${dropped ? `, ${dropped} dropped (invalid)` : ""} -> ${out}`);
+}
+
 function main() {
   const args = process.argv.slice(2);
-  const targetKeys = args.filter((a) => !a.startsWith("--"));
   const dateFlag = args.find((a) => a.startsWith("--date="));
+  const observedOnDefault = dateFlag ? dateFlag.slice("--date=".length) : new Date().toISOString().slice(0, 10);
+
+  if (args.includes("--catch-all")) {
+    runCatchAll(args, observedOnDefault);
+    return;
+  }
+
+  const targetKeys = args.filter((a) => !a.startsWith("--"));
   const unknown = targetKeys.filter((k) => !TARGETS[k]);
   if (targetKeys.length === 0 || unknown.length) {
     if (unknown.length) console.error(`Unknown target(s): ${unknown.join(", ")}`);
@@ -358,7 +530,7 @@ function main() {
     console.error(`  targetKey: ${Object.keys(TARGETS).join(" | ")}`);
     process.exit(1);
   }
-  const observedOn = dateFlag ? dateFlag.slice("--date=".length) : new Date().toISOString().slice(0, 10);
+  const observedOn = observedOnDefault;
 
   // Accumulate across ALL requested targets, then write the landing batch ONCE —
   // writeObservations() clears the source dir per call, so multiple targets that
@@ -370,12 +542,7 @@ function main() {
     const target = TARGETS[targetKey];
     const rawKey = target.rawKey ?? targetKey;
     if (!rawCache.has(rawKey)) {
-      const file = rawFile(rawKey);
-      if (!fs.existsSync(file)) {
-        console.error(`No capture at ${file}. Capture it in the browser first (see file header).`);
-        process.exit(1);
-      }
-      rawCache.set(rawKey, JSON.parse(fs.readFileSync(file, "utf8")));
+      rawCache.set(rawKey, readRawCapture(rawKey));
     }
     const records = rawCache.get(rawKey)!;
     const obs: PriceObservation[] = [];
