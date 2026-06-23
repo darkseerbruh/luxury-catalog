@@ -238,6 +238,20 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── LV Dauphine (#441) ────────────────────────────────────────────────────────
+// Micro / Mini / MM / GM. Micro & Mini are distinct whole words; a broad Dauphine
+// search pulls many other LV bags so require "dauphine".
+const DAUPHINE_SIZES = ["micro", "mini", "mm", "gm"];
+export function dauphineSize(label: "Micro" | "Mini" | "MM" | "GM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("dauphine") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = DAUPHINE_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Hermès Jypsière (#420) ────────────────────────────────────────────────────
 // Mini + numeric 28 / 31 / 34. "jypsi" token covers Jypsière/Jypsiere. Mini first;
 // the non-backbone 37 has no bucket and drops. Numerics whole-word.
@@ -862,6 +876,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── LV Dauphine (#441) — Micro/Mini/MM/GM, share one "lv-dauphine" capture. ──
+  "lv-dauphine-micro": { brand: "Louis Vuitton", style: "Dauphine", size_label: "Micro",
+    namePredicate: dauphineSize("Micro"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-mini": { brand: "Louis Vuitton", style: "Dauphine", size_label: "Mini",
+    namePredicate: dauphineSize("Mini"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-mm": { brand: "Louis Vuitton", style: "Dauphine", size_label: "MM",
+    namePredicate: dauphineSize("MM"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-gm": { brand: "Louis Vuitton", style: "Dauphine", size_label: "GM",
+    namePredicate: dauphineSize("GM"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
 
   // ── Hermès Jypsière (#420) — Mini/28/31/34, share one "hermes-jypsiere" capture. ──
   "hermes-jypsiere-mini": { brand: "Hermès", style: "Jypsière", size_label: "Mini",
