@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TASTE_QUESTIONS } from "@/lib/taste";
 import { getDeals } from "@/lib/deals";
 import { getMostWantedBags } from "@/lib/coveted-bags";
+import { getClosetValue } from "@/lib/portfolio";
 
 /**
  * "What brings you in?" — the homepage goal-picker. Each tile SHOWS its value
@@ -54,7 +55,11 @@ export default async function PersonaRouter() {
   // Live #1 rows for the data tiles. Both reads are resilient (return [] on any
   // missing env / column / key), so a thin or credential-less environment simply
   // falls back to the illustrative visuals below.
-  const [topDeals, topWanted] = await Promise.all([getDeals(1), getMostWantedBags(1)]);
+  const [topDeals, topWanted, closetValue] = await Promise.all([
+    getDeals(1),
+    getMostWantedBags(1),
+    getClosetValue(),
+  ]);
   const topDeal = topDeals[0] ?? null;
   const topBag = topWanted[0] ?? null;
   const dealName = topDeal ? [topDeal.brandName, topDeal.styleName].filter(Boolean).join(" ") : "";
@@ -99,15 +104,29 @@ export default async function PersonaRouter() {
         <Link href="/closet" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Collect &amp; invest</h3>
           <p className="mt-1 text-sm text-muted">Track what you own. Watch what it&rsquo;s worth.</p>
-          <div className="mt-4 flex flex-1 items-center gap-3">
-            <Bag className="h-10 w-10 text-gold/50" />
-            <Bag className="h-12 w-12 text-gold/80" />
-            <Bag className="h-10 w-10 text-gold/50" />
-            <svg viewBox="0 0 90 40" className="ml-auto h-10 w-24 text-gold" fill="none" aria-hidden>
-              <path d="M2 34 L20 30 L38 24 L56 22 L74 12 L88 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              <circle cx="88" cy="4" r="3" fill="currentColor" className="text-gold-soft" />
-            </svg>
-          </div>
+          {closetValue ? (
+            // Logged-in collector with priced bags: show the real estimated resale
+            // total (never fabricated — only bags with resale history are counted).
+            <div className="mt-4 flex flex-1 flex-col justify-center">
+              <p className="font-serif text-3xl text-gold">
+                {formatPrice(closetValue.total, closetValue.currency)}
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                estimated resale across {closetValue.valued} of {closetValue.count}{" "}
+                {closetValue.count === 1 ? "bag" : "bags"} you own
+              </p>
+            </div>
+          ) : (
+            <div className="mt-4 flex flex-1 items-center gap-3">
+              <Bag className="h-10 w-10 text-gold/50" />
+              <Bag className="h-12 w-12 text-gold/80" />
+              <Bag className="h-10 w-10 text-gold/50" />
+              <svg viewBox="0 0 90 40" className="ml-auto h-10 w-24 text-gold" fill="none" aria-hidden>
+                <path d="M2 34 L20 30 L38 24 L56 22 L74 12 L88 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                <circle cx="88" cy="4" r="3" fill="currentColor" className="text-gold-soft" />
+              </svg>
+            </div>
+          )}
           <span className={CTA}>Track your closet &rarr;</span>
         </Link>
 
