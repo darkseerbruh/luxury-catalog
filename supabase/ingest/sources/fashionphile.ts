@@ -728,6 +728,144 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 6000,
     searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // LV ICONS 2026-06-23 (batch 3) — the most-searched Louis Vuitton permanent icons
+  // (Fashionphile-first, no browser). Sizes + tokens validated against the live LV
+  // collection JSON (6,250 products; handle distributions inspected per icon).
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // LV NéoNoé (#435) — bucket bag, sizes BB / MM. The size-less "neonoe" (no bb/mm)
+  // routes to discovered rather than guessing.
+  ...(["bb", "mm"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "NéoNoé",
+    size_label: size.toUpperCase(),
+    requireTokens: ["neonoe", size],
+    excludeTokens: ["wallet", "charm", "strap"],
+    minPrice: 1000,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Capucines (#436) — sizes Mini / BB / MM / GM / East-West. excludeTokens drop
+  // the Capucines compact wallet / card holder. Exotic skins push the top of band.
+  ...(["mini", "bb", "mm", "gm", "east-west"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Capucines",
+    size_label: size === "east-west" ? "East-West" : size.length === 2 ? size.toUpperCase() : size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["capucines", size],
+    excludeTokens: ["wallet", "compact", "card", "pochette"],
+    minPrice: 2000,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV OnTheGo (#437) — tote, sizes PM / MM / GM / East-West.
+  ...(["pm", "mm", "gm", "east-west"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "OnTheGo",
+    size_label: size === "east-west" ? "East-West" : size.toUpperCase(),
+    requireTokens: ["onthego", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1500,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Pochette Métis (#438) — sizes Standard / East-West. The handle always contains
+  // "pochette-metis"; Standard excludes the East-West + Mini variants.
+  {
+    brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
+    requireTokens: ["pochette-metis", "east-west"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1200, maxPrice: 4500,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
+  {
+    brand: "Louis Vuitton", style: "Pochette Métis", size_label: "Standard",
+    requireTokens: ["pochette-metis"],
+    excludeTokens: ["east-west", "mini", "wallet", "card"],
+    minPrice: 1200, maxPrice: 4500,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
+
+  // LV Keepall (#440) — duffle, NUMERIC sizes 25 / 45 / 50 / 55 / 60 (anchored "-NN-";
+  // matches both "keepall-55" and "keepall-bandouliere-55"). TRAP: "keepall ... shoulder
+  // strap" is a strap accessory ("25mm" ≠ "-25-"), dropped by excludeTokens + price band.
+  ...(["25", "45", "50", "55", "60"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Keepall",
+    size_label: size,
+    requireTokens: ["keepall", `-${size}-`],
+    excludeTokens: ["strap", "wallet", "charm", "puppet", "friends"],
+    minPrice: 700,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Coussin (#442) — sizes BB / MM / PM. excludeTokens drop the metal coussin chain
+  // STRAP accessory + the "pochette coussin" / "lou coussin wallet" SLGs.
+  ...(["bb", "mm", "pm"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Coussin",
+    size_label: size.toUpperCase(),
+    requireTokens: ["coussin", size],
+    excludeTokens: ["strap", "wallet", "pochette", "scarabeo", "card"],
+    minPrice: 1500,
+    maxPrice: 5000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Bumbag (#445) — sizes Mini / Standard (the "high rise" is a Standard variant).
+  {
+    brand: "Louis Vuitton", style: "Bumbag", size_label: "Mini",
+    requireTokens: ["bumbag", "mini"],
+    excludeTokens: ["wallet", "charm"],
+    minPrice: 1200, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
+  {
+    brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
+    requireTokens: ["bumbag"],
+    excludeTokens: ["mini", "wallet", "charm"],
+    minPrice: 1200, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
+
+  // LV Dauphine (#441) — sizes Micro / Mini / MM / GM (the "soft GM" folds to GM).
+  ...(["micro", "mini", "mm", "gm"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Dauphine",
+    size_label: size.length === 2 ? size.toUpperCase() : size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["dauphine", size],
+    excludeTokens: ["wallet", "chain", "card"],
+    minPrice: 1200,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Twist (#439) — sizes PM / MM. excludeTokens drop the Twist wallet / belt chain.
+  ...(["pm", "mm"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Twist",
+    size_label: size.toUpperCase(),
+    requireTokens: ["twist", size],
+    excludeTokens: ["wallet", "belt", "chain", "card"],
+    minPrice: 1500,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+
+  // LV Petite Malle (#443) — the mini trunk, one size (Standard; the soft "Souple"
+  // folds in). excludeTokens drop the Petite Malle card/chain SLGs.
+  {
+    brand: "Louis Vuitton", style: "Petite Malle", size_label: "Standard",
+    requireTokens: ["petite-malle"],
+    excludeTokens: ["wallet", "card", "chain"],
+    minPrice: 1500, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
 ];
 
 // ---------------------------------------------------------------------------
