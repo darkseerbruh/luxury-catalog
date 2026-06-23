@@ -130,6 +130,8 @@ When eBay keys land: add them, `npm run ingest:ebay` → `load:prices -- ebay --
 
 ## 9. Open items / recommended next steps
 
+> 📋 **Full capture runbook: [`capture-runbook.md`](capture-runbook.md)** — turnkey, ordered commands to capture every size variant (165 across 46 groups; 6 loaded). Must run in a **Claude-in-Chrome** session (web sessions can't reach the resale domains — network policy blocks them, and TRR needs a logged-in browser). Per group: scaffold → TRR search → adapter → `load:prices --write` → `summary:refresh`.
+
 0. **MERGE `claude/multibrand-parser`**, then **load Birkin 30**: `npx tsx supabase/ingest/sources/trr-jsonld.ts hermes-birkin-30` → `npm run load:prices -- therealreal --write` → `npm run summary:refresh`. (Raw already captured.)
 1. **Scale TheRealReal** to the remaining heroes (Kelly 25/28/32, Neverfull PM/MM, GG Marmont S/M) via the §5 capture flow → the reusable `trr-jsonld.ts` adapter (one command per `targetKey`; tune each `TARGETS` predicate/bounds against the capture). *Chanel (116) + Birkin 30 (102, ready) done.* The older search-text adapter `trr-paste.ts` remains for the paste flow.
 2. **Add Vestiaire** (region data) then **Fashionphile** as parser plug-ins.
