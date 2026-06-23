@@ -1,7 +1,7 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (25-icon TRR
-higher-fidelity pass, 3 batches). Companion: `docs/data-collection-handoff.md` (capture
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (25-icon TRR higher-fidelity pass + Chanel
+Reissue, 4 batches). Companion: `docs/data-collection-handoff.md` (capture
 techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
 
 > **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,139
@@ -37,11 +37,25 @@ techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
 >   comps. (5) TRR drops accents ("Metis"/"Neonoe"/"Jypsiere") + has seller typos ("Pictoin"/
 >   "Petit Malle") — match accent-insensitively, drop typos. (6) Marketplace size LABELS can
 >   differ (Diana: FP "Maxi" = TRR "Large") — map them onto the same variant.
-> - **Still open (all OPTIONAL polish):** deferred-ambiguous FP icons (YSL Cassandre,
->   Fendi C'mon, Chanel Reissue, Loewe — owner-gated, need NEW catalog work); non-FP brands
->   Kate Spade/Coach (need TRR/other source). **The curated-TRR pass is essentially COMPLETE**
->   — every backbone icon with meaningful TRR inventory now has a 2nd source. Further TRR
->   would be re-captures for freshness or net-new backbone styles.
+> - **Batch 4 (deferred-icon cleanup):** **Chanel 2.55 Reissue #423 RESOLVED** — it had a
+>   clean canonical style all along; scaffolded 5 variants (224/225/226/227/Mini #804-808),
+>   FP targets (`reissue-NNN` anchors, exclude WOC/belt/non-flap) + TRR `reissueSize` →
+>   **2-source, 182 rows (FP 100 + TRR 82), 81% year**. (prod → 11,321)
+> - **⛔ Confirmed DEAD ENDS this session (don't re-try via TRR/FP):**
+>   - **Kate Spade Knott/Sam + Coach Field** are **MODEL-LESS in TRR JSON-LD** — a "knott"/
+>     "field" search returns generic names ("Leather Top Handle Bag", "Leather Tote") with the
+>     model in neither name NOR desc (verified: 0 hits across full captures). Same limitation
+>     as vintage Coach. Kate Spade has **empty FP** too → these need a DIFFERENT source
+>     (Vestiaire/eBay) or stay unfilled. (Coach Tabby/Rogue/Brooklyn worked because those
+>     contemporary models ARE named in TRR; Field/Bandit are not.)
+>   - **YSL Cassandre Envelope** FP = ~106 hits but **nearly all SLGs** (wallets/clutches/
+>     pouches/card cases/chain wallets); the actual Envelope *bag* is rare and blurry to
+>     separate cleanly → genuinely needs human curation, left unfilled.
+>   - **Fendi C'mon** = only **1 in stock** on FP → not worth a style scaffold.
+> - **Still open (all OPTIONAL):** the 3 dead-ends above (need a new source or human curation);
+>   **Loewe** (owner's backbone excluded it — confirm before adding a new brand). **The curated
+>   2nd-source pass is COMPLETE** — every backbone icon with usable TRR/FP inventory now has its
+>   per-size data; further work is re-captures for freshness or net-new backbone styles.
 
 > **🚀 Latest session (2026-06-23 PM) — 62 NEW icons via Fashionphile, prod 6,232 →
 > 9,059 listed rows (+2,827), 0 unresolved, 8 clean merges to `main`:**
@@ -143,11 +157,11 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: 11,139 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
-25-icon TRR higher-fidelity pass added +2,052 second-source/year rows across 3 batches —
-see the top banner; TheRealReal is now 4,391 rows). **315 styles / 629 variants** (no new
-styles or variants — the TRR pass added price rows to existing per-size variants). Before
-this the 62-icon Fashionphile go-wide reached 9,059; earlier the same day ~6,260, ~5,102.
+**Prod total: 11,321 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
+25-icon TRR higher-fidelity pass + the Chanel 2.55 Reissue 2-source add = +2,234 rows
+across 4 batches — see the top banner; TheRealReal is now 4,473 rows). **315 styles /
+634 variants** (the only new variants this session were the 5 scaffolded Reissue sizes
+#804-808). Before this the 62-icon Fashionphile go-wide reached 9,059; earlier ~6,260.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**

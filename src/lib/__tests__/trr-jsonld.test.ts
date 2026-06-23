@@ -32,6 +32,7 @@ import {
   petiteMalleStandard,
   roulisSize,
   attacheSize,
+  reissueSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -578,5 +579,17 @@ describe("attacheSize (Small / Large)", () => {
     expect(attacheSize("Large")("GG Supreme Attache Large")).toBe(true);
     expect(attacheSize("Small")("GG Supreme Attache")).toBe(true);
     expect(attacheSize("Small")("Web Attache Mini")).toBe(false);
+  });
+});
+
+describe("reissueSize (224/225/226/227/Mini)", () => {
+  it("buckets the numeric Reissue flap sizes whole-word", () => {
+    expect(reissueSize("226")("Reissue 226 Double Flap Bag")).toBe(true);
+    expect(reissueSize("225")("Reissue 226 Double Flap Bag")).toBe(false);
+    expect(reissueSize("Mini")("2.55 Reissue Mini Flap Bag")).toBe(true);
+  });
+  it("drops Reissue-line non-flaps (WOC/belt/E-W)", () => {
+    expect(reissueSize("Mini")("Reissue Wallet On Chain")).toBe(false);
+    expect(reissueSize("226")("Reissue 2.55 Belt Bag")).toBe(false);
   });
 });

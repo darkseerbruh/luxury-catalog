@@ -238,6 +238,25 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Chanel 2.55 Reissue (#423) ────────────────────────────────────────────────
+// Backbone 224 / 225 / 226 / 227 / Mini. TRR names "Reissue 226 Double Flap" etc.;
+// require "reissue", numeric sizes whole-word + Mini. Reissue-LINE non-flaps (WOC /
+// Belt Bag / E-W / wallet) carry no size number so the numeric buckets skip them; the
+// Mini bucket guards them explicitly. Unsized Reissue flaps drop (clean per-size split).
+const REISSUE_NUMS = ["224", "225", "226", "227"];
+const REISSUE_NOT = /wallet|woc|belt|waist|clutch|card|coin|camera|phone|cosmetic/;
+export function reissueSize(label: "224" | "225" | "226" | "227" | "Mini"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("reissue") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n) && !REISSUE_NOT.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = REISSUE_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Gucci Attache (#452) ──────────────────────────────────────────────────────
 // Backbone Small / Large (TRR carries very few). Large = "large"; everything else
 // non-Mini is the Small (incl. the unsized standard). The Attache Mini isn't a
@@ -913,6 +932,18 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Chanel 2.55 Reissue (#423) — 224/225/226/227/Mini, share one "chanel-reissue" capture. ──
+  "chanel-reissue-224": { brand: "Chanel", style: "2.55 Reissue", size_label: "224",
+    namePredicate: reissueSize("224"), minPrice: 700, maxPrice: 20000, rawKey: "chanel-reissue" },
+  "chanel-reissue-225": { brand: "Chanel", style: "2.55 Reissue", size_label: "225",
+    namePredicate: reissueSize("225"), minPrice: 700, maxPrice: 20000, rawKey: "chanel-reissue" },
+  "chanel-reissue-226": { brand: "Chanel", style: "2.55 Reissue", size_label: "226",
+    namePredicate: reissueSize("226"), minPrice: 700, maxPrice: 20000, rawKey: "chanel-reissue" },
+  "chanel-reissue-227": { brand: "Chanel", style: "2.55 Reissue", size_label: "227",
+    namePredicate: reissueSize("227"), minPrice: 700, maxPrice: 20000, rawKey: "chanel-reissue" },
+  "chanel-reissue-mini": { brand: "Chanel", style: "2.55 Reissue", size_label: "Mini",
+    namePredicate: reissueSize("Mini"), minPrice: 700, maxPrice: 20000, rawKey: "chanel-reissue" },
 
   // ── Gucci Attache (#452) — Small / Large, share one "gucci-attache" capture. ──
   "gucci-attache-small": { brand: "Gucci", style: "Attache", size_label: "Small",

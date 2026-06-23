@@ -210,6 +210,32 @@ const TARGETS: FashionphileTarget[] = [
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   },
 
+  // Chanel 2.55 Reissue (#423) — the clean canonical (NOT the verbose one-offs). FP
+  // handles it as "...255-reissue-<NNN>-flap" (224/225/226/227) + "reissue-mini-flap".
+  // requireTokens anchor "reissue-<NNN>"; excludeTokens drop the Reissue-LINE non-flaps
+  // (WOC / belt-bag / chain-waist / pouch / camera / phone / cosmetic / wallet). Validated
+  // against the live collection (2026-06-23): 224:3 / 225:30 / 226:33 / 227:13 / Mini:21.
+  ...(["224", "225", "226", "227"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "2.55 Reissue",
+    size_label: size,
+    requireTokens: [`reissue-${size}`],
+    excludeTokens: ["woc", "wallet-on-chain", "belt-bag", "waist", "pouch", "camera", "phone", "cosmetic", "card", "coin", "clutch", "holder"],
+    minPrice: 1500,
+    maxPrice: 20000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+  {
+    brand: "Chanel",
+    style: "2.55 Reissue",
+    size_label: "Mini",
+    requireTokens: ["reissue-mini"],
+    excludeTokens: ["woc", "wallet-on-chain", "belt-bag", "waist", "pouch", "camera", "phone", "cosmetic", "card", "coin", "clutch", "holder"],
+    minPrice: 1500,
+    maxPrice: 20000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  },
+
   // Gucci Dionysus (#201) — sizes Super Mini / Mini / Small / Medium. "Super Mini"
   // contains "mini", so the Mini target excludes "super"; the Super Mini target
   // anchors on the handle token "super-mini-dionysus". excludeTokens drop the chain
