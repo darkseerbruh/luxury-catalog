@@ -992,6 +992,115 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 9000,
     searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // GUCCI ICONS 2026-06-23 (batch 5) — Gucci permanent non-Dionysus/Horsebit/Jackie/
+  // Marmont icons (Fashionphile-first, no browser). Validated against the live Gucci
+  // collection JSON.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Ophidia (#448) — sizes Super Mini / Mini / Small / Medium / Large / Jumbo. "Super
+  // Mini" contains "mini" so the Super Mini anchors on "super-mini-ophidia" and the
+  // Mini bucket excludes "super". excludeTokens drop the Ophidia SLGs (wallet / card /
+  // cosmetic / key pouch). (The line spans shoulder / belt / top-handle forms — all
+  // the same Ophidia style; per-listing spec is preserved on each row.)
+  {
+    brand: "Gucci", style: "Ophidia", size_label: "Super Mini",
+    requireTokens: ["super-mini-ophidia"],
+    excludeTokens: ["wallet", "card", "cosmetic", "key"],
+    minPrice: 600, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+  ...(["mini", "small", "medium", "large", "jumbo"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Ophidia",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["ophidia", size],
+    excludeTokens: size === "mini"
+      ? ["super", "wallet", "card", "cosmetic", "key", "pouch"]
+      : ["wallet", "card", "cosmetic", "key", "pouch"],
+    minPrice: 600,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+
+  // Bamboo 1947 (#449) — the revived top-handle, sizes Mini / Small / Medium / Large.
+  // require the literal "bamboo-1947" so vintage "bamboo" + "new bamboo" + Dionysus/
+  // Diana bamboo-handle bags are NOT folded in. excludeTokens drop backpack / SLGs.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Bamboo 1947",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["bamboo-1947", size],
+    excludeTokens: ["wallet", "backpack", "card"],
+    minPrice: 800,
+    maxPrice: 5000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+
+  // Soho Disco (#450) — the disco crossbody, sizes Small (standard) / Mini. The
+  // size-less "soho-disco-bag" is the standard Small; Mini anchors on "mini".
+  {
+    brand: "Gucci", style: "Soho Disco", size_label: "Mini",
+    requireTokens: ["soho-disco", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 500, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+  {
+    brand: "Gucci", style: "Soho Disco", size_label: "Small",
+    requireTokens: ["soho-disco"],
+    excludeTokens: ["mini", "wallet", "card"],
+    minPrice: 500, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+
+  // Diana (#451) — the bamboo-handle tote, sizes Mini / Small / Medium / Maxi. TRAP:
+  // "jumbo" in "jumbo-gg ... small-diana" is the GG monogram SCALE, not a size (the
+  // real size is the word before "diana") — jumbo is NOT a Diana size bucket.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Diana",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["diana", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+  {
+    brand: "Gucci", style: "Diana", size_label: "Maxi",
+    requireTokens: ["maxi-diana"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  },
+
+  // Attache (#452) — sizes Small / Large.
+  ...(["small", "large"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Attache",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["attache", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+
+  // Blondie (#453) — sizes Mini / Small / Medium / Large. excludeTokens drop the
+  // Blondie continental chain wallet / card case. The size-less standard routes to
+  // discovered rather than guessing.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Blondie",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["blondie", size],
+    excludeTokens: ["wallet", "card", "continental", "pouch"],
+    minPrice: 800,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
