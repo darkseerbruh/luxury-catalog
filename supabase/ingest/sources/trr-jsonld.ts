@@ -238,6 +238,22 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Hermès Bolide (#415) ──────────────────────────────────────────────────────
+// Mini + numeric 25 / 27 / 31 / 35. Mini checked first; numerics whole-word (the
+// "1923" line name can't false-match). Non-Bolide Hermès in a broad search drop.
+const BOLIDE_NUMS = ["25", "27", "31", "35"];
+export function bolideSize(label: "Mini" | "25" | "27" | "31" | "35"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("bolide") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = BOLIDE_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV Coussin (#442) ─────────────────────────────────────────────────────────
 // Letter sizes BB / MM / PM. Whole-word (\b) so a letter can't hide in another word;
 // require "coussin" to exclude other LV bags in a broad search.
@@ -801,6 +817,18 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Hermès Bolide (#415) — Mini/25/27/31/35, share one "hermes-bolide" capture. ──
+  "hermes-bolide-mini": { brand: "Hermès", style: "Bolide", size_label: "Mini",
+    namePredicate: bolideSize("Mini"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-25": { brand: "Hermès", style: "Bolide", size_label: "25",
+    namePredicate: bolideSize("25"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-27": { brand: "Hermès", style: "Bolide", size_label: "27",
+    namePredicate: bolideSize("27"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-31": { brand: "Hermès", style: "Bolide", size_label: "31",
+    namePredicate: bolideSize("31"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-35": { brand: "Hermès", style: "Bolide", size_label: "35",
+    namePredicate: bolideSize("35"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
 
   // ── LV Coussin (#442) — BB / MM / PM, share one "lv-coussin" capture. ──
   "lv-coussin-bb": { brand: "Louis Vuitton", style: "Coussin", size_label: "BB",
