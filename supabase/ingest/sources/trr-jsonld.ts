@@ -217,6 +217,19 @@ export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolea
   };
 }
 
+// ── LV NéoNoé (#435) ──────────────────────────────────────────────────────────
+// Two backbone variants: BB / MM. Requiring the "neonoe"/"néonoé" token (not bare
+// "Noé") keeps the regular Noé + Neverfull bucket bags out. Letter size whole-word.
+export function neoNoeSize(label: "BB" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/n[eé]o.?no[eé]/.test(n) || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const other = label === "BB" ? /\bmm\b/ : /\bbb\b/;
+    return want.test(n) && !other.test(n);
+  };
+}
+
 // ── LV Capucines (#436) ───────────────────────────────────────────────────────
 // Mini + letter sizes BB / MM / GM + East-West. EW is checked first (its own backbone
 // variant), then Mini, then the letter buckets (whole-word \b so "mm" can't hide in
@@ -651,6 +664,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
   "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
     namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+
+  // ── LV NéoNoé (#435) — BB / MM, share one "lv-neonoe" capture. ──
+  "lv-neonoe-bb": { brand: "Louis Vuitton", style: "NéoNoé", size_label: "BB",
+    namePredicate: neoNoeSize("BB"), minPrice: 500, maxPrice: 6000, rawKey: "lv-neonoe" },
+  "lv-neonoe-mm": { brand: "Louis Vuitton", style: "NéoNoé", size_label: "MM",
+    namePredicate: neoNoeSize("MM"), minPrice: 500, maxPrice: 6000, rawKey: "lv-neonoe" },
 
   // ── LV Capucines (#436) — Mini/BB/MM/GM/East-West, share one "lv-capucines" capture. ──
   "lv-capucines-mini": { brand: "Louis Vuitton", style: "Capucines", size_label: "Mini",
