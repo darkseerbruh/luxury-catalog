@@ -1,8 +1,37 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (62-icon
-Fashionphile go-wide). Companion: `docs/data-collection-handoff.md` (capture
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (9-icon TRR
+higher-fidelity pass). Companion: `docs/data-collection-handoff.md` (capture
 techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
+
+> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 9,987
+> listed rows (+900), TRR now 3,239 rows, 9 clean merges to `main`):**
+> Mission #1 done — added a 2nd source (TheRealReal) + per-listing year to the 9
+> highest-FP-row icons via **curated per-size TRR targets** (the §3 browser-gated
+> JSON-LD flow; all 9 captures clean, 0 rate-limit blocks, gentle ~450ms sequential).
+> Every one is now **2-source**. Per icon (TRR rows / year coverage):
+> - **Gucci Ophidia** #448: 72 (4% yr — modern) · super-mini-aware `ophidiaSize`
+> - **Hermès Evelyne** #412: 115 (77% yr) · `evelyneSize` maps TRR's NUMERIC cm
+>   (16=TPM/29=PM/33=GM); **TGM 40 is a non-backbone size → dropped**
+> - **LV Keepall** #440: 95 (52% yr) · `keepallSize` whole-word numeric 25/45/50/55/60
+> - **Hermès Picotin Lock** #414: 118 (71% yr) · `picotinSize` 18/22/26; seller typo
+>   "Pictoin" + the larger 31cm drop
+> - **Chanel Vanity Case** #430: 55 (79% yr) · reuses `modelSize("vanity",…)`
+> - **LV Pochette Métis** #438: 115 (47% yr) · `pochetteMetisSize` (accent-insensitive,
+>   excludes Eva/Félicie/Accessoires/Orsay)
+> - **LV OnTheGo** #437: 113 (32% yr) · `onTheGoSize` matches OnTheGo/On The Go
+> - **LV Bumbag** #445: 112 (38% yr) · `bumbagSize` (Bumbag/Bum Bag, excludes belt bags)
+> - **Chanel Deauville** #429: 105 (72% yr) · reuses `modelSize("deauville",…)`
+> - **⚡ Key learning:** TRR sizes Hermès by **NUMERIC cm in the name** (Evelyne 16/29/33,
+>   Picotin 18/22/26), not the FP letter codes — inspect the live name distribution before
+>   writing predicates. ~half of Ophidia/Vanity listings are **unsized** in the TRR title →
+>   they DROP (the clean per-size split; FP already covers the icon high-confidence).
+>   Year coverage scales with bag AGE (Hermès/Vanity ~75%, modern LV/Gucci 30-50%).
+> - **+16 regression tests** (52 in `trr-jsonld.test.ts`, 360 suite-wide, all green).
+> - **Still open (all OPTIONAL polish):** deferred-ambiguous FP icons (YSL Cassandre,
+>   Fendi C'mon, Chanel Reissue, Loewe — owner-gated); non-FP brands Kate Spade/Coach
+>   (need TRR/other source); TRR for the remaining smaller-FP icons (Bolide/Lindy/Herbag/
+>   Roulis/Jypsière/Capucines/NéoNoé/Coussin/Dauphine/Twist/etc. — same recipe, lower yield).
 
 > **🚀 Latest session (2026-06-23 PM) — 62 NEW icons via Fashionphile, prod 6,232 →
 > 9,059 listed rows (+2,827), 0 unresolved, 8 clean merges to `main`:**
@@ -104,10 +133,11 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: 9,059 listed rows + 212 `discovered_listing`** as of 2026-06-23 PM (the
-62-icon Fashionphile go-wide added +2,827 — see the top banner). **315 styles / 629
-variants** (no new styles — all 62 icons filled pre-seeded backbone styles). Earlier
-the same day it was ~6,260, and ~5,102 before that.
+**Prod total: 9,987 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
+9-icon TRR higher-fidelity pass added +900 second-source/year rows — see the top
+banner; TheRealReal is now 3,239 rows). **315 styles / 629 variants** (no new styles
+or variants — the TRR pass added price rows to existing per-size variants). Before this
+the 62-icon Fashionphile go-wide reached 9,059; earlier the same day ~6,260, ~5,102.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**
