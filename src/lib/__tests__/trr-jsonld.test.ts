@@ -33,6 +33,7 @@ import {
   roulisSize,
   attacheSize,
   reissueSize,
+  loewePuzzleSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -579,6 +580,14 @@ describe("attacheSize (Small / Large)", () => {
     expect(attacheSize("Large")("GG Supreme Attache Large")).toBe(true);
     expect(attacheSize("Small")("GG Supreme Attache")).toBe(true);
     expect(attacheSize("Small")("Web Attache Mini")).toBe(false);
+  });
+});
+
+describe("loewePuzzleSize (Mini/Small/Medium/Large, excludes Edge)", () => {
+  it("buckets by whole-word size and keeps Puzzle Edge out", () => {
+    expect(loewePuzzleSize("Small")("Leather Puzzle Small")).toBe(true);
+    expect(loewePuzzleSize("Medium")("Leather Puzzle Small")).toBe(false);
+    expect(loewePuzzleSize("Small")("Calfskin Small Puzzle Edge Bag")).toBe(false);
   });
 });
 
