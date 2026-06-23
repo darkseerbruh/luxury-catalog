@@ -238,6 +238,21 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Hermès Roulis (#419) ──────────────────────────────────────────────────────
+// Backbone Mini / 23. A Roulis search returns the Roulis Slim WALLET + Roulis Double
+// Tour BRACELET (jewelry/SLG) — guarded out. Mini = mini token; everything else (incl.
+// unsized standard Roulis) is the 23; the rare non-backbone 18 drops.
+const ROULIS_NOT = /slim|wallet|compact|to go|card|bracelet|station|jewelry/;
+export function roulisSize(label: "Mini" | "23"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("roulis") || ROULIS_NOT.test(n) || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n) || /\b18\b/.test(n)) return false;
+    return true; // 23 = explicit 23 or the unsized standard Roulis
+  };
+}
+
 // ── LV Petite Malle (#443) ────────────────────────────────────────────────────
 // One backbone variant (Standard). Require the full "petite malle" phrase — a broad
 // search returns Montaigne/Carmel/Métis/Trunk Clutch + a "Petit Malle" typo. The
@@ -885,6 +900,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Hermès Roulis (#419) — Mini / 23, share one "hermes-roulis" capture. ──
+  "hermes-roulis-mini": { brand: "Hermès", style: "Roulis", size_label: "Mini",
+    namePredicate: roulisSize("Mini"), minPrice: 2000, maxPrice: 25000, rawKey: "hermes-roulis" },
+  "hermes-roulis-23": { brand: "Hermès", style: "Roulis", size_label: "23",
+    namePredicate: roulisSize("23"), minPrice: 2000, maxPrice: 25000, rawKey: "hermes-roulis" },
 
   // ── LV Petite Malle (#443) — single Standard variant. ──
   "lv-petite-malle-standard": { brand: "Louis Vuitton", style: "Petite Malle", size_label: "Standard",
