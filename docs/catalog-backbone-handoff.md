@@ -45,10 +45,33 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: ~2,910 listed rows** (TRR ~1,660 · Fashionphile ~1,235) as of 2026-06-23 PM.
-This session added Boy/Jackie/Celine/Loulou (+~1,123 rows) across TRR + the new Fashionphile
-Node path. **Vestiaire not added this session** (browser-gated, ~15 rows/search — deprioritized;
-opportunistic future add).
+**Prod total: ~5,102 listed rows + 209 `discovered_listing`** as of 2026-06-23 (late PM).
+The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
+
+- **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**
+  (18/24) · **Chanel 19** (S/M/L/Maxi) · **Chanel Gabrielle** (S/M/L) · **Chanel Wallet on
+  Chain** (WOC) · **Gucci Dionysus** (Super Mini/Mini/S/M) · **Gucci Horsebit 1955**
+  (Mini/S/Shoulder) · **Celine Triomphe** (Nano/Mini/S/M/Teen) · **Celine Classic Box**
+  (S/M/Teen) · **YSL Sac de Jour** (Nano/Baby/S/M/L) · **YSL Kate** (S/M/L). Variants 529–561.
+- **Fashionphile backfill on the 4 TRR-only styles** (~851 rows): **Book Tote** (slug
+  `christian-dior`), **Speedy** (size anchored `-NN-` to catch Bandoulière), **Alma**,
+  **Kelly** (fixed: handle is `kelly-sellier-NN`, the old `kelly-28` token matched 0 — that
+  was why Kelly was FP-empty; scaffolded Kelly 35 #562).
+- **TRR brand-wide catch-all × 4 brands** (Celine, Hermès, Saint Laurent, Chanel — 4 gentle
+  120-fetch windows, **480 fetches, 0 blocks** — the rate limit did NOT bite tonight). Each
+  resolves that brand's curated icons to their variants (adding **year data**, TRR's edge over
+  FP's 0%) and routes uncurated models → `discovered_listing`. Net: Constance/Triomphe/Box/Sac
+  de Jour/Kate/WOC gained TRR + year; the heroes (Classic Flap +119, Boy +113, Luggage, Loulou
+  +, Birkin/Kelly) were refreshed; `discovered_listing` grew 0 → 209 (Celine 74 · Hermès 35 ·
+  YSL 97 · Chanel 3). **Gucci was SKIPPED** on purpose: catch-all `detectSizeLabel` would
+  mislabel **Super Mini Dionysus → Mini** and pollute the clean FP split — Gucci TRR needs a
+  curated, Super-Mini-aware target (next session). Catch-all rows are `confidence:"low"`,
+  size best-effort; the high-confidence per-size truth is the FP load.
+- **Matcher fix** (`scoreVariantMatch`): added an exact-size-match bonus so a row sized
+  "Mini" can no longer tie onto a SUPERSET size like "Super Mini" and win on insertion order
+  (it was mis-routing all Dionysus Mini rows). Regression test added.
+
+**Vestiaire still not added** (browser-gated, ~15 rows/search — deprioritized).
 
 Adapter targets: `lv-speedy-*`, `lv-alma-*`, `dior-book-tote-*`, `chanel-boy-*`,
 `gucci-jackie-*`, `celine-luggage-*`, `ysl-loulou-*` in `trr-jsonld.ts` (generic
@@ -56,8 +79,13 @@ Adapter targets: `lv-speedy-*`, `lv-alma-*`, `dior-book-tote-*`, `chanel-boy-*`,
 adjacent sub-models like Luggage **Phantom**; `rawKey` shares one capture across an icon's
 sizes). Fashionphile targets in `fashionphile.ts` gained an `excludeTokens` field (keep a
 style's size buckets clean of Boy-line accessories / Loulou Puffer / Luggage Phantom / SLGs).
-**Remaining Tier-1 icon queue:** finish Loulou TRR, then go wide (Hermès Constance, Chanel
-19/Gabrielle/WOC, Gucci Dionysus/Horsebit, Celine Triomphe, YSL Sac de Jour/Kate, …).
+The wide batch added Fashionphile `TARGETS` for all 10 new icons + the 4 backfills (validated
+against the live collection JSON; `requireTokens` anchor the size, `excludeTokens` drop SLGs/
+sub-models). **TRR `TARGETS` for the new icons are NOT yet written** — Celine TRR came via
+catch-all; the other brands' TRR is the main remaining work (rate-limited, see §2).
+**Remaining Tier-1 work:** curated TRR for Constance / Dionysus / Horsebit / 19 / Gabrielle /
+WOC / Sac de Jour / Kate (year + 2nd source); then next icons (Coco Handle, Bottega
+Cassette/Jodie, Fendi Baguette/Peekaboo, Coach full depth).
 
 ⚠️ **Celine near-duplicate style** — `#207 "Luggage"` (pre-existing) vs `#484 "Luggage Tote"`
 (backbone). Loaded onto the backbone canonical **#484**; queue an owner-gated merge of #207→#484
@@ -190,11 +218,15 @@ full parsed spec + partial match + raw title.
   the find-or-create→re-point plan. DRY-RUN default; `--write` is a guarded stub (owner-gated —
   wire the upserts when approving a batch).
 
-**Why `discovered_listing` is still 0:** all curated icon loads resolve 100% (tight size
-targets), so they never miss → nothing to capture. The layer fills from **wide catch-all
-captures of UNCURATED models** (e.g. a broad "celine" TRR search → Triomphe/Box/etc land in
-discovered for later promotion). **TODO (cheap, do next):** run one wide catch-all capture to
-demonstrate the layer end-to-end.
+**✅ `discovered_listing` DEMONSTRATED end-to-end (2026-06-23 wide batch).** A wide
+catch-all TRR capture (`trr-jsonld.ts --catch-all --brand "Celine" celine-wide`, 120 gentle
+fetches, 0 blocks) routed **46 → curated** Triomphe/Box/Luggage variants and **74 →
+`discovered_listing`** (34 `no_style` + 40 `no_variant`) — real uncurated Celine models
+(Celine 16, Cabas Phantom, Trio, Trapeze, Trotteur, Belt Bag) with full spec preserved
+(colour 100%, year 36%). `promote:discovered` clusters them (74 → 64 clusters; 0 promotable
+at the default ≥5, as a single wide search is thin per-model — at `--min=2` it prints the
+find-or-create→re-point plan for the recurring ones). The promotion `--write` stays an
+**owner-gated stub**. The layer now grows with every brand-wide catch-all capture.
 
 **Catalog cleanup (separate, DESTRUCTIVE — owner-gated):** Chanel/Hermès/LV have 65–73
 styles each, many verbose one-off names; this is why Birkin 40 mis-resolves. A cleanup pass
@@ -222,7 +254,9 @@ unattended; prepare a dry-run plan for the owner.
   `summary:refresh`, `promote:discovered`.
 - **Catalog:** `brand`/`style`/`variant` tables (**13 brands / 315 styles**; backbone spine +
   per-icon size variants). Icon variant_ids: Boy 513-516, Jackie 517-520, Luggage Tote 521-524,
-  Loulou 525-528.
+  Loulou 525-528. **Wide batch (529-562):** Constance 529-530 · Gabrielle 531-533 · WOC 534 ·
+  Dionysus 535-538 · Horsebit 1955 539-541 · Triomphe 542-546 · Classic Box 547-549 · Sac de
+  Jour 550-554 · Kate 555-557 · Chanel 19 558-561 · Kelly 35 562.
 
 ---
 
@@ -230,7 +264,18 @@ unattended; prepare a dry-run plan for the owner.
 
 1. ~~Architecture call + migration 0026 + catch-all/promotion~~ **DONE** (§5).
 2. ~~Apply the backbone~~ **DONE** (§4). ~~Speedy/Alma/Book Tote~~ + ~~Boy/Jackie/Celine/Loulou~~
-   **DONE** (§1, ~2,910 prod rows).
+   **DONE**. ~~10 new icons + 4 FP backfills via Fashionphile~~ **DONE** (§1, ~4,896 prod rows).
+   ~~Demonstrate `discovered_listing`~~ **DONE** (§5). ~~Celine #207→#484 merge plan~~ **DONE**
+   (`docs/celine-luggage-merge-plan.md`, owner-gated).
+2b. ~~TRR brand-wide catch-all for Celine / Hermès / Saint Laurent / Chanel~~ **DONE** (§1; 480
+    fetches, 0 blocks, +TRR year on the new icons, discovered → 209). **Remaining TRR:**
+    - **Gucci curated TRR** (Dionysus needs a Super-Mini-aware predicate — do NOT catch-all it,
+      it would mislabel Super Mini → Mini and pollute the FP split). Add curated `trr-jsonld.ts`
+      TARGETS for Dionysus/Horsebit 1955 (+ refresh Jackie/Marmont) and capture a `gucci-wide`.
+    - **Optional higher-fidelity re-do:** the 4 brands' new icons currently have *catch-all*
+      (low-confidence, best-effort size) TRR. If per-size precision matters, add curated TRR
+      targets for Constance/19/Gabrielle/WOC/Sac de Jour/Kate and re-capture (the FP per-size
+      data is already high-confidence, so this is polish, not a blocker).
 3. **Go wide — next icons (the proven per-icon recipe, now faster):**
    - **(a) Fashionphile FIRST (no browser, fast):** `tsx supabase/ingest/sources/fashionphile-collection.ts
      <brand-slug> <token>` → `tsx supabase/ingest/sources/fashionphile.ts --raw`.

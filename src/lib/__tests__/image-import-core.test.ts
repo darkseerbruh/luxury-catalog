@@ -76,7 +76,18 @@ describe("scoreVariantMatch / pickVariant", () => {
 
   it("weights size over colour over hardware", () => {
     const s = scoreVariantMatch(variants[0], { size: "Medium", colors: "Black", hardware: "Gold" });
-    expect(s).toBe(3 + 2 + 1); // size*3 + colour*2 + hardware_color*1
+    expect(s).toBe(10 + 3 + 2 + 1); // exact-size bonus + size*3 + colour*2 + hardware_color*1
+  });
+
+  it("lands a sub-size row on its exact variant, not a superset size", () => {
+    // "Super Mini" contains the "mini" token, so a row sized "Mini" ties with it
+    // on tokenOverlap; the exact-size bonus must break the tie toward "Mini".
+    const dionysus: VariantAttrs[] = [
+      { variant_id: 535, size_label: "Super Mini", exterior_colorway: null, hardware_color: null, hardware_type: null },
+      { variant_id: 536, size_label: "Mini", exterior_colorway: null, hardware_color: null, hardware_type: null },
+    ];
+    expect(pickVariant(dionysus, { size: "Mini" })?.variant_id).toBe(536);
+    expect(pickVariant(dionysus, { size: "Super Mini" })?.variant_id).toBe(535);
   });
 
   it("picks the best-matching variant from several", () => {
