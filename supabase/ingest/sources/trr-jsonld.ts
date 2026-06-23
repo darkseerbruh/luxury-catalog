@@ -238,6 +238,20 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Gucci Soho Disco (#450) ───────────────────────────────────────────────────
+// Backbone Mini / Small. REQUIRE "disco" — a "soho" search returns the broader Soho
+// line (Chain tote, Boston in medium/large) which are NOT the Disco. The Disco is a
+// single small crossbody, so an unsized "Soho Disco" IS the Small; only a "mini" token
+// routes to Mini.
+export function sohoDiscoSize(label: "Mini" | "Small"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("disco") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    return !/\bmini\b/.test(n); // Small = any non-mini Disco (labeled "Small" or unsized)
+  };
+}
+
 // ── Hermès Bolide (#415) ──────────────────────────────────────────────────────
 // Mini + numeric 25 / 27 / 31 / 35. Mini checked first; numerics whole-word (the
 // "1923" line name can't false-match). Non-Bolide Hermès in a broad search drop.
@@ -817,6 +831,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Gucci Soho Disco (#450) — Mini / Small, share one "gucci-soho-disco" capture. ──
+  "gucci-soho-disco-mini": { brand: "Gucci", style: "Soho Disco", size_label: "Mini",
+    namePredicate: sohoDiscoSize("Mini"), minPrice: 300, maxPrice: 4000, rawKey: "gucci-soho-disco" },
+  "gucci-soho-disco-small": { brand: "Gucci", style: "Soho Disco", size_label: "Small",
+    namePredicate: sohoDiscoSize("Small"), minPrice: 300, maxPrice: 4000, rawKey: "gucci-soho-disco" },
 
   // ── Hermès Bolide (#415) — Mini/25/27/31/35, share one "hermes-bolide" capture. ──
   "hermes-bolide-mini": { brand: "Hermès", style: "Bolide", size_label: "Mini",
