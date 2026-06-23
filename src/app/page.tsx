@@ -79,20 +79,19 @@ export default async function Home() {
   ].filter((n): n is number => n != null));
 
   return (
-    <main className="flex flex-1 flex-col">
-      <section className="border-b border-border px-5 py-16 text-center">
-        <h1 className="mx-auto max-w-xl font-serif text-4xl leading-tight text-foreground sm:text-5xl">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
+      <section className="border-b border-border px-5 py-10 text-center">
+        <h1 className="mx-auto max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
           Know what it&rsquo;s worth — and what it&rsquo;s worth <em>to you</em>.
         </h1>
-        <p className="mx-auto mt-4 max-w-md text-muted">
-          The reference for designer handbags: production history,
-          authentication markers, and what they actually resell for, all in
-          one place.
+        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+          The reference for designer handbags: production history, authentication
+          markers, and real resale prices, all in one place.
         </p>
         <form
           action="/search"
           method="GET"
-          className="mx-auto mt-8 flex max-w-md items-center gap-2"
+          className="mx-auto mt-6 flex max-w-md items-center gap-2"
         >
           <input
             name="q"
