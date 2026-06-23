@@ -217,6 +217,23 @@ export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolea
   };
 }
 
+// ── Hermès Lindy (#416) ───────────────────────────────────────────────────────
+// Mini + numeric 26 / 30 / 34. Mini is checked first (a "Mini Lindy 26" is the Mini
+// variant, not the 26); numerics whole-word. Other Hermès models in a broad Lindy
+// search lack "lindy" so they drop.
+const LINDY_NUMS = ["26", "30", "34"];
+export function lindySize(label: "Mini" | "26" | "30" | "34"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("lindy") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = LINDY_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV NéoNoé (#435) ──────────────────────────────────────────────────────────
 // Two backbone variants: BB / MM. Requiring the "neonoe"/"néonoé" token (not bare
 // "Noé") keeps the regular Noé + Neverfull bucket bags out. Letter size whole-word.
@@ -664,6 +681,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
   "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
     namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+
+  // ── Hermès Lindy (#416) — Mini / 26 / 30 / 34, share one "hermes-lindy" capture. ──
+  "hermes-lindy-mini": { brand: "Hermès", style: "Lindy", size_label: "Mini",
+    namePredicate: lindySize("Mini"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-26": { brand: "Hermès", style: "Lindy", size_label: "26",
+    namePredicate: lindySize("26"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-30": { brand: "Hermès", style: "Lindy", size_label: "30",
+    namePredicate: lindySize("30"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-34": { brand: "Hermès", style: "Lindy", size_label: "34",
+    namePredicate: lindySize("34"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
 
   // ── LV NéoNoé (#435) — BB / MM, share one "lv-neonoe" capture. ──
   "lv-neonoe-bb": { brand: "Louis Vuitton", style: "NéoNoé", size_label: "BB",
