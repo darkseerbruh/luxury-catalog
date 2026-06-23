@@ -81,7 +81,7 @@ export default async function Home() {
     <main className="flex flex-1 flex-col">
       <section className="border-b border-border px-5 py-16 text-center">
         <h1 className="mx-auto max-w-xl font-serif text-4xl leading-tight text-foreground sm:text-5xl">
-          Know what it&rsquo;s worth — and what it&rsquo;s worth to you.
+          Know what it&rsquo;s worth — and what it&rsquo;s worth <em>to you</em>.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-muted">
           The reference for designer handbags: production history,
