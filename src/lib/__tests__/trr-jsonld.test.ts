@@ -8,6 +8,8 @@ import {
   recordToCatchAllObservation,
   dionysusSize,
   horsebitSize,
+  coachModelSize,
+  coachPillowTabby,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -274,5 +276,50 @@ describe("horsebitSize (Mini / Small / Shoulder)", () => {
     // A sized listing must NOT fall into the unsized Shoulder bucket.
     expect(shoulder("Gucci Mini Horsebit 1955 Bag")).toBe(false);
     expect(shoulder("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(false);
+  });
+});
+
+// ── Coach curated predicates (numeric sizes + Standard bucket; Pillow split) ──
+
+describe("coachModelSize", () => {
+  const TABBY = ["12", "20", "26"];
+  const tabby26 = coachModelSize("tabby", "26", TABBY, ["pillow"]);
+  const tabby20 = coachModelSize("tabby", "20", TABBY, ["pillow"]);
+  const tabbyStd = coachModelSize("tabby", null, TABBY, ["pillow"]);
+
+  it("buckets numeric Coach sizes by whole word", () => {
+    expect(tabby26("Coach Leather Tabby 26")).toBe(true);
+    expect(tabby20("Coach Leather Tabby 26")).toBe(false);
+    expect(tabby20("Coach Signature Tabby 20")).toBe(true);
+  });
+
+  it("routes a model named with NO numeric size to the Standard bucket", () => {
+    expect(tabbyStd("Coach Leather Tabby")).toBe(true);
+    expect(tabbyStd("Coach Leather Tabby 26")).toBe(false); // sized → not Standard
+    expect(tabby26("Coach Leather Tabby")).toBe(false); // unsized → not the 26 bucket
+  });
+
+  it("excludes Pillow Tabby from the plain Tabby buckets (distinct backbone style)", () => {
+    expect(tabby26("Coach Signature Pillow Tabby 26")).toBe(false);
+    expect(tabbyStd("Coach Pillow Tabby")).toBe(false);
+  });
+
+  it("drops Coach SLGs (wallets, card cases, wristlets)", () => {
+    expect(tabby26("Coach Tabby 26 Wristlet")).toBe(false);
+    expect(coachModelSize("rogue", null, ["17", "25", "30", "39"])("Coach Rogue Card Case")).toBe(false);
+  });
+
+  it("does not cross-match a different model", () => {
+    expect(tabby26("Coach Leather Brooklyn 28")).toBe(false);
+  });
+});
+
+describe("coachPillowTabby", () => {
+  const p18 = coachPillowTabby("18");
+  const pStd = coachPillowTabby(null);
+  it("requires BOTH 'pillow' and 'tabby'", () => {
+    expect(p18("Coach Signature Pillow Tabby 18")).toBe(true);
+    expect(p18("Coach Leather Tabby 18")).toBe(false); // not pillow
+    expect(pStd("Coach Pillow Tabby")).toBe(true);
   });
 });
