@@ -44,6 +44,10 @@
     "Coach": {
       "1": ["Tabby", "Rogue", "Willow", "Pillow Tabby", "Brooklyn"],
       "2": ["Field", "Bandit"]
+    },
+    "Loewe": {
+      "1": ["Puzzle", "Hammock", "Flamenco", "Gate", "Goya", "Amazona"],
+      "2": ["Puzzle Edge", "Squeeze", "Basket", "Paseo"]
     }
   }
 }

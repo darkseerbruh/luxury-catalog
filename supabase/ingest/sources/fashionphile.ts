@@ -236,6 +236,62 @@ const TARGETS: FashionphileTarget[] = [
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   },
 
+  // ── Loewe (#399, brand added 2026-06-23) — Spanish house; all share the loewe
+  // collection. Sizes are word-form at the handle head ("mini-puzzle", "small-hammock").
+  // Validated against the live collection: Puzzle is the hero (88, excl. Edge). The plain
+  // Puzzle excludes "edge" so Puzzle Edge (its own style #510) doesn't leak in; SLG tokens
+  // (wallet/card/coin/pouch) drop the line accessories. ──
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Loewe", style: "Puzzle", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["puzzle", size], excludeTokens: ["edge", "wallet", "card", "coin", "pouch"],
+    minPrice: 500, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Loewe", style: "Puzzle Edge", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["puzzle-edge", size], excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 600, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Loewe", style: "Hammock", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["hammock", size], excludeTokens: ["wallet", "card", "coin", "compact"],
+    minPrice: 600, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Loewe", style: "Flamenco", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["flamenco", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 4000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Loewe", style: "Gate", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["gate", size], excludeTokens: ["wallet", "card", "coin", "pocket-wallet"],
+    minPrice: 500, maxPrice: 4000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["mini", "medium"] as const).map((size) => ({
+    brand: "Loewe", style: "Goya", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["goya", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 4000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["19", "23", "28"] as const).map((size) => ({
+    brand: "Loewe", style: "Amazona", size_label: size,
+    requireTokens: ["amazona", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Loewe", style: "Squeeze", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["squeeze", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 700, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Loewe", style: "Basket", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["basket", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 3000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+  ...(["small", "large"] as const).map((size) => ({
+    brand: "Loewe", style: "Paseo", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["paseo", size], excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 4000, searchUrl: "https://www.fashionphile.com/collections/loewe/products.json",
+  })),
+
   // Gucci Dionysus (#201) — sizes Super Mini / Mini / Small / Medium. "Super Mini"
   // contains "mini", so the Mini target excludes "super"; the Super Mini target
   // anchors on the handle token "super-mini-dionysus". excludeTokens drop the chain
