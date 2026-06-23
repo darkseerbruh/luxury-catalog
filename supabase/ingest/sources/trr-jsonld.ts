@@ -238,6 +238,22 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Hermès Jypsière (#420) ────────────────────────────────────────────────────
+// Mini + numeric 28 / 31 / 34. "jypsi" token covers Jypsière/Jypsiere. Mini first;
+// the non-backbone 37 has no bucket and drops. Numerics whole-word.
+const JYPSIERE_NUMS = ["28", "31", "34"];
+export function jypsiereSize(label: "Mini" | "28" | "31" | "34"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/jypsi/.test(n) || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = JYPSIERE_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Gucci Bamboo 1947 (#449) ──────────────────────────────────────────────────
 // Backbone Mini / Small / Medium / Large. REQUIRE both "bamboo" + "1947" — a Bamboo
 // search returns vintage "Bamboo Top Handle" bags (a different, uncatalogued style)
@@ -846,6 +862,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Hermès Jypsière (#420) — Mini/28/31/34, share one "hermes-jypsiere" capture. ──
+  "hermes-jypsiere-mini": { brand: "Hermès", style: "Jypsière", size_label: "Mini",
+    namePredicate: jypsiereSize("Mini"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-28": { brand: "Hermès", style: "Jypsière", size_label: "28",
+    namePredicate: jypsiereSize("28"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-31": { brand: "Hermès", style: "Jypsière", size_label: "31",
+    namePredicate: jypsiereSize("31"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-34": { brand: "Hermès", style: "Jypsière", size_label: "34",
+    namePredicate: jypsiereSize("34"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
 
   // ── Gucci Bamboo 1947 (#449) — Mini/Small/Medium/Large, share one "gucci-bamboo-1947" capture. ──
   "gucci-bamboo-1947-mini": { brand: "Gucci", style: "Bamboo 1947", size_label: "Mini",
