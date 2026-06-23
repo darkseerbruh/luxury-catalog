@@ -100,6 +100,42 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 20000,
     searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   })),
+  // Gucci Jackie 1961 (backbone Tier-1). Fashionphile handle: gucci-...-jackie-1961-<size>-.
+  // excludeTokens drop Jackie-line small leather goods (wallet/card/coin/pouch).
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Gucci",
+    style: "Jackie 1961",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["jackie", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch", "continental"],
+    minPrice: 400,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
+  })),
+  // Celine Luggage (backbone Tier-1, canonical "Luggage Tote"). excludeTokens drop the
+  // Luggage PHANTOM sub-model (open-side, distinct) + small leather goods.
+  ...(["nano", "micro", "mini", "medium"] as const).map((size) => ({
+    brand: "Celine",
+    style: "Luggage Tote",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["luggage", size],
+    excludeTokens: ["phantom", "wallet", "card", "pouch"],
+    minPrice: 400,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/celine/products.json",
+  })),
+  // Saint Laurent Loulou (backbone Tier-1). excludeTokens drop the Loulou PUFFER sub-line
+  // (distinct quilted puffer) + small leather goods.
+  ...(["toy", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Loulou",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["loulou", size],
+    excludeTokens: ["puffer", "wallet", "card", "pouch", "toy-puffer"],
+    minPrice: 400,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
