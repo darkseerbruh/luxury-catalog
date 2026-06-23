@@ -51,11 +51,13 @@ Opinion axes capture only lived experience; facts come from the catalogue/price 
 - Best crossbody for everyday — carry=crossbody × `everyday_wearability`
 - Best night-out bag — *needs structured `occasion`* (see gap)
 
-## Gap to close: structure `occasion`
+## Gap to close: structure `occasion` (DECIDED — do it)
 
-`occasion` is free text today, so it can't rank cleanly. To unlock
-night-out/work/travel/everyday boards, make it a closed enum (low-effort taps),
-same pattern as the axis vocabulary. Additive migration.
+`occasion` is free text today, so it can't rank cleanly. **Decision (2026-06-23):
+migrate it to a closed enum** (evening / work / travel / everyday / special),
+captured as low-effort taps, same pattern as the axis vocabulary. Additive,
+human-gated migration; backfill/parse existing free-text values where possible.
+Unlocks the night-out/work/travel boards.
 
 ## The flywheel (why this matters even though it isn't monetizable)
 
@@ -70,9 +72,21 @@ things that DO monetize / de-risk:
 4. **Contributor tiers** — votes/photos/reviews are the value-producing UGC that XP
    and the Aficionado→Curator ladder reward (never vanity metrics).
 
-## Homepage treatment (proposed)
+## Homepage treatment (DECIDED — new section)
 
-A "What the community knows" section: 2-3 rotating leaderboards + a low-effort
-contribution driver (tap the bars, worth-it toggle, add-a-photo, tier progress).
-Leaderboards degrade gracefully: a board hides until it has enough ratings; never
-show a sparse or invented ranking. All numbers labeled and dated.
+**Decision (2026-06-23): a dedicated "What the community knows" section** below the
+6 goal tiles: 2-3 rotating leaderboards + a low-effort contribution driver (tap the
+bars, worth-it toggle, add-a-photo, contributor-tier progress). Leaderboards degrade
+gracefully: a board hides until it has enough ratings; never show a sparse or
+invented ranking. All numbers labeled and dated.
+
+## Build dependencies / sequence
+
+1. **Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
+   `worth_the_price` vs review `worth_it`. (Edit the migration; it's not yet applied.)
+2. **New migration:** convert `review.occasion` free text → enum (+ backfill).
+3. **Leaderboard queries:** aggregate per board, resilient reads (empty until data),
+   minimum-N threshold before a board renders.
+4. **Homepage "What the community knows" section** + the contribution driver
+   (axis bars, worth-it, add-a-photo, tier progress).
+5. **Value-retention board** computed from `price_history` (data, not votes).
