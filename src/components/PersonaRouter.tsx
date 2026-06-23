@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { TASTE_QUESTIONS } from "@/lib/taste";
+import { getDeals } from "@/lib/deals";
+import { getMostWantedBags } from "@/lib/coveted-bags";
 
 /**
  * "What brings you in?" — the homepage goal-picker. Each tile SHOWS its value
@@ -8,13 +10,19 @@ import { TASTE_QUESTIONS } from "@/lib/taste";
  * docs/ux/home-use-case-value-props.md + docs/ux/homepage-experiments.md.
  *
  * Search lives ONCE, in the page hero (Option 1 of the search-IA review), so no
- * tile repeats a search box. Tiles that point at data pages (deals, most-wanted)
- * pitch the value here and deliver the real data on the linked page. We never put
- * fabricated figures on these tiles (never-invent): visuals are illustrative and
- * unlabeled, real numbers appear on the destination page.
+ * tile repeats a search box. The data tiles (deals, most-wanted) preview their
+ * REAL #1 row when data exists — every figure is a recorded value, never
+ * fabricated (never-invent). When the DB is unreachable or the signal isn't there
+ * yet, each tile degrades to its illustrative, unlabeled visual. The full ranked
+ * lists live on /deals and /coveted; both reads are resilient and return [].
  */
 
 const Q1 = TASTE_QUESTIONS[0];
+
+function formatPrice(amount: number, currency: string | null): string {
+  const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
+  return `${symbol}${amount.toLocaleString()}`;
+}
 
 function Check({ className = "text-gold" }: { className?: string }) {
   return (
@@ -42,7 +50,16 @@ function Bag({ className = "" }: { className?: string }) {
 const CTA = "mt-4 text-sm font-medium text-gold transition-colors group-hover:text-gold-soft";
 const TILE = "group flex flex-col rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold";
 
-export default function PersonaRouter() {
+export default async function PersonaRouter() {
+  // Live #1 rows for the data tiles. Both reads are resilient (return [] on any
+  // missing env / column / key), so a thin or credential-less environment simply
+  // falls back to the illustrative visuals below.
+  const [topDeals, topWanted] = await Promise.all([getDeals(1), getMostWantedBags(1)]);
+  const topDeal = topDeals[0] ?? null;
+  const topBag = topWanted[0] ?? null;
+  const dealName = topDeal ? [topDeal.brandName, topDeal.styleName].filter(Boolean).join(" ") : "";
+  const bagName = topBag ? [topBag.brandName, topBag.styleName].filter(Boolean).join(" ") : "";
+
   return (
     <section className="border-b border-border px-5 py-12">
       <h2 className="font-serif text-2xl text-foreground">What brings you in?</h2>
@@ -134,29 +151,57 @@ export default function PersonaRouter() {
           </p>
         </div>
 
-        {/* Tile 5 — Best deals right now (pitch; /deals delivers the live data) */}
+        {/* Tile 5 — Best deals right now. Previews the real #1 deal when we have
+            a listing under median; otherwise the illustrative chart. */}
         <Link href="/deals" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Best deals right now</h3>
           <p className="mt-1 text-sm text-muted">Listings priced under the resale median.</p>
-          <div className="mt-4 flex flex-1 items-center">
-            <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs text-gold-soft">under median</span>
-            <svg viewBox="0 0 60 24" className="ml-3 h-6 w-16 text-gold" fill="none" aria-hidden>
-              <path d="M2 4 L20 10 L38 16 L58 22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              <path d="M58 22 l-6 -2 m6 2 l-2 -6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          </div>
+          {topDeal ? (
+            <div className="mt-4 flex flex-1 flex-col justify-center">
+              <p className="text-xs uppercase tracking-wide text-muted">Biggest gap right now</p>
+              <div className="mt-1.5 flex items-center gap-2">
+                <span className="min-w-0 flex-1 truncate font-serif text-foreground">{dealName}</span>
+                <span className="flex-shrink-0 rounded-full border border-gold/40 bg-gold/10 px-2.5 py-0.5 text-xs font-medium text-gold-soft">
+                  {topDeal.pctUnder}% under
+                </span>
+              </div>
+              <p className="mt-1 text-sm">
+                <span className="text-foreground">{formatPrice(topDeal.currentPrice, topDeal.currency)}</span>
+                <span className="text-muted"> vs. {formatPrice(topDeal.medianPrice, topDeal.currency)} median</span>
+              </p>
+            </div>
+          ) : (
+            <div className="mt-4 flex flex-1 items-center">
+              <span className="rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs text-gold-soft">under median</span>
+              <svg viewBox="0 0 60 24" className="ml-3 h-6 w-16 text-gold" fill="none" aria-hidden>
+                <path d="M2 4 L20 10 L38 16 L58 22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                <path d="M58 22 l-6 -2 m6 2 l-2 -6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </div>
+          )}
           <span className={CTA}>See today&rsquo;s deals &rarr;</span>
         </Link>
 
-        {/* Tile 6 — Most coveted bags (distinct from coveted closets; /coveted ranks) */}
+        {/* Tile 6 — Most coveted bags (distinct from coveted closets; /coveted
+            ranks). Previews the real #1 most-wanted bag when there's want signal. */}
         <Link href="/coveted" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Most coveted bags</h3>
           <p className="mt-1 text-sm text-muted">The bags the most people want right now.</p>
-          <div className="mt-4 flex flex-1 items-center gap-2 text-muted">
-            <Bag className="h-8 w-8 text-gold/70" />
-            <Bag className="h-8 w-8 text-gold/45" />
-            <Bag className="h-8 w-8 text-gold/30" />
-          </div>
+          {topBag ? (
+            <div className="mt-4 flex flex-1 flex-col justify-center">
+              <p className="text-xs uppercase tracking-wide text-gold">#1 right now</p>
+              <p className="mt-1.5 truncate font-serif text-foreground">{bagName}</p>
+              <p className="mt-1 text-sm text-muted">
+                {topBag.wantCount} {topBag.wantCount === 1 ? "person wants it" : "people want it"}
+              </p>
+            </div>
+          ) : (
+            <div className="mt-4 flex flex-1 items-center gap-2 text-muted">
+              <Bag className="h-8 w-8 text-gold/70" />
+              <Bag className="h-8 w-8 text-gold/45" />
+              <Bag className="h-8 w-8 text-gold/30" />
+            </div>
+          )}
           <span className={CTA}>See the most-wanted bags &rarr;</span>
         </Link>
       </div>
