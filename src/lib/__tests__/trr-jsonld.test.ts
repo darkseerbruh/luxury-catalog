@@ -10,6 +10,13 @@ import {
   horsebitSize,
   coachModelSize,
   coachPillowTabby,
+  ophidiaSize,
+  evelyneSize,
+  keepallSize,
+  picotinSize,
+  pochetteMetisSize,
+  onTheGoSize,
+  bumbagSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -321,5 +328,96 @@ describe("coachPillowTabby", () => {
     expect(p18("Coach Signature Pillow Tabby 18")).toBe(true);
     expect(p18("Coach Leather Tabby 18")).toBe(false); // not pillow
     expect(pStd("Coach Pillow Tabby")).toBe(true);
+  });
+});
+
+describe("ophidiaSize (Super-Mini-aware, like Dionysus)", () => {
+  it("routes 'Super Mini' away from the plain Mini bucket", () => {
+    expect(ophidiaSize("super mini")("Gucci GG Supreme Super Mini Ophidia")).toBe(true);
+    expect(ophidiaSize("mini")("Gucci GG Supreme Super Mini Ophidia")).toBe(false);
+    expect(ophidiaSize("mini")("Gucci GG Canvas Mini Ophidia")).toBe(true);
+  });
+  it("buckets the real TRR size names by whole word", () => {
+    expect(ophidiaSize("small")("Gucci GG Supreme Ophidia Small")).toBe(true);
+    expect(ophidiaSize("medium")("Gucci GG Canvas Ophidia Medium")).toBe(true);
+    expect(ophidiaSize("large")("Web Ophidia Large")).toBe(true);
+    expect(ophidiaSize("small")("Web Ophidia Large")).toBe(false);
+  });
+  it("drops Ophidia SLGs / backpack / belt bag", () => {
+    expect(ophidiaSize("small")("Gucci Small Ophidia Wallet")).toBe(false);
+    expect(ophidiaSize("medium")("Gucci Ophidia Backpack")).toBe(false);
+    expect(ophidiaSize("mini")("Gucci Ophidia Belt Bag")).toBe(false);
+  });
+});
+
+describe("evelyneSize (numeric TRR cm → TPM/PM/GM)", () => {
+  it("maps numeric cm to the backbone letter size", () => {
+    expect(evelyneSize("PM")("Clemence Evelyne III 29")).toBe(true);
+    expect(evelyneSize("GM")("Clemence Evelyne III 33")).toBe(true);
+    expect(evelyneSize("TPM")("Clemence Amazone Evelyne TPM 16")).toBe(true);
+  });
+  it("keeps 'TPM 16' out of the PM bucket and vice versa", () => {
+    expect(evelyneSize("PM")("Clemence Amazone Evelyne TPM 16")).toBe(false);
+    expect(evelyneSize("TPM")("Clemence Evelyne III 29")).toBe(false);
+  });
+  it("drops the non-backbone TGM 40", () => {
+    expect(evelyneSize("GM")("Clemence Evelyne III TGM 40")).toBe(false);
+    expect(evelyneSize("PM")("Clemence Evelyne III TGM 40")).toBe(false);
+  });
+});
+
+describe("keepallSize (whole-word numeric)", () => {
+  it("buckets each size and folds Bandoulière in", () => {
+    expect(keepallSize("50")("Monogram Keepall Bandoulière 50")).toBe(true);
+    expect(keepallSize("55")("Monogram Keepall 55")).toBe(true);
+    expect(keepallSize("50")("Monogram Keepall 55")).toBe(false);
+  });
+  it("a year cannot false-match a size token", () => {
+    expect(keepallSize("50")("2019 Monogram Keepall 45")).toBe(false);
+  });
+});
+
+describe("picotinSize (numeric + rare Micro)", () => {
+  it("buckets 18/22/26 by whole word", () => {
+    expect(picotinSize("18")("Clemence Picotin Lock 18")).toBe(true);
+    expect(picotinSize("22")("Clemence Picotin Lock 22")).toBe(true);
+    expect(picotinSize("18")("Clemence Picotin Lock 22")).toBe(false);
+  });
+  it("drops the seller typo and the larger 31", () => {
+    expect(picotinSize("18")("Clemence Pictoin Lock 18")).toBe(false);
+    expect(picotinSize("26")("Clemence Picotin Lock 31")).toBe(false);
+  });
+});
+
+describe("pochetteMetisSize (Standard / East-West)", () => {
+  it("is accent-insensitive and splits East-West out", () => {
+    expect(pochetteMetisSize("Standard")("Monogram Pochette Metis")).toBe(true);
+    expect(pochetteMetisSize("East-West")("Monogram Pochette Metis East West")).toBe(true);
+    expect(pochetteMetisSize("Standard")("Monogram Pochette Metis East West")).toBe(false);
+  });
+  it("excludes other LV Pochettes", () => {
+    expect(pochetteMetisSize("Standard")("LV Monogram Pochette Félicie")).toBe(false);
+  });
+});
+
+describe("onTheGoSize (PM/MM/GM/East-West)", () => {
+  it("matches both OnTheGo and On The Go spellings, whole-word size", () => {
+    expect(onTheGoSize("MM")("Louis Vuitton OnTheGo MM")).toBe(true);
+    expect(onTheGoSize("GM")("Louis Vuitton On The Go GM")).toBe(true);
+    expect(onTheGoSize("MM")("Louis Vuitton On The Go GM")).toBe(false);
+  });
+  it("checks East-West before the letter buckets", () => {
+    expect(onTheGoSize("East-West")("OnTheGo East West")).toBe(true);
+  });
+});
+
+describe("bumbagSize (Mini / Standard)", () => {
+  it("matches Bumbag and Bum Bag, splits Mini out", () => {
+    expect(bumbagSize("Standard")("Monogram Bumbag")).toBe(true);
+    expect(bumbagSize("Mini")("Monogram Mini Bum Bag")).toBe(true);
+    expect(bumbagSize("Standard")("Monogram Mini Bum Bag")).toBe(false);
+  });
+  it("excludes other LV belt bags", () => {
+    expect(bumbagSize("Standard")("Monogram Belt Bag")).toBe(false);
   });
 });

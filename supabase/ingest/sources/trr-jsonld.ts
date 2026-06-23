@@ -125,6 +125,12 @@ const JACKIE_SIZES = ["mini", "small", "medium", "large"];
 const LUGGAGE_SIZES = ["nano", "micro", "mini", "medium"];
 // Saint Laurent Loulou: Toy / Small / Medium / Large.
 const LOULOU_SIZES = ["toy", "small", "medium", "large"];
+// Chanel Vanity Case (#430): Mini / Small / Medium / Large. TRR names many vanities
+// without a size (~half) — those drop; non-Vanity Chanel cosmetic/box bags lack the
+// "vanity" token so they're excluded by modelSize's model requirement.
+const VANITY_SIZES = ["mini", "small", "medium", "large"];
+// Chanel Deauville (#429): Mini / Small / Medium / Large.
+const DEAUVILLE_SIZES = ["mini", "small", "medium", "large"];
 
 // ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
 // A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
@@ -170,6 +176,127 @@ export function horsebitSize(size: "mini" | "small" | null): (name: string) => b
       return want.test(n) && !others.some((re) => re.test(n));
     }
     return !HORSEBIT_SIZES.some((s) => new RegExp(`\\b${s}\\b`).test(n)); // Shoulder = no size token
+  };
+}
+
+/**
+ * Gucci Ophidia size predicate — Super Mini / Mini / Small / Medium / Large / Jumbo
+ * (backbone #448). Like Dionysus, "Super Mini" CONTAINS "mini", so plain Mini rejects
+ * any "super mini" name and Super Mini requires the phrase. TRR titles the size at the
+ * end ("Web Ophidia Large", "GG Supreme Ophidia Medium"); ~40% of Ophidia listings are
+ * UNSIZED ("GG Supreme Ophidia") — those match no size bucket and DROP (the clean
+ * per-size pattern; the high-confidence FP load already covers the icon, this TRR pass
+ * adds year + a 2nd source per size). Footwear/SLGs and the Ophidia backpack/belt bag
+ * (different silhouettes, not backbone size variants) are guarded out.
+ */
+const OPHIDIA_SIZES = ["mini", "small", "medium", "large", "jumbo"];
+const GUCCI_OPHIDIA_NOT = /loafer|sandal|boot|pump|mule|slide|sneaker|wallet|card case|cardholder|card holder|key case|key pouch|belt bag|backpack/;
+export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "large" | "jumbo"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("ophidia") || GUCCI_OPHIDIA_NOT.test(n)) return false;
+    if (size === "super mini") return /super[\s-]*mini/.test(n);
+    if (size === "mini" && /super[\s-]*mini/.test(n)) return false; // plain Mini ≠ Super Mini
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = OPHIDIA_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── LV Bumbag (#445) ──────────────────────────────────────────────────────────
+// Two backbone variants: Mini / Standard. TRR titles it "Bumbag" or "Bum Bag" (both
+// matched); other LV belt/utility bags lack "bumbag" so requiring it excludes them.
+export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/bum.?bag/.test(n) || /charm/.test(n)) return false;
+    const isMini = /\bmini\b/.test(n);
+    return label === "Mini" ? isMini : !isMini;
+  };
+}
+
+// ── LV OnTheGo (#437) ─────────────────────────────────────────────────────────
+// Letter sizes PM / MM / GM + East-West. TRR titles it "OnTheGo" or "On The Go" —
+// both matched. Letter sizes whole-word (\b, so "mm" can't hide in "monogram"); the
+// EW format is checked first so it can't fall into a letter bucket.
+const ONTHEGO_SIZES = ["pm", "mm", "gm"];
+export function onTheGoSize(label: "PM" | "MM" | "GM" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/on.?the.?go|onthego/.test(n) || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    if (label === "East-West") return isEW;
+    if (isEW) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = ONTHEGO_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── LV Pochette Métis (#438) ──────────────────────────────────────────────────
+// Two backbone variants: Standard / East-West. TRR drops the accent ("Pochette
+// Metis"); other LV Pochettes (Eva, Félicie, Accessoires, Orsay) lack "metis" so
+// requiring it excludes them. East-West = the "East West"/"EW" name; everything else
+// metis is Standard (a rare Mini folds into Standard — no Mini backbone variant).
+export function pochetteMetisSize(label: "Standard" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/m[eé]tis/.test(n) || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    return label === "East-West" ? isEW : !isEW;
+  };
+}
+
+// ── Hermès Picotin Lock (#414) ────────────────────────────────────────────────
+// Numeric sizes 18 / 22 / 26 (+ a rare Micro). Whole-word (\b) numeric; a seller
+// typo ("Pictoin") and the larger 31cm both drop (clean per-size split). Adds year
+// + a 2nd source to the FP Picotin rows.
+const PICOTIN_SIZES = ["18", "22", "26"];
+export function picotinSize(size: "18" | "22" | "26" | "Micro"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("picotin") || /charm/.test(n)) return false;
+    if (size === "Micro") return /\bmicro\b/.test(n);
+    if (/\bmicro\b/.test(n)) return false;
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = PICOTIN_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── LV Keepall (#440) ─────────────────────────────────────────────────────────
+// Numeric sizes 25 / 45 / 50 / 55 / 60, often with a "Bandoulière" strap that folds
+// into its size (the strap detail stays in the row's desc). Whole-word (\b) so a year
+// or a "25mm strap" mention can't false-match the size token. Unsized listings drop.
+const KEEPALL_SIZES = ["25", "45", "50", "55", "60"];
+export function keepallSize(size: string): (name: string) => boolean {
+  const want = new RegExp(`\\b${size}\\b`);
+  const others = KEEPALL_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("keepall") || /charm/.test(n)) return false;
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── Hermès Evelyne (#412) ─────────────────────────────────────────────────────
+// TRR sizes the Evelyne by NUMERIC cm, not the letter code: 16=TPM, 29=PM, 33=GM
+// ("Clemence Evelyne III 29"). The letter codes appear only on the smallest as
+// "TPM 16". TGM 40 is a larger, non-backbone size → dropped. Each numeric is
+// whole-word (\b) so a year ("2024 … 29") can't false-match and a "16" can't hide
+// inside "2016". Adds year (Evelyne has ~77% year coverage on TRR) + a 2nd source.
+const EVELYNE_MAP: Record<"TPM" | "PM" | "GM", string> = { TPM: "16", PM: "29", GM: "33" };
+export function evelyneSize(label: "TPM" | "PM" | "GM"): (name: string) => boolean {
+  const num = EVELYNE_MAP[label];
+  const otherNums = Object.values(EVELYNE_MAP).filter((x) => x !== num);
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("evelyne")) return false;
+    if (/\b40\b/.test(n) || /tgm/.test(n)) return false; // TGM 40 ≠ backbone GM
+    if (otherNums.some((x) => new RegExp(`\\b${x}\\b`).test(n))) return false;
+    const numHit = new RegExp(`\\b${num}\\b`).test(n);
+    const letterHit = new RegExp(`\\b${label.toLowerCase()}\\b`).test(n); // \btpm\b ⊅ pm
+    return numHit || letterHit;
   };
 }
 
@@ -481,6 +608,93 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     brand: "Saint Laurent", style: "Loulou", size_label: "Large",
     namePredicate: modelSize("loulou", "large", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
+
+  // ── Gucci Ophidia (#448) — curated per-size, share one "gucci-ophidia" capture. ──
+  // Adds year + a 2nd source to the FP Ophidia rows. Unsized listings drop (clean split).
+  "gucci-ophidia-super-mini": { brand: "Gucci", style: "Ophidia", size_label: "Super Mini",
+    namePredicate: ophidiaSize("super mini"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-mini": { brand: "Gucci", style: "Ophidia", size_label: "Mini",
+    namePredicate: ophidiaSize("mini"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-small": { brand: "Gucci", style: "Ophidia", size_label: "Small",
+    namePredicate: ophidiaSize("small"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-medium": { brand: "Gucci", style: "Ophidia", size_label: "Medium",
+    namePredicate: ophidiaSize("medium"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-large": { brand: "Gucci", style: "Ophidia", size_label: "Large",
+    namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+  "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
+    namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── LV Bumbag (#445) — Mini / Standard, share one "lv-bumbag" capture. ──
+  "lv-bumbag-mini": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Mini",
+    namePredicate: bumbagSize("Mini"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+  "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
+    namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
+
+  // ── LV OnTheGo (#437) — letter sizes + East-West, share one "lv-onthego" capture. ──
+  "lv-onthego-pm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "PM",
+    namePredicate: onTheGoSize("PM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-mm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "MM",
+    namePredicate: onTheGoSize("MM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-gm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "GM",
+    namePredicate: onTheGoSize("GM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+  "lv-onthego-east-west": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "East-West",
+    namePredicate: onTheGoSize("East-West"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
+
+  // ── LV Pochette Métis (#438) — share one "lv-pochette-metis" capture. ──
+  "lv-pochette-metis-standard": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "Standard",
+    namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+  "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
+    namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── Chanel Deauville (#429) — share one "chanel-deauville" capture. ──
+  "chanel-deauville-mini": { brand: "Chanel", style: "Deauville", size_label: "Mini",
+    namePredicate: modelSize("deauville", "mini", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-small": { brand: "Chanel", style: "Deauville", size_label: "Small",
+    namePredicate: modelSize("deauville", "small", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-medium": { brand: "Chanel", style: "Deauville", size_label: "Medium",
+    namePredicate: modelSize("deauville", "medium", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+  "chanel-deauville-large": { brand: "Chanel", style: "Deauville", size_label: "Large",
+    namePredicate: modelSize("deauville", "large", DEAUVILLE_SIZES), minPrice: 600, maxPrice: 12000, rawKey: "chanel-deauville" },
+
+  // ── Chanel Vanity Case (#430) — share one "chanel-vanity" capture. ──
+  "chanel-vanity-mini": { brand: "Chanel", style: "Vanity Case", size_label: "Mini",
+    namePredicate: modelSize("vanity", "mini", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-small": { brand: "Chanel", style: "Vanity Case", size_label: "Small",
+    namePredicate: modelSize("vanity", "small", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-medium": { brand: "Chanel", style: "Vanity Case", size_label: "Medium",
+    namePredicate: modelSize("vanity", "medium", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-large": { brand: "Chanel", style: "Vanity Case", size_label: "Large",
+    namePredicate: modelSize("vanity", "large", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+
+  // ── Hermès Picotin Lock (#414) — numeric sizes, share one "hermes-picotin" capture. ──
+  "hermes-picotin-18": { brand: "Hermès", style: "Picotin Lock", size_label: "18",
+    namePredicate: picotinSize("18"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-22": { brand: "Hermès", style: "Picotin Lock", size_label: "22",
+    namePredicate: picotinSize("22"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-26": { brand: "Hermès", style: "Picotin Lock", size_label: "26",
+    namePredicate: picotinSize("26"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+  "hermes-picotin-micro": { brand: "Hermès", style: "Picotin Lock", size_label: "Micro",
+    namePredicate: picotinSize("Micro"), minPrice: 1000, maxPrice: 30000, rawKey: "hermes-picotin" },
+
+  // ── LV Keepall (#440) — numeric sizes, share one "lv-keepall" capture. ──
+  "lv-keepall-25": { brand: "Louis Vuitton", style: "Keepall", size_label: "25",
+    namePredicate: keepallSize("25"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-45": { brand: "Louis Vuitton", style: "Keepall", size_label: "45",
+    namePredicate: keepallSize("45"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-50": { brand: "Louis Vuitton", style: "Keepall", size_label: "50",
+    namePredicate: keepallSize("50"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-55": { brand: "Louis Vuitton", style: "Keepall", size_label: "55",
+    namePredicate: keepallSize("55"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-60": { brand: "Louis Vuitton", style: "Keepall", size_label: "60",
+    namePredicate: keepallSize("60"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+
+  // ── Hermès Evelyne (#412) — numeric TRR sizes, share one "hermes-evelyne" capture. ──
+  "hermes-evelyne-tpm": { brand: "Hermès", style: "Evelyne", size_label: "TPM",
+    namePredicate: evelyneSize("TPM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
+  "hermes-evelyne-pm": { brand: "Hermès", style: "Evelyne", size_label: "PM",
+    namePredicate: evelyneSize("PM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
+  "hermes-evelyne-gm": { brand: "Hermès", style: "Evelyne", size_label: "GM",
+    namePredicate: evelyneSize("GM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
 
   // ── Coach (the viral thrift engine) — curated per-model; all share "coach-models". ──
   // Tabby (#3) — sizes 12 / 20 / 26 + Standard. Excludes Pillow Tabby (own style).
