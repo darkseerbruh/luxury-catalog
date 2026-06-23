@@ -224,6 +224,20 @@ export function dianaSize(label: "Mini" | "Small" | "Medium" | "Maxi"): (name: s
   };
 }
 
+// ── LV Twist (#439) ───────────────────────────────────────────────────────────
+// Backbone PM / MM. A broad Twist search pulls in LV "Twist" JEWELRY (bracelet/ring/
+// the Idylle Blossom Twist) — guarded out. Letter size whole-word.
+const TWIST_NOT = /bracelet|ring|necklace|earring|brooch|pendant|wallet|card/;
+export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("twist") || TWIST_NOT.test(n) || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const other = label === "PM" ? /\bmm\b/ : /\bpm\b/;
+    return want.test(n) && !other.test(n);
+  };
+}
+
 // ── LV Coussin (#442) ─────────────────────────────────────────────────────────
 // Letter sizes BB / MM / PM. Whole-word (\b) so a letter can't hide in another word;
 // require "coussin" to exclude other LV bags in a broad search.
@@ -781,6 +795,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── LV Twist (#439) — PM / MM, share one "lv-twist" capture. ──
+  "lv-twist-pm": { brand: "Louis Vuitton", style: "Twist", size_label: "PM",
+    namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+  "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
+    namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
 
   // ── LV Coussin (#442) — BB / MM / PM, share one "lv-coussin" capture. ──
   "lv-coussin-bb": { brand: "Louis Vuitton", style: "Coussin", size_label: "BB",
