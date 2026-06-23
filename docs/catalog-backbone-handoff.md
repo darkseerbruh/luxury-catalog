@@ -1,10 +1,49 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (Gucci-TRR +
-next-icons + Coach batch). Companion: `docs/data-collection-handoff.md` (capture
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (62-icon
+Fashionphile go-wide). Companion: `docs/data-collection-handoff.md` (capture
 techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
 
-> **Latest batch (2026-06-23, this session) — prod 5,130 → 6,260 listed rows:**
+> **🚀 Latest session (2026-06-23 PM) — 62 NEW icons via Fashionphile, prod 6,232 →
+> 9,059 listed rows (+2,827), 0 unresolved, 8 clean merges to `main`:**
+> The big browser-free "go wide" pass. Every clean unfilled backbone style with FP
+> coverage is now filled (variants #611–803, +193 size buckets; styles unchanged at
+> 315 — all 62 were pre-seeded backbone styles). Batches:
+> - **Batch 2 (13):** Hermès Garden Party/Evelyne · Celine Belt Bag/Ava · YSL Niki/
+>   Le 5 à 7 · Bottega Andiamo/Arco · Fendi First/Sunshine Shopper · Prada Galleria/
+>   Re-Edition 2005 · Dior Lady D-Joy. (+671)
+> - **Batch 3 (10 LV):** NéoNoé · Capucines · OnTheGo · Pochette Métis · Keepall ·
+>   Coussin · Bumbag · Dauphine · Twist · Petite Malle. (+772)
+> - **Batch 4 (7 Hermès):** Picotin Lock · Bolide · Lindy · Herbag · Kelly Pochette ·
+>   Roulis · Jypsière. (+362)
+> - **Batch 5 (6 Gucci):** Ophidia · Bamboo 1947 · Soho Disco · Diana · Attache ·
+>   Blondie. (+410)
+> - **Batch 6 (11):** YSL College/Icare/Lou Camera/Manhattan/Solferino · Dior Caro/
+>   Bobby/Toujours · Fendi Mon Trésor/By the Way/Fendigraphy. (+237)
+> - **Batch 7 (12):** Prada Cleo/Symbole/Moon/Arqué · Bottega The Pouch/Loop/Knot/
+>   Sardine/Lauren 1980 · Chanel Deauville/Vanity Case/Business Affinity. (+362)
+> - **Batch 8 (3 Burberry):** The Knight · Lola. (+13)
+> - **⚡ Technique win:** a one-pass **OR-capture** (`_fpcapture.mjs`: crawl a brand
+>   collection ONCE, merge every product matching ANY icon token) replaced N per-icon
+>   crawls — far gentler on FP's rate limit (one 429 early under parallel inspection;
+>   sequential single-crawl-per-brand held clean the rest of the session).
+> - **Traps caught & encoded** (all in `fashionphile.ts` comments): Celine "belt" vs
+>   Triomphe waist-belts (require `belt-bag`); "havana" colour ⊃ "ava"; Bottega
+>   `maxi-intrecciato` is the WEAVE not a size (Arco + The Pouch); Evelyne "tpm" ⊃
+>   "pm" (anchor `-pm`/`-gm`); LV Keepall numeric `-NN-` (a "25mm" strap ≠ "-25-");
+>   Gucci Diana "jumbo" = GG monogram SCALE not a size; Prada Symbole = mostly
+>   SUNGLASSES; Dior "diorbobby" sunglasses + "d-bobby" hat; Fendi/First nano =
+>   bag-charm; Burberry "knight" is also a COLORWAY. Numeric Hermès sizes anchored
+>   `-NN-` so a 7-digit product-id can't false-match.
+> - **Deferred (ambiguous naming — left for a careful pass):** YSL Cassandre Envelope
+>   (conflated with SLG pouches), Fendi C'mon (handle token mismatch — try "cmon"),
+>   Chanel Reissue 2.55 (only verbose one-off styles, no clean canonical), Loewe
+>   (NOT a brand in the catalog). **FP-empty brands:** Kate Spade + Coach (no FP
+>   collection — TRR/other source only). **Note:** the brief Burberry Knight glitch
+>   left 3 stale rows in `discovered_listing` (209→212) — same data now correctly
+>   `listed`; harmless, clean up opportunistically.
+
+> **Prior batch (2026-06-23 AM) — prod 5,130 → 6,260 listed rows:**
 > - **Gucci curated TRR** (the deferred #1): Super-Mini-aware `dionysusSize` +
 >   1955-anchored `horsebitSize` predicates (footwear/SLG guarded). Captured
 >   `gucci-wide` (477 records) → Dionysus 49/57/93/45 · Horsebit 66/44/107 · Jackie +
@@ -40,8 +79,8 @@ currently for sale, then deepen (colours/leathers/eras) and broaden (more styles
 
 ## 1. What's live right now (prod Supabase)
 
-⚠️ *The 1,787 figure below is a HISTORICAL snapshot — current prod is **~6,260** (see the
-top banner + the "Prod total" line further down). The per-source split is kept only to
+⚠️ *The 1,787 figure below is a HISTORICAL snapshot — current prod is **9,059 listed**
+(see the top banner + the "Prod total" line further down). The per-source split is kept only to
 show the capture method per marketplace.* Each row carries per-listing colour / leather /
 hardware / year / source_url and feeds the bag-page value module:
 
@@ -65,9 +104,10 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: ~6,260 listed rows + 209 `discovered_listing`** as of 2026-06-23 (this
-batch added ~1,130: Gucci TRR + 7 FP next-icons + Coach — see the banner at the top).
-Earlier in the day it was ~5,102.
+**Prod total: 9,059 listed rows + 212 `discovered_listing`** as of 2026-06-23 PM (the
+62-icon Fashionphile go-wide added +2,827 — see the top banner). **315 styles / 629
+variants** (no new styles — all 62 icons filled pre-seeded backbone styles). Earlier
+the same day it was ~6,260, and ~5,102 before that.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**
