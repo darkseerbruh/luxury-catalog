@@ -401,44 +401,51 @@ Rogue 601-605 · Brooklyn 606-608 · Willow 609-610.
 
 ---
 
-## 7. Next steps (prioritized)
+## 7. Next steps (prioritized — current as of 2026-06-23, batch 5)
 
-1. ~~Architecture call + migration 0026 + catch-all/promotion~~ **DONE** (§5).
-2. ~~Apply the backbone~~ **DONE** (§4). ~~Speedy/Alma/Book Tote~~ + ~~Boy/Jackie/Celine/Loulou~~
-   **DONE**. ~~10 new icons + 4 FP backfills via Fashionphile~~ **DONE** (§1, ~4,896 prod rows).
-   ~~Demonstrate `discovered_listing`~~ **DONE** (§5). ~~Celine #207→#484 merge plan~~ **DONE**
-   (`docs/celine-luggage-merge-plan.md`, owner-gated).
-2b. ~~TRR brand-wide catch-all for Celine / Hermès / Saint Laurent / Chanel~~ **DONE** (§1; 480
-    fetches, 0 blocks, +TRR year on the new icons, discovered → 209).
-2c. ~~**Gucci curated TRR** (Super-Mini-aware Dionysus + Horsebit)~~ **DONE** this session.
-2d. ~~**Coach full depth**~~ **DONE** this session (curated per-model; see the TRR Coach
-    limitation in the top banner — vintage Coach is generic-named & not curatable from TRR).
-    **Remaining TRR (still open, all OPTIONAL polish):**
-    - **Higher-fidelity re-do of the 4 catch-all brands' new icons:** Constance/19/Gabrielle/
-      WOC/Sac de Jour/Kate currently have *catch-all* (low-confidence) TRR. Curated TRR targets
-      would add per-size precision + year. FP per-size data is already high-confidence → polish.
-    - **More Coach models** (Field, Bandit, Swagger, vintage Willis/Rambler/Station): Field/Bandit
-      are thin on TRR; vintage models are model-LESS in TRR JSON-LD (see banner) → would need a
-      non-TRR source. Tabby/Rogue/Brooklyn (the hyped modern ones) are the high-value ones, done.
-    - **Coco Handle / Lady Dior / Saddle / Jodie / Cassette / Peekaboo / Baguette** have FP only
-      (high-confidence per-size); a TRR pass would add year + 2nd source (polish).
-3. **Go wide — next icons (the proven per-icon recipe, now faster):**
-   - **(a) Fashionphile FIRST (no browser, fast):** `tsx supabase/ingest/sources/fashionphile-collection.ts
-     <brand-slug> <token>` → `tsx supabase/ingest/sources/fashionphile.ts --raw`.
-   - **(b) Scaffold variants:** `tsx supabase/seed/scaffold-variants.ts "<Brand>" "<Style>" <sizes…> --write`
-     (loader DROPS rows for a style with zero variants — real sizes are facts, not "inventing").
-   - **(c) Add targets:** Fashionphile `TARGETS` (`requireTokens` + `excludeTokens` for sub-models/SLGs);
-     TRR `trr-jsonld.ts` `TARGETS` (`modelSize(model,size,siblings,notTokens)`, share one capture via `rawKey`).
-   - **(d) TRR capture (browser, GENTLE — see §2 rate-limit playbook):** one icon (~120 fetches) per
-     ~10-min window; `__fetchGentle` sequential; Blob-download to `~/Downloads` → `cp` to `data/ingest/_raw/<key>.json`.
-   - **(e)** `load:prices <source> --write` → `summary:refresh`. Gate `tsc/eslint/next build/npm test`, branch-per-icon, merge to main.
-   - **Queue:** Hermès Constance · Chanel 19 / Gabrielle / WOC / Coco Handle · Gucci Dionysus / Horsebit 1955 ·
-     Celine Triomphe / Box · YSL Sac de Jour / Kate / Niki · Bottega Cassette/Jodie · Fendi Baguette/Peekaboo · Coach (full depth).
-4. **Demonstrate `discovered_listing`:** one wide catch-all TRR capture (§5) → promotion-pass dry-run.
-5. **Vestiaire (deprioritized):** browser-gated + ~15 rows/search; add opportunistically, not as a blocker.
-6. **Catalog cleanup** (owner-gated, DESTRUCTIVE; dry-run plan first): merge Celine **#207 "Luggage" → #484
-   "Luggage Tote"**; dedupe verbose Chanel/Hermès/LV one-off styles (Birkin 40 mis-resolve).
-7. **Enrichment:** condition-detail capture (Fashionphile renders grades) → `enrich-conditions` (ANTHROPIC_API_KEY in `.env.local`).
+**The big data pushes are DONE.** Backbone applied; 62-icon FP go-wide done; the curated
+**2nd-source TRR pass is COMPLETE** for every backbone icon with usable TRR/FP inventory
+(26 icons, +per-listing year); Loewe added as a new brand; the deferred Chanel Reissue +
+YSL Cassandre are resolved. What remains is the menu below.
+
+**A. Browser-FREE, in-scope, do anytime (Fashionphile CLI + DB/code):**
+1. **eBay-gated brands — the one real unfilled gap.** Kate Spade (Knott #196, Sam #197) +
+   Coach (Field #502, Bandit #503, Swagger #2) are **model-less in TRR/FP/Vestiaire structured
+   data** (confirmed batch 5) — they have 0 variants and can't be cleanly sourced today.
+   **Unblock:** owner creates a free **eBay developer app** → set `EBAY_APP_ID` + `EBAY_CERT_ID`
+   in the env; the `ebay.ts` adapter (Browse API, structured item-specifics incl. model) then
+   loads them. *Prep waiting:* add eBay `TARGETS` for these 5 styles once keys exist.
+2. **Enrichment:** condition-detail capture (FP renders grades) → `enrich-conditions`
+   (`ANTHROPIC_API_KEY` in `.env.local`).
+3. **More breadth** (any new icon, same recipe): FP collection capture → scaffold variants →
+   `requireTokens`/`excludeTokens` targets → `load:prices --write` → `summary:refresh`.
+
+**B. Browser-GATED (owner's logged-in Chrome; gentle per §2):**
+4. **Higher-fidelity re-do of the 6 catch-all-only icons:** Constance / Chanel 19 / Gabrielle /
+   WOC / Sac de Jour / Kate still have *catch-all* (low-confidence) TRR — curated per-size TRR
+   targets (the `trr-jsonld.ts` recipe used for the 26 icons) would add precision + year. Polish.
+5. **Re-captures for freshness** — TRR/FP listings churn; re-running an icon's capture refreshes
+   asking prices (idempotent via the listing_ref dedup index).
+6. **Vestiaire (deprioritized):** browser-gated, ~15 rows/search, AND its `model.name` is empty
+   for mass brands (Kate Spade) — low yield. Only worth it for a specific hero with no other source.
+
+**C. OWNER-GATED (prep as dry-run; do NOT execute unattended):**
+7. **Celine #207 "Luggage" → #484 "Luggage Tote" merge** (`docs/celine-luggage-merge-plan.md`,
+   DESTRUCTIVE).
+8. **`promote:discovered --write`** — the 212 `discovered_listing` clusters need human curation
+   before promotion (the `--write` path is a guarded stub).
+9. **Catalog cleanup:** dedupe verbose Chanel/Hermès/LV one-off styles (cause of the Birkin 40
+   mis-resolve) — DESTRUCTIVE, dry-run plan first.
+
+**The per-icon recipe (proven, fast):** (a) FP first (no browser): `fashionphile-collection.ts
+<brand-slug> <token>` → `fashionphile.ts --raw`; (b) scaffold: `scaffold-variants.ts "<Brand>"
+"<Style>" <sizes…> --write` (loader DROPS rows for a variant-less style); (c) targets: FP
+`requireTokens`+`excludeTokens` / TRR `trr-jsonld.ts` per-size predicate sharing one `rawKey`;
+(d) TRR capture (browser, GENTLE §2) — Blob-download to `~/Downloads` → `cp` to `_raw/<key>.json`;
+(e) `load:prices <source> --write` → `summary:refresh`. Gate tsc/eslint/next build/npm test,
+branch-per-batch, merge to main. **ALWAYS inspect the live name/handle distribution before
+writing predicates** (see banner key-learnings — TRR sizes Hermès numerically, broad searches
+pull sibling models + SLGs/jewelry, marketplace size labels differ e.g. Diana Maxi=Large).
 
 ---
 

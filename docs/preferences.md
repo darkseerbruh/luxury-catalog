@@ -103,6 +103,8 @@
 - **Catalog stays free** — monetize via affiliate + (later) authenticator marketplace + premium *search capability*, never a content paywall.
 - **Coach matters** — the viral thrift-store acquisition engine.
 - **Mobile-first** — every page works at 375px.
+- **The catalog of styles is owner-curated top-down** (the approved backbone in `supabase/seed/research/catalog-backbone.json`). She **expands it when she chooses** — on 2026-06-23 she added **Loewe** (14th brand, #399; T1 Puzzle/Hammock/Flamenco/Gate/Goya/Amazona) after earlier excluding it, so don't treat the backbone as frozen — but adding a *new brand* is her call; confirm before doing it unprompted.
+- **Data-source reality (locked finding 2026-06-23):** TheRealReal JSON-LD, Fashionphile, and Vestiaire all carry **structured per-size data ONLY for hyped/contemporary models**; **mass-market brands are model-LESS in structured feeds** (Kate Spade Knott/Sam, vintage + Field/Bandit Coach come back as generic "Leather Tote", and Vestiaire's `model.name` is empty for them). Sourcing those cleanly needs the **eBay Browse API** — set `EBAY_APP_ID` + `EBAY_CERT_ID` in the env (she'd create a free eBay developer app); the `ebay.ts` adapter is already built. Do **not** scrape free-text seller descriptions to fill model names (violates the never-invent rule).
 
 ## Brand voice & tone (locked) — canonical: `docs/voice-and-tone.md`
 - **A fresh, internet-native voice** — explicitly *not* legacy-luxury hush (serif, "timeless elegance") and *not* discount breathlessness ("SCORE designer for LESS!!").
