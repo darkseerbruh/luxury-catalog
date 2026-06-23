@@ -21,6 +21,13 @@
 - **She supplies her own source material and wants analysis grounded in it**, not your assumptions — e.g. she pasted full YouTube transcripts so you'd extract her favorite creators' *actual* phrasing. Prefer real sources over guessing; if a source can't be fetched (e.g. transcript host blocks it), say so plainly and ask her for it rather than characterizing from memory.
 - **Wants honest go/no-go verdicts, not just yes-and.** She'll ask *"is that even worth doing?"* — give a candid recommendation with the tradeoff, even if the answer is "marginal" (e.g. she accepted that collection tax-tracking is valuable to flippers but minor for most users). Don't oversell a feature just because it's buildable. **This holds even after she's said "build it":** if the data can't honestly support the full feature, **trim it to what's real and say so** (e.g. shipped variant-level era context but deferred the per-listing year matrix because no feed carries a reliable item year) rather than fabricating to fill the design.
 - **Designs from pasted competitor screenshots, iterated visually.** She drops UI screenshots (Google Shopping, KBB, Google Flights, etc.) as *design briefs* and wants the patterns **synthesized into one coherent, glanceable story** — not each cloned separately. During brainstorm, **render concepts as visual mockups she can react to** (inline widgets) in the product's own dark/gold/serif look, then converge through her reactions. Prose-only design proposals under-serve her.
+- **A/B tests isolate ONE variable (locked 2026-06-23).** She corrected a test that
+  changed both the headline and the interaction at once: *"this is poor testing
+  practice... we can't know which variable drove the change."* Every experiment
+  variant must differ from its control by exactly one thing (copy OR layout OR
+  mechanic, never several), so the result is attributable. She also frames feature
+  ideas as explicit **hypotheses** ("We believe X will cause Y because Z, measured
+  by [metric]") for multivariate learning.
 - **When she can't yet pick a priority, instrument and let usage data decide** — don't force the call. She declined to choose the "most common / most monetizable" user for the value module ("not sure without usage data") and chose to build it **adaptive + instrumented** so real behavior answers it. Default to measurable designs (an impression/intent event paired with the downstream conversion) over speculative prioritization, and say what the data will later reveal.
 - **She may open broad, then narrow to the specific feature she actually means** mid-task (*"I'm specifically talking about…"*) — follow the refined intent, don't keep answering the wider question.
 - **She likes the research → documentation → shipped guardrails pipeline.** When you research a risk, also turn the findings into concrete changes (the finance-compliance research led directly to footer disclosures + legal pages). After a doc lands she'll often ask *"anything we need to do to the UX?"* — anticipate the build step.
@@ -111,8 +118,8 @@
 - **No em dashes (—), ever (locked 2026-06-23).** She called this out directly:
   em dashes are out across all user-facing copy. Use a period, comma, colon, or
   parentheses instead (rationale + replacement guidance now in `docs/voice-and-tone.md`
-  §7–8). Open item she should decide: the locked tagline *"Know what it's worth —
-  and what it's worth to you"* still contains a dash.
+  §7–8). The one deliberate exception she approved: the tagline *"Know what it's
+  worth — and what it's worth to you"* keeps its dash; everything else obeys the rule.
 - **Apply the FULL `docs/voice-and-tone.md`, not the summary.** She asked point-blank
   whether the voice guide was being used when drafting copy; draft against the
   canonical guide (run the §8 slop sweep + the human-review checklist), don't rely
