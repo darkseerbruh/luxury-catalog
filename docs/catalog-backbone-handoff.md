@@ -1,46 +1,47 @@
 # Catalog Backbone + Data Pull — Handoff (bootstrap a fresh chat with THIS file)
 
-*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (14-icon TRR
-higher-fidelity pass, 2 batches). Companion: `docs/data-collection-handoff.md` (capture
+*Self-contained brief. Point a new chat here. Last updated 2026-06-23 (25-icon TRR
+higher-fidelity pass, 3 batches). Companion: `docs/data-collection-handoff.md` (capture
 techniques in depth) + `docs/data-sourcing-research.md` (legal posture).*
 
-> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 10,440
-> listed rows (+1,353), TRR now 3,692 rows, 2 batches merged to `main`):**
-> Mission #1 done + a wider second tier — added a 2nd source (TheRealReal) + per-listing
-> year to the **14** highest-FP-row icons via **curated per-size TRR targets** (the §3
-> browser-gated JSON-LD flow; all 14 captures clean, **0 rate-limit blocks**, gentle ~450ms
-> sequential, one icon per ~5-min window with load/code work between as the cooldown).
-> Every one is now **2-source**. Per icon (TRR rows / year coverage):
-> - **Batch 1 (9):** Gucci Ophidia #448 72 (4% yr) · Hermès Evelyne #412 115 (77%) ·
->   LV Keepall #440 95 (52%) · Hermès Picotin Lock #414 118 (71%) · Chanel Vanity Case
->   #430 55 (79%) · LV Pochette Métis #438 115 (47%) · LV OnTheGo #437 113 (32%) ·
->   LV Bumbag #445 112 (38%) · Chanel Deauville #429 105 (72%). (+900)
-> - **Batch 2 (5):** Gucci Blondie #453 82 (0% yr — 2022 bag) · LV Capucines #436 102
->   (38%) · LV NéoNoé #435 67 (38%) · Hermès Lindy #416 109 (79%) · Hermès Herbag #417
->   93 (65%). (+453)
-> - **New predicates** (all in `trr-jsonld.ts`, all whole-word \b, all with tests):
->   `ophidiaSize`/`capucinesSize` (Super-Mini/EW checked before letter buckets),
->   `evelyneSize`/`herbagSize` (numeric cm → letter: Evelyne 16/29/33, Herbag 31/39),
->   `keepallSize`/`picotinSize`/`lindySize` (numeric), `pochetteMetisSize`/`onTheGoSize`/
->   `bumbagSize`/`neoNoeSize` (token-required to exclude sibling models); Blondie+Deauville
->   reuse `modelSize`.
+> **🚀 Latest session (2026-06-23 — TRR higher-fidelity pass, prod 9,087 → 11,139
+> listed rows (+2,052), TRR now 4,391 rows, 3 batches merged to `main`):**
+> Mission #1 + the full curated-TRR tail — added a 2nd source (TheRealReal) + per-listing
+> year to **25 icons** (every backbone icon with meaningful TRR inventory) via **curated
+> per-size TRR targets** (the §3 browser-gated JSON-LD flow; all 25 captures clean,
+> **0 rate-limit blocks** the entire session, gentle ~450ms sequential, one icon per
+> ~5-min window with load/code work between as the cooldown). Every one is now **2-source**.
+> - **Batch 1 (9):** Ophidia 72 · Evelyne 115 · Keepall 95 · Picotin 118 · Vanity Case 55 ·
+>   Pochette Métis 115 · OnTheGo 113 · Bumbag 112 · Deauville 105. (+900)
+> - **Batch 2 (5):** Blondie 82 · Capucines 102 · NéoNoé 67 · Lindy 109 · Herbag 93. (+453)
+> - **Batch 3 (11 long-tail):** Diana 96 · Coussin 104 · Twist 65 · Bolide 80 · Soho Disco
+>   76 · Bamboo 1947 57 · Jypsière 92 · Dauphine 26 · Petite Malle 57 · Roulis 43 ·
+>   Attache 3 (TRR thin). (+699)
+> - **New predicates** (all in `trr-jsonld.ts`, all whole-word \b, all with tests — 73 in
+>   `trr-jsonld.test.ts`): numeric-cm mappers `evelyneSize`/`herbagSize`/`picotinSize`/
+>   `keepallSize`/`lindySize`/`bolideSize`/`jypsiereSize`; Super-Mini/EW-first
+>   `ophidiaSize`/`capucinesSize`/`dianaSize` (Diana **TRR "Large" = backbone Maxi**);
+>   token/letter `pochetteMetisSize`/`onTheGoSize`/`bumbagSize`/`neoNoeSize`/`coussinSize`/
+>   `dauphineSize`/`twistSize`/`roulisSize`/`attacheSize`/`sohoDiscoSize`(requires "disco")/
+>   `bamboo1947Size`(requires "1947")/`petiteMalleStandard`; Blondie+Deauville reuse `modelSize`.
 > - **⚡ Key learnings:** (1) TRR sizes **Hermès by NUMERIC cm in the NAME** (Evelyne
->   16/29/33, Picotin 18/22/26, Herbag 31/39, Lindy 26/30/34), NOT the FP letter codes —
->   ALWAYS inspect the live name distribution before writing predicates. (2) A broad model
->   search pulls sibling models (NéoNoé search → Noé/Neverfull; Lindy → Halzan/Bolide) so
->   REQUIRE the model token. (3) ~30-50% of modern-bag listings (Ophidia/Vanity/OnTheGo)
->   are **unsized** in the TRR title → they DROP (clean per-size split; FP already covers
->   the icon high-confidence). (4) **Year coverage scales with bag AGE** (Hermès/older
->   ~65-79%, 2020s LV/Gucci 0-50%) — even 0% year still adds a 2nd source of full
->   colour/material/hardware comps. (5) TRR titles drop accents ("Metis"/"Neonoe") + has
->   the occasional seller typo ("Pictoin") — match accent-insensitively, drop typos.
-> - **+24 regression tests** (60 in `trr-jsonld.test.ts`, 368 suite-wide, all green).
+>   16/29/33, Picotin 18/22/26, Herbag 31/39, Lindy 26/30/34, Bolide/Jypsière numeric),
+>   NOT the FP letter codes — ALWAYS inspect the live name distribution first. (2) A broad
+>   model search pulls **sibling models** (NéoNoé→Noé/Neverfull, Lindy→Halzan, Bamboo→vintage
+>   Bamboo Top Handle, Soho→Soho Chain, Dauphine→everything) AND **jewelry/SLGs** (Twist
+>   bracelet, Roulis Slim wallet/Double Tour bracelet) — REQUIRE a distinguishing token +
+>   guard SLGs/jewelry. (3) ~30-50% of modern-bag listings are **unsized** in the TRR title →
+>   they DROP (or, where the bag is single-size like Soho Disco / Petite Malle, the unsized =
+>   the standard). (4) **Year coverage scales with bag AGE** (Hermès/older ~65-79%, 2020s
+>   LV/Gucci 0-50%) — even 0% year still adds a 2nd source of full colour/material/hardware
+>   comps. (5) TRR drops accents ("Metis"/"Neonoe"/"Jypsiere") + has seller typos ("Pictoin"/
+>   "Petit Malle") — match accent-insensitively, drop typos. (6) Marketplace size LABELS can
+>   differ (Diana: FP "Maxi" = TRR "Large") — map them onto the same variant.
 > - **Still open (all OPTIONAL polish):** deferred-ambiguous FP icons (YSL Cassandre,
->   Fendi C'mon, Chanel Reissue, Loewe — owner-gated); non-FP brands Kate Spade/Coach
->   (need TRR/other source); TRR for the remaining SMALLER-FP icons (Bolide 39/Soho 39/
->   Diana 44/Coussin 44/Twist 44/Roulis 16/Jypsière 24/Dauphine 18/Petite Malle 29/
->   Bamboo 28/Attache 8 — same recipe, diminishing yield). The hero/Tier-1 icons all
->   now have a curated TRR pass.
+>   Fendi C'mon, Chanel Reissue, Loewe — owner-gated, need NEW catalog work); non-FP brands
+>   Kate Spade/Coach (need TRR/other source). **The curated-TRR pass is essentially COMPLETE**
+>   — every backbone icon with meaningful TRR inventory now has a 2nd source. Further TRR
+>   would be re-captures for freshness or net-new backbone styles.
 
 > **🚀 Latest session (2026-06-23 PM) — 62 NEW icons via Fashionphile, prod 6,232 →
 > 9,059 listed rows (+2,827), 0 unresolved, 8 clean merges to `main`:**
@@ -142,9 +143,9 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: 10,440 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
-14-icon TRR higher-fidelity pass added +1,353 second-source/year rows across 2 batches —
-see the top banner; TheRealReal is now 3,692 rows). **315 styles / 629 variants** (no new
+**Prod total: 11,139 listed rows + 212 `discovered_listing`** as of 2026-06-23 (the
+25-icon TRR higher-fidelity pass added +2,052 second-source/year rows across 3 batches —
+see the top banner; TheRealReal is now 4,391 rows). **315 styles / 629 variants** (no new
 styles or variants — the TRR pass added price rows to existing per-size variants). Before
 this the 62-icon Fashionphile go-wide reached 9,059; earlier the same day ~6,260, ~5,102.
 The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
