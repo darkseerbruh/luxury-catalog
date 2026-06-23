@@ -13,12 +13,12 @@ function hasSupabase(): boolean {
 
 /**
  * The votable axis vocabulary — a SUBSET of the `bag_axis` enum in 0012, limited
- * to genuine lived-experience opinions. `holds_value` is deliberately excluded:
- * value retention is a market fact we compute from price_history, not something
- * to crowd-vote (asking owners to vote on it produces noise or contradicts the
- * real data). Any existing `holds_value` rows in the DB are simply ignored on
- * read, and new votes on it are rejected by isAxis(). See
- * docs/ux/review-data-leaderboards.md.
+ * to genuine lived-experience opinions. Two enum values are deliberately excluded:
+ * `holds_value` (value retention is a market fact computed from price_history, not
+ * a crowd vote) and `worth_the_price` (it duplicates the review `worth_it` boolean,
+ * which is already live — keep one signal, not two). Excluded axes don't render,
+ * new votes on them are rejected by isAxis(), and any existing rows are ignored on
+ * read. No DB enum change needed. See docs/ux/review-data-leaderboards.md.
  */
 export const AXES = [
   "build_quality",
@@ -26,7 +26,6 @@ export const AXES = [
   "roomy_vs_compact",
   "comfort",
   "versatility",
-  "worth_the_price",
 ] as const;
 
 export type Axis = (typeof AXES)[number];
@@ -42,7 +41,6 @@ export const AXIS_META: Record<Axis, { label: string; low: string; high: string 
   roomy_vs_compact: { label: "Roomy vs compact", low: "Compact", high: "Roomy" },
   comfort: { label: "Comfort to carry", low: "Awkward", high: "Effortless" },
   versatility: { label: "Versatility", low: "One-note", high: "Goes with anything" },
-  worth_the_price: { label: "Worth the price", low: "Overpriced", high: "Worth every cent" },
 };
 
 export interface AxisAggregate {

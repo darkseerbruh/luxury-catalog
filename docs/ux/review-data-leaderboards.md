@@ -31,8 +31,8 @@ is applied (it's additive/editable until then):
   on read. No DB enum change needed. Surface value retention as a **data-derived**
   board from `price_history` instead (not yet built).
 - **`worth_the_price` duplicates the review `worth_it` boolean** — keep one signal,
-  not two. (Lean toward the review boolean; it's already live.) STILL PENDING:
-  left in `AXES` for now, retire it the same app-layer way once confirmed.
+  not two. DONE (2026-06-23): retired from `AXES`/`AXIS_META` the same app-layer way
+  as `holds_value`. The review `worth_it` boolean is the kept signal.
 
 Rule going forward: **a thing we can measure from data is never a subjective vote.**
 Opinion axes capture only lived experience; facts come from the catalogue/price data.
