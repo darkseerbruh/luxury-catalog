@@ -131,6 +131,8 @@ const LOULOU_SIZES = ["toy", "small", "medium", "large"];
 const VANITY_SIZES = ["mini", "small", "medium", "large"];
 // Chanel Deauville (#429): Mini / Small / Medium / Large.
 const DEAUVILLE_SIZES = ["mini", "small", "medium", "large"];
+// Gucci Blondie (#453): Mini / Small / Medium / Large.
+const BLONDIE_SIZES = ["mini", "small", "medium", "large"];
 
 // ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
 // A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
@@ -212,6 +214,73 @@ export function bumbagSize(label: "Mini" | "Standard"): (name: string) => boolea
     if (!/bum.?bag/.test(n) || /charm/.test(n)) return false;
     const isMini = /\bmini\b/.test(n);
     return label === "Mini" ? isMini : !isMini;
+  };
+}
+
+// ── Hermès Herbag (#417) ──────────────────────────────────────────────────────
+// Backbone PM / MM. TRR sizes it mostly by NUMERIC cm (31=PM, 39=MM, "Herbag Zip 31")
+// with a few literal PM/MM. Map both; the opposite size's tokens exclude. The Garden
+// Party and other models in a broad search lack "herbag" so they drop.
+export function herbagSize(label: "PM" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("herbag") || /charm/.test(n)) return false;
+    const wantNum = label === "PM" ? "31" : "39";
+    const otherNum = label === "PM" ? "39" : "31";
+    const wantLetter = label.toLowerCase();
+    const otherLetter = label === "PM" ? "mm" : "pm";
+    if (new RegExp(`\\b${otherNum}\\b`).test(n) || new RegExp(`\\b${otherLetter}\\b`).test(n)) return false;
+    return new RegExp(`\\b${wantNum}\\b`).test(n) || new RegExp(`\\b${wantLetter}\\b`).test(n);
+  };
+}
+
+// ── Hermès Lindy (#416) ───────────────────────────────────────────────────────
+// Mini + numeric 26 / 30 / 34. Mini is checked first (a "Mini Lindy 26" is the Mini
+// variant, not the 26); numerics whole-word. Other Hermès models in a broad Lindy
+// search lack "lindy" so they drop.
+const LINDY_NUMS = ["26", "30", "34"];
+export function lindySize(label: "Mini" | "26" | "30" | "34"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("lindy") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = LINDY_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── LV NéoNoé (#435) ──────────────────────────────────────────────────────────
+// Two backbone variants: BB / MM. Requiring the "neonoe"/"néonoé" token (not bare
+// "Noé") keeps the regular Noé + Neverfull bucket bags out. Letter size whole-word.
+export function neoNoeSize(label: "BB" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/n[eé]o.?no[eé]/.test(n) || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const other = label === "BB" ? /\bmm\b/ : /\bbb\b/;
+    return want.test(n) && !other.test(n);
+  };
+}
+
+// ── LV Capucines (#436) ───────────────────────────────────────────────────────
+// Mini + letter sizes BB / MM / GM + East-West. EW is checked first (its own backbone
+// variant), then Mini, then the letter buckets (whole-word \b so "mm" can't hide in
+// "monogram"). Unsized listings drop.
+const CAPUCINES_LETTERS = ["bb", "mm", "gm"];
+export function capucinesSize(label: "Mini" | "BB" | "MM" | "GM" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("capucines") || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    if (label === "East-West") return isEW;
+    if (isEW) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = CAPUCINES_LETTERS.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
   };
 }
 
@@ -630,6 +699,40 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "lv-bumbag-standard": { brand: "Louis Vuitton", style: "Bumbag", size_label: "Standard",
     namePredicate: bumbagSize("Standard"), minPrice: 250, maxPrice: 6000, rawKey: "lv-bumbag" },
 
+  // ── Hermès Herbag (#417) — PM / MM (numeric 31/39), share one "hermes-herbag" capture. ──
+  "hermes-herbag-pm": { brand: "Hermès", style: "Herbag", size_label: "PM",
+    namePredicate: herbagSize("PM"), minPrice: 500, maxPrice: 12000, rawKey: "hermes-herbag" },
+  "hermes-herbag-mm": { brand: "Hermès", style: "Herbag", size_label: "MM",
+    namePredicate: herbagSize("MM"), minPrice: 500, maxPrice: 12000, rawKey: "hermes-herbag" },
+
+  // ── Hermès Lindy (#416) — Mini / 26 / 30 / 34, share one "hermes-lindy" capture. ──
+  "hermes-lindy-mini": { brand: "Hermès", style: "Lindy", size_label: "Mini",
+    namePredicate: lindySize("Mini"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-26": { brand: "Hermès", style: "Lindy", size_label: "26",
+    namePredicate: lindySize("26"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-30": { brand: "Hermès", style: "Lindy", size_label: "30",
+    namePredicate: lindySize("30"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+  "hermes-lindy-34": { brand: "Hermès", style: "Lindy", size_label: "34",
+    namePredicate: lindySize("34"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-lindy" },
+
+  // ── LV NéoNoé (#435) — BB / MM, share one "lv-neonoe" capture. ──
+  "lv-neonoe-bb": { brand: "Louis Vuitton", style: "NéoNoé", size_label: "BB",
+    namePredicate: neoNoeSize("BB"), minPrice: 500, maxPrice: 6000, rawKey: "lv-neonoe" },
+  "lv-neonoe-mm": { brand: "Louis Vuitton", style: "NéoNoé", size_label: "MM",
+    namePredicate: neoNoeSize("MM"), minPrice: 500, maxPrice: 6000, rawKey: "lv-neonoe" },
+
+  // ── LV Capucines (#436) — Mini/BB/MM/GM/East-West, share one "lv-capucines" capture. ──
+  "lv-capucines-mini": { brand: "Louis Vuitton", style: "Capucines", size_label: "Mini",
+    namePredicate: capucinesSize("Mini"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-bb": { brand: "Louis Vuitton", style: "Capucines", size_label: "BB",
+    namePredicate: capucinesSize("BB"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-mm": { brand: "Louis Vuitton", style: "Capucines", size_label: "MM",
+    namePredicate: capucinesSize("MM"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-gm": { brand: "Louis Vuitton", style: "Capucines", size_label: "GM",
+    namePredicate: capucinesSize("GM"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+  "lv-capucines-east-west": { brand: "Louis Vuitton", style: "Capucines", size_label: "East-West",
+    namePredicate: capucinesSize("East-West"), minPrice: 1000, maxPrice: 20000, rawKey: "lv-capucines" },
+
   // ── LV OnTheGo (#437) — letter sizes + East-West, share one "lv-onthego" capture. ──
   "lv-onthego-pm": { brand: "Louis Vuitton", style: "OnTheGo", size_label: "PM",
     namePredicate: onTheGoSize("PM"), minPrice: 600, maxPrice: 10000, rawKey: "lv-onthego" },
@@ -645,6 +748,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── Gucci Blondie (#453) — share one "gucci-blondie" capture. ──
+  "gucci-blondie-mini": { brand: "Gucci", style: "Blondie", size_label: "Mini",
+    namePredicate: modelSize("blondie", "mini", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-small": { brand: "Gucci", style: "Blondie", size_label: "Small",
+    namePredicate: modelSize("blondie", "small", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-medium": { brand: "Gucci", style: "Blondie", size_label: "Medium",
+    namePredicate: modelSize("blondie", "medium", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-large": { brand: "Gucci", style: "Blondie", size_label: "Large",
+    namePredicate: modelSize("blondie", "large", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
 
   // ── Chanel Deauville (#429) — share one "chanel-deauville" capture. ──
   "chanel-deauville-mini": { brand: "Chanel", style: "Deauville", size_label: "Mini",

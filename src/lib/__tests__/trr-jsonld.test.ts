@@ -17,6 +17,10 @@ import {
   pochetteMetisSize,
   onTheGoSize,
   bumbagSize,
+  capucinesSize,
+  neoNoeSize,
+  lindySize,
+  herbagSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -419,5 +423,53 @@ describe("bumbagSize (Mini / Standard)", () => {
   });
   it("excludes other LV belt bags", () => {
     expect(bumbagSize("Standard")("Monogram Belt Bag")).toBe(false);
+  });
+});
+
+describe("capucinesSize (Mini/BB/MM/GM/East-West)", () => {
+  it("checks East-West before letter buckets", () => {
+    expect(capucinesSize("East-West")("Taurillon Capucines East West")).toBe(true);
+    expect(capucinesSize("BB")("Taurillon Capucines East West")).toBe(false);
+  });
+  it("separates Mini from BB/MM/GM", () => {
+    expect(capucinesSize("Mini")("Taurillon Mini Capucines")).toBe(true);
+    expect(capucinesSize("BB")("Taurillon Mini Capucines")).toBe(false);
+    expect(capucinesSize("MM")("Taurillon Capucines MM")).toBe(true);
+    expect(capucinesSize("BB")("Taurillon Capucines MM")).toBe(false);
+  });
+});
+
+describe("neoNoeSize (BB / MM)", () => {
+  it("requires the neonoe token, not bare Noé", () => {
+    expect(neoNoeSize("MM")("Monogram NeoNoe MM")).toBe(true);
+    expect(neoNoeSize("BB")("Monogram NéoNoé BB")).toBe(true);
+    expect(neoNoeSize("MM")("Monogram Noé GM")).toBe(false);
+    expect(neoNoeSize("MM")("Monogram Neverfull MM")).toBe(false);
+  });
+});
+
+describe("lindySize (Mini / 26 / 30 / 34)", () => {
+  it("Mini wins over a numeric in the same name", () => {
+    expect(lindySize("Mini")("Swift Mini Lindy 26")).toBe(true);
+    expect(lindySize("26")("Swift Mini Lindy 26")).toBe(false);
+  });
+  it("buckets numerics whole-word", () => {
+    expect(lindySize("30")("Clemence Lindy 30")).toBe(true);
+    expect(lindySize("26")("Clemence Lindy 30")).toBe(false);
+  });
+  it("drops non-Lindy Hermès models", () => {
+    expect(lindySize("26")("Swift Mini Halzan 22")).toBe(false);
+  });
+});
+
+describe("herbagSize (PM / MM, numeric 31/39)", () => {
+  it("maps numeric cm to PM/MM", () => {
+    expect(herbagSize("PM")("Toile Herbag Zip 31")).toBe(true);
+    expect(herbagSize("MM")("Toile Herbag Zip 39")).toBe(true);
+    expect(herbagSize("PM")("Toile Herbag Zip 39")).toBe(false);
+  });
+  it("also accepts the literal letter size", () => {
+    expect(herbagSize("MM")("Toile Herbag MM")).toBe(true);
+    expect(herbagSize("PM")("Toile Herbag MM")).toBe(false);
   });
 });
