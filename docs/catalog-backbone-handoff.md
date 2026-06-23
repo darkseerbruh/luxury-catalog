@@ -176,18 +176,25 @@ any listing it can't place on a curated variant (no brand/style/variant match) i
 table instead of dropping it — full parsed spec + partial match + raw title preserved for
 a later promotion pass. The curated catalog stays clean.
 
-⚠️ **HUMAN-GATED — migration 0026 not yet applied.** Apply via GitHub → Actions → "Apply
-database migrations" (it's on `main`), then re-run the loads to capture the discovered
-layer. Until then the loader degrades gracefully (logs `42P01`, captures nothing — today's
-behaviour), so nothing is broken.
+✅ **Migration 0026 APPLIED 2026-06-23** (GitHub Action, run succeeded). `discovered_listing`
+is live (0 rows so far — see below). The loader routes any unplaceable listing there with its
+full parsed spec + partial match + raw title.
 
-**Known gap (next enhancement):** the discovered layer currently only catches *loader*-level
-misses. Listings dropped at the *adapter* predicate stage (e.g. a generic "Alma" with no
-size in the title, or "Book"-truncated names without a size) never reach the loader, so
-they're still not captured. To truly get "every bag," add a **catch-all capture mode**
-(emit every search result with a best-guess style/size → discovered_listing) alongside the
-curated size-targets. **The promotion/normalization pass** (recurring discovered models →
-curated styles/variants) is also still TODO.
+✅ **Catch-all capture mode + promotion pass BUILT & merged 2026-06-23** (closes the gap below):
+- **Catch-all mode:** `tsx trr-jsonld.ts --catch-all --brand "<Brand>" [--style-guess "<style>"]
+  <rawKey>` emits EVERY captured record (best-guess style/size via `detectSizeLabel`) so the
+  loader places what it can on curated variants and routes the rest to `discovered_listing` —
+  nothing dropped. The curated per-size targets are unchanged.
+- **Promotion pass:** `npm run promote:discovered [--min=N] [--write]` clusters discovered rows
+  by (brand_guess, style_guess, size_label), flags recurring models ≥ N as promotable, prints
+  the find-or-create→re-point plan. DRY-RUN default; `--write` is a guarded stub (owner-gated —
+  wire the upserts when approving a batch).
+
+**Why `discovered_listing` is still 0:** all curated icon loads resolve 100% (tight size
+targets), so they never miss → nothing to capture. The layer fills from **wide catch-all
+captures of UNCURATED models** (e.g. a broad "celine" TRR search → Triomphe/Box/etc land in
+discovered for later promotion). **TODO (cheap, do next):** run one wide catch-all capture to
+demonstrate the layer end-to-end.
 
 **Catalog cleanup (separate, DESTRUCTIVE — owner-gated):** Chanel/Hermès/LV have 65–73
 styles each, many verbose one-off names; this is why Birkin 40 mis-resolves. A cleanup pass
@@ -199,37 +206,48 @@ unattended; prepare a dry-run plan for the owner.
 ## 6. Pipeline code map
 
 - **Pure parsers (tested):** `src/lib/ingest/{trr,fashionphile,vestiaire}.ts`, `types.ts`
-  (PriceObservation + validation), `trr.ts` (multi-brand vocab). Tests in
-  `src/lib/__tests__/{ingest,fashionphile,vestiaire}.test.ts` (306 total, all green).
+  (PriceObservation + validation), `trr.ts` (multi-brand vocab). Tests across
+  `src/lib/__tests__/*` (**329 total, all green** — incl. `trr-jsonld.test.ts` catch-all +
+  `promote-discovered.test.ts`).
 - **Source adapters:** `supabase/ingest/sources/{trr-jsonld,trr-paste,fashionphile,vestiaire}.ts`
-  — each has a `TARGETS` map (brand/style/size + requireTokens, tuned per site's naming;
-  e.g. Vestiaire calls the Chanel flap "Timeless/Classique", Fashionphile "Medium Double Flap").
-- **Loader/refresh:** `supabase/ingest/load-prices.ts`, `refresh-summary.ts`. npm scripts:
-  `ingest:fashionphile:raw`, `ingest:vestiaire`, `load:prices`, `summary:refresh`.
-- **Catalog:** `brand`/`style`/`variant` tables (12 brands, 222 styles, 321 variants —
-  rich attributes; backbone adds the clean canonical spine).
+  — each has a `TARGETS` map. TRR `modelSize(model,size,siblings,notTokens)` (whole-word +
+  sub-model exclusion); Fashionphile `requireTokens` + `excludeTokens`.
+- **NEW capture/build tooling (2026-06-23):**
+  - `supabase/ingest/sources/fashionphile-collection.ts` — server-side Fashionphile fetcher (NO browser).
+  - `supabase/seed/scaffold-variants.ts` — find-or-create bare size variants on a canonical style.
+  - `supabase/ingest/promote-discovered.ts` (`npm run promote:discovered`) — §5 promotion pass.
+  - `trr-jsonld.ts --catch-all` — §5 catch-all capture mode.
+- **Loader/refresh:** `supabase/ingest/load-prices.ts` (routes misses → `discovered_listing`),
+  `refresh-summary.ts`. npm: `ingest:fashionphile:raw`, `ingest:vestiaire`, `load:prices`,
+  `summary:refresh`, `promote:discovered`.
+- **Catalog:** `brand`/`style`/`variant` tables (**13 brands / 315 styles**; backbone spine +
+  per-icon size variants). Icon variant_ids: Boy 513-516, Jackie 517-520, Luggage Tote 521-524,
+  Loulou 525-528.
 
 ---
 
 ## 7. Next steps (prioritized)
 
-1. ~~Owner's architecture call (§5)~~ **DONE — chose B, built.** Now: **apply migration
-   0026** (GitHub Action), then re-run loads to start filling `discovered_listing`.
-2. ~~Apply the backbone~~ **DONE** (see §4).
-3. **Per Tier-1 style:** add variant scaffolds (sizes) + capture-filter, then pull listings
-   across all 3 sites *filtered to that style* (depth per icon). **Speedy is the worked
-   example (§1).** Recipe per icon: (a) browser-capture the TRR search, transport via the
-   `get_page_text` body trick (§3), merge+dedup to `data/ingest/_raw/<key>.json`; (b) add
-   size targets to `trr-jsonld.ts` (share one capture via `rawKey`; whole-word size
-   predicates so years don't collide); (c) create the size variants on the canonical
-   style (loader DROPS rows for a style with zero variants — scaffolds are required, and
-   real sizes are NOT "inventing"); (d) run ALL targets in ONE adapter call (it clears the
-   landing dir per run); (e) `load:prices --write` then `refresh-summary` (no `--write`
-   flag — its only arg is an optional variant_id). Next icons: LV Alma, Chanel Boy, Dior
-   Book Tote, Gucci Jackie 1961, Celine Luggage, YSL Loulou.
-4. **Catalog cleanup** (§5) — owner-gated, destructive; dry-run plan first.
-5. **Enrichment:** condition-detail capture (Fashionphile collection pages render condition
-   grades) → `enrich-conditions` (ANTHROPIC_API_KEY is in `.env.local`).
+1. ~~Architecture call + migration 0026 + catch-all/promotion~~ **DONE** (§5).
+2. ~~Apply the backbone~~ **DONE** (§4). ~~Speedy/Alma/Book Tote~~ + ~~Boy/Jackie/Celine/Loulou~~
+   **DONE** (§1, ~2,910 prod rows).
+3. **Go wide — next icons (the proven per-icon recipe, now faster):**
+   - **(a) Fashionphile FIRST (no browser, fast):** `tsx supabase/ingest/sources/fashionphile-collection.ts
+     <brand-slug> <token>` → `tsx supabase/ingest/sources/fashionphile.ts --raw`.
+   - **(b) Scaffold variants:** `tsx supabase/seed/scaffold-variants.ts "<Brand>" "<Style>" <sizes…> --write`
+     (loader DROPS rows for a style with zero variants — real sizes are facts, not "inventing").
+   - **(c) Add targets:** Fashionphile `TARGETS` (`requireTokens` + `excludeTokens` for sub-models/SLGs);
+     TRR `trr-jsonld.ts` `TARGETS` (`modelSize(model,size,siblings,notTokens)`, share one capture via `rawKey`).
+   - **(d) TRR capture (browser, GENTLE — see §2 rate-limit playbook):** one icon (~120 fetches) per
+     ~10-min window; `__fetchGentle` sequential; Blob-download to `~/Downloads` → `cp` to `data/ingest/_raw/<key>.json`.
+   - **(e)** `load:prices <source> --write` → `summary:refresh`. Gate `tsc/eslint/next build/npm test`, branch-per-icon, merge to main.
+   - **Queue:** Hermès Constance · Chanel 19 / Gabrielle / WOC / Coco Handle · Gucci Dionysus / Horsebit 1955 ·
+     Celine Triomphe / Box · YSL Sac de Jour / Kate / Niki · Bottega Cassette/Jodie · Fendi Baguette/Peekaboo · Coach (full depth).
+4. **Demonstrate `discovered_listing`:** one wide catch-all TRR capture (§5) → promotion-pass dry-run.
+5. **Vestiaire (deprioritized):** browser-gated + ~15 rows/search; add opportunistically, not as a blocker.
+6. **Catalog cleanup** (owner-gated, DESTRUCTIVE; dry-run plan first): merge Celine **#207 "Luggage" → #484
+   "Luggage Tote"**; dedupe verbose Chanel/Hermès/LV one-off styles (Birkin 40 mis-resolve).
+7. **Enrichment:** condition-detail capture (Fashionphile renders grades) → `enrich-conditions` (ANTHROPIC_API_KEY in `.env.local`).
 
 ---
 
