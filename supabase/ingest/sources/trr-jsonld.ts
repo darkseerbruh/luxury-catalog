@@ -238,6 +238,21 @@ export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
   };
 }
 
+// ── Gucci Bamboo 1947 (#449) ──────────────────────────────────────────────────
+// Backbone Mini / Small / Medium / Large. REQUIRE both "bamboo" + "1947" — a Bamboo
+// search returns vintage "Bamboo Top Handle" bags (a different, uncatalogued style)
+// that must NOT land on the modern Bamboo 1947. Size words whole-word.
+const BAMBOO_SIZES = ["mini", "small", "medium", "large"];
+export function bamboo1947Size(label: "Mini" | "Small" | "Medium" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("bamboo") || !n.includes("1947") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = BAMBOO_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Gucci Soho Disco (#450) ───────────────────────────────────────────────────
 // Backbone Mini / Small. REQUIRE "disco" — a "soho" search returns the broader Soho
 // line (Chain tote, Boston in medium/large) which are NOT the Disco. The Disco is a
@@ -831,6 +846,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
   "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
     namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Gucci Bamboo 1947 (#449) — Mini/Small/Medium/Large, share one "gucci-bamboo-1947" capture. ──
+  "gucci-bamboo-1947-mini": { brand: "Gucci", style: "Bamboo 1947", size_label: "Mini",
+    namePredicate: bamboo1947Size("Mini"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-small": { brand: "Gucci", style: "Bamboo 1947", size_label: "Small",
+    namePredicate: bamboo1947Size("Small"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-medium": { brand: "Gucci", style: "Bamboo 1947", size_label: "Medium",
+    namePredicate: bamboo1947Size("Medium"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-large": { brand: "Gucci", style: "Bamboo 1947", size_label: "Large",
+    namePredicate: bamboo1947Size("Large"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
 
   // ── Gucci Soho Disco (#450) — Mini / Small, share one "gucci-soho-disco" capture. ──
   "gucci-soho-disco-mini": { brand: "Gucci", style: "Soho Disco", size_label: "Mini",
