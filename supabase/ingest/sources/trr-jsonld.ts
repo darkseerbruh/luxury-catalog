@@ -125,6 +125,12 @@ const JACKIE_SIZES = ["mini", "small", "medium", "large"];
 const LUGGAGE_SIZES = ["nano", "micro", "mini", "medium"];
 // Saint Laurent Loulou: Toy / Small / Medium / Large.
 const LOULOU_SIZES = ["toy", "small", "medium", "large"];
+// Chanel Vanity Case (#430): Mini / Small / Medium / Large. TRR names many vanities
+// without a size (~half) — those drop; non-Vanity Chanel cosmetic/box bags lack the
+// "vanity" token so they're excluded by modelSize's model requirement.
+const VANITY_SIZES = ["mini", "small", "medium", "large"];
+// Chanel Deauville (#429): Mini / Small / Medium / Large.
+const DEAUVILLE_SIZES = ["mini", "small", "medium", "large"];
 
 // ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
 // A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
@@ -573,6 +579,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── Chanel Vanity Case (#430) — share one "chanel-vanity" capture. ──
+  "chanel-vanity-mini": { brand: "Chanel", style: "Vanity Case", size_label: "Mini",
+    namePredicate: modelSize("vanity", "mini", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-small": { brand: "Chanel", style: "Vanity Case", size_label: "Small",
+    namePredicate: modelSize("vanity", "small", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-medium": { brand: "Chanel", style: "Vanity Case", size_label: "Medium",
+    namePredicate: modelSize("vanity", "medium", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
+  "chanel-vanity-large": { brand: "Chanel", style: "Vanity Case", size_label: "Large",
+    namePredicate: modelSize("vanity", "large", VANITY_SIZES), minPrice: 1000, maxPrice: 15000, rawKey: "chanel-vanity" },
 
   // ── Hermès Picotin Lock (#414) — numeric sizes, share one "hermes-picotin" capture. ──
   "hermes-picotin-18": { brand: "Hermès", style: "Picotin Lock", size_label: "18",
