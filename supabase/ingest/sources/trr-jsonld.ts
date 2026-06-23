@@ -205,6 +205,165 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+/**
+ * Gucci Diana size predicate (#451). Backbone sizes Mini / Small / Medium / Maxi.
+ * TRR labels the largest tote "Large" (not "Maxi"), so the Maxi bucket matches
+ * "maxi" OR "large" — same physical bag, different marketplace label. The Diana
+ * "jumbo" token is the GG-monogram SCALE, not a size, so it's never a bucket.
+ * Footwear/SLGs guarded; whole-word sibling exclusion.
+ */
+const DIANA_SIZES = ["mini", "small", "medium", "maxi", "large"];
+export function dianaSize(label: "Mini" | "Small" | "Medium" | "Maxi"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("diana") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    const wants = label === "Maxi" ? ["maxi", "large"] : [label.toLowerCase()];
+    const others = DIANA_SIZES.filter((s) => !wants.includes(s)).map((s) => new RegExp(`\\b${s}\\b`));
+    if (others.some((re) => re.test(n))) return false;
+    return wants.some((w) => new RegExp(`\\b${w}\\b`).test(n));
+  };
+}
+
+// ── LV Twist (#439) ───────────────────────────────────────────────────────────
+// Backbone PM / MM. A broad Twist search pulls in LV "Twist" JEWELRY (bracelet/ring/
+// the Idylle Blossom Twist) — guarded out. Letter size whole-word.
+const TWIST_NOT = /bracelet|ring|necklace|earring|brooch|pendant|wallet|card/;
+export function twistSize(label: "PM" | "MM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("twist") || TWIST_NOT.test(n) || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const other = label === "PM" ? /\bmm\b/ : /\bpm\b/;
+    return want.test(n) && !other.test(n);
+  };
+}
+
+// ── Gucci Attache (#452) ──────────────────────────────────────────────────────
+// Backbone Small / Large (TRR carries very few). Large = "large"; everything else
+// non-Mini is the Small (incl. the unsized standard). The Attache Mini isn't a
+// backbone variant and drops; SLGs guarded.
+export function attacheSize(label: "Small" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("attache") || /charm|wallet|card/.test(n)) return false;
+    if (/\bmini\b/.test(n)) return false; // Mini not a backbone variant
+    return label === "Large" ? /\blarge\b/.test(n) : !/\blarge\b/.test(n);
+  };
+}
+
+// ── Hermès Roulis (#419) ──────────────────────────────────────────────────────
+// Backbone Mini / 23. A Roulis search returns the Roulis Slim WALLET + Roulis Double
+// Tour BRACELET (jewelry/SLG) — guarded out. Mini = mini token; everything else (incl.
+// unsized standard Roulis) is the 23; the rare non-backbone 18 drops.
+const ROULIS_NOT = /slim|wallet|compact|to go|card|bracelet|station|jewelry/;
+export function roulisSize(label: "Mini" | "23"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("roulis") || ROULIS_NOT.test(n) || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n) || /\b18\b/.test(n)) return false;
+    return true; // 23 = explicit 23 or the unsized standard Roulis
+  };
+}
+
+// ── LV Petite Malle (#443) ────────────────────────────────────────────────────
+// One backbone variant (Standard). Require the full "petite malle" phrase — a broad
+// search returns Montaigne/Carmel/Métis/Trunk Clutch + a "Petit Malle" typo. The
+// Souple soft version folds into Standard (same icon, no separate variant).
+export function petiteMalleStandard(name: string): boolean {
+  const n = name.toLowerCase();
+  return n.includes("petite malle") && !/charm/.test(n);
+}
+
+// ── LV Dauphine (#441) ────────────────────────────────────────────────────────
+// Micro / Mini / MM / GM. Micro & Mini are distinct whole words; a broad Dauphine
+// search pulls many other LV bags so require "dauphine".
+const DAUPHINE_SIZES = ["micro", "mini", "mm", "gm"];
+export function dauphineSize(label: "Micro" | "Mini" | "MM" | "GM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("dauphine") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = DAUPHINE_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── Hermès Jypsière (#420) ────────────────────────────────────────────────────
+// Mini + numeric 28 / 31 / 34. "jypsi" token covers Jypsière/Jypsiere. Mini first;
+// the non-backbone 37 has no bucket and drops. Numerics whole-word.
+const JYPSIERE_NUMS = ["28", "31", "34"];
+export function jypsiereSize(label: "Mini" | "28" | "31" | "34"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/jypsi/.test(n) || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = JYPSIERE_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── Gucci Bamboo 1947 (#449) ──────────────────────────────────────────────────
+// Backbone Mini / Small / Medium / Large. REQUIRE both "bamboo" + "1947" — a Bamboo
+// search returns vintage "Bamboo Top Handle" bags (a different, uncatalogued style)
+// that must NOT land on the modern Bamboo 1947. Size words whole-word.
+const BAMBOO_SIZES = ["mini", "small", "medium", "large"];
+export function bamboo1947Size(label: "Mini" | "Small" | "Medium" | "Large"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("bamboo") || !n.includes("1947") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = BAMBOO_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── Gucci Soho Disco (#450) ───────────────────────────────────────────────────
+// Backbone Mini / Small. REQUIRE "disco" — a "soho" search returns the broader Soho
+// line (Chain tote, Boston in medium/large) which are NOT the Disco. The Disco is a
+// single small crossbody, so an unsized "Soho Disco" IS the Small; only a "mini" token
+// routes to Mini.
+export function sohoDiscoSize(label: "Mini" | "Small"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("disco") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    return !/\bmini\b/.test(n); // Small = any non-mini Disco (labeled "Small" or unsized)
+  };
+}
+
+// ── Hermès Bolide (#415) ──────────────────────────────────────────────────────
+// Mini + numeric 25 / 27 / 31 / 35. Mini checked first; numerics whole-word (the
+// "1923" line name can't false-match). Non-Bolide Hermès in a broad search drop.
+const BOLIDE_NUMS = ["25", "27", "31", "35"];
+export function bolideSize(label: "Mini" | "25" | "27" | "31" | "35"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("bolide") || /charm/.test(n)) return false;
+    if (label === "Mini") return /\bmini\b/.test(n);
+    if (/\bmini\b/.test(n)) return false;
+    const want = new RegExp(`\\b${label}\\b`);
+    const others = BOLIDE_NUMS.filter((s) => s !== label).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+// ── LV Coussin (#442) ─────────────────────────────────────────────────────────
+// Letter sizes BB / MM / PM. Whole-word (\b) so a letter can't hide in another word;
+// require "coussin" to exclude other LV bags in a broad search.
+const COUSSIN_SIZES = ["bb", "mm", "pm"];
+export function coussinSize(label: "BB" | "MM" | "PM"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("coussin") || /charm/.test(n)) return false;
+    const want = new RegExp(`\\b${label.toLowerCase()}\\b`);
+    const others = COUSSIN_SIZES.filter((s) => s !== label.toLowerCase()).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── LV Bumbag (#445) ──────────────────────────────────────────────────────────
 // Two backbone variants: Mini / Standard. TRR titles it "Bumbag" or "Bum Bag" (both
 // matched); other LV belt/utility bags lack "bumbag" so requiring it excludes them.
@@ -748,6 +907,94 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── LV Twist (#439) — PM / MM, share one "lv-twist" capture. ──
+  "lv-twist-pm": { brand: "Louis Vuitton", style: "Twist", size_label: "PM",
+    namePredicate: twistSize("PM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+  "lv-twist-mm": { brand: "Louis Vuitton", style: "Twist", size_label: "MM",
+    namePredicate: twistSize("MM"), minPrice: 800, maxPrice: 12000, rawKey: "lv-twist" },
+
+  // ── Gucci Attache (#452) — Small / Large, share one "gucci-attache" capture. ──
+  "gucci-attache-small": { brand: "Gucci", style: "Attache", size_label: "Small",
+    namePredicate: attacheSize("Small"), minPrice: 400, maxPrice: 6000, rawKey: "gucci-attache" },
+  "gucci-attache-large": { brand: "Gucci", style: "Attache", size_label: "Large",
+    namePredicate: attacheSize("Large"), minPrice: 400, maxPrice: 6000, rawKey: "gucci-attache" },
+
+  // ── Hermès Roulis (#419) — Mini / 23, share one "hermes-roulis" capture. ──
+  "hermes-roulis-mini": { brand: "Hermès", style: "Roulis", size_label: "Mini",
+    namePredicate: roulisSize("Mini"), minPrice: 2000, maxPrice: 25000, rawKey: "hermes-roulis" },
+  "hermes-roulis-23": { brand: "Hermès", style: "Roulis", size_label: "23",
+    namePredicate: roulisSize("23"), minPrice: 2000, maxPrice: 25000, rawKey: "hermes-roulis" },
+
+  // ── LV Petite Malle (#443) — single Standard variant. ──
+  "lv-petite-malle-standard": { brand: "Louis Vuitton", style: "Petite Malle", size_label: "Standard",
+    namePredicate: petiteMalleStandard, minPrice: 400, maxPrice: 15000, rawKey: "lv-petite-malle" },
+
+  // ── LV Dauphine (#441) — Micro/Mini/MM/GM, share one "lv-dauphine" capture. ──
+  "lv-dauphine-micro": { brand: "Louis Vuitton", style: "Dauphine", size_label: "Micro",
+    namePredicate: dauphineSize("Micro"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-mini": { brand: "Louis Vuitton", style: "Dauphine", size_label: "Mini",
+    namePredicate: dauphineSize("Mini"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-mm": { brand: "Louis Vuitton", style: "Dauphine", size_label: "MM",
+    namePredicate: dauphineSize("MM"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+  "lv-dauphine-gm": { brand: "Louis Vuitton", style: "Dauphine", size_label: "GM",
+    namePredicate: dauphineSize("GM"), minPrice: 400, maxPrice: 10000, rawKey: "lv-dauphine" },
+
+  // ── Hermès Jypsière (#420) — Mini/28/31/34, share one "hermes-jypsiere" capture. ──
+  "hermes-jypsiere-mini": { brand: "Hermès", style: "Jypsière", size_label: "Mini",
+    namePredicate: jypsiereSize("Mini"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-28": { brand: "Hermès", style: "Jypsière", size_label: "28",
+    namePredicate: jypsiereSize("28"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-31": { brand: "Hermès", style: "Jypsière", size_label: "31",
+    namePredicate: jypsiereSize("31"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+  "hermes-jypsiere-34": { brand: "Hermès", style: "Jypsière", size_label: "34",
+    namePredicate: jypsiereSize("34"), minPrice: 1500, maxPrice: 20000, rawKey: "hermes-jypsiere" },
+
+  // ── Gucci Bamboo 1947 (#449) — Mini/Small/Medium/Large, share one "gucci-bamboo-1947" capture. ──
+  "gucci-bamboo-1947-mini": { brand: "Gucci", style: "Bamboo 1947", size_label: "Mini",
+    namePredicate: bamboo1947Size("Mini"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-small": { brand: "Gucci", style: "Bamboo 1947", size_label: "Small",
+    namePredicate: bamboo1947Size("Small"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-medium": { brand: "Gucci", style: "Bamboo 1947", size_label: "Medium",
+    namePredicate: bamboo1947Size("Medium"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+  "gucci-bamboo-1947-large": { brand: "Gucci", style: "Bamboo 1947", size_label: "Large",
+    namePredicate: bamboo1947Size("Large"), minPrice: 600, maxPrice: 10000, rawKey: "gucci-bamboo-1947" },
+
+  // ── Gucci Soho Disco (#450) — Mini / Small, share one "gucci-soho-disco" capture. ──
+  "gucci-soho-disco-mini": { brand: "Gucci", style: "Soho Disco", size_label: "Mini",
+    namePredicate: sohoDiscoSize("Mini"), minPrice: 300, maxPrice: 4000, rawKey: "gucci-soho-disco" },
+  "gucci-soho-disco-small": { brand: "Gucci", style: "Soho Disco", size_label: "Small",
+    namePredicate: sohoDiscoSize("Small"), minPrice: 300, maxPrice: 4000, rawKey: "gucci-soho-disco" },
+
+  // ── Hermès Bolide (#415) — Mini/25/27/31/35, share one "hermes-bolide" capture. ──
+  "hermes-bolide-mini": { brand: "Hermès", style: "Bolide", size_label: "Mini",
+    namePredicate: bolideSize("Mini"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-25": { brand: "Hermès", style: "Bolide", size_label: "25",
+    namePredicate: bolideSize("25"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-27": { brand: "Hermès", style: "Bolide", size_label: "27",
+    namePredicate: bolideSize("27"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-31": { brand: "Hermès", style: "Bolide", size_label: "31",
+    namePredicate: bolideSize("31"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+  "hermes-bolide-35": { brand: "Hermès", style: "Bolide", size_label: "35",
+    namePredicate: bolideSize("35"), minPrice: 1500, maxPrice: 30000, rawKey: "hermes-bolide" },
+
+  // ── LV Coussin (#442) — BB / MM / PM, share one "lv-coussin" capture. ──
+  "lv-coussin-bb": { brand: "Louis Vuitton", style: "Coussin", size_label: "BB",
+    namePredicate: coussinSize("BB"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
+  "lv-coussin-mm": { brand: "Louis Vuitton", style: "Coussin", size_label: "MM",
+    namePredicate: coussinSize("MM"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
+  "lv-coussin-pm": { brand: "Louis Vuitton", style: "Coussin", size_label: "PM",
+    namePredicate: coussinSize("PM"), minPrice: 800, maxPrice: 10000, rawKey: "lv-coussin" },
+
+  // ── Gucci Diana (#451) — Mini/Small/Medium/Maxi(=TRR "Large"), one "gucci-diana" capture. ──
+  "gucci-diana-mini": { brand: "Gucci", style: "Diana", size_label: "Mini",
+    namePredicate: dianaSize("Mini"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-small": { brand: "Gucci", style: "Diana", size_label: "Small",
+    namePredicate: dianaSize("Small"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-medium": { brand: "Gucci", style: "Diana", size_label: "Medium",
+    namePredicate: dianaSize("Medium"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
+  "gucci-diana-maxi": { brand: "Gucci", style: "Diana", size_label: "Maxi",
+    namePredicate: dianaSize("Maxi"), minPrice: 400, maxPrice: 8000, rawKey: "gucci-diana" },
 
   // ── Gucci Blondie (#453) — share one "gucci-blondie" capture. ──
   "gucci-blondie-mini": { brand: "Gucci", style: "Blondie", size_label: "Mini",
