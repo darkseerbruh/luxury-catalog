@@ -1101,6 +1101,166 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 4000,
     searchUrl: "https://www.fashionphile.com/collections/gucci/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // MID-LUX CONTEMPORARY ICONS 2026-06-23 (batch 6) — Saint Laurent / Dior / Fendi
+  // permanent icons (Fashionphile-first, no browser). Validated against each live
+  // collection JSON.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Saint Laurent College (#465) — the chevron-quilted satchel, sizes Mini/Medium/Large.
+  ...(["mini", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "College",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["college", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 800,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Saint Laurent Icare Tote (#470) — the quilted shopper, sizes Maxi / Medium.
+  ...(["maxi", "medium"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Icare Tote",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["icare", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 2000,
+    maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Saint Laurent Lou Camera (#464) — sizes Mini / Small / Standard. The size-less
+  // "lou-camera-bag" is the Standard; excludeTokens drop the Lou wallet.
+  {
+    brand: "Saint Laurent", style: "Lou Camera", size_label: "Mini",
+    requireTokens: ["lou-camera", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 600, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  },
+  {
+    brand: "Saint Laurent", style: "Lou Camera", size_label: "Small",
+    requireTokens: ["lou-camera", "small"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 600, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  },
+  {
+    brand: "Saint Laurent", style: "Lou Camera", size_label: "Standard",
+    requireTokens: ["lou-camera"],
+    excludeTokens: ["mini", "small", "wallet", "card"],
+    minPrice: 600, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  },
+
+  // Saint Laurent Manhattan (#468) — sizes Nano / Mini / Small / Standard (shoulder).
+  ...(["nano", "mini", "small"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Manhattan",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["manhattan", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 800,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+  {
+    brand: "Saint Laurent", style: "Manhattan", size_label: "Standard",
+    requireTokens: ["manhattan", "shoulder"],
+    excludeTokens: ["mini", "nano", "wallet", "card"],
+    minPrice: 800, maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  },
+
+  // Saint Laurent Solferino (#469) — sizes Mini / Small / Medium / Large.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Saint Laurent",
+    style: "Solferino",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["solferino", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 700,
+    maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // Dior Caro (#456) — sizes Mini / Small / Medium. excludeTokens drop the Caro heart
+  // pouch / chain pouch / compact card wallet SLGs. Dior collection slug = christian-dior.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Caro",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["caro", size],
+    excludeTokens: ["pouch", "wallet", "heart", "card", "compact"],
+    minPrice: 1500,
+    maxPrice: 5000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
+
+  // Dior Bobby (#457) — sizes Micro / Small / Medium / Large / East-West. TRAP:
+  // "diorbobby" sunglasses + "d-bobby" brim hat share the name; excludeTokens drop them.
+  ...(["micro", "small", "medium", "large", "east-west"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Bobby",
+    size_label: size === "east-west" ? "East-West" : size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["bobby", size],
+    excludeTokens: ["sunglass", "hat", "brim", "wallet", "card"],
+    minPrice: 1200,
+    maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
+
+  // Dior Toujours (#459) — sizes Small / Medium / Large.
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Dior Toujours",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["toujours", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1500,
+    maxPrice: 5000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
+
+  // Fendi Mon Trésor (#480) — the bucket bag, sizes Micro / Mini / Small.
+  ...(["micro", "mini", "small"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "Mon Trésor",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["mon-tresor", size],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 700,
+    maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
+
+  // Fendi By the Way (#481) — the Boston bag, sizes Mini / Medium / Large.
+  ...(["mini", "medium", "large"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "By the Way",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["by-the-way", size],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 500,
+    maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
+
+  // Fendi Fendigraphy (#482) — the hobo, sizes Small / Medium. TRAP: the "nano
+  // fendigraphy" is a bag CHARM (excluded, not a size bucket).
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Fendi",
+    style: "Fendigraphy",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["fendigraphy", size],
+    excludeTokens: ["charm", "wallet"],
+    minPrice: 1000,
+    maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
