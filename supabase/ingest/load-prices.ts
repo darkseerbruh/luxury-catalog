@@ -103,6 +103,43 @@ function toRow(o: PriceObservation, variantId: number) {
   };
 }
 
+/**
+ * Build a discovered_listing row for an observation the loader could NOT place on a
+ * curated variant (catalog backbone §5 / migration 0026). Keeps the full parsed spec
+ * plus whatever partial match we got (brand/style ids), so a later promotion pass can
+ * roll recurring models into the clean catalog. Nothing real is dropped.
+ */
+function toDiscovered(
+  o: PriceObservation,
+  reason: "no_brand" | "no_style" | "no_variant",
+  matchedBrandId: number | null,
+  matchedStyleId: number | null
+) {
+  return {
+    platform: o.platform,
+    listing_ref: o.attrs.listing_ref ?? o.source_url,
+    source_url: o.source_url,
+    raw_name: o.notes ?? null,
+    brand_guess: o.brand,
+    style_guess: o.style,
+    matched_brand_id: matchedBrandId,
+    matched_style_id: matchedStyleId,
+    size_label: o.attrs.size_label ?? null,
+    colorway: o.attrs.exterior_colorway ?? null,
+    material: o.attrs.exterior_material ?? null,
+    hardware_color: o.attrs.hardware_color ?? null,
+    production_year: o.attrs.production_year ?? null,
+    season: o.attrs.season ?? null,
+    inclusions: o.attrs.inclusions ?? null,
+    price_type: o.price_type,
+    sale_price: o.sale_price,
+    currency: o.currency,
+    condition: o.condition ?? null,
+    unresolved_reason: reason,
+    observed_on: o.observed_on,
+  };
+}
+
 async function main() {
   const flags = parseFlags(process.argv.slice(2));
   let observations = readLandingObservations(flags.source);
@@ -119,20 +156,18 @@ async function main() {
   const variantsCache = new Map<number, VariantAttrs[]>();
 
   const rows: ReturnType<typeof toRow>[] = [];
-  let unresolved = 0;
+  const discovered: ReturnType<typeof toDiscovered>[] = [];
 
   for (const o of observations) {
     const brand = brandByNorm.get(norm(normalizeDesigner(o.brand)));
     if (!brand) {
-      unresolved++;
-      console.warn(`  no brand match: ${o.brand} / ${o.style}`);
+      discovered.push(toDiscovered(o, "no_brand", null, null));
       continue;
     }
     if (!stylesCache.has(brand.brand_id)) stylesCache.set(brand.brand_id, await loadStylesForBrand(brand.brand_id));
     const style = pickStyle(stylesCache.get(brand.brand_id)!, o.style);
     if (!style) {
-      unresolved++;
-      console.warn(`  no style match: ${o.brand} / ${o.style}`);
+      discovered.push(toDiscovered(o, "no_style", brand.brand_id, null));
       continue;
     }
     if (!variantsCache.has(style.style_id)) variantsCache.set(style.style_id, await loadVariantsForStyle(style.style_id));
@@ -142,26 +177,48 @@ async function main() {
       hardware: o.attrs.hardware_color,
     });
     if (!variant) {
-      unresolved++;
-      console.warn(`  no variant for style ${style.name}`);
+      discovered.push(toDiscovered(o, "no_variant", brand.brand_id, style.style_id));
       continue;
     }
     rows.push(toRow(o, variant.variant_id));
   }
 
-  console.log(`Resolved ${rows.length} row(s); ${unresolved} unresolved.`);
+  console.log(`Resolved ${rows.length} row(s); ${discovered.length} unresolved -> discovered_listing.`);
   if (!flags.write) {
     console.log("DRY RUN — pass --write to persist. Sample:");
     console.table(rows.slice(0, 8).map((r) => ({ variant_id: r.variant_id, platform: r.platform, type: r.price_type, price: r.sale_price, on: r.observed_on })));
+    if (discovered.length) {
+      const byReason = discovered.reduce<Record<string, number>>((m, d) => ((m[d.unresolved_reason] = (m[d.unresolved_reason] ?? 0) + 1), m), {});
+      console.log(`  would capture ${discovered.length} to discovered_listing:`, byReason);
+    }
     return;
   }
-  if (rows.length === 0) return;
 
-  const { error } = await supabaseAdmin
-    .from("price_history")
-    .upsert(rows, { onConflict: "variant_id,platform,price_type,observed_on,sale_price,listing_ref", ignoreDuplicates: true });
-  if (error) throw error;
-  console.log(`Upserted ${rows.length} price row(s). Refresh variant_price_summary to surface them.`);
+  if (rows.length > 0) {
+    const { error } = await supabaseAdmin
+      .from("price_history")
+      .upsert(rows, { onConflict: "variant_id,platform,price_type,observed_on,sale_price,listing_ref", ignoreDuplicates: true });
+    if (error) throw error;
+    console.log(`Upserted ${rows.length} price row(s). Refresh variant_price_summary to surface them.`);
+  }
+
+  // Two-tier raw layer (migration 0026). Resilient: if the table isn't there yet,
+  // the loader keeps working (the unresolved rows are simply not captured this run,
+  // as before) so merging this ahead of the migration never breaks a load.
+  if (discovered.length > 0) {
+    const { error } = await supabaseAdmin
+      .from("discovered_listing")
+      .upsert(discovered, { onConflict: "platform,listing_ref,observed_on,sale_price", ignoreDuplicates: true });
+    if (error) {
+      if (error.code === "42P01") {
+        console.warn(`  discovered_listing not found — apply migration 0026, then re-run to capture ${discovered.length} unresolved listing(s).`);
+      } else {
+        throw error;
+      }
+    } else {
+      console.log(`Captured ${discovered.length} unresolved listing(s) to discovered_listing.`);
+    }
+  }
 }
 
 main().catch((e) => {
