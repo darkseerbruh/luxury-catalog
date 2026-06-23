@@ -131,6 +131,8 @@ const LOULOU_SIZES = ["toy", "small", "medium", "large"];
 const VANITY_SIZES = ["mini", "small", "medium", "large"];
 // Chanel Deauville (#429): Mini / Small / Medium / Large.
 const DEAUVILLE_SIZES = ["mini", "small", "medium", "large"];
+// Gucci Blondie (#453): Mini / Small / Medium / Large.
+const BLONDIE_SIZES = ["mini", "small", "medium", "large"];
 
 // ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
 // A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
@@ -645,6 +647,16 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
   "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
     namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+
+  // ── Gucci Blondie (#453) — share one "gucci-blondie" capture. ──
+  "gucci-blondie-mini": { brand: "Gucci", style: "Blondie", size_label: "Mini",
+    namePredicate: modelSize("blondie", "mini", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-small": { brand: "Gucci", style: "Blondie", size_label: "Small",
+    namePredicate: modelSize("blondie", "small", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-medium": { brand: "Gucci", style: "Blondie", size_label: "Medium",
+    namePredicate: modelSize("blondie", "medium", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
+  "gucci-blondie-large": { brand: "Gucci", style: "Blondie", size_label: "Large",
+    namePredicate: modelSize("blondie", "large", BLONDIE_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "gucci-blondie" },
 
   // ── Chanel Deauville (#429) — share one "chanel-deauville" capture. ──
   "chanel-deauville-mini": { brand: "Chanel", style: "Deauville", size_label: "Mini",
