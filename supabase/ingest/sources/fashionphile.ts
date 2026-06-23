@@ -5,12 +5,18 @@
  *   Fashionphile runs on Shopify. In Chrome, fetch individual product JSONs via
  *   the same-origin endpoint:
  *     fetch('/products/<handle>.json').then(r=>r.json())
- *   Collect the `product` objects into an array and save as:
- *     data/ingest/_raw/fashionphile.json  →  [{product:{...}}, ...]
+ *   Collect the records (with optional condition grade from the card) and save as:
+ *     data/ingest/_raw/fashionphile.json
+ *   Shape of each element:
+ *     { product: ShopifyProduct, url: string, conditionGrade?: string }
  *   Then run:
  *     npx tsx supabase/ingest/sources/fashionphile.ts --raw
- *   Each record maps through parseFashionphileProduct() → PriceObservation with
- *   confidence:"high", price_type:"listed", source_url per listing.
+ *   Each record maps through parseFashionphileProduct(product, conditionGrade)
+ *   → PriceObservation with confidence:"high", price_type:"listed", source_url per listing.
+ *
+ * Condition grades Fashionphile uses (capture from the listing card):
+ *   "New" | "Giftable" | "Excellent" | "Very Good" | "Good" | "Fair"
+ *   Mapped to SaleCondition by mapFashionphileCondition().
  *
  * MODE B — live page scrape (medium-confidence, search-page summary):
  *   npm run ingest:fashionphile   (no flag)
@@ -29,7 +35,7 @@ import { parseFashionphileProduct } from "../../../src/lib/ingest/fashionphile";
 import type { ShopifyProduct } from "../../../src/lib/ingest/fashionphile";
 import { politeFetchText } from "../lib/fetch";
 import { writeObservations } from "../lib/landing";
-import type { PriceObservation, SaleCondition } from "../../../src/lib/ingest/types";
+import type { PriceObservation } from "../../../src/lib/ingest/types";
 
 const PLATFORM = "Fashionphile";
 const RAW_DUMP = path.resolve(__dirname, "../../../data/ingest/_raw/fashionphile.json");
@@ -67,11 +73,22 @@ const TARGETS: FashionphileTarget[] = [
 // MODE A — browser raw-dump (high confidence, per listing)
 // ---------------------------------------------------------------------------
 
-/** Shape of one element in the raw dump (Shopify product-JSON wrapper). */
+/**
+ * Shape of one element in the raw dump.
+ * `conditionGrade` is optional — capture it from the listing card in the browser
+ * (the grade text appears as "Condition: Excellent" on search/product cards).
+ * Fashionphile grades: "New" | "Giftable" | "Excellent" | "Very Good" | "Good" | "Fair"
+ */
 interface RawDumpEntry {
   product: ShopifyProduct;
   /** Canonical listing URL — must be captured alongside the product JSON. */
   url?: string;
+  /**
+   * Optional condition grade from the listing/search card.
+   * Not present in the Shopify product JSON; must be captured from the page.
+   * Example: "Excellent", "Very Good", "Giftable"
+   */
+  conditionGrade?: string | null;
 }
 
 /**
@@ -79,7 +96,7 @@ interface RawDumpEntry {
  * Returns null if the record can't be matched to a target or price is absent.
  */
 function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | null {
-  const { product, url } = entry;
+  const { product, url, conditionGrade } = entry;
   if (!url) {
     console.warn("fashionphile: raw record missing url — skipping (url is required for attribution)");
     return null;
@@ -96,7 +113,8 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     return null;
   }
 
-  const spec = parseFashionphileProduct(product);
+  // Pass conditionGrade so parseFashionphileProduct can map it to a SaleCondition.
+  const spec = parseFashionphileProduct(product, conditionGrade);
   if (!spec.price) {
     console.warn(`fashionphile: no price parsed for "${product.handle}" — skipping`);
     return null;
@@ -123,8 +141,7 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     price_type: "listed",
     sale_price: spec.price,
     currency: spec.currency,
-    // condition is always null from the Shopify JSON; only add when real
-    condition: spec.condition as SaleCondition | null,
+    condition: spec.condition,
     observed_on: today,
     source_url: url,
     confidence: "high",
@@ -135,9 +152,10 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
 function ingestFromRawDump(): void {
   if (!fs.existsSync(RAW_DUMP)) {
     console.error(`fashionphile --raw: dump not found at ${RAW_DUMP}`);
-    console.error("Capture step: in Chrome on fashionphile.com, run:");
-    console.error("  const products = []; for (const handle of HANDLES) { const r = await fetch(`/products/${handle}.json`); const j = await r.json(); products.push({product: j.product, url: `https://www.fashionphile.com/products/${handle}`}); } copy(products);");
-    console.error("Save the result to data/ingest/_raw/fashionphile.json, then re-run.");
+    console.error("Capture step: in Chrome on fashionphile.com, follow docs/research-drafts/fashionphile-capture.md.");
+    console.error("Quick version — for each handle, fetch `/products/<handle>.json`, then save:");
+    console.error("  [{product: <shopify-product-obj>, url: 'https://www.fashionphile.com/products/<handle>', conditionGrade: 'Excellent'}]");
+    console.error("to data/ingest/_raw/fashionphile.json, then re-run with --raw.");
     process.exit(1);
   }
   const raw: RawDumpEntry[] = JSON.parse(fs.readFileSync(RAW_DUMP, "utf8"));
