@@ -99,12 +99,18 @@ function speedyWord(word: string): (name: string) => boolean {
  * Small/Medium/Large, …). Note TRR sometimes truncates the model name (Book Tote →
  * "Book"), so pass the shortest reliable token as `model`.
  */
-function modelSize(model: string, size: string, siblings: string[]): (name: string) => boolean {
+function modelSize(
+  model: string,
+  size: string,
+  siblings: string[],
+  notTokens: string[] = []
+): (name: string) => boolean {
   const want = new RegExp(`\\b${size}\\b`, "i");
   const others = siblings.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`, "i"));
   return (name: string) => {
     const n = name.toLowerCase();
     if (!n.includes(model) || /charm/.test(n)) return false;
+    if (notTokens.some((t) => n.includes(t))) return false; // e.g. exclude Luggage PHANTOM sub-model
     return want.test(n) && !others.some((re) => re.test(n));
   };
 }
@@ -316,37 +322,37 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   // ── Celine Luggage (backbone Tier-1, canonical "Luggage Tote") — Nano/Micro/Mini/Medium ──
   "celine-luggage-nano": {
     brand: "Celine", style: "Luggage Tote", size_label: "Nano",
-    namePredicate: modelSize("luggage", "nano", LUGGAGE_SIZES), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
+    namePredicate: modelSize("luggage", "nano", LUGGAGE_SIZES, ["phantom"]), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
   },
   "celine-luggage-micro": {
     brand: "Celine", style: "Luggage Tote", size_label: "Micro",
-    namePredicate: modelSize("luggage", "micro", LUGGAGE_SIZES), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
+    namePredicate: modelSize("luggage", "micro", LUGGAGE_SIZES, ["phantom"]), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
   },
   "celine-luggage-mini": {
     brand: "Celine", style: "Luggage Tote", size_label: "Mini",
-    namePredicate: modelSize("luggage", "mini", LUGGAGE_SIZES), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
+    namePredicate: modelSize("luggage", "mini", LUGGAGE_SIZES, ["phantom"]), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
   },
   "celine-luggage-medium": {
     brand: "Celine", style: "Luggage Tote", size_label: "Medium",
-    namePredicate: modelSize("luggage", "medium", LUGGAGE_SIZES), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
+    namePredicate: modelSize("luggage", "medium", LUGGAGE_SIZES, ["phantom"]), minPrice: 400, maxPrice: 12000, rawKey: "celine-luggage",
   },
 
   // ── Saint Laurent Loulou (backbone Tier-1) — Toy/Small/Medium/Large ──
   "ysl-loulou-toy": {
     brand: "Saint Laurent", style: "Loulou", size_label: "Toy",
-    namePredicate: modelSize("loulou", "toy", LOULOU_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
+    namePredicate: modelSize("loulou", "toy", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
   "ysl-loulou-small": {
     brand: "Saint Laurent", style: "Loulou", size_label: "Small",
-    namePredicate: modelSize("loulou", "small", LOULOU_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
+    namePredicate: modelSize("loulou", "small", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
   "ysl-loulou-medium": {
     brand: "Saint Laurent", style: "Loulou", size_label: "Medium",
-    namePredicate: modelSize("loulou", "medium", LOULOU_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
+    namePredicate: modelSize("loulou", "medium", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
   "ysl-loulou-large": {
     brand: "Saint Laurent", style: "Loulou", size_label: "Large",
-    namePredicate: modelSize("loulou", "large", LOULOU_SIZES), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
+    namePredicate: modelSize("loulou", "large", LOULOU_SIZES, ["puffer"]), minPrice: 400, maxPrice: 8000, rawKey: "ysl-loulou",
   },
 };
 
