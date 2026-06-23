@@ -197,6 +197,27 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── Hermès Evelyne (#412) ─────────────────────────────────────────────────────
+// TRR sizes the Evelyne by NUMERIC cm, not the letter code: 16=TPM, 29=PM, 33=GM
+// ("Clemence Evelyne III 29"). The letter codes appear only on the smallest as
+// "TPM 16". TGM 40 is a larger, non-backbone size → dropped. Each numeric is
+// whole-word (\b) so a year ("2024 … 29") can't false-match and a "16" can't hide
+// inside "2016". Adds year (Evelyne has ~77% year coverage on TRR) + a 2nd source.
+const EVELYNE_MAP: Record<"TPM" | "PM" | "GM", string> = { TPM: "16", PM: "29", GM: "33" };
+export function evelyneSize(label: "TPM" | "PM" | "GM"): (name: string) => boolean {
+  const num = EVELYNE_MAP[label];
+  const otherNums = Object.values(EVELYNE_MAP).filter((x) => x !== num);
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("evelyne")) return false;
+    if (/\b40\b/.test(n) || /tgm/.test(n)) return false; // TGM 40 ≠ backbone GM
+    if (otherNums.some((x) => new RegExp(`\\b${x}\\b`).test(n))) return false;
+    const numHit = new RegExp(`\\b${num}\\b`).test(n);
+    const letterHit = new RegExp(`\\b${label.toLowerCase()}\\b`).test(n); // \btpm\b ⊅ pm
+    return numHit || letterHit;
+  };
+}
+
 // ── Coach (the viral thrift engine) ───────────────────────────────────────────
 // TRR carries Coach's model + numeric size in the JSON-LD name for CONTEMPORARY
 // Coach ("Leather Tabby 26", "Rogue 17", "Brooklyn 28"); VINTAGE Coach is
@@ -520,6 +541,14 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── Hermès Evelyne (#412) — numeric TRR sizes, share one "hermes-evelyne" capture. ──
+  "hermes-evelyne-tpm": { brand: "Hermès", style: "Evelyne", size_label: "TPM",
+    namePredicate: evelyneSize("TPM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
+  "hermes-evelyne-pm": { brand: "Hermès", style: "Evelyne", size_label: "PM",
+    namePredicate: evelyneSize("PM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
+  "hermes-evelyne-gm": { brand: "Hermès", style: "Evelyne", size_label: "GM",
+    namePredicate: evelyneSize("GM"), minPrice: 1000, maxPrice: 12000, rawKey: "hermes-evelyne" },
 
   // ── Coach (the viral thrift engine) — curated per-model; all share "coach-models". ──
   // Tabby (#3) — sizes 12 / 20 / 26 + Standard. Excludes Pillow Tabby (own style).
