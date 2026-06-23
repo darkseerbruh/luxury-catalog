@@ -21,6 +21,17 @@ import {
   neoNoeSize,
   lindySize,
   herbagSize,
+  dianaSize,
+  coussinSize,
+  twistSize,
+  bolideSize,
+  sohoDiscoSize,
+  bamboo1947Size,
+  jypsiereSize,
+  dauphineSize,
+  petiteMalleStandard,
+  roulisSize,
+  attacheSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -471,5 +482,101 @@ describe("herbagSize (PM / MM, numeric 31/39)", () => {
   it("also accepts the literal letter size", () => {
     expect(herbagSize("MM")("Toile Herbag MM")).toBe(true);
     expect(herbagSize("PM")("Toile Herbag MM")).toBe(false);
+  });
+});
+
+describe("dianaSize (Maxi = TRR 'Large')", () => {
+  it("maps TRR Large to the Maxi bucket", () => {
+    expect(dianaSize("Maxi")("Gucci Bamboo Diana Large")).toBe(true);
+    expect(dianaSize("Medium")("Gucci Bamboo Diana Large")).toBe(false);
+  });
+  it("buckets Mini/Small/Medium whole-word", () => {
+    expect(dianaSize("Mini")("Gucci Diana Mini")).toBe(true);
+    expect(dianaSize("Small")("Gucci Diana Small")).toBe(true);
+    expect(dianaSize("Medium")("Gucci Diana Small")).toBe(false);
+  });
+  it("drops Diana footwear", () => {
+    expect(dianaSize("Mini")("Gucci Diana Mini Loafer")).toBe(false);
+  });
+});
+
+describe("coussinSize (BB / MM / PM)", () => {
+  it("buckets letters whole-word, requires coussin", () => {
+    expect(coussinSize("PM")("Monogram Coussin PM")).toBe(true);
+    expect(coussinSize("BB")("Monogram Coussin PM")).toBe(false);
+    expect(coussinSize("PM")("Monogram Bella")).toBe(false);
+  });
+});
+
+describe("twistSize (PM / MM, jewelry-guarded)", () => {
+  it("buckets PM/MM but drops Twist jewelry", () => {
+    expect(twistSize("MM")("Epi Leather Twist MM")).toBe(true);
+    expect(twistSize("MM")("18K Diamond Idylle Blossom Twist Bracelet")).toBe(false);
+  });
+});
+
+describe("bolideSize (Mini / 25 / 27 / 31 / 35)", () => {
+  it("Mini-first, numerics whole-word", () => {
+    expect(bolideSize("Mini")("Clemence Mini Bolide")).toBe(true);
+    expect(bolideSize("31")("Clemence Bolide 31")).toBe(true);
+    expect(bolideSize("25")("Clemence Bolide 31")).toBe(false);
+  });
+});
+
+describe("sohoDiscoSize (requires 'disco')", () => {
+  it("treats unsized Disco as Small, requires disco", () => {
+    expect(sohoDiscoSize("Small")("Interlocking G Soho Disco")).toBe(true);
+    expect(sohoDiscoSize("Mini")("Soho Disco Mini")).toBe(true);
+    expect(sohoDiscoSize("Small")("Soho Disco Mini")).toBe(false);
+    expect(sohoDiscoSize("Small")("Soho Chain Tote Medium")).toBe(false);
+  });
+});
+
+describe("bamboo1947Size (requires bamboo + 1947)", () => {
+  it("excludes vintage Bamboo Top Handle", () => {
+    expect(bamboo1947Size("Small")("Gucci Bamboo 1947 Small")).toBe(true);
+    expect(bamboo1947Size("Medium")("Leather Medium Bamboo Top Handle Flap")).toBe(false);
+  });
+});
+
+describe("jypsiereSize (Mini / 28 / 31 / 34)", () => {
+  it("Mini-first, drops non-backbone 37", () => {
+    expect(jypsiereSize("Mini")("Evercolor Mini Jypsiere")).toBe(true);
+    expect(jypsiereSize("31")("Clemence Jypsiere 31")).toBe(true);
+    expect(jypsiereSize("34")("Clemence Jypsiere 37")).toBe(false);
+  });
+});
+
+describe("dauphineSize (Micro/Mini/MM/GM)", () => {
+  it("separates Micro from Mini whole-word", () => {
+    expect(dauphineSize("Mini")("Monogram Dauphine Mini")).toBe(true);
+    expect(dauphineSize("Micro")("Monogram Dauphine Mini")).toBe(false);
+    expect(dauphineSize("MM")("Monogram Dauphine MM")).toBe(true);
+  });
+});
+
+describe("petiteMalleStandard", () => {
+  it("requires the full phrase", () => {
+    expect(petiteMalleStandard("Monogram Petite Malle")).toBe(true);
+    expect(petiteMalleStandard("LV Monogram Petit Malle")).toBe(false); // typo, no 'e'
+    expect(petiteMalleStandard("LV Monogram Montaigne MM")).toBe(false);
+  });
+});
+
+describe("roulisSize (Mini / 23, SLG-guarded)", () => {
+  it("guards out wallet/bracelet, unsized = 23", () => {
+    expect(roulisSize("23")("Clemence Roulis 23")).toBe(true);
+    expect(roulisSize("23")("Evercolor Roulis")).toBe(true); // unsized standard
+    expect(roulisSize("Mini")("Evercolor Mini Roulis")).toBe(true);
+    expect(roulisSize("23")("Roulis Slim Wallet")).toBe(false);
+    expect(roulisSize("23")("Roulis Double Tour Bracelet")).toBe(false);
+  });
+});
+
+describe("attacheSize (Small / Large)", () => {
+  it("Large=large, Small=non-large, Mini drops", () => {
+    expect(attacheSize("Large")("GG Supreme Attache Large")).toBe(true);
+    expect(attacheSize("Small")("GG Supreme Attache")).toBe(true);
+    expect(attacheSize("Small")("Web Attache Mini")).toBe(false);
   });
 });
