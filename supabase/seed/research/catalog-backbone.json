@@ -1,0 +1,49 @@
+{
+  "_note": "Permanent-collection backbone — the bags each house makes every season, prioritised over seasonal/one-offs. tier 1 = perennial icons (catalog first, in depth); tier 2 = permanent but secondary. Approved by owner 2026-06-23 (Celine Luggage kept T1; Coach full depth). Drives catalog build + capture order; not the listings.",
+  "brands": {
+    "Hermès": {
+      "1": ["Birkin", "Kelly", "Constance", "Evelyne", "Garden Party", "Picotin Lock", "Bolide", "Lindy", "Herbag", "Kelly Pochette"],
+      "2": ["Roulis", "Jypsière", "24/24", "Della Cavalleria"]
+    },
+    "Chanel": {
+      "1": ["Classic Flap", "2.55 Reissue", "Boy", "Chanel 19", "Gabrielle", "Wallet on Chain", "Coco Handle"],
+      "2": ["Deauville", "Vanity Case", "Chanel 22", "Business Affinity"]
+    },
+    "Louis Vuitton": {
+      "1": ["Neverfull", "Speedy", "Alma", "NéoNoé", "Capucines", "OnTheGo", "Pochette Métis", "Twist"],
+      "2": ["Keepall", "Dauphine", "Coussin", "Petite Malle", "Multi Pochette Accessoires", "Bumbag"]
+    },
+    "Gucci": {
+      "1": ["GG Marmont", "Dionysus", "Jackie 1961", "Horsebit 1955", "Ophidia", "Bamboo 1947"],
+      "2": ["Soho Disco", "Diana", "Attache", "Blondie"]
+    },
+    "Dior": {
+      "1": ["Lady Dior", "Saddle", "Book Tote", "30 Montaigne", "Caro"],
+      "2": ["Bobby", "Lady D-Joy", "Dior Toujours"]
+    },
+    "Saint Laurent": {
+      "1": ["Loulou", "Sac de Jour", "Kate", "Niki", "Lou Camera", "College", "Cassandre Envelope"],
+      "2": ["Le 5 à 7", "Manhattan", "Solferino", "Icare Tote"]
+    },
+    "Bottega Veneta": {
+      "1": ["Cassette", "Jodie", "The Pouch", "Andiamo", "Arco", "Loop"],
+      "2": ["Sardine", "Lauren 1980", "Knot"]
+    },
+    "Fendi": {
+      "1": ["Baguette", "Peekaboo", "Sunshine Shopper", "First", "Mon Trésor"],
+      "2": ["By the Way", "Fendigraphy", "C'mon"]
+    },
+    "Celine": {
+      "1": ["Triomphe", "Luggage Tote", "Belt Bag", "Classic Box", "Ava", "16 (Sixteen)"],
+      "2": ["Cabas", "Sangle", "Conti"]
+    },
+    "Prada": {
+      "1": ["Galleria", "Re-Edition", "Cleo"],
+      "2": ["Re-Nylon Backpack", "Arqué", "Symbole", "Moon"]
+    },
+    "Coach": {
+      "1": ["Tabby", "Rogue", "Willow", "Pillow Tabby", "Brooklyn"],
+      "2": ["Field", "Bandit"]
+    }
+  }
+}
