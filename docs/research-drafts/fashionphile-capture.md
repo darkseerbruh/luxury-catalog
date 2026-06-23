@@ -1,8 +1,37 @@
 # Fashionphile Capture Recipe
 
-**Status:** Ready for operator execution. Code is on `claude/fashionphile-capture`.
+**Status:** ✅ PROVEN LIVE 2026-06-23 — 101 Chanel Medium Double Flaps captured & loaded.
 **Run in:** a logged-in Fashionphile tab in Chrome.
-**Prereq:** Claude-in-Chrome extension, or browser console (DevTools > Console).
+
+---
+
+## ✅ WORKING METHOD (use this — the Algolia path below was unnecessary)
+
+The on-site **search** (`/shop?q=`) is server-rendered and returns poor results — it surfaced **zero** Classic Flap Mediums. The clean unlock is the **Shopify collection `products.json`**, which returns full product objects (title, body_html, variants) and needs no Algolia key:
+
+```js
+// In a logged-in fashionphile.com tab. Paginate the brand collection, filter handles.
+window.__FP=[];
+for(let page=1; page<=8; page++){
+  const j=await fetch(`/collections/chanel/products.json?limit=250&page=${page}`,{credentials:'include'}).then(r=>r.json());
+  if(!j.products?.length) break;
+  for(const p of j.products){
+    const h=p.handle.toLowerCase();
+    if(/double-flap|classic-flap/.test(h) && /medium/.test(h) && !/mini|small|jumbo|maxi/.test(h)){
+      window.__FP.push({product:{title:p.title,handle:p.handle,
+        body_html:(p.body_html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,600),
+        tags:p.tags, variants:[{price:p.variants?.[0]?.price, sku:p.variants?.[0]?.sku}]},
+        url:'https://www.fashionphile.com/products/'+p.handle});
+    }
+  }
+  await new Promise(r=>setTimeout(r,300));
+}
+// download window.__FP as a Blob → save to data/ingest/_raw/fashionphile.json
+```
+Then: `npm run ingest:fashionphile:raw` → `npm run load:prices -- fashionphile --write` → `npm run summary:refresh`.
+- Swap `/collections/chanel/` and the handle filter per brand/bag (e.g. `/collections/hermes/` + `/birkin/`, `/30/`).
+- Condition isn't in `products.json` (it's on the card) → loads with `condition: null`; capture `conditionGrade` from the card later if needed.
+- The `TARGETS[].requireTokens` must match Fashionphile's naming: it calls the bag **"Medium Double Flap"**, so use `["chanel","double-flap","medium"]` (NOT "classic flap").
 
 ---
 

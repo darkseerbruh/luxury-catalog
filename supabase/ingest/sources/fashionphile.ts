@@ -62,10 +62,12 @@ const TARGETS: FashionphileTarget[] = [
     brand: "Chanel",
     style: "Classic Flap",
     size_label: "Medium",
-    requireTokens: ["chanel", "classic", "flap", "medium"],
+    // Fashionphile names it "Medium Double Flap" (handle: chanel-...-medium-double-flap-...),
+    // not "Classic Flap" — match on that.
+    requireTokens: ["chanel", "double-flap", "medium"],
     minPrice: 1500,
     maxPrice: 25000,
-    searchUrl: "https://www.fashionphile.com/shop/chanel/classic-flap",
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
   },
 ];
 
