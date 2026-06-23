@@ -137,6 +137,25 @@ When eBay keys land: add them, `npm run ingest:ebay` → `load:prices -- ebay --
 4. **eBay** once approved → automated live resale (cron-able).
 5. Consider **first-seen / days-on-market** derivation off `listing_ref` across repeat snapshots.
 
+## 9b. Capture backlog (prioritised 2026-06-23)
+
+Order by value + whether a **retail MSRP anchor** is already loaded (so resale instantly yields retention %). Sources: TRR (proven), Vestiaire (region/cross-currency), Fashionphile (Shopify `/products/<handle>.json`, easy).
+
+| # | Bag | Variant | Retail anchor? | Sources | Status |
+|---|---|---|---|---|---|
+| 0 | Hermès Birkin 30 | 210 | ✓ | TRR | ✅ **loaded (102)** · retention 155% |
+| 1 | Hermès Kelly 28 | 214 | ✓ | TRR → Vestiaire | ✅ **loaded (91)** · retention 118% |
+| 2 | Hermès Birkin 35 | 211 | ✓ | TRR → Vestiaire | ✅ **loaded (108)** · retention 106% |
+| 3 | LV Neverfull MM | 218 | ✓ | TRR → Fashionphile | ✅ **loaded (105)** · retention 55% |
+| 4 | Gucci GG Marmont Small | 207 | ✓ | TRR → Fashionphile | ✅ **loaded (102)** |
+| 5 | Chanel Classic Flap Medium | 199 | ✓ (resale ✓ TRR) | **Vestiaire + Fashionphile** | next — validate new parsers + region/multi-site grid |
+| 6 | Hermès Birkin 25 / 40 | 212 / 213 | partial | TRR | broaden |
+| 7 | Hermès Kelly 25 / 32 | 215 / 216 | — | TRR | broaden |
+| 8 | LV Neverfull PM | 217 | ✓ | TRR / Fashionphile | broaden |
+| 9 | Gucci GG Marmont Medium | 208 | — | TRR / Fashionphile | broaden |
+
+Also pending: **condition_detail** capture from TRR product pages (separate section, not in JSON-LD) → `enrich-conditions`/`enrich-specs` (ANTHROPIC_API_KEY set locally) → the era×**condition** matrix's second axis.
+
 ## 10. Gotchas
 - Browser tool: chunk fetches ≤~8/call; page large returns; use top-level `await` (not an async IIFE — returns `{}`).
 - `load:prices` is dry-run unless `--write`; idempotent (dedup index on variant+platform+price_type+observed_on+sale_price).
