@@ -108,6 +108,15 @@
 - **Reference creators she loves (learn-from, don't copy):** **Je Suis Lou** (primary tonal model — informed-but-warm, anti-snobbery, transparency-as-mission, joy/memory-led value, "we don't judge"); @relaxitsonlyfashion (deadpan + deep passion); @AlexandraAnele (approachable + exacting); @juliareingoldproductions (human-on-the-other-side; the founder-persona model). Brand canon: Mr Porter ("would you say it in the pub?"), Mailchimp-minus-quirk (clear over clever), Aesop (no superlatives), Ffern (make the mechanics feel human).
 - **Content channels chosen** (canonical: `docs/social-content-calendar.md`): Pinterest, Email/Newsletter, Instagram, TikTok/YouTube Shorts. Evaluate formats by **revenue proximity × solo-operator effort**; every post drives to a real page; **batch the video**; the newsletter opt-in is a known unbuilt dependency.
 - **Pinterest is an *outbound* channel only** — a visual-search/shopping engine for *driving* high-intent shoppers to bag pages (Rich Pins) and for **creator collaborative/group boards**; she explicitly decided it is **not** an on-site embed source like YouTube/Instagram ("no need to consider embedding").
+- **No em dashes (—), ever (locked 2026-06-23).** She called this out directly:
+  em dashes are out across all user-facing copy. Use a period, comma, colon, or
+  parentheses instead (rationale + replacement guidance now in `docs/voice-and-tone.md`
+  §7–8). Open item she should decide: the locked tagline *"Know what it's worth —
+  and what it's worth to you"* still contains a dash.
+- **Apply the FULL `docs/voice-and-tone.md`, not the summary.** She asked point-blank
+  whether the voice guide was being used when drafting copy; draft against the
+  canonical guide (run the §8 slop sweep + the human-review checklist), don't rely
+  on the condensed voice notes in this file.
 - **The voice is a standing gate, not a one-time pass.** Parallel feature sessions ship user-facing copy *without* the guide and reintroduce banned patterns — a later overhaul re-added the hype word *"definitive"* in the footer and leaked an internal *"migration 0014"* string into a user-facing error. So when `main` moves or you reconcile sessions, **re-check new/changed user-facing copy against `docs/voice-and-tone.md`** and fix the drift. Mechanics that held up well: a copy-only pass touching *only* display strings (headings, labels, empty states, errors, metadata) while leaving code/structure/data untouched, **preserving every hedge & legal disclosure verbatim**, and **never inventing facts** (e.g. dropped an "what it's worth" CTA on `/identify` because the tool returns no value).
 
 ## Surfacing features on the home/entry pages (UX copy)

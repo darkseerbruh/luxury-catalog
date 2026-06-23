@@ -297,6 +297,14 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   here"* about knowledge that took expertise to assemble. Give it its due weight.
 - **Movie-trailer cadences:** the portentous three-beat ("Know it. Want it. Then
   decide.") reads cheap. Vary the rhythm.
+- **Em dashes (—).** Hard rule: don't use them. They're an AI-slop tell and they
+  blur sentence logic. Use a period, comma, colon, or parentheses instead, and
+  pick the one that fits the thought:
+  - aside or pause → comma ("Photograph any bag, and we check it against the markers")
+  - hard stop / two ideas → period or semicolon ("Track what you own. Watch it grow.")
+  - setup → payoff → colon ("What it's worth: the real resale range, dated and sourced.")
+  *(The one open exception is the legacy tagline below, which still uses a dash —
+  pending the owner's call on reworking it.)*
 - **AI-slop tells:** see §8.
 
 ---
@@ -317,7 +325,8 @@ so this is strategy, not just taste.
   comes to," "look no further," "dive into," "in conclusion."** → cut on sight.
 - **Symmetrical mush:** every sentence the same length and shape. Vary it. Fragments
   are fine.
-- **Em-dash overload and emoji confetti.** One clean idea beats decoration.
+- **Em dashes (—) at all, and emoji confetti.** Em dashes are banned outright
+  (see §7 for the replacements to reach for); one clean idea beats decoration.
 - **Vague universality:** "many collectors feel…" with no source. Either cite a real
   number (we have them) or cut it.
 
