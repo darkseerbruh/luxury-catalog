@@ -15,6 +15,8 @@
     "ingest:fashionphile": "tsx supabase/ingest/sources/fashionphile.ts",
     "ingest:auction": "tsx supabase/ingest/sources/auction.ts",
     "ingest:ebay": "tsx supabase/ingest/sources/ebay.ts",
+    "ingest:fashionphile:raw": "tsx supabase/ingest/sources/fashionphile.ts --raw",
+    "ingest:vestiaire": "tsx supabase/ingest/sources/vestiaire.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
     "summary:refresh": "tsx supabase/ingest/refresh-summary.ts",
     "enrich:conditions": "tsx supabase/ingest/enrich-conditions.ts"
