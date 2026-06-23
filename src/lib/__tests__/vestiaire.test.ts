@@ -393,7 +393,10 @@ describe("parseVestiaireProduct — PriceObservation mapping", () => {
         exterior_colorway: spec.color,
         exterior_material: spec.material,
         hardware_color: spec.hardwareColor,
-        condition_detail: chanelFlapNode.condition ?? null,
+        condition_detail:
+          typeof chanelFlapNode.condition === "string"
+            ? chanelFlapNode.condition
+            : chanelFlapNode.condition?.description ?? chanelFlapNode.condition?.name ?? null,
         region: spec.region,
         listing_ref: String(chanelFlapNode.id),
       },
@@ -446,7 +449,10 @@ describe("parseVestiaireProduct — PriceObservation mapping", () => {
         exterior_colorway: spec.color,
         exterior_material: spec.material,
         hardware_color: spec.hardwareColor,
-        condition_detail: arrayFieldsNode.condition ?? null,
+        condition_detail:
+          typeof arrayFieldsNode.condition === "string"
+            ? arrayFieldsNode.condition
+            : arrayFieldsNode.condition?.description ?? arrayFieldsNode.condition?.name ?? null,
         region: spec.region,
         listing_ref: String(arrayFieldsNode.id),
       },
@@ -521,5 +527,27 @@ describe("findVestiaireProductNode", () => {
     expect(findVestiaireProductNode(null)).toBeNull();
     expect(findVestiaireProductNode({})).toBeNull();
     expect(findVestiaireProductNode({ page: "home", query: "chanel" })).toBeNull();
+  });
+});
+
+describe("real __NEXT_DATA__ node shape (live-captured 2026-06-23)", () => {
+  it("parses the real Vestiaire product node: object color/material/condition, price.cents", () => {
+    // Exactly the shape pageProps.product carries on a live Vestiaire PDP.
+    const node = {
+      id: "68098591",
+      name: "Timeless/Classique leather handbag",
+      description: "Blue Chanel Medium Classic Double Flap.",
+      brand: { id: "50", name: "Chanel" },
+      color: { id: "9", name: "Blue" },
+      material: { id: "3", name: "Leather" },
+      condition: { id: "3", type: "condition", description: "Very good condition" },
+      price: { currency: "USD", cents: 205100 },
+    };
+    const spec = parseVestiaireProduct(node);
+    expect(spec.price).toBe(2051);
+    expect(spec.currency).toBe("USD");
+    expect(spec.color).toBe("Blue");
+    expect(spec.material).toBe("Leather");
+    expect(spec.condition).toBe("very good");
   });
 });

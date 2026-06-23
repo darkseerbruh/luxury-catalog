@@ -58,7 +58,8 @@ const TARGETS: VestiaireTarget[] = [
     brand: "Chanel",
     style: "Classic Flap",
     size_label: "Medium",
-    requireTokens: ["chanel", "flap"],
+    // Vestiaire names the Classic Flap "Timeless/Classique" — match on that, not "flap".
+    requireTokens: ["chanel", "classique"],
     minPrice: 1500,
     maxPrice: 25000,
   },
@@ -125,7 +126,10 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
       exterior_colorway: spec.color,
       exterior_material: spec.material,
       hardware_color: spec.hardwareColor,
-      condition_detail: node.condition ?? null,
+      condition_detail:
+        typeof node.condition === "string"
+          ? node.condition
+          : node.condition?.description ?? node.condition?.name ?? null,
       region: spec.region,
       listing_ref: listingRef,
     },

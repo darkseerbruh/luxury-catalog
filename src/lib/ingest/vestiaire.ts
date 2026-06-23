@@ -124,8 +124,9 @@ export interface VestiaireProductNode {
   /** Raw hardware string, e.g. "Gold-Tone Hardware" */
   hardware?: string | null;
 
-  // Condition — Vestiaire's own grade string (e.g. "Very good condition")
-  condition?: string | null;
+  // Condition — string (JSON-LD) OR object { description } (real __NEXT_DATA__ node,
+  // e.g. { id, type:"condition", description:"Very good condition" }).
+  condition?: string | { description?: string; name?: string } | null;
 
   // Price — Vestiaire uses various shapes depending on API version
   price?: {
@@ -315,8 +316,15 @@ export function parseVestiaireProduct(node: VestiaireProductNode): VestiaireSpec
   }
 
   // --- Condition ---
-  // Prefer Vestiaire grade string; fall back to schema.org itemCondition
-  const rawCondition = node.condition ?? node.itemCondition ?? null;
+  // Vestiaire's __NEXT_DATA__ node carries condition as an OBJECT
+  // ({ description: "Very good condition" }); JSON-LD gives a string / itemCondition URL.
+  const condRaw: unknown = node.condition ?? node.itemCondition ?? null;
+  const rawCondition =
+    typeof condRaw === "string"
+      ? condRaw
+      : (condRaw as { description?: string; name?: string } | null)?.description ??
+        (condRaw as { name?: string } | null)?.name ??
+        null;
   const condition = mapVestiaireCondition(rawCondition);
 
   return {
