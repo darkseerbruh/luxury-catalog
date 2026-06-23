@@ -81,8 +81,16 @@ const TARGETS: FashionphileTarget[] = [
   { brand: "Hermès", style: "Birkin", size_label: "25", requireTokens: ["hermes", "birkin-25"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
   { brand: "Hermès", style: "Birkin", size_label: "30", requireTokens: ["hermes", "birkin-30"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
   { brand: "Hermès", style: "Birkin", size_label: "35", requireTokens: ["hermes", "birkin-35"], minPrice: 8000, maxPrice: 120000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
-  { brand: "Hermès", style: "Kelly", size_label: "28", requireTokens: ["hermes", "kelly-28"], minPrice: 7000, maxPrice: 100000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
-  { brand: "Hermès", style: "Kelly", size_label: "32", requireTokens: ["hermes", "kelly-32"], minPrice: 7000, maxPrice: 100000, searchUrl: "https://www.fashionphile.com/collections/hermes/products.json" },
+  // Kelly handles are "kelly-sellier-28" / "kelly-retourne-28" (NOT "kelly-28"), so
+  // the size is anchored as "-NN-"; excludeTokens drop the Kelly sub-models/SLGs
+  // (Mini Kelly 20, Kelly Pochette/Cut/Longue/Moove/Pocket/Danse, wallets, twilly).
+  ...(["25", "28", "32", "35"] as const).map((size) => ({
+    brand: "Hermès", style: "Kelly", size_label: size,
+    requireTokens: ["kelly", `-${size}-`],
+    excludeTokens: ["wallet", "pochette", "cut", "longue", "moove", "pocket", "danse", "twilly", "compact", "mini", "depeche", "to-go", "picnic", "charm", "card"],
+    minPrice: 6000, maxPrice: 120000,
+    searchUrl: "https://www.fashionphile.com/collections/hermes/products.json",
+  })),
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "MM", requireTokens: ["neverfull-mm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull-pm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["gg-marmont", "small"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
@@ -298,6 +306,67 @@ const TARGETS: FashionphileTarget[] = [
     minPrice: 700,
     maxPrice: 6000,
     searchUrl: "https://www.fashionphile.com/collections/saint-laurent/products.json",
+  })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // FASHIONPHILE BACKFILL 2026-06-23 — the 4 styles that had TRR data but no FP.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Dior Book Tote (#454) — Mini / Small / Medium / Large. Dior's collection slug is
+  // "christian-dior"; the size sits before "book-tote" in the handle.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Dior",
+    style: "Book Tote",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["book-tote", size],
+    excludeTokens: ["card", "pouch", "phone", "wallet"],
+    minPrice: 800,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/christian-dior/products.json",
+  })),
+
+  // LV Speedy (#433) — numeric sizes 20/25/30/35/40 + Nano. The numeric size is
+  // anchored as "-NN-" so it matches BOTH "speedy-25" and "speedy-bandouliere-25"
+  // (the strap version folds into its size) without colliding with a product-id digit.
+  ...(["20", "25", "30", "35", "40"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Speedy",
+    size_label: size,
+    requireTokens: ["speedy", `-${size}-`],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    minPrice: 300,
+    maxPrice: 16000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+  {
+    brand: "Louis Vuitton", style: "Speedy", size_label: "Nano",
+    requireTokens: ["speedy", "nano"],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    minPrice: 300, maxPrice: 16000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  },
+
+  // LV Alma (#434) — BB / PM / MM / GM anchored on the handle ("alma-bb"), plus
+  // Mini / Nano word sizes.
+  ...(["bb", "pm", "mm", "gm"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Alma",
+    size_label: size.toUpperCase(),
+    requireTokens: [`alma-${size}`],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "vanity"],
+    minPrice: 250,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
+  })),
+  ...(["mini", "nano"] as const).map((size) => ({
+    brand: "Louis Vuitton",
+    style: "Alma",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["alma", size],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "vanity"],
+    minPrice: 250,
+    maxPrice: 12000,
+    searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
   })),
 ];
 
