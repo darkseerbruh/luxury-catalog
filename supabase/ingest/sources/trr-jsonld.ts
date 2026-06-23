@@ -197,6 +197,21 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── LV Keepall (#440) ─────────────────────────────────────────────────────────
+// Numeric sizes 25 / 45 / 50 / 55 / 60, often with a "Bandoulière" strap that folds
+// into its size (the strap detail stays in the row's desc). Whole-word (\b) so a year
+// or a "25mm strap" mention can't false-match the size token. Unsized listings drop.
+const KEEPALL_SIZES = ["25", "45", "50", "55", "60"];
+export function keepallSize(size: string): (name: string) => boolean {
+  const want = new RegExp(`\\b${size}\\b`);
+  const others = KEEPALL_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("keepall") || /charm/.test(n)) return false;
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
 // ── Hermès Evelyne (#412) ─────────────────────────────────────────────────────
 // TRR sizes the Evelyne by NUMERIC cm, not the letter code: 16=TPM, 29=PM, 33=GM
 // ("Clemence Evelyne III 29"). The letter codes appear only on the smallest as
@@ -541,6 +556,18 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── LV Keepall (#440) — numeric sizes, share one "lv-keepall" capture. ──
+  "lv-keepall-25": { brand: "Louis Vuitton", style: "Keepall", size_label: "25",
+    namePredicate: keepallSize("25"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-45": { brand: "Louis Vuitton", style: "Keepall", size_label: "45",
+    namePredicate: keepallSize("45"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-50": { brand: "Louis Vuitton", style: "Keepall", size_label: "50",
+    namePredicate: keepallSize("50"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-55": { brand: "Louis Vuitton", style: "Keepall", size_label: "55",
+    namePredicate: keepallSize("55"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
+  "lv-keepall-60": { brand: "Louis Vuitton", style: "Keepall", size_label: "60",
+    namePredicate: keepallSize("60"), minPrice: 300, maxPrice: 15000, rawKey: "lv-keepall" },
 
   // ── Hermès Evelyne (#412) — numeric TRR sizes, share one "hermes-evelyne" capture. ──
   "hermes-evelyne-tpm": { brand: "Hermès", style: "Evelyne", size_label: "TPM",
