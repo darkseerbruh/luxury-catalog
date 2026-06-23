@@ -62,6 +62,16 @@ export interface ValueModuleProps {
    * populates price_history.production_year.
    */
   era?: { productionYears: string | null; discontinued: boolean; vintage: boolean };
+  /**
+   * Era lens — recorded resale grouped by production-year decade (from
+   * price_history.production_year, migration 0022 + LLM extraction pass).
+   * Renders when ≥2 bands are populated; otherwise falls through to the
+   * condition ladder or gauge, mirroring the condition-ladder's ≥2-tier rule.
+   * Empty array when the column is absent (pre-0022) — page degrades gracefully.
+   */
+  byEra?: CompRow[];
+  /** Currency for the era lens axis (may differ from the main range currency). */
+  eraCurrency?: string | null;
 }
 
 /** A neutral, non-invented note on how the production era bears on value. */
@@ -140,8 +150,13 @@ export default function ValueModule({
   retailTrendPct = null,
   byCondition,
   era,
+  byEra,
+  eraCurrency,
 }: ValueModuleProps) {
   const ladder = !!byCondition && byCondition.length >= 2;
+  // Era lens shows when ≥2 decade bands are populated with real data.
+  const eraLens = !!byEra && byEra.length >= 2;
+
   useEffect(() => {
     track(EVENTS.valueModuleViewed, {
       variant_id: variantId,
@@ -150,10 +165,11 @@ export default function ValueModule({
       recorded_count: range?.count ?? 0,
       has_listed: listed.length > 0,
       has_ladder: ladder,
+      has_era_lens: eraLens,
       demand_level: demandLevel,
       scope: "exact",
     });
-  }, [variantId, framing, listed.length, range?.count, ladder, demandLevel]);
+  }, [variantId, framing, listed.length, range?.count, ladder, eraLens, demandLevel]);
 
   // Honest empty state — mirrors the catalog's "we only show real ranges" rule.
   if (!range) {
@@ -248,6 +264,13 @@ export default function ValueModule({
   const note = timingNote(framing, demandLevel, trendPct, retailTrendPct);
   const eraText = era ? eraNote(era) : null;
 
+  // Era lens caption: total listing count + capture date, descriptive + dated,
+  // never advice or "investment" framing — matches the catalog honesty rails.
+  const eraLensCount = eraLens ? byEra!.reduce((s, r) => s + r.count, 0) : 0;
+  const eraLensCaption = eraLens
+    ? `Resale by production era — ${eraLensCount} ${eraLensCount === 1 ? "listing" : "listings"}, estimated from recorded prices.`
+    : null;
+
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -280,6 +303,9 @@ export default function ValueModule({
 
       {eraText && <p className="mt-1.5 text-sm text-muted">{eraText}</p>}
 
+      {/* Primary viz: condition ladder (≥2 tiers) › gauge (fallback).
+          Era lens is stacked below when it qualifies (≥2 bands), separated
+          by a labelled divider — no toggle, no JS, works at 375px. */}
       <div className="mt-4">
         {ladder ? (
           <>
@@ -292,6 +318,25 @@ export default function ValueModule({
           <CompScale low={low} median={median} high={high} currency={currency} comps={listed} />
         )}
       </div>
+
+      {/* Era lens — shown only when ≥2 decade bands have data. Stacked below
+          the condition view (or gauge) so both stay legible. Labels are decade
+          strings (e.g. "1990s", "2000s") — never invented or interpolated. */}
+      {eraLens && (
+        <div className="mt-5">
+          <p className="mb-2 text-xs uppercase tracking-wide text-muted/70">
+            By production era · decade
+          </p>
+          <CompScale
+            low={Math.min(...byEra!.map((r) => r.low))}
+            median={Math.round(byEra!.reduce((s, r) => s + r.median * r.count, 0) / eraLensCount)}
+            high={Math.max(...byEra!.map((r) => r.high))}
+            currency={eraCurrency ?? currency}
+            rows={byEra}
+          />
+          <p className="mt-1.5 text-xs text-muted/60">{eraLensCaption}</p>
+        </div>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <p className="text-xs text-muted/60">
