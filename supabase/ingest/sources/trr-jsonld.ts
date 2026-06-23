@@ -203,6 +203,20 @@ export function ophidiaSize(size: "super mini" | "mini" | "small" | "medium" | "
   };
 }
 
+// ── LV Pochette Métis (#438) ──────────────────────────────────────────────────
+// Two backbone variants: Standard / East-West. TRR drops the accent ("Pochette
+// Metis"); other LV Pochettes (Eva, Félicie, Accessoires, Orsay) lack "metis" so
+// requiring it excludes them. East-West = the "East West"/"EW" name; everything else
+// metis is Standard (a rare Mini folds into Standard — no Mini backbone variant).
+export function pochetteMetisSize(label: "Standard" | "East-West"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!/m[eé]tis/.test(n) || /charm/.test(n)) return false;
+    const isEW = /east[\s-]*west|\bew\b/.test(n);
+    return label === "East-West" ? isEW : !isEW;
+  };
+}
+
 // ── Hermès Picotin Lock (#414) ────────────────────────────────────────────────
 // Numeric sizes 18 / 22 / 26 (+ a rare Micro). Whole-word (\b) numeric; a seller
 // typo ("Pictoin") and the larger 31cm both drop (clean per-size split). Adds year
@@ -579,6 +593,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: ophidiaSize("large"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
   "gucci-ophidia-jumbo": { brand: "Gucci", style: "Ophidia", size_label: "Jumbo",
     namePredicate: ophidiaSize("jumbo"), minPrice: 350, maxPrice: 6000, rawKey: "gucci-ophidia" },
+
+  // ── LV Pochette Métis (#438) — share one "lv-pochette-metis" capture. ──
+  "lv-pochette-metis-standard": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "Standard",
+    namePredicate: pochetteMetisSize("Standard"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
+  "lv-pochette-metis-east-west": { brand: "Louis Vuitton", style: "Pochette Métis", size_label: "East-West",
+    namePredicate: pochetteMetisSize("East-West"), minPrice: 500, maxPrice: 8000, rawKey: "lv-pochette-metis" },
 
   // ── Chanel Vanity Case (#430) — share one "chanel-vanity" capture. ──
   "chanel-vanity-mini": { brand: "Chanel", style: "Vanity Case", size_label: "Mini",
