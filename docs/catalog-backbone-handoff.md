@@ -45,8 +45,8 @@ backbone target wins; the messy duplicates are bypassed, not used):
 | Celine **Luggage** (canon `Luggage Tote`) | 484 | 185 | TRR+FP | Nano/Micro/Mini/Medium |
 | YSL **Loulou** | 460 | 190 | TRR+FP | Toy/Small/Medium/Large |
 
-**Prod total: ~4,896 listed rows + 74 `discovered_listing`** as of 2026-06-23 (late PM).
-The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~1,986 listed**:
+**Prod total: ~5,102 listed rows + 209 `discovered_listing`** as of 2026-06-23 (late PM).
+The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~2,192 listed**:
 
 - **10 new Tier-1 icons via Fashionphile** (no browser, ~1,065 rows): **Hermès Constance**
   (18/24) · **Chanel 19** (S/M/L/Maxi) · **Chanel Gabrielle** (S/M/L) · **Chanel Wallet on
@@ -57,9 +57,16 @@ The earlier session reached ~2,910; the **WIDE BATCH** session then added **+~1,
   `christian-dior`), **Speedy** (size anchored `-NN-` to catch Bandoulière), **Alma**,
   **Kelly** (fixed: handle is `kelly-sellier-NN`, the old `kelly-28` token matched 0 — that
   was why Kelly was FP-empty; scaffolded Kelly 35 #562).
-- **Celine TRR catch-all** (one gentle 120-fetch window, 0 blocks): +46 curated Celine TRR
-  rows (Triomphe/Box/Luggage, with **year 36–56%** — TRR's value over FP's 0%) and **74 →
-  `discovered_listing`** (the §5 demo, end-to-end: see below).
+- **TRR brand-wide catch-all × 4 brands** (Celine, Hermès, Saint Laurent, Chanel — 4 gentle
+  120-fetch windows, **480 fetches, 0 blocks** — the rate limit did NOT bite tonight). Each
+  resolves that brand's curated icons to their variants (adding **year data**, TRR's edge over
+  FP's 0%) and routes uncurated models → `discovered_listing`. Net: Constance/Triomphe/Box/Sac
+  de Jour/Kate/WOC gained TRR + year; the heroes (Classic Flap +119, Boy +113, Luggage, Loulou
+  +, Birkin/Kelly) were refreshed; `discovered_listing` grew 0 → 209 (Celine 74 · Hermès 35 ·
+  YSL 97 · Chanel 3). **Gucci was SKIPPED** on purpose: catch-all `detectSizeLabel` would
+  mislabel **Super Mini Dionysus → Mini** and pollute the clean FP split — Gucci TRR needs a
+  curated, Super-Mini-aware target (next session). Catch-all rows are `confidence:"low"`,
+  size best-effort; the high-confidence per-size truth is the FP load.
 - **Matcher fix** (`scoreVariantMatch`): added an exact-size-match bonus so a row sized
   "Mini" can no longer tie onto a SUPERSET size like "Super Mini" and win on insertion order
   (it was mis-routing all Dionysus Mini rows). Regression test added.
@@ -260,13 +267,15 @@ unattended; prepare a dry-run plan for the owner.
    **DONE**. ~~10 new icons + 4 FP backfills via Fashionphile~~ **DONE** (§1, ~4,896 prod rows).
    ~~Demonstrate `discovered_listing`~~ **DONE** (§5). ~~Celine #207→#484 merge plan~~ **DONE**
    (`docs/celine-luggage-merge-plan.md`, owner-gated).
-2b. **TRR for the new icons (MAIN REMAINING WORK — rate-limited, §2).** Fashionphile gave all 14
-    styles clean per-size colour/material but **year 0%**; TRR adds year + a 2nd source. Fastest
-    path: a **brand-wide gentle catch-all** per ~10-min window (`trr-jsonld.ts --catch-all --brand
-    "<Brand>" <brand>-wide`) resolves that brand's curated icons to their variants AND grows
-    `discovered_listing`. For high-confidence per-size TRR, instead add curated TRR `TARGETS`
-    (mind: catch-all `detectSizeLabel` mislabels "Super Mini"→"Mini"). Brands left: Hermès
-    (Constance), Gucci (Dionysus/Horsebit), Saint Laurent (Sac de Jour/Kate), Chanel (19/Gabrielle/WOC).
+2b. ~~TRR brand-wide catch-all for Celine / Hermès / Saint Laurent / Chanel~~ **DONE** (§1; 480
+    fetches, 0 blocks, +TRR year on the new icons, discovered → 209). **Remaining TRR:**
+    - **Gucci curated TRR** (Dionysus needs a Super-Mini-aware predicate — do NOT catch-all it,
+      it would mislabel Super Mini → Mini and pollute the FP split). Add curated `trr-jsonld.ts`
+      TARGETS for Dionysus/Horsebit 1955 (+ refresh Jackie/Marmont) and capture a `gucci-wide`.
+    - **Optional higher-fidelity re-do:** the 4 brands' new icons currently have *catch-all*
+      (low-confidence, best-effort size) TRR. If per-size precision matters, add curated TRR
+      targets for Constance/19/Gabrielle/WOC/Sac de Jour/Kate and re-capture (the FP per-size
+      data is already high-confidence, so this is polish, not a blocker).
 3. **Go wide — next icons (the proven per-icon recipe, now faster):**
    - **(a) Fashionphile FIRST (no browser, fast):** `tsx supabase/ingest/sources/fashionphile-collection.ts
      <brand-slug> <token>` → `tsx supabase/ingest/sources/fashionphile.ts --raw`.
