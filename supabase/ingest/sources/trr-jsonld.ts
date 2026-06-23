@@ -126,6 +126,53 @@ const LUGGAGE_SIZES = ["nano", "micro", "mini", "medium"];
 // Saint Laurent Loulou: Toy / Small / Medium / Large.
 const LOULOU_SIZES = ["toy", "small", "medium", "large"];
 
+// ── Gucci curated predicates (Super-Mini-aware; footwear/SLG guarded) ─────────
+// A brand-wide Gucci catch-all would mislabel Super Mini Dionysus → Mini (the
+// detectSizeLabel word-list hits "mini" first) and pollute the clean FP split, so
+// Gucci gets CURATED per-size TRR predicates instead. A broad Gucci search also
+// pulls in Gucci footwear/SLGs that carry a model name (Dionysus loafers, Horsebit
+// loafers), so both predicates exclude footwear + small leather goods.
+const GUCCI_FOOTWEAR_SLG = /loafer|sandal|boot|pump|mule|slide|sneaker|espadrille|wallet|card holder|cardholder|key case|key pouch/;
+
+/**
+ * Gucci Dionysus size predicate. "Super Mini" CONTAINS "mini", so the plain Mini
+ * bucket rejects any "super mini" name, and the Super Mini bucket requires the
+ * "super mini" phrase (TRR may hyphenate or space it). Small/Medium use whole-word
+ * sibling exclusion. Footwear/SLGs are dropped up front.
+ */
+const DIONYSUS_SIZES = ["mini", "small", "medium"];
+export function dionysusSize(size: "super mini" | "mini" | "small" | "medium"): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("dionysus") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    if (size === "super mini") return /super[\s-]*mini/.test(n);
+    if (size === "mini" && /super[\s-]*mini/.test(n)) return false; // plain Mini ≠ Super Mini
+    const want = new RegExp(`\\b${size}\\b`);
+    const others = DIONYSUS_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+
+/**
+ * Gucci Horsebit 1955 size predicate — Mini / Small / Shoulder (the standard,
+ * unsized "Horsebit 1955 Shoulder Bag"). Requires both "horsebit" and "1955" so the
+ * Horsebit CHAIN model and the Horsebit loafers/sandals never leak in. A null size
+ * is the Shoulder bucket: horsebit-1955 with NO mini/small token.
+ */
+const HORSEBIT_SIZES = ["mini", "small"];
+export function horsebitSize(size: "mini" | "small" | null): (name: string) => boolean {
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes("horsebit") || !n.includes("1955") || GUCCI_FOOTWEAR_SLG.test(n)) return false;
+    if (size) {
+      const want = new RegExp(`\\b${size}\\b`);
+      const others = HORSEBIT_SIZES.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`));
+      return want.test(n) && !others.some((re) => re.test(n));
+    }
+    return !HORSEBIT_SIZES.some((s) => new RegExp(`\\b${s}\\b`).test(n)); // Shoulder = no size token
+  };
+}
+
 /**
  * Targets. The Chanel Classic Flap Medium entry is PROVEN (loaded from a real
  * 120-record capture). The rest are SCAFFOLDS — best-effort brand/style/size_label/
@@ -195,12 +242,12 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "gucci-gg-marmont-small": {
     brand: "Gucci", style: "GG Marmont", size_label: "Small",
     namePredicate: predicate(["marmont", "small"], ["medium", "mini", "large"]),
-    minPrice: 600, maxPrice: 4000,
+    minPrice: 600, maxPrice: 4000, rawKey: "gucci-wide",
   },
   "gucci-gg-marmont-medium": {
     brand: "Gucci", style: "GG Marmont", size_label: "Medium",
     namePredicate: predicate(["marmont", "medium"], ["small", "mini", "large"]),
-    minPrice: 600, maxPrice: 4000,
+    minPrice: 600, maxPrice: 4000, rawKey: "gucci-wide",
   },
 
   // ── LV Speedy (backbone Tier-1) — all sizes share the one "lv-speedy" capture ─
@@ -301,22 +348,60 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
     namePredicate: modelSize("boy", "large", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
   },
 
-  // ── Gucci Jackie 1961 (backbone Tier-1) — Mini/Small/Medium/Large, one capture ──
+  // ── Gucci Jackie 1961 (backbone Tier-1) — Mini/Small/Medium/Large. Shares the
+  // one broad "gucci-wide" capture with Dionysus / Horsebit / Marmont. ──
   "gucci-jackie-mini": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Mini",
-    namePredicate: modelSize("jackie", "mini", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "mini", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-small": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Small",
-    namePredicate: modelSize("jackie", "small", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "small", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-medium": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Medium",
-    namePredicate: modelSize("jackie", "medium", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "medium", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
   },
   "gucci-jackie-large": {
     brand: "Gucci", style: "Jackie 1961", size_label: "Large",
-    namePredicate: modelSize("jackie", "large", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-jackie",
+    namePredicate: modelSize("jackie", "large", JACKIE_SIZES), minPrice: 500, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+
+  // ── Gucci Dionysus (backbone Tier-1) — Super Mini / Mini / Small / Medium.
+  // CURATED (not catch-all) because Super Mini contains "mini": the catch-all
+  // detectSizeLabel would mislabel Super Mini → Mini and pollute the FP split.
+  // Shares the "gucci-wide" capture. ──
+  "gucci-dionysus-super-mini": {
+    brand: "Gucci", style: "Dionysus", size_label: "Super Mini",
+    namePredicate: dionysusSize("super mini"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-mini": {
+    brand: "Gucci", style: "Dionysus", size_label: "Mini",
+    namePredicate: dionysusSize("mini"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-small": {
+    brand: "Gucci", style: "Dionysus", size_label: "Small",
+    namePredicate: dionysusSize("small"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-dionysus-medium": {
+    brand: "Gucci", style: "Dionysus", size_label: "Medium",
+    namePredicate: dionysusSize("medium"), minPrice: 350, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+
+  // ── Gucci Horsebit 1955 (backbone Tier-1) — Mini / Small / Shoulder. Requires
+  // "horsebit" + "1955" so the Horsebit Chain model + loafers never leak. Shares
+  // the "gucci-wide" capture. ──
+  "gucci-horsebit-mini": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Mini",
+    namePredicate: horsebitSize("mini"), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-horsebit-small": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Small",
+    namePredicate: horsebitSize("small"), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
+  },
+  "gucci-horsebit-shoulder": {
+    brand: "Gucci", style: "Horsebit 1955", size_label: "Shoulder",
+    namePredicate: horsebitSize(null), minPrice: 450, maxPrice: 12000, rawKey: "gucci-wide",
   },
 
   // ── Celine Luggage (backbone Tier-1, canonical "Luggage Tote") — Nano/Micro/Mini/Medium ──

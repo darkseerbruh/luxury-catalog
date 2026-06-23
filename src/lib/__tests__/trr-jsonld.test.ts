@@ -6,6 +6,8 @@ import {
   detectSizeLabel,
   catchAllStyle,
   recordToCatchAllObservation,
+  dionysusSize,
+  horsebitSize,
   type TrrRecord,
   type TrrJsonLdTarget,
 } from "../../../supabase/ingest/sources/trr-jsonld";
@@ -206,5 +208,71 @@ describe("recordToCatchAllObservation", () => {
     expect(recordToCatchAllObservation({ ...rec, price: 0 }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
     expect(recordToCatchAllObservation({ ...rec, price: -5 }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
     expect(recordToCatchAllObservation({ ...rec, price: NaN }, "Louis Vuitton", "Speedy", "2026-06-23")).toBeNull();
+  });
+});
+
+// ── Gucci curated Super-Mini-aware predicates ────────────────────────────────
+
+describe("dionysusSize (Super-Mini-aware)", () => {
+  const superMini = dionysusSize("super mini");
+  const mini = dionysusSize("mini");
+  const small = dionysusSize("small");
+  const medium = dionysusSize("medium");
+
+  it("routes 'Super Mini' to the Super Mini bucket, never to Mini", () => {
+    expect(superMini("Gucci Super Mini Dionysus Bag")).toBe(true);
+    expect(superMini("Gucci GG Supreme Super-Mini Dionysus")).toBe(true); // hyphenated
+    // The whole point of the fix: a Super Mini must NOT also land in the plain Mini bucket.
+    expect(mini("Gucci Super Mini Dionysus Bag")).toBe(false);
+    expect(mini("Gucci GG Supreme Super-Mini Dionysus")).toBe(false);
+  });
+
+  it("routes a plain Mini to Mini only", () => {
+    expect(mini("Gucci Mini Dionysus Shoulder Bag")).toBe(true);
+    expect(superMini("Gucci Mini Dionysus Shoulder Bag")).toBe(false);
+    expect(small("Gucci Mini Dionysus Shoulder Bag")).toBe(false);
+  });
+
+  it("separates Small and Medium by whole word", () => {
+    expect(small("Gucci Small Dionysus Bag")).toBe(true);
+    expect(medium("Gucci Small Dionysus Bag")).toBe(false);
+    expect(medium("Gucci Medium Dionysus Shoulder Bag")).toBe(true);
+    expect(small("Gucci Medium Dionysus Shoulder Bag")).toBe(false);
+  });
+
+  it("drops Dionysus footwear / SLGs from every bucket", () => {
+    expect(mini("Gucci Mini Dionysus Loafer")).toBe(false);
+    expect(superMini("Gucci Super Mini Dionysus Wallet")).toBe(false);
+    expect(small("Gucci Dionysus Card Holder Small")).toBe(false);
+  });
+
+  it("rejects non-Dionysus names", () => {
+    expect(mini("Gucci Mini GG Marmont Bag")).toBe(false);
+  });
+});
+
+describe("horsebitSize (Mini / Small / Shoulder)", () => {
+  const mini = horsebitSize("mini");
+  const small = horsebitSize("small");
+  const shoulder = horsebitSize(null);
+
+  it("requires both 'horsebit' and '1955' (drops Horsebit Chain + loafers)", () => {
+    expect(shoulder("Gucci Horsebit 1955 Shoulder Bag")).toBe(true);
+    expect(shoulder("Gucci Horsebit Chain Shoulder Bag")).toBe(false); // no 1955
+    expect(shoulder("Gucci Horsebit 1955 Loafer")).toBe(false); // footwear
+  });
+
+  it("buckets Mini and Small by whole word", () => {
+    expect(mini("Gucci Mini Horsebit 1955 Bag")).toBe(true);
+    expect(small("Gucci Mini Horsebit 1955 Bag")).toBe(false);
+    expect(small("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(true);
+    expect(mini("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(false);
+  });
+
+  it("Shoulder = horsebit-1955 with no size token (even though the name says 'shoulder')", () => {
+    expect(shoulder("Gucci Horsebit 1955 Shoulder Bag")).toBe(true);
+    // A sized listing must NOT fall into the unsized Shoulder bucket.
+    expect(shoulder("Gucci Mini Horsebit 1955 Bag")).toBe(false);
+    expect(shoulder("Gucci Small Horsebit 1955 Shoulder Bag")).toBe(false);
   });
 });
