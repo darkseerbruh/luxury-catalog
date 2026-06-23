@@ -110,6 +110,9 @@ function modelSize(model: string, size: string, siblings: string[]): (name: stri
 }
 const ALMA_SIZES = ["bb", "pm", "mm", "gm", "mini", "nano"];
 const BOOK_TOTE_SIZES = ["mini", "small", "medium", "large"];
+// Chanel Boy: TRR names it Mini / Small / Medium / Large (no Old/New Medium split
+// in the feed — it just says "Medium").
+const BOY_SIZES = ["mini", "small", "medium", "large"];
 
 /**
  * Targets. The Chanel Classic Flap Medium entry is PROVEN (loaded from a real
@@ -264,6 +267,26 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "dior-book-tote-large": {
     brand: "Dior", style: "Book Tote", size_label: "Large",
     namePredicate: modelSize("book", "large", BOOK_TOTE_SIZES), minPrice: 800, maxPrice: 8000, rawKey: "dior-book-tote",
+  },
+
+  // ── Chanel Boy (backbone Tier-1) — sizes Mini/Small/Medium/Large, one capture ──
+  // Resolves to the clean canonical "Boy" style (#424). Wide band keeps real range
+  // (quilted lambskin ~$1.2k → exotic python/limited ~$9k+).
+  "chanel-boy-mini": {
+    brand: "Chanel", style: "Boy", size_label: "Mini",
+    namePredicate: modelSize("boy", "mini", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
+  },
+  "chanel-boy-small": {
+    brand: "Chanel", style: "Boy", size_label: "Small",
+    namePredicate: modelSize("boy", "small", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
+  },
+  "chanel-boy-medium": {
+    brand: "Chanel", style: "Boy", size_label: "Medium",
+    namePredicate: modelSize("boy", "medium", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
+  },
+  "chanel-boy-large": {
+    brand: "Chanel", style: "Boy", size_label: "Large",
+    namePredicate: modelSize("boy", "large", BOY_SIZES), minPrice: 800, maxPrice: 20000, rawKey: "chanel-boy",
   },
 };
 

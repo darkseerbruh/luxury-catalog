@@ -51,6 +51,13 @@ interface FashionphileTarget {
   size_label: string;
   /** Tokens that must ALL appear (case-insensitive) in the product handle or title. */
   requireTokens: string[];
+  /**
+   * Optional tokens that must NOT appear (case-insensitive) in handle or title.
+   * Used to keep a style's size buckets clean of adjacent products that share the
+   * style name — e.g. the Chanel "Boy" flap bag vs. Boy-line accessories (Wallet on
+   * Chain, bucket bag, cosmetic case, card holder) that also carry "boy" in the name.
+   */
+  excludeTokens?: string[];
   minPrice: number;
   maxPrice: number;
   /** Search/listing page URL — used for fallback scrape + as source_url for search-level rows. */
@@ -80,6 +87,19 @@ const TARGETS: FashionphileTarget[] = [
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull-pm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["gg-marmont", "small"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Medium", requireTokens: ["gg-marmont", "medium"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
+  // Chanel Boy (backbone Tier-1). Fashionphile titles it "<material> ... <size> Boy Flap <colour>"
+  // (New/Old Medium both fold to Medium). excludeTokens drop the Boy-LINE accessories that share
+  // the name (WOC/wallet, bucket bag, cosmetic/vanity case, card holder, mini pochette, brick).
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Boy",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["boy", size],
+    excludeTokens: ["woc", "wallet", "bucket", "cosmetic", "vanity", "card", "coin", "pochette", "brick", "backpack", "key"],
+    minPrice: 1000,
+    maxPrice: 20000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
@@ -118,8 +138,10 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
   const handle = (product.handle ?? "").toLowerCase();
   const title = (product.title ?? "").toLowerCase();
 
-  const target = TARGETS.find((t) =>
-    t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok))
+  const target = TARGETS.find(
+    (t) =>
+      t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
+      !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
   );
   if (!target) {
     console.warn(`fashionphile: no target matched for handle "${product.handle}" — skipping`);
