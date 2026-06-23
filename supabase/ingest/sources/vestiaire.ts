@@ -63,6 +63,19 @@ const TARGETS: VestiaireTarget[] = [
     minPrice: 1500,
     maxPrice: 25000,
   },
+  // Hermès — node.name carries the size, e.g. "Birkin 30 leather tote", "Kelly 28 ...".
+  { brand: "Hermès", style: "Birkin", size_label: "25", requireTokens: ["birkin", "25"], minPrice: 8000, maxPrice: 150000 },
+  { brand: "Hermès", style: "Birkin", size_label: "30", requireTokens: ["birkin", "30"], minPrice: 8000, maxPrice: 150000 },
+  { brand: "Hermès", style: "Birkin", size_label: "35", requireTokens: ["birkin", "35"], minPrice: 8000, maxPrice: 150000 },
+  { brand: "Hermès", style: "Birkin", size_label: "40", requireTokens: ["birkin", "40"], minPrice: 8000, maxPrice: 150000 },
+  { brand: "Hermès", style: "Kelly", size_label: "25", requireTokens: ["kelly", "25"], minPrice: 7000, maxPrice: 120000 },
+  { brand: "Hermès", style: "Kelly", size_label: "28", requireTokens: ["kelly", "28"], minPrice: 7000, maxPrice: 120000 },
+  { brand: "Hermès", style: "Kelly", size_label: "32", requireTokens: ["kelly", "32"], minPrice: 7000, maxPrice: 120000 },
+  // LV / Gucci — verified naming when captured.
+  { brand: "Louis Vuitton", style: "Neverfull", size_label: "MM", requireTokens: ["neverfull", "mm"], minPrice: 500, maxPrice: 8000 },
+  { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull", "pm"], minPrice: 500, maxPrice: 8000 },
+  { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["marmont", "small"], minPrice: 400, maxPrice: 5000 },
+  { brand: "Gucci", style: "GG Marmont", size_label: "Medium", requireTokens: ["marmont", "medium"], minPrice: 400, maxPrice: 5000 },
 ];
 
 // ---------------------------------------------------------------------------
