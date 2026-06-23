@@ -10,30 +10,40 @@ bag-page leaderboards, data-viz, and a contribution loop. Pairs with
 `rating` 1-5 · `worth_it` boolean · `occasion` *(free text)* · `durability_rating`
 1-5 · `title`/`body` free text.
 
-**Multi-axis votes (`0012_bag_axis_votes.sql`, HUMAN-GATED, not yet applied):**
+**Multi-axis votes (`0012_bag_axis_votes.sql`, APPLIED to prod):**
 Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars". The
-enum is now the corrected 5-axis opinion set (see correction below):
-`build_quality, everyday_wearability, roomy_vs_compact, comfort, versatility`.
+`bag_axis` enum was applied with 7 values, but only the **5 kept opinion axes** are
+votable (see correction below): `build_quality, everyday_wearability,
+roomy_vs_compact, comfort, versatility`. `holds_value` and `worth_the_price` are
+dormant labels in the enum, retired at the app layer.
 
 ## Correction to the 0012 axis vocabulary (decided 2026-06-23)
 
 Owner caught that **`holds_value` is not an opinion — it's a market fact** we
 already compute from `price_history` (e.g. 87.7% retention on the Classic Flap).
-Voting on it would be noise or contradict the real data. Fix this **before** 0012
-is applied (it's additive/editable until then):
+Voting on it would be noise or contradict the real data.
+
+**Status (verified 2026-06-23 via `pg_enum`): the `bag_axis` enum was ALREADY
+APPLIED to prod with all 7 original values.** Postgres can't cleanly drop an enum
+value once applied, and editing the applied migration changes nothing in prod
+(db push skips applied versions). So the retirement is enforced at the **app
+layer**, which is sufficient — no one can vote on the retired axes:
 
 - **Keep as voted OPINION axes:** `build_quality`, `comfort`,
   `everyday_wearability`, `versatility`, `roomy_vs_compact` (the last as *felt*
   roominess; dedupe against catalog capacity, don't double-count).
-- **Remove `holds_value` from the vote enum.** DONE (2026-06-23), both layers:
-  dropped from `AXES`/`AXIS_META` in `src/lib/votes.ts` (the bar no longer renders,
-  new votes rejected by `isAxis()`, existing rows ignored on read) AND removed from
-  the `bag_axis` enum in `0012_bag_axis_votes.sql` itself (the migration is still
-  unapplied, so the enum could be narrowed cleanly). Value retention is surfaced as
-  a **data-derived** board from `price_history` (`getValueRetentionLeaders`, built).
-- **`worth_the_price` duplicates the review `worth_it` boolean** — keep one signal,
-  not two. DONE (2026-06-23): retired from `AXES`/`AXIS_META` and from the `0012`
-  enum the same way as `holds_value`. The review `worth_it` boolean is the kept signal.
+- **`holds_value` retired** at the app layer in `src/lib/votes.ts`: dropped from
+  `AXES`/`AXIS_META`, so the bar never renders, new votes are rejected by
+  `isAxis()`, and any existing rows are ignored on read. Value retention is surfaced
+  instead as a **data-derived** board from `price_history` (`getValueRetentionLeaders`,
+  built). The dormant enum label is harmless.
+- **`worth_the_price` retired** the same way — it duplicates the live review
+  `worth_it` boolean; keep one signal, not two.
+- **OPTIONAL future cleanup:** to physically remove the two dormant labels, a new
+  migration would rebuild the type (create `bag_axis_v2` with the 5 values, `alter
+  table bag_axis_vote alter column axis type bag_axis_v2 using axis::text::bag_axis_v2`
+  after deleting any rows on the retired axes, drop the old type, rename). Cosmetic
+  only — deferred unless we want the schema spotless.
 
 Rule going forward: **a thing we can measure from data is never a subjective vote.**
 Opinion axes capture only lived experience; facts come from the catalogue/price data.
@@ -95,8 +105,10 @@ invented ranking. All numbers labeled and dated.
 
 ## Build dependencies / sequence
 
-1. **Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
-   `worth_the_price` vs review `worth_it`. (Edit the migration; it's not yet applied.)
+1. ~~**Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
+   `worth_the_price`.~~ **Resolved at the app layer** — the enum was already
+   applied to prod (can't be edited retroactively), so the two retired axes are
+   enforced out via `src/lib/votes.ts`. See the correction section above.
 2. ~~**New migration:** convert `review.occasion` free text → enum (+ backfill).~~
    **DONE** — `0028_review_occasion_enum.sql` + `src/lib/occasions.ts`.
 3. ~~**Leaderboard queries:** aggregate per board, resilient reads (empty until data),

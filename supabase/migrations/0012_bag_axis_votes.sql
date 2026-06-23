@@ -14,23 +14,25 @@
 -- lets the UI render a known set of bars. Adding an axis later is an additive
 -- `alter type ... add value` in a follow-up migration.
 --
--- VOCAB CORRECTION (2026-06-23, docs/ux/review-data-leaderboards.md): two axes
--- were dropped from the original draft BEFORE this migration was applied, because
--- a thing we can measure is never a subjective vote:
---   * `holds_value` — value retention is a market FACT (resale median vs retail),
---     computed from price_history and surfaced as a data-derived board, not voted.
---   * `worth_the_price` — duplicates the review `worth_it` boolean, which is
---     already live; keep one signal, not two.
--- The app (src/lib/votes.ts `AXES`) already votes on exactly this 5-axis set, so
--- the enum now matches it. Safe to edit because the migration is not yet applied —
--- narrowing an enum after apply is not cleanly reversible in Postgres.
+-- NOTE (2026-06-23): this enum was APPLIED to prod with all 7 original values
+-- (verified via pg_enum). Two of them — `holds_value` and `worth_the_price` — were
+-- later retired as VOTE axes (a measurable fact is never a crowd vote; worth_the_price
+-- duplicates the review `worth_it` boolean). That retirement is enforced at the APP
+-- layer in src/lib/votes.ts (`AXES` = the 5 kept axes; isAxis() rejects the rest;
+-- existing rows are ignored on read), which is why this migration file is left as
+-- applied: editing it would not change prod (db push skips applied versions), and
+-- narrowing a live enum is not cleanly reversible in Postgres. The two dormant
+-- labels are harmless. See docs/ux/review-data-leaderboards.md for an optional
+-- enum-rebuild migration if we ever want them physically removed.
 
 create type bag_axis as enum (
   'build_quality',
   'everyday_wearability',
+  'holds_value',
   'roomy_vs_compact',
   'comfort',
-  'versatility'
+  'versatility',
+  'worth_the_price'
 );
 
 -- ============ Table: bag_axis_vote (one vote per user, per bag, per axis) ============
