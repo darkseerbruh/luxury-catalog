@@ -1261,6 +1261,201 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 3500,
     searchUrl: "https://www.fashionphile.com/collections/fendi/products.json",
   })),
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ICONS 2026-06-23 (batch 7) — Prada / Bottega Veneta / Chanel permanent icons
+  // (Fashionphile-first, no browser). Validated against each live collection JSON.
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Prada Cleo (#493) — the sleek flap, sizes Mini / Standard / Large.
+  {
+    brand: "Prada", style: "Cleo", size_label: "Mini",
+    requireTokens: ["cleo", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 700, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Cleo", size_label: "Large",
+    requireTokens: ["cleo", "large"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 700, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Cleo", size_label: "Standard",
+    requireTokens: ["cleo"],
+    excludeTokens: ["mini", "large", "wallet", "card"],
+    minPrice: 700, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+
+  // Prada Symbole (#496) — sizes Micro / Mini / Small / Large. TRAP: "symbole" is
+  // mostly SUNGLASSES on FP (spr-* style codes); excludeTokens + the price band drop them.
+  ...(["micro", "mini", "small", "large"] as const).map((size) => ({
+    brand: "Prada",
+    style: "Symbole",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["symbole", size],
+    excludeTokens: ["sunglass", "spr", "wallet"],
+    minPrice: 800,
+    maxPrice: 5000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  })),
+
+  // Prada Moon (#497) — the puffy nylon shoulder bag, one size (Standard).
+  {
+    brand: "Prada", style: "Moon", size_label: "Standard",
+    requireTokens: ["moon", "shoulder"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 500, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+
+  // Prada Arqué (#495) — sizes Mini / Small / Standard.
+  {
+    brand: "Prada", style: "Arqué", size_label: "Mini",
+    requireTokens: ["arque", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Arqué", size_label: "Small",
+    requireTokens: ["arque", "small"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+  {
+    brand: "Prada", style: "Arqué", size_label: "Standard",
+    requireTokens: ["arque"],
+    excludeTokens: ["mini", "small", "wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/prada/products.json",
+  },
+
+  // Bottega Veneta The Pouch (#471) — the oversized clutch, sizes Mini / Standard.
+  // TRAP: "maxi-intrecciato" is the WEAVE not a size, so it folds into Standard.
+  {
+    brand: "Bottega Veneta", style: "The Pouch", size_label: "Mini",
+    requireTokens: ["the-pouch", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 800, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+  {
+    brand: "Bottega Veneta", style: "The Pouch", size_label: "Standard",
+    requireTokens: ["the-pouch"],
+    excludeTokens: ["mini", "wallet", "card"],
+    minPrice: 800, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+
+  // Bottega Veneta Loop (#474) — the intrecciato camera bag, sizes Mini / Small / Medium.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Loop",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["loop", size],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 600,
+    maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Bottega Veneta Knot (#477) — the double-knot bag, sizes Mini / Small. excludeTokens
+  // drop the Knot×Loop hybrid camera bag + wallets.
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Bottega Veneta",
+    style: "Knot",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["knot", size],
+    excludeTokens: ["loop", "wallet", "card"],
+    minPrice: 400,
+    maxPrice: 3000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  })),
+
+  // Bottega Veneta Sardine (#475) — sizes Mini / Medium / Standard.
+  {
+    brand: "Bottega Veneta", style: "Sardine", size_label: "Mini",
+    requireTokens: ["sardine", "mini"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+  {
+    brand: "Bottega Veneta", style: "Sardine", size_label: "Medium",
+    requireTokens: ["sardine", "medium"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+  {
+    brand: "Bottega Veneta", style: "Sardine", size_label: "Standard",
+    requireTokens: ["sardine"],
+    excludeTokens: ["mini", "medium", "wallet", "card"],
+    minPrice: 1000, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+
+  // Bottega Veneta Lauren 1980 (#476) — the chain clutch, sizes Small / Standard.
+  // require the literal "lauren-1980".
+  {
+    brand: "Bottega Veneta", style: "Lauren 1980", size_label: "Small",
+    requireTokens: ["lauren-1980", "small"],
+    excludeTokens: ["wallet", "card"],
+    minPrice: 2000, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+  {
+    brand: "Bottega Veneta", style: "Lauren 1980", size_label: "Standard",
+    requireTokens: ["lauren-1980"],
+    excludeTokens: ["small", "wallet", "card"],
+    minPrice: 2000, maxPrice: 6000,
+    searchUrl: "https://www.fashionphile.com/collections/bottega-veneta/products.json",
+  },
+
+  // Chanel Deauville (#429) — the tote, sizes Mini / Small / Medium / Large.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Deauville",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["deauville", size],
+    excludeTokens: ["wallet", "pouch", "bowling"],
+    minPrice: 2000,
+    maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+
+  // Chanel Vanity Case (#430) — sizes Mini / Small / Medium / Large (spans classic /
+  // round / slim forms — all the same Vanity Case style). Wide band (vintage wood
+  // round CC vanity cases run high). excludeTokens drop the makeup brush / SLGs.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Vanity Case",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["vanity", size],
+    excludeTokens: ["brush", "wallet", "card"],
+    minPrice: 1500,
+    maxPrice: 25000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
+
+  // Chanel Business Affinity (#432) — the flap/shoulder bag, sizes Mini/Small/Medium/
+  // Large. excludeTokens route the Affinity backpack / phone holder / waist belt bag /
+  // SLGs away (distinct forms), keeping the flap & clutch-with-chain.
+  ...(["mini", "small", "medium", "large"] as const).map((size) => ({
+    brand: "Chanel",
+    style: "Business Affinity",
+    size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["affinity", size],
+    excludeTokens: ["backpack", "phone", "belt", "waist", "wallet", "card"],
+    minPrice: 2000,
+    maxPrice: 7000,
+    searchUrl: "https://www.fashionphile.com/collections/chanel/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
