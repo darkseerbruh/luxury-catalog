@@ -92,6 +92,23 @@ function speedyWord(word: string): (name: string) => boolean {
 }
 
 /**
+ * Generic LV size predicate: a listing is this size of this model when its name
+ * contains the model, the size as a WHOLE word (\b, so letter codes like "mm" never
+ * match inside "monogram"), and none of the SIBLING sizes — and isn't a bag charm.
+ * Reusable across LV models whose sizes are letter codes (Alma BB/PM/MM/GM, …).
+ */
+function lvSize(model: string, size: string, siblings: string[]): (name: string) => boolean {
+  const want = new RegExp(`\\b${size}\\b`, "i");
+  const others = siblings.filter((s) => s !== size).map((s) => new RegExp(`\\b${s}\\b`, "i"));
+  return (name: string) => {
+    const n = name.toLowerCase();
+    if (!n.includes(model) || /charm/.test(n)) return false;
+    return want.test(n) && !others.some((re) => re.test(n));
+  };
+}
+const ALMA_SIZES = ["bb", "pm", "mm", "gm", "mini", "nano"];
+
+/**
  * Targets. The Chanel Classic Flap Medium entry is PROVEN (loaded from a real
  * 120-record capture). The rest are SCAFFOLDS — best-effort brand/style/size_label/
  * predicate/bounds to be tuned once each is captured. Brand/style names match the
@@ -200,6 +217,32 @@ const TARGETS: Record<string, TrrJsonLdTarget> = {
   "lv-speedy-hl": {
     brand: "Louis Vuitton", style: "Speedy", size_label: "HL",
     namePredicate: speedyWord("hl"), minPrice: 300, maxPrice: 16000, rawKey: "lv-speedy",
+  },
+
+  // ── LV Alma (backbone Tier-1) — sizes BB/PM/MM/GM + Mini/Nano, one capture ────
+  "lv-alma-bb": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "BB",
+    namePredicate: lvSize("alma", "bb", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+  "lv-alma-pm": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "PM",
+    namePredicate: lvSize("alma", "pm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+  "lv-alma-mm": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "MM",
+    namePredicate: lvSize("alma", "mm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+  "lv-alma-gm": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "GM",
+    namePredicate: lvSize("alma", "gm", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+  "lv-alma-mini": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "Mini",
+    namePredicate: lvSize("alma", "mini", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
+  },
+  "lv-alma-nano": {
+    brand: "Louis Vuitton", style: "Alma", size_label: "Nano",
+    namePredicate: lvSize("alma", "nano", ALMA_SIZES), minPrice: 250, maxPrice: 12000, rawKey: "lv-alma",
   },
 };
 
