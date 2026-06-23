@@ -13,15 +13,24 @@
 -- A closed enum keeps the vote space stable (Fragrantica-style fixed axes) and
 -- lets the UI render a known set of bars. Adding an axis later is an additive
 -- `alter type ... add value` in a follow-up migration.
+--
+-- VOCAB CORRECTION (2026-06-23, docs/ux/review-data-leaderboards.md): two axes
+-- were dropped from the original draft BEFORE this migration was applied, because
+-- a thing we can measure is never a subjective vote:
+--   * `holds_value` — value retention is a market FACT (resale median vs retail),
+--     computed from price_history and surfaced as a data-derived board, not voted.
+--   * `worth_the_price` — duplicates the review `worth_it` boolean, which is
+--     already live; keep one signal, not two.
+-- The app (src/lib/votes.ts `AXES`) already votes on exactly this 5-axis set, so
+-- the enum now matches it. Safe to edit because the migration is not yet applied —
+-- narrowing an enum after apply is not cleanly reversible in Postgres.
 
 create type bag_axis as enum (
   'build_quality',
   'everyday_wearability',
-  'holds_value',
   'roomy_vs_compact',
   'comfort',
-  'versatility',
-  'worth_the_price'
+  'versatility'
 );
 
 -- ============ Table: bag_axis_vote (one vote per user, per bag, per axis) ============

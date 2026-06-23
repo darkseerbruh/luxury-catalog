@@ -11,9 +11,9 @@ bag-page leaderboards, data-viz, and a contribution loop. Pairs with
 1-5 · `title`/`body` free text.
 
 **Multi-axis votes (`0012_bag_axis_votes.sql`, HUMAN-GATED, not yet applied):**
-Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars":
-`build_quality, everyday_wearability, holds_value, roomy_vs_compact, comfort,
-versatility, worth_the_price`.
+Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars". The
+enum is now the corrected 5-axis opinion set (see correction below):
+`build_quality, everyday_wearability, roomy_vs_compact, comfort, versatility`.
 
 ## Correction to the 0012 axis vocabulary (decided 2026-06-23)
 
@@ -25,14 +25,15 @@ is applied (it's additive/editable until then):
 - **Keep as voted OPINION axes:** `build_quality`, `comfort`,
   `everyday_wearability`, `versatility`, `roomy_vs_compact` (the last as *felt*
   roominess; dedupe against catalog capacity, don't double-count).
-- **Remove `holds_value` from the vote enum.** DONE (2026-06-23) at the app layer:
-  dropped from `AXES`/`AXIS_META` in `src/lib/votes.ts`, so the bar no longer
-  renders, new votes are rejected by `isAxis()`, and any existing rows are ignored
-  on read. No DB enum change needed. Surface value retention as a **data-derived**
-  board from `price_history` instead (not yet built).
+- **Remove `holds_value` from the vote enum.** DONE (2026-06-23), both layers:
+  dropped from `AXES`/`AXIS_META` in `src/lib/votes.ts` (the bar no longer renders,
+  new votes rejected by `isAxis()`, existing rows ignored on read) AND removed from
+  the `bag_axis` enum in `0012_bag_axis_votes.sql` itself (the migration is still
+  unapplied, so the enum could be narrowed cleanly). Value retention is surfaced as
+  a **data-derived** board from `price_history` (`getValueRetentionLeaders`, built).
 - **`worth_the_price` duplicates the review `worth_it` boolean** — keep one signal,
-  not two. DONE (2026-06-23): retired from `AXES`/`AXIS_META` the same app-layer way
-  as `holds_value`. The review `worth_it` boolean is the kept signal.
+  not two. DONE (2026-06-23): retired from `AXES`/`AXIS_META` and from the `0012`
+  enum the same way as `holds_value`. The review `worth_it` boolean is the kept signal.
 
 Rule going forward: **a thing we can measure from data is never a subjective vote.**
 Opinion axes capture only lived experience; facts come from the catalogue/price data.
