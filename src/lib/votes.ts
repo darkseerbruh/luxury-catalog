@@ -11,11 +11,18 @@ function hasSupabase(): boolean {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
 }
 
-/** The fixed axis vocabulary — must match the `bag_axis` enum in 0012. */
+/**
+ * The votable axis vocabulary — a SUBSET of the `bag_axis` enum in 0012, limited
+ * to genuine lived-experience opinions. `holds_value` is deliberately excluded:
+ * value retention is a market fact we compute from price_history, not something
+ * to crowd-vote (asking owners to vote on it produces noise or contradicts the
+ * real data). Any existing `holds_value` rows in the DB are simply ignored on
+ * read, and new votes on it are rejected by isAxis(). See
+ * docs/ux/review-data-leaderboards.md.
+ */
 export const AXES = [
   "build_quality",
   "everyday_wearability",
-  "holds_value",
   "roomy_vs_compact",
   "comfort",
   "versatility",
@@ -32,7 +39,6 @@ export function isAxis(value: string): value is Axis {
 export const AXIS_META: Record<Axis, { label: string; low: string; high: string }> = {
   build_quality: { label: "Build quality", low: "Flimsy", high: "Tank-like" },
   everyday_wearability: { label: "Everyday wearability", low: "Occasion-only", high: "Daily driver" },
-  holds_value: { label: "Holds value", low: "Depreciates", high: "Holds / appreciates" },
   roomy_vs_compact: { label: "Roomy vs compact", low: "Compact", high: "Roomy" },
   comfort: { label: "Comfort to carry", low: "Awkward", high: "Effortless" },
   versatility: { label: "Versatility", low: "One-note", high: "Goes with anything" },

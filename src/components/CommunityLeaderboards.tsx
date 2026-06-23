@@ -75,10 +75,10 @@ export default async function CommunityLeaderboards() {
           </p>
         </div>
         <Link
-          href="/closet"
+          href="/search"
           className="inline-block flex-shrink-0 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
         >
-          Rate a bag &rarr;
+          Find a bag to rate &rarr;
         </Link>
       </div>
     </section>

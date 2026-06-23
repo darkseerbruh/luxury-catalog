@@ -25,10 +25,14 @@ is applied (it's additive/editable until then):
 - **Keep as voted OPINION axes:** `build_quality`, `comfort`,
   `everyday_wearability`, `versatility`, `roomy_vs_compact` (the last as *felt*
   roominess; dedupe against catalog capacity, don't double-count).
-- **Remove `holds_value` from the vote enum.** Surface value retention as a
-  **data-derived** board computed from `price_history`, never a vote.
+- **Remove `holds_value` from the vote enum.** DONE (2026-06-23) at the app layer:
+  dropped from `AXES`/`AXIS_META` in `src/lib/votes.ts`, so the bar no longer
+  renders, new votes are rejected by `isAxis()`, and any existing rows are ignored
+  on read. No DB enum change needed. Surface value retention as a **data-derived**
+  board from `price_history` instead (not yet built).
 - **`worth_the_price` duplicates the review `worth_it` boolean** — keep one signal,
-  not two. (Lean toward the review boolean; it's already live.)
+  not two. (Lean toward the review boolean; it's already live.) STILL PENDING:
+  left in `AXES` for now, retire it the same app-layer way once confirmed.
 
 Rule going forward: **a thing we can measure from data is never a subjective vote.**
 Opinion axes capture only lived experience; facts come from the catalogue/price data.
