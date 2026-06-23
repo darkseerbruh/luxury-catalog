@@ -2,7 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages } from "@/lib/queries";
+import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
@@ -352,13 +352,59 @@ export default async function BagDetailPage({
 
   // Production-era context for the value module (honest year signal we have
   // today): the variant's own production range + discontinued/vintage status,
-  // from year_start/year_end. Per-listing era (the era×condition matrix) waits on
-  // date-code extraction — no resale feed carries a reliable item year yet.
+  // from year_start/year_end.
   const era = {
     productionYears: yearRange,
     discontinued: !v.stillInProduction,
     vintage: !v.stillInProduction && v.yearStart != null && v.yearStart <= new Date().getFullYear() - 20,
   };
+
+  // Era lens (single-axis): resale rows grouped by production-year decade, read
+  // from price_history.production_year (migration 0022 + LLM extraction pass).
+  // RESILIENT — getVariantEraComps returns [] on any DB error or missing column,
+  // so this block can never 404 the live page. The lens only renders when ≥2 era
+  // bands are populated; otherwise falls through to the existing gauge, mirroring
+  // the condition-ladder's ≥2-tier rule.
+  //
+  // Bucketing: by decade (1980s, 1990s, 2000s, 2010s, 2020s). The real TRR data
+  // spans 1986–2025, which maps cleanly to 3–5 natural bands depending on density.
+  // Null production_year rows are excluded — never invent or bucket an unknown year.
+  //
+  // TODO: era×condition matrix once per-listing condition is captured+enriched
+  //       (TRR rows currently have null condition; the 2-axis view waits on that).
+  const eraCompsRaw = await getVariantEraComps(v.variantId);
+  function eraDecadeLabel(year: number): string {
+    const decade = Math.floor(year / 10) * 10;
+    return `${decade}s`;
+  }
+  const eraGroupMap = new Map<string, { prices: number[]; comps: { price: number; platform: string | null; condition: string | null; url: string | null }[] }>();
+  for (const c of eraCompsRaw) {
+    const label = eraDecadeLabel(c.productionYear);
+    if (!eraGroupMap.has(label)) eraGroupMap.set(label, { prices: [], comps: [] });
+    const group = eraGroupMap.get(label)!;
+    group.prices.push(c.salePrice);
+    if (c.priceType === "listed") {
+      group.comps.push({ price: c.salePrice, platform: c.platform, condition: c.condition, url: c.sourceUrl });
+    }
+  }
+  // Emit rows sorted chronologically (oldest era first); currency from the first era comp.
+  const eraCurrency = eraCompsRaw.length > 0 ? eraCompsRaw[0].currency : (fairMarket?.currency ?? null);
+  const byEra = Array.from(eraGroupMap.entries())
+    .sort(([a], [b]) => parseInt(a) - parseInt(b))
+    .map(([label, g]) => {
+      const sorted = g.prices.slice().sort((a, b) => a - b);
+      const mid = Math.floor(sorted.length / 2);
+      const med = sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+      return {
+        label,
+        low: Math.min(...g.prices),
+        median: med,
+        high: Math.max(...g.prices),
+        count: g.prices.length,
+        comps: g.comps,
+      };
+    })
+    .filter((r) => r.count > 0);
 
   // Retail price trajectory (MSRP over time) — the appreciation story, shown
   // separately from the resale Fair Market Range and honestly labelled so retail
@@ -559,6 +605,8 @@ export default async function BagDetailPage({
           retailTrendPct={retailChange}
           byCondition={byCondition}
           era={era}
+          byEra={byEra}
+          eraCurrency={eraCurrency}
         />
         <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t border-border pt-4 text-sm">
           {v.retailPriceOriginal != null && (

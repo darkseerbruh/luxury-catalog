@@ -533,6 +533,60 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
   };
 }
 
+/** One resale row carrying a per-listing production year (from migration 0022). */
+export interface EraComp {
+  productionYear: number;
+  salePrice: number;
+  currency: string | null;
+  platform: string | null;
+  condition: string | null;
+  priceType: string | null;
+  sourceUrl: string | null;
+}
+
+/**
+ * Resale rows that carry a per-listing `production_year` (populated by migration
+ * 0022 + the LLM spec-extraction pass). RESILIENT — catches any DB error (including
+ * "column does not exist" from a pre-0022 environment) and returns [] so the live
+ * page never 404s. The era lens in ValueModule degrades to the gauge when this is
+ * empty or has fewer than 2 populated era bands.
+ */
+export async function getVariantEraComps(variantId: number): Promise<EraComp[]> {
+  try {
+    const { data, error } = await getSupabase()
+      .from("price_history")
+      .select("production_year, sale_price, currency, platform, condition, price_type, source_url")
+      .eq("variant_id", variantId)
+      .not("production_year", "is", null)
+      .not("sale_price", "is", null);
+    if (error || !data) return [];
+    const RETAIL_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+    return (data as {
+      production_year: number | null;
+      sale_price: number | string | null;
+      currency: string | null;
+      platform: string | null;
+      condition: string | null;
+      price_type: string | null;
+      source_url: string | null;
+    }[])
+      .filter((r) => r.production_year != null && r.sale_price != null)
+      .filter((r) => !(r.price_type === "retail_msrp" || (r.price_type == null && r.platform != null && RETAIL_RX.test(r.platform))))
+      .map((r) => ({
+        productionYear: r.production_year as number,
+        salePrice: Number(r.sale_price),
+        currency: r.currency,
+        platform: r.platform,
+        condition: r.condition,
+        priceType: r.price_type,
+        sourceUrl: r.source_url,
+      }));
+  } catch {
+    // pre-0022: production_year column absent — degrade gracefully
+    return [];
+  }
+}
+
 export interface StyleVariantOption {
   variantId: number;
   sizeLabel: string | null;
