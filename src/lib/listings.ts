@@ -19,6 +19,7 @@
 
 import { getSupabase } from "./supabase";
 import { PLATFORMS } from "./platforms";
+import { colorFamily, materialFamily } from "./listings-taxonomy";
 import {
   rateListing,
   isConfidentBasis,
@@ -78,12 +79,17 @@ export interface ShopProduct {
 
 export type ShopSort = "best-deal" | "price-asc" | "price-desc" | "newest";
 
+/** A color/material filter value is either an exact specific (e.g. "Étoupe") or a whole
+ *  family, encoded "f:Beige". The matcher and the controls both understand this prefix. */
+export const FAMILY_PREFIX = "f:";
+
 export interface ShopFilters {
   brand?: string;
   dealsOnly?: boolean;
+  minPrice?: number;
   maxPrice?: number;
   sort?: ShopSort;
-  /** Per-listing spec filters (matched case-insensitively against the listing's own spec). */
+  /** Per-listing spec filters. color/material accept a specific value or "f:Family". */
   color?: string;
   material?: string;
   hardware?: string;
@@ -96,10 +102,19 @@ export interface Facet {
   count: number;
 }
 
+/** A family ("Brown", "Leather") with its product count and the specific values under it. */
+export interface GroupedFacet {
+  family: string;
+  count: number;
+  options: Facet[];
+}
+
 export interface ShopFacets {
   brands: Facet[];
-  colors: Facet[];
-  materials: Facet[];
+  /** Color specifics grouped under their family (with an inclusive family option). */
+  colors: GroupedFacet[];
+  /** Material specifics grouped under their family (Leather inclusive of Togo, Caviar…). */
+  materials: GroupedFacet[];
   hardware: Facet[];
   conditions: Facet[];
 }
@@ -130,6 +145,10 @@ interface PriceRow {
   observedOn: string | null;
   dateRecorded: string | null;
   condition: string | null;
+  /** Stable per-listing id (migration 0024); dedup key across crawl dates. */
+  listingRef: string | null;
+  /** Live-vs-sold state (migration 0030): 'available' | 'sold' | null (legacy). */
+  listingStatus: string | null;
   spec: ItemSpec;
 }
 
@@ -142,6 +161,8 @@ type RawRow = {
   source_url: string | null;
   observed_on: string | null;
   date_recorded: string | null;
+  listing_ref: string | null;
+  listing_status: string | null;
   condition: string | null;
   colorway: string | null;
   material: string | null;
@@ -165,7 +186,7 @@ type RawVariant = {
 };
 
 const SELECT =
-  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, condition, colorway, material, hardware_color, production_year, " +
+  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, " +
   "variant:variant_id(size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), style:style_id(style_id, name, brand:brand_id(name)))";
 
 function one<T>(rel: T | T[] | null | undefined): T | null {
@@ -197,6 +218,8 @@ function mapRow(r: RawRow): PriceRow | null {
     sourceUrl: r.source_url,
     observedOn: r.observed_on,
     dateRecorded: r.date_recorded,
+    listingRef: r.listing_ref ?? null,
+    listingStatus: r.listing_status ?? null,
     condition: r.condition,
     spec: {
       // Prefer the per-listing spec (migration 0022); fall back to the variant's own.
@@ -216,7 +239,30 @@ function isRetail(r: PriceRow): boolean {
 }
 
 function isListed(r: PriceRow): boolean {
-  return r.priceType === "listed";
+  // A live offer = a resale listing still for sale. 'sold' rows have been retired by
+  // reconcile-sold.ts (the source no longer carries them); legacy rows are null = shown.
+  return r.priceType === "listed" && r.listingStatus !== "sold";
+}
+
+/**
+ * Collapse repeat observations of the same listing into one. A re-crawl writes a fresh
+ * dated row per listing each time, so a bag live for N crawls would otherwise count N
+ * times and show a stale price. Keep the most recent observation per (platform,
+ * listing_ref); rows without a listing_ref are left as-is (can't be safely merged).
+ */
+function dedupeByListing(rows: PriceRow[]): PriceRow[] {
+  const latest = new Map<string, PriceRow>();
+  const out: PriceRow[] = [];
+  for (const r of rows) {
+    if (!r.listingRef) {
+      out.push(r);
+      continue;
+    }
+    const key = `${r.platform ?? ""}|${r.listingRef}`;
+    const prev = latest.get(key);
+    if (!prev || (r.observedOn ?? "") > (prev.observedOn ?? "")) latest.set(key, r);
+  }
+  return out.concat([...latest.values()]);
 }
 
 function platformLabel(platform: string | null): string {
@@ -308,8 +354,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .filter((r) => !isRetail(r) && (sizeLabel == null || r.sizeLabel === sizeLabel))
       .map(specComp);
 
-    const offers = rows
-      .filter((r) => r.variantId === variantId && isListed(r))
+    const offers = dedupeByListing(rows.filter((r) => r.variantId === variantId && isListed(r)))
       .map((r) => toOffer(r, comps))
       .sort(compareOffers);
 
@@ -380,6 +425,10 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (!isRetail(r)) g.comps.push(specComp(r));
     }
 
+    // Collapse repeat crawl observations so each live listing counts once, at its most
+    // recent price — otherwise a bag re-seen across N crawls would inflate every count.
+    for (const g of groups.values()) g.listed = dedupeByListing(g.listed);
+
     // Facet accumulators (count distinct PRODUCTS carrying each value, over the unfiltered
     // set — like the brand facet). Spec facets count only over groups with live listings.
     const facetAcc = {
@@ -389,6 +438,9 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       hardware: new Map<string, Facet>(),
       conditions: new Map<string, Facet>(),
     };
+    // Family-level product counts (for the inclusive "All Brown" / "All Leather" option).
+    const colorFamCount = new Map<string, number>();
+    const materialFamCount = new Map<string, number>();
     const bump = (acc: Map<string, Facet>, raw: string | null) => {
       if (!raw) return;
       const k = raw.toLowerCase().trim();
@@ -397,18 +449,28 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (e) e.count += 1;
       else acc.set(k, { value: raw.trim(), count: 1 });
     };
+    const bumpFam = (acc: Map<string, number>, fams: Set<string>) => {
+      for (const f of fams) acc.set(f, (acc.get(f) ?? 0) + 1);
+    };
 
     const bandRank: Record<DealBand, number> = { great: 4, good: 3, fair: 2, above: 1 };
-    const matchesSpec = (r: PriceRow): boolean => {
-      const eq = (val: string | null, want?: string) =>
-        !want || (val != null && val.toLowerCase().trim() === want.toLowerCase().trim());
-      return (
-        eq(r.spec.colorway, filters.color) &&
-        eq(r.spec.material, filters.material) &&
-        eq(r.spec.hardwareColor, filters.hardware) &&
-        eq(r.condition, filters.condition)
-      );
+    // A color/material filter is either an exact specific or a whole family ("f:Beige").
+    const matchOne = (
+      val: string | null,
+      want: string | undefined,
+      fam: (s: string | null) => string | null,
+    ): boolean => {
+      if (!want) return true;
+      if (want.startsWith(FAMILY_PREFIX)) return fam(val) === want.slice(FAMILY_PREFIX.length);
+      return val != null && val.toLowerCase().trim() === want.toLowerCase().trim();
     };
+    const eq = (val: string | null, want?: string) =>
+      !want || (val != null && val.toLowerCase().trim() === want.toLowerCase().trim());
+    const matchesSpec = (r: PriceRow): boolean =>
+      matchOne(r.spec.colorway, filters.color, colorFamily) &&
+      matchOne(r.spec.material, filters.material, materialFamily) &&
+      eq(r.spec.hardwareColor, filters.hardware) &&
+      eq(r.condition, filters.condition);
 
     let products: ShopProduct[] = [];
     let totalListings = 0;
@@ -417,10 +479,15 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
 
       // Facets: count this product once per distinct value among its listed rows.
       if (g.brandName) bump(facetAcc.brands, g.brandName);
-      for (const v of new Set(g.listed.map((r) => r.spec.colorway).filter(Boolean))) bump(facetAcc.colors, v);
-      for (const v of new Set(g.listed.map((r) => r.spec.material).filter(Boolean))) bump(facetAcc.materials, v);
+      const colorVals = new Set(g.listed.map((r) => r.spec.colorway).filter((s): s is string => !!s));
+      const materialVals = new Set(g.listed.map((r) => r.spec.material).filter((s): s is string => !!s));
+      for (const v of colorVals) bump(facetAcc.colors, v);
+      for (const v of materialVals) bump(facetAcc.materials, v);
       for (const v of new Set(g.listed.map((r) => r.spec.hardwareColor).filter(Boolean))) bump(facetAcc.hardware, v);
       for (const v of new Set(g.listed.map((r) => r.condition).filter(Boolean))) bump(facetAcc.conditions, v);
+      // Count the product once per distinct FAMILY it spans (for the "All Brown" option).
+      bumpFam(colorFamCount, new Set([...colorVals].map(colorFamily).filter((f): f is string => !!f)));
+      bumpFam(materialFamCount, new Set([...materialVals].map(materialFamily).filter((f): f is string => !!f)));
 
       // The listings that survive the active per-listing spec filters.
       const matching = g.listed.filter(matchesSpec);
@@ -458,16 +525,42 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
 
     const sortFacet = (acc: Map<string, Facet>, top: number): Facet[] =>
       [...acc.values()].sort((a, b) => b.count - a.count || a.value.localeCompare(b.value)).slice(0, top);
+
+    // Group color/material specifics under their family, biggest family first, and put an
+    // "Unknown" bucket last so unclassified values are still browsable.
+    const groupByFamily = (
+      acc: Map<string, Facet>,
+      famCount: Map<string, number>,
+      fam: (s: string | null) => string | null,
+      perFamily: number,
+    ): GroupedFacet[] => {
+      const byFam = new Map<string, Facet[]>();
+      for (const f of acc.values()) {
+        const family = fam(f.value) ?? "Other";
+        (byFam.get(family) ?? byFam.set(family, []).get(family)!).push(f);
+      }
+      return [...byFam.entries()]
+        .map(([family, options]) => ({
+          family,
+          count: famCount.get(family) ?? options.reduce((s, o) => s + o.count, 0),
+          options: options.sort((a, b) => b.count - a.count || a.value.localeCompare(b.value)).slice(0, perFamily),
+        }))
+        .sort((a, b) =>
+          a.family === "Other" ? 1 : b.family === "Other" ? -1 : b.count - a.count || a.family.localeCompare(b.family),
+        );
+    };
+
     const facets: ShopFacets = {
       brands: sortFacet(facetAcc.brands, 50),
-      colors: sortFacet(facetAcc.colors, 24),
-      materials: sortFacet(facetAcc.materials, 24),
+      colors: groupByFamily(facetAcc.colors, colorFamCount, colorFamily, 20),
+      materials: groupByFamily(facetAcc.materials, materialFamCount, materialFamily, 20),
       hardware: sortFacet(facetAcc.hardware, 16),
       conditions: sortFacet(facetAcc.conditions, 12),
     };
 
     // Product-level filters (brand/price/deals) on top of the listing-level spec filters.
     if (filters.brand) products = products.filter((p) => p.brandName === filters.brand);
+    if (filters.minPrice != null) products = products.filter((p) => p.fromPrice >= filters.minPrice!);
     if (filters.maxPrice != null) products = products.filter((p) => p.fromPrice <= filters.maxPrice!);
     if (filters.dealsOnly)
       products = products.filter((p) => p.dealBand === "great" || p.dealBand === "good");
