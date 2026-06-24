@@ -54,30 +54,40 @@ npm run promote:discovered              # review clean clusters (≥5)
   Next: (a) wire find-or-create + re-point, run it only for clusters mapping to a CLEAN existing
   style first; (b) raise dictionary coverage past 23% so more of the 11.5k discovered listings cluster.
 
-## Phase 3 — TheRealReal (browser, rate-limited) ⬜ IN PROGRESS
-Browser capture is **validated** (extracted 120 Chanel listings via same-origin JSON-LD).
-Two hard constraints make this a dedicated multi-session grind:
-- **Rate limit:** ~120 same-origin fetches → 403, ~10-min cooldown. One search page = ~120 listings.
-- **Transport:** TRR's CSP blocks the localhost sink (`scripts/capture-sink.mjs`), and the
-  JS-return display caps at ~1KB. Documented transport = chunked `get_page_text` body-transport
-  (write ≤~6KB of JSON into `document.body` as text, read it, repeat) — slow but works.
+## Phase 3 — TheRealReal (browser) ⬜ IN PROGRESS — efficient method FOUND
+Server-side `curl` is hard-403'd (bot wall), so it needs the logged-in browser. But TRR is a
+**Next.js app**: the search page embeds the full GraphQL result in `__NEXT_DATA__`, so one PAGE
+LOAD yields ~120 listings with **no per-product fetches** (dodges the ~120-fetch/10-min rate limit
+entirely). Each node carries `name, sku, url, brandUnion.name, price.final/original/msrp (usdCents),
+images[]`. Specs (colour/material/year) are NOT in search data — they live on product pages (rich
+JSON-LD), enrich later for priority variants.
 
-**Per-brand loop (in Claude-in-Chrome, logged in):**
+**Transport (solved):** TRR's CSP blocks the localhost sink (`capture-sink.mjs`) AND the JS-return
+display caps at ~1KB. The working transport is a **Blob download**: build a `Blob` of the JSON in
+the page and `a.click()` it → saves to `~/Downloads/` uncapped, no CSP. Then Bash picks it up.
+
+**Validated loop (in Claude-in-Chrome, logged in):**
 ```
-# 1. Open https://www.therealreal.com/products?keywords=<Brand>&page=<N>
-# 2. Collect product URLs:  [...document.querySelectorAll('a[href*="/products/"]')]
-#       .map(a=>a.getAttribute('href')).filter(h=>h && !h.includes('/similar/'))
-# 3. same-origin fetch each (credentials:'include'), parse the JSON-LD Product block ->
-#       {url,name,sku,price,currency,condition,desc}  — batch ≤18/call (CDP 45s limit), watch for 403
-# 4. Transport the array to data/ingest/_raw/trr-<brand>-<page>.json (chunked body-transport)
-# 5. Adapt (catch-all) + load to discovered:
-npx tsx supabase/ingest/sources/trr-jsonld.ts --catch-all --brand "<Brand>" trr-<brand>-<page>
-npm run load:prices -- therealreal --discovered-only --write
+# 1. Navigate: https://www.therealreal.com/products?keywords=<Brand>
+# 2. Extract __NEXT_DATA__ -> props.pageProps.serverResult.data.products.edges[].node,
+#    map to {url,name,sku,brand,price,original,msrp,currency,image}, Blob-download as
+#    trr-<brand>-p<page>.json  (see the page-aware extractor used 2026-06-24)
+# 3. Bash: cp ~/Downloads/trr-<brand>-p<page>.json data/ingest/_raw/
+# 4. npx tsx supabase/ingest/sources/trr-jsonld.ts --catch-all --brand "<Brand>" trr-<brand>-p<page> [...more]
+# 5. npm run load:prices -- therealreal --discovered-only --write   (integrity-safe)
 ```
-**Brand priority** (catalog depth + demand): ⬜ Chanel ⬜ Louis Vuitton ⬜ Hermès ⬜ Gucci
+✅ Proven 2026-06-24: Chanel page-1 → 120 rows → discovered_listing.
+⚠️ **Deep pagination unsolved:** `?page=N` is ignored (SPA uses cursor pagination — `pageInfo.endCursor`).
+So this method reliably gets the **first ~120 per brand** only. To go deeper: (a) replay the same-origin
+GraphQL query with `endCursor` (1 request/120 items, well under rate limit — the scalable path), or
+(b) scroll-to-load-more + extract from the live DOM. Build (a) next.
+**Brand priority** (catalog depth + demand): ✅ Chanel(p1) ⬜ Louis Vuitton ⬜ Hermès ⬜ Gucci
 ⬜ Dior ⬜ Saint Laurent ⬜ Prada ⬜ Bottega Veneta ⬜ Celine ⬜ Fendi ⬜ Loewe ⬜ Coach
 ⬜ Goyard ⬜ Balenciaga ⬜ Burberry ⬜ (then long-tail brands the keyword search surfaces).
-Note: TRR keyword search includes non-bag results (footwear/SLGs) — fine, they land in discovered.
+
+**The clean scale path (recommended over scraping):** an **affiliate product feed** (Skimlinks/CJ/
+Impact) returns structured listings + licensed images server-side — no bot wall, no rate limit, no
+transport hack, and image rights. Pursue feeds for TRR + Vestiaire; scraping is the interim.
 
 ## Phase 4 — Vestiaire (browser, low yield) ⬜ TODO
 Richest for region/currency. Next.js `__NEXT_DATA__` transport (see `vestiaire.ts` header).
