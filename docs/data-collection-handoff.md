@@ -184,11 +184,15 @@ partners but it does not carry the resale players.
 **Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
 **Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days). ✅ **CJ publisher account
 ACTIVE** (account ID `7997608`, property = luxurycatalog.com, primary model = Product
-Comparison/Discovery). ⏳ **Next inside CJ:** apply to the **Rebag** and **Vestiaire Collective**
-advertiser programs individually (Partners → Advertisers → search → Join; each Join accepts that
-advertiser's click-through program terms). Once programs approve, swap raw outbound links for
-tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches the locked
-monetization strategy.
+Comparison/Discovery). ✅ **Inside CJ: Rebag applied** (advertiser 5749848, manual review pending). Rebag terms worth
+noting: 7% commission but **new (first-time) customers only**, tiered down to **3% on orders >$2,500**
+(flat $423 over $14,124), **0% on return customers**, 30-day cookie — so a buyer-side, new-customer
+program, not a seller lever. ❌ **Vestiaire Collective is NOT available on CJ for the US account**
+(only an unrelated French "En Selle Marcel" matches; VC's CJ program is EU-region-gated) — **covered
+by Skimlinks instead**, so no gap. CJ "handbags" keyword (66 results) is otherwise dominated by
+new-retail apparel, not resale, so Rebag is the one relevant CJ fit. Once programs approve, swap raw
+outbound links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps
+matches the locked monetization strategy.
 
 **Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
 before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
