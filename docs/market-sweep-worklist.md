@@ -66,24 +66,40 @@ JSON-LD), enrich later for priority variants.
 display caps at ~1KB. The working transport is a **Blob download**: build a `Blob` of the JSON in
 the page and `a.click()` it → saves to `~/Downloads/` uncapped, no CSP. Then Bash picks it up.
 
-**Validated loop (in Claude-in-Chrome, logged in):**
+**Deep pagination — SOLVED.** `?page=N` alone is ignored; you also need an `after` cursor:
+`after = base64("arrayconnection:" + ((page-1)*120 - 1))` (page 1 = no cursor). Deterministic, so
+every page URL is built without reading the (harness-redacted) cursor. The bot wall is bypassed by
+**same-origin `fetch()` of the full page HTML from the logged-in tab**, so a whole brand loops in
+ONE JS call (1 fetch per 120 listings), parsing `__NEXT_DATA__` out of each response — no navigation,
+no per-product fetches.
+
+**Validated loop (run JS in the logged-in TRR tab):**
+```js
+for (page=1; hasNext && fetched<25; page++) {
+  after = page===1 ? '' : '&after='+btoa('arrayconnection:'+((page-1)*120-1));
+  r = await fetch(`/products?keywords=${BRAND}&page=${page}${after}`, {credentials:'include'});
+  if (!r.ok) break;                          // 403 = rate limited → cooldown & resume
+  d = JSON.parse(html.match(/__NEXT_DATA__[^>]*>([\s\S]*?)<\/script>/)[1])
+        .props.pageProps.serverResult.data.products;
+  acc.push(...d.edges.map(e => e.node));  hasNext = d.pageInfo.hasNextPage;
+}
+// Blob-download acc -> ~/Downloads/trr-<slug>-all.json
 ```
-# 1. Navigate: https://www.therealreal.com/products?keywords=<Brand>
-# 2. Extract __NEXT_DATA__ -> props.pageProps.serverResult.data.products.edges[].node,
-#    map to {url,name,sku,brand,price,original,msrp,currency,image}, Blob-download as
-#    trr-<brand>-p<page>.json  (see the page-aware extractor used 2026-06-24)
-# 3. Bash: cp ~/Downloads/trr-<brand>-p<page>.json data/ingest/_raw/
-# 4. npx tsx supabase/ingest/sources/trr-jsonld.ts --catch-all --brand "<Brand>" trr-<brand>-p<page> [...more]
-# 5. npm run load:prices -- therealreal --discovered-only --write   (integrity-safe)
+Ingest from the worktree:
 ```
-✅ Proven 2026-06-24: Chanel page-1 → 120 rows → discovered_listing.
-⚠️ **Deep pagination unsolved:** `?page=N` is ignored (SPA uses cursor pagination — `pageInfo.endCursor`).
-So this method reliably gets the **first ~120 per brand** only. To go deeper: (a) replay the same-origin
-GraphQL query with `endCursor` (1 request/120 items, well under rate limit — the scalable path), or
-(b) scroll-to-load-more + extract from the live DOM. Build (a) next.
-**Brand priority** (catalog depth + demand): ✅ Chanel(p1) ⬜ Louis Vuitton ⬜ Hermès ⬜ Gucci
-⬜ Dior ⬜ Saint Laurent ⬜ Prada ⬜ Bottega Veneta ⬜ Celine ⬜ Fendi ⬜ Loewe ⬜ Coach
-⬜ Goyard ⬜ Balenciaga ⬜ Burberry ⬜ (then long-tail brands the keyword search surfaces).
+cp ~/Downloads/trr-<slug>-all.json data/ingest/_raw/
+npx tsx supabase/ingest/sources/trr-jsonld.ts --catch-all --brand "<Brand>" trr-<slug>-all
+npm run load:prices -- therealreal --discovered-only --write
+npx tsx supabase/ingest/normalize-discovered.ts --write && npx tsx supabase/ingest/refresh-summary.ts
+```
+**Limits found 2026-06-24:** keyword search caps at **~17 pages (~1,830 listings)/brand** (deeper needs
+style/category facets), and page-HTML fetches **403 after ~60–70 fetches** (≈4 brands) → ~10-min
+cooldown. So: sweep ~4 brands, cool down, resume.
+
+**Brand progress** (✅ = ~1,830 listings each → discovered_listing):
+✅ Chanel ✅ Louis Vuitton ✅ Hermès ✅ Gucci — *(hit rate-limit cooldown)* —
+⬜ Dior ⬜ Saint Laurent ⬜ Celine ⬜ Bottega Veneta ⬜ Loewe ⬜ Fendi ⬜ Prada ⬜ Coach
+⬜ Burberry ⬜ Kate Spade ⬜ (then long-tail brands the keyword search surfaces).
 
 **The clean scale path (recommended over scraping):** an **affiliate product feed** (Skimlinks/CJ/
 Impact) returns structured listings + licensed images server-side — no bot wall, no rate limit, no
