@@ -5,6 +5,7 @@ import {
   rateListing,
   bestBand,
   bandLabel,
+  isConfidentBasis,
   type SpecComp,
   type ItemSpec,
 } from "../listings-core";
@@ -124,8 +125,38 @@ describe("computeFairValue", () => {
   });
 });
 
+describe("computeFairValue — realized prices preferred", () => {
+  it("prices off sold comps when there are enough, ignoring asking listings", () => {
+    const comps = [
+      comp({ realized: true, salePrice: 6000 }),
+      comp({ realized: true, salePrice: 6200 }),
+      comp({ realized: true, salePrice: 6400 }),
+      comp({ realized: true, salePrice: 6600 }),
+      // higher ASKING listings that should NOT pull the fair value up
+      comp({ realized: false, salePrice: 9000 }),
+      comp({ realized: false, salePrice: 9500 }),
+    ];
+    const fv = computeFairValue(blackCaviarGold, comps)!;
+    expect(fv.realized).toBe(true);
+    expect(fv.value).toBe(6300); // median of the four sold comps only
+    expect(fv.compCount).toBe(4);
+  });
+
+  it("falls back to asking listings when sold comps are too thin, and flags it", () => {
+    const comps = [
+      comp({ realized: true, salePrice: 6000 }),
+      comp({ realized: false, salePrice: 7000 }),
+      comp({ realized: false, salePrice: 7200 }),
+      comp({ realized: false, salePrice: 7400 }),
+    ];
+    const fv = computeFairValue(blackCaviarGold, comps)!;
+    expect(fv.realized).toBe(false);
+    expect(fv.compCount).toBe(4);
+  });
+});
+
 describe("classifyDeal", () => {
-  const fair = { value: 5000, compCount: 10, dimsUsed: [], dimsDropped: [], broadened: false, variantLevel: false };
+  const fair = { value: 5000, compCount: 10, dimsUsed: [], dimsDropped: [], broadened: false, variantLevel: false, realized: false };
 
   it("rates a clearly-under listing as great", () => {
     const r = classifyDeal(4000, fair); // 20% under
@@ -169,5 +200,24 @@ describe("bandLabel", () => {
   it("maps bands to human labels", () => {
     expect(bandLabel("great")).toBe("Great price");
     expect(bandLabel("above")).toBe("Above market");
+  });
+});
+
+describe("isConfidentBasis", () => {
+  const base = { value: 5000, compCount: 6, broadened: false, variantLevel: false, realized: false };
+
+  it("is confident only when matched like-for-like on leather AND color", () => {
+    expect(isConfidentBasis({ ...base, dimsUsed: ["material", "color"], dimsDropped: [] })).toBe(true);
+    expect(isConfidentBasis({ ...base, dimsUsed: ["material", "color", "hardware"], dimsDropped: [] })).toBe(true);
+  });
+
+  it("is not confident when color was dropped (blended across colors)", () => {
+    expect(isConfidentBasis({ ...base, broadened: true, dimsUsed: ["material"], dimsDropped: ["color"] })).toBe(false);
+  });
+
+  it("is never confident at the blended variant level", () => {
+    expect(
+      isConfidentBasis({ ...base, variantLevel: true, dimsUsed: [], dimsDropped: ["material", "color"] }),
+    ).toBe(false);
   });
 });

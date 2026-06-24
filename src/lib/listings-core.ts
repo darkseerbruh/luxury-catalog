@@ -35,6 +35,8 @@ export interface ItemSpec {
 /** A recorded resale price with its spec, used as a comparable. */
 export interface SpecComp extends ItemSpec {
   salePrice: number;
+  /** True for a REALIZED price (sold/auction); false/undefined for an asking listing. */
+  realized?: boolean;
 }
 
 /** The fair value we rated a listing against, plus the basis so the UI can be honest. */
@@ -51,6 +53,8 @@ export interface FairValue {
   broadened: boolean;
   /** True when we fell all the way back to every resale comp for the variant. */
   variantLevel: boolean;
+  /** True when the chosen bucket is REALIZED sold prices (the truth), not asking prices. */
+  realized: boolean;
 }
 
 export interface DealRating {
@@ -125,6 +129,18 @@ function matchComps(target: ItemSpec, comps: SpecComp[], dims: SpecDim[]): SpecC
 }
 
 /**
+ * Pick the comp pool to price a bucket from, preferring REALIZED sold prices (the truth)
+ * over asking listings: if there are enough realized comps use those, else use all comps
+ * if there are enough, else null (too thin). `min` is the threshold to clear.
+ */
+function pickPool(matched: SpecComp[], min: number): { pool: SpecComp[]; realized: boolean } | null {
+  const realized = matched.filter((c) => c.realized);
+  if (realized.length >= min) return { pool: realized, realized: true };
+  if (matched.length >= min) return { pool: matched, realized: false };
+  return null;
+}
+
+/**
  * Fair value for a listing: the median of the tightest spec bucket with at least
  * MIN_SPEC_COMPS comps; broaden one dimension at a time when thin; finally fall back
  * to every resale comp for the variant (MIN_VARIANT_COMPS). Returns null when even the
@@ -147,29 +163,32 @@ export function computeFairValue(target: ItemSpec, comps: SpecComp[]): FairValue
     if (seen.has(key)) continue;
     seen.add(key);
 
-    const matched = matchComps(target, valid, applicable);
-    if (matched.length >= MIN_SPEC_COMPS) {
+    const picked = pickPool(matchComps(target, valid, applicable), MIN_SPEC_COMPS);
+    if (picked) {
       const dropped = known.filter((d) => !applicable.includes(d));
       return {
-        value: median(matched.map((m) => m.salePrice)),
-        compCount: matched.length,
+        value: median(picked.pool.map((m) => m.salePrice)),
+        compCount: picked.pool.length,
         dimsUsed: applicable,
         dimsDropped: dropped,
         broadened: dropped.length > 0,
         variantLevel: false,
+        realized: picked.realized,
       };
     }
   }
 
   // Variant-level fallback: every resale comp for the bag, regardless of spec.
-  if (valid.length >= MIN_VARIANT_COMPS) {
+  const pickedAll = pickPool(valid, MIN_VARIANT_COMPS);
+  if (pickedAll) {
     return {
-      value: median(valid.map((m) => m.salePrice)),
-      compCount: valid.length,
+      value: median(pickedAll.pool.map((m) => m.salePrice)),
+      compCount: pickedAll.pool.length,
       dimsUsed: [],
       dimsDropped: known,
       broadened: true,
       variantLevel: true,
+      realized: pickedAll.realized,
     };
   }
 
@@ -215,4 +234,15 @@ export function bandLabel(band: DealBand): string {
 export function bestBand(bands: DealBand[]): DealBand | null {
   if (bands.length === 0) return null;
   return bands.reduce((best, b) => (BAND_RANK[b] > BAND_RANK[best] ? b : best), bands[0]);
+}
+
+/**
+ * Whether a fair value is trustworthy enough to SHOW a deal verdict on. "Market value"
+ * is only honest when it's a like-for-like comparison: matched on the two biggest price
+ * drivers (leather + color). A blended variant-level fallback makes the cheapest colorway
+ * look like a steal against pricier ones, so we withhold the verdict there (show the price,
+ * not a green badge). This is what stops "every listing is a great deal".
+ */
+export function isConfidentBasis(fv: FairValue): boolean {
+  return !fv.variantLevel && fv.dimsUsed.includes("material") && fv.dimsUsed.includes("color");
 }

@@ -21,6 +21,7 @@ import { getSupabase } from "./supabase";
 import { PLATFORMS } from "./platforms";
 import {
   rateListing,
+  isConfidentBasis,
   bestBand,
   type DealRating,
   type DealBand,
@@ -70,7 +71,9 @@ export interface ShopProduct {
   sellerCount: number;
   fromPrice: number;
   currency: string | null;
-  bestBand: DealBand | null;
+  /** Deal verdict for the "from" price, only when its market value is a like-for-like
+   *  (leather + color) basis; null when we can't honestly assert one. */
+  dealBand: DealBand | null;
 }
 
 export type ShopSort = "best-deal" | "price-asc" | "price-desc" | "newest";
@@ -80,12 +83,33 @@ export interface ShopFilters {
   dealsOnly?: boolean;
   maxPrice?: number;
   sort?: ShopSort;
+  /** Per-listing spec filters (matched case-insensitively against the listing's own spec). */
+  color?: string;
+  material?: string;
+  hardware?: string;
+  condition?: string;
+}
+
+/** A filter option with how many bags carry a matching live listing. */
+export interface Facet {
+  value: string;
+  count: number;
+}
+
+export interface ShopFacets {
+  brands: Facet[];
+  colors: Facet[];
+  materials: Facet[];
+  hardware: Facet[];
+  conditions: Facet[];
 }
 
 export interface ShopResult {
   products: ShopProduct[];
-  /** Brand facet (count of products per brand, over the unfiltered set). */
-  brands: { name: string; count: number }[];
+  /** Brand facet (kept top-level for back-compat with the existing grid controls). */
+  brands: Facet[];
+  /** All filter facets (brand/color/material/hardware/condition), over the unfiltered set. */
+  facets: ShopFacets;
   totalListings: number;
   totalProducts: number;
 }
@@ -205,7 +229,9 @@ function platformLabel(platform: string | null): string {
 }
 
 function specComp(r: PriceRow): SpecComp {
-  return { ...r.spec, salePrice: r.price };
+  // Realized = an actual sale (sold/auction). Asking listings are aspirational, so the
+  // rating engine prefers realized comps for fair value when it has enough of them.
+  return { ...r.spec, salePrice: r.price, realized: r.priceType === "sold" || r.priceType === "auction" };
 }
 
 function toOffer(r: PriceRow, comps: SpecComp[]): Offer {
@@ -317,7 +343,8 @@ interface ProductGroup {
  * server-side from one resilient read. Always returns an (possibly empty) result.
  */
 export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Promise<ShopResult> {
-  const EMPTY: ShopResult = { products: [], brands: [], totalListings: 0, totalProducts: 0 };
+  const emptyFacets: ShopFacets = { brands: [], colors: [], materials: [], hardware: [], conditions: [] };
+  const EMPTY: ShopResult = { products: [], brands: [], facets: emptyFacets, totalListings: 0, totalProducts: 0 };
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return EMPTY;
 
   try {
@@ -353,18 +380,66 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (!isRetail(r)) g.comps.push(specComp(r));
     }
 
-    // Build products from groups that have at least one live listing.
+    // Facet accumulators (count distinct PRODUCTS carrying each value, over the unfiltered
+    // set — like the brand facet). Spec facets count only over groups with live listings.
+    const facetAcc = {
+      brands: new Map<string, Facet>(),
+      colors: new Map<string, Facet>(),
+      materials: new Map<string, Facet>(),
+      hardware: new Map<string, Facet>(),
+      conditions: new Map<string, Facet>(),
+    };
+    const bump = (acc: Map<string, Facet>, raw: string | null) => {
+      if (!raw) return;
+      const k = raw.toLowerCase().trim();
+      if (!k) return;
+      const e = acc.get(k);
+      if (e) e.count += 1;
+      else acc.set(k, { value: raw.trim(), count: 1 });
+    };
+
+    const bandRank: Record<DealBand, number> = { great: 4, good: 3, fair: 2, above: 1 };
+    const matchesSpec = (r: PriceRow): boolean => {
+      const eq = (val: string | null, want?: string) =>
+        !want || (val != null && val.toLowerCase().trim() === want.toLowerCase().trim());
+      return (
+        eq(r.spec.colorway, filters.color) &&
+        eq(r.spec.material, filters.material) &&
+        eq(r.spec.hardwareColor, filters.hardware) &&
+        eq(r.condition, filters.condition)
+      );
+    };
+
     let products: ShopProduct[] = [];
     let totalListings = 0;
     for (const g of groups.values()) {
       if (g.listed.length === 0) continue;
-      totalListings += g.listed.length;
 
-      const cheapest = g.listed.reduce((lo, c) => (c.price < lo.price ? c : lo), g.listed[0]);
-      const bands = g.listed
-        .map((r) => rateListing(r.price, r.spec, g.comps)?.band)
-        .filter((b): b is DealBand => b != null);
-      const sellers = new Set(g.listed.map((r) => platformLabel(r.platform)));
+      // Facets: count this product once per distinct value among its listed rows.
+      if (g.brandName) bump(facetAcc.brands, g.brandName);
+      for (const v of new Set(g.listed.map((r) => r.spec.colorway).filter(Boolean))) bump(facetAcc.colors, v);
+      for (const v of new Set(g.listed.map((r) => r.spec.material).filter(Boolean))) bump(facetAcc.materials, v);
+      for (const v of new Set(g.listed.map((r) => r.spec.hardwareColor).filter(Boolean))) bump(facetAcc.hardware, v);
+      for (const v of new Set(g.listed.map((r) => r.condition).filter(Boolean))) bump(facetAcc.conditions, v);
+
+      // The listings that survive the active per-listing spec filters.
+      const matching = g.listed.filter(matchesSpec);
+      if (matching.length === 0) continue;
+      totalListings += matching.length;
+
+      const cheapest = matching.reduce((lo, c) => (c.price < lo.price ? c : lo), matching[0]);
+      const sellers = new Set(matching.map((r) => platformLabel(r.platform)));
+      const colors = new Set(matching.map((r) => r.spec.colorway?.toLowerCase()).filter(Boolean));
+
+      // Rate EACH listing against its OWN spec's market value, and keep only verdicts on a
+      // like-for-like basis (leather + color) — a blended fallback would falsely call a
+      // cheap colorway a steal. The thumbnail then shows the best deal among the items
+      // behind it: if any one item is genuinely a great deal for its spec, badge the tile.
+      const confidentBands = matching
+        .map((r) => rateListing(r.price, r.spec, g.comps))
+        .filter((rt): rt is DealRating => rt != null && isConfidentBasis(rt.fairValue))
+        .map((rt) => rt.band);
+      const dealBand = bestBand(confidentBands);
 
       products.push({
         key: g.key,
@@ -372,35 +447,33 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
         brandName: g.brandName,
         styleName: g.styleName,
         sizeLabel: g.sizeLabel,
-        colorCount: g.colors.size,
-        listingCount: g.listed.length,
+        colorCount: colors.size,
+        listingCount: matching.length,
         sellerCount: sellers.size,
         fromPrice: Math.round(cheapest.price),
         currency: cheapest.currency,
-        bestBand: bestBand(bands),
+        dealBand,
       });
     }
 
-    const totalProducts = products.length;
+    const sortFacet = (acc: Map<string, Facet>, top: number): Facet[] =>
+      [...acc.values()].sort((a, b) => b.count - a.count || a.value.localeCompare(b.value)).slice(0, top);
+    const facets: ShopFacets = {
+      brands: sortFacet(facetAcc.brands, 50),
+      colors: sortFacet(facetAcc.colors, 24),
+      materials: sortFacet(facetAcc.materials, 24),
+      hardware: sortFacet(facetAcc.hardware, 16),
+      conditions: sortFacet(facetAcc.conditions, 12),
+    };
 
-    // Brand facet over the unfiltered product set.
-    const brandCounts = new Map<string, number>();
-    for (const p of products) {
-      if (!p.brandName) continue;
-      brandCounts.set(p.brandName, (brandCounts.get(p.brandName) ?? 0) + 1);
-    }
-    const brands = [...brandCounts.entries()]
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-
-    // Apply filters.
+    // Product-level filters (brand/price/deals) on top of the listing-level spec filters.
     if (filters.brand) products = products.filter((p) => p.brandName === filters.brand);
     if (filters.maxPrice != null) products = products.filter((p) => p.fromPrice <= filters.maxPrice!);
     if (filters.dealsOnly)
-      products = products.filter((p) => p.bestBand === "great" || p.bestBand === "good");
+      products = products.filter((p) => p.dealBand === "great" || p.dealBand === "good");
 
-    // Sort.
-    const bandRank: Record<DealBand, number> = { great: 4, good: 3, fair: 2, above: 1 };
+    const totalProducts = products.length;
+
     const sort = filters.sort ?? "best-deal";
     products.sort((a, b) => {
       switch (sort) {
@@ -412,8 +485,8 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
           return 0; // grid rows aren't dated at the product level; keep group order
         case "best-deal":
         default: {
-          const ra = a.bestBand ? bandRank[a.bestBand] : 0;
-          const rb = b.bestBand ? bandRank[b.bestBand] : 0;
+          const ra = a.dealBand ? bandRank[a.dealBand] : 0;
+          const rb = b.dealBand ? bandRank[b.dealBand] : 0;
           if (ra !== rb) return rb - ra;
           return a.fromPrice - b.fromPrice;
         }
@@ -422,7 +495,8 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
 
     return {
       products: products.slice(0, Math.max(0, limit)),
-      brands,
+      brands: facets.brands,
+      facets,
       totalListings,
       totalProducts,
     };

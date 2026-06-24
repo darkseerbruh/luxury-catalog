@@ -1,5 +1,6 @@
 import { getListingsForVariant, type Offer } from "@/lib/listings";
 import { affiliateListingUrl } from "@/lib/affiliate";
+import { isConfidentBasis } from "@/lib/listings-core";
 import { DealBadge } from "@/components/DealBadge";
 
 function formatPrice(amount: number, currency: string | null): string {
@@ -24,6 +25,8 @@ function basis(offer: Offer, sizeLabel: string | null): string {
   const r = offer.rating;
   if (!r) return "";
   const fv = r.fairValue;
+  // Realized sold prices are the truth; asking listings are aspirational. Say which.
+  const kind = fv.realized ? "sold prices" : "listings";
   if (fv.variantLevel) {
     return `vs all ${fv.compCount} resale records for this bag (limited spec data)`;
   }
@@ -36,8 +39,8 @@ function basis(offer: Offer, sizeLabel: string | null): string {
     .join(" ");
   const noun = `${desc}${size}`.trim() || "comparable";
   return fv.broadened
-    ? `vs ${fv.compCount} ${noun} listings, broadened from this exact spec (limited data)`
-    : `vs ${fv.compCount} ${noun} listings`;
+    ? `vs ${fv.compCount} ${noun} ${kind}, broadened from this exact spec (limited data)`
+    : `vs ${fv.compCount} ${noun} ${kind}`;
 }
 
 function specChips(offer: Offer): string[] {
@@ -99,7 +102,7 @@ export default async function ListingsForSale({ variantId }: { variantId: number
                   <p className="font-serif text-lg text-foreground">
                     {formatPrice(offer.price, offer.currency)}
                   </p>
-                  {offer.rating && (
+                  {offer.rating && isConfidentBasis(offer.rating.fairValue) && (
                     <DealBadge
                       band={offer.rating.band}
                       pctUnder={offer.rating.pctUnder}
