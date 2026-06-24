@@ -96,10 +96,12 @@ npx tsx supabase/ingest/normalize-discovered.ts --write && npx tsx supabase/inge
 style/category facets), and page-HTML fetches **403 after ~60–70 fetches** (≈4 brands) → ~10-min
 cooldown. So: sweep ~4 brands, cool down, resume.
 
-**Brand progress** (✅ = ~1,830 listings each → discovered_listing; TRR portion now 9,451):
-✅ Chanel ✅ Louis Vuitton ✅ Hermès ✅ Gucci ✅ Dior — *(rate-limit cooldown ~15min/4 brands)* —
-⬜ Saint Laurent ⬜ Celine ⬜ Bottega Veneta ⬜ Loewe ⬜ Fendi ⬜ Prada ⬜ Coach
-⬜ Burberry ⬜ Kate Spade ⬜ (then long-tail brands the keyword search surfaces).
+**Brand progress** (✅ = ~1,700–1,900 listings each → discovered_listing; TRR portion ~11,100):
+✅ Chanel ✅ Louis Vuitton ✅ Hermès ✅ Gucci ✅ Dior ✅ Saint Laurent —
+*(rate limit TIGHTENED to ~1 brand/15min after repeated hits)* —
+⬜ Celine ⬜ Bottega Veneta ⬜ Loewe ⬜ Fendi ⬜ Prada ⬜ Coach ⬜ Burberry ⬜ Kate Spade
+⬜ (then long-tail brands the keyword search surfaces). The 6 biggest/highest-demand brands are done;
+the remaining 8 are long-tail — better finished via the affiliate feed than a multi-hour cooldown grind.
 **Gotchas (2026-06-24):** keep JS calls to ONE brand (2 blow the 45s CDP eval limit); `rm ~/Downloads/trr-*.json`
 between batches (Chrome suffixes re-downloads `(1)`); cooldown ran >10min — wait ~15min between batches.
 
