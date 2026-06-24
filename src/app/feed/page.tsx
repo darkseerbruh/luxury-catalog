@@ -31,7 +31,7 @@ export default async function FeedPage() {
             Follow a closet and what they save, review and write shows up here.
           </p>
           <Link
-            href="/closets"
+            href="/coveted-closets"
             className="mt-5 inline-block rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
           >
             Browse coveted closets

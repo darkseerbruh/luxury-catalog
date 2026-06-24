@@ -111,7 +111,7 @@ export default async function ProfilePage() {
           Year in Bags
         </Link>
         <Link
-          href="/closets"
+          href="/coveted-closets"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >
           Leaderboards

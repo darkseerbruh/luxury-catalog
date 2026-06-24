@@ -57,6 +57,18 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // `/closets` was renamed to `/coveted-closets` so it can't be mistaken
+      // for `/closet` (your own closet, one letter apart). Keep old links,
+      // bookmarks, and indexed URLs working.
+      {
+        source: "/closets",
+        destination: "/coveted-closets",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
