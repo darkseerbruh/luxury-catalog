@@ -235,3 +235,14 @@ export function bestBand(bands: DealBand[]): DealBand | null {
   if (bands.length === 0) return null;
   return bands.reduce((best, b) => (BAND_RANK[b] > BAND_RANK[best] ? b : best), bands[0]);
 }
+
+/**
+ * Whether a fair value is trustworthy enough to SHOW a deal verdict on. "Market value"
+ * is only honest when it's a like-for-like comparison: matched on the two biggest price
+ * drivers (leather + color). A blended variant-level fallback makes the cheapest colorway
+ * look like a steal against pricier ones, so we withhold the verdict there (show the price,
+ * not a green badge). This is what stops "every listing is a great deal".
+ */
+export function isConfidentBasis(fv: FairValue): boolean {
+  return !fv.variantLevel && fv.dimsUsed.includes("material") && fv.dimsUsed.includes("color");
+}

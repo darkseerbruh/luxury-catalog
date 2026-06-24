@@ -21,6 +21,7 @@ import { getSupabase } from "./supabase";
 import { PLATFORMS } from "./platforms";
 import {
   rateListing,
+  isConfidentBasis,
   bestBand,
   type DealRating,
   type DealBand,
@@ -70,7 +71,9 @@ export interface ShopProduct {
   sellerCount: number;
   fromPrice: number;
   currency: string | null;
-  bestBand: DealBand | null;
+  /** Deal verdict for the "from" price, only when its market value is a like-for-like
+   *  (leather + color) basis; null when we can't honestly assert one. */
+  dealBand: DealBand | null;
 }
 
 export type ShopSort = "best-deal" | "price-asc" | "price-desc" | "newest";
@@ -425,11 +428,18 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       totalListings += matching.length;
 
       const cheapest = matching.reduce((lo, c) => (c.price < lo.price ? c : lo), matching[0]);
-      const bands = matching
-        .map((r) => rateListing(r.price, r.spec, g.comps)?.band)
-        .filter((b): b is DealBand => b != null);
       const sellers = new Set(matching.map((r) => platformLabel(r.platform)));
       const colors = new Set(matching.map((r) => r.spec.colorway?.toLowerCase()).filter(Boolean));
+
+      // Rate EACH listing against its OWN spec's market value, and keep only verdicts on a
+      // like-for-like basis (leather + color) — a blended fallback would falsely call a
+      // cheap colorway a steal. The thumbnail then shows the best deal among the items
+      // behind it: if any one item is genuinely a great deal for its spec, badge the tile.
+      const confidentBands = matching
+        .map((r) => rateListing(r.price, r.spec, g.comps))
+        .filter((rt): rt is DealRating => rt != null && isConfidentBasis(rt.fairValue))
+        .map((rt) => rt.band);
+      const dealBand = bestBand(confidentBands);
 
       products.push({
         key: g.key,
@@ -442,7 +452,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
         sellerCount: sellers.size,
         fromPrice: Math.round(cheapest.price),
         currency: cheapest.currency,
-        bestBand: bestBand(bands),
+        dealBand,
       });
     }
 
@@ -460,7 +470,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
     if (filters.brand) products = products.filter((p) => p.brandName === filters.brand);
     if (filters.maxPrice != null) products = products.filter((p) => p.fromPrice <= filters.maxPrice!);
     if (filters.dealsOnly)
-      products = products.filter((p) => p.bestBand === "great" || p.bestBand === "good");
+      products = products.filter((p) => p.dealBand === "great" || p.dealBand === "good");
 
     const totalProducts = products.length;
 
@@ -475,8 +485,8 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
           return 0; // grid rows aren't dated at the product level; keep group order
         case "best-deal":
         default: {
-          const ra = a.bestBand ? bandRank[a.bestBand] : 0;
-          const rb = b.bestBand ? bandRank[b.bestBand] : 0;
+          const ra = a.dealBand ? bandRank[a.dealBand] : 0;
+          const rb = b.dealBand ? bandRank[b.dealBand] : 0;
           if (ra !== rb) return rb - ra;
           return a.fromPrice - b.fromPrice;
         }

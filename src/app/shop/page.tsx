@@ -102,9 +102,9 @@ export default async function ShopPage({
             {result.products.map((p) => {
               const imageUrl = images[p.variantId] ?? null;
               const pulse =
-                p.bestBand === "great"
+                p.dealBand === "great"
                   ? "Great deal in stock"
-                  : p.bestBand === "good"
+                  : p.dealBand === "good"
                     ? "Good deal in stock"
                     : null;
               return (
