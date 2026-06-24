@@ -194,3 +194,10 @@ affiliate links (no per-link work). It's inert until the account is approved. Pl
 Next.js app = root layout (see the modified Next.js docs in `node_modules/next/dist/docs/` re: the
 `Script` component before writing it). AMP/WordPress/Squarespace install guides exist but N/A — we're
 a custom Next.js site, so the JS snippet route applies.
+
+**TODO — privacy policy + cookie consent (dev task, required by CJ §2(e)/§6, also good practice for
+Skimlinks/Awin tracking):** `luxurycatalog.com` must conspicuously post a privacy policy that
+discloses third-party affiliate tracking cookies (CJ, Skimlinks, etc.) and provide a cookie-consent
+mechanism (GDPR/ePrivacy for any EU visitors; US state-privacy disclosure). Needed before running
+CJ links in production. Scope: privacy-policy page + consent banner gating non-essential/tracking
+cookies. Not yet built.
