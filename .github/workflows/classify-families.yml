@@ -8,9 +8,10 @@ name: Classify new color/material families
 # the next deploy (the commit to main triggers it).
 #
 # REQUIRED repo secrets (Settings -> Secrets and variables -> Actions):
-#   • NEXT_PUBLIC_SUPABASE_URL     (already used by the market-refresh job)
-#   • SUPABASE_SERVICE_ROLE_KEY    (already used by the market-refresh job)
-#   • ANTHROPIC_API_KEY            (add once — the key that powers the catalog's AI features)
+#   • SUPABASE_SERVICE_ROLE_KEY    (Supabase -> Project Settings -> API -> service_role key)
+#   • ANTHROPIC_API_KEY            (the key that powers the catalog's AI features)
+# The Supabase URL is public (not a secret) so it's set inline below; override it with a
+# NEXT_PUBLIC_SUPABASE_URL secret if the project ref ever changes.
 
 on:
   workflow_dispatch:
@@ -35,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       # Scheduled runs always write; manual runs honour the dry-run toggle.
