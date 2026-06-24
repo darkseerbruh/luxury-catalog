@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chanel "flap" — categorization teaching</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; padding: 24px; background: #faf9f6; color: #1a1a1a; }
+  h1 { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
+  p.sub { color: #666; margin: 0 0 20px; max-width: 760px; line-height: 1.5; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: #fff; border: 1px solid #e6e3da; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .card img { width: 100%; height: 240px; object-fit: contain; background: #f3f1ea; }
+  .body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .title { font-size: 13px; line-height: 1.35; }
+  .meta { font-size: 12px; color: #777; }
+  .guess { font-size: 12px; }
+  .guess b { font-weight: 500; }
+  label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
+  select, input { width: 100%; font-size: 13px; padding: 6px; border: 1px solid #d8d5cc; border-radius: 6px; background: #fff; box-sizing: border-box; }
+  a { color: #8a6d3b; font-size: 12px; text-decoration: none; }
+  .bar { position: sticky; top: 0; background: #faf9f6; padding: 10px 0; margin-bottom: 12px; z-index: 5; display: flex; gap: 12px; align-items: center; }
+  button { font-size: 14px; padding: 9px 16px; border-radius: 8px; border: 1px solid #c9a96a; background: #c9a96a; color: #1a1a1a; cursor: pointer; font-weight: 500; }
+  #out { width: 100%; height: 140px; margin-top: 12px; font-family: ui-monospace, monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Chanel "flap" — teach me the categories</h1>
+<p class="sub">Every bag below has "flap" in its marketplace title, but they're different things. For each, set what it actually is (style + item type). Where I guessed wrong, your correction teaches the classifier. Then click "Copy my decisions" and paste the result back into chat.</p>
+<div class="bar">
+  <button onclick="copyDecisions()">Copy my decisions</button>
+  <span class="meta" id="status"></span>
+</div>
+<div class="grid" id="grid"></div>
+<textarea id="out" placeholder="Your decisions appear here after you click Copy."></textarea>
+<script>
+const STYLES = ["Classic Flap","Boy","Chanel 19","2.55 Reissue","Gabrielle","Coco Handle","Wallet on Chain","Trendy CC","Camera Bag","Other seasonal/novelty flap","Kelly (Chanel seasonal)","Not Chanel / wrong","Other (note it)"];
+const TYPES = ["Shoulder/flap bag","Top-handle bag","Belt bag / waist","Clutch / minaudière","WOC (wallet on chain)","Card holder / SLG","Wallet","Vanity / cosmetic case","Backpack","Tote","Other"];
+const ITEMS = [
+{"title":"Caviar Quilted Boy Flap Waist Belt Bag Black","my_guess":"(verbose title)","price":2030,"color":"Black","material":"Caviar Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/93809bcfcf7ff76f42d17d9ba78c7d07.jpg?v=1772122995","url":"https://www.fashionphile.com/products/chanel-caviar-quilted-boy-flap-waist-belt-bag-black-1823547"},
+{"title":"Calfskin Quilted North South Boy Flap Light Green","my_guess":"Boy","price":2275,"color":"Green","material":"Calfskin Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/7f6f2cd905b44f881c3df5b29e8e674e.jpg?v=1779394339","url":"https://www.fashionphile.com/products/chanel-calfskin-quilted-north-south-boy-flap-light-green-1874957"},
+{"title":"Glazed Calfskin Quilted Soft Boy Flap Red","my_guess":"Boy","price":1420,"color":"Red","material":"Calfskin Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/d8cfb9ae307e8393c2374fc5e3f05a50.jpg?v=1779444278","url":"https://www.fashionphile.com/products/chanel-glazed-calfskin-quilted-soft-boy-flap-red-1884135"},
+{"title":"Braided Raffia Nano Kelly Flap Bag Dark Beige","my_guess":"(verbose title)","price":9595,"color":"Beige","material":"Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/ee8526b3464baee91f0b12493275a96a.jpg?v=1781879112","url":"https://www.fashionphile.com/products/chanel-braided-raffia-nano-kelly-flap-bag-dark-beige-1909260"},
+{"title":"Braided Raffia Nano Kelly Flap Bag Dark Beige","my_guess":"(verbose title)","price":8995,"color":"Beige","material":"Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/14e833a9a812ddf3e48f24962b72d32b.jpg?v=1782159158","url":"https://www.fashionphile.com/products/chanel-braided-raffia-nano-kelly-flap-bag-dark-beige-1913978"},
+{"title":"Calfskin Bubble Quilt Accordion Flap Red","my_guess":"(verbose title)","price":1995,"color":"Red","material":"Calfskin Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/366d56de01c1d92c0fc4834aaa8c37f7.jpg?v=1781705613","url":"https://www.fashionphile.com/products/chanel-calfskin-bubble-quilt-accordion-flap-red-1902395"},
+{"title":"Calfskin Crocodile Embossed Turn Around Mini Flap Burgundy","my_guess":"(verbose title)","price":8095,"color":"Burgundy","material":"Crocodile","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/9e976622d6b4d028cf074830c22d9f14.jpg?v=1781344880","url":"https://www.fashionphile.com/products/chanel-calfskin-crocodile-embossed-turn-around-mini-flap-burgundy-1907852"},
+{"title":"Calfskin Crocodile Embossed Turn Around Mini Flap Dark Grey","my_guess":"(verbose title)","price":8495,"color":"Grey","material":"Crocodile","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/d5d6772ae776ccfa737de9b24c8cc719.jpg?v=1781972879","url":"https://www.fashionphile.com/products/chanel-calfskin-crocodile-embossed-turn-around-mini-flap-dark-grey-1912113"},
+{"title":"Calfskin Crocodile Embossed Turn Around Mini Flap Dark Grey","my_guess":"(verbose title)","price":8995,"color":"Grey","material":"Crocodile","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/e7c9054ead533111eceb9c91faf8aa9f.jpg?v=1781973976","url":"https://www.fashionphile.com/products/chanel-calfskin-crocodile-embossed-turn-around-mini-flap-dark-grey-1912858"},
+{"title":"Calfskin Crocodile Embossed Turn Around Mini Flap Emerald","my_guess":"(verbose title)","price":8995,"color":"Green","material":"Crocodile","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/343b01ce0ab4ecedd3694e3c96bc18ed.jpg?v=1781884772","url":"https://www.fashionphile.com/products/chanel-calfskin-crocodile-embossed-turn-around-mini-flap-emerald-1910768"},
+{"title":"Calfskin Crocodile Embossed Turn Around Mini Flap Emerald","my_guess":"(verbose title)","price":8995,"color":"Red","material":"Crocodile","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/7dd8b8b2e41d7474a662fe8519e23051.jpg?v=1781973977","url":"https://www.fashionphile.com/products/chanel-calfskin-crocodile-embossed-turn-around-mini-flap-emerald-1912859"},
+{"title":"Calfskin Quilted Belt Chain Flap Black","my_guess":"(verbose title)","price":5720,"color":"Black","material":"Calfskin Leather","image":"https://cdn.shopify.com/s/files/1/0894/3186/7695/files/80a7dfd9d97164e43508d93e849d349e.jpg?v=1773482822","url":"https://www.fashionphile.com/products/chanel-calfskin-quilted-belt-chain-flap-black-1831219"}
+];
+const grid = document.getElementById('grid');
+ITEMS.forEach((it, i) => {
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML =
+    '<img loading="lazy" src="'+ (it.image||'') +'" alt="">'+
+    '<div class="body">'+
+      '<div class="title">'+ it.title +'</div>'+
+      '<div class="meta">$'+ (it.price||'?') +' · '+ (it.color||'') +' · '+ (it.material||'') +'</div>'+
+      '<div class="guess">my guess: <b>'+ (it.my_guess||'—') +'</b></div>'+
+      '<div><label>Correct style</label><select data-i="'+i+'" data-k="style">'+ STYLES.map(s=>'<option>'+s+'</option>').join('') +'</select></div>'+
+      '<div><label>Item type</label><select data-i="'+i+'" data-k="type">'+ TYPES.map(s=>'<option>'+s+'</option>').join('') +'</select></div>'+
+      '<div><label>Note (optional)</label><input data-i="'+i+'" data-k="note" placeholder="e.g. this is the seasonal one"></div>'+
+      '<a href="'+ it.url +'" target="_blank">view listing ↗</a>'+
+    '</div>';
+  grid.appendChild(card);
+});
+function copyDecisions(){
+  const dec = ITEMS.map((it,i)=>({ title: it.title, url: it.url,
+    style: document.querySelector('[data-i="'+i+'"][data-k="style"]').value,
+    type: document.querySelector('[data-i="'+i+'"][data-k="type"]').value,
+    note: document.querySelector('[data-i="'+i+'"][data-k="note"]').value }));
+  const text = "CHANEL FLAP DECISIONS:\n" + dec.map(d=>`- ${d.title} => style:${d.style} | type:${d.type}${d.note?' | note:'+d.note:''}`).join("\n");
+  document.getElementById('out').value = text;
+  navigator.clipboard.writeText(text).then(()=>{ document.getElementById('status').textContent = "Copied — paste into chat."; },
+    ()=>{ document.getElementById('status').textContent = "Select the text box and copy manually."; });
+}
+</script>
+</body>
+</html>
