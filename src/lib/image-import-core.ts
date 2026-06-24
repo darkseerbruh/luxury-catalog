@@ -5,9 +5,12 @@
  * No imports, no side effects.
  */
 
-/** TheRealReal/TheLuxuryCloset export "Hermes" without the accent. */
-export function normalizeDesigner(raw: string): string {
-  return raw.trim() === "Hermes" ? "Hermès" : raw.trim();
+/** TheRealReal/TheLuxuryCloset export "Hermes" without the accent. Null-safe: a
+ *  brand-less observation (e.g. an un-guessable catch-all listing) normalises to ""
+ *  so the caller's "no brand" path routes it to discovered_listing, never crashes. */
+export function normalizeDesigner(raw: string | null | undefined): string {
+  const s = (raw ?? "").trim();
+  return s === "Hermes" ? "Hermès" : s;
 }
 
 /** Pull the first http(s) URL out of a Photos cell that may hold several. */
