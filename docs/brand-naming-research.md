@@ -90,8 +90,17 @@ nickname queries to our page. Real per-platform divergence we already see: Class
 is "Cannage Lady Dior" (TRR) vs "Patent Cannage Mini Lady Dior" (FP).
 
 **Status:** reseller aggregation built + run (`npm run aggregate:aliases` → `data/ingest/_raw/reseller-aliases.json`,
-9,507 bag listings → 150 canonical bags). Community seed started. **Next (human-gated migration):** an
-`aliases` table/JSONB on `style` + the bag-page "Also known as" block + JSON-LD `alternateName`.
+9,507 bag listings → 150 canonical bags). Community seed started. Data layer built:
+- **Migration `0031_bag_aliases.sql`** — `bag_alias` table keyed by (brand, canonical_model), 3 source layers. ⬜ APPLY (db-migrate action).
+- **`populate-aliases.ts`** (`npx tsx supabase/ingest/populate-aliases.ts --write`) — merges canonical + reseller + community into `bag_alias`. Run after the migration applies.
+- **`src/lib/aliases.ts`** — read helpers (`getBagAliases`, `toAlternateNames`, `resellerNamesByPlatform`, `communityNicknames`), tested.
+
+### Bag-page integration — HANDOFF to the shop/UI session (you own `bag/[variantId]`)
+1. Resolve the variant to its canonical key: `canonicalBrand(brand)` + `canonicalModel(brand, styleName)` from `src/lib/ingest/model-normalize.ts`.
+2. `const aliases = await getBagAliases(supabase, brand, model)` (src/lib/aliases.ts).
+3. Render an **"Also known as"** block: `communityNicknames(aliases)` ("collectors call it …") + `resellerNamesByPlatform(aliases)` ("on TheRealReal: …, on Fashionphile: …").
+4. Add `toAlternateNames(aliases, model)` to the Product **JSON-LD `alternateName`** array — this is the GEO payoff (answer engines resolve nickname queries to the page).
+Migration-number coordination: I took **0031**; next free is 0032.
 
 ## Sources
 - Chanel numbering & style codes: [Tatler Asia](https://www.tatlerasia.com/style/fashion/chanel-iconic-numbers-story-en), [Fashionphile flap guide](https://blog.fashionphile.com/the-ultimate-chanel-flap-guide/), [Coco Approved size guide](https://cocoapproved.com/blogs/style/19-22-31-chanel-handbag-size-guide)
