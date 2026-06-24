@@ -18,6 +18,7 @@
     "ingest:fashionphile:raw": "tsx supabase/ingest/sources/fashionphile.ts --raw",
     "ingest:vestiaire": "tsx supabase/ingest/sources/vestiaire.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
+    "normalize:discovered": "tsx supabase/ingest/normalize-discovered.ts",
     "promote:discovered": "tsx supabase/ingest/promote-discovered.ts",
     "summary:refresh": "tsx supabase/ingest/refresh-summary.ts",
     "enrich:conditions": "tsx supabase/ingest/enrich-conditions.ts"

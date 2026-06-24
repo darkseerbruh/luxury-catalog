@@ -194,12 +194,22 @@ async function main() {
       throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local");
     }
     const supabase = createClient(url, serviceKey, { auth: { persistSession: false } });
-    const { data, error } = await supabase
-      .from("discovered_listing")
-      .select("discovered_id, brand_guess, style_guess, size_label, sale_price, currency, matched_brand_id, matched_style_id, unresolved_reason, promoted_variant_id")
-      .is("promoted_variant_id", null);
-    if (error) throw error;
-    return (data ?? []) as DiscoveredRow[];
+    // Paginate: a plain select caps at 1000 rows, which would silently cluster on a
+    // fraction of the table. Page through with .range() until exhausted.
+    const out: DiscoveredRow[] = [];
+    const pageSize = 1000;
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await supabase
+        .from("discovered_listing")
+        .select("discovered_id, brand_guess, style_guess, size_label, sale_price, currency, matched_brand_id, matched_style_id, unresolved_reason, promoted_variant_id")
+        .is("promoted_variant_id", null)
+        .range(from, from + pageSize - 1);
+      if (error) throw error;
+      if (!data || data.length === 0) break;
+      out.push(...(data as DiscoveredRow[]));
+      if (data.length < pageSize) break;
+    }
+    return out;
   }
 
   console.log(`promote-discovered: threshold ≥ ${flags.minCount}${flags.write ? " (WRITE)" : " (DRY RUN)"}`);

@@ -71,10 +71,11 @@ async function main() {
   const args = process.argv.slice(2);
   const slug = args.find((a) => !a.startsWith("--")) ?? "handbags";
   const maxPages = Number((args.find((a) => a.startsWith("--max-pages=")) ?? "--max-pages=400").split("=")[1]);
+  const startPage = Number((args.find((a) => a.startsWith("--start-page=")) ?? "--start-page=1").split("=")[1]);
 
-  console.log(`Fashionphile master crawl: /collections/${slug}/ (up to ${maxPages} pages)`);
+  console.log(`Fashionphile master crawl: /collections/${slug}/ (pages ${startPage}–${maxPages})`);
   const fresh: RawDumpEntry[] = [];
-  for (let page = 1; page <= maxPages; page++) {
+  for (let page = startPage; page <= maxPages; page++) {
     const products = await fetchPage(slug, page);
     if (products === null) break; // unrecoverable error
     if (products.length === 0) break; // true end

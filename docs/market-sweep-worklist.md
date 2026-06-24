@@ -35,13 +35,24 @@ npm run summary:refresh
 discovered_listing. The `handbags` crawl stopped at page 61 on an HTTP 500 (not retried) —
 **⬜ re-run to grab any pages past 60**, and ⬜ crawl `all` for non-handbag categories if wanted.
 
-## Phase 2 — Promote discovered → curated ⚠️ GATED (do not --write yet)
-`npm run promote:discovered` (dry-run) currently produces **junk clusters**: the catch-all
-`style_guess` is the full FP title (colour + material + accessory-type baked in), so clusters
-are tiny and would create garbage styles ("Calfskin Quilted CC Uniform Flap Belt Black").
-**Unlock:** a model-name normalizer that extracts the canonical style (Dionysus, Constance,
-Boulogne…) from a verbose title, dropping colour/material/size/accessory tokens. Until then
-the price DATA is safely captured in `discovered_listing`; only promotion is blocked.
+## Phase 2 — Normalize + promote discovered → curated ✅ NORMALIZER BUILT (promotion owner-gated)
+The model-name normalizer is built and run:
+```
+npm run normalize:discovered            # dry-run: conversion rate + clean clusters
+npm run normalize:discovered -- --write # rewrite style_guess to canonical model
+npm run promote:discovered              # review clean clusters (≥5)
+```
+- `src/lib/ingest/model-normalize.ts` — `canonicalModel(brand, rawName)`: curated per-brand
+  model dictionary + SLG/accessory exclusion (5 unit tests). Honors "never invent" → null when
+  unknown. **Extend MODELS as new recurring models surface.**
+- `normalize-discovered.ts` rewrote `style_guess` → canonical model on **~2,640 rows (23%)**,
+  producing **120 clean promotable clusters** (e.g. GG Marmont Mini ×122, Classic Flap Jumbo ×120,
+  Fendi Baguette ×82, Multi Pochette ×56). `raw_name` keeps the original title.
+- **Fixed:** `promote-discovered` `loadRows()` was capped at 1000 rows (Supabase default) — now paginates.
+- ⬜ **Promotion (`promote:discovered --write`) is still the intentional owner-gated stub** — it would
+  mass-create catalog styles/variants, and the catalog `style` table already has verbose junk rows.
+  Next: (a) wire find-or-create + re-point, run it only for clusters mapping to a CLEAN existing
+  style first; (b) raise dictionary coverage past 23% so more of the 11.5k discovered listings cluster.
 
 ## Phase 3 — TheRealReal (browser, rate-limited) ⬜ IN PROGRESS
 Browser capture is **validated** (extracted 120 Chanel listings via same-origin JSON-LD).
