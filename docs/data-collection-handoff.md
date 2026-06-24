@@ -181,7 +181,9 @@ partners but it does not carry the resale players.
 | **Fashionphile** | **Impact** (legacy: ShareASale) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
-**Accounts needed:** The RealReal (direct, prioritize Real Partners), CJ (Rebag + Vestiaire),
-Impact (Fashionphile), **Skimlinks** (publisher signup `signup.skimlinks.com` — catch-all over
-48,500 merchants / 50+ networks, auto-affiliates outbound links; fills CJ-signup gaps that bit us
-before). Direct-where-it-works + Skimlinks-to-fill-gaps matches the locked monetization strategy.
+**Application status (2026-06-24):** ✅ **Applied — The RealReal** (direct) and **Fashionphile**
+(Impact) — both pending approval. ⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire),
+**Skimlinks** publisher signup (`signup.skimlinks.com` — catch-all over 48,500 merchants / 50+
+networks, auto-affiliates outbound links; fills CJ-signup gaps that bit us before). Once approved,
+swap raw outbound links for tracking links on bag/deal pages. Direct-where-it-works +
+Skimlinks-to-fill-gaps matches the locked monetization strategy.
