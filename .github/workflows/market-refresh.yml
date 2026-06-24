@@ -8,10 +8,10 @@ name: Refresh market listings (Fashionphile)
 # Fashionphile is the only source crawlable headless in CI today; TheRealReal /
 # Vestiaire still need a browser session, so they're reconciled manually for now.
 #
-# REQUIRED repo secrets (Settings -> Secrets and variables -> Actions) — the same
-# two the rest of the pipeline uses:
-#   • NEXT_PUBLIC_SUPABASE_URL
-#   • SUPABASE_SERVICE_ROLE_KEY
+# SECRETS: needs only SUPABASE_SERVICE_ROLE_KEY (already set on this repo). The
+# Supabase URL is public (NEXT_PUBLIC_*), so it's inlined as a fallback below — no
+# secret required; override with a NEXT_PUBLIC_SUPABASE_URL secret if the project
+# ref ever changes. (Mirrors classify-families.yml.)
 
 on:
   schedule:
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       COLLECTION: ${{ github.event.inputs.collection || 'handbags' }}
       # Scheduled runs always write; manual runs honour the dry-run toggle.
