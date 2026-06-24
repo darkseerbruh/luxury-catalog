@@ -172,7 +172,7 @@ export default async function PersonaRouter() {
 
         {/* Tile 5 — Best deals right now. Previews the real #1 deal when we have
             a listing under median; otherwise the illustrative chart. */}
-        <Link href="/deals" className={TILE}>
+        <Link href="/shop?deals=1&sort=best-deal" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Best deals right now</h3>
           <p className="mt-1 text-sm text-muted">Listings priced under the resale median.</p>
           {topDeal ? (

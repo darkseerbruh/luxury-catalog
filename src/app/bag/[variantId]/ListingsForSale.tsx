@@ -24,6 +24,8 @@ function basis(offer: Offer, sizeLabel: string | null): string {
   const r = offer.rating;
   if (!r) return "";
   const fv = r.fairValue;
+  // Realized sold prices are the truth; asking listings are aspirational. Say which.
+  const kind = fv.realized ? "sold prices" : "listings";
   if (fv.variantLevel) {
     return `vs all ${fv.compCount} resale records for this bag (limited spec data)`;
   }
@@ -36,8 +38,8 @@ function basis(offer: Offer, sizeLabel: string | null): string {
     .join(" ");
   const noun = `${desc}${size}`.trim() || "comparable";
   return fv.broadened
-    ? `vs ${fv.compCount} ${noun} listings, broadened from this exact spec (limited data)`
-    : `vs ${fv.compCount} ${noun} listings`;
+    ? `vs ${fv.compCount} ${noun} ${kind}, broadened from this exact spec (limited data)`
+    : `vs ${fv.compCount} ${noun} ${kind}`;
 }
 
 function specChips(offer: Offer): string[] {

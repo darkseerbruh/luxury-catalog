@@ -31,9 +31,27 @@ const VALID_SORTS: ShopSort[] = ["best-deal", "price-asc", "price-desc", "newest
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ brand?: string; sort?: string; deals?: string; max?: string }>;
+  searchParams: Promise<{
+    brand?: string;
+    sort?: string;
+    deals?: string;
+    max?: string;
+    color?: string;
+    material?: string;
+    hardware?: string;
+    condition?: string;
+  }>;
 }) {
-  const { brand = "", sort = "best-deal", deals = "", max = "" } = await searchParams;
+  const {
+    brand = "",
+    sort = "best-deal",
+    deals = "",
+    max = "",
+    color = "",
+    material = "",
+    hardware = "",
+    condition = "",
+  } = await searchParams;
   const sortValue = (VALID_SORTS as string[]).includes(sort) ? (sort as ShopSort) : "best-deal";
   const maxPrice = max && Number.isFinite(Number(max)) ? Number(max) : undefined;
 
@@ -42,6 +60,10 @@ export default async function ShopPage({
     sort: sortValue,
     dealsOnly: deals === "1",
     maxPrice,
+    color: color || undefined,
+    material: material || undefined,
+    hardware: hardware || undefined,
+    condition: condition || undefined,
   });
 
   const images = await getVariantImages(result.products.map((p) => p.variantId));
@@ -61,8 +83,8 @@ export default async function ShopPage({
       </header>
 
       <ShopControls
-        brands={result.brands}
-        current={{ brand, sort: sortValue, deals: deals === "1", max }}
+        facets={result.facets}
+        current={{ brand, sort: sortValue, deals: deals === "1", max, color, material, hardware, condition }}
       />
 
       {result.products.length === 0 ? (
