@@ -174,5 +174,10 @@ constraint — the value-module condition ladder still owns within-condition gra
   names categorize themselves: run it, commit the JSON, deploy. Honest by design — fixed
   family vocabulary, "Other" allowed, so it sorts rather than invents. Dry-run by default;
   `--write` to persist. Needs `.env.local` (Supabase read + `ANTHROPIC_API_KEY`).
+  **No CLI needed:** the GitHub Action **"Classify new color/material families"**
+  (`.github/workflows/classify-families.yml`) runs it in the cloud (Actions tab → Run
+  workflow), commits the updated JSON back to `main`, and the names go live on the next
+  deploy. Also runs monthly. Requires the `ANTHROPIC_API_KEY` repo secret (Supabase secrets
+  already exist for the market-refresh job).
 - **Price is now an editable min/max field** (not preset dropdown caps); commits on
   Enter/blur.
