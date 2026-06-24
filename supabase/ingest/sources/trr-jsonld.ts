@@ -1306,7 +1306,7 @@ export function recordToObservation(
   target: TrrJsonLdTarget,
   observedOn: string
 ): PriceObservation | null {
-  if (!target.namePredicate(rec.name)) return null;
+  if (typeof rec.name !== "string" || !target.namePredicate(rec.name)) return null;
   if (typeof rec.price !== "number" || rec.price < target.minPrice || rec.price > target.maxPrice) return null;
 
   const spec = parseTrrDescription(normalizeDesc(rec.desc ?? ""));

@@ -10,7 +10,14 @@
 - **Never invent specs** — unverified colour/leather/hardware/year → `null`.
 
 
-**Progress: 6/165 size variants loaded, 41/46 capture groups still to do.**
+**Progress (2026-06-24): the full catalog is captured AND loaded.** ~225 distinct variants
+carry TheRealReal resale rows in prod (4,461 rows on the 2026-06-23 snapshot + 116 Chanel
+hero on 06-22). All 165 size-variant targets adapt+load cleanly from the raw files already in
+`data/ingest/_raw/` — **no fresh browser capture is needed to (re)load**; just re-run the adapt
+loop over the existing raw files. Only run a NEW Chrome capture when you want a *fresh* snapshot
+(new listings / price movement) — and if you do, load it on its own date so it doesn't duplicate
+an existing day (the dedup index keys on `observed_on`, so re-loading the same raw file under a new
+date creates near-duplicate rows that skew the per-variant median/range).
 
 ## The loop (same 5 steps for every group)
 ```
