@@ -66,10 +66,11 @@ const WRAP_TEMPLATE = process.env.NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE;
 
 // eBay Partner Network needs its own treatment: monetized eBay links carry a fixed
 // set of tracking params plus the campaign id, not a single affiliate code. The
-// campaign id is NOT a secret (it rides openly in every affiliate URL), but we keep
-// it in a public env var so monetization stays additive/configurable — set
-// NEXT_PUBLIC_EBAY_CAMPAIGN_ID to flip eBay links on; unset = plain, never-broken links.
-const EBAY_CAMPAIGN_ID = process.env.NEXT_PUBLIC_EBAY_CAMPAIGN_ID;
+// campaign id is NOT a secret (it rides openly in every affiliate URL), so it lives
+// in code and works out of the box on deploy — no env config required. An optional
+// NEXT_PUBLIC_EBAY_CAMPAIGN_ID env var overrides it (e.g. to swap campaigns) without
+// a code change.
+const EBAY_CAMPAIGN_ID = process.env.NEXT_PUBLIC_EBAY_CAMPAIGN_ID || "5339158071";
 /** EPN rotation id for the US marketplace (network 711). */
 const EBAY_US_ROTATION = "711-53200-19255-0";
 
