@@ -182,10 +182,13 @@ partners but it does not carry the resale players.
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
 **Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
-**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days, hub access gated on approval).
-⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire). Once approved, swap raw outbound
-links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches
-the locked monetization strategy.
+**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days). ✅ **CJ publisher account
+ACTIVE** (account ID `7997608`, property = luxurycatalog.com, primary model = Product
+Comparison/Discovery). ⏳ **Next inside CJ:** apply to the **Rebag** and **Vestiaire Collective**
+advertiser programs individually (Partners → Advertisers → search → Join; each Join accepts that
+advertiser's click-through program terms). Once programs approve, swap raw outbound links for
+tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches the locked
+monetization strategy.
 
 **Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
 before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
