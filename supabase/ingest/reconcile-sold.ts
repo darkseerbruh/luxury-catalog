@@ -89,7 +89,12 @@ function readLiveRefs(snapshotPath: string): Set<string> {
 
 type AvailRow = { platform: string | null; listing_ref: string | null };
 
-/** Page through every currently-available listed row for the target platform. */
+// A listed row counts as "currently shown" unless we've already retired it: status
+// 'available' OR null (legacy rows loaded before 0030 — the existing backlog we want
+// to reconcile too). Only 'sold' is excluded.
+const NOT_RETIRED = "listing_status.is.null,listing_status.eq.available";
+
+/** Page through every still-shown listed row for the target platform. */
 async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
   const all: AvailRow[] = [];
   const PAGE = 1000;
@@ -98,7 +103,7 @@ async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
       .from("price_history")
       .select("platform, listing_ref")
       .eq("price_type", "listed")
-      .eq("listing_status", "available")
+      .or(NOT_RETIRED)
       .ilike("platform", `%${platform}%`)
       .range(from, from + PAGE - 1);
     if (error) throw error;
@@ -119,7 +124,8 @@ async function retire(platform: string, refs: string[], delistedOn: string): Pro
       .from("price_history")
       .update({ listing_status: "sold", delisted_on: delistedOn })
       .eq("platform", platform)
-      .eq("listing_status", "available")
+      .eq("price_type", "listed")
+      .or(NOT_RETIRED)
       .in("listing_ref", batch)
       .select("price_id");
     if (error) throw error;

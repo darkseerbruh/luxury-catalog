@@ -1,0 +1,73 @@
+name: Classify new color/material families
+
+# One-button taxonomy refresher. The Shop filters group specific names (Étoupe, Togo) under
+# families (Beige, Leather). When new names show up that the keyword rules can't place, this
+# job asks Claude to sort them into the existing families and commits the result into
+# src/lib/data/spec-families.json — which the app reads to power the grouped filters. No
+# laptop or command line needed: run it from the Actions tab, and the new names go live on
+# the next deploy (the commit to main triggers it).
+#
+# REQUIRED repo secrets (Settings -> Secrets and variables -> Actions):
+#   • SUPABASE_SERVICE_ROLE_KEY    (Supabase -> Project Settings -> API -> service_role key)
+#   • ANTHROPIC_API_KEY            (the key that powers the catalog's AI features)
+# The Supabase URL is public (not a secret) so it's set inline below; override it with a
+# NEXT_PUBLIC_SUPABASE_URL secret if the project ref ever changes.
+
+on:
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Apply + commit results? false = dry run (classify + report only, no commit)"
+        required: false
+        default: "true"
+  schedule:
+    # Monthly, 07:00 UTC on the 1st — catch newly-captured names without anyone running it.
+    - cron: "0 7 1 * *"
+
+concurrency:
+  group: classify-families
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Classify unknown color/material names
+        run: |
+          if [ "$WRITE" = "true" ]; then
+            npm run classify:families -- --write
+          else
+            npm run classify:families
+          fi
+
+      - name: Commit any newly-classified families
+        if: ${{ env.WRITE == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- src/lib/data/spec-families.json; then
+            echo "No new classifications — nothing to commit."
+          else
+            git add src/lib/data/spec-families.json
+            git commit -m "chore(shop): auto-classify new color/material families"
+            git push
+          fi

@@ -14,24 +14,9 @@ import { ExperimentExposure } from "@/components/ExperimentExposure";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { getUserProfile } from "@/lib/personalization/user-profile";
 import { evaluatePersonalizationFlag, getBootstrapFlags } from "@/lib/analytics/flags";
+import { FITS, CARRY_METHODS } from "@/lib/browse-taxonomy";
 
 export const dynamic = "force-dynamic";
-
-const FITS: { label: string; slug: string }[] = [
-  { label: "Cell phone", slug: "cell-phone" },
-  { label: "Tablet or book", slug: "tablet" },
-  { label: "Laptop & more", slug: "laptop" },
-];
-
-const CARRY_METHODS: { label: string; slug: string }[] = [
-  { label: "Shoulder", slug: "shoulder" },
-  { label: "Top handle", slug: "top-handle" },
-  { label: "Crossbody", slug: "crossbody" },
-  { label: "Backpack", slug: "backpack" },
-  { label: "Belt bag", slug: "belt-bag" },
-  { label: "Wallets, pouches & clutches", slug: "clutch" },
-  { label: "Rolling luggage", slug: "luggage" },
-];
 
 function formatPrice(amount: number | null, currency: string | null) {
   if (amount == null) return null;
@@ -267,7 +252,7 @@ export default async function Home() {
           {[
             { href: "/quiz", label: "Find your taste" },
             { href: "/identify", label: "Identify a bag" },
-            { href: "/closets", label: "Most coveted closets" },
+            { href: "/coveted-closets", label: "Most coveted closets" },
             { href: "/posts", label: "Expert articles" },
             ...(user
               ? [

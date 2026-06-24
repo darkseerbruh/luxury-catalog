@@ -55,21 +55,34 @@ export default async function RootLayout({
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
-          <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="font-serif text-foreground">The Luxury Catalog</p>
-            <nav className="flex flex-wrap gap-x-5 gap-y-2">
-              <Link href="/" className="hover:text-foreground">Home</Link>
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+            <div className="col-span-2 sm:col-span-1">
+              <p className="font-serif text-foreground">The Luxury Catalog</p>
+              <p className="mt-2 max-w-xs text-muted">
+                Production history, authentication markers, and resale prices for designer handbags.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs uppercase tracking-wide text-muted/70">Shop</p>
+              <Link href="/shop" className="hover:text-foreground">Shop the market</Link>
+              <Link href="/deals" className="hover:text-foreground">Deals</Link>
+              <Link href="/coveted" className="hover:text-foreground">Most coveted bags</Link>
+              <Link href="/browse" className="hover:text-foreground">Browse</Link>
               <Link href="/search" className="hover:text-foreground">Search</Link>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs uppercase tracking-wide text-muted/70">Discover</p>
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
-              <Link href="/closet" className="hover:text-foreground">Closet</Link>
-              <Link href="/closets" className="hover:text-foreground">Coveted closets</Link>
+              <Link href="/quiz" className="hover:text-foreground">Taste quiz</Link>
               <Link href="/posts" className="hover:text-foreground">Articles</Link>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs uppercase tracking-wide text-muted/70">You</p>
+              <Link href="/closet" className="hover:text-foreground">Your closet</Link>
               <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
+              <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
-            </nav>
-            <p className="text-muted">
-              Production history, authentication markers, and resale prices for designer handbags.
-            </p>
+            </div>
           </div>
           <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
             <p className="max-w-xl text-muted/60">
