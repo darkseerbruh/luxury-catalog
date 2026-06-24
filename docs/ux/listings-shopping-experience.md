@@ -166,5 +166,13 @@ constraint — the value-module condition ladder still owns within-condition gra
   under them — so a shopper can browse a family or pick an exact designer color. Filter
   values encode a family as `f:Family` (`FAMILY_PREFIX`). Keyword tables are tunable in the
   taxonomy file (add designer color/leather names as data grows).
+- **Self-classifying unknowns.** `npm run classify:families`
+  (`supabase/ingest/classify-spec-families.ts`) finds color/material names the keyword
+  rules can't place, asks Claude (Haiku) to sort each into one of the existing families (or
+  leave "Other"), and merges the result into a committed overrides file
+  (`src/lib/data/spec-families.json`) that the classifier reads FIRST. So new Hermès/Chanel
+  names categorize themselves: run it, commit the JSON, deploy. Honest by design — fixed
+  family vocabulary, "Other" allowed, so it sorts rather than invents. Dry-run by default;
+  `--write` to persist. Needs `.env.local` (Supabase read + `ANTHROPIC_API_KEY`).
 - **Price is now an editable min/max field** (not preset dropdown caps); commits on
   Enter/blur.

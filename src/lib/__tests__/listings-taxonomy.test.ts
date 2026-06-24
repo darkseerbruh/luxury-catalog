@@ -21,6 +21,12 @@ describe("colorFamily", () => {
     expect(colorFamily("Silver")).toBe("Metallic");
   });
 
+  it("uses learned overrides for names the keyword rules can't place", () => {
+    // "celadon" is in the committed overrides (a pale green) but has no keyword rule.
+    expect(colorFamily("Celadon")).toBe("Green");
+    expect(colorFamily("amethyst")).toBe("Purple");
+  });
+
   it("returns null for unknown / empty", () => {
     expect(colorFamily("Sploot")).toBeNull();
     expect(colorFamily(null)).toBeNull();

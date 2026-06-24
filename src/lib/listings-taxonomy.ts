@@ -47,9 +47,25 @@ const MATERIAL_FAMILIES: [string, string[]][] = [
   ],
 ];
 
-function classify(name: string | null, table: [string, string[]][]): string | null {
+import overrides from "./data/spec-families.json";
+
+/** The controlled vocabulary of families (for the LLM classifier to choose from). */
+export const COLOR_FAMILY_NAMES: string[] = COLOR_FAMILIES.map(([f]) => f);
+export const MATERIAL_FAMILY_NAMES: string[] = MATERIAL_FAMILIES.map(([f]) => f);
+
+const COLOR_OVERRIDES = (overrides.colors ?? {}) as Record<string, string>;
+const MATERIAL_OVERRIDES = (overrides.materials ?? {}) as Record<string, string>;
+
+function classify(
+  name: string | null,
+  table: [string, string[]][],
+  learned: Record<string, string>,
+): string | null {
   if (!name) return null;
-  const n = name.toLowerCase();
+  const n = name.toLowerCase().replace(/\s+/g, " ").trim();
+  if (!n) return null;
+  // Learned overrides (LLM-classified, committed) win over the keyword rules.
+  if (learned[n]) return learned[n];
   for (const [family, keys] of table) {
     if (keys.some((k) => n.includes(k))) return family;
   }
@@ -58,10 +74,10 @@ function classify(name: string | null, table: [string, string[]][]): string | nu
 
 /** The broad color family for a specific colorway (e.g. "Étoupe" → "Beige"), or null. */
 export function colorFamily(name: string | null): string | null {
-  return classify(name, COLOR_FAMILIES);
+  return classify(name, COLOR_FAMILIES, COLOR_OVERRIDES);
 }
 
 /** The broad material family for a specific leather/material (e.g. "Togo" → "Leather"), or null. */
 export function materialFamily(name: string | null): string | null {
-  return classify(name, MATERIAL_FAMILIES);
+  return classify(name, MATERIAL_FAMILIES, MATERIAL_OVERRIDES);
 }
