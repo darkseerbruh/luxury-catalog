@@ -145,6 +145,10 @@ interface PriceRow {
   observedOn: string | null;
   dateRecorded: string | null;
   condition: string | null;
+  /** Stable per-listing id (migration 0024); dedup key across crawl dates. */
+  listingRef: string | null;
+  /** Live-vs-sold state (migration 0030): 'available' | 'sold' | null (legacy). */
+  listingStatus: string | null;
   spec: ItemSpec;
 }
 
@@ -157,6 +161,8 @@ type RawRow = {
   source_url: string | null;
   observed_on: string | null;
   date_recorded: string | null;
+  listing_ref: string | null;
+  listing_status: string | null;
   condition: string | null;
   colorway: string | null;
   material: string | null;
@@ -180,7 +186,7 @@ type RawVariant = {
 };
 
 const SELECT =
-  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, condition, colorway, material, hardware_color, production_year, " +
+  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, " +
   "variant:variant_id(size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), style:style_id(style_id, name, brand:brand_id(name)))";
 
 function one<T>(rel: T | T[] | null | undefined): T | null {
@@ -212,6 +218,8 @@ function mapRow(r: RawRow): PriceRow | null {
     sourceUrl: r.source_url,
     observedOn: r.observed_on,
     dateRecorded: r.date_recorded,
+    listingRef: r.listing_ref ?? null,
+    listingStatus: r.listing_status ?? null,
     condition: r.condition,
     spec: {
       // Prefer the per-listing spec (migration 0022); fall back to the variant's own.
@@ -231,7 +239,30 @@ function isRetail(r: PriceRow): boolean {
 }
 
 function isListed(r: PriceRow): boolean {
-  return r.priceType === "listed";
+  // A live offer = a resale listing still for sale. 'sold' rows have been retired by
+  // reconcile-sold.ts (the source no longer carries them); legacy rows are null = shown.
+  return r.priceType === "listed" && r.listingStatus !== "sold";
+}
+
+/**
+ * Collapse repeat observations of the same listing into one. A re-crawl writes a fresh
+ * dated row per listing each time, so a bag live for N crawls would otherwise count N
+ * times and show a stale price. Keep the most recent observation per (platform,
+ * listing_ref); rows without a listing_ref are left as-is (can't be safely merged).
+ */
+function dedupeByListing(rows: PriceRow[]): PriceRow[] {
+  const latest = new Map<string, PriceRow>();
+  const out: PriceRow[] = [];
+  for (const r of rows) {
+    if (!r.listingRef) {
+      out.push(r);
+      continue;
+    }
+    const key = `${r.platform ?? ""}|${r.listingRef}`;
+    const prev = latest.get(key);
+    if (!prev || (r.observedOn ?? "") > (prev.observedOn ?? "")) latest.set(key, r);
+  }
+  return out.concat([...latest.values()]);
 }
 
 function platformLabel(platform: string | null): string {
@@ -323,8 +354,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .filter((r) => !isRetail(r) && (sizeLabel == null || r.sizeLabel === sizeLabel))
       .map(specComp);
 
-    const offers = rows
-      .filter((r) => r.variantId === variantId && isListed(r))
+    const offers = dedupeByListing(rows.filter((r) => r.variantId === variantId && isListed(r)))
       .map((r) => toOffer(r, comps))
       .sort(compareOffers);
 
@@ -394,6 +424,10 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (isListed(r)) g.listed.push(r);
       if (!isRetail(r)) g.comps.push(specComp(r));
     }
+
+    // Collapse repeat crawl observations so each live listing counts once, at its most
+    // recent price — otherwise a bag re-seen across N crawls would inflate every count.
+    for (const g of groups.values()) g.listed = dedupeByListing(g.listed);
 
     // Facet accumulators (count distinct PRODUCTS carrying each value, over the unfiltered
     // set — like the brand facet). Spec facets count only over groups with live listings.

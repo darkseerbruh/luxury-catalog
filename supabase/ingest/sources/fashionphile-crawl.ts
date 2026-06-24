@@ -25,6 +25,8 @@ import fs from "fs";
 import path from "path";
 
 const RAW_DUMP = path.resolve(__dirname, "../../../data/ingest/_raw/fashionphile.json");
+// Authoritative "what's live right now" set for reconcile-sold.ts (overwritten each full run).
+const LIVE_SNAPSHOT = path.resolve(__dirname, "../../../data/ingest/_raw/fashionphile-live.json");
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 const LIMIT = 250;
@@ -107,6 +109,19 @@ async function main() {
   const merged = [...byUrl.values()];
   fs.writeFileSync(RAW_DUMP, JSON.stringify(merged));
   console.log(`dump: ${existing.length} existing + ${added} new = ${merged.length} total -> ${RAW_DUMP}`);
+
+  // Current-run LIVE snapshot (overwrite, NOT merged): exactly what this crawl saw on
+  // the site right now. The accumulating dump above is the loader's history staging and
+  // keeps stale entries forever, so it can't tell "still for sale" from "sold". This
+  // snapshot is the authoritative live set reconcile-sold.ts diffs against to retire the
+  // listings that have since sold/been pulled. Only written for a full crawl (start at
+  // page 1) — a resumed/partial crawl must not be mistaken for the whole live inventory.
+  if (startPage === 1) {
+    fs.writeFileSync(LIVE_SNAPSHOT, JSON.stringify(fresh));
+    console.log(`live snapshot: ${fresh.length} listing(s) seen this run -> ${LIVE_SNAPSHOT}`);
+  } else {
+    console.log(`live snapshot: SKIPPED (started at page ${startPage}; not a full crawl).`);
+  }
 }
 
 main().catch((e) => {
