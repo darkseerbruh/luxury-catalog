@@ -205,8 +205,9 @@ matches the locked monetization strategy.
 - **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
   myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
   Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
-  EPC ~$1.74. Join via Awin's "+ Join". (Lesson: ShareASale signups now redirect to Awin; check the
-  existing Awin account before creating anything new.)
+  EPC ~$1.74. ✅ **Applied 2026-06-24, pending** (verified in Awin → Advertisers → Pending tab).
+  (Lesson: ShareASale signups now redirect to Awin; check the existing Awin account before creating
+  anything new.)
 - **Madison Avenue Couture** — high-end Hermès/Chanel reseller, **consignment-based affiliate**
   (seller-side lever, on-strategy but niche): madisonavenuecouture.com/pages/affiliate.
 - **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
