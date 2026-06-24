@@ -37,6 +37,7 @@ export default function HeaderNav({
   }, [open]);
 
   const links: NavLink[] = [
+    { href: "/shop", label: "Shop" },
     { href: "/identify", label: "Identify" },
     { href: "/search", label: "Search" },
     { href: "/quiz", label: "Quiz" },
