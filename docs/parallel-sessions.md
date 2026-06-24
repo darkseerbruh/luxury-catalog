@@ -17,7 +17,10 @@ Create a worktree:  `git worktree add -b <branch> ~/Documents/<folder> origin/ma
 List / remove:       `git worktree list` · `git worktree remove <folder>`
 
 **Gitignored local state doesn't copy with a worktree** — after creating one, copy over
-`.env.local` (DB creds) and the `data/ingest/` cache, or scripts can't run.
+`.env.local` (DB creds) and the `data/ingest/` cache, or scripts can't run. For deps, run
+**`npm install` in the worktree** — do NOT symlink `node_modules` to the main checkout: Turbopack
+(`next build`) rejects a `node_modules` symlink that points out of the project root and fatal-errors.
+(tsc/eslint/vitest tolerate the symlink; only the build breaks — so the symlink hides the problem until build time.)
 
 ## Rules that keep it clean
 1. Each chat stays in **its own folder, on its own branch** off `main`.

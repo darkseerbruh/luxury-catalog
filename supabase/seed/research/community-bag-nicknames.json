@@ -1,0 +1,26 @@
+{
+  "_about": "Community/collector nicknames the houses themselves don't use, for the alias model (authority + GEO). source_type='community'. SEED LIST — extend from PurseForum / Facebook collector groups (owner is in those). For 'named' entries the canonical model exists; 'seasonal_community_named' are runway/novelty pieces with NO official Chanel name where the community name IS the de-facto primary.",
+  "named": [
+    { "brand": "Chanel", "model": "Classic Flap", "community": ["Timeless", "CF", "Double Flap", "11.12"] },
+    { "brand": "Chanel", "model": "Reissue", "community": ["2.55", "Reissue 226", "the 225/226/227"] },
+    { "brand": "Chanel", "model": "Wallet on Chain", "community": ["WOC"] },
+    { "brand": "Chanel", "model": "Diana", "community": ["Diana flap"] },
+    { "brand": "Chanel", "model": "Trendy CC", "community": ["Trendy"] },
+    { "brand": "Hermès", "model": "Birkin", "community": ["B", "B25", "B30", "B35"] },
+    { "brand": "Hermès", "model": "Kelly", "community": ["K", "K25", "K28", "Sellier", "Retourne"] },
+    { "brand": "Hermès", "model": "Constance", "community": ["Connie"] },
+    { "brand": "Louis Vuitton", "model": "Neverfull", "community": ["NF"] },
+    { "brand": "Louis Vuitton", "model": "Speedy", "community": ["Speedy B", "Bandoulière"] }
+  ],
+  "seasonal_community_named": [
+    { "brand": "Chanel", "name": "Hula Hoop Bag", "season": "SS2013", "community": ["Hula Hoop"], "note": "oversized runway statement bag; no official Chanel name" },
+    { "brand": "Chanel", "name": "Milk Carton Bag", "community": ["Milk Carton", "Coco milk carton"], "note": "novelty minaudière; carton reads 'Coco'" },
+    { "brand": "Chanel", "name": "Gas Can Bag", "community": ["Gas Can", "Jerrycan"], "note": "oil-can minaudière" },
+    { "brand": "Chanel", "name": "Lego Clutch", "community": ["Lego Brick", "Lego"], "note": "acrylic brick minaudière" },
+    { "brand": "Chanel", "name": "Perfume Bottle Minaudière", "community": ["No. 5 bag", "perfume bottle"], "note": "Resort 2014 lucite minaudière" }
+  ],
+  "size_nicknames": {
+    "_note": "community size shorthand that shows up in titles/searches",
+    "Chanel": { "rectangular mini": ["rec mini", "rectangle mini"], "square mini": ["square mini"], "jumbo": ["XL flap"] }
+  }
+}

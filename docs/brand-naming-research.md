@@ -56,6 +56,43 @@ line), Montaigne, Favorite, Félicie, Graceful, Delightful, CarryAll, Petite Mal
    and any silhouette calls, because no official source can resolve them. Everything in Regimes A is
    mostly machine-resolvable.
 
+## Chanel 3-tier taxonomy (implemented in `model-normalize.ts` → `bagTier()`)
+
+Chanel doesn't formally label permanent vs seasonal; named designs recur by demand and some graduate
+to permanent. So the meaningful split is **"does it have a stable recurring name?"**, not "icon or not":
+
+| Tier | Definition | Examples | Handling |
+|---|---|---|---|
+| `icon` | permanent, universally known | Classic Flap, 2.55, Boy, 19, 22, 25, WOC | own style + comps |
+| `named` | stable recurring name, not top-icon | Business Affinity, Trendy CC, Deauville, Coco Handle, Gabrielle, Urban Spirit, Vanity Case | own style + comps |
+| `seasonal` | no canonical Chanel name (one-off/runway) | "Hula Hoop", "Milk Carton", "Gas Can", "Grocery Basket" | classify by silhouette + season + style code; community name as label |
+
+Evidence: Business Affinity debuted SS2017 *seasonal* but recurs by demand; Trendy CC (2014) graduated
+to *permanent*; Deauville re-issued yearly since SS2012; Gabrielle was permanent, discontinued 2023.
+A name is "named/icon" if it's in the curated dictionary OR recurs across many listings; a one-off
+descriptive name is `seasonal`.
+
+## The alias model — one canonical name + tagged "also known as" set
+
+Every bag = a **canonical name** (Chanel's official, or for unnamed seasonals the style code +
+descriptor + season) plus an **aliases[]** set, each tagged by source. Three layers:
+
+| Layer | `source_type` | Where it comes from |
+|---|---|---|
+| Official | `official` | Chanel/house + curated dictionary + research |
+| Reseller | `reseller` | **auto-aggregated from our captured listing names per platform** — `aggregate-aliases.ts` (free; we already hold ~24k bag listings tagged by platform) |
+| Community | `community` | `supabase/seed/research/community-bag-nicknames.json` — curated from forums/FB groups (owner-extended) |
+
+**Why it's a moat (authority + GEO):** one place mapping nickname ↔ official ↔ each reseller's name —
+Chanel's own SAs can't do this. Emit every alias as JSON-LD `alternateName` so answer engines resolve
+nickname queries to our page. Real per-platform divergence we already see: Classic Flap is
+"Classic Medium Double Flap Bag" (TRR) vs "Caviar Quilted Medium Double Flap" (Fashionphile); Lady Dior
+is "Cannage Lady Dior" (TRR) vs "Patent Cannage Mini Lady Dior" (FP).
+
+**Status:** reseller aggregation built + run (`npm run aggregate:aliases` → `data/ingest/_raw/reseller-aliases.json`,
+9,507 bag listings → 150 canonical bags). Community seed started. **Next (human-gated migration):** an
+`aliases` table/JSONB on `style` + the bag-page "Also known as" block + JSON-LD `alternateName`.
+
 ## Sources
 - Chanel numbering & style codes: [Tatler Asia](https://www.tatlerasia.com/style/fashion/chanel-iconic-numbers-story-en), [Fashionphile flap guide](https://blog.fashionphile.com/the-ultimate-chanel-flap-guide/), [Coco Approved size guide](https://cocoapproved.com/blogs/style/19-22-31-chanel-handbag-size-guide)
 - Chanel seasonal = serial/season, no official name: [Fashionphile serial codes](https://blog.fashionphile.com/chanel-serial-codes-decoded/), [PurseForum](https://forum.purseblog.com/threads/how-to-read-the-chanel-receipt-and-series-no.1026052/)

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { canonicalModel } from "../ingest/model-normalize";
+import { canonicalModel, canonicalBrand, bagTier } from "../ingest/model-normalize";
 
 describe("canonicalModel", () => {
   it("maps a known model from a brand-less FP title", () => {
@@ -30,5 +30,30 @@ describe("canonicalModel", () => {
   it("does not false-match a substring inside another word", () => {
     // "noe" must not match inside "monogram"/"shoulder"; requires whole word
     expect(canonicalModel("Louis Vuitton", "Monogram Shoulder Bag")).toBeNull();
+  });
+
+  it("resolves sub-brands / collabs / accents to one canonical brand", () => {
+    expect(canonicalBrand("Christian Dior")).toBe("Dior");
+    expect(canonicalBrand("DIOR MEN")).toBe("Dior");
+    expect(canonicalBrand("Gucci x Balenciaga")).toBe("Gucci");
+    expect(canonicalBrand("Chanel Pharrell")).toBe("Chanel");
+    expect(canonicalBrand("Hermes")).toBe("Hermès");
+    expect(canonicalBrand("Balenciaga")).toBe("Balenciaga");
+  });
+
+  it("maps models through a sub-brand label", () => {
+    expect(canonicalModel("Christian Dior", "Cannage Lady Dior Medium")).toBe("Lady Dior");
+    expect(canonicalModel("Christian Dior", "Toile de Jouy Book Medium")).toBe("Book Tote");
+    expect(canonicalModel("Gucci", "GG Supreme Web Boston")).toBe("Boston");
+    expect(canonicalModel("Hermès", "Toile Sac Steeple")).toBe("Steeple");
+  });
+
+  it("assigns Chanel tiers: icon / named line / seasonal", () => {
+    expect(bagTier("Chanel", "Classic Flap")).toBe("icon");
+    expect(bagTier("Chanel", "Business Affinity")).toBe("named");
+    expect(bagTier("Chanel", "Trendy CC")).toBe("named");
+    expect(bagTier("Chanel", null)).toBe("seasonal");      // unnamed Chanel = seasonal/runway
+    expect(bagTier("Gucci", null)).toBeNull();              // other brands: uncategorised, not seasonal
+    expect(bagTier("Hermès", "Birkin")).toBe("icon");
   });
 });
