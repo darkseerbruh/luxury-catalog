@@ -209,7 +209,8 @@ matches the locked monetization strategy.
   (Lesson: ShareASale signups now redirect to Awin; check the existing Awin account before creating
   anything new.)
 - **Madison Avenue Couture** — high-end Hermès/Chanel reseller, **consignment-based affiliate**
-  (seller-side lever, on-strategy but niche): madisonavenuecouture.com/pages/affiliate.
+  (seller-side lever, on-strategy but niche). ✅ **Applied 2026-06-24** via "The MadAve Collective"
+  inquiry form (madisonavenuecouture.com/pages/affiliate); their client team follows up with next steps.
 - **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
   trade-dress/legal risk). **Cudoni** is defunct (closed 2023).
 
