@@ -5,6 +5,7 @@ import {
   rateListing,
   bestBand,
   bandLabel,
+  isConfidentBasis,
   type SpecComp,
   type ItemSpec,
 } from "../listings-core";
@@ -199,5 +200,24 @@ describe("bandLabel", () => {
   it("maps bands to human labels", () => {
     expect(bandLabel("great")).toBe("Great price");
     expect(bandLabel("above")).toBe("Above market");
+  });
+});
+
+describe("isConfidentBasis", () => {
+  const base = { value: 5000, compCount: 6, broadened: false, variantLevel: false, realized: false };
+
+  it("is confident only when matched like-for-like on leather AND color", () => {
+    expect(isConfidentBasis({ ...base, dimsUsed: ["material", "color"], dimsDropped: [] })).toBe(true);
+    expect(isConfidentBasis({ ...base, dimsUsed: ["material", "color", "hardware"], dimsDropped: [] })).toBe(true);
+  });
+
+  it("is not confident when color was dropped (blended across colors)", () => {
+    expect(isConfidentBasis({ ...base, broadened: true, dimsUsed: ["material"], dimsDropped: ["color"] })).toBe(false);
+  });
+
+  it("is never confident at the blended variant level", () => {
+    expect(
+      isConfidentBasis({ ...base, variantLevel: true, dimsUsed: [], dimsDropped: ["material", "color"] }),
+    ).toBe(false);
   });
 });
