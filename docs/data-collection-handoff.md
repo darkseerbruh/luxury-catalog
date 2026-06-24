@@ -164,3 +164,24 @@ Also pending: **condition_detail** capture from TRR product pages (separate sect
 - After any load, run `summary:refresh` (or wait for the cron) so bag pages update.
 - Don't commit `data/ingest/` (gitignored runtime landing zone).
 - Temp probe scripts: write under `supabase/ingest/_*.ts`, run with `tsx`, then `rm`.
+
+## 11. Affiliate program landscape (researched 2026-06-24)
+
+Where each core resale partner's affiliate/consignor program actually lives, so we don't
+re-derive it. **Verified the four priority partners are NOT on Awin's US network** (searched
+Fashionphile, Rebag, The RealReal, Vestiaire + "Luxury Closet"/"preloved"/"StockX" — only
+fuzzy/tiny unproven hits). Awin onboarding for our own publisher account (ID `2945769`,
+"Luxury Catalog, LLC") **is complete** (profile + payout); keep it for future new-retail
+partners but it does not carry the resale players.
+
+| Partner | Network to join | Commission | Notes |
+|---|---|---|---|
+| **The RealReal** | **Direct** (`therealreal.com/affiliates` + `/real-partners`) | Buyer 5% (existing) / 7% (new) | ⭐ **Real Partners** consignor referral = the seller lever in `preferences.md`: ~$1,250 avg, up to $20k, earns on referred consignor's sales for first 120 days. "Real Friends" $125 promo through 2026-06. |
+| **Rebag** | **CJ (Commission Junction)** | 7% (3% over $2,500), 30-day cookie, AOV ~$1,800 | product feed available |
+| **Fashionphile** | **Impact** (legacy: ShareASale) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
+| **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
+
+**Accounts needed:** The RealReal (direct, prioritize Real Partners), CJ (Rebag + Vestiaire),
+Impact (Fashionphile), **Skimlinks** (publisher signup `signup.skimlinks.com` — catch-all over
+48,500 merchants / 50+ networks, auto-affiliates outbound links; fills CJ-signup gaps that bit us
+before). Direct-where-it-works + Skimlinks-to-fill-gaps matches the locked monetization strategy.
