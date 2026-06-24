@@ -1,8 +1,13 @@
 name: Refresh market listings (Fashionphile)
 
-# Hands-off "keep the Shop current" job. Re-crawls Fashionphile's live inventory,
-# loads fresh prices, then retires listings that have since sold or been pulled —
-# so the Shop shows only what's actually for sale, without anyone running anything.
+# Hands-off "drop sold bags off the Shop" job. Re-crawls Fashionphile's live
+# inventory and retires the listings we still show that the crawl no longer sees
+# (sold / pulled) — so the Shop reflects what's actually for sale, untouched by hand.
+#
+# SCOPE: this job ONLY retires sold listings; it does NOT load new prices. Loading
+# fresh prices / new bags stays the existing manual, curated pipeline (ingest -> raw
+# adapter -> load:prices) — bulk-loading the whole 20k catalogue nightly would flood
+# discovered_listing and isn't needed to keep sold status current.
 #
 # Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
 # Fashionphile is the only source crawlable headless in CI today; TheRealReal /
@@ -53,19 +58,8 @@ jobs:
 
       - run: npm ci
 
-      - name: Crawl Fashionphile live inventory
+      - name: Crawl Fashionphile live inventory (writes the live snapshot)
         run: npx tsx supabase/ingest/sources/fashionphile-crawl.ts "$COLLECTION"
-
-      - name: Map crawl into price observations
-        run: npx tsx supabase/ingest/sources/fashionphile.ts --raw
-
-      - name: Load prices into the database
-        run: |
-          if [ "$WRITE" = "true" ]; then
-            npm run load:prices -- --write
-          else
-            npm run load:prices
-          fi
 
       - name: Retire sold / pulled listings
         run: |
