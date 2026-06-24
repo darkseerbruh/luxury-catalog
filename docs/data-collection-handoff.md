@@ -178,7 +178,7 @@ partners but it does not carry the resale players.
 |---|---|---|---|
 | **The RealReal** | **Direct** (`therealreal.com/affiliates` + `/real-partners`) | Buyer 5% (existing) / 7% (new) | ⭐ **Real Partners** consignor referral = the seller lever in `preferences.md`: ~$1,250 avg, up to $20k, earns on referred consignor's sales for first 120 days. "Real Friends" $125 promo through 2026-06. |
 | **Rebag** | **CJ (Commission Junction)** | 7% (3% over $2,500), 30-day cookie, AOV ~$1,800 | product feed available |
-| **Fashionphile** | **Impact** (legacy: ShareASale) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
+| **Fashionphile** | **Impact** (confirmed 2026-06-24; older listings mention ShareASale — ignore) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
 **Application status (2026-06-24):** ✅ **Applied — The RealReal** (direct) and **Fashionphile**
