@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import type { ShopSort, ShopFacets, Facet } from "@/lib/listings";
+import { FAMILY_PREFIX, type ShopSort, type ShopFacets, type Facet, type GroupedFacet } from "@/lib/listings";
 
 const SORTS: { value: ShopSort; label: string }[] = [
   { value: "best-deal", label: "Best deal first" },
@@ -9,21 +9,16 @@ const SORTS: { value: ShopSort; label: string }[] = [
   { value: "price-desc", label: "Price: high to low" },
 ];
 
-const PRICE_CAPS: { value: string; label: string }[] = [
-  { value: "", label: "Any price" },
-  { value: "1500", label: "Under $1,500" },
-  { value: "3000", label: "Under $3,000" },
-  { value: "7000", label: "Under $7,000" },
-  { value: "15000", label: "Under $15,000" },
-];
-
 const selectClass =
   "rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-foreground transition-colors hover:border-gold focus:border-gold focus:outline-none";
+const inputClass =
+  "w-24 rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-foreground placeholder:text-muted/60 transition-colors hover:border-gold focus:border-gold focus:outline-none";
 
 export interface ShopCurrent {
   brand: string;
   sort: string;
   deals: boolean;
+  min: string;
   max: string;
   color: string;
   material: string;
@@ -31,7 +26,7 @@ export interface ShopCurrent {
   condition: string;
 }
 
-/** A labeled select backed by a facet list; renders nothing when it has no options. */
+/** A flat facet select (brand / hardware / condition); renders nothing when empty. */
 function FacetSelect({
   id,
   label,
@@ -65,14 +60,96 @@ function FacetSelect({
   );
 }
 
-/** Filter + sort controls for the Shop grid. Each change updates the URL (server reads it). */
-export default function ShopControls({
-  facets,
-  current,
+/**
+ * A two-level facet select: families as <optgroup>s, each led by an inclusive
+ * "All {family}" option (value "f:Family") followed by the specific names under it. So a
+ * shopper can pick "All Brown" or "Étoupe", "All Leather" or "Togo".
+ */
+function GroupedFacetSelect({
+  id,
+  label,
+  allLabel,
+  value,
+  groups,
+  onChange,
 }: {
-  facets: ShopFacets;
-  current: ShopCurrent;
+  id: string;
+  label: string;
+  allLabel: string;
+  value: string;
+  groups: GroupedFacet[];
+  onChange: (value: string) => void;
 }) {
+  if (groups.length === 0) return null;
+  return (
+    <>
+      <label className="sr-only" htmlFor={id}>
+        {label}
+      </label>
+      <select id={id} className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{allLabel}</option>
+        {groups.map((g) => (
+          <optgroup key={g.family} label={g.family}>
+            <option value={`${FAMILY_PREFIX}${g.family}`}>
+              All {g.family.toLowerCase()} ({g.count})
+            </option>
+            {g.options.map((o) => (
+              <option key={o.value} value={o.value}>
+                {"  "}
+                {o.value} ({o.count})
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+    </>
+  );
+}
+
+/**
+ * An editable price box that commits to the URL on Enter or blur (not per keystroke).
+ * Uncontrolled (`defaultValue` + `key`) so it resets cleanly when the URL value changes
+ * from elsewhere (back button / reset) without syncing prop→state in an effect.
+ */
+function PriceInput({
+  label,
+  placeholder,
+  value,
+  onCommit,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onCommit: (value: string) => void;
+}) {
+  const commit = (raw: string) => {
+    const cleaned = raw.replace(/[^0-9]/g, "");
+    if (cleaned !== value) onCommit(cleaned);
+  };
+  return (
+    <>
+      <label className="sr-only" htmlFor={`shop-${label.toLowerCase()}`}>
+        {label} price
+      </label>
+      <input
+        key={value}
+        id={`shop-${label.toLowerCase()}`}
+        type="text"
+        inputMode="numeric"
+        className={inputClass}
+        placeholder={placeholder}
+        defaultValue={value}
+        onBlur={(e) => commit(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+        }}
+      />
+    </>
+  );
+}
+
+/** Filter + sort controls for the Shop grid. Each change updates the URL (server reads it). */
+export default function ShopControls({ facets, current }: { facets: ShopFacets; current: ShopCurrent }) {
   const router = useRouter();
   const sp = useSearchParams();
 
@@ -96,20 +173,20 @@ export default function ShopControls({
         options={facets.brands}
         onChange={(v) => update({ brand: v })}
       />
-      <FacetSelect
+      <GroupedFacetSelect
         id="shop-color"
         label="Color"
         allLabel="Any color"
         value={current.color}
-        options={facets.colors}
+        groups={facets.colors}
         onChange={(v) => update({ color: v })}
       />
-      <FacetSelect
+      <GroupedFacetSelect
         id="shop-material"
         label="Leather"
         allLabel="Any leather"
         value={current.material}
-        options={facets.materials}
+        groups={facets.materials}
         onChange={(v) => update({ material: v })}
       />
       <FacetSelect
@@ -129,31 +206,16 @@ export default function ShopControls({
         onChange={(v) => update({ condition: v })}
       />
 
-      <label className="sr-only" htmlFor="shop-price">
-        Maximum price
-      </label>
-      <select
-        id="shop-price"
-        className={selectClass}
-        value={current.max}
-        onChange={(e) => update({ max: e.target.value })}
-      >
-        {PRICE_CAPS.map((p) => (
-          <option key={p.value} value={p.value}>
-            {p.label}
-          </option>
-        ))}
-      </select>
+      <div className="flex items-center gap-1.5">
+        <PriceInput label="Min" placeholder="Min $" value={current.min} onCommit={(v) => update({ min: v })} />
+        <span className="text-sm text-muted">–</span>
+        <PriceInput label="Max" placeholder="Max $" value={current.max} onCommit={(v) => update({ max: v })} />
+      </div>
 
       <label className="sr-only" htmlFor="shop-sort">
         Sort
       </label>
-      <select
-        id="shop-sort"
-        className={selectClass}
-        value={current.sort}
-        onChange={(e) => update({ sort: e.target.value })}
-      >
+      <select id="shop-sort" className={selectClass} value={current.sort} onChange={(e) => update({ sort: e.target.value })}>
         {SORTS.map((s) => (
           <option key={s.value} value={s.value}>
             {s.label}

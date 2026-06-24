@@ -153,3 +153,18 @@ edit the constants at the top of `listings-core.ts` (`GREAT/GOOD_UNDER_PCT`,
 `FAIR_OVER_PCT`, `MIN_SPEC_COMPS`). Until then the defaults are sensible, defensible. Also: the grid "deal pulse" as a count vs single
 badge; a per-listing condition grading axis (today condition is a filter, not a comp
 constraint — the value-module condition ladder still owns within-condition grading).
+
+**v4 (2026-06-24) — deal badge correctness + taxonomy + price field:**
+- **Deal badge fixed.** Each listing is rated against its OWN spec's market value
+  (leather + color); a verdict shows only on a like-for-like basis (`isConfidentBasis`),
+  never a blended fallback. The collection thumbnail badges if ANY one item behind it is a
+  genuine deal. Fixes "every tile says great deal".
+- **Color + material taxonomy** (`src/lib/listings-taxonomy.ts`, pure, tested):
+  `colorFamily()` / `materialFamily()` roll specifics up into families (Étoupe → Beige,
+  Togo → Leather). The color/leather filters are now two-level `<optgroup>` selects —
+  families with an inclusive "All Brown" / "All Leather" option, then the specific names
+  under them — so a shopper can browse a family or pick an exact designer color. Filter
+  values encode a family as `f:Family` (`FAMILY_PREFIX`). Keyword tables are tunable in the
+  taxonomy file (add designer color/leather names as data grows).
+- **Price is now an editable min/max field** (not preset dropdown caps); commits on
+  Enter/blur.

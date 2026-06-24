@@ -35,6 +35,7 @@ export default async function ShopPage({
     brand?: string;
     sort?: string;
     deals?: string;
+    min?: string;
     max?: string;
     color?: string;
     material?: string;
@@ -46,6 +47,7 @@ export default async function ShopPage({
     brand = "",
     sort = "best-deal",
     deals = "",
+    min = "",
     max = "",
     color = "",
     material = "",
@@ -53,12 +55,14 @@ export default async function ShopPage({
     condition = "",
   } = await searchParams;
   const sortValue = (VALID_SORTS as string[]).includes(sort) ? (sort as ShopSort) : "best-deal";
+  const minPrice = min && Number.isFinite(Number(min)) ? Number(min) : undefined;
   const maxPrice = max && Number.isFinite(Number(max)) ? Number(max) : undefined;
 
   const result = await getShopProducts({
     brand: brand || undefined,
     sort: sortValue,
     dealsOnly: deals === "1",
+    minPrice,
     maxPrice,
     color: color || undefined,
     material: material || undefined,
@@ -84,7 +88,7 @@ export default async function ShopPage({
 
       <ShopControls
         facets={result.facets}
-        current={{ brand, sort: sortValue, deals: deals === "1", max, color, material, hardware, condition }}
+        current={{ brand, sort: sortValue, deals: deals === "1", min, max, color, material, hardware, condition }}
       />
 
       {result.products.length === 0 ? (
