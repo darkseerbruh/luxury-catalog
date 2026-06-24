@@ -64,6 +64,45 @@ const AFFILIATE_CODES: Record<string, string | undefined> = {
 
 const WRAP_TEMPLATE = process.env.NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE;
 
+// eBay Partner Network needs its own treatment: monetized eBay links carry a fixed
+// set of tracking params plus the campaign id, not a single affiliate code. The
+// campaign id is NOT a secret (it rides openly in every affiliate URL), but we keep
+// it in a public env var so monetization stays additive/configurable — set
+// NEXT_PUBLIC_EBAY_CAMPAIGN_ID to flip eBay links on; unset = plain, never-broken links.
+const EBAY_CAMPAIGN_ID = process.env.NEXT_PUBLIC_EBAY_CAMPAIGN_ID;
+/** EPN rotation id for the US marketplace (network 711). */
+const EBAY_US_ROTATION = "711-53200-19255-0";
+
+/** True for any eBay domain (ebay.com, ebay.co.uk, …). */
+export function isEbayUrl(url: string): boolean {
+  try {
+    return /(^|\.)ebay\.[a-z.]+$/i.test(new URL(url).hostname);
+  } catch {
+    return /\bebay\.[a-z.]+/i.test(url);
+  }
+}
+
+/**
+ * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
+ * campaign id configured this returns the URL unchanged, so eBay links always work
+ * and monetization is purely additive. `customId` (≤256 chars) is EPN's free-form
+ * sub-id for our own click attribution (e.g. the bag/page it came from).
+ */
+export function applyEbayAffiliate(url: string, customId?: string): string {
+  if (!url || !EBAY_CAMPAIGN_ID) return url;
+  const params = new URLSearchParams({
+    mkcid: "1", // eBay Partner Network
+    mkrid: EBAY_US_ROTATION,
+    siteid: "0", // US
+    campid: EBAY_CAMPAIGN_ID,
+    toolid: "10001",
+    mkevt: "1", // link-click event
+  });
+  if (customId) params.set("customid", customId.slice(0, 256));
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}${params.toString()}`;
+}
+
 function applyAffiliate(url: string, platform: Platform): string {
   const code = AFFILIATE_CODES[platform.paramEnv];
   let finalUrl = url;
@@ -86,6 +125,10 @@ function applyAffiliate(url: string, platform: Platform): string {
  */
 export function affiliateListingUrl(url: string, platformRaw: string | null): string {
   if (!url) return url;
+  // eBay uses EPN's multi-param scheme, not a single affiliate code — route it first.
+  if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
+    return applyEbayAffiliate(url);
+  }
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);
