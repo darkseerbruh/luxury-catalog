@@ -196,14 +196,17 @@ matches the locked monetization strategy.
 
 **Additional appropriate brands (researched 2026-06-24):**
 - **The Luxury Closet** (CJ advertiser 5312449) — pre-loved + new designer, **flat 7.69%** all sales,
-  7-day cookie, 60-day lock (better structure than Rebag; low historical EPC though). Applying via CJ.
+  7-day cookie, 60-day lock (better structure than Rebag; low historical EPC though). ✅ Applied via CJ 2026-06-24.
 - **eBay Partner Network (EPN)** — eBay is a major authenticated pre-owned luxury market; its own
   network. ✅ **Applied 2026-06-24, under review** (≤24h). Registered the website property
   (luxurycatalog.com, business model Content/Reviews). Commission is modest (Sale 1-4% USD) but value
   = volume + a huge authenticated-resale price source for comparison pages.
 - **1stDibs** — vintage/high-end marketplace; **covered by Skimlinks** (network 67427), no separate app.
-- **myGemma** — luxury resale (bags/jewelry/watches), **5% via ShareASale**, 30-day cookie. Optional
-  (needs a ShareASale account; Skimlinks likely covers it too).
+- **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
+  myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
+  Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
+  EPC ~$1.74. Join via Awin's "+ Join". (Lesson: ShareASale signups now redirect to Awin; check the
+  existing Awin account before creating anything new.)
 - **Madison Avenue Couture** — high-end Hermès/Chanel reseller, **consignment-based affiliate**
   (seller-side lever, on-strategy but niche): madisonavenuecouture.com/pages/affiliate.
 - **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
