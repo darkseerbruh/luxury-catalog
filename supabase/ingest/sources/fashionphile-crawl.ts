@@ -99,6 +99,10 @@ async function main() {
   }
   console.log(`Crawled ${fresh.length} listing(s) from /collections/${slug}/`);
 
+  // The _raw landing dir is gitignored, so it's absent in a fresh CI checkout — create
+  // it before writing or the whole crawl is lost at the final save (ENOENT).
+  fs.mkdirSync(path.dirname(RAW_DUMP), { recursive: true });
+
   const existing: RawDumpEntry[] = fs.existsSync(RAW_DUMP) ? JSON.parse(fs.readFileSync(RAW_DUMP, "utf8")) : [];
   const byUrl = new Map(existing.map((e) => [e.url, e]));
   let added = 0;
