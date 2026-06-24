@@ -181,9 +181,16 @@ partners but it does not carry the resale players.
 | **Fashionphile** | **Impact** (confirmed 2026-06-24; older listings mention ShareASale — ignore) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
-**Application status (2026-06-24):** ✅ **Applied — The RealReal** (direct) and **Fashionphile**
-(Impact) — both pending approval. ⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire),
-**Skimlinks** publisher signup (`signup.skimlinks.com` — catch-all over 48,500 merchants / 50+
-networks, auto-affiliates outbound links; fills CJ-signup gaps that bit us before). Once approved,
-swap raw outbound links for tracking links on bag/deal pages. Direct-where-it-works +
-Skimlinks-to-fill-gaps matches the locked monetization strategy.
+**Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
+**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days, hub access gated on approval).
+⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire). Once approved, swap raw outbound
+links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches
+the locked monetization strategy.
+
+**Skimlinks site install (dev task, not yet done):** Skimlinks gave a JS snippet to drop just
+before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
+client-side, safe to commit). Once added, Skimlinks auto-rewrites outbound merchant links to
+affiliate links (no per-link work). It's inert until the account is approved. Placement in our
+Next.js app = root layout (see the modified Next.js docs in `node_modules/next/dist/docs/` re: the
+`Script` component before writing it). AMP/WordPress/Squarespace install guides exist but N/A — we're
+a custom Next.js site, so the JS snippet route applies.
