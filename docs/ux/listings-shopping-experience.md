@@ -145,9 +145,11 @@ Shipped:
   asking and flagging which (`FairValue.realized`); the bag rail says "vs N … sold prices"
   vs "… listings". 16 unit tests total in `listings-core.test.ts`.
 
-Still deferred (honest): **band-threshold tuning** needs a pass over the real loaded
-spread (no DB creds in the build env) — the thresholds are sensible, defensible defaults
-and remain tunable constants at the top of `listings-core.ts` (`GREAT/GOOD_UNDER_PCT`,
-`FAIR_OVER_PCT`, `MIN_SPEC_COMPS`). Also: the grid "deal pulse" as a count vs single
+**Band-threshold tuning — tool shipped (run against prod).** `npm run analyze:deals`
+(`supabase/ingest/analyze-deal-spread.ts`, read-only, needs `.env.local`) rates every
+live listing with the shared core and prints the real distribution of "% under fair
+value" + what each candidate threshold would label, with a suggested setting. Run it, then
+edit the constants at the top of `listings-core.ts` (`GREAT/GOOD_UNDER_PCT`,
+`FAIR_OVER_PCT`, `MIN_SPEC_COMPS`). Until then the defaults are sensible, defensible. Also: the grid "deal pulse" as a count vs single
 badge; a per-listing condition grading axis (today condition is a filter, not a comp
 constraint — the value-module condition ladder still owns within-condition grading).
