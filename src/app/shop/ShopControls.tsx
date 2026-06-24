@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import type { ShopSort } from "@/lib/listings";
+import type { ShopSort, ShopFacets, Facet } from "@/lib/listings";
 
 const SORTS: { value: ShopSort; label: string }[] = [
   { value: "best-deal", label: "Best deal first" },
@@ -20,13 +20,58 @@ const PRICE_CAPS: { value: string; label: string }[] = [
 const selectClass =
   "rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-foreground transition-colors hover:border-gold focus:border-gold focus:outline-none";
 
+export interface ShopCurrent {
+  brand: string;
+  sort: string;
+  deals: boolean;
+  max: string;
+  color: string;
+  material: string;
+  hardware: string;
+  condition: string;
+}
+
+/** A labeled select backed by a facet list; renders nothing when it has no options. */
+function FacetSelect({
+  id,
+  label,
+  allLabel,
+  value,
+  options,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  allLabel: string;
+  value: string;
+  options: Facet[];
+  onChange: (value: string) => void;
+}) {
+  if (options.length === 0) return null;
+  return (
+    <>
+      <label className="sr-only" htmlFor={id}>
+        {label}
+      </label>
+      <select id={id} className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{allLabel}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.value} ({o.count})
+          </option>
+        ))}
+      </select>
+    </>
+  );
+}
+
 /** Filter + sort controls for the Shop grid. Each change updates the URL (server reads it). */
 export default function ShopControls({
-  brands,
+  facets,
   current,
 }: {
-  brands: { name: string; count: number }[];
-  current: { brand: string; sort: string; deals: boolean; max: string };
+  facets: ShopFacets;
+  current: ShopCurrent;
 }) {
   const router = useRouter();
   const sp = useSearchParams();
@@ -43,22 +88,46 @@ export default function ShopControls({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <label className="sr-only" htmlFor="shop-brand">
-        Brand
-      </label>
-      <select
+      <FacetSelect
         id="shop-brand"
-        className={selectClass}
+        label="Brand"
+        allLabel="All brands"
         value={current.brand}
-        onChange={(e) => update({ brand: e.target.value })}
-      >
-        <option value="">All brands</option>
-        {brands.map((b) => (
-          <option key={b.name} value={b.name}>
-            {b.name} ({b.count})
-          </option>
-        ))}
-      </select>
+        options={facets.brands}
+        onChange={(v) => update({ brand: v })}
+      />
+      <FacetSelect
+        id="shop-color"
+        label="Color"
+        allLabel="Any color"
+        value={current.color}
+        options={facets.colors}
+        onChange={(v) => update({ color: v })}
+      />
+      <FacetSelect
+        id="shop-material"
+        label="Leather"
+        allLabel="Any leather"
+        value={current.material}
+        options={facets.materials}
+        onChange={(v) => update({ material: v })}
+      />
+      <FacetSelect
+        id="shop-hardware"
+        label="Hardware"
+        allLabel="Any hardware"
+        value={current.hardware}
+        options={facets.hardware}
+        onChange={(v) => update({ hardware: v })}
+      />
+      <FacetSelect
+        id="shop-condition"
+        label="Condition"
+        allLabel="Any condition"
+        value={current.condition}
+        options={facets.conditions}
+        onChange={(v) => update({ condition: v })}
+      />
 
       <label className="sr-only" htmlFor="shop-price">
         Maximum price

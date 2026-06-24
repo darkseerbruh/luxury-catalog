@@ -131,7 +131,23 @@ Shipped:
   URL when codes are set (no-op otherwise).
 - `HeaderNav` — "Shop" added as the lead nav entry.
 
-Deferred (documented, not built): folding `/deals` into the grid as a preset; the richer
-facet set (color/leather/hardware/condition/size facets, year "coming soon"); band-
-threshold tuning against real spread; the grid "deal pulse" as a count vs single badge.
-Band thresholds + min-comp constants are tunable at the top of `listings-core.ts`.
+**v2 (2026-06-23, same branch) — three follow-ups landed:**
+- **`/deals` folded in.** `/deals` now redirects to `/shop?deals=1&sort=best-deal` (the
+  "deals only" preset); the homepage "Best deals" tile points straight at it. One
+  listings surface, not two. `getDeals` stays only as the tile's "is there a deal?" gate.
+- **Richer facets.** `getShopProducts` now returns brand + **color / leather / hardware /
+  condition** facets (product counts) and filters listings by them (spec filters apply at
+  the listing level, then aggregate). `ShopControls` shows a select per facet, hidden when
+  a facet has no options — so the model-less mass-market gap simply shows fewer filters,
+  never fakes them. Year stays out (data-gated).
+- **Realized prices preferred.** The rating engine now prefers **sold/auction comps**
+  (the truth) over asking listings for fair value when it has enough, falling back to
+  asking and flagging which (`FairValue.realized`); the bag rail says "vs N … sold prices"
+  vs "… listings". 16 unit tests total in `listings-core.test.ts`.
+
+Still deferred (honest): **band-threshold tuning** needs a pass over the real loaded
+spread (no DB creds in the build env) — the thresholds are sensible, defensible defaults
+and remain tunable constants at the top of `listings-core.ts` (`GREAT/GOOD_UNDER_PCT`,
+`FAIR_OVER_PCT`, `MIN_SPEC_COMPS`). Also: the grid "deal pulse" as a count vs single
+badge; a per-listing condition grading axis (today condition is a filter, not a comp
+constraint — the value-module condition ladder still owns within-condition grading).
