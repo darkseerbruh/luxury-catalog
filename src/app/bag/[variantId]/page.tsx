@@ -26,6 +26,7 @@ import PriceTrend from "./PriceTrend";
 import ValueModule, { type ValueFraming } from "./ValueModule";
 import TrackBagView from "./TrackBagView";
 import WhereToBuy from "./WhereToBuy";
+import ListingsForSale from "./ListingsForSale";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
@@ -1131,7 +1132,10 @@ export default async function BagDetailPage({
           </Section>
         )}
 
-      {/* Where to buy (affiliate resale links) */}
+      {/* Live listings for this exact variant, rated against fair value (links out). */}
+      <ListingsForSale variantId={v.variantId} />
+
+      {/* Where to buy (affiliate resale search links — fallback when no live listings) */}
       <WhereToBuy variantId={v.variantId} brand={v.brand.name} style={v.style.name} />
 
       {/* Where to sell — buyout vs. consignment fork (consignor-referral revenue). */}

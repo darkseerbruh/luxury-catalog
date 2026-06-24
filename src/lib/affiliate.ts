@@ -77,6 +77,24 @@ function applyAffiliate(url: string, platform: Platform): string {
   return finalUrl;
 }
 
+/**
+ * Apply affiliate attribution to a SPECIFIC listing URL (not a search link), matching
+ * the platform by the raw platform string we recorded. With no env set this returns the
+ * URL unchanged, so a "Shop the market" offer always links straight to the seller —
+ * monetization is purely additive and flips on when codes land. If we can't match a
+ * known platform, the network wrap template (if any) still applies.
+ */
+export function affiliateListingUrl(url: string, platformRaw: string | null): string {
+  if (!url) return url;
+  const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
+  const platform = PLATFORMS.find((p) => key.includes(p.key));
+  if (platform) return applyAffiliate(url, platform);
+  if (WRAP_TEMPLATE && WRAP_TEMPLATE.includes("{url}")) {
+    return WRAP_TEMPLATE.replace("{url}", encodeURIComponent(url));
+  }
+  return url;
+}
+
 /** Resale search links for a bag, with affiliate attribution applied when configured. */
 export function buildResaleLinks(brand: string, style: string): ResaleLink[] {
   const q = encodeURIComponent([brand, style].filter(Boolean).join(" ").trim());
