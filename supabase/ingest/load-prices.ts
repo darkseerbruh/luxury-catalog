@@ -104,6 +104,10 @@ function toRow(o: PriceObservation, variantId: number) {
     // dedup idempotently on their stable source_url.
     listing_ref: o.attrs.listing_ref ?? o.source_url,
     enrichment: o.enrichment ?? null,
+    // Live-vs-sold state (migration 0030). Only resale *listings* are "available"
+    // and thus reconcilable to 'sold' later; sold/auction/retail rows are historical
+    // facts, not live offers, so they stay NULL and are never retired.
+    listing_status: o.price_type === "listed" ? "available" : null,
   };
 }
 

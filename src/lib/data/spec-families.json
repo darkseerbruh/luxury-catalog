@@ -1,0 +1,14 @@
+{
+  "_note": "Learned color/material family overrides. Keyed by lowercased specific name. The keyword classifier in listings-taxonomy.ts is the base; these take precedence for names it can't place. Filled by `npm run classify:families` (Claude-backed) and committed as data. Hand-edits welcome.",
+  "colors": {
+    "celadon": "Green",
+    "malachite": "Green",
+    "amethyst": "Purple",
+    "saffron": "Yellow",
+    "ecru": "White"
+  },
+  "materials": {
+    "cotton": "Fabric",
+    "nylon": "Fabric"
+  }
+}
