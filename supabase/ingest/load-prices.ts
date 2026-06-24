@@ -30,12 +30,16 @@ interface Flags {
   source?: string;
   write: boolean;
   limit: number | null;
+  /** Route EVERY observation to discovered_listing (skip curated variant resolution).
+   *  For low-confidence catch-all loads that must not stamp prices on curated variants. */
+  discoveredOnly: boolean;
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { write: false, limit: null };
+  const flags: Flags = { write: false, limit: null, discoveredOnly: false };
   for (const a of argv) {
     if (a === "--write") flags.write = true;
+    else if (a === "--discovered-only") flags.discoveredOnly = true;
     else if (a.startsWith("--limit=")) flags.limit = Number(a.slice("--limit=".length)) || null;
     else if (!a.startsWith("--")) flags.source = a;
   }
@@ -111,7 +115,7 @@ function toRow(o: PriceObservation, variantId: number) {
  */
 function toDiscovered(
   o: PriceObservation,
-  reason: "no_brand" | "no_style" | "no_variant",
+  reason: "no_brand" | "no_style" | "no_variant" | "catch_all",
   matchedBrandId: number | null,
   matchedStyleId: number | null
 ) {
@@ -160,6 +164,12 @@ async function main() {
 
   for (const o of observations) {
     const brand = brandByNorm.get(norm(normalizeDesigner(o.brand)));
+    // discovered-only: never place on a curated variant (avoids loose-match price
+    // pollution); keep the brand id when known so promote-discovered can cluster.
+    if (flags.discoveredOnly) {
+      discovered.push(toDiscovered(o, "catch_all", brand?.brand_id ?? null, null));
+      continue;
+    }
     if (!brand) {
       discovered.push(toDiscovered(o, "no_brand", null, null));
       continue;

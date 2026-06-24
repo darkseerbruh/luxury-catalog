@@ -35,6 +35,7 @@ import { parseFashionphileProduct } from "../../../src/lib/ingest/fashionphile";
 import type { ShopifyProduct } from "../../../src/lib/ingest/fashionphile";
 import { politeFetchText } from "../lib/fetch";
 import { writeObservations } from "../lib/landing";
+import { detectSizeLabel } from "./trr-jsonld";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 
 const PLATFORM = "Fashionphile";
@@ -1683,6 +1684,112 @@ function ingestFromRawDump(): void {
 }
 
 // ---------------------------------------------------------------------------
+// MODE A-ALL — catch-all: emit EVERY product (curated mapping where a target
+// matches, best-guess otherwise) so nothing is dropped at the adapter. The loader
+// places what it can on curated variants and routes the rest into discovered_listing.
+// Mirrors the trr-jsonld.ts --catch-all design. The ONLY drop is a missing price.
+// ---------------------------------------------------------------------------
+
+/** FP handle/title brand slugs → canonical brand (longest/multi-token first). */
+const FP_BRAND_SLUGS: [string, string][] = [
+  ["louis-vuitton", "Louis Vuitton"], ["saint-laurent", "Saint Laurent"],
+  ["yves-saint-laurent", "Saint Laurent"], ["christian-dior", "Dior"],
+  ["bottega-veneta", "Bottega Veneta"], ["kate-spade", "Kate Spade"],
+  ["the-row", "The Row"], ["valentino-garavani", "Valentino"], ["miu-miu", "Miu Miu"],
+  ["salvatore-ferragamo", "Salvatore Ferragamo"], ["alexander-mcqueen", "Alexander McQueen"],
+  ["alexander-wang", "Alexander Wang"], ["marc-jacobs", "Marc Jacobs"], ["jimmy-choo", "Jimmy Choo"],
+  ["tory-burch", "Tory Burch"], ["stella-mccartney", "Stella McCartney"], ["dolce-gabbana", "Dolce & Gabbana"],
+  // single-token
+  ["chanel", "Chanel"], ["hermes", "Hermès"], ["gucci", "Gucci"], ["dior", "Dior"],
+  ["celine", "Celine"], ["loewe", "Loewe"], ["fendi", "Fendi"], ["prada", "Prada"],
+  ["coach", "Coach"], ["burberry", "Burberry"], ["goyard", "Goyard"], ["balenciaga", "Balenciaga"],
+  ["chloe", "Chloe"], ["valentino", "Valentino"], ["givenchy", "Givenchy"], ["versace", "Versace"],
+  ["mulberry", "Mulberry"], ["delvaux", "Delvaux"], ["moynat", "Moynat"], ["dolce", "Dolce & Gabbana"],
+];
+
+export function guessBrandFromHandle(handle: string): string {
+  const h = (handle ?? "").toLowerCase();
+  for (const [slug, name] of FP_BRAND_SLUGS) if (h.startsWith(slug)) return name;
+  const first = h.split("-")[0];
+  return first ? first[0].toUpperCase() + first.slice(1) : "Unknown";
+}
+
+/** Best-guess style from the title: strip the brand and the generic "bag" word. */
+export function guessStyleFromTitle(title: string, brand: string): string {
+  let s = (title ?? "").trim();
+  const lead = [brand.toLowerCase(), "christian dior", "yves saint laurent"];
+  const low = s.toLowerCase();
+  for (const b of lead) if (low.startsWith(b)) { s = s.slice(b.length); break; }
+  s = s.replace(/\bbag\b/gi, "").replace(/\s+/g, " ").trim();
+  return s || title?.trim() || "Unknown";
+}
+
+/** Catch-all map: every product → observation (best-guess identity, low confidence). */
+function mapRawRecordCatchAll(entry: RawDumpEntry, today: string): PriceObservation | null {
+  const { product, url, conditionGrade } = entry;
+  if (!url) return null;
+  const spec = parseFashionphileProduct(product, conditionGrade);
+  if (!spec.price) return null;
+  const brand = guessBrandFromHandle(product.handle ?? "");
+  const title = product.title ?? product.handle ?? "";
+  return {
+    brand,
+    style: guessStyleFromTitle(title, brand),
+    attrs: {
+      size_label: detectSizeLabel(title),
+      exterior_colorway: spec.color,
+      exterior_material: spec.material,
+      hardware_color: spec.hardwareColor,
+      production_year: spec.productionYear,
+      season: spec.season,
+      inclusions: spec.inclusions,
+      listing_ref: spec.sku,
+    },
+    platform: PLATFORM,
+    price_type: "listed",
+    sale_price: spec.price,
+    currency: spec.currency,
+    condition: spec.condition,
+    observed_on: today,
+    source_url: url,
+    confidence: "low",
+    notes: title.slice(0, 160),
+  };
+}
+
+/**
+ * Catch-all mode: emit ONLY the records that DON'T match a curated target, as
+ * best-guess observations. These are meant to load with `load:prices --discovered-only`
+ * so they land in discovered_listing (NOT force-matched onto curated variants —
+ * pickVariant would otherwise stamp a wrong price on a real variant at score 0).
+ * promote-discovered then rolls recurring real models up into the curated catalog.
+ */
+function ingestCatchAllRemainder(): void {
+  if (!fs.existsSync(RAW_DUMP)) {
+    console.error(`fashionphile --catch-all: dump not found at ${RAW_DUMP}. Crawl it first (fashionphile-crawl.ts).`);
+    process.exit(1);
+  }
+  const raw: RawDumpEntry[] = JSON.parse(fs.readFileSync(RAW_DUMP, "utf8"));
+  const today = new Date().toISOString().slice(0, 10);
+  const obs: PriceObservation[] = [];
+  let curatedSkipped = 0, dropped = 0;
+  for (const e of raw) {
+    const handle = (e.product.handle ?? "").toLowerCase();
+    const title = (e.product.title ?? "").toLowerCase();
+    const hasTarget = TARGETS.some(
+      (t) =>
+        t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
+        !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
+    );
+    if (hasTarget) { curatedSkipped++; continue; } // curated rows come from --raw
+    const o = mapRawRecordCatchAll(e, today);
+    if (o) obs.push(o); else dropped++;
+  }
+  const { file, kept } = writeObservations("fashionphile", obs);
+  console.log(`fashionphile (catch-all): ${raw.length} records -> ${kept} non-curated kept, ${curatedSkipped} curated (use --raw), ${dropped} dropped (no price) -> ${file}`);
+}
+
+// ---------------------------------------------------------------------------
 // MODE B — live search-page scrape (medium confidence, single search-level row)
 // ---------------------------------------------------------------------------
 
@@ -1744,8 +1851,9 @@ async function ingestFromSearchPages(): Promise<void> {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  const useRaw = process.argv.includes("--raw");
-  if (useRaw) {
+  if (process.argv.includes("--catch-all")) {
+    ingestCatchAllRemainder();
+  } else if (process.argv.includes("--raw")) {
     ingestFromRawDump();
   } else {
     await ingestFromSearchPages();
