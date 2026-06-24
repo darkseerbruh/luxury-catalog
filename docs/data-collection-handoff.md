@@ -182,10 +182,37 @@ partners but it does not carry the resale players.
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
 **Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
-**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days, hub access gated on approval).
-⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire). Once approved, swap raw outbound
-links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches
-the locked monetization strategy.
+**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days). ✅ **CJ publisher account
+ACTIVE** (account ID `7997608`, property = luxurycatalog.com, primary model = Product
+Comparison/Discovery). ✅ **Inside CJ: Rebag applied** (advertiser 5749848, manual review pending). Rebag terms worth
+noting: 7% commission but **new (first-time) customers only**, tiered down to **3% on orders >$2,500**
+(flat $423 over $14,124), **0% on return customers**, 30-day cookie — so a buyer-side, new-customer
+program, not a seller lever. ❌ **Vestiaire Collective is NOT available on CJ for the US account**
+(only an unrelated French "En Selle Marcel" matches; VC's CJ program is EU-region-gated) — **covered
+by Skimlinks instead**, so no gap. CJ "handbags" keyword (66 results) is otherwise dominated by
+new-retail apparel, not resale, so Rebag is the one relevant CJ fit. Once programs approve, swap raw
+outbound links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps
+matches the locked monetization strategy.
+
+**Additional appropriate brands (researched 2026-06-24):**
+- **The Luxury Closet** (CJ advertiser 5312449) — pre-loved + new designer, **flat 7.69%** all sales,
+  7-day cookie, 60-day lock (better structure than Rebag; low historical EPC though). ✅ Applied via CJ 2026-06-24.
+- **eBay Partner Network (EPN)** — eBay is a major authenticated pre-owned luxury market; its own
+  network. ✅ **Applied 2026-06-24, under review** (≤24h). Registered the website property
+  (luxurycatalog.com, business model Content/Reviews). Commission is modest (Sale 1-4% USD) but value
+  = volume + a huge authenticated-resale price source for comparison pages.
+- **1stDibs** — vintage/high-end marketplace; **covered by Skimlinks** (network 67427), no separate app.
+- **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
+  myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
+  Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
+  EPC ~$1.74. ✅ **Applied 2026-06-24, pending** (verified in Awin → Advertisers → Pending tab).
+  (Lesson: ShareASale signups now redirect to Awin; check the existing Awin account before creating
+  anything new.)
+- **Madison Avenue Couture** — high-end Hermès/Chanel reseller, **consignment-based affiliate**
+  (seller-side lever, on-strategy but niche). ✅ **Applied 2026-06-24** via "The MadAve Collective"
+  inquiry form (madisonavenuecouture.com/pages/affiliate); their client team follows up with next steps.
+- **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
+  trade-dress/legal risk). **Cudoni** is defunct (closed 2023).
 
 **Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
 before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
