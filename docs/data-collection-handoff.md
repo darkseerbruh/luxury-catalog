@@ -198,7 +198,9 @@ matches the locked monetization strategy.
 - **The Luxury Closet** (CJ advertiser 5312449) — pre-loved + new designer, **flat 7.69%** all sales,
   7-day cookie, 60-day lock (better structure than Rebag; low historical EPC though). Applying via CJ.
 - **eBay Partner Network (EPN)** — eBay is a major authenticated pre-owned luxury market; its own
-  network, register by signing in with an eBay account. High volume, buyer-side. In progress.
+  network. ✅ **Applied 2026-06-24, under review** (≤24h). Registered the website property
+  (luxurycatalog.com, business model Content/Reviews). Commission is modest (Sale 1-4% USD) but value
+  = volume + a huge authenticated-resale price source for comparison pages.
 - **1stDibs** — vintage/high-end marketplace; **covered by Skimlinks** (network 67427), no separate app.
 - **myGemma** — luxury resale (bags/jewelry/watches), **5% via ShareASale**, 30-day cookie. Optional
   (needs a ShareASale account; Skimlinks likely covers it too).
