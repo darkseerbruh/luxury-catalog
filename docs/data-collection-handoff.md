@@ -164,3 +164,40 @@ Also pending: **condition_detail** capture from TRR product pages (separate sect
 - After any load, run `summary:refresh` (or wait for the cron) so bag pages update.
 - Don't commit `data/ingest/` (gitignored runtime landing zone).
 - Temp probe scripts: write under `supabase/ingest/_*.ts`, run with `tsx`, then `rm`.
+
+## 11. Affiliate program landscape (researched 2026-06-24)
+
+Where each core resale partner's affiliate/consignor program actually lives, so we don't
+re-derive it. **Verified the four priority partners are NOT on Awin's US network** (searched
+Fashionphile, Rebag, The RealReal, Vestiaire + "Luxury Closet"/"preloved"/"StockX" — only
+fuzzy/tiny unproven hits). Awin onboarding for our own publisher account (ID `2945769`,
+"Luxury Catalog, LLC") **is complete** (profile + payout); keep it for future new-retail
+partners but it does not carry the resale players.
+
+| Partner | Network to join | Commission | Notes |
+|---|---|---|---|
+| **The RealReal** | **Direct** (`therealreal.com/affiliates` + `/real-partners`) | Buyer 5% (existing) / 7% (new) | ⭐ **Real Partners** consignor referral = the seller lever in `preferences.md`: ~$1,250 avg, up to $20k, earns on referred consignor's sales for first 120 days. "Real Friends" $125 promo through 2026-06. |
+| **Rebag** | **CJ (Commission Junction)** | 7% (3% over $2,500), 30-day cookie, AOV ~$1,800 | product feed available |
+| **Fashionphile** | **Impact** (confirmed 2026-06-24; older listings mention ShareASale — ignore) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
+| **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
+
+**Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
+**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days, hub access gated on approval).
+⏳ **Still to do:** **CJ** account (covers Rebag + Vestiaire). Once approved, swap raw outbound
+links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches
+the locked monetization strategy.
+
+**Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
+before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
+client-side, safe to commit). Once added, Skimlinks auto-rewrites outbound merchant links to
+affiliate links (no per-link work). It's inert until the account is approved. Placement in our
+Next.js app = root layout (see the modified Next.js docs in `node_modules/next/dist/docs/` re: the
+`Script` component before writing it). AMP/WordPress/Squarespace install guides exist but N/A — we're
+a custom Next.js site, so the JS snippet route applies.
+
+**TODO — privacy policy + cookie consent (dev task, required by CJ §2(e)/§6, also good practice for
+Skimlinks/Awin tracking):** `luxurycatalog.com` must conspicuously post a privacy policy that
+discloses third-party affiliate tracking cookies (CJ, Skimlinks, etc.) and provide a cookie-consent
+mechanism (GDPR/ePrivacy for any EU visitors; US state-privacy disclosure). Needed before running
+CJ links in production. Scope: privacy-policy page + consent banner gating non-essential/tracking
+cookies. Not yet built.
