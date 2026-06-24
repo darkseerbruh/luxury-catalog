@@ -187,7 +187,7 @@ partners but it does not carry the resale players.
 links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps matches
 the locked monetization strategy.
 
-**Skimlinks site install (dev task, not yet done):** Skimlinks gave a JS snippet to drop just
+**Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
 before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
 client-side, safe to commit). Once added, Skimlinks auto-rewrites outbound merchant links to
 affiliate links (no per-link work). It's inert until the account is approved. Placement in our
