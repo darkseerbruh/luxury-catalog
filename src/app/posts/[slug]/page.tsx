@@ -22,7 +22,11 @@ function authorName(post: Awaited<ReturnType<typeof getBySlug>>): string {
 
 function plainExcerpt(post: NonNullable<Awaited<ReturnType<typeof getBySlug>>>): string {
   if (post.excerpt) return post.excerpt;
-  const text = (post.body ?? "").replace(/\s+/g, " ").trim();
+  const text = (post.body ?? "")
+    .replace(/^(#{1,6}|>|-)\s+/gm, "") // strip leading block markers
+    .replace(/\*\*/g, "") // strip bold markers
+    .replace(/\s+/g, " ")
+    .trim();
   if (text.length <= 157) return text;
   return text.slice(0, 154).replace(/\s+\S*$/, "") + "…";
 }
@@ -63,18 +67,79 @@ function formatDate(iso: string | null): string | null {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-/** Render the body as paragraphs (plain text, newline-delimited). No HTML is
- * injected from user content — each block is rendered as escaped text. */
+/** Minimal inline formatting: **bold** only. No links render from article
+ * bodies on purpose, so monetization stays in the PostBagCTA block. Text nodes
+ * are escaped by React, so this never injects HTML. */
+function renderInline(text: string, keyPrefix: string) {
+  return text.split(/\*\*/).map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={`${keyPrefix}-${i}`} className="font-semibold text-foreground">
+        {part}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
+/** Render the article body with a small, safe block vocabulary, parsed from the
+ * plain-text body field. One block per blank-line group:
+ *   "## heading"   -> a serif subheading
+ *   "- item" lines -> a bulleted list
+ *   "> line" lines -> a callout box (set apart from the article body)
+ *   anything else  -> a paragraph
+ * No raw HTML is injected: every value renders as an escaped React text node. */
 function Body({ body }: { body: string | null }) {
   if (!body) return null;
-  const blocks = body.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
+  const blocks = body.split(/\n{2,}/).map((b) => b.replace(/\s+$/, "")).filter((b) => b.trim());
   return (
     <div className="flex flex-col gap-4 text-foreground">
-      {blocks.map((block, i) => (
-        <p key={i} className="whitespace-pre-line text-base leading-relaxed">
-          {block}
-        </p>
-      ))}
+      {blocks.map((block, i) => {
+        const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+
+        // Callout: every line starts with ">". Visually set apart from the body.
+        if (lines.length > 0 && lines.every((l) => l.startsWith(">"))) {
+          const text = lines.map((l) => l.replace(/^>\s?/, "")).join(" ");
+          return (
+            <aside
+              key={i}
+              className="rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm leading-relaxed text-muted"
+            >
+              {renderInline(text, `c${i}`)}
+            </aside>
+          );
+        }
+
+        // Bulleted list: every line starts with "- ".
+        if (lines.length > 0 && lines.every((l) => l.startsWith("- "))) {
+          return (
+            <ul key={i} className="flex flex-col gap-1.5 pl-1">
+              {lines.map((l, j) => (
+                <li key={j} className="flex gap-2.5 text-base leading-relaxed">
+                  <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                  <span>{renderInline(l.replace(/^-\s+/, ""), `b${i}-${j}`)}</span>
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        // Heading: a lone line starting with "## ".
+        if (lines.length === 1 && lines[0].startsWith("## ")) {
+          return (
+            <h2 key={i} className="mt-2 font-serif text-xl text-foreground">
+              {renderInline(lines[0].replace(/^##\s+/, ""), `h${i}`)}
+            </h2>
+          );
+        }
+
+        // Default: a paragraph (single newlines collapse to spaces).
+        return (
+          <p key={i} className="text-base leading-relaxed">
+            {renderInline(lines.join(" "), `p${i}`)}
+          </p>
+        );
+      })}
     </div>
   );
 }
