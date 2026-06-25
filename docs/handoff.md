@@ -12,7 +12,15 @@
 4. **Comparisons** — Neverfull vs Speedy, Classic Flap vs Reissue, Caviar vs Lambskin (high-intent, links both options).
 5. **Market/trend** — most coveted now / what's appreciating / best deals under median (ties to `/coveted` + `/deals` + demand data; recurring).
 
-**Recommended first batch:** Pillars 1 + 2 on the hero bags we already have data for (Chanel Classic Flap 199 [116 TRR rows], Birkin 30 [102 rows], Kelly, Neverfull, Marmont) → ~6–10 substantive articles. Then **re-apply to Skimlinks**. All drafted against `docs/voice-and-tone.md` (no em dashes, no empty superlatives, de-gatekeeping). **Status: plan proposed 2026-06-24, owner to react + lock the first batch.**
+**Data-readiness audit (run 2026-06-24, read-only against prod) — refines the plan:**
+- price_history = **19,241 listing prices / 401 variants / 0 sold** (all "listing for"; owner confirmed asking-price framing is fine + we describe TODAY's market, not history).
+- **Coverage is heavily HIGH-END:** LV 4,240/46 · Chanel 3,768/66 · Hermès 3,530/58 · Gucci 2,618/35 · Dior · YSL · Celine … **Coach only 200 rows/16 variants; Michael Kors / Kate Spade / Tory Burch / Longchamp = 0.** Cause: our only price sources (Fashionphile, TheRealReal) are **premium** resale — they barely carry mid-tier, so scraping them more won't fix it. (24k `discovered_listing` catch-all is premium-skewed too.)
+- **Implication — split the strategy:**
+  - **Value/market content → strong for high-end** (155 variants have 30+ listings). Write these on LV/Chanel/Hermès/Gucci now.
+  - **Authentication wedge → mid-tier (Coach etc.)** per owner: lower stakes, more credible than pretending Chanel/Hermès auth expertise. Research + reference-image driven (does NOT need our price data) — can start now; needs detail images sourced first-party/licensed (NOT eBay — off-limits).
+  - **Mid-tier VALUE content needs data we don't have → collect it first**, and from the RIGHT source: mid-tier bags live on **eBay + Poshmark**, not Fashionphile/TRR. Capture via the §5 Claude-in-Chrome method (data only; eBay images stay off-limits). Then mid-tier value content becomes credible.
+
+**Recommended next:** (1) draft the **Coach authentication** article (credibility wedge, mid-tier); (2) start an **eBay/Poshmark mid-tier data capture** (Coach first) via Claude-in-Chrome to grow coverage; high-end value/market pieces can run anytime off existing data. Then **re-apply to Skimlinks**. All copy against `docs/voice-and-tone.md`. **Status: audit done 2026-06-24; owner choosing first action (Coach article / mid-tier capture / both).**
 
 ## TL;DR — real resale data + fidelity + parallel features (2026-06-23)
 
