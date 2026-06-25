@@ -31,6 +31,7 @@ anti-bloat workflow in `AGENTS.md`). 🔄 = auto-loaded every session.*
 | `social-content-calendar.md` | **Canonical** content channels + calendar. |
 | `social-embed-strategy.md` | **Canonical** YouTube/Instagram embed approach. |
 | `content-strategy.md` | Content pillars (auth guides, value guides) — ties to the factuality protocol. |
+| `content-writing-handoff.md` | Bootstrap brief for the content/article-writing chat. |
 
 ## Data & capture (ACTIVE workstream — the current unlock)
 *Overlapping by nature because it's work-in-progress. Revisit for consolidation once the market sweep completes; don't merge while live.*
