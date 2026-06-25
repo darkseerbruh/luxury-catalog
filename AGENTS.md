@@ -4,6 +4,17 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+# Operating rules — APPLY TO EVERY RESPONSE (non-negotiable)
+
+The owner's always-on rules live in **ONE place**: the `ENFORCED:start..ENFORCED:end`
+block at the top of `docs/preferences.md`. They bind every turn, not just at session
+start — the `UserPromptSubmit` hook (`.claude/hooks/operating-rules.sh`) reads that block
+live and re-injects it into every response. **Read that block now and obey it.**
+
+Do not maintain a second copy of these rules here or in the hook — the block is the
+single source of truth, so it can never drift out of sync. To add/remove an always-on
+rule, edit only that block (see the wrap-up maintenance step below).
+
 # Branch & sync workflow — READ FIRST, EVERY SESSION
 
 `main` is the **single source of truth** for this project. Work accumulates there
@@ -28,7 +39,13 @@ so separate Claude sessions/chats don't drift into parallel copies.
       decisions, or product/brand choices the owner revealed this chat (how she likes
       to work, things she locked or paused). Merge in/refine — don't duplicate, don't
       remove anything still valid, keep it concise; skip volatile task status (that
-      lives in `docs/handoff.md`). Commit + push to `main` with the rest of the wrap-up.
+      lives in `docs/handoff.md`). **Then promote anything enforce-worthy:** if a new
+      preference is a non-negotiable that should apply to EVERY response (not just
+      nuance), add ONE terse line inside the `ENFORCED:start..ENFORCED:end` block at the
+      top of the file — that block is the single source the hook + AGENTS.md both use, so
+      this is the only step needed to make a rule always-on. Keep the block short; demote
+      anything that's really just nuance back into the prose sections. Commit + push to
+      `main` with the rest of the wrap-up.
 3. **Never start new work from an old per-session branch** (e.g.
    `claude/desktop-display-test-*`, `claude/luxury-catalog-analytics-plan-*`,
    `claude/catalog-enhancements-*`). They are stale/archived — always base off
