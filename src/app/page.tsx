@@ -251,7 +251,6 @@ export default async function Home() {
         <div className="mt-6 flex flex-wrap gap-3">
           {[
             { href: "/quiz", label: "Find your taste" },
-            { href: "/identify", label: "Identify a bag" },
             { href: "/coveted-closets", label: "Most coveted closets" },
             { href: "/posts", label: "Expert articles" },
             ...(user

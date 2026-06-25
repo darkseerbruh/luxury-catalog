@@ -139,12 +139,12 @@ export default async function ClosetPage() {
         </section>
       )}
 
-      {closet.length > 0 && authComingSoon && (
+      {(portfolio.have.count + portfolio.had.count) > 0 && authComingSoon && (
         <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
-          <p className="font-serif text-lg text-foreground">Authenticate your collection</p>
+          <p className="font-serif text-lg text-foreground">Authenticate before you sell or insure</p>
           <p className="mt-1 mb-3 text-sm text-muted">
-            Pro authentication is coming soon — handy before you sell, insure, or just for peace
-            of mind. Want first access?
+            Pro authentication is coming soon, useful before you sell, consign, or insure a
+            piece. Want first access?
           </p>
           <AuthInterestButton signedIn source="closet" />
         </section>
