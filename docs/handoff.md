@@ -22,6 +22,12 @@
 
 **Recommended next:** (1) draft the **Coach authentication** article (credibility wedge, mid-tier); (2) start an **eBay/Poshmark mid-tier data capture** (Coach first) via Claude-in-Chrome to grow coverage; high-end value/market pieces can run anytime off existing data. Then **re-apply to Skimlinks**. All copy against `docs/voice-and-tone.md`. **Status: audit done 2026-06-24; owner choosing first action (Coach article / mid-tier capture / both).**
 
+**Content-execution gap map (2026-06-24) — what content needs to actually earn + travel:**
+- **EARN (keystone):** ⭐ **post→bag "money-moment" CTA block** — renders from a post's `topic_brand_id`/`topic_style_id`, surfaces seller-weighted buy/sell (later rent) affiliate links + a link to the bag page. **Articles are monetary dead-ends without it** (post body is plain text, no inline links; the affiliate money-moments live on the bag page). Plus **conversion instrumentation** (article→CTA→outbound click). Affiliate coverage to point at: eBay✅, myGemma/Rebag/TLC/TRR/FP pending, Skimlinks rejected (Vestiaire/1stDibs/RtR uncovered), Vivrelle pending.
+- **PRODUCE:** article backlog (Chanel value ready; pick next 5–8); authentication **sourcing** (authoritative/cited — the real gap); **mid-tier data capture** (eBay/Poshmark, Coach first); **schematic SVG diagram component** (auth visual, decided not built).
+- **TRAVEL:** internal linking (article↔bag↔/deals,/coveted,/quiz); **newsletter opt-in** (known unbuilt dependency); social repurpose per `social-content-calendar.md`; re-apply Skimlinks after content ships.
+- **Critical path:** build the CTA block → push the Chanel value article through it end-to-end → then scale (backlog + diagram component + mid-tier capture + auth sourcing). Everything plugs into the CTA block. **Status: building the CTA block 2026-06-24.**
+
 ## TL;DR — real resale data + fidelity + parallel features (2026-06-23)
 
 Two prior chats (value-module UI + data-collection pipeline) were reconciled and their stranded work landed; then a real data + feature push. **Companion briefs: `docs/data-collection-handoff.md` and `docs/value-module-handoff.md` (both current).**

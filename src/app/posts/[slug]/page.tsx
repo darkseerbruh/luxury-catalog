@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
+import { PostBagCTA } from "./PostBagCTA";
 
 export const dynamic = "force-dynamic";
 
@@ -164,6 +165,11 @@ export default async function PostDetailPage({
       <article>
         <Body body={post.body} />
       </article>
+
+      {/* Money-moment: topic-tagged posts hand off to commissionable buy/sell links */}
+      {hasTopic && (post.topic.brandName || post.topic.styleName) && (
+        <PostBagCTA brandName={post.topic.brandName} styleName={post.topic.styleName} slug={post.slug} />
+      )}
 
       {/* Sources / related — link to the brand or style this article covers */}
       {hasTopic && (
