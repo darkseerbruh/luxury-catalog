@@ -56,4 +56,6 @@ authentication needs sourcing; mid-tier needs data capture.**
 - **Tier 3 is genuinely blocked** (mid-tier capture, Vivrelle approval) — don't force it.
 - **Every post is topic-tagged** to its brand/style so the CTA block can render the
   hand-off. Body is plain-text paragraphs (no inline links); monetization lives in the CTA.
-- **All copy passes `docs/voice-and-tone.md`** §8 slop sweep + the review checklist.
+- **All copy passes `docs/voice-and-tone.md`** §8 slop sweep + the review checklist (incl. the AI-tell blacklist).
+- **Visuals are required, catalog-wide (locked 2026-06-25).** If a piece states numbers, it gets a **data visualization** (the distribution, comparison, or trend). If it describes a bag's shape or markers, it gets an **original schematic** (`docs/authentication-standard.md` §3). Numbers and shapes are shown, not just told. Applies to articles and the catalog UI.
+- **Control for confounders, and show the work (locked 2026-06-25).** Before claiming a value gap is caused by one factor (e.g. caviar > lambskin), control for what we can (year, color, platform) and **state plainly what we cannot** (condition is usually unrecorded). Put the controlled finding and its limits in the article, framed as a leaning when it is one. A raw median gap is not a causal claim.

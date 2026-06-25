@@ -331,6 +331,21 @@ so this is strategy, not just taste.
 - **Vague universality:** "many collectors feel…" with no source. Either cite a real
   number (we have them) or cut it.
 
+### The blacklist (never use these — they read as AI). Added 2026-06-25.
+- **Words:** crucial, delve, realm, robust, seamless, unlock, empower, leverage, elevate,
+  boasts, nestled, bustling, tapestry, testament, foster, pivotal, myriad, "navigate the
+  landscape," "embark on a journey." Reach for the plain word (important, dig into, area,
+  strong, smooth) or cut.
+- **Filler transitions:** Moreover, Furthermore, Additionally, "That said," "Ultimately,"
+  "At the end of the day," "It's worth noting," "It's important to note." Cut them and
+  start the sentence.
+- **Signposting framings:** "The honest answer is," "Here's what the numbers say," "Here's
+  the thing," "Put another way," "Let's break it down," "the whole story," "in plain
+  numbers," "the bottom line," "let's face it," "look no further." Just say the thing.
+- **The tell is the cluster.** One slips by; three in a paragraph screams AI. Strip them
+  all. (Researched against editor write-ups of common ChatGPT tells; pairs with §7's em-dash
+  ban and the hype-adjective rule.)
+
 ### Human-review checklist (run before publishing any AI-drafted copy)
 1. **Informed check** — does this prove we actually know? Is the warmth *earned* by
    a real, specific fact? If it could've been written by someone who's never held
