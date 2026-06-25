@@ -160,14 +160,11 @@ export function CoachAuthDiagram() {
             <Tile marker="creed" />
             <Tile marker="stitching" />
           </div>
-          <svg viewBox="0 0 150 170" width="100%" role="img" aria-hidden>
-            <g fill="none" stroke={FG} strokeWidth="2" strokeLinejoin="round">
-              <path d="M48 60 Q48 34 70 34 Q92 34 92 60" />
-              <path d="M92 60 Q92 34 114 34 Q136 34 136 60" />
-              <path d="M34 60 L150 60 L140 152 Q140 160 132 160 L52 160 Q44 160 44 152 Z" transform="translate(-12,0)" />
-            </g>
-            <line x1="34" y1="60" x2="130" y2="60" stroke={MUTED} strokeWidth="1.3" strokeDasharray="4 3" />
-            <g fill="#c9a24c"><rect x="68" y="98" width="7" height="7" transform="rotate(45 71.5 101.5)" /><rect x="88" y="98" width="7" height="7" transform="rotate(45 91.5 101.5)" /><rect x="78" y="118" width="7" height="7" transform="rotate(45 81.5 121.5)" /></g>
+          <svg viewBox="0 0 80 96" width="100%" style={{ maxWidth: 120, margin: "0 auto", display: "block" }} role="img" aria-hidden>
+            <path d="M29 36 Q29 18 40 18 Q51 18 51 36" fill="none" stroke={FG} strokeWidth="2" />
+            <path d="M18 36 L62 36 L57 86 Q57 90 53 90 L27 90 Q23 90 23 86 Z" fill="none" stroke={FG} strokeWidth="2.2" strokeLinejoin="round" />
+            <line x1="23" y1="36" x2="57" y2="36" stroke={MUTED} strokeWidth="1.2" strokeDasharray="4 3" />
+            <g fill="#c9a24c"><rect x="33" y="54" width="6" height="6" transform="rotate(45 36 57)" /><rect x="41" y="54" width="6" height="6" transform="rotate(45 44 57)" /><rect x="37" y="63" width="6" height="6" transform="rotate(45 40 66)" /></g>
           </svg>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Tile marker="canvas" />

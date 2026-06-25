@@ -1,4 +1,4 @@
-import { cache, type ComponentType } from "react";
+import { cache, type ComponentType, type ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -89,74 +89,106 @@ function renderInline(text: string, keyPrefix: string) {
   );
 }
 
-/** Render the article body with a small, safe block vocabulary, parsed from the
- * plain-text body field. One block per blank-line group:
- *   "## heading"   -> a serif subheading
- *   "- item" lines -> a bulleted list
- *   "> line" lines -> a callout box (set apart from the article body)
- *   anything else  -> a paragraph
+/** Render the article body from its plain-text field with a small, safe markup
+ * vocabulary, parsed line by line so a "## heading" sitting directly above its
+ * paragraph still renders as a heading:
+ *   "## heading"      -> a serif subheading
+ *   "- item" lines    -> a bulleted list
+ *   "> line" lines    -> a callout box (set apart from the body)
+ *   "[diagram: <id>]" -> a registered schematic component
+ *   anything else     -> a paragraph
  * No raw HTML is injected: every value renders as an escaped React text node. */
 function Body({ body }: { body: string | null }) {
   if (!body) return null;
-  const blocks = body.split(/\n{2,}/).map((b) => b.replace(/\s+$/, "")).filter((b) => b.trim());
-  return (
-    <div className="flex flex-col gap-4 text-foreground">
-      {blocks.map((block, i) => {
-        // Diagram token: `[diagram: <id>]` on its own line renders a registered
-        // schematic component in place of the text block.
-        const diagram = block.trim().match(/^\[diagram:\s*([\w-]+)\]$/);
-        if (diagram) {
-          const D = DIAGRAMS[diagram[1]];
-          if (D) return <D key={i} />;
-        }
+  const out: ReactNode[] = [];
+  let para: string[] = [];
+  let list: string[] = [];
+  let quote: string[] = [];
+  let k = 0;
+  const flushPara = () => {
+    if (!para.length) return;
+    const text = para.join(" ");
+    out.push(<p key={k} className="text-base leading-relaxed">{renderInline(text, `p${k}`)}</p>);
+    para = [];
+    k++;
+  };
+  const flushList = () => {
+    if (!list.length) return;
+    const items = list;
+    out.push(
+      <ul key={k} className="flex flex-col gap-1.5 pl-1">
+        {items.map((l, j) => (
+          <li key={j} className="flex gap-2.5 text-base leading-relaxed">
+            <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+            <span>{renderInline(l, `b${k}-${j}`)}</span>
+          </li>
+        ))}
+      </ul>,
+    );
+    list = [];
+    k++;
+  };
+  const flushQuote = () => {
+    if (!quote.length) return;
+    const text = quote.join(" ");
+    out.push(
+      <aside key={k} className="rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm leading-relaxed text-muted">
+        {renderInline(text, `c${k}`)}
+      </aside>,
+    );
+    quote = [];
+    k++;
+  };
+  const flushAll = () => {
+    flushPara();
+    flushList();
+    flushQuote();
+  };
 
-        const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
-
-        // Callout: every line starts with ">". Visually set apart from the body.
-        if (lines.length > 0 && lines.every((l) => l.startsWith(">"))) {
-          const text = lines.map((l) => l.replace(/^>\s?/, "")).join(" ");
-          return (
-            <aside
-              key={i}
-              className="rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm leading-relaxed text-muted"
-            >
-              {renderInline(text, `c${i}`)}
-            </aside>
-          );
-        }
-
-        // Bulleted list: every line starts with "- ".
-        if (lines.length > 0 && lines.every((l) => l.startsWith("- "))) {
-          return (
-            <ul key={i} className="flex flex-col gap-1.5 pl-1">
-              {lines.map((l, j) => (
-                <li key={j} className="flex gap-2.5 text-base leading-relaxed">
-                  <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-                  <span>{renderInline(l.replace(/^-\s+/, ""), `b${i}-${j}`)}</span>
-                </li>
-              ))}
-            </ul>
-          );
-        }
-
-        // Heading: a lone line starting with "## ".
-        if (lines.length === 1 && lines[0].startsWith("## ")) {
-          return (
-            <h2 key={i} className="mt-2 font-serif text-xl text-foreground">
-              {renderInline(lines[0].replace(/^##\s+/, ""), `h${i}`)}
-            </h2>
-          );
-        }
-
-        // Default: a paragraph (single newlines collapse to spaces).
-        return (
-          <p key={i} className="text-base leading-relaxed">
-            {renderInline(lines.join(" "), `p${i}`)}
-          </p>
-        );
-      })}
-    </div>
-  );
+  for (const raw of body.replace(/\r\n/g, "\n").split("\n")) {
+    const line = raw.trim();
+    if (!line) {
+      flushAll();
+      continue;
+    }
+    const diagram = line.match(/^\[diagram:\s*([\w-]+)\]$/);
+    if (diagram) {
+      flushAll();
+      const D = DIAGRAMS[diagram[1]];
+      if (D) {
+        out.push(<D key={k} />);
+        k++;
+      }
+      continue;
+    }
+    if (line.startsWith("## ")) {
+      flushAll();
+      out.push(
+        <h2 key={k} className="mt-2 font-serif text-xl text-foreground">
+          {renderInline(line.replace(/^##\s+/, ""), `h${k}`)}
+        </h2>,
+      );
+      k++;
+      continue;
+    }
+    if (line.startsWith("- ")) {
+      flushPara();
+      flushQuote();
+      list.push(line.replace(/^-\s+/, ""));
+      continue;
+    }
+    if (line.startsWith(">")) {
+      flushPara();
+      flushList();
+      quote.push(line.replace(/^>\s?/, ""));
+      continue;
+    }
+    flushList();
+    flushQuote();
+    para.push(line);
+  }
+  flushAll();
+  return <div className="flex flex-col gap-4 text-foreground">{out}</div>;
 }
 
 export default async function PostDetailPage({
