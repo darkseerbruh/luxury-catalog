@@ -74,6 +74,7 @@ type PostRow = {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  author_user_id: string;
   author?: ProfileJoin | ProfileJoin[] | null;
   topic_brand?: BrandJoin | BrandJoin[] | null;
   topic_style?: StyleJoin | StyleJoin[] | null;
@@ -113,9 +114,12 @@ function mapTopic(row: PostRow): PostTopic {
 // The author profile is fetched via a foreign-table embed. `post.author_user_id`
 // references auth.users, but `profile.id` is the same uuid, so we embed `profile`
 // explicitly by the relationship hint.
+// NOTE: the author is NOT embedded. `post.author_user_id` FKs to auth.users, not
+// profile, so PostgREST cannot embed `profile` through it ("could not find a
+// relationship"). We select author_user_id and fetch the profile separately
+// (attachAuthors) — robust and avoids the broken embed.
 const SUMMARY_SELECT =
-  "post_id, slug, title, excerpt, status, topic_brand_id, topic_style_id, published_at, created_at, updated_at, " +
-  "author:profile!post_author_user_id_fkey(id, display_name, handle, bio, avatar_url, is_expert, is_authenticator, is_verified), " +
+  "post_id, slug, title, excerpt, status, topic_brand_id, topic_style_id, published_at, created_at, updated_at, author_user_id, " +
   "topic_brand:brand!post_topic_brand_id_fkey(brand_id, name), " +
   "topic_style:style!post_topic_style_id_fkey(style_id, name)";
 
@@ -141,7 +145,24 @@ function mapSummary(row: PostRow): PostSummary {
  * if the schema's been altered. Retry without the embed so the list still renders.
  */
 const SUMMARY_SELECT_FALLBACK =
-  "post_id, slug, title, excerpt, status, topic_brand_id, topic_style_id, published_at, created_at, updated_at";
+  "post_id, slug, title, excerpt, status, topic_brand_id, topic_style_id, published_at, created_at, updated_at, author_user_id";
+
+/** Fetch author profiles by id and attach them to the rows (the FK embed can't,
+ * see SUMMARY_SELECT). RLS still applies: public profiles (verified/expert/etc.)
+ * resolve for anyone, an author's own profile resolves for the author. */
+async function attachAuthors(
+  supabase: Awaited<ReturnType<typeof createServerSupabase>>,
+  rows: PostRow[],
+): Promise<void> {
+  const ids = [...new Set(rows.map((r) => r.author_user_id).filter(Boolean))];
+  if (ids.length === 0) return;
+  const { data } = await supabase
+    .from("profile")
+    .select("id, display_name, handle, bio, avatar_url, is_expert, is_authenticator, is_verified")
+    .in("id", ids);
+  const byId = new Map<string, ProfileJoin>(((data ?? []) as ProfileJoin[]).map((p) => [p.id, p]));
+  for (const r of rows) r.author = (r.author_user_id ? byId.get(r.author_user_id) : null) ?? null;
+}
 const DETAIL_SELECT_FALLBACK = SUMMARY_SELECT_FALLBACK.replace(
   "post_id, slug",
   "post_id, slug, body"
@@ -171,6 +192,7 @@ export async function listPublished(limit = 50): Promise<PostSummary[]> {
     rows = fb.data as unknown as PostRow[];
   }
   if (!rows) return [];
+  await attachAuthors(supabase, rows);
   return rows.map(mapSummary);
 }
 
@@ -202,6 +224,7 @@ export async function getBySlug(slug: string): Promise<PostDetail | null> {
     row = fb.data as unknown as PostRow;
   }
   if (!row) return null;
+  await attachAuthors(supabase, [row]);
   return { ...mapSummary(row), body: row.body ?? null };
 }
 
@@ -241,6 +264,7 @@ export async function listByAuthor(
     rows = fbRes.data as unknown as PostRow[];
   }
   if (!rows) return [];
+  await attachAuthors(supabase, rows);
   return rows.map(mapSummary);
 }
 
