@@ -50,6 +50,9 @@ authentication needs sourcing; mid-tier needs data capture.**
 - **Authentication runs in parallel as the reach/brand play**, gated on sourcing (mid-tier
   Coach first; lower stakes). Text-first + schematic SVG diagrams, never licensed photos
   (see `docs/preferences.md` image rule). Never assert an unsourced auth marker.
+  **ALL authentication content (articles, bag-page sections, diagrams, the Identify tool +
+  any authenticity score, marketplace copy) is bound by `docs/authentication-standard.md` —
+  the hard pre-publish gate. If a piece can't pass that gate, it does not ship. No exceptions.**
 - **Tier 3 is genuinely blocked** (mid-tier capture, Vivrelle approval) — don't force it.
 - **Every post is topic-tagged** to its brand/style so the CTA block can render the
   hand-off. Body is plain-text paragraphs (no inline links); monetization lives in the CTA.
