@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buildResaleLinks, buildConsignmentLinks, applyEbayAffiliate } from "@/lib/affiliate";
+import { buildResaleLinks, buildConsignmentLinks, buildRentalLinks, applyEbayAffiliate } from "@/lib/affiliate";
 
 /**
  * The "money-moment" on an article: turns a topic-tagged post into a commissionable
@@ -27,6 +27,7 @@ export function PostBagCTA({
 
   const sell = buildConsignmentLinks(brand, style);
   const buy = buildResaleLinks(brand, style);
+  const rent = buildRentalLinks(brand, style);
   const ebayUrl = applyEbayAffiliate(
     `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(label)}&_sacat=169291`,
     `post-${slug}`,
@@ -64,6 +65,21 @@ export function PostBagCTA({
           </a>
         </div>
       </div>
+
+      {rent.length > 0 && (
+        <div className="mt-4">
+          <p className="text-sm font-medium text-foreground">Not ready to buy? Rent it first</p>
+          <p className="mt-0.5 text-xs text-muted">Carry it for a trip or a season before you commit.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {rent.map((l) => (
+              <a key={l.key} href={l.url} target="_blank" rel="sponsored nofollow noopener" className={PILL}>
+                {l.name}
+                <span className="text-muted/70"> · {l.note}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <p className="mt-4 text-xs text-muted">
         Some links above are affiliate links. If you buy or sell through them we may earn a commission, at no

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl } from "../affiliate";
+import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks } from "../affiliate";
 
 const DEFAULT_CAMPID = "5339158071";
 
@@ -52,6 +52,22 @@ describe("eBay EPN attribution (campaign id ships in code by default)", () => {
     // eBay scheme only — never the single-code params used for FP/TRR/Vestiaire.
     expect(u.searchParams.get("aff")).toBeNull();
     expect(u.searchParams.get("aid")).toBeNull();
+  });
+});
+
+describe("buildRentalLinks", () => {
+  it("returns Vivrelle + Rent the Runway with the bag in the search URL", () => {
+    const links = buildRentalLinks("Chanel", "Classic Flap");
+    const keys = links.map((l) => l.key);
+    expect(keys).toContain("vivrelle");
+    expect(keys).toContain("renttherunway");
+    for (const l of links) {
+      expect(l.url).toMatch(/Chanel/i);
+      expect(l.note.length).toBeGreaterThan(0);
+    }
+  });
+  it("returns nothing without a brand or style", () => {
+    expect(buildRentalLinks("", "")).toEqual([]);
   });
 });
 

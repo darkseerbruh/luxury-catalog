@@ -60,6 +60,8 @@ const AFFILIATE_CODES: Record<string, string | undefined> = {
   NEXT_PUBLIC_AFFILIATE_FASHIONPHILE: process.env.NEXT_PUBLIC_AFFILIATE_FASHIONPHILE,
   NEXT_PUBLIC_AFFILIATE_THEREALREAL: process.env.NEXT_PUBLIC_AFFILIATE_THEREALREAL,
   NEXT_PUBLIC_AFFILIATE_VESTIAIRE: process.env.NEXT_PUBLIC_AFFILIATE_VESTIAIRE,
+  NEXT_PUBLIC_AFFILIATE_VIVRELLE: process.env.NEXT_PUBLIC_AFFILIATE_VIVRELLE,
+  NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY: process.env.NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY,
 };
 
 const WRAP_TEMPLATE = process.env.NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE;
@@ -207,6 +209,54 @@ export function buildConsignmentLinks(brand: string, style: string): ConsignLink
     key: p.key,
     name: p.name,
     mode: p.mode,
+    url: applyAffiliate(p.search(q), p),
+  }));
+}
+
+/**
+ * Rental — the third transaction fork (buy / sell / RENT), mapped to the "want"
+ * intent ("not ready to buy? try it first"). Both players are reachable via
+ * networks already held (Vivrelle on Awin; Rent the Runway on Skimlinks/FlexOffers).
+ * Links work now (useful "rent it first" routing) and pick up affiliate attribution
+ * when the codes land, exactly like buy/sell. URLs are best-effort search deep-links;
+ * verify the exact format against each affiliate dashboard once approved.
+ */
+interface RentalPlatform extends Platform {
+  /** Short model note for the UI (e.g. how the rental works). */
+  note: string;
+}
+
+const RENTAL_PLATFORMS: RentalPlatform[] = [
+  {
+    key: "vivrelle",
+    name: "Vivrelle",
+    note: "membership",
+    search: (q) => `https://vivrelle.com/search?q=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_VIVRELLE",
+    paramName: "utm_source",
+  },
+  {
+    key: "renttherunway",
+    name: "Rent the Runway",
+    note: "membership + single rentals",
+    search: (q) => `https://www.renttherunway.com/search?query=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY",
+    paramName: "utm_source",
+  },
+];
+
+export interface RentalLink extends ResaleLink {
+  note: string;
+}
+
+/** Rental search links for a bag, with affiliate attribution applied when configured. */
+export function buildRentalLinks(brand: string, style: string): RentalLink[] {
+  const q = encodeURIComponent([brand, style].filter(Boolean).join(" ").trim());
+  if (!q) return [];
+  return RENTAL_PLATFORMS.map((p) => ({
+    key: p.key,
+    name: p.name,
+    note: p.note,
     url: applyAffiliate(p.search(q), p),
   }));
 }
