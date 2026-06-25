@@ -17,6 +17,8 @@ export interface PostAuthor {
   userId: string;
   displayName: string | null;
   handle: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
   isExpert: boolean;
   isAuthenticator: boolean;
   isVerified: boolean;
@@ -50,6 +52,8 @@ type ProfileJoin = {
   id: string;
   display_name: string | null;
   handle: string | null;
+  bio: string | null;
+  avatar_url: string | null;
   is_expert: boolean | null;
   is_authenticator: boolean | null;
   is_verified: boolean | null;
@@ -87,6 +91,8 @@ function mapAuthor(j: PostRow["author"]): PostAuthor | null {
     userId: a.id,
     displayName: a.display_name,
     handle: a.handle,
+    bio: a.bio,
+    avatarUrl: a.avatar_url,
     isExpert: Boolean(a.is_expert),
     isAuthenticator: Boolean(a.is_authenticator),
     isVerified: Boolean(a.is_verified),
@@ -109,7 +115,7 @@ function mapTopic(row: PostRow): PostTopic {
 // explicitly by the relationship hint.
 const SUMMARY_SELECT =
   "post_id, slug, title, excerpt, status, topic_brand_id, topic_style_id, published_at, created_at, updated_at, " +
-  "author:profile!post_author_user_id_fkey(id, display_name, handle, is_expert, is_authenticator, is_verified), " +
+  "author:profile!post_author_user_id_fkey(id, display_name, handle, bio, avatar_url, is_expert, is_authenticator, is_verified), " +
   "topic_brand:brand!post_topic_brand_id_fkey(brand_id, name), " +
   "topic_style:style!post_topic_style_id_fkey(style_id, name)";
 
