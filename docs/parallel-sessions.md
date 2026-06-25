@@ -31,8 +31,11 @@ List / remove:       `git worktree list` · `git worktree remove <folder>`
 
 ## Rules that keep it clean
 1. Each chat stays in **its own folder, on its own branch** off `main`.
-2. Each chat edits files **only in its own folder**. Natural split here: ingest/pipeline
-   (`supabase/ingest/**`, `scripts/**`) vs. shop UI (`src/app/shop/**`, `src/components/**`).
+2. Each chat works **only in its own folder** (its worktree). Within that folder a chat may
+   edit **any file its task needs** — lanes are not file-fences (see the registry). The only
+   collision risk is two **live** chats editing the same files at once; when that happens, the
+   natural split is ingest/pipeline (`supabase/ingest/**`, `scripts/**`) vs. shop UI
+   (`src/app/**`, `src/components/**`).
 3. **Land work onto `main`** without touching the other chat's checkout:
    ```
    git fetch origin

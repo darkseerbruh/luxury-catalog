@@ -7,7 +7,7 @@ anti-bloat workflow in `AGENTS.md`). 🔄 = auto-loaded every session.*
 ## Start here (operating docs)
 | File | What it is |
 |---|---|
-| 🔄 `handoff.md` | **Current project state** — opens with the **🧭 Active-lanes registry** (the session router: who owns which files + each lane's live status; a new chat hydrates from it). Then live TL;DRs, pending operator steps, setup checklist, reference. Read first. |
+| 🔄 `handoff.md` | **Current project state** — opens with the **🧭 Active-lanes registry** (the session router: each lane's live status + where its deep docs live, so a new chat hydrates from it; lanes label context, they are not file-fences). Then live TL;DRs, pending operator steps, setup checklist, reference. Read first. |
 | 🔄 `preferences.md` | **How the owner works + locked decisions.** Holds the always-on ENFORCED rules block. |
 | 🔄 `../AGENTS.md` | Branch/sync workflow + the enforced operating rules + wrap-up hygiene. |
 | `desktop-todo.md` | Operator backlog — everything that needs a browser/dashboard/human, lettered A–J. |

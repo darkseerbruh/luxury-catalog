@@ -7,17 +7,17 @@
 
 **Lanes are durable; chats are disposable.** This project runs as a handful of parallel
 **workstreams (lanes)**. You spin up a fresh chat whenever — each new chat does NOT need a long
-pasted brief: it **hydrates from this table**, works **one** lane, and **writes its status back
-here on wrap-up**. That is what stops chats running into each other: the table says which files
-each lane owns and what each lane is mid-doing, so a cold chat picks up exactly where the last one
-left off without colliding.
+pasted brief: it **hydrates from this table**, picks up a lane, and **writes its status back here
+on wrap-up**. That is what stops chats running into each other: the table says what each lane is
+mid-doing, so a cold chat sees what's in flight and picks up where the last one left off.
 
-> A chat edits **only the files its lane owns.** Cross-lane edits are the collision. Shared
-> resources (prod Supabase DB, migration numbers, the `main` remote) are isolated by **nobody** —
-> coordinate them per [parallel-sessions.md](parallel-sessions.md) (worktree mechanics + the
-> "announce your migration number" rule).
+> **Lanes are a label for finding context, not territory — cross files freely.** Work blurs
+> across lanes (a content post touches the DB and the CTA component); the "usually touches" column
+> is a collision *hint*, not a fence. The only HARD limits: don't run two **live** chats on the
+> same files at once (one worktree per concurrent chat), **announce any migration number**, and
+> coordinate before restructuring a shared DB table — all per [parallel-sessions.md](parallel-sessions.md).
 
-| Lane | Worktree · branch (off `main`) | Owns — edit ONLY these | Deep doc(s) | Live status → next action |
+| Lane | Worktree · branch (off `main`) | Usually touches (not a fence) | Deep doc(s) | Live status → next action |
 |---|---|---|---|---|
 | **Content** (editorial suite) | `…/luxury-catalog-content` · `content/editorial` | `post` rows · `src/app/posts/**` · `docs/content-*.md` | [content-writing-handoff.md](content-writing-handoff.md) + [content-strategy.md](content-strategy.md) | Suite shape UNCONFIRMED (refined additive suite recommended). Chanel draft `post_id 1` FAILED factuality audit. 0 published. **Next:** confirm suite with owner → fix/rewrite Chanel as a decision piece → write the batch as drafts. |
 | **Data / capture** | `…/luxury-catalog-data` · `data/market-capture` | `supabase/ingest/**` · `scripts/**` · `data/ingest/**` | [data-collection-handoff.md](data-collection-handoff.md) + [capture-runbook.md](capture-runbook.md) + [market-sweep-worklist.md](market-sweep-worklist.md) | Market sweep in progress (FP done; TRR/Vestiaire bulk transport is the bottleneck). Mid-tier (Coach via eBay/Poshmark) NOT captured. `promote-discovered` gated on a model-name normalizer. **Next:** merge `claude/multibrand-parser` → load Birkin 30 → mid-tier capture. |
@@ -28,7 +28,7 @@ left off without colliding.
 > You're working the **`<LANE>`** lane of Luxury Catalog.
 > 1. Sync `main` (or create your lane's worktree off `main` — see `docs/parallel-sessions.md`).
 > 2. Read `docs/handoff.md` (the Active-lanes registry + your lane's row), then your lane's deep doc, then `docs/preferences.md`. Obey the ENFORCED block (auto-injected each turn).
-> 3. Work ONLY the files your lane owns. Coordinate shared DB / migration numbers per `parallel-sessions.md`.
+> 3. Cross files freely as the task needs — just don't run a second **live** chat on the same files, announce any migration number, and coordinate shared-DB changes (see `parallel-sessions.md`).
 > 4. On wrap-up: land on `main` with gates green (`tsc --noEmit`, `eslint src`, `next build`, `npm test`), then **update your lane's "Live status → next action" cell** in the registry.
 
 *Keep each status cell to one current line (the live state + the single next action). Dated
