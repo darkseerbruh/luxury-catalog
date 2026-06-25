@@ -97,9 +97,11 @@ keeping a couple per-bag pieces; confirm with her before writing.
 - **Post system:** `post` table; editor at `/posts/new` (or insert a row via a `tsx` script
   with the admin client). Fields: title, excerpt, **body**, status (`draft`/`published`),
   `topic_brand_id`, `topic_style_id`, `author_user_id`.
-- **Body is PLAIN-TEXT paragraphs** (split on blank lines; escaped; **no markdown headings,
-  bold, bullets, or inline links render**). Write prose paragraphs. Monetization is NOT in the
-  body — it's the **CTA block** (`src/app/posts/[slug]/PostBagCTA.tsx`, already built), which
+- **Body supports a small, safe markup subset** (added 2026-06-25, `src/app/posts/[slug]/page.tsx`
+  `Body`): `## ` heading, `- ` bullet list, `> ` callout box, `**bold**`. Blank line separates
+  blocks. Everything else is a paragraph. **Inline links still do NOT render by design** (no
+  `[]()`), so monetization stays in the **CTA block** (`src/app/posts/[slug]/PostBagCTA.tsx`,
+  already built), which
   renders seller-first buy/sell/**rent** affiliate links from the post's topic tag. So **always
   topic-tag** the post (e.g. Chanel `brand_id=1` / Classic Flap `style_id=1`).
 - **Existing draft:** the Chanel value piece is seeded as a **draft** (post_id 1, slug
