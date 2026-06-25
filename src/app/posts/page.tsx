@@ -40,6 +40,11 @@ export default async function PostsPage() {
             How to spot the real thing, where a bag came from, and what it actually holds in
             resale — from our verified experts.
           </p>
+          <p className="mt-3 max-w-prose text-sm text-muted">
+            Checking a specific bag right now?{" "}
+            <Link href="/identify" className="text-gold hover:underline">Identify it from a photo</Link>{" "}
+            or <Link href="/authenticate" className="text-gold hover:underline">request a pro review</Link>.
+          </p>
         </div>
         {profile?.isExpert && (
           <Link

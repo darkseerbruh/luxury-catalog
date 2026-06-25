@@ -492,6 +492,24 @@ export default function IdentifyPage() {
               {id.notes}
             </p>
           )}
+
+          {/* Escalation — the Check rung points up to Verify and Learn
+              (authentication standard §4: never a verdict, always escalate). */}
+          <div className="rounded-2xl border border-border bg-surface/50 p-5 text-sm">
+            <p className="text-muted">
+              These are the markers we can see in a photo, not proof. We don&rsquo;t
+              guarantee authenticity, and a good fake can pass a photo check, so confirm
+              anything high-stakes with a person.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-medium text-gold">
+              <Link href="/authenticate" className="transition-colors hover:text-gold-soft">
+                Get it checked by a pro &rarr;
+              </Link>
+              <Link href="/posts" className="transition-colors hover:text-gold-soft">
+                Read the authentication guides &rarr;
+              </Link>
+            </div>
+          </div>
         </section>
       )}
     </main>
