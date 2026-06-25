@@ -23,37 +23,45 @@ const LINE = "#7d7259";
 const GOOD = "#9bbf6a";
 const BAD = "#cf7d59";
 
+// Tile text is the SCAN version, kept to ~2 short, roughly even sentences. The
+// deeper prose lives in the article body, not here, so the two never duplicate.
 const MARKERS = {
   creed: {
     name: "Creed patch",
     where: "inside",
-    body: "The leather tag sewn inside. Lettering pressed into the leather, not flat ink. The serial sits stamped in its center.",
+    body: "The leather tag sewn inside. The lettering should be pressed into the leather, not flat-printed on the surface.",
+  },
+  serial: {
+    name: "Serial number",
+    where: "on the creed",
+    body: "Stamped into the creed, more than five digits. A wrong number is a red flag; a correct one is not proof.",
   },
   stitching: {
     name: "Stitching",
     where: "at the seams",
-    body: "Even and straight, with steady spacing. Crooked, overlapping, or loose threads are the worry.",
+    body: "Even and straight, with steady spacing. Crooked, overlapping, or loose threads are the warning signs.",
   },
   canvas: {
     name: "Signature canvas",
     where: "on the front",
-    body: "Coach's coated canvas printed with the repeating C pattern, instead of plain leather. On the front it looks balanced and centered, with crisp print. It will not line up along the side and bottom seams, and that is fine.",
+    body: "Coach's coated canvas with the repeating C print. On the front it should look balanced and centered.",
   },
   materials: {
     name: "Materials and feel",
     where: "the leather",
-    body: "Hard to judge from a photo. In your hands it tells you more. Real glove-tanned leather feels soft and substantial, with natural grain you can see: small pores, light creases, slight variation. It smells like leather, and older bags soften and gain a patina. Fakes feel stiff and plastic and can smell chemical. Some newer bags use coated or thinner leather, so stiffness alone is not proof.",
+    body: "Real glove-tanned leather feels soft, with visible natural grain. Stiff, plastic, and uniform is a warning sign.",
   },
   zipper: {
     name: "The zipper",
     where: "at the top",
-    body: "The brand stamped on the zipper proves nothing. Coach used many makers, and fakes use the same ones, like YKK, a common zipper brand. Check the bag, not the zipper.",
+    body: "The brand on the zipper pull proves nothing. Coach used many makers, and counterfeiters use the same ones.",
   },
 } as const;
 
 // Each tile's "Read more" jumps to the matching body section (h2 id = slugified heading).
 const ANCHORS: Record<keyof typeof MARKERS, string> = {
   creed: "the-creed-patch",
+  serial: "the-serial-number",
   stitching: "stitching",
   canvas: "signature-canvas",
   materials: "materials-and-feel",
@@ -84,6 +92,8 @@ function Pair({ marker }: { marker: keyof typeof MARKERS }) {
       return <svg viewBox="0 0 80 10" width="100%"><line x1="4" y1="5" x2="76" y2="5" stroke={FG} strokeWidth="1.4" strokeDasharray="6 4" /></svg>;
     if (m === "canvas")
       return <svg viewBox="0 0 80 16" width="100%"><g fill={MUTED}><rect x="28" y="5" width="5" height="5" transform="rotate(45 30.5 7.5)" /><rect x="38" y="5" width="5" height="5" transform="rotate(45 40.5 7.5)" /><rect x="48" y="5" width="5" height="5" transform="rotate(45 50.5 7.5)" /></g></svg>;
+    if (m === "serial")
+      return <svg viewBox="0 0 80 12" width="100%"><g fill={MUTED}><rect x="6" y="3" width="7" height="7" /><rect x="18" y="3" width="7" height="7" /><rect x="30" y="3" width="7" height="7" /><rect x="42" y="3" width="7" height="7" /><rect x="54" y="3" width="7" height="7" /><rect x="66" y="3" width="7" height="7" /></g></svg>;
     return <svg viewBox="0 0 140 16" width="100%"><g fill={MUTED}><circle cx="12" cy="6" r="1" /><circle cx="34" cy="10" r="1.2" /><circle cx="56" cy="5" r="1" /><circle cx="78" cy="11" r="1.3" /><circle cx="100" cy="7" r="1" /><circle cx="122" cy="10" r="1.2" /><circle cx="24" cy="12" r="0.9" /><circle cx="66" cy="12" r="0.9" /><circle cx="110" cy="12" r="0.9" /></g></svg>;
   };
   const bad = (m: keyof typeof MARKERS) => {
@@ -93,10 +103,13 @@ function Pair({ marker }: { marker: keyof typeof MARKERS }) {
       return <svg viewBox="0 0 80 10" width="100%"><path d="M4 4 L18 7 L32 4 L46 8 L60 4 L74 7" fill="none" stroke={LINE} strokeWidth="1.4" strokeDasharray="5 4" /></svg>;
     if (m === "canvas")
       return <svg viewBox="0 0 80 16" width="100%"><g fill={LINE}><rect x="8" y="5" width="5" height="5" transform="rotate(45 10.5 7.5)" /><rect x="18" y="5" width="5" height="5" transform="rotate(45 20.5 7.5)" /><rect x="28" y="5" width="5" height="5" transform="rotate(45 30.5 7.5)" /></g></svg>;
+    if (m === "serial")
+      return <svg viewBox="0 0 80 12" width="100%"><g fill={LINE}><rect x="6" y="3" width="7" height="7" /><rect x="18" y="3" width="7" height="7" /><rect x="30" y="3" width="7" height="7" /></g></svg>;
     return <svg viewBox="0 0 140 16" width="100%"><line x1="6" y1="6" x2="134" y2="6" stroke={LINE} strokeWidth="1" /><line x1="6" y1="11" x2="134" y2="11" stroke={LINE} strokeWidth="1" /></svg>;
   };
   const labels: Record<keyof typeof MARKERS, [string, string]> = {
-    creed: ["pressed in", "on top"],
+    creed: ["pressed in", "printed"],
+    serial: ["6 digits", "too few"],
     stitching: ["even", "crooked"],
     canvas: ["centered", "off-center"],
     materials: ["natural grain", "flat, uniform"],
@@ -123,6 +136,7 @@ function LocatorBag({ marker }: { marker: keyof typeof MARKERS }) {
       <path d="M20 24 Q20 11 28 11 Q36 11 36 24" fill="none" stroke={marker === "materials" ? GOLD : LINE} strokeWidth="1.5" />
       <path d="M13 24 L43 24 L40 56 Q40 59 37 59 L19 59 Q16 59 16 56 Z" fill="none" stroke={marker === "materials" ? GOLD : LINE} strokeWidth={marker === "materials" ? 1.8 : 1.5} />
       {marker === "creed" && (<><circle cx="28" cy="41" r="11" fill="none" stroke={GOLD} strokeWidth="0.8" opacity="0.5" /><rect x="23" y="37" width="10" height="8" rx="1" fill="#2a230f" stroke={GOLD} strokeWidth="1.6" /></>)}
+      {marker === "serial" && (<><rect x="22" y="36" width="12" height="9" rx="1" fill="none" stroke={GOLD} strokeWidth="1.5" /><line x1="25" y1="40.5" x2="31" y2="40.5" stroke={GOLD} strokeWidth="1.4" /></>)}
       {marker === "stitching" && <path d="M14 26 L17 55" fill="none" stroke={GOLD} strokeWidth="2.4" strokeLinecap="round" />}
       {marker === "canvas" && <g fill={GOLD}><rect x="23" y="36" width="5" height="5" transform="rotate(45 25.5 38.5)" /><rect x="30" y="36" width="5" height="5" transform="rotate(45 32.5 38.5)" /><rect x="26.5" y="43" width="5" height="5" transform="rotate(45 29 45.5)" /></g>}
       {marker === "materials" && <g fill={GOLD}><circle cx="24" cy="38" r="0.9" /><circle cx="32" cy="42" r="0.9" /><circle cx="28" cy="48" r="0.9" /></g>}
@@ -188,8 +202,9 @@ export function CoachAuthDiagram() {
         {/* One responsive grid: a single column on a phone, two on desktop. Each
             tile self-locates via its own highlighted bag, so no central bag is
             needed. Materials spans the full width (it carries the longest text). */}
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Tile marker="creed" />
+          <Tile marker="serial" />
           <Tile marker="stitching" />
           <Tile marker="canvas" />
           <Tile marker="materials" />
@@ -232,6 +247,7 @@ function SectionVisual({ marker }: { marker: keyof typeof MARKERS }) {
 export const coachDiagramRegistry: Record<string, ComponentType> = {
   "coach-authentication": CoachAuthDiagram,
   "coach-visual-creed": () => <SectionVisual marker="creed" />,
+  "coach-visual-serial": () => <SectionVisual marker="serial" />,
   "coach-visual-stitching": () => <SectionVisual marker="stitching" />,
   "coach-visual-canvas": () => <SectionVisual marker="canvas" />,
   "coach-visual-materials": () => <SectionVisual marker="materials" />,
