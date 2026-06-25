@@ -49,6 +49,15 @@ const MARKERS = {
   },
 } as const;
 
+// Each tile's "Read more" jumps to the matching body section (h2 id = slugified heading).
+const ANCHORS: Record<keyof typeof MARKERS, string> = {
+  creed: "the-creed-patch",
+  stitching: "stitching",
+  canvas: "signature-canvas",
+  materials: "materials-and-feel",
+  zipper: "the-zipper-myth",
+};
+
 function CheckMark() {
   return (
     <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke={GOOD} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -136,6 +145,9 @@ function Tile({ marker }: { marker: keyof typeof MARKERS }) {
       </div>
       <div style={{ fontSize: 12.5, lineHeight: 1.55, color: MUTED, marginBottom: 9 }}>{m.body}</div>
       {marker === "zipper" ? <ZipperVisual /> : <Pair marker={marker} />}
+      <a href={`#${ANCHORS[marker]}`} style={{ display: "inline-block", marginTop: 10, fontSize: 11.5, fontWeight: 500, color: "#c9a24c" }}>
+        Read more &rarr;
+      </a>
     </div>
   );
 }
@@ -174,14 +186,12 @@ export function CoachAuthDiagram() {
         {/* One responsive grid: a single column on a phone, two on desktop. Each
             tile self-locates via its own highlighted bag, so no central bag is
             needed. Materials spans the full width (it carries the longest text). */}
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3">
           <Tile marker="creed" />
           <Tile marker="stitching" />
           <Tile marker="canvas" />
+          <Tile marker="materials" />
           <Tile marker="zipper" />
-          <div className="md:col-span-2">
-            <Tile marker="materials" />
-          </div>
         </div>
 
         <div style={{ background: "#1c1708", border: "1px solid #4a3f1f", borderRadius: 10, padding: "12px 14px", display: "flex", gap: 8, alignItems: "flex-start", marginTop: 12 }}>

@@ -163,9 +163,11 @@ function Body({ body }: { body: string | null }) {
     }
     if (line.startsWith("## ")) {
       flushAll();
+      const heading = line.replace(/^##\s+/, "");
+      const id = heading.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
       out.push(
-        <h2 key={k} className="mt-2 font-serif text-xl text-foreground">
-          {renderInline(line.replace(/^##\s+/, ""), `h${k}`)}
+        <h2 key={k} id={id} className="mt-2 scroll-mt-24 font-serif text-xl text-foreground">
+          {renderInline(heading, `h${k}`)}
         </h2>,
       );
       k++;
