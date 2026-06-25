@@ -358,7 +358,9 @@ so this is strategy, not just taste.
 5. **Slop sweep** — strip the tells above; kill flip throwaways and trailer cadences.
 6. **Register check** — does the tightness match the surface (§4 dial)?
 7. **One-voice check** — same person as our last three posts? Brand voice, not
-   founder-persona gush, unless it's on-camera (§5).
+   founder-persona gush, unless it's on-camera (§5). **Articles are third person:**
+   "the bag people ask about most," never "the bag I get asked about most." First-person
+   "I / my" is the founder persona (video only); the brand "we / our" is fine.
 
 > If a draft can't pass 1–7 in under a minute of editing, the draft was wrong —
 > rewrite the prompt, don't polish the slop.
