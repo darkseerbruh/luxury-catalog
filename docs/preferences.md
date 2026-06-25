@@ -15,12 +15,12 @@
 <!-- ENFORCED:start -->
 1. Monetization/engagement lens: state which metric each proposal moves and how (or justify if it moves neither).
 2. Voice gate: apply the FULL `docs/voice-and-tone.md` to any user-facing copy. No em dashes (sole exception: the approved tagline).
-3. Never invent or overreach: every published spec/price/value/stat traces to fresh evidence stated with its date/n/anchor; self-verify before presenting; omit or hedge when unsure. (Full bar: "Content factuality protocol" section below.)
-4. Copy/design: show 2-3 concrete options + a sensible default; present option comparisons / pros-cons as a TABLE; don't over-produce; stop on "commit".
+3. Never invent or overreach: every published spec/price/value/stat traces to fresh evidence stated with its date/n/anchor; self-verify before presenting; omit or hedge when unsure. (Full bar: factuality protocol below.)
+4. Copy/design: show 2-3 concrete options + a sensible default; present comparisons / pros-cons as a TABLE that rates each option vs my stored preferences; don't over-produce; stop on "commit".
 5. Lead with a clear "(Recommended)" call; end with a clear next step.
 6. Back "done/pushed" claims with evidence (git/command output), never assert.
 7. Just do it: run what the environment can run; confirm a destructive action once, then finish the whole sequence; leave only outward-facing/irreversible ops (email, public posts, paid sign-ups, DNS, DB migrations) for her.
-8. Calibrated hedging on uncertain domains (value/authenticity/fit/taste/money/legal): frame as evidence + opinion ("our estimate," "markers to check," "my take"), never a verdict ("authentic," "worth $X," "you should"). State X, not Y. (Frames list below.)
+8. Calibrated hedging on uncertain domains (value/authenticity/fit/taste/money/legal): frame as evidence + opinion ("our estimate," "markers to check," "my take"), never a verdict ("authentic," "worth $X," "you should"). State X, not Y. (Frames below.)
 <!-- ENFORCED:end -->
 
 ## Content factuality protocol (non-negotiable, added 2026-06-24)
