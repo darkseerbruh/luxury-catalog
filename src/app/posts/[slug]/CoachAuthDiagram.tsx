@@ -134,8 +134,32 @@ function Tile({ marker }: { marker: keyof typeof MARKERS }) {
           {marker === "zipper" && <span style={{ fontSize: 9, color: MUTED, textTransform: "uppercase", letterSpacing: "0.08em" }}>myth</span>}
         </div>
       </div>
-      <div style={{ fontSize: 12.5, lineHeight: 1.55, color: MUTED, marginBottom: marker === "zipper" ? 0 : 9 }}>{m.body}</div>
-      {marker !== "zipper" && <Pair marker={marker} />}
+      <div style={{ fontSize: 12.5, lineHeight: 1.55, color: MUTED, marginBottom: 9 }}>{m.body}</div>
+      {marker === "zipper" ? <ZipperVisual /> : <Pair marker={marker} />}
+    </div>
+  );
+}
+
+function ZipperVisual() {
+  // The zipper is a myth, not a genuine/red-flag pair, so this is a single neutral
+  // panel: a zipper with a "not a clue" note marked by an info icon, never a check
+  // or X (the brand is not good or bad, it just tells you nothing).
+  return (
+    <div style={{ border: "1px solid #322c22", borderRadius: 6, background: "#161310", padding: 8 }}>
+      <div style={{ fontSize: 10, color: MUTED, marginBottom: 6, display: "flex", gap: 4, alignItems: "center" }}>
+        <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke={MUTED} strokeWidth="1.3" aria-hidden>
+          <circle cx="7" cy="7" r="6" /><line x1="7" y1="6.5" x2="7" y2="10" /><circle cx="7" cy="4" r="0.7" fill={MUTED} stroke="none" />
+        </svg>
+        any brand on the pull is normal
+      </div>
+      <svg viewBox="0 0 200 30" width="100%" role="img" aria-hidden>
+        <rect x="6" y="4" width="188" height="8" rx="2" fill="none" stroke={LINE} strokeWidth="1" />
+        <rect x="6" y="18" width="188" height="8" rx="2" fill="none" stroke={LINE} strokeWidth="1" />
+        <line x1="12" y1="12.5" x2="188" y2="12.5" stroke={LINE} strokeWidth="2" strokeDasharray="2 3" />
+        <line x1="14" y1="17.5" x2="190" y2="17.5" stroke={LINE} strokeWidth="2" strokeDasharray="2 3" />
+        <rect x="92" y="6" width="16" height="18" rx="2" fill="#1a1310" stroke={GOLD} strokeWidth="1.3" />
+        <line x1="100" y1="24" x2="100" y2="29" stroke={GOLD} strokeWidth="1.3" /><circle cx="100" cy="30" r="1.6" fill="none" stroke={GOLD} strokeWidth="1.1" />
+      </svg>
     </div>
   );
 }
