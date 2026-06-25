@@ -7,7 +7,7 @@ anti-bloat workflow in `AGENTS.md`). 🔄 = auto-loaded every session.*
 ## Start here (operating docs)
 | File | What it is |
 |---|---|
-| 🔄 `handoff.md` | **Current project state** — live TL;DRs, pending operator steps, setup checklist, reference. Read first. |
+| 🔄 `handoff.md` | **Current project state** — opens with the **🧭 Active-lanes registry** (the session router: who owns which files + each lane's live status; a new chat hydrates from it). Then live TL;DRs, pending operator steps, setup checklist, reference. Read first. |
 | 🔄 `preferences.md` | **How the owner works + locked decisions.** Holds the always-on ENFORCED rules block. |
 | 🔄 `../AGENTS.md` | Branch/sync workflow + the enforced operating rules + wrap-up hygiene. |
 | `desktop-todo.md` | Operator backlog — everything that needs a browser/dashboard/human, lettered A–J. |
@@ -55,7 +55,7 @@ anti-bloat workflow in `AGENTS.md`). 🔄 = auto-loaded every session.*
 | `deployment-checklist.md` | Deploy steps. |
 | `analytics-setup.md` | PostHog/analytics setup. |
 | `utm-conventions.md` | UTM tagging conventions. |
-| `parallel-sessions.md` | How to run parallel/background-agent sessions safely. |
+| `parallel-sessions.md` | Worktree mechanics for parallel/background-agent sessions (lane ownership itself lives in the handoff.md registry). |
 
 ## UX (`docs/ux/`)
 Customer-journey evaluations, homepage experiments, sitemap/flows, backlog. `ux/homepage-experiments.md` + `ux/home-use-case-value-props.md` are the canonical homepage references.

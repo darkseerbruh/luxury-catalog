@@ -1,6 +1,41 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-25 (preference-governance + docs cleanup; recaps split to docs/handoff-archive.md). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
+---
+
+## 🧭 Active-lanes registry — the session router (READ FIRST)
+
+**Lanes are durable; chats are disposable.** This project runs as a handful of parallel
+**workstreams (lanes)**. You spin up a fresh chat whenever — each new chat does NOT need a long
+pasted brief: it **hydrates from this table**, works **one** lane, and **writes its status back
+here on wrap-up**. That is what stops chats running into each other: the table says which files
+each lane owns and what each lane is mid-doing, so a cold chat picks up exactly where the last one
+left off without colliding.
+
+> A chat edits **only the files its lane owns.** Cross-lane edits are the collision. Shared
+> resources (prod Supabase DB, migration numbers, the `main` remote) are isolated by **nobody** —
+> coordinate them per [parallel-sessions.md](parallel-sessions.md) (worktree mechanics + the
+> "announce your migration number" rule).
+
+| Lane | Worktree · branch (off `main`) | Owns — edit ONLY these | Deep doc(s) | Live status → next action |
+|---|---|---|---|---|
+| **Content** (editorial suite) | `…/luxury-catalog-content` · `content/editorial` | `post` rows · `src/app/posts/**` · `docs/content-*.md` | [content-writing-handoff.md](content-writing-handoff.md) + [content-strategy.md](content-strategy.md) | Suite shape UNCONFIRMED (refined additive suite recommended). Chanel draft `post_id 1` FAILED factuality audit. 0 published. **Next:** confirm suite with owner → fix/rewrite Chanel as a decision piece → write the batch as drafts. |
+| **Data / capture** | `…/luxury-catalog-data` · `data/market-capture` | `supabase/ingest/**` · `scripts/**` · `data/ingest/**` | [data-collection-handoff.md](data-collection-handoff.md) + [capture-runbook.md](capture-runbook.md) + [market-sweep-worklist.md](market-sweep-worklist.md) | Market sweep in progress (FP done; TRR/Vestiaire bulk transport is the bottleneck). Mid-tier (Coach via eBay/Poshmark) NOT captured. `promote-discovered` gated on a model-name normalizer. **Next:** merge `claude/multibrand-parser` → load Birkin 30 → mid-tier capture. |
+| **UX / shop + auth-UX** | `…/luxury-catalog` (original) · `shop/listings` | `src/app/**` (NOT posts) · `src/components/**` · nav · `next.config.ts` · `docs/ux/**` · `docs/authentication-standard.md` | [authentication-standard.md](authentication-standard.md) + `docs/ux/**` | Nav restructure shipped. 3 trims pending owner OK (homepage "Identify a bag" chip · AuthInterestButton on `/closet` · PersonaRouter copy). Learn-vs-Check nav-balance question open. **PRIMARY NAV IS PROTECTED — never add to it without asking the owner.** |
+| **Infra / ops** (catch-all) | any clean worktree · `ops/<task>` | `supabase/migrations/**` (announce the number!) · deploy/DNS · `docs/desktop-todo.md` · analytics | [desktop-todo.md](desktop-todo.md) + the setup checklist below | Migration apply-state = **RE-VERIFY** (see the pending-operator block below, do not trust). **Next (open to-do):** site-load / perf investigation, `desktop-todo.md` §J. |
+
+**Starting a new chat — paste this (fill the lane), nothing longer is needed:**
+> You're working the **`<LANE>`** lane of Luxury Catalog.
+> 1. Sync `main` (or create your lane's worktree off `main` — see `docs/parallel-sessions.md`).
+> 2. Read `docs/handoff.md` (the Active-lanes registry + your lane's row), then your lane's deep doc, then `docs/preferences.md`. Obey the ENFORCED block (auto-injected each turn).
+> 3. Work ONLY the files your lane owns. Coordinate shared DB / migration numbers per `parallel-sessions.md`.
+> 4. On wrap-up: land on `main` with gates green (`tsc --noEmit`, `eslint src`, `next build`, `npm test`), then **update your lane's "Live status → next action" cell** in the registry.
+
+*Keep each status cell to one current line (the live state + the single next action). Dated
+session history goes in the TL;DRs below, then ages out to [handoff-archive.md](handoff-archive.md) — never let it pile up in the registry.*
+
+---
+
 ## TL;DR — preference-governance system + docs cleanup (2026-06-25)
 
 Goal of the session: make Claude's behavior match the owner's priorities without her re-reminding it. **No app code or DB touched** (docs + `.claude/` hooks only). All on `main`, commit `86c7fd8`.

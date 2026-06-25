@@ -6,8 +6,9 @@ shapes + legal posture). Last updated 2026-06-22.
 
 > ⚠️ **Run this workstream in ONE chat / its own git worktree.** Two chats sharing
 > the same working tree both pushed to `main` and caused branch-switch churn + near
-> clobbers. The "value module" chat owns the **bag-page UI/visualizations**; this
-> workstream owns the **data pipeline + loaded data**. Keep them separate.
+> clobbers. This is the **Data / capture** lane; the **UX / shop** lane owns the
+> bag-page UI/visualizations. Keep them separate. Lane ownership + live status: the
+> 🧭 Active-lanes registry at the top of [handoff.md](handoff.md) (this is its deep doc).
 
 ---
 

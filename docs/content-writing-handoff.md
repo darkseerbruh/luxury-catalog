@@ -1,8 +1,10 @@
 # Content Writing — Handoff / Bootstrap
 
-*Created 2026-06-24. For the chat that WRITES the content suite. Read this first, then
-the canonical docs it points to. You are producing publishable editorial that earns
-search/AI-citation traffic and monetizes it through the compare-and-hand-off CTA.*
+*Created 2026-06-24. The deep doc for the **Content** lane. Find the lane's worktree/branch,
+file ownership, and live status in the 🧭 Active-lanes registry at the top of
+[handoff.md](handoff.md); this is the depth behind that row. Read it first, then the canonical
+docs it points to. You are producing publishable editorial that earns search/AI-citation
+traffic and monetizes it through the compare-and-hand-off CTA.*
 
 ## 0. The end goal (confirmed by the owner)
 Build Luxury Catalog into the **trusted, AI- and Google-citable reference for the luxury
