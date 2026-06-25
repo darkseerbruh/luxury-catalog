@@ -1,5 +1,16 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-25 (recaps split to docs/handoff-archive.md). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-06-25 (preference-governance + docs cleanup; recaps split to docs/handoff-archive.md). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+## TL;DR — preference-governance system + docs cleanup (2026-06-25)
+
+Goal of the session: make Claude's behavior match the owner's priorities without her re-reminding it. **No app code or DB touched** (docs + `.claude/` hooks only). All on `main`, commit `86c7fd8`.
+
+- **Always-on rules = single source of truth.** The `ENFORCED:start..ENFORCED:end` block at the top of `docs/preferences.md` holds the 8 standing rules; `.claude/hooks/operating-rules.sh` (UserPromptSubmit) re-injects them **every turn**; `AGENTS.md` points at the block (no duplicate copy). To change an always-on rule, edit only that block. New this session: rule **#8 calibrated hedging** + the **Content factuality protocol** + a **Calibrated-hedge frames** list ("X, not Y").
+- **The Preference Bar** (`AGENTS.md`): stored preferences must be short, decisive, clear, one decision per line, and **decisive about nuance** (prescribe the hedge, don't drop it). Wired into the wrap-up workflow; every added line must pass it.
+- **Anti-bloat guard** `.claude/hooks/doc-budget.sh` (SessionStart): warns once per session if the ENFORCED block / `preferences.md` / `handoff.md` drift over budget or use hedge words in priorities. Budgets in the script; raise deliberately.
+- **Docs cleanup:** `handoff.md` slimmed 698→233 lines (old recaps → `docs/handoff-archive.md`, nothing lost; pending operator items surfaced with a **re-verify** caveat). Added `docs/README.md` (the map: canonical vs archived). Archived 10 stale first-day/completed-handoff docs → `docs/archive/`. Removed a stale duplicate git worktree.
+- **Activation:** hooks load at session start, so the per-turn injection + guard take effect in a **fresh session** (no action needed).
+- **Open:** site-load/perf investigation (`docs/desktop-todo.md` §J) — the one new to-do; nothing is blocking.
 
 ## TL;DR — content development is the current unlock (2026-06-24)
 
