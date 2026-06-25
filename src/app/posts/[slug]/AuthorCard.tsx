@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TrustBadges } from "@/components/TrustBadges";
+import { AUTHOR_ROLE } from "@/lib/geo";
 import type { PostAuthor } from "@/lib/posts";
 
 /**
@@ -33,6 +34,7 @@ export function AuthorCard({ author }: { author: PostAuthor }) {
               isAuthenticator={author.isAuthenticator}
             />
           </div>
+          <p className="mt-0.5 text-sm text-gold/90">{AUTHOR_ROLE}</p>
           {author.bio && <p className="mt-1.5 text-sm leading-relaxed text-muted">{author.bio}</p>}
           {profileHref && (
             <Link

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
-import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
+import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { AuthorCard } from "./AuthorCard";
@@ -253,6 +253,7 @@ export default async function PostDetailPage({
           ) : (
             name
           )}
+          {post.author && `, ${AUTHOR_ROLE}`}
           {post.author && (
             <TrustBadges
               isVerified={post.author.isVerified}
