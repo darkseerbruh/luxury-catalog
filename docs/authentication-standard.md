@@ -43,8 +43,11 @@ A marker may be published ONLY if it meets ALL of:
 4. **Failure-mode labeled.** State what a counterfeit gets wrong, or the cross-check to
    run. The failure mode is the teaching value; a marker without one is not publishable.
 5. **Confidence-rated and cited.** Every published marker carries a `confidence_level`
-   (low / medium / high / verified) and its `sources`, surfaced in the UI. If we cannot
-   cite it, we do not publish it.
+   (low / medium / high / verified) and its `sources`. Confidence governs **what we publish
+   and how we word it** (publish medium or better; state softness in plain words, e.g. "easy
+   to misjudge, so do not lean on it"). Surfacing it as a visible per-marker badge is
+   **optional** and omitted when it adds reader clutter; the citation/sourcing requirement
+   stands. If we cannot cite it, we do not publish it.
 
 **Never assert an unsourced marker. Never invent a marker, a serial format, a date code,
 or a percentage to fill out a checklist.**
@@ -150,7 +153,8 @@ A piece may ship only if every box is true. If any is false, it does not ship.
 
 - [ ] Every marker is objective, cross-verified (2+ reputable sources), era-stamped, and
       failure-mode labeled (§1).
-- [ ] Every marker carries a confidence rating and its citation, surfaced in the UI (§1).
+- [ ] Every marker carries a confidence rating and its citation; confidence governs
+      publication and wording (a visible reader-facing badge is optional, §1).
 - [ ] No verdict of authentic / genuine / real anywhere; any score uses the §2 capped,
       asymmetric form with no invented numbers.
 - [ ] The "we do not guarantee authenticity" line and the escalate-to-a-human route are
