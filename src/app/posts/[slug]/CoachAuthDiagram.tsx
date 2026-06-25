@@ -141,36 +141,21 @@ function Tile({ marker }: { marker: keyof typeof MARKERS }) {
 }
 
 export function CoachAuthDiagram() {
-  const order: (keyof typeof MARKERS)[] = ["creed", "stitching", "canvas", "materials", "zipper"];
   return (
     <figure style={{ margin: "0.5rem 0 1rem", color: FG }} aria-label="Coach authentication markers, illustrated">
       <div style={{ border: "1px solid #322c22", borderRadius: 14, padding: 18, background: "#14120c" }}>
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 20 }}>Coach, the markers worth checking</div>
         <div style={{ fontSize: 13, color: "#c9a24c", marginBottom: 12 }}>A wrong marker is a red flag. A right marker is never proof.</div>
 
-        {/* Mobile + narrow: stacked tiles, each self-locating. */}
-        <div className="flex flex-col gap-2.5 md:hidden">
-          {order.map((k) => <Tile key={k} marker={k} />)}
-        </div>
-
-        {/* Desktop: tiles around a central bag. (Leader-line ring degrades to this
-            grid when narrower; the per-tile locators carry the "where".) */}
-        <div className="hidden md:grid" style={{ gridTemplateColumns: "1fr 150px 1fr", gap: 14, alignItems: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <Tile marker="creed" />
-            <Tile marker="stitching" />
-          </div>
-          <svg viewBox="0 0 80 96" width="100%" style={{ maxWidth: 120, margin: "0 auto", display: "block" }} role="img" aria-hidden>
-            <path d="M29 36 Q29 18 40 18 Q51 18 51 36" fill="none" stroke={FG} strokeWidth="2" />
-            <path d="M18 36 L62 36 L57 86 Q57 90 53 90 L27 90 Q23 90 23 86 Z" fill="none" stroke={FG} strokeWidth="2.2" strokeLinejoin="round" />
-            <line x1="23" y1="36" x2="57" y2="36" stroke={MUTED} strokeWidth="1.2" strokeDasharray="4 3" />
-            <g fill="#c9a24c"><rect x="33" y="54" width="6" height="6" transform="rotate(45 36 57)" /><rect x="41" y="54" width="6" height="6" transform="rotate(45 44 57)" /><rect x="37" y="63" width="6" height="6" transform="rotate(45 40 66)" /></g>
-          </svg>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <Tile marker="canvas" />
-            <Tile marker="zipper" />
-          </div>
-          <div style={{ gridColumn: "1 / -1" }}>
+        {/* One responsive grid: a single column on a phone, two on desktop. Each
+            tile self-locates via its own highlighted bag, so no central bag is
+            needed. Materials spans the full width (it carries the longest text). */}
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <Tile marker="creed" />
+          <Tile marker="stitching" />
+          <Tile marker="canvas" />
+          <Tile marker="zipper" />
+          <div className="md:col-span-2">
             <Tile marker="materials" />
           </div>
         </div>
