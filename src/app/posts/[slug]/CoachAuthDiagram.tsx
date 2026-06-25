@@ -14,6 +14,8 @@
  * Every genuine/red-flag pair carries a check and an X, never color alone.
  */
 
+import type { ComponentType } from "react";
+
 const FG = "#f3ede0";
 const MUTED = "#a89c87";
 const GOLD = "#e3c785";
@@ -205,3 +207,33 @@ export function CoachAuthDiagram() {
     </figure>
   );
 }
+
+/** A single marker's visual (the highlighted bag + its genuine/red-flag images),
+ * with no body text, re-shown at that marker's section so the picture reappears
+ * while the reader reads the deeper prose. */
+function SectionVisual({ marker }: { marker: keyof typeof MARKERS }) {
+  return (
+    <div
+      style={{ border: "1px solid #322c22", borderRadius: 10, padding: 12, background: "#1a1712", display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}
+      role="img"
+      aria-label={`${MARKERS[marker].name}, illustrated`}
+    >
+      <LocatorBag marker={marker} />
+      <div style={{ flex: 1, minWidth: 200 }}>
+        {marker === "zipper" ? <ZipperVisual /> : <Pair marker={marker} />}
+      </div>
+    </div>
+  );
+}
+
+/** Registry consumed by the post Body renderer: a body line `[diagram: <id>]`
+ * renders the matching component. The full diagram is the hero; the per-marker
+ * visuals re-appear at each body section. */
+export const coachDiagramRegistry: Record<string, ComponentType> = {
+  "coach-authentication": CoachAuthDiagram,
+  "coach-visual-creed": () => <SectionVisual marker="creed" />,
+  "coach-visual-stitching": () => <SectionVisual marker="stitching" />,
+  "coach-visual-canvas": () => <SectionVisual marker="canvas" />,
+  "coach-visual-materials": () => <SectionVisual marker="materials" />,
+  "coach-visual-zipper": () => <SectionVisual marker="zipper" />,
+};

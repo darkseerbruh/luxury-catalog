@@ -6,13 +6,11 @@ import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
-import { CoachAuthDiagram } from "./CoachAuthDiagram";
+import { coachDiagramRegistry } from "./CoachAuthDiagram";
 
-// Registered article diagrams. A body line `[diagram: <id>]` renders the
-// matching original schematic component (never a photo) in place.
-const DIAGRAMS: Record<string, ComponentType> = {
-  "coach-authentication": CoachAuthDiagram,
-};
+// Registered article diagrams. A body line `[diagram: <id>]` renders the matching
+// original schematic component (never a photo) in place.
+const DIAGRAMS: Record<string, ComponentType> = coachDiagramRegistry;
 
 export const dynamic = "force-dynamic";
 
