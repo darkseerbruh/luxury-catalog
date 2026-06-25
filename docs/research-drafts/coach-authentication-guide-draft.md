@@ -55,21 +55,36 @@ Coach is widely counterfeited, which also makes it one of the most teachable bra
 The sections below go deeper on each marker in the diagram above: what to look for, why it works, and where it stops being reliable.
 
 ## The creed patch
+
+[diagram: coach-visual-creed]
+
 Every genuine Coach carries its paperwork on the creed, a small rectangle of leather stitched into the lining that names the brand and, on most bags, holds the serial or style number. The detail counterfeiters most often fumble is depth. A real creed is heat-set under pressure, so the characters are physically sunk into the hide and catch shadow when you tilt the bag toward the light. A reproduction tends to print or foil the text flat onto the surface, where it sits without relief and can smudge at the edges. Read the wording while you are there, because a genuine die leaves sharp, level, correctly spelled lines, so wandering baselines, fuzzy characters, or a spelling slip are all reasons to slow down. Placement is deliberately not a rule. Over the years the creed has been set on an interior wall, along the top lining seam, and on the back panel of structured styles, so an unfamiliar spot is not evidence of anything, and neither is its absence on small pieces like wristlets and minis, many of which never carried one.
 
 ## The serial number
 The code on the creed is a production and style number, not a unique fingerprint, and that distinction is the whole game. On bags from the 1970s onward it is struck into the leather beside the brand text; for a short stretch around 2014 to 2016 Coach moved the style number onto a slim white fabric tag tucked into the corner of an inner pocket, where it is easy to miss. A few mechanical tells are worth knowing: the number is pressed in rather than printed, it runs to more than five digits, and a code that opens with a letter from N through Z is one Coach does not use. Here is the part that trips up most shoppers. Because these codes repeat across thousands of bags and are simple to photograph and copy, a number that looks right tells you very little. The check runs one way only. A number that breaks the format is a strong reason to walk away; a number that fits is just the absence of that one red flag.
 
 ## Stitching
+
+[diagram: coach-visual-stitching]
+
 Construction is where corners get cut, and stitching shows it first. Run your eye along the seams, the handle anchors, and the border of the creed, where the work is densest. The thread should hold a steady line and an even rhythm, the same gauge from one end of a seam to the other. Authentic bags are not flawless, and an older one will show honest wear, so you are not hunting for perfection. You are watching for the mistakes a careful maker would not ship: stitches that wander or double back over themselves, threads left loose or fraying at the ends, or a run where the color or thickness shifts partway along. Hurried, sloppy seams are one of the cheapest places for a counterfeit to give itself away.
 
 ## Signature canvas
+
+[diagram: coach-visual-canvas]
+
 Signature canvas is not leather at all. It is a coated fabric printed with Coach's repeating logo motif and then trimmed in leather, so judge it the way you would judge any print job. Across the front panel the pattern should sit square and balanced, centered from left to right, with clean edges and even ink. What you should not expect is for the motif to meet perfectly where panels join. Aligning a repeating print across every side and bottom seam would waste a great deal of fabric, so genuine bags routinely break the pattern there, and a few styles never followed the front-symmetry habit at all. Save your attention for the print itself: muddy or blurred motifs, uneven spacing, or a front that reads visibly lopsided are the things worth a pause.
 
 ## Materials and feel
+
+[diagram: coach-visual-materials]
+
 This is the one check a photo cannot really give you, which is exactly why it rewards handling the bag. Coach's classic leather is glove-tanned, a soft, full-bodied hide left largely natural and colored with clear aniline dyes, so the surface keeps its real character: fine pores, faint creasing, and small differences from one panel to the next. It carries a true leather scent, and with use it relaxes and deepens into a patina rather than wearing out. Counterfeits tend to feel the opposite, stiff and slick like coated plastic, uniform in a way real hide never is, and sometimes carrying a chemical smell. One fair caveat keeps this honest: Coach itself has used coated and thinner leathers on some newer lines, so a firmer hand on its own does not condemn a bag. Treat feel as a strong supporting signal in person, never a verdict on its own.
 
 ## The zipper myth
+
+[diagram: coach-visual-zipper]
+
 It is worth retiring one piece of folklore, because it sends people down the wrong path. The maker's name stamped on a zipper pull does not authenticate a Coach bag. Over the years the brand has fitted hardware from several suppliers, including Talon, Eclair, RiRi, and YKK, so an unfamiliar name is perfectly ordinary. Just as important, those suppliers sell to everyone, which means a counterfeiter can fit the very same genuine YKK zipper you would expect on a real bag. Hardware brands are easy to source and easy to fake, so they belong near the bottom of any reliable checklist. Spend your attention on the leather, the stamping, and the construction instead.
 
 ## The honest bottom line
