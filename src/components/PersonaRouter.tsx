@@ -93,10 +93,11 @@ export default async function PersonaRouter() {
             </svg>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm">
-            <li className="flex items-center gap-2 text-foreground"><Check /> Even stitching</li>
-            <li className="flex items-center gap-2 text-foreground"><Check /> Date code checks out</li>
-            <li className="flex items-center gap-2 text-muted"><Cross /> Crooked logo? Fake.</li>
+            <li className="flex items-center gap-2 text-foreground"><Check /> Stitching and edges</li>
+            <li className="flex items-center gap-2 text-foreground"><Check /> Stamps and date codes</li>
+            <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
+          <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
           <span className={CTA}>Scan a bag &rarr;</span>
         </Link>
 
