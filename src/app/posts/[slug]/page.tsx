@@ -7,6 +7,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
+import { AuthorCard } from "./AuthorCard";
+import { TrustBadges } from "@/components/TrustBadges";
 
 // Registered article diagrams. A body line `[diagram: <id>]` renders the matching
 // original schematic component (never a photo) in place.
@@ -251,10 +253,13 @@ export default async function PostDetailPage({
           ) : (
             name
           )}
-          {post.author?.isExpert && (
-            <span className="ml-2 rounded-full bg-gold/10 px-2 py-0.5 text-xs text-gold">
-              Verified expert
-            </span>
+          {post.author && (
+            <TrustBadges
+              isVerified={post.author.isVerified}
+              isExpert={post.author.isExpert}
+              isAuthenticator={post.author.isAuthenticator}
+              className="ml-2 inline-flex align-middle"
+            />
           )}
           {date ? ` · ${date}` : ""}
         </p>
@@ -282,6 +287,9 @@ export default async function PostDetailPage({
       {hasTopic && (post.topic.brandName || post.topic.styleName) && (
         <PostBagCTA brandName={post.topic.brandName} styleName={post.topic.styleName} slug={post.slug} />
       )}
+
+      {/* Author credibility card (E-E-A-T): who wrote this and why to trust it. */}
+      {post.author && <AuthorCard author={post.author} />}
 
       {/* Sources / related — link to the brand or style this article covers */}
       {hasTopic && (
