@@ -1,4 +1,4 @@
-import { cache } from "react";
+import { cache, type ComponentType } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,6 +6,13 @@ import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
+import { CoachAuthDiagram } from "./CoachAuthDiagram";
+
+// Registered article diagrams. A body line `[diagram: <id>]` renders the
+// matching original schematic component (never a photo) in place.
+const DIAGRAMS: Record<string, ComponentType> = {
+  "coach-authentication": CoachAuthDiagram,
+};
 
 export const dynamic = "force-dynamic";
 
@@ -95,6 +102,14 @@ function Body({ body }: { body: string | null }) {
   return (
     <div className="flex flex-col gap-4 text-foreground">
       {blocks.map((block, i) => {
+        // Diagram token: `[diagram: <id>]` on its own line renders a registered
+        // schematic component in place of the text block.
+        const diagram = block.trim().match(/^\[diagram:\s*([\w-]+)\]$/);
+        if (diagram) {
+          const D = DIAGRAMS[diagram[1]];
+          if (D) return <D key={i} />;
+        }
+
         const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
 
         // Callout: every line starts with ">". Visually set apart from the body.
