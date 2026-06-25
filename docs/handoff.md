@@ -1,6 +1,19 @@
 # Luxury Catalog — Handoff Document
 *Updated 2026-06-23. Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
+## TL;DR — content development is the current unlock (2026-06-24)
+
+**Why now:** the affiliate monetization stack is wired up (eBay EPN approved + links live in code; myGemma/Rebag/TLC/TRR/Fashionphile/MadAve applied — see `docs/data-collection-handoff.md` §11), but **Skimlinks REJECTED the site 2026-06-24** as "not suitable" — their criteria point to **insufficient original content** for a reviewer to determine the site's purpose/value. (NOT the fake-door/"coming soon" surfaces — those are fine and stay; owner confirmed real sites use them.) So the highest-leverage work shifts from *more signups* to **making the site content-rich + review-ready**, which also de-risks the pending manual-review approvals and is the real SEO/traffic engine.
+
+**Content plan — lean on the two moats: real resale DATA + authentication authority. Prioritized pillars:**
+1. ⭐ **Authentication guides** — "How to authenticate a Chanel Classic Flap / Birkin / Neverfull / Marmont." Brand-defining ("is it real"), high-intent SEO, obviously-original content, pure de-gatekeeping voice.
+2. ⭐ **Value & price guides** — "[Bag] resale value & price history 2026", "Which Birkin sizes hold value best", "Is the Classic Flap worth it?" Built on OUR captured data (original/defensible), commerce-relevant (buy/sell links), feeds the value module.
+3. **Buy/sell guides** — "Where to sell your [bag] for the most" (seller-side = top revenue lever), "Best entry luxury bags that hold value."
+4. **Comparisons** — Neverfull vs Speedy, Classic Flap vs Reissue, Caviar vs Lambskin (high-intent, links both options).
+5. **Market/trend** — most coveted now / what's appreciating / best deals under median (ties to `/coveted` + `/deals` + demand data; recurring).
+
+**Recommended first batch:** Pillars 1 + 2 on the hero bags we already have data for (Chanel Classic Flap 199 [116 TRR rows], Birkin 30 [102 rows], Kelly, Neverfull, Marmont) → ~6–10 substantive articles. Then **re-apply to Skimlinks**. All drafted against `docs/voice-and-tone.md` (no em dashes, no empty superlatives, de-gatekeeping). **Status: plan proposed 2026-06-24, owner to react + lock the first batch.**
+
 ## TL;DR — real resale data + fidelity + parallel features (2026-06-23)
 
 Two prior chats (value-module UI + data-collection pipeline) were reconciled and their stranded work landed; then a real data + feature push. **Companion briefs: `docs/data-collection-handoff.md` and `docs/value-module-handoff.md` (both current).**

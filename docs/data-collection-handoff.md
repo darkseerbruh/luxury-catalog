@@ -227,7 +227,14 @@ Madison Avenue Couture below; most other partners are buyer-side) or down-weight
     API License bans co-mingling eBay content with non-eBay listings — incompatible with our multi-platform
     comparison UI. Licensed product images come from the CJ/Awin/Impact **product feeds** instead (see
     "Product feeds = licensed images" below).
-- **1stDibs** — vintage/high-end marketplace; **covered by Skimlinks** (network 67427), no separate app.
+- **1stDibs** — vintage/high-end marketplace; was to be **covered by Skimlinks** (network 67427) — but Skimlinks declined (below), so 1stDibs is uncovered for now.
+- **Skimlinks (catch-all) — ❌ REJECTED 2026-06-24.** "Your website is not suitable... at this time."
+  Per their criteria, the cause is **insufficient original content** for reviewers to determine the
+  site's purpose/value (NOT the fake-door/"coming soon" surfaces — those are fine, real sites use them;
+  owner corrected this). **Re-appliable** ("we regularly re-evaluate") once the site has real editorial
+  content (see Content plan in `docs/handoff.md`). **Impact:** **Vestiaire + 1stDibs are now uncovered**
+  (they were Skimlinks-only); directly-joined programs (eBay, myGemma, Rebag/TLC/TRR/Fashionphile) are
+  unaffected. Re-apply after the content batch ships.
 - **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
   myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
   Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
