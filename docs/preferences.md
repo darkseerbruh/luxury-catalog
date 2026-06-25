@@ -75,6 +75,8 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 
 ## How she likes to work with you (interaction style)
 - **Explain technical/infra things in plain language** — minimal jargon, use analogies. Git/branches/deploys confuse her; **you handle that for her** and keep explanations simple.
+- **Define trade jargon the first time it appears**, in plain words (e.g. "creed patch: the leather tag sewn inside the bag"). Don't assume the reader knows insider terms. Applies to articles, diagrams, and UI copy.
+- **Spell ratings out in full in any UI or copy:** low / medium / high / verified. Never abbreviate (no "conf.", no "med-hi").
 - **Destructive actions: confirm once, then run the whole sequence** (per ENFORCED #7) — she'll say "keep going, stop asking," then expects completion (delete → verify → commit → merge) without per-step prompts. She values being stopped before a real mistake (you once caught a stale-`main` near-overwrite). **But push back when she challenges a claim** — *"are you sure they're all duplicates?"* means verify empirically and report the real breakdown, don't just defend.
 - **She's scope-ambitious** — when offered options she frequently picks **"all of these."** Build broadly, but keep the build green (`tsc`/`eslint`/`next build`) and clearly document any steps she has to do herself (migrations, env, seeds).
 - She **starts new chats often to save context/tokens** — so keep `main` the single source of truth and push there at the end of every session.
