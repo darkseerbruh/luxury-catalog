@@ -48,7 +48,7 @@ A parallel, operator-driven session (ran alongside the Personalization work belo
 - 📊 **PostHog analytics live** (`NEXT_PUBLIC_POSTHOG_KEY`, US region; verified). *Events are eaten by ad-blockers in everyday browsers — test in incognito + PostHog "Live" tab.*
 - 🔍 **Sitemap submitted to Google Search Console + Bing** (indexing clock started; ~8–16 wks).
 - 🖼️ Operator applied migrations **0015/0016/0017**, set self `is_admin`, and **runtime-tested the photo flow end-to-end (works).**
-- 💰 **Affiliate apps in flight:** TRR Real Partners (consignor, call pending) + TRR affiliate (Impact) + Awin (Vestiaire **and** Fashionphile — ShareASale merged into Awin). When codes arrive → wire `NEXT_PUBLIC_AFFILIATE_*`.
+- 💰 **Affiliate apps in flight:** ~~TRR Real Partners (consignor)~~ **❌ ruled out 2026-06-24** (call: relationship-based, no trackable links for a digital aggregator — see `data-collection-handoff.md` §11; the `$1,250` seller lever is down-weighted to ~$250 in `monetization-projections.md`). Still in flight: **TRR buyer-side affiliate** (direct) + Fashionphile (Impact) + CJ (Rebag, Luxury Closet) + eBay EPN + Awin (myGemma) + Skimlinks catch-all. **New 2026-06-24:** owner applied to **Vivrelle** (rental, Awin) + **BriteCo** (insurance, Awin). **Amazon Associates — BACKLOG (paused mid-signup 2026-06-24 at the Amazon login gate; needs owner login → then Claude can fill the profile fields; tax/bank/submit are owner-only).** When codes arrive → wire `NEXT_PUBLIC_AFFILIATE_*`.
 
 **Code shipped this session:**
 1. **Photo gallery byline bugfix** — `getApprovedPhotos`/`getPhotosForReview` (and the auth-request reads) used a PostgREST embed `profile:user_id(...)` that can't resolve (the tables FK to `auth.users`, not `profile`), so they errored → empty gallery even though photos published. Fixed with a **separate profile lookup** merged in JS (`src/lib/photos.ts`, `authentication.ts`). Also `router.refresh()` after a photo upload.
@@ -248,8 +248,11 @@ Merged to `main`. Code + docs; **no DB migrations, env vars, or seed changes.**
 
 1. **New doc `docs/monetization-moments-audit.md`** — maps each of the 4 revenue streams to the
    feature/moment that triggers it, audits placement, records the changes. Key finding: the
-   **consignor referral (~$1,250/seller) is the model's biggest swing, and its triggers — closet
-   `had`/`have` + the thrift `/found` log — did nothing with that intent.**
+   **consignor referral is a high-value seller lever, and its triggers — closet
+   `had`/`have` + the thrift `/found` log — did nothing with that intent.** *(Update 2026-06-24: the
+   `$1,250`/seller figure assumed TRR Real Partners, now ruled out for a digital aggregator; the lever
+   is down-weighted to ~$250 — see `monetization-projections.md`. The UX changes below still stand —
+   surfacing "where to sell" remains good UX regardless of per-referral value.)*
 2. **Bag page (`/bag/[variantId]`):** rebuilt `BagActions` into an **above-the-fold decision cluster**
    placed under the "What it's worth" value card — want/have/had + watch **and** the Buy/Sell CTAs,
    with contextual bridges (`had` → leads with Sell; `want` → watch price). Was buried ~600 lines down,

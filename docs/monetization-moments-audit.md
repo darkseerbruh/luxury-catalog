@@ -4,6 +4,14 @@
 audits where that moment currently sits in the UX, and records the placement changes
 made this session. Revenue model + unit economics live in `docs/monetization-projections.md`.*
 
+> **⚠️ Economics update 2026-06-24:** the consignor-referral per-unit was cut from **$1,250 → ~$250**
+> after TRR Real Partners was ruled out for a digital aggregator (call finding — see
+> `docs/data-collection-handoff.md` §11; model down-weighted in `monetization-projections.md`).
+> **The UX in this audit still stands** — surfacing "where to sell" at the `had`/`have`/thrift-find
+> moments is good UX regardless — but stream #2 is **no longer the model's "biggest swing"**; buyer
+> affiliate (traffic-bound) is now the backbone. Read the per-unit and "25–40×" framing below as
+> historical.
+
 ## The map — revenue stream → triggering feature/moment
 
 | Stream (per projections) | Per-unit value | Direct feature (the outbound moment) | Indirect signals that feed it |

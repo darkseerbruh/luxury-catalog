@@ -93,8 +93,9 @@ ordinary consumers.”*
   inflation-adjusted and **per violation** (in the ~$51K–$53K range depending on the year/violation
   date — verify the live FTC penalty table before quoting it).
 - **Consignor/seller referrals are the same rule, in the other direction.** Referring people who
-  *sell* their bags (marketing-plan Decision 3, the high-value `$1,250`-per-consignor line) is still a
-  paid endorsement → disclose the **referral fee** too. And seller-side content tends to make
+  *sell* their bags (marketing-plan Decision 3 — the seller lever; note its per-referral value was
+  down-weighted from `$1,250` to ~$250 on 2026-06-24 after TRR Real Partners was ruled out, but the
+  disclosure rule is unchanged) is still a paid endorsement → disclose the **referral fee** too. And seller-side content tends to make
   **outcome claims** (“get the most for your bag,” “sell fast”) — those are **performance
   representations** that must be **truthful and substantiated**. Don't promise payout amounts or sale
   speed unless the reseller's published terms back it.
