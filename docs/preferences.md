@@ -2,6 +2,57 @@
 
 *For the owner of Luxury Catalog (Arielle). Complements `docs/handoff.md` (project state). This file = how she likes to work + decisions she's locked. Keep it updated as you learn more; confirm new preferences before treating them as standing rules.*
 
+## Enforced imperatives (auto-injected into every turn)
+
+<!-- SINGLE SOURCE OF TRUTH. The hook .claude/hooks/operating-rules.sh reads everything
+     between the two clean marker lines below and injects it into EVERY response; AGENTS.md
+     points here too. To add an always-on rule, add ONE terse numbered line between the
+     markers; to stop enforcing one, delete its line. Nothing else to sync. Keep the list
+     SHORT: a per-turn reminder that grows long becomes wallpaper, so only truly
+     non-negotiable, applies-to-every-response rules belong here; everything nuanced stays
+     as prose in the sections below. (Don't write the two marker tokens anywhere else in
+     this file, or the hook will mis-detect the block.) -->
+<!-- ENFORCED:start -->
+1. Monetization/engagement lens: state which metric each proposal moves and how (or justify if it moves neither).
+2. Voice gate: apply the FULL `docs/voice-and-tone.md` to any user-facing copy. No em dashes (sole exception: the approved tagline).
+3. Never invent OR overreach: every published spec/price/value/stat must trace to a freshly re-run query or cited source, stated with its date/anchor/sample(n); report derived stats conservatively (no cherry-picked buckets); mark inferences & unmeasured combinations as such; SELF-VERIFY before presenting, not after. Omit or mark low-confidence; never fake to fill a design. (See "Content factuality protocol".)
+4. Copy/design: show 2-3 concrete options + a sensible default; don't over-produce; stop on "commit".
+5. Lead with a clear "(Recommended)" call; end with a clear next step.
+6. Back "done/pushed" claims with evidence (git/command output), never assert.
+7. Just do it: run what the environment can run; confirm a destructive action once, then finish the whole sequence; leave only outward-facing/irreversible ops (email, public posts, paid sign-ups, DNS, DB migrations) for her.
+<!-- ENFORCED:end -->
+
+## Content factuality protocol (non-negotiable, added 2026-06-24)
+
+*Trigger: ANY user-facing content with a fact, figure, spec, price, value, retention %, or
+authentication claim. She should never have to run an audit and find an overreach. A draft
+that can't pass this is not done.* (Origin: a Chanel value draft overreached — mislabeled a
+2019 retail as "recent," cherry-picked a 60% leather gap that was ~44% aggregated, and called
+the price floor "heavily worn" when condition was unknown. Tighter than plain "never invent".)
+
+1. **Every figure traces to fresh evidence.** Before writing, re-run the query (or cite the
+   source) that produces each number. Never write a stat from memory or from a prior turn — data
+   changes between runs.
+2. **Label the anchor.** State **date, sample size (n), and what the number is relative to.** A
+   retail/price figure MUST carry its **year** (e.g. "2019 retail $6,500"); never call a stale
+   figure "recent"/"current" without verifying. A retention/% claim must name what it is a % *of*.
+3. **Derived stats conservatively.** When a number depends on bucketing/grouping, report the
+   **aggregate/conservative** figure and show the grouping; never pick the bucket that yields the
+   most dramatic number.
+4. **Inference ≠ measurement.** Never state an inference or a *why* as measured fact (e.g.
+   "heavily worn"). If the field is null/unspecified, say so or omit it. Separate measured facts
+   from domain knowledge from interpretation.
+5. **No unmeasured combinations.** Don't present a combination ("black caviar + gold holds value
+   best") as measured unless you actually computed that cross-tab; otherwise frame as independent
+   factors.
+6. **Self-audit BEFORE presenting.** Run the trace yourself and surface provenance + caveats
+   proactively (n, date, source, what's inferred). The owner should never be the one to catch it.
+7. **When in doubt, omit or hedge.** A smaller true claim beats a bigger shaky one. Give the
+   information its due weight; never round/stretch toward a better story.
+
+This complements `docs/voice-and-tone.md` §8 #4 (never-invent) and is the standing bar for the
+content strategy (`docs/content-strategy.md`), whose whole value rests on being citably true.
+
 ## Who she is
 - **Arielle Coambes** — founder/owner of **Luxury Catalog**. Product owner, **not an engineer**.
 - **Based in Georgia** (relocated from Utah). The original **Utah LLC lapsed**, so the entity is being re-formed as a **Georgia LLC** ("Luxury Catalog, LLC", filed 2026-06). Use the **GA entity + new EIN** for go-forward business setup (affiliate W-9s, banking); affiliate programs can be started as a sole prop in the meantime.
