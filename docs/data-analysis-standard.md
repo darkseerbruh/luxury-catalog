@@ -52,6 +52,13 @@ Publish a comparative or causal price claim only if ALL hold:
 If a claim is borderline (wide CI, small n, one source), it ships as an explicit leaning
 with its limits, or it does not ship.
 
-## 5. Show the work to the reader
-The article itself states the method in plain words: how many listings, from where, the
-test, the range, and what we could not control for. Transparency is the credibility.
+## 5. Show the work to the reader, in plain language
+The article states the method in plain words: how many listings, from where, and what we
+could not control for. Transparency is the credibility.
+
+**Readers are not researchers.** Translate the statistics into intuition, do not dump them.
+"The gap held across four marketplaces and in actual sold prices, so it is unlikely to be
+chance" lands; "Mann-Whitney p=0.0006" does not, on its own. Lead with what it means, then
+offer the number for those who want it. Sound smart and trustworthy, never condescending.
+The rigor lives under the hood; the surface is a knowledgeable friend explaining what the
+data shows.
