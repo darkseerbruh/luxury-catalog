@@ -1,7 +1,7 @@
 # Celine "Luggage" duplicate — merge/cleanup dry-run plan (OWNER-GATED)
 
 *Prepared 2026-06-23. Destructive (a delete), so it is **not executed** — this is the
-plan for the owner to approve. See `docs/catalog-backbone-handoff.md` §5/§7.6.*
+plan for the owner to approve. See `docs/archive/catalog-backbone-handoff.md` §5/§7.6.*
 
 ## The duplicate
 
