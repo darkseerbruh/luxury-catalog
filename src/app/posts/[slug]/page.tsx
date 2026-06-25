@@ -7,12 +7,13 @@ import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
+import { flapChartsRegistry } from "./FlapValueCharts";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
-// Registered article diagrams. A body line `[diagram: <id>]` renders the matching
-// original schematic component (never a photo) in place.
-const DIAGRAMS: Record<string, ComponentType> = coachDiagramRegistry;
+// Registered article visuals. A body line `[diagram: <id>]` renders the matching
+// original schematic or data-viz component (never a photo) in place.
+const DIAGRAMS: Record<string, ComponentType> = { ...coachDiagramRegistry, ...flapChartsRegistry };
 
 export const dynamic = "force-dynamic";
 
