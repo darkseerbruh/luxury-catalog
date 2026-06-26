@@ -78,22 +78,6 @@ function BagGroup({ kind, dx }: { kind: Kind; dx: number }) {
   );
 }
 
-function TwoBags() {
-  return (
-    <svg
-      viewBox="0 0 360 150"
-      width="100%"
-      preserveAspectRatio="xMidYMid meet"
-      style={{ display: "block", height: "auto" }}
-      role="img"
-      aria-label="Two side-by-side schematics of the same quilted flap bag at identical size: on the left, lambskin rendered smooth with a soft diagonal sheen and a small corner scuff; on the right, caviar rendered with a fine pebbled grain and crisp structure."
-    >
-      <BagGroup kind="lamb" dx={0} />
-      <BagGroup kind="caviar" dx={180} />
-    </svg>
-  );
-}
-
 const TRAITS: Record<Kind, { name: string; texture: string; chips: string[] }> = {
   lamb: {
     name: "Lambskin",
@@ -107,21 +91,31 @@ const TRAITS: Record<Kind, { name: string; texture: string; chips: string[] }> =
   },
 };
 
-function Caption({ kind }: { kind: Kind }) {
+/** The caption (name, texture, chips) rendered as SVG text so it shares the bags'
+ * coordinate system: name + texture centered over the bag at `center`, chips
+ * left-aligned starting at `chipX`. */
+function CaptionGroup({ kind, center, chipX }: { kind: Kind; center: number; chipX: number }) {
   const t = TRAITS[kind];
   return (
-    <div style={{ minWidth: 0, padding: "0 4px" }}>
-      <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: FG }}>{t.name}</div>
-      <div style={{ fontSize: 12, color: GOLDSOFT, marginBottom: 10 }}>{t.texture}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {t.chips.map((c) => (
-          <div key={c} style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 12.5, color: MUTED, lineHeight: 1.4 }}>
-            <span aria-hidden style={{ height: 5, width: 5, borderRadius: 999, background: GOLD, flexShrink: 0 }} />
-            <span>{c}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <g>
+      <text x={center} y={176} textAnchor="middle" fontSize="16" fill={FG} style={{ fontFamily: "var(--font-serif)" }}>
+        {t.name}
+      </text>
+      <text x={center} y={190} textAnchor="middle" fontSize="10" fill={GOLDSOFT}>
+        {t.texture}
+      </text>
+      {t.chips.map((c, i) => {
+        const y = 207 + i * 15;
+        return (
+          <g key={c}>
+            <circle cx={chipX} cy={y - 3} r="2" fill={GOLD} />
+            <text x={chipX + 9} y={y} fontSize="9.5" fill={MUTED}>
+              {c}
+            </text>
+          </g>
+        );
+      })}
+    </g>
   );
 }
 
@@ -132,13 +126,21 @@ export function LeatherComparisonDiagram() {
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 20 }}>Same bag, two hides</div>
         <div style={{ fontSize: 13, color: GOLD, marginBottom: 14 }}>One is pebbled and tough, the other smooth and delicate.</div>
 
-        {/* Both bags live in one SVG so they always share a scale; the captions sit
-            in a matching two-column grid directly beneath each bag. */}
-        <TwoBags />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, marginTop: 12 }}>
-          <Caption kind="lamb" />
-          <Caption kind="caviar" />
-        </div>
+        {/* The whole comparison (both bags + both captions) is ONE svg, so the bags
+            share a scale AND each caption stays aligned under its bag. Left column
+            is centered at x=100, right at x=300. */}
+        <svg
+          viewBox="0 0 400 248"
+          preserveAspectRatio="xMidYMid meet"
+          style={{ display: "block", width: "100%", height: "auto" }}
+          role="img"
+          aria-label="Two side-by-side schematics of the same quilted flap bag at identical size: on the left, lambskin rendered smooth with a soft diagonal sheen and a small corner scuff; on the right, caviar rendered with a fine pebbled grain and crisp structure. Lambskin is soft, supple, and scuffs sooner; caviar is firm, matte, and resists scratches."
+        >
+          <BagGroup kind="lamb" dx={10} />
+          <BagGroup kind="caviar" dx={210} />
+          <CaptionGroup kind="lamb" center={100} chipX={28} />
+          <CaptionGroup kind="caviar" center={300} chipX={228} />
+        </svg>
 
         <div style={{ fontSize: 11, color: MUTED, marginTop: 14 }}>
           Illustrative schematic, not a real bag. The textures show how each leather looks and behaves, traits that are common to caviar and lambskin.
