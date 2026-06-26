@@ -178,7 +178,7 @@ export default async function Home() {
 
       <section id="brands" className="border-b border-border px-5 py-12">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>
+          <h2 className="font-serif text-2xl text-foreground">Brands</h2>
           <Link
             href="/brands"
             className="text-sm text-muted transition-colors hover:text-gold"
@@ -195,7 +195,7 @@ export default async function Home() {
                 <p className="text-xs uppercase tracking-widest text-muted/70">
                   {tier.label}
                 </p>
-                <div className="mt-5 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-7 min-[360px]:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
                   {group.map((brand) => (
                     <div key={brand.brandId}>
                       <Link
