@@ -35,7 +35,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ #16 does-a-smaller-bag-cost-more (SizePriceCurveChart) (2026-06-26)
 - ⬜ Neverfull vs Speedy (NeverfullSpeedyChart exists; needs Speedy data + the ask-vs-sold +
   Trends fading-icon angle). Coordinate with Content lane (owns that component).
-- ⬜ "Most wanted vs most expensive" icon demand–price gap (Trends + our icon prices)
+- ✅ "Most searched vs most expensive" LIVE draft post #20 (SearchVsPriceChart): Kelly/Birkin top both; Flap least-searched yet 3rd priciest (2026-06-26)
 - ✅ "Dior Saddle is back" LIVE draft post (dior-saddle-resale-price), reuses ask-vs-sold-gap chart (2026-06-26)
 - ✅ "The asking-price illusion" LIVE draft post #17 (AskVsSoldGapChart) (2026-06-26)
 
