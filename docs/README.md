@@ -20,6 +20,7 @@ anti-bloat workflow in `AGENTS.md`). 🔄 = auto-loaded every session.*
 | `engagement-strategy.md` | **Canonical** social/community scope (reference-DB-with-community, not a social network). |
 | `personalization-best-practices.md` | Recs / Taste Map approach. |
 | `brand-naming-research.md` | Brand-name research. |
+| `category-expansion-research.md` | Should we expand beyond handbags (shoes/jewelry/watches)? Decision + research. |
 
 ## Monetization & growth
 | File | What it is |
