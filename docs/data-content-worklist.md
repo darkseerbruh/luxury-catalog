@@ -17,7 +17,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Gucci GG Marmont small v207 sold — 46 rows, median $780 (2026-06-26)
 - ✅ Dior Lady Dior Mini/Small/Med/Large sold — 46 rows (2026-06-26)
 - ✅ Dior Saddle Medium/Mini sold — 88 rows, median ~$1,600 (2026-06-26)
-- ⬜ Coach other models sold (Brooklyn v606, Pillow Tabby v598/599, Willow v609/610) — finish brief-mandated Coach depth
+- 🔄 Coach other models: Brooklyn v606 sold loaded (169 rows, median $225). Remaining: Pillow Tabby v598/599, Willow v609/610.
 - ⬜ Poshmark cross-source for other heroes (Neverfull, Flap) when desired
 - ✅ Poshmark cross-source for Coach Tabby 26 — 24 recent sold, median $250 (vs eBay $198); both confirm ~$200-250, well under $365 ask (2026-06-26)
 
