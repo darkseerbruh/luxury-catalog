@@ -7,6 +7,7 @@ import Recommendations from "@/components/Recommendations";
 import FourGrails from "@/components/FourGrails";
 import TasteMapSection from "@/components/TasteMapSection";
 import ContributorCard from "@/components/ContributorCard";
+import { Avatar } from "@/components/Avatar";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,18 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-12">
-      <header>
-        <p className="text-sm uppercase tracking-widest text-muted">Profile</p>
-        <h1 className="mt-1 font-serif text-3xl text-foreground">
-          {profile?.displayName || "Your account"}
-        </h1>
+      <header className="flex items-center gap-4">
+        <Avatar
+          src={profile?.avatarUrl}
+          name={profile?.displayName || profile?.handle}
+          size="lg"
+        />
+        <div>
+          <p className="text-sm uppercase tracking-widest text-muted">Profile</p>
+          <h1 className="mt-1 font-serif text-3xl text-foreground">
+            {profile?.displayName || "Your account"}
+          </h1>
+        </div>
       </header>
 
       <div className="divide-y divide-border rounded-2xl border border-border bg-surface">
