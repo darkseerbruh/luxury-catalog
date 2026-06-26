@@ -20,8 +20,9 @@ name: Refresh market listings (Fashionphile)
 
 on:
   schedule:
-    # Daily 06:00 UTC. Adjust the cadence here if you want it more/less often.
-    - cron: "0 6 * * *"
+    # Every 3 hours (listings sell hourly, so retire sold Fashionphile listings fast — this is
+    # the only source crawlable headless). Off the :00 mark. Tune up/down here.
+    - cron: "17 */3 * * *"
   workflow_dispatch:
     inputs:
       collection:

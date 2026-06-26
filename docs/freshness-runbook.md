@@ -4,9 +4,19 @@
 imperative. The honest constraint: eBay/Poshmark/TRR are browser-gated, so they cannot refresh in
 headless CI the way Fashionphile does.*
 
+## Two different freshness needs (do not conflate)
+- **Live listings** (the ShopThisBag affiliate card, `getStyleShopData`): individual offers sell
+  hourly. A sold-out "view" link is a dead affiliate click, so these need to be as fresh as the
+  source allows. Headless sources can refresh fast; browser-gated ones cannot.
+- **Chart medians** (`getMedians`): aggregates over n=80 to 177 sold comps. One more sale does not
+  move a median of $198 (n=177), so a monthly re-capture keeps the medians honest. The hourly churn
+  is individual listings, not the aggregate.
+
 ## What refreshes automatically today
-- **Fashionphile:** `.github/workflows/market-refresh.yml` runs daily (06:00 UTC): re-crawls live
-  inventory and retires sold listings. The only source crawlable headless.
+- **Fashionphile:** `.github/workflows/market-refresh.yml` runs **every 3 hours**: re-crawls live
+  inventory and retires sold listings. The only source crawlable headless, so it is also the most
+  reliable "still live" signal. The ShopThisBag card ranks Fashionphile (then TheRealReal) first for
+  its clickable "view" links, since those are the offers least likely to be already sold.
 - **Derived views:** Vercel cron `price-summary` (daily) rebuilds the per-variant summary.
 - **NOT auto-refreshed:** eBay, Poshmark, TheRealReal asking + all the peer-to-peer SOLD data. These
   are the figures the new articles cite, and they only update when re-captured by hand.
@@ -23,11 +33,15 @@ Claude cron auto-expires in 7 days and dies with the ephemeral container.)
 After each monthly pull, run `docs/article-freshness-report.md`'s drift check (the `_drift` query) and
 update any article figure that moved.
 
-## The real fix (hands-off, no browser)
-Pursue the **affiliate product feeds** (CJ / Impact / Awin), which deliver fresh prices + images
-server-side daily with no browser and no rate limit. This is the only truly hands-off path and is gated
-only on the affiliate program approvals (most are pending). When a feed lands, build a per-network feed
-ingester (extend the existing adapter pattern) and the article numbers stay current automatically.
+## The real fix for hourly listing freshness (hands-off, no browser)
+**Affiliate product feeds** (CJ / Impact / Awin) are the only way to get hourly-fresh listings with no
+browser: they deliver live inventory + prices + images server-side, refreshable as often as we pull,
+with no rate limit. This is also the monetization mechanism (the links carry our affiliate ID), so it
+moves the same metric twice: fresher cards AND commissioned clicks. Gated only on the affiliate program
+approvals (owner-side; most pending). When a feed lands, build a per-network ingester (extend the
+existing adapter pattern) and both the cards and the chart numbers stay current automatically. Until
+then, browser-gated eBay/Poshmark/TRR listing status can only be refreshed by the manual re-capture, so
+their individual "view" links carry the most staleness risk — which is why the card prefers Fashionphile.
 
 ## Self-updating charts (done 2026-06-26)
 All 6 data-article charts now read live from `price_history` at render via `src/lib/article-data.ts`
