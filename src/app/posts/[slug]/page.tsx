@@ -9,6 +9,7 @@ import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
+import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -18,6 +19,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...coachDiagramRegistry,
   ...flapChartsRegistry,
   ...caviarVsLambskinChartsRegistry,
+  ...leatherDiagramRegistry,
 };
 
 export const dynamic = "force-dynamic";
