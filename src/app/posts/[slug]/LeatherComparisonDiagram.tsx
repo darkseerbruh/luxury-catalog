@@ -40,10 +40,10 @@ function Bag({ kind }: { kind: Kind }) {
           <rect x="34" y="54" width="112" height="86" rx="8" />
         </clipPath>
         {kind === "caviar" && (
-          <pattern id={`grain-${id}`} width="6" height="6" patternUnits="userSpaceOnUse">
-            <circle cx="3" cy="3" r="1" fill={GOLDSOFT} opacity="0.55" />
-            <circle cx="0" cy="6" r="1" fill={GOLDSOFT} opacity="0.55" />
-            <circle cx="6" cy="0" r="1" fill={GOLDSOFT} opacity="0.55" />
+          <pattern id={`grain-${id}`} width="3.4" height="3.4" patternUnits="userSpaceOnUse">
+            <circle cx="1.7" cy="1.7" r="0.6" fill={GOLDSOFT} opacity="0.5" />
+            <circle cx="0" cy="0" r="0.6" fill={GOLDSOFT} opacity="0.5" />
+            <circle cx="3.4" cy="3.4" r="0.6" fill={GOLDSOFT} opacity="0.5" />
           </pattern>
         )}
       </defs>
@@ -62,7 +62,10 @@ function Bag({ kind }: { kind: Kind }) {
         <rect x="34" y="54" width="112" height="86" rx="8" fill={`url(#grain-${id})`} clipPath={`url(#body-${id})`} />
       ) : (
         <g clipPath={`url(#body-${id})`}>
-          <ellipse cx="68" cy="80" rx="44" ry="22" fill={FG} opacity="0.11" />
+          {/* a diagonal sheen streak, the way light catches smooth leather */}
+          <rect x="56" y="12" width="26" height="172" transform="rotate(-26 90 97)" fill={FG} opacity="0.07" />
+          <rect x="72" y="12" width="10" height="172" transform="rotate(-26 90 97)" fill={FG} opacity="0.13" />
+          {/* a small scuff at the corner: lambskin marks sooner */}
           <path d="M40 132 q10 -7 20 -2" fill="none" stroke="#b6a986" strokeWidth="1.4" opacity="0.75" strokeLinecap="round" />
           <path d="M44 136 q8 -5 16 -1" fill="none" stroke="#b6a986" strokeWidth="1.1" opacity="0.5" strokeLinecap="round" />
         </g>
@@ -92,8 +95,8 @@ const TRAITS: Record<Kind, { name: string; texture: string; chips: string[] }> =
 function Side({ kind }: { kind: Kind }) {
   const t = TRAITS[kind];
   return (
-    <div style={{ flex: 1, minWidth: 0, border: `1px solid ${BORDER}`, borderRadius: 12, background: "#1a1712", padding: 14 }}>
-      <div style={{ maxWidth: 200, margin: "0 auto" }}>
+    <div style={{ minWidth: 0, border: `1px solid ${BORDER}`, borderRadius: 12, background: "#1a1712", padding: 14 }}>
+      <div style={{ maxWidth: 170, margin: "0 auto" }}>
         <Bag kind={kind} />
       </div>
       <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: FG, marginTop: 6 }}>{t.name}</div>
@@ -117,7 +120,7 @@ export function LeatherComparisonDiagram() {
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 20 }}>Same bag, two hides</div>
         <div style={{ fontSize: 13, color: GOLD, marginBottom: 14 }}>One is pebbled and tough, the other smooth and delicate.</div>
 
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
           <Side kind="lamb" />
           <Side kind="caviar" />
         </div>
