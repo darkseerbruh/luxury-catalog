@@ -40,11 +40,30 @@ rising names to cover early. Pure prioritization signal; do not publish Trends i
 facts (relative, not absolute).
 
 ## FINDINGS (record here)
-- Set 1 (icons 12mo): _ranking highest→lowest + any riser_ …
-- Set 2 (Birkin vs Kelly): …
-- Set 3 (Neverfull vs Speedy): …
-- Set 4 (entry tier): …
-- Set 5 (icons 5y, rising/fading): …
-- Set 6 (next it-bag 5y): …
-- Set 7 (auth intent): …
-- Date run: …
+
+*Run 2026-06-26, US, via Trends' own `widgetdata/multiline` API (same-origin, logged-in Chrome) so the
+read is the exact indexed series, not an eyeballed chart. Values are **relative interest (0–100 within
+each set), not volume** — compare only WITHIN a set. "avg" = mean over the window; arrow = first-third →
+last-third average. NB: in the 12-month sets almost everything reads "rising" because the window's last
+third (spring 2026) sits above its first third (summer 2025) — a shared seasonal/secular lift — so for
+12mo trust the RANKING; the 5-year sets carry the real rising/fading signal.*
+
+- **Set 1 (icons 12mo):** Hermès Kelly (avg 26.2) ≈ Hermès Birkin (25.4) lead → LV Neverfull (18.5) →
+  Gucci Marmont (17.2) → **Chanel Classic Flap LOWEST (14.4)**. Surprise: the Flap is the least-searched
+  of the five icons, and Kelly noses ahead of Birkin.
+- **Set 2 (Birkin vs Kelly 12mo):** **Kelly (56) edges Birkin (54.5)** — basically tied, Kelly slightly
+  ahead. (Counter to the usual "Birkin is king" assumption for search demand.)
+- **Set 3 (Neverfull vs Speedy 12mo):** **Speedy (27.8) clearly beats Neverfull (17.9).** Speedy is the
+  more-searched LV tote/bag right now.
+- **Set 4 (entry tier 12mo):** Speedy (27.8) >> Dior Saddle (18.4) ≈ Neverfull (17.9) ≈ Gucci Marmont
+  (16.7) >> **YSL Loulou (2.3, flat — "low volume" signal).** Speedy dominates the accessible tier.
+- **Set 5 (icons 5y, the real trend):** Birkin (15.8) > Kelly (15) > **Neverfull (11.6, FADING:
+  13.2→12.7)** > Marmont (8.5, rising off a low base) > Classic Flap (5.8, lowest but rising). Headline:
+  **Hermès is pulling away; Neverfull is the one icon fading over 5y** while Speedy rises (sets 3–4).
+- **Set 6 (next it-bag 5y):** Bottega Veneta (35.2 — but that's a *brand* term, so inflated vs the model
+  terms) > **Polène (17.8, strong riser 7.2→25.3)** > Loewe Puzzle (3.4, rising) > The Row Margaux (1.4,
+  rising off ~0). Real story: **Polène is the breakout accessible-luxury riser.**
+- **Set 7 (auth intent 12mo):** **"real vs fake Chanel" (27.8) dominates** >> "how to authenticate Louis
+  Vuitton" (10.2, fading) >> "fake Gucci Marmont" (1.5, low). Chanel authentication anxiety is by far the
+  largest auth-intent search of the three.
+- **Date run:** 2026-06-26
