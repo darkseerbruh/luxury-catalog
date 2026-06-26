@@ -42,7 +42,32 @@ authentication needs sourcing; mid-tier needs data capture.**
 | **Coach authentication** (brand/SEO wedge) | M | H+ | ❌ needs sourcing | Med | 2 |
 | **Market/trend** (most coveted / appreciating / best deals) → `/coveted`, `/deals` | M | M | ✅ | Low | 2 |
 | **Mid-tier value** (Coach/MK) | M | M | ❌ needs eBay/Poshmark capture | Med | 3 |
-| **"Buy vs rent a [bag]"** (rental fork) | M | M | 🟡 rental CTA built; Vivrelle approval pending | Med | 3 |
+| **"Buy vs rent a [bag]"** (rental fork) | M | M | ✅ write as framework now (owner 2026-06-26: Vivrelle approval does NOT block useful content; wire affiliate when a code lands) | Med | 2 |
+
+## The comparison / "worth it" value bar (locked 2026-06-26)
+
+"X vs Y" and "is it worth it" pieces match high-intent search, but **do NOT farm thin ones.**
+A piece ships only if it clears ONE of:
+- a **non-obvious finding** from our data (e.g. Birkin and Kelly cost the same size-for-size; the small-size premium; sold lands under asking), or
+- a **genuinely high-stakes or high-volume decision** where a clear answer helps a lot (Birkin vs Kelly, is the Flap worth it).
+
+If the finding is just "two numbers that are close," it is a **data point, not an article.** Reason:
+our moat is being the cited original-data authority; thin near-duplicate comparison pages get
+downweighted by Google's helpful-content system and AI search, and dilute that authority. A few
+deep pieces beat dozens of shallow ones. (Marmont small vs medium = fails the bar; Neverfull MM
+vs PM = borderline.) The self-updating + shoppable north star makes substantive comparisons
+compound; it does not rescue thin ones.
+
+## Future: rental-market intelligence (Vivrelle) — recorded 2026-06-26
+
+Owner idea, not now. Subscribe to Vivrelle and **pull their catalog on a schedule** to measure
+**availability depth and rental velocity**, not just whether a bag is listed but whether it is
+ever actually available (a listed-but-never-available Birkin is the example). Output: original
+"findings" articles + an evaluative tool for prospective subscribers (nobody else publishes this).
+**Owner's hypothesis to TEST, not assert:** Vivrelle's selection skews cast-offs (older / less
+desirable) and the marquee bags are rarely available; she is a longtime user and *wants data that
+could prove her wrong.* Frame any finding as evidence, never a verdict, and never disparage
+without the data. Needs: a paid subscription + a scheduled catalog pull (browser or API).
 
 ## Operating rules
 - **Lead with Tier 1** (overlap of highest monetization × ready today — our data moat,
