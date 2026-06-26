@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/notifications";
 import { BRAND_TIERS, getBrandsOverview } from "@/lib/queries";
+import { covetedBagsReady } from "@/lib/content-gates";
 import { Providers } from "./providers";
 import TasteFlusher from "./TasteFlusher";
 import HeaderNav from "@/components/HeaderNav";
@@ -48,6 +49,10 @@ export default async function RootLayout({
       .filter((b) => b.tier === t.key)
       .map((b) => ({ brandId: b.brandId, name: b.name })),
   })).filter((g) => g.brands.length > 0);
+
+  // "Coveted" (most-coveted bags) stays hidden in nav + footer until there's
+  // enough want-signal to make the ranking meaningful (content gate).
+  const covetedReady = await covetedBagsReady();
   return (
     <html
       lang="en"
@@ -61,7 +66,7 @@ export default async function RootLayout({
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <HeaderNav signedIn={!!user} unread={unread} brandGroups={brandGroups} />
+            <HeaderNav signedIn={!!user} unread={unread} brandGroups={brandGroups} covetedReady={covetedReady} />
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
@@ -77,7 +82,9 @@ export default async function RootLayout({
               <p className="text-xs uppercase tracking-wide text-muted/70">Shop</p>
               <Link href="/shop" className="hover:text-foreground">Shop the market</Link>
               <Link href="/deals" className="hover:text-foreground">Deals</Link>
-              <Link href="/coveted" className="hover:text-foreground">Most coveted bags</Link>
+              {covetedReady && (
+                <Link href="/coveted" className="hover:text-foreground">Most coveted bags</Link>
+              )}
               <Link href="/browse" className="hover:text-foreground">Browse</Link>
               <Link href="/search" className="hover:text-foreground">Search</Link>
             </div>

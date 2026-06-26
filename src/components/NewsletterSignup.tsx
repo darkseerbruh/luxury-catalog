@@ -41,8 +41,8 @@ export function NewsletterSignup({ className, source }: Props) {
   if (status === "success") {
     return (
       <p className={className ?? ""} aria-live="polite">
-        <span className="text-foreground">You&rsquo;re in</span>
-        <span className="text-muted"> — we&rsquo;ll be in touch.</span>
+        <span className="text-foreground">You&rsquo;re in.</span>
+        <span className="text-muted"> We&rsquo;ll be in touch.</span>
       </p>
     );
   }
@@ -51,7 +51,7 @@ export function NewsletterSignup({ className, source }: Props) {
     <div className={className}>
       <form
         onSubmit={handleSubmit}
-        className="flex max-w-md items-center gap-2"
+        className="flex w-full items-center gap-2"
       >
         <input
           type="email"
@@ -71,7 +71,7 @@ export function NewsletterSignup({ className, source }: Props) {
       </form>
       {status === "error" && (
         <p aria-live="polite" className="mt-2 text-sm text-muted">
-          Something went wrong — try again.
+          Something went wrong. Try again.
         </p>
       )}
     </div>
