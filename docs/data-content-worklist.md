@@ -37,7 +37,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
   Trends fading-icon angle). Coordinate with Content lane (owns that component).
 - ⬜ "Most wanted vs most expensive" icon demand–price gap (Trends + our icon prices)
 - ⬜ "Dior Saddle is back" (Trends riser + our Saddle pricing)
-- ⬜ "The asking-price illusion" (ask vs sold across Coach + Neverfull + Flap; our sold data)
+- 🔄 "The asking-price illusion" draft written (asking-price-illusion-draft.md); wiring next
 
 ## Trends
 - ✅ 7-set Google Trends pull recorded (`docs/research-drafts/trends-keyword-pull.md`) (2026-06-26)
