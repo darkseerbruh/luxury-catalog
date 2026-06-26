@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
+import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
 import { flapVenueChartRegistry } from "./FlapVenueChart";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
@@ -19,6 +20,7 @@ import { TrustBadges } from "@/components/TrustBadges";
 // original schematic or data-viz component (never a photo) in place.
 const DIAGRAMS: Record<string, ComponentType> = {
   ...coachDiagramRegistry,
+  ...lvAuthDiagramRegistry,
   ...flapChartsRegistry,
   ...flapVenueChartRegistry,
   ...caviarVsLambskinChartsRegistry,
