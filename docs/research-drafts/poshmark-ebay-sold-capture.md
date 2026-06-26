@@ -85,11 +85,22 @@ browser pull like Poshmark:
   asking-side API later, but it is not needed for the sold signal.)
 
 ## Build status / next steps
-- [x] Poshmark browser paginator mechanism proven; first hero-bag sold pull done.
-- [ ] **Loader into prod is deliberate, not a dump.** Sold rows must load with
-  `price_type='sold'` + `listing_status='sold'`, and the app's value reads must filter by
-  `price_type` so sold prices do NOT pollute the asking-based "listing for" medians. Wire the
-  read filter first, then load. Catch-all/unmatched rows go to `discovered_listing`, never
-  auto-onto curated variants (existing integrity rule).
-- [ ] eBay developer keys (owner action) → run the Browse crawler for market-wide asking.
-- [ ] Scale Poshmark depth-first across the hero bags, then brands (repeat the query loop).
+- [x] Poshmark + eBay browser sold-capture mechanisms proven; first hero-bag pulls done.
+- [x] **Reads are already sold-safe (verified 2026-06-26).** No read changes needed: the value
+  engine was built for this. `src/lib/listings.ts` `isListed()` = `price_type='listed' AND
+  listing_status != 'sold'`, so sold rows are excluded from current offers; `deals.ts` keys the
+  asking median on `price_type='listed'`; and `specComp()` flags `price_type='sold'` rows as
+  **realized**, which the rating engine prefers for fair value. So sold rows feed fair-value
+  without polluting the locked "listing for" asking displays.
+- [x] **Loader built:** `supabase/ingest/load-sold.ts` (reusable, idempotent, dry-run default).
+  Reads a captured JSON → upserts `price_type='sold'` + `listing_status='sold'` rows, deduped
+  by (variant, platform, listing_ref). Hero bags load to a known `variant_id`; unmatched rows
+  stay a separate `discovered_listing` path (integrity rule).
+- [ ] **GATING BLOCKER — browser→repo transport.** The localhost sink (`scripts/capture-sink.mjs`)
+  is **CSP-blocked on Poshmark and eBay** (confirmed 2026-06-26; same as TheRealReal), and the
+  tool-output path filters Poshmark's ObjectId listing refs. So the capture works but moving the
+  data to disk at scale does not. Options to solve next: (a) the `get_page_text` body-transport
+  (write the JSON into the DOM, read it back) as the handoff uses for TRR; (b) transform
+  refs to non-ObjectId keys and return small batches through the tool output; (c) a permissive
+  relay origin. **The loader is ready to consume the JSON the moment transport lands.**
+- [ ] Scale Poshmark/eBay depth-first across the hero bags once transport is solved.
