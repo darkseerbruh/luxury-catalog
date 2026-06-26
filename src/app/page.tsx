@@ -9,6 +9,7 @@ import BestDeals from "@/components/BestDeals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import JournalShelf from "@/components/JournalShelf";
 import { HomeHero } from "@/components/HomeHero";
 import { communityKnowledgeReady } from "@/lib/content-gates";
 import { assignHomeHeadline, HOME_HEADLINE_COPY } from "@/lib/experiments/home-headline";
@@ -242,6 +243,10 @@ export default async function Home() {
           })}
         </div>
       </section>
+
+      {/* From the Journal — department shelf, mirrors the Articles rail. Renders
+          nothing until at least one article is published. */}
+      <JournalShelf />
 
       {/* Stay in the loop — last on the page, full width, one compact line. */}
       <section className="px-5 py-12">
