@@ -118,3 +118,25 @@ top brands/styles opportunistically; not exhaustive. Currently 15 rows in prod.
 Fashionphile is the one source fully crawlable from a headless environment, so it carries the
 bulk of "every bag" today. TRR + Vestiaire are browser-gated AND rate-limited AND
 transport-constrained — they advance per dedicated capture session, not in one pass.
+
+## Incoming to-dos — from the reseller-research lane (2026-06-25)
+Goal: widen price capture to vetted smaller resellers, prioritizing the mid-tier gap
+FP/TRR miss. Trust gate FIRST: ingest only from resellers with a money-back authenticity
+guarantee + solid reputation; prices as facts + source_url only, never their photos or
+descriptions. Do NOT ingest Julia Rose Boston (reputation red flags this session). Full
+evaluation + trust/affiliate table: `docs/trusted-resellers.md`.
+
+- ⬜ **Redeluxe (priority).** Shopify open feed verified 2026-06-25:
+  `redeluxe.com/products.json` (vendor=brand, product_type=style, variants[].price,
+  tags=condition). Same path as Fashionphile; route catch-all to discovered_listing.
+  Fills the mid-tier gap (carries Michael Kors, Fendi alongside LV/Chanel/Hermès).
+  Runs a DIRECT affiliate program (partners.redeluxe.com), so its listings become
+  monetizable hand-offs once a code lands.
+- ⬜ **Couture USA.** Shopify open feed verified 2026-06-25: `coutureusa.com/products.json`.
+  No affiliate program (data/trust only). Vet reputation first (mixed Trustpilot).
+- ⬜ **Generalize a `shopify-products` adapter** (one adapter, per-store config) so adding
+  a vetted Shopify reseller is config, not new code. Check for an open products.json:
+  Ann's Fabulous Finds, Madison Avenue Couture, Sellier Knightsbridge, Luxe Du Jour.
+- ⬜ **Keep source_url per row** so affiliate wrapping is possible later for the
+  affiliate-enabled sellers (Redeluxe, Rebag, Madison Ave, Luxury Closet, Vestiaire,
+  Sellier, Luxe Du Jour, Luxe Collective).
