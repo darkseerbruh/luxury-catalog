@@ -16,6 +16,7 @@ import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
 import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
 import { birkinKellyChartRegistry } from "./BirkinKellyChart";
 import { neverfullSizeChartRegistry } from "./NeverfullSizeChart";
+import { iconicPricesChartRegistry } from "./IconicPricesChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -32,6 +33,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...whereToSellDiagramRegistry,
   ...birkinKellyChartRegistry,
   ...neverfullSizeChartRegistry,
+  ...iconicPricesChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
