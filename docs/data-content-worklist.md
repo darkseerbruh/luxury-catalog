@@ -53,3 +53,10 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ LV Speedy created/used (style 433: 25=v497, 30=v498, +Bandoulière v934); sold 146 rows, median $593
   (25 ~$565, 30 ~$566, Bandoulière ~$840). KEY: Speedy out-searches Neverfull (Trends set 3) but SELLS for
   LESS ($593 vs Neverfull MM $770) — backs the Content lane's Neverfull-vs-Speedy piece (post_id 10).
+
+## Monetization + freshness execution (owner-directed 2026-06-26)
+- ✅ Skimlinks pre-resubmit: privacy policy now discloses affiliate/third-party tracking cookies (eBay/Impact/CJ/Awin/Skimlinks) — `src/app/privacy/page.tsx`. (Other blocker = PUBLISH drafts; reviewer sees only published.)
+- ✅ Monetization gap fix: tagged #14 (Marmont vs Neverfull vs Speedy) → Gucci/Marmont so the PostBagCTA renders. (#11 rent-or-buy + #12 red-flags left brand-neutral by design.)
+- ⬜ UX: build the "Shop this bag" sticky card (desktop right-rail + mobile bottom bar) + an inline "Shop these" unit after the first data point. Pull REAL live listings via getListingsForVariant() (price + affiliate link), not a search link. Tasteful/data-led/dismissible, mobile-safe at 375px. Behind existing components; preview before owner commits.
+- ⬜ FRESHNESS (imperative): (1) scheduled re-capture routine for article/hero bags (weekly/monthly) via get_page_text method (browser-gated → scheduled Claude-in-Chrome run); (2) pursue affiliate product feeds (CJ/Impact/Awin) = hands-off daily refresh once codes land; (3) refactor chart components to read LIVE from price_history (self-updating articles) instead of hardcoded constants. Today only Fashionphile auto-refreshes (market-refresh.yml daily); eBay/Poshmark/TRR do NOT.
+- ⬜ Re-verify stale price numbers in content-lane price pieces before publish (#8 Neverfull MM says $1,245 vs current $1,500; #9/#14 figures); enrich #10 Neverfull-vs-Speedy with the Speedy sold $593 now loaded.
