@@ -1,10 +1,16 @@
 import type { ComponentType } from "react";
+import { getMedians } from "../../../lib/article-data";
 
 /**
  * Which accessible-luxury bags hold value. eBay completed (sold) medians, our capture
  * 2026-06-26, each with n (prod price_history, price_type='sold'). Most sit under the
  * $500 line eBay authenticates at, so these are peer-to-peer market prices. Leather
  * heritage bags (gold) hold; logo/nylon (kelly) does not. Original SVG/CSS.
+ *
+ * Self-updating: async server component reads each bag's live sold median + n per variant
+ * at render (getMedians), falling back per-row to the baked capture when n=0 or the DB is
+ * unavailable. Chart-only; prose stays honest via the drift check
+ * (docs/article-freshness-report.md).
  */
 const FG = "#f3ede0";
 const MUTED = "#a89c87";
@@ -14,21 +20,28 @@ const BORDER = "#322c22";
 const SURF = "#1a1815";
 
 const money = (n: number) => "$" + n.toLocaleString();
-const MAX = 700;
-const pct = (v: number) => `${Math.min(100, (v / MAX) * 100).toFixed(1)}%`;
+const pct = (v: number, max: number) => `${Math.min(100, (v / max) * 100).toFixed(1)}%`;
 
-type Row = { label: string; sub: string; v: number; n: number; leather: boolean };
+type Row = { label: string; sub: string; variant: number; v: number; n: number; leather: boolean };
 const ROWS: Row[] = [
-  { label: "Coach Rogue", sub: "leather", v: 645, n: 88, leather: true },
-  { label: "Mulberry Bayswater", sub: "leather", v: 519, n: 93, leather: true },
-  { label: "Coach Tabby 26", sub: "coated canvas", v: 198, n: 177, leather: false },
-  { label: "Kate Spade Knott", sub: "leather, value brand", v: 114, n: 86, leather: false },
-  { label: "Kate Spade Sam", sub: "nylon", v: 100, n: 50, leather: false },
-  { label: "Longchamp Le Pliage", sub: "nylon", v: 90, n: 69, leather: false },
-  { label: "Michael Kors Jet Set", sub: "coated canvas", v: 70, n: 55, leather: false },
+  { label: "Coach Rogue", sub: "leather", variant: 605, v: 645, n: 88, leather: true },
+  { label: "Mulberry Bayswater", sub: "leather", variant: 932, v: 519, n: 93, leather: true },
+  { label: "Coach Tabby 26", sub: "coated canvas", variant: 596, v: 198, n: 177, leather: false },
+  { label: "Kate Spade Knott", sub: "leather, value brand", variant: 925, v: 114, n: 86, leather: false },
+  { label: "Kate Spade Sam", sub: "nylon", variant: 927, v: 100, n: 50, leather: false },
+  { label: "Longchamp Le Pliage", sub: "nylon", variant: 930, v: 90, n: 69, leather: false },
+  { label: "Michael Kors Jet Set", sub: "coated canvas", variant: 928, v: 70, n: 55, leather: false },
 ];
 
-export function MidTierHoldsValueChart() {
+export async function MidTierHoldsValueChart() {
+  const stats = await getMedians(ROWS.map((r) => r.variant), "sold");
+  // Live sold median overrides the baked fallback per-row; a bag with no rows (n=0) keeps its baked number.
+  const rows = ROWS.map((r) => {
+    const s = stats[r.variant];
+    return s && s.n > 0 ? { ...r, v: s.median, n: s.n } : r;
+  });
+  // Scale to the data (with headroom) so a re-capture past the old 700 ceiling still renders proportionally.
+  const max = Math.max(700, ...rows.map((r) => r.v)) * 1.05;
   return (
     <figure style={{ margin: "0.5rem 0 1rem" }}>
       <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c", color: FG, maxWidth: 580 }}>
@@ -41,7 +54,7 @@ export function MidTierHoldsValueChart() {
           <span><span style={{ display: "inline-block", width: 18, height: 8, background: KELLY, borderRadius: 3, verticalAlign: "middle", marginRight: 5 }} />logo / nylon / canvas</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-          {ROWS.map((r) => (
+          {rows.map((r) => (
             <div key={r.label}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 4 }}>
                 <span style={{ color: FG }}>
@@ -52,7 +65,7 @@ export function MidTierHoldsValueChart() {
                 </span>
               </div>
               <div style={{ height: 15, background: SURF, borderRadius: 7, overflow: "hidden" }}>
-                <div style={{ width: pct(r.v), height: "100%", background: r.leather ? GOLD : KELLY, borderRadius: 7 }} />
+                <div style={{ width: pct(r.v, max), height: "100%", background: r.leather ? GOLD : KELLY, borderRadius: 7 }} />
               </div>
             </div>
           ))}
