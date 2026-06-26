@@ -24,6 +24,7 @@ import { holdsValueDiagramRegistry } from "./HoldsValueDiagram";
 import { entryBagsChartRegistry } from "./EntryBagsChart";
 import { coachResaleRealityChartRegistry } from "./CoachResaleRealityChart";
 import { sizePriceCurveChartRegistry } from "./SizePriceCurveChart";
+import { askVsSoldGapChartRegistry } from "./AskVsSoldGapChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -48,6 +49,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...entryBagsChartRegistry,
   ...coachResaleRealityChartRegistry,
   ...sizePriceCurveChartRegistry,
+  ...askVsSoldGapChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
