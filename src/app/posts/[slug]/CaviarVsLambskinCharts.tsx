@@ -24,15 +24,11 @@ const GOLDSOFT = "#e3c785";
 const LAMB = "#6f6450";
 const BORDER = "#322c22";
 
-// Texture, not color, separates the two leathers (accessibility: never encode
-// meaning by color alone). Caviar is the pebbled leather, so it gets a dot
-// stipple; lambskin is smooth, so it gets a fine diagonal weave. The legend
-// swatches carry the same fill so the pattern reads as a key.
-const CAVIAR_FILL = {
-  backgroundColor: GOLD,
-  backgroundImage: "radial-gradient(rgba(40,28,4,0.5) 0.9px, transparent 1.1px)",
-  backgroundSize: "5px 5px",
-} as const;
+// Texture, not color alone, separates the two leathers (accessibility: never
+// encode meaning by color alone). Caviar is solid gold; lambskin carries a fine
+// diagonal weave. The legend swatches carry the same fills so the pattern reads
+// as a key.
+const CAVIAR_FILL = { backgroundColor: GOLD } as const;
 const LAMBSKIN_FILL = {
   backgroundColor: LAMB,
   backgroundImage:
@@ -85,7 +81,7 @@ export function CaviarVsLambskinCharts() {
         {/* legend */}
         <div style={{ display: "flex", gap: 16, fontSize: 11.5, color: MUTED, marginBottom: 14 }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 13, height: 13, borderRadius: 3, display: "inline-block", ...CAVIAR_FILL }} /> Caviar (dotted)
+            <span style={{ width: 13, height: 13, borderRadius: 3, display: "inline-block", ...CAVIAR_FILL }} /> Caviar (solid)
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
             <span style={{ width: 13, height: 13, borderRadius: 3, display: "inline-block", ...LAMBSKIN_FILL }} /> Lambskin (striped)
