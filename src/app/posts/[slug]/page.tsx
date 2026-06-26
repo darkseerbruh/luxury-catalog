@@ -10,6 +10,7 @@ import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
 import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
+import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -20,6 +21,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...flapChartsRegistry,
   ...caviarVsLambskinChartsRegistry,
   ...leatherDiagramRegistry,
+  ...whereToSellDiagramRegistry,
 };
 
 export const dynamic = "force-dynamic";
