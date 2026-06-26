@@ -41,3 +41,8 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
 ## Trends
 - ✅ 7-set Google Trends pull recorded (`docs/research-drafts/trends-keyword-pull.md`) (2026-06-26)
+
+## Mid-tier insight (2026-06-26) — ready to wire as article
+- ✅ Draft written: `midtier-holds-value-draft.md` (which accessible bags hold value). Leather heritage
+  (Bayswater $519, Rogue $645) >> logo/nylon (MK Jet Set $70, Le Pliage $90, Kate Spade $100-114, Tabby $198).
+- ⬜ Wire midtier-holds-value as a post (build MidTierHoldsValueChart, seed draft).
