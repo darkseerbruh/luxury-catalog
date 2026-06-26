@@ -31,14 +31,20 @@ Query `chanel classic flap medium`, `availability=sold_out`. 96 raw → **78 kep
   ~$6,000 asking median on the authenticated resellers. Used in the Flap "is it worth it"
   article (post_id 1).
 
-## eBay — two separate paths
-- **Asking (active) prices → Browse API.** Scalable, ToS-clean, the Fashionphile-equivalent.
-  Adapter already built (`supabase/ingest/sources/ebay.ts` + `src/lib/ingest/ebay.ts`).
-  **Needs `EBAY_APP_ID` + `EBAY_CERT_ID`** (free eBay developer app) in the env. Returns
-  ACTIVE listings only → `price_type 'listed'`.
-- **Sold (completed) prices → browser only.** The Browse API does not return sold; the
-  realized-price Marketplace Insights API is access-gated. So eBay sold prices come from
-  browser-capturing the `&LH_Sold=1&LH_Complete=1` search, same pattern as Poshmark.
+## eBay — browser pull (the dev API is out)
+**The owner was rejected from the eBay Developers Program (2026-06-26)**, so the Browse API
+path is unavailable. That is fine: the Browse API only returned *asking* prices (which we
+already have from TheRealReal/Fashionphile/Vestiaire), and eBay *sold* prices were always
+browser-only (the realized-price Marketplace Insights API is access-gated). So eBay becomes a
+browser pull like Poshmark:
+- Capture the completed-sales search same-origin in the logged-in browser, e.g.
+  `https://www.ebay.com/sch/i.html?_nkw=chanel+classic+flap+medium&_sacat=169291&LH_Sold=1&LH_Complete=1`.
+- Extract sold price + title + condition from the rendered results, filter the same way
+  (genuine flap bags, $500+ so authenticated, exclude accessories/other sizes).
+- **eBay rate-limits harder than Poshmark** (~120 fetches then 403, ~10-min cooldown): pace
+  gently, never burst. The built `ebay.ts` Browse adapter is now dormant; the live path is the
+  browser. (If the owner's eBay account matures, re-applying to the dev program may unlock the
+  asking-side API later, but it is not needed for the sold signal.)
 
 ## Build status / next steps
 - [x] Poshmark browser paginator mechanism proven; first hero-bag sold pull done.
