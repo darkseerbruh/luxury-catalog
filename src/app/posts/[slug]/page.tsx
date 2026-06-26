@@ -22,6 +22,8 @@ import { rentVsBuyDiagramRegistry } from "./RentVsBuyDiagram";
 import { resaleRedFlagsDiagramRegistry } from "./ResaleRedFlagsDiagram";
 import { holdsValueDiagramRegistry } from "./HoldsValueDiagram";
 import { entryBagsChartRegistry } from "./EntryBagsChart";
+import { coachResaleRealityChartRegistry } from "./CoachResaleRealityChart";
+import { sizePriceCurveChartRegistry } from "./SizePriceCurveChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -44,6 +46,8 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...resaleRedFlagsDiagramRegistry,
   ...holdsValueDiagramRegistry,
   ...entryBagsChartRegistry,
+  ...coachResaleRealityChartRegistry,
+  ...sizePriceCurveChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
