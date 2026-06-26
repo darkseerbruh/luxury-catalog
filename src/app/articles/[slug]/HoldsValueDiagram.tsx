@@ -16,7 +16,7 @@ const HOLDS = [
   "Classic shapes that stay in the lineup for years",
   "Neutral colors (black, beige, brown)",
   "Heritage houses with tightly managed production",
-  "The full set: box, dust bag, receipt",
+  "The full set: Box, dust bag, receipt",
   "Excellent, well-kept condition",
 ];
 const LOSES = [

@@ -53,7 +53,7 @@ export function RentVsBuyDiagram() {
   return (
     <figure style={{ margin: "0.5rem 0 1rem", color: FG }} aria-label="Rent versus buy, when each makes sense">
       <div style={{ maxWidth: 600, margin: "0 auto", border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c" }}>
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: 19 }}>Rent or buy: which fits you</div>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: 19 }}>Rent or buy: Which fits you</div>
         <div style={{ fontSize: 12.5, color: MUTED, marginBottom: 14 }}>
           The deciding factor is how often you will actually carry it, not which looks cheaper up front.
         </div>

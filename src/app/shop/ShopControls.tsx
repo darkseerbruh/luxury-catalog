@@ -5,8 +5,8 @@ import { FAMILY_PREFIX, type ShopSort, type ShopFacets, type Facet, type Grouped
 
 const SORTS: { value: ShopSort; label: string }[] = [
   { value: "best-deal", label: "Best deal first" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
+  { value: "price-asc", label: "Price: Low to high" },
+  { value: "price-desc", label: "Price: High to low" },
 ];
 
 const selectClass =

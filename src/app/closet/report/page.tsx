@@ -193,7 +193,7 @@ export default async function CollectionReportPage() {
               column to track unrealised gain/loss for capital-gains planning — it&rsquo;s private to you.</span>
             </p>
             <p className="mt-2 text-muted/70">
-              Note: if you sell at a profit, handbags are generally taxed as <em>collectibles</em> (a
+              Note: If you sell at a profit, handbags are generally taxed as <em>collectibles</em> (a
               higher maximum federal rate than stocks), and whether you count as an investor or a dealer
               changes the treatment. These figures are for your records — <span className="text-muted">not
               tax advice</span>. Confirm with a tax professional.

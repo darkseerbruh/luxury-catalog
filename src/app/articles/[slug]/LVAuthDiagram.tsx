@@ -37,7 +37,7 @@ const MARKERS: {
   {
     name: "Date code or microchip",
     where: "hidden inside",
-    body: "Bags made before about 2021 carry an embossed date code: a factory and a date, never a serial number. Newer bags hide an NFC microchip instead, which only Louis Vuitton can read. A date code is not proof, since fakes copy them, which is exactly why the brand switched.",
+    body: "Bags made before about 2021 carry an embossed date code: A factory and a date, never a serial number. Newer bags hide an NFC microchip instead, which only Louis Vuitton can read. A date code is not proof, since fakes copy them, which is exactly why the brand switched.",
     kind: "info",
   },
   {

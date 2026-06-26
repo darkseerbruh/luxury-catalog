@@ -57,7 +57,7 @@ export function FlapVenueChart() {
           viewBox="0 0 400 178"
           width="100%"
           role="img"
-          aria-label="A box-and-whisker chart of Chanel Medium Classic Flap sale prices by marketplace, June 2026. eBay (n=76): middle half $2,500 to $5,416, median $3,897. Poshmark (n=78): middle half $3,300 to $6,550, median $4,292. Fashionphile (n=229): middle half $6,930 to $8,795, median $7,995. The typical asking price is $6,000 and the new boutique price is $11,700. Fashionphile's box sits well above the other two, which stretch much lower."
+          aria-label="A box-and-whisker chart of Chanel Medium Classic Flap sale prices by marketplace, June 2026. eBay (n=76): Middle half $2,500 to $5,416, median $3,897. Poshmark (n=78): Middle half $3,300 to $6,550, median $4,292. Fashionphile (n=229): Middle half $6,930 to $8,795, median $7,995. The typical asking price is $6,000 and the new boutique price is $11,700. Fashionphile's box sits well above the other two, which stretch much lower."
         >
           {/* reference lines */}
           {REFS.map((r) => (

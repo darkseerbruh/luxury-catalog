@@ -113,7 +113,7 @@ export default function PrivacyPage() {
 
         <section className="space-y-3">
           <h2 className="font-serif text-xl text-foreground">Contact</h2>
-          <p>Questions or requests: hello@luxurycatalog.com.</p>
+          <p>Questions or requests? Email hello@luxurycatalog.com.</p>
         </section>
 
         <p className="text-muted/70">

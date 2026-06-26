@@ -134,7 +134,7 @@ export function LeatherComparisonDiagram() {
           preserveAspectRatio="xMidYMid meet"
           style={{ display: "block", width: "100%", height: "auto" }}
           role="img"
-          aria-label="Two side-by-side schematics of the same quilted flap bag at identical size: on the left, lambskin rendered smooth with a soft diagonal sheen and a small corner scuff; on the right, caviar rendered with a fine pebbled grain and crisp structure. Lambskin is soft, supple, and scuffs sooner; caviar is firm, matte, and resists scratches."
+          aria-label="Two side-by-side schematics of the same quilted flap bag at identical size: On the left, lambskin rendered smooth with a soft diagonal sheen and a small corner scuff; on the right, caviar rendered with a fine pebbled grain and crisp structure. Lambskin is soft, supple, and scuffs sooner; caviar is firm, matte, and resists scratches."
         >
           <BagGroup kind="lamb" dx={10} />
           <BagGroup kind="caviar" dx={210} />
