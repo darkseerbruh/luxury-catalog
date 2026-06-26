@@ -338,3 +338,38 @@ discloses third-party affiliate tracking cookies (CJ, Skimlinks, etc.) and provi
 mechanism (GDPR/ePrivacy for any EU visitors; US state-privacy disclosure). Needed before running
 CJ links in production. Scope: privacy-policy page + consent banner gating non-essential/tracking
 cookies. Not yet built.
+
+## 12. Sold capture + discovered promotion (2026-06-26)
+
+**Realized (sold) prices — browser pull.** eBay/Poshmark completed-sales are the only
+peer-to-peer realized signal (Fashionphile reconcile-sold is premium fixed-price). Method
+proven + documented in `docs/research-drafts/poshmark-ebay-sold-capture.md`. Loaded the first
+421 p2p sold rows (Coach Tabby 20/26/Standard `v595/596/597`, Rogue all sizes `v601-605`) via
+`load-sold.ts` (`price_type='sold'`). Recency-window every sold pull (date-confound rule).
+
+**TRANSPORT REALITY (verified 2026-06-26) — use `get_page_text` body-transport.**
+- The localhost sink (`scripts/capture-sink.mjs`) is **CSP-blocked on eBay, Poshmark, AND
+  TheRealReal** (the POST hangs → CDP timeout). Don't rely on it for these origins.
+- Blob-download works **once per origin**, then Chrome gates every subsequent auto-download
+  (no fresh-nav reset). Fine for a single file; useless for a multi-model grind.
+- **Working path:** capture in-page → `window.__CAPS = JSON.stringify(records)` →
+  `document.body.innerHTML='<pre>CAPSTART'+window.__CAPS+'CAPEND</pre>'` → `get_page_text`
+  returns the FULL JSON uncapped (the eval return truncates ~5KB; get_page_text does not).
+  Author the captured JSON to `data/ingest/_raw/<key>.json`, then `load-sold.ts --write`.
+- All three sources are live + logged-in in the local Chrome (TRR `__NEXT_DATA__`, Poshmark
+  `__INITIAL_STATE__["$_search"].gridData`, eBay `.s-card` sold markup).
+
+**SAFE promotion — `promote-safe.ts` (built 2026-06-26).** Rolls recurring `discovered_listing`
+clusters into curated size-variants of **EXISTING clean styles only** (no new style rows = no
+junk-style risk). Run: `npx tsx supabase/ingest/promote-safe.ts --min=20 [--write]`. First run
+promoted 3,855 asking rows → 85 new variants (~15 brands' iconic models), deduped by listing_ref.
+- **OWNER-GATED next:** `promote-safe --min=20` also reports the **28 promotable clusters that
+  need a brand-NEW style** (e.g. models we don't carry yet). Creating those means new `style`
+  rows on the live catalog — review the list and greenlight before running the mass
+  `promote-discovered --write` (still the intentional stub).
+
+**Coverage auditor — `audit-coverage.ts`.** `npx tsx supabase/ingest/audit-coverage.ts` prints
+listed/sold totals + per-brand priced-variant counts (paginates, so counts don't cap at 1000).
+2026-06-26 state: 750 priced variants / 23,096 listed / 12,636 sold (421 p2p + 12,215 FP).
+**Still slim:** Coach asking (200, mid-tier lives on eBay/Poshmark not TRR/FP), and MK / Kate
+Spade / Longchamp / Mulberry = absent (mid-tier capture queued).
