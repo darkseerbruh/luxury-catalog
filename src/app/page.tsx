@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
+import { BRAND_TIERS, getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
@@ -53,9 +53,6 @@ export default async function Home() {
     showPersonalized = flagValue === true || flagValue === "test";
     bootstrapFlags = flagBootstrap?.flags ?? {};
   }
-
-  const liveBrands = brands.filter((b) => b.isLive);
-  const comingSoonBrands = brands.filter((b) => !b.isLive);
 
   // Real photos for the hero + closet cards when available; placeholders otherwise.
   const images = await getVariantImages([
@@ -282,28 +279,69 @@ export default async function Home() {
       </section>
 
       <section id="brands" className="border-b border-border px-5 py-12">
-        <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {liveBrands.map((brand) => (
-            <Link
-              key={brand.brandId}
-              href={`/brand/${brand.brandId}`}
-              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
-            >
-              {brand.name}
-            </Link>
-          ))}
-          {comingSoonBrands.map((brand) => (
-            <div
-              key={brand.brandId}
-              className="rounded-xl border border-border bg-surface/40 px-4 py-4 text-muted"
-            >
-              <p>{brand.name}</p>
-              <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-                Coming soon
-              </p>
-            </div>
-          ))}
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>
+          <Link
+            href="/brands"
+            className="text-sm text-muted transition-colors hover:text-gold"
+          >
+            All brands
+          </Link>
+        </div>
+        <div className="mt-8 flex flex-col gap-10">
+          {BRAND_TIERS.map((tier) => {
+            const group = brands.filter((b) => b.tier === tier.key);
+            if (group.length === 0) return null;
+            return (
+              <div key={tier.key}>
+                <p className="text-xs uppercase tracking-widest text-muted/70">
+                  {tier.label}
+                </p>
+                <div className="mt-5 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+                  {group.map((brand) => (
+                    <div key={brand.brandId}>
+                      <Link
+                        href={`/brand/${brand.brandId}`}
+                        className="font-serif text-lg text-foreground transition-colors hover:text-gold"
+                      >
+                        {brand.name}
+                      </Link>
+                      {brand.isLive ? (
+                        <ul className="mt-2 flex flex-col gap-1.5">
+                          {brand.topStyles.map((s) => (
+                            <li key={s.styleId}>
+                              <Link
+                                href={
+                                  s.variantId
+                                    ? `/bag/${s.variantId}`
+                                    : `/brand/${brand.brandId}`
+                                }
+                                className="text-sm text-muted transition-colors hover:text-gold"
+                              >
+                                {s.name}
+                              </Link>
+                            </li>
+                          ))}
+                          <li>
+                            <Link
+                              href={`/brand/${brand.brandId}`}
+                              className="text-sm text-gold transition-colors hover:text-gold-soft"
+                            >
+                              View all {brand.name} →
+                            </Link>
+                          </li>
+                        </ul>
+                      ) : (
+                        <p className="mt-1 text-xs uppercase tracking-wide text-muted/60">
+                          Coming soon
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 

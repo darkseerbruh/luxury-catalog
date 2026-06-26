@@ -15,7 +15,8 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ⬜ LV Speedy (capture asking too; not a curated variant yet — create style/variant first)
 - ⬜ Hermès Birkin 30 v210 + Kelly 28 v214 (low eBay volume; verify enough genuine sold)
 - ⬜ Gucci GG Marmont small v207 sold
-- ⬜ Dior Lady Dior + Saddle sold (Trends riser)
+- ✅ Dior Lady Dior Mini/Small/Med/Large sold — 46 rows (2026-06-26)
+- ⬜ Dior Saddle sold (Trends riser)
 - ⬜ Poshmark cross-source for Coach Tabby (corroborate the eBay $198 median)
 
 ## Mid-tier breadth (absent brands — create curated variants, then capture)

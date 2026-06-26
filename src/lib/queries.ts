@@ -8,8 +8,26 @@ export interface BrandOverview {
   name: string;
   tier: "thrift" | "mid" | "ultra-luxury";
   styleCount: number;
+  /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
+  variantCount: number;
   isLive: boolean;
+  /** Up to 3 most-documented styles (by catalogued variant count), each with a representative variant id to link to its bag page. */
+  topStyles: { styleId: number; name: string; variantId: number | null }[];
 }
+
+/** Display order for the brand directory: the tiers most people shop for lead. */
+export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
+  "ultra-luxury": 0,
+  mid: 1,
+  thrift: 2,
+};
+
+/** Tier groups for the brand directory, in display order, with section labels. */
+export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
+  { key: "ultra-luxury", label: "Ultra-luxury" },
+  { key: "mid", label: "Mid-tier" },
+  { key: "thrift", label: "Thrift & contemporary" },
+];
 
 export interface HeroCard {
   styleId: number;
@@ -67,22 +85,47 @@ function embeddedName(relation: unknown): string {
 export async function getBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
     .from("brand")
-    .select("brand_id, name, tier, style(style_id, variant(variant_id))")
-    .order("name");
+    .select("brand_id, name, tier, style(style_id, name, variant(variant_id))");
 
   if (error || !data) return [];
 
-  return data.map((brand) => {
+  const brands = data.map((brand) => {
     const styles = (brand.style ?? []) as StyleWithVariants[];
-    const isLive = styles.some((s) => (s.variant ?? []).length > 0);
+    const variantCount = styles.reduce((n, s) => n + (s.variant ?? []).length, 0);
+    // "Top" styles = most documented (deepest variant coverage), then alphabetical
+    // as a stable tiebreak. Honest proxy: we surface what we know best, not a
+    // popularity claim we have no data for.
+    const topStyles = [...styles]
+      .sort(
+        (a, b) =>
+          (b.variant ?? []).length - (a.variant ?? []).length ||
+          a.name.localeCompare(b.name)
+      )
+      .slice(0, 3)
+      .map((s) => ({
+        styleId: s.style_id,
+        name: s.name,
+        variantId: (s.variant ?? [])[0]?.variant_id ?? null,
+      }));
     return {
       brandId: brand.brand_id,
       name: brand.name,
-      tier: brand.tier,
+      tier: brand.tier as BrandOverview["tier"],
       styleCount: styles.length,
-      isLive,
+      variantCount,
+      isLive: styles.some((s) => (s.variant ?? []).length > 0),
+      topStyles,
     };
   });
+
+  // Rank by tier (ultra-luxury first), then by catalogue depth, then name — so the
+  // brands most people come for lead, not whatever sorts first alphabetically.
+  return brands.sort(
+    (a, b) =>
+      BRAND_TIER_RANK[a.tier] - BRAND_TIER_RANK[b.tier] ||
+      b.variantCount - a.variantCount ||
+      a.name.localeCompare(b.name)
+  );
 }
 
 const HERO_STYLES: { brand: string; style: string }[] = [
