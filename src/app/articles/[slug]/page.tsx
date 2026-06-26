@@ -6,6 +6,9 @@ import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
+import { ShopThisBag, type ShopThisBagData } from "./ShopThisBag";
+import { getStyleShopData } from "@/lib/article-shop";
+import { buildConsignmentLinks, applyEbayAffiliate, affiliateListingUrl } from "@/lib/affiliate";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
 import { gucciMarmontAuthDiagramRegistry } from "./GucciMarmontAuthDiagram";
@@ -140,9 +143,10 @@ function renderInline(text: string, keyPrefix: string) {
  *   "[diagram: <id>]" -> a registered schematic component
  *   anything else     -> a paragraph
  * No raw HTML is injected: every value renders as an escaped React text node. */
-function Body({ body }: { body: string | null }) {
+function Body({ body, injectAfterFirstDiagram }: { body: string | null; injectAfterFirstDiagram?: ReactNode }) {
   if (!body) return null;
   const out: ReactNode[] = [];
+  let injected = false;
   let para: string[] = [];
   let list: string[] = [];
   let quote: string[] = [];
@@ -201,6 +205,11 @@ function Body({ body }: { body: string | null }) {
         out.push(<D key={k} />);
         k++;
       }
+      if (injectAfterFirstDiagram && !injected) {
+        out.push(<div key={`inject-${k}`}>{injectAfterFirstDiagram}</div>);
+        injected = true;
+        k++;
+      }
       continue;
     }
     if (line.startsWith("## ")) {
@@ -257,6 +266,35 @@ export default async function PostDetailPage({
   const hasTopic = Boolean(
     (post.topic.brandId && post.topic.brandName) || (post.topic.styleId && post.topic.styleName)
   );
+
+  // Live "shop this bag" data for the visible (sticky + inline) CTAs. Real listings from
+  // our capture, affiliate-attributed. Null/absent → cards simply don't render.
+  const shopLabel = [post.topic.brandName, post.topic.styleName].filter(Boolean).join(" ").trim();
+  const shop = hasTopic ? await getStyleShopData(post.topic.styleId) : null;
+  let shopData: ShopThisBagData | null = null;
+  if (shop && shop.count > 0 && shopLabel) {
+    shopData = {
+      label: shopLabel,
+      count: shop.count,
+      fromPrice: shop.fromPrice,
+      currency: shop.currency,
+      asOf: shop.asOf,
+      offers: shop.offers
+        .filter((o) => o.sourceUrl)
+        .map((o) => ({
+          price: o.price,
+          currency: o.currency,
+          sizeLabel: o.sizeLabel,
+          platformLabel: o.platformLabel,
+          href: affiliateListingUrl(o.sourceUrl as string, o.platform),
+        })),
+      sell: buildConsignmentLinks(post.topic.brandName ?? "", post.topic.styleName ?? "").map((l) => ({ key: l.key, name: l.name, url: l.url })),
+      ebayUrl: applyEbayAffiliate(
+        `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(shopLabel)}&_sacat=169291`,
+        `post-${post.slug}`,
+      ),
+    };
+  }
 
   // Article JSON-LD with a named-author byline (E-E-A-T). Only includes fields
   // that exist; no invented data.
@@ -329,8 +367,15 @@ export default async function PostDetailPage({
       )}
 
       <article>
-        <Body body={post.body} />
+        <Body
+          body={post.body}
+          injectAfterFirstDiagram={shopData ? <ShopThisBag variant="inline" data={shopData} /> : undefined}
+        />
       </article>
+
+      {/* Dismissible floating shop bar: keeps the buy/sell path visible without forcing
+          a scroll to the bottom. Mobile = bottom bar, desktop = bottom-right card. */}
+      {shopData && <ShopThisBag variant="floating" data={shopData} />}
 
       {/* Money-moment: topic-tagged posts hand off to commissionable buy/sell links */}
       {hasTopic && (post.topic.brandName || post.topic.styleName) && (
