@@ -122,7 +122,7 @@ function CaptionGroup({ kind, center, chipX }: { kind: Kind; center: number; chi
 export function LeatherComparisonDiagram() {
   return (
     <figure style={{ margin: "0.5rem 0 1rem", color: FG }} aria-label="Caviar versus lambskin leather, illustrated">
-      <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c" }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c" }}>
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 20 }}>Same bag, two hides</div>
         <div style={{ fontSize: 13, color: GOLD, marginBottom: 14 }}>One is pebbled and tough, the other smooth and delicate.</div>
 
