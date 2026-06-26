@@ -21,7 +21,29 @@
 6. Back "done/pushed" claims with evidence (git/command output), never assert.
 7. Just do it: run what the environment can run; confirm a destructive action once, then finish the whole sequence; leave only outward-facing/irreversible ops (email, public posts, paid sign-ups, DNS, DB migrations) for her.
 8. Calibrated hedging on uncertain domains (value/authenticity/fit/taste/money/legal): frame as evidence + opinion ("our estimate," "markers to check," "my take"), never a verdict ("authentic," "worth $X," "you should"). State X, not Y. (Frames below.)
+9. On a multi-hour/"run until done" task: do NOT stop to summarize, check in, or ask. Keep firing the next tool call off `docs/data-content-worklist.md`, committing after each unit. ONLY valid stops: worklist empty, hard technical blocker, or an outward-facing/irreversible op needs her. "Context is getting long" is NOT a stop reason; checkpoint to the worklist and continue. (Protocol below.)
 <!-- ENFORCED:end -->
+
+## Autonomous run protocol (added 2026-06-26, after she flagged premature stopping)
+
+*Why this exists: on a big "run for hours" task I kept ending turns with a polished summary
+and handing control back. That IS the stopping she hates. The honest cause was a check-in
+reflex plus rationalizing "context is long." Fix below removes the judgment call.*
+
+- **The default is CONTINUE.** When she hands a multi-part / "don't stop" / "run for hours"
+  task, treat a finished sub-step as a cue to immediately start the NEXT one, not to report.
+  No wrap-up summary, no "want me to keep going?", no permission requests mid-run.
+- **Work a written queue, not memory.** Keep the live queue in `docs/data-content-worklist.md`:
+  ordered items, each marked ⬜/🔄/✅ with a one-line result. Pick the top ⬜, do it, commit,
+  mark ✅, move to the next. This is what makes "context is long" a non-issue: a fresh chat
+  (or my next turn) reads the worklist and resumes with zero re-derivation.
+- **Commit after every unit** so nothing is ever lost to a context reset (already the habit).
+- **The only legitimate stops:** (1) the worklist is empty, (2) a hard technical blocker I
+  cannot work around (state it + what I tried), (3) an outward-facing/irreversible op that is
+  hers by rule (publish, paid signup, DNS, email, destructive delete). Anything else = keep going.
+- **If context truly runs low,** do not stop to chat: append remaining items to the worklist,
+  commit, and keep working until the turn ends on its own. For genuinely hands-off multi-hour
+  runs she can wrap the task in `/loop` (self-paced) so the runtime re-fires me automatically.
 
 ## Content factuality protocol (non-negotiable, added 2026-06-24)
 
