@@ -23,7 +23,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Michael Kors created (brand 401, Jet Set style 514, v928/929); Jet Set tote sold — 80 rows, median $80 (2026-06-26)
 - ✅ Kate Spade DONE: Knott (v925/926, 116 rows, med $120) + Sam (v927, 50 rows, med $100), eBay sold (2026-06-26)
 - ✅ Longchamp created (brand 402, Le Pliage style 515, v930/931); nylon tote sold — 84 rows, median $99.50 (2026-06-26)
-- ⬜ Mulberry (Bayswater/Alexa)
+- ✅ Mulberry created (brand 403, Bayswater 516/v932 + Alexa 517/v933); Bayswater sold — 93 rows, median $519, holds best of mid-tier (2026-06-26)
 
 ## Promotion / catalog
 - ⬜ 28 promote-safe clusters that need NEW styles — owner greenlight before mass create
