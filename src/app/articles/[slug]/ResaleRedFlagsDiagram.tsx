@@ -17,12 +17,12 @@ const FLAGS = [
   "Brags about an authenticity card for a brand that never issues one",
   "Only stock-style photos, or dodges your request for close-ups",
   "Vague or no return policy",
-  "Pressure or urgency: someone else is about to buy it",
+  "Pressure or urgency: Someone else is about to buy it",
   "A private, off-platform sale with no authentication",
 ];
 const MOVES = [
   "Buy where authentication is built in (eBay and Poshmark check items over $500; authenticating resellers verify everything)",
-  "Ask for the specific shots: stamp or date code, hardware engraving, interior tag, stitching",
+  "Ask for the specific shots: Stamp or date code, hardware engraving, interior tag, stitching",
   "Check the markers against a brand guide",
   "For anything costly, send it to a professional authenticator",
 ];

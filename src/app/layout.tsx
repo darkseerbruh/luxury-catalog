@@ -29,7 +29,7 @@ const SKIMLINKS_ID = process.env.NEXT_PUBLIC_SKIMLINKS_ID ?? "305125X1793317";
 export const metadata: Metadata = {
   title: "The Luxury Catalog",
   description:
-    "The reference for designer handbags: production history, authentication markers, and what they actually resell for, brand by brand.",
+    "The reference for designer handbags: Production history, authentication markers, and what they actually resell for, brand by brand.",
 };
 
 export default async function RootLayout({

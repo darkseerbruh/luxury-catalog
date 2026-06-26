@@ -39,7 +39,7 @@ export function WhereToSellDiagram() {
         </div>
 
         <svg viewBox="0 0 360 248" preserveAspectRatio="xMidYMid meet" style={{ display: "block", width: "100%", height: "auto" }} role="img"
-          aria-label="A tradeoff chart. The vertical axis is how much of the sale you keep, low at the bottom to high at the top. The horizontal axis is how much work you do, none on the left to all of it on the right. Four selling routes sit along a rising line: instant buyout keeps the least with no work, consignment is next, then an authenticated marketplace, then selling it yourself keeps the most for the most work.">
+          aria-label="A tradeoff chart. The vertical axis is how much of the sale you keep, low at the bottom to high at the top. The horizontal axis is how much work you do, none on the left to all of it on the right. Four selling routes sit along a rising line: Instant buyout keeps the least with no work, consignment is next, then an authenticated marketplace, then selling it yourself keeps the most for the most work.">
           {/* axes */}
           <line x1="40" y1="30" x2="40" y2="222" stroke={LINE} strokeWidth="1" />
           <line x1="40" y1="222" x2="344" y2="222" stroke={LINE} strokeWidth="1" />
@@ -74,7 +74,7 @@ export function WhereToSellDiagram() {
         </div>
       </div>
       <figcaption className="sr-only">
-        A tradeoff diagram for selling a handbag: routes that take more of the work off your hands (instant buyout, then consignment) leave you with less of the sale, while routes where you do more (an authenticated marketplace, then selling it yourself) leave you with more. No fee figures are shown because they change over time.
+        A tradeoff diagram for selling a handbag: Routes that take more of the work off your hands (instant buyout, then consignment) leave you with less of the sale, while routes where you do more (an authenticated marketplace, then selling it yourself) leave you with more. No fee figures are shown because they change over time.
       </figcaption>
     </figure>
   );
