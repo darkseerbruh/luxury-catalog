@@ -78,6 +78,28 @@ desirable) and the marquee bags are rarely available; she is a longtime user and
 could prove her wrong.* Frame any finding as evidence, never a verdict, and never disparage
 without the data. Needs: a paid subscription + a scheduled catalog pull (browser or API).
 
+## Mined article ideas + the keyword-data reality (2026-06-26)
+
+**Keyword tooling honesty:** we have NO search-volume tool. WebSearch returns results, not
+volume; never quote a volume we can't source. **Real demand data = Google Search Console**
+(the queries already driving impressions to the live site; owner has it, submitted the sitemap)
+and **Google Trends** (relative interest only). **Operator action to unlock real targeting:**
+export the GSC "Performance → Queries" report and hand it over, then we write to actual demand.
+What we can do without it: qualitative intent-mining (competitor headlines + question patterns).
+
+Mined from intent (all must respect never-invent: NO appreciation/retention/"investment return"
+claims, NO unsourced retail; lean on current-asking data + authentication authority):
+- **⭐ "Are designer bags actually a good investment? The honest answer."** Huge crowded category,
+  but rivals recycle appreciation stats ("retains 136%", "+93% since 2020", "14.2% annual return")
+  we cannot make. Our wedge = honesty + real current prices: classics hold up better than most
+  fashion, but treat value as buy-what-you-love, not a guaranteed return (estimate-not-appraisal;
+  aligns with the no-investment-framing compliance stance). Standout next piece.
+- **Cross-brand entry matchup** (the owner's "closely-priced across brands" type): e.g. Gucci
+  Marmont vs LV Neverfull vs LV Speedy, ~$900–$1,600 entry tier, decided on fit/use/durability,
+  not price. Clears the value bar on multiple axes.
+- **"The cheapest way into each luxury house on resale"** — entry points by brand, current asking
+  data (Neverfull/Speedy/Marmont + entry Chanel/Dior). Data the listicles lack.
+
 ## Operating rules
 - **Lead with Tier 1** (overlap of highest monetization × ready today — our data moat,
   monetizes immediately through the CTA block).
