@@ -1,0 +1,59 @@
+name: Monthly re-capture reminder
+
+# Fires the MONTHLY article/hero-bag re-capture (docs/monthly-recapture-task.md). The capture
+# itself is browser-gated (eBay/Poshmark/TheRealReal block headless CI), so this job does NOT
+# run the capture — it only opens a GitHub issue as the reminder. The owner (or a logged-in
+# Claude-in-Chrome session) then runs the loop prompt in that doc and closes the issue.
+#
+# Why a workflow and not an in-session cron: a Claude session cron auto-expires in 7 days and
+# dies with the ephemeral container, so it can't hold a monthly cadence. A scheduled workflow
+# survives and fires every month with no live session.
+#
+# Idempotent: if an open `recapture` issue already exists, it comments instead of opening a
+# duplicate. No secrets needed — uses the default GITHUB_TOKEN.
+
+on:
+  schedule:
+    # 1st of each month, 07:13 UTC (off the :00 mark on purpose).
+    - cron: "13 7 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+concurrency:
+  group: monthly-recapture-reminder
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const title = "Monthly re-capture due";
+            const label = "recapture";
+            const month = new Date().toISOString().slice(0, 7);
+
+            // Reuse an already-open reminder rather than spamming a new issue each month.
+            const open = await github.rest.issues.listForRepo({
+              owner, repo, state: "open", labels: label, per_page: 1,
+            });
+            const body = [
+              `Time for the monthly article/hero-bag price re-capture (**${month}**).`,
+              ``,
+              `Browser-gated, so run it in a logged-in Claude-in-Chrome session: open`,
+              `\`docs/monthly-recapture-task.md\` and paste the loop prompt. Run the drift check`,
+              `in \`docs/article-freshness-report.md\` after, then close this issue.`,
+            ].join("\n");
+
+            if (open.data.length > 0) {
+              const n = open.data[0].number;
+              await github.rest.issues.createComment({ owner, repo, issue_number: n, body: `Reminder bump (${month}).\n\n${body}` });
+              core.info(`Commented on existing #${n}`);
+            } else {
+              const created = await github.rest.issues.create({ owner, repo, title, body, labels: [label] });
+              core.info(`Opened #${created.data.number}`);
+            }
