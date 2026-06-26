@@ -47,16 +47,25 @@ authentication needs sourcing; mid-tier needs data capture.**
 ## The comparison / "worth it" value bar (locked 2026-06-26)
 
 "X vs Y" and "is it worth it" pieces match high-intent search, but **do NOT farm thin ones.**
-A piece ships only if it clears ONE of:
-- a **non-obvious finding** from our data (e.g. Birkin and Kelly cost the same size-for-size; the small-size premium; sold lands under asking), or
-- a **genuinely high-stakes or high-volume decision** where a clear answer helps a lot (Birkin vs Kelly, is the Flap worth it).
+A piece ships only if it gives the reader a **real decision aid on at least one meaningful axis**,
+not just a number gap. Meaningful axes (locked 2026-06-26, owner pushback):
+- **price** (a non-obvious finding, e.g. Birkin = Kelly size-for-size; the small-size premium), OR
+- **fit / capacity** (what actually fits, day-to-day usability), OR
+- **durability / wear** (how each ages and holds up), OR
+- **use-case / who it suits**, OR
+- it is a **genuinely high-stakes or high-volume decision** where even a clear answer helps a lot.
 
-If the finding is just "two numbers that are close," it is a **data point, not an article.** Reason:
-our moat is being the cited original-data authority; thin near-duplicate comparison pages get
-downweighted by Google's helpful-content system and AI search, and dilute that authority. A few
-deep pieces beat dozens of shallow ones. (Marmont small vs medium = fails the bar; Neverfull MM
-vs PM = borderline.) The self-updating + shoppable north star makes substantive comparisons
-compound; it does not rescue thin ones.
+**Strong comparison type to mine: two closely-priced bags, often across brands, that serve the
+same purpose** (e.g. similar-price totes or flaps from different houses). Same price, different
+trade-offs is exactly the decision a buyer agonizes over.
+
+What fails: a piece whose only content is "two numbers that are close" with nothing on fit, wear,
+or use. That is a **data point, not an article.** (So small-vs-same-size pieces need a real
+fit/use finding to clear the bar; Marmont small vs medium only ships if it genuinely covers what
+each fits and suits, not just price.) Reason: our moat is being the cited original-data authority;
+thin near-duplicate pages get downweighted by Google's helpful-content system and AI search and
+dilute that authority. A few deep pieces beat dozens of shallow ones. The self-updating +
+shoppable north star makes substantive comparisons compound; it does not rescue thin ones.
 
 ## Future: rental-market intelligence (Vivrelle) — recorded 2026-06-26
 
