@@ -14,7 +14,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ LV Neverfull MM v218 — 87 rows, median $770 vs $1,245 ask (2026-06-26)
 - ⬜ LV Speedy (capture asking too; not a curated variant yet — create style/variant first)
 - ⬜ Hermès Birkin 30 v210 + Kelly 28 v214 (low eBay volume; verify enough genuine sold)
-- ⬜ Gucci GG Marmont small v207 sold
+- ✅ Gucci GG Marmont small v207 sold — 46 rows, median $780 (2026-06-26)
 - ✅ Dior Lady Dior Mini/Small/Med/Large sold — 46 rows (2026-06-26)
 - ✅ Dior Saddle Medium/Mini sold — 88 rows, median ~$1,600 (2026-06-26)
 - ⬜ Poshmark cross-source for Coach Tabby (corroborate the eBay $198 median)
