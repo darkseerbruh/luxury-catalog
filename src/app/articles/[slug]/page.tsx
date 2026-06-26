@@ -26,6 +26,7 @@ import { coachResaleRealityChartRegistry } from "./CoachResaleRealityChart";
 import { sizePriceCurveChartRegistry } from "./SizePriceCurveChart";
 import { askVsSoldGapChartRegistry } from "./AskVsSoldGapChart";
 import { midTierHoldsValueChartRegistry } from "./MidTierHoldsValueChart";
+import { searchVsPriceChartRegistry } from "./SearchVsPriceChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -52,6 +53,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...sizePriceCurveChartRegistry,
   ...askVsSoldGapChartRegistry,
   ...midTierHoldsValueChartRegistry,
+  ...searchVsPriceChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
