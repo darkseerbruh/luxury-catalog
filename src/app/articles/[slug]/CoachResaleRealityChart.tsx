@@ -1,10 +1,17 @@
 import type { ComponentType } from "react";
+import { getMedians } from "../../../lib/article-data";
 
 /**
  * Coach resale reality: realized (sold) median vs asking median, per model+size.
  * Our own capture 2026-06-26: eBay completed sales (sold) + TheRealReal/Fashionphile
  * (asking), in prod price_history. Sold is the lead figure; asking shown as a marker.
  * Per docs/data-analysis-standard.md every bar carries its n. Original SVG/CSS.
+ *
+ * Self-updating: this async server component reads live medians from price_history at
+ * render time (getMedians). The baked numbers below are the FALLBACK, used per-field when
+ * a variant has no rows yet or the DB is unavailable, so the chart never renders empty.
+ * Scope: this updates the CHART only. Article PROSE figures are kept honest by the drift
+ * check (docs/article-freshness-report.md), not here.
  */
 const FG = "#f3ede0";
 const MUTED = "#a89c87";
@@ -15,19 +22,33 @@ const BORDER = "#322c22";
 const SURF = "#1a1815";
 
 const money = (n: number) => "$" + n.toLocaleString();
-const MAX = 720;
-const pct = (v: number) => `${Math.min(100, (v / MAX) * 100).toFixed(1)}%`;
+const pct = (v: number, max: number) => `${Math.min(100, (v / max) * 100).toFixed(1)}%`;
 
-type Row = { label: string; group: "Tabby" | "Rogue"; sold: number; soldN: number; ask: number };
+type Row = { label: string; group: "Tabby" | "Rogue"; variant: number; sold: number; soldN: number; ask: number };
 const ROWS: Row[] = [
-  { label: "Tabby 26", group: "Tabby", sold: 198, soldN: 177, ask: 365 },
-  { label: "Tabby 20", group: "Tabby", sold: 193, soldN: 25, ask: 303 },
-  { label: "Tabby (shoulder)", group: "Tabby", sold: 204, soldN: 73, ask: 309 },
-  { label: "Rogue 25", group: "Rogue", sold: 499, soldN: 41, ask: 356 },
-  { label: "Rogue (standard)", group: "Rogue", sold: 645, soldN: 88, ask: 420 },
+  { label: "Tabby 26", group: "Tabby", variant: 596, sold: 198, soldN: 177, ask: 365 },
+  { label: "Tabby 20", group: "Tabby", variant: 595, sold: 193, soldN: 25, ask: 303 },
+  { label: "Tabby (shoulder)", group: "Tabby", variant: 597, sold: 204, soldN: 73, ask: 309 },
+  { label: "Rogue 25", group: "Rogue", variant: 602, sold: 499, soldN: 41, ask: 356 },
+  { label: "Rogue (standard)", group: "Rogue", variant: 605, sold: 645, soldN: 88, ask: 420 },
 ];
 
-export function CoachResaleRealityChart() {
+export async function CoachResaleRealityChart() {
+  const ids = ROWS.map((r) => r.variant);
+  const [soldStats, askStats] = await Promise.all([getMedians(ids, "sold"), getMedians(ids, "listed")]);
+  // Live medians override the baked fallback per-field; a variant with no rows (n=0) keeps its baked number.
+  const rows = ROWS.map((r) => {
+    const s = soldStats[r.variant];
+    const a = askStats[r.variant];
+    return {
+      ...r,
+      sold: s && s.n > 0 ? s.median : r.sold,
+      soldN: s && s.n > 0 ? s.n : r.soldN,
+      ask: a && a.n > 0 ? a.median : r.ask,
+    };
+  });
+  // Scale to the data (with headroom) so a re-capture that pushes a value past the old 720 ceiling still renders proportionally.
+  const max = Math.max(720, ...rows.map((r) => Math.max(r.sold, r.ask))) * 1.05;
   return (
     <figure style={{ margin: "0.5rem 0 1rem" }}>
       <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c", color: FG, maxWidth: 580 }}>
@@ -40,7 +61,7 @@ export function CoachResaleRealityChart() {
           <span><span style={{ display: "inline-block", width: 2, height: 12, background: FG, verticalAlign: "middle", marginRight: 6 }} />asking median</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
-          {ROWS.map((r) => (
+          {rows.map((r) => (
             <div key={r.label}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 4 }}>
                 <span style={{ color: FG }}>
@@ -51,8 +72,8 @@ export function CoachResaleRealityChart() {
                 </span>
               </div>
               <div style={{ position: "relative", height: 16, background: SURF, borderRadius: 8, overflow: "hidden" }}>
-                <div style={{ width: pct(r.sold), height: "100%", background: r.group === "Rogue" ? GOLD : KELLY, borderRadius: 8 }} />
-                <div style={{ position: "absolute", top: -2, left: pct(r.ask), width: 2, height: 20, background: FG }} title={`asking ${money(r.ask)}`} />
+                <div style={{ width: pct(r.sold, max), height: "100%", background: r.group === "Rogue" ? GOLD : KELLY, borderRadius: 8 }} />
+                <div style={{ position: "absolute", top: -2, left: pct(r.ask, max), width: 2, height: 20, background: FG }} title={`asking ${money(r.ask)}`} />
               </div>
             </div>
           ))}
