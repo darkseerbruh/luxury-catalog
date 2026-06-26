@@ -78,6 +78,9 @@ export const EVENTS = {
   personalizedRecsViewed: "personalized_recs_viewed",
   /** A user subscribed to the newsletter. */
   newsletterSubscribed: "newsletter_subscribed",
+  /** The homepage hero search box was engaged (focused or submitted) — the success
+   *  metric for the home_headline copy test. Carries `flag`, `variant`, `kind`. */
+  homeSearchEngaged: "home_search_engaged",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

@@ -4,17 +4,14 @@ import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
-import Recommendations from "@/components/Recommendations";
-import PersonalizedRecs from "@/components/PersonalizedRecs";
 import PersonaRouter from "@/components/PersonaRouter";
+import BestDeals from "@/components/BestDeals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
-import { PostHogFlagBootstrap } from "@/components/PostHogFlagBootstrap";
-import { ExperimentExposure } from "@/components/ExperimentExposure";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
-import { getUserProfile } from "@/lib/personalization/user-profile";
-import { evaluatePersonalizationFlag, getBootstrapFlags } from "@/lib/analytics/flags";
-import { FITS, CARRY_METHODS } from "@/lib/browse-taxonomy";
+import { HomeHero } from "@/components/HomeHero";
+import { communityKnowledgeReady } from "@/lib/content-gates";
+import { assignHomeHeadline, HOME_HEADLINE_COPY } from "@/lib/experiments/home-headline";
 
 export const dynamic = "force-dynamic";
 
@@ -25,34 +22,15 @@ function formatPrice(amount: number | null, currency: string | null) {
 }
 
 export default async function Home() {
-  const [brands, heroCards, user] = await Promise.all([
+  const [brands, heroCards, user, communityReady] = await Promise.all([
     getBrandsOverview(),
     getHeroCarousel(),
     getCurrentUser(),
+    communityKnowledgeReady(),
   ]);
   const [closet, feed] = user
     ? await Promise.all([getCloset(), getFeed(8)])
     : [[], []];
-
-  // Phase-2 personalization: evaluate the PostHog flag server-side so the
-  // decision is baked into the initial HTML (no flicker). Bootstrap the
-  // evaluated values to the client so PostHog JS stays in sync for event tracking.
-  let showPersonalized = false;
-  let bootstrapFlags: Record<string, string | boolean> = {};
-  if (user) {
-    const personProfile = await getUserProfile(user.id);
-    const personProps = {
-      persona: personProfile?.persona ?? null,
-      budget_band: personProfile?.budgetBand ?? null,
-      intent: personProfile?.intent ?? null,
-    };
-    const [flagValue, flagBootstrap] = await Promise.all([
-      evaluatePersonalizationFlag(user.id, personProps),
-      getBootstrapFlags(user.id, personProps),
-    ]);
-    showPersonalized = flagValue === true || flagValue === "test";
-    bootstrapFlags = flagBootstrap?.flags ?? {};
-  }
 
   // Real photos for the hero + closet cards when available; placeholders otherwise.
   const images = await getVariantImages([
@@ -60,35 +38,13 @@ export default async function Home() {
     ...closet.map((c) => c.variantId),
   ].filter((n): n is number => n != null));
 
+  // home_headline A/B/C copy test (single variable: the H1). Assigned per
+  // impression, server-side, cookieless. Success metric = hero search engagement.
+  const headlineVariant = assignHomeHeadline();
+
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
-      <section className="border-b border-border px-5 py-10 text-center">
-        <h1 className="mx-auto max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-          Know what it&rsquo;s worth — and what it&rsquo;s worth <em>to you</em>.
-        </h1>
-        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-          The reference for designer handbags: production history, authentication
-          markers, and real resale prices, all in one place.
-        </p>
-        <form
-          action="/search"
-          method="GET"
-          className="mx-auto mt-6 flex max-w-md items-center gap-2"
-        >
-          <input
-            name="q"
-            type="search"
-            placeholder="Look up any bag: prices, authentication, history"
-            className="min-w-0 flex-1 truncate rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="shrink-0 rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
-          >
-            Search
-          </button>
-        </form>
-      </section>
+      <HomeHero variant={headlineVariant} headline={HOME_HEADLINE_COPY[headlineVariant]} />
 
       {!user && (
         <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
@@ -98,7 +54,7 @@ export default async function Home() {
           </h2>
           <p className="mx-auto mt-3 max-w-md text-muted">
             A few quick taps and we&rsquo;ll name your taste and match you to bags
-            you&rsquo;ll love — <span className="text-foreground">no account needed</span> to
+            you&rsquo;ll love. <span className="text-foreground">No account needed</span> to
             see your result.
           </p>
           <Link
@@ -112,7 +68,11 @@ export default async function Home() {
 
       <PersonaRouter />
 
-      <CommunityLeaderboards />
+      <BestDeals />
+
+      {/* "What the community knows" — gated until there are enough real reviews
+          to fill the boards (docs/ux/content-gating-strategy.md). No ghost town. */}
+      {communityReady && <CommunityLeaderboards />}
 
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">
@@ -216,68 +176,6 @@ export default async function Home() {
         )}
       </section>
 
-      {user && (
-        <section className="border-b border-border px-5 py-12">
-          {showPersonalized ? (
-            <PersonalizedRecs
-              userId={user.id}
-              source="home_personalized"
-              layout="scroll"
-              limit={8}
-            />
-          ) : (
-            <Recommendations source="home" layout="scroll" limit={8} />
-          )}
-        </section>
-      )}
-
-      {/* Bootstrap PostHog flag state from the server to the client to prevent
-          flag-evaluation flicker and to track experiment exposure correctly. */}
-      {user && Object.keys(bootstrapFlags).length > 0 && (
-        <PostHogFlagBootstrap flags={bootstrapFlags} />
-      )}
-      {user && (
-        <ExperimentExposure
-          flag="personalized_home"
-          variant={showPersonalized ? "test" : "control"}
-        />
-      )}
-
-      <section className="border-b border-border px-5 py-12">
-        <h2 className="font-serif text-2xl text-foreground">Explore</h2>
-        <div className="mt-6 flex flex-wrap gap-3">
-          {[
-            { href: "/quiz", label: "Find your taste" },
-            { href: "/coveted-closets", label: "Most coveted closets" },
-            { href: "/articles", label: "Expert articles" },
-            ...(user
-              ? [
-                  { href: "/watchlist", label: "Your watchlist" },
-                  { href: "/taste", label: "Your taste profile" },
-                ]
-              : []),
-            { href: "/found", label: "Log a thrift find" },
-          ].map((l) => (
-            <Link
-              key={l.href + l.label}
-              href={l.href}
-              className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-b border-border px-5 py-12">
-        <h2 className="font-serif text-2xl text-foreground">Stay in the loop</h2>
-        <p className="mt-2 max-w-xl text-sm text-muted">
-          New brands, price drops, and authentication guides — a few times a month,
-          never spam.
-        </p>
-        <NewsletterSignup source="homepage" className="mt-6 max-w-md" />
-      </section>
-
       <section id="brands" className="border-b border-border px-5 py-12">
         <div className="flex items-baseline justify-between">
           <h2 className="font-serif text-2xl text-foreground">Bags by brand</h2>
@@ -345,37 +243,17 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="fits" className="border-b border-border px-5 py-12">
-        <h2 className="font-serif text-2xl text-foreground">
-          Bags by what they fit
-        </h2>
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {FITS.map((fit) => (
-            <Link
-              key={fit.slug}
-              href={`/browse/fits/${fit.slug}`}
-              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
-            >
-              {fit.label}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section id="carry" className="px-5 py-12">
-        <h2 className="font-serif text-2xl text-foreground">
-          Bags by how they&rsquo;re carried
-        </h2>
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {CARRY_METHODS.map((method) => (
-            <Link
-              key={method.slug}
-              href={`/browse/carry/${method.slug}`}
-              className="rounded-xl border border-border bg-surface px-4 py-4 text-foreground transition-colors hover:border-gold"
-            >
-              {method.label}
-            </Link>
-          ))}
+      {/* Stay in the loop — last on the page, full width, one compact line. */}
+      <section className="px-5 py-12">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="font-serif text-2xl text-foreground">Stay in the loop</h2>
+            <p className="mt-1 text-sm text-muted">
+              New brands, price drops, and authentication guides. A few times a
+              month, never spam.
+            </p>
+          </div>
+          <NewsletterSignup source="homepage" className="w-full sm:w-auto sm:min-w-[22rem]" />
         </div>
       </section>
     </main>

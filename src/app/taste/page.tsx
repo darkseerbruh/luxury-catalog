@@ -139,10 +139,10 @@ export default async function TastePage() {
         </dl>
       </section>
 
-      <NewsletterSignup source="taste_page" className="mt-8" />
+      <NewsletterSignup source="taste_page" className="mt-8 max-w-md" />
 
       <p className="mt-8 text-xs text-muted">
-        Your taste profile is built from bags you&rsquo;ve saved, watched, and reviewed —
+        Your taste profile is built from bags you&rsquo;ve saved, watched, and reviewed,
         plus your quiz answers. It updates nightly.{" "}
         <Link href="/privacy" className="underline hover:text-foreground">
           Privacy policy
