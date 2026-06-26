@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Avatar } from "@/components/Avatar";
 import { TrustBadges } from "@/components/TrustBadges";
 import { AUTHOR_ROLE } from "@/lib/geo";
 import type { PostAuthor } from "@/lib/posts";
@@ -10,21 +11,13 @@ import type { PostAuthor } from "@/lib/posts";
  */
 export function AuthorCard({ author }: { author: PostAuthor }) {
   const name = author.displayName || (author.handle ? `@${author.handle}` : "The Luxury Catalog");
-  const initial = (name.replace(/^@/, "")[0] || "L").toUpperCase();
   const profileHref = author.handle ? `/u/${author.handle}` : null;
 
   return (
     <section className="rounded-2xl border border-border bg-surface p-5">
       <p className="text-xs uppercase tracking-widest text-muted">Written by</p>
       <div className="mt-3 flex items-start gap-4">
-        {author.avatarUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={author.avatarUrl} alt={name} className="h-14 w-14 shrink-0 rounded-full object-cover" />
-        ) : (
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10 font-serif text-xl text-gold">
-            {initial}
-          </div>
-        )}
+        <Avatar src={author.avatarUrl} name={name} size="md" />
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <p className="font-serif text-lg text-foreground">{name}</p>

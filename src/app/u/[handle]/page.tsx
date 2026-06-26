@@ -5,6 +5,7 @@ import { getPublicProfile, isFavoritingCloset } from "@/lib/social";
 import { listByAuthor } from "@/lib/posts";
 import { getFourGrails } from "@/lib/grails";
 import { getCurrentUser } from "@/lib/auth";
+import { Avatar } from "@/components/Avatar";
 import { TrustBadges } from "@/components/TrustBadges";
 import FourGrails from "@/components/FourGrails";
 import FollowClosetButton from "./FollowClosetButton";
@@ -75,14 +76,11 @@ export default async function PublicProfilePage({
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
       <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface text-2xl font-serif text-gold">
-            {profile.avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.avatarUrl} alt="" className="h-full w-full object-cover" />
-            ) : (
-              (profile.displayName || profile.handle).charAt(0).toUpperCase()
-            )}
-          </div>
+          <Avatar
+            src={profile.avatarUrl}
+            name={profile.displayName || profile.handle}
+            size="lg"
+          />
           <div>
             <h1 className="font-serif text-2xl text-foreground sm:text-3xl">
               {profile.displayName || `@${profile.handle}`}
