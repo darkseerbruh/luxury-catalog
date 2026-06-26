@@ -36,6 +36,14 @@ session history goes in the TL;DRs below, then ages out to [handoff-archive.md](
 
 ---
 
+## TL;DR — overnight article batch + sold-transport solved (2026-06-26 late)
+
+Autonomous batch (owner asleep, bypass perms). All seeded as DRAFTS; **publishing left to owner.**
+- **5 new review-ready DRAFTS:** `post_id 5` LV authentication (brand-neutral `LVAuthDiagram`, the 2021 date-code→microchip hook), `post_id 6` Birkin vs Kelly (`BirkinKellyChart`, the small-size premium, asking data re-verified), `post_id 7` how to spot a fake Gucci Marmont (`GucciMarmontAuthDiagram`, sourced), `post_id 8` Neverfull MM vs PM (`NeverfullSizeChart`, both ~$1,200), `post_id 9` "what the icons cost on resale" roundup (`IconicPricesChart`, $911→$18,000). Plus `post_id 4` where-to-sell still drafted. Research foundations: `docs/research-drafts/lv-authentication-guide-draft.md`. All data is **current asking** (date-clean); gates green; on `main`.
+- **Two PUBLISHED articles corrected for the date-confound** (see below): Flap `post_id 1` (removed wrong $4k venue spread + box plot) and caviar `post_id 3` (subordinated sold to date-clean asking). Locked the **date-control rule** in `docs/data-analysis-standard.md`.
+- **Sold transport SOLVED:** blob-download bypasses the CSP-blocked sink (writes to ~/Downloads; Chrome rate-limits multiple auto-downloads). Sold loader built (`supabase/ingest/load-sold.ts`); reads already sold-safe. **Sold data still needs recency-filtered re-capture before it's article-ready** (peer-to-peer recent samples are thin). See `docs/research-drafts/poshmark-ebay-sold-capture.md`.
+- **Open for owner:** review/publish the 6 drafts (`post_id 1` Flap is published; `3` caviar published; `4,5,6,7,8,9` are drafts). Retail-anchored "worth it" pieces (Neverfull/Marmont vs retail) are **deferred** because LV/Gucci block price fetch (never-invent: no retail from memory).
+
 ## TL;DR — Flap sold-by-venue + sold-data pipeline (2026-06-26)
 
 - **PUBLISHED:** "Is the Chanel Classic Flap worth it" (`post_id 1`) and "Caviar vs lambskin" (`post_id 3`). The Flap piece now carries a **sold-by-venue box plot** (`FlapVenueChart.tsx`): authenticated realized prices eBay $3,897 (n=76) / Poshmark $4,292 (n=78) / Fashionphile $7,995 (n=229) vs $6,000 ask vs $11,700 retail. Insight: realized price swings ~$4k peer-to-peer → ~$8k premium reseller, mostly because Fashionphile curates the top tier (rarely sells under $4k) + fixed-price (no below-ask offers). Trimmed the redundant new-vs-preowned panel from `FlapValueCharts` (retail-by-year only). **"Last updated" date** now shows on posts; quarterly freshness routine scheduled.
