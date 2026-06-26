@@ -40,10 +40,19 @@ const sizeKey = (s: string | null) => norm(s || "").replace(/[()]/g, "").trim();
 
 // Exclude non-handbag clusters the normalizer mis-grabbed (apparel, footwear,
 // accessories) and descriptive non-model names. These must NOT become catalog styles.
-const NOT_A_BAG = /\b(t-?shirt|shirt|tee|dress|sweatshirt|sweater|blazer|jacket|coat|blouson|cardigan|hoodie|knit|polo|jeans|pant|trouser|skirt|blouse|sneaker|shoe|boot|loafer|sandal|heel|mule|espadrille|belt|scarf|sunglass|glasses|hat|cap|wallet|cardholder|card holder|sneakers|kit|wool|cashmere|denim)\b/i;
+const NOT_A_BAG = /\b(t-?shirt|shirt|tee|top|dress|sweatshirt|sweater|blazer|jacket|coat|blouson|cardigan|hoodie|knit|polo|jeans|pant|trouser|skirt|blouse|button-?up|sneaker|sneakers|shoe|boot|loafer|sandal|heel|mule|espadrille|flat|flats|pump|pumps|slingback|slide|slides|ballerina|ballet|belt|scarf|sunglass|sunglasses|glasses|hat|cap|wallet|cardholder|card holder|trousse|make ?up|cosmetic|agenda|cles|kit|wool|cashmere|denim)\b/i;
 const DESCRIPTIVE_PREFIX = /^(graphic|vintage|reversible|virgin|leather classic|leather trapeze|leather (medium|large|small)|printed|striped|embroidered|monogram print)\b/i;
+// Reject descriptive-soup names: >4 words, a duplicated word, or a colour/finish token
+// the normalizer failed to strip (a clean model name does not carry "Black"/"Caviar"/etc.).
+const COLOUR_FINISH = /\b(black|white|beige|brown|navy|grey|gray|tan|red|blue|pink|green|caviar|lambskin|quilted|supreme|crop|acero)\b/i;
 function isPromotableBag(style: string): boolean {
-  return !NOT_A_BAG.test(style) && !DESCRIPTIVE_PREFIX.test(style.trim());
+  const s = style.trim();
+  if (NOT_A_BAG.test(s) || DESCRIPTIVE_PREFIX.test(s)) return false;
+  const words = s.split(/\s+/);
+  if (words.length > 4) return false;                         // descriptive soup
+  if (new Set(words.map((w) => w.toLowerCase())).size < words.length) return false; // duplicated word ("Diorissimo Diorissimo")
+  if (COLOUR_FINISH.test(s)) return false;                    // unstripped colour/finish
+  return true;
 }
 
 async function main() {

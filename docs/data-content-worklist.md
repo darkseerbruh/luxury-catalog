@@ -28,8 +28,8 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Mulberry created (brand 403, Bayswater 516/v932 + Alexa 517/v933); Bayswater sold — 93 rows, median $519, holds best of mid-tier (2026-06-26)
 
 ## Promotion / catalog
-- ⬜ 28 promote-safe clusters that need NEW styles — owner greenlight before mass create
-  (run `npx tsx supabase/ingest/promote-safe.ts --min=20` to list). Owner-gated.
+- ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
+  PLUS min=10 pass: +25 styles, +30 variants, +404 rows (Diane, Favorite, Boulogne, Delightful, Palermo, Tivoli, Reissue, Hop, Sylvie, Boston, Diorama, In-The-Loop, Jige, Trim, Jamie, Urban Spirit...). Strengthened blocklist excludes footwear/apparel/colour-soup. Total: 41 styles, 50 variants, ~1,016 rows.
 - ⬜ Resolve the 1 ambiguous Neverfull "MM" duplicate (v868) across canvases (manual).
 
 ## Articles (write as DRAFTS, wire + chart + seed, gates green)
