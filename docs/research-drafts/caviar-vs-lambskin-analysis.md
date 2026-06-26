@@ -37,8 +37,14 @@ asking)** at the median, i.e. caviar asks/sells ~25-45% higher depending on venu
 ## Honest limits (state in the article)
 - **Condition: 0% recorded** on any source. The one confounder we cannot control. If
   caviar bags skew better-kept, part of the gap is condition.
-- **Authenticity noise:** eBay/Poshmark are not authenticating resellers; some listings may
-  be fakes or mislabels despite the filters. TheRealReal/Fashionphile authenticate.
+- **Authenticity:** all four sources authenticate at these price points. TheRealReal and
+  Fashionphile authenticate everything; **eBay** makes authentication mandatory on handbags
+  sold at $500+ (Authenticity Guarantee, independent inspector before the buyer receives it),
+  and **Poshmark** auto-authenticates every item sold at $500+ (Posh Authenticate). Our
+  eBay/Poshmark sold set was filtered to $1,500+, so every one of those completed sales passed
+  third-party authentication. Residual mislabel risk (wrong leather/size in the title) remains,
+  but outright-fake risk is low. (Corrected 2026-06-26; an earlier draft wrongly called
+  eBay/Poshmark non-authenticating.)
 - **Asking vs sold:** TRR/FP are asking; eBay/Poshmark are sold. We report them separately.
 - **Snapshot:** point-in-time, June 2026.
 - **Age:** lambskin listings skew older; the premium held age-for-age earlier, but per-era n
