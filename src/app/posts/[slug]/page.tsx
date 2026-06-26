@@ -8,11 +8,14 @@ import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
+import { gucciMarmontAuthDiagramRegistry } from "./GucciMarmontAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
 import { flapVenueChartRegistry } from "./FlapVenueChart";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
 import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
 import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
+import { birkinKellyChartRegistry } from "./BirkinKellyChart";
+import { neverfullSizeChartRegistry } from "./NeverfullSizeChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -21,11 +24,14 @@ import { TrustBadges } from "@/components/TrustBadges";
 const DIAGRAMS: Record<string, ComponentType> = {
   ...coachDiagramRegistry,
   ...lvAuthDiagramRegistry,
+  ...gucciMarmontAuthDiagramRegistry,
   ...flapChartsRegistry,
   ...flapVenueChartRegistry,
   ...caviarVsLambskinChartsRegistry,
   ...leatherDiagramRegistry,
   ...whereToSellDiagramRegistry,
+  ...birkinKellyChartRegistry,
+  ...neverfullSizeChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
