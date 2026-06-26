@@ -30,6 +30,15 @@ not survive, we do not claim it, or we frame it as a leaning and say why.
   platform mix). If it only appears pooled, it is likely confounded.
 - **Name the confounders we could not control.** If condition is unrecorded (it usually is),
   say so plainly: we cannot rule it out.
+- **Sale DATE is a confounder for sold prices (locked 2026-06-26).** Marketplaces that keep a
+  sold archive (Poshmark, eBay) return completed sales spanning *years*. When retail has climbed
+  (Chanel roughly doubled 2019→2026), an all-time sold median is dragged down by old cheap sales
+  and badly understates today's price. **Always date-control sold prices: filter to a recent
+  window (state it) and never compare a recent median from one source to an all-time median from
+  another.** Origin: a published Flap draft compared recent Fashionphile sold (~$8k) to all-time
+  eBay/Poshmark sold (~$4k) and reported a fake ~2x venue spread; the recent-to-recent figures
+  were close. Reconcile-derived sold (Fashionphile) is recent by construction; archive-scraped
+  sold (eBay/Poshmark) is not, so it must be filtered by sale date.
 
 ## 3. Respect the sample frame (no overreach)
 - **Scope the claim to where the data came from.** Our prices are premium US resale

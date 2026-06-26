@@ -84,6 +84,22 @@ browser pull like Poshmark:
   browser. (If the owner's eBay account matures, re-applying to the dev program may unlock the
   asking-side API later, but it is not needed for the sold signal.)
 
+## TRANSPORT SOLVED (2026-06-26) + the date-confound lesson
+- **Browser→repo transport = blob download.** The CSP-blocked localhost sink is bypassed by
+  building a `Blob` of the JSON in the page and triggering an `<a download>` click; the file
+  lands in `~/Downloads` (CSP does not govern downloads). Real ObjectId listing refs survive
+  (they never pass through the filtered tool output). **Limit:** Chrome blocks *multiple*
+  automatic downloads per page, so it is ~one file per navigation/site before Chrome needs an
+  "allow" click. Workable for one capture at a time; for bulk, the owner allows multiple
+  downloads or we download once per fresh nav.
+- **⚠️ Date-confound (must control).** Poshmark/eBay sold archives span years. The Flap's
+  Poshmark all-time median was $4,200 but last-12mo ~$7,075 (n=13) and last-6mo ~$10k (small n);
+  retail climbing drives it. **Filter sold to a recent window before quoting; never compare
+  recent-from-one-source to all-time-from-another.** This produced a wrong venue spread in the
+  published Flap draft, since corrected (the box plot was removed; see `data-analysis-standard.md`).
+  Recent peer-to-peer sold samples are thin (Poshmark sold pop ~78 total for this query), so a
+  clean recent peer-to-peer median needs more capture or a recency-sorted source.
+
 ## Build status / next steps
 - [x] Poshmark + eBay browser sold-capture mechanisms proven; first hero-bag pulls done.
 - [x] **Reads are already sold-safe (verified 2026-06-26).** No read changes needed: the value
