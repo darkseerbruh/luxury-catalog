@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBrandDetail, getBrandResaleStats, getVariantImages } from "@/lib/queries";
+import { listByBrand } from "@/lib/posts";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { BagImage } from "@/components/BagImage";
+import { ArticleList } from "@/components/ArticleList";
 
 export const dynamic = "force-dynamic";
 
@@ -59,11 +61,12 @@ export default async function BrandPage({
   const stubStyles = brand.styles.filter((s) => s.variants.length === 0);
   const allVariants = brand.styles.flatMap((s) => s.variants);
 
-  const [resale, images] = await Promise.all([
+  const [resale, images, brandPosts] = await Promise.all([
     getBrandResaleStats(id),
     getVariantImages(
       liveStyles.map((s) => s.variants[0]?.variantId).filter((n): n is number => n != null),
     ),
+    listByBrand(id, 4),
   ]);
 
   // At-a-glance, all derived from the catalogued variants (real, never invented).
@@ -163,12 +166,21 @@ export default async function BrandPage({
           and boutique relationships, what it&rsquo;s resold for, and which pieces hold
           their value.
         </p>
-        <Link
-          href={`/articles?brand=${id}`}
-          className="mt-3 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
-        >
-          {brand.name} articles &amp; guides →
-        </Link>
+        {brandPosts.length > 0 ? (
+          <div className="mt-4">
+            <ArticleList posts={brandPosts} />
+            <Link
+              href={`/articles?brand=${id}`}
+              className="mt-3 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
+            >
+              All {brand.name} articles →
+            </Link>
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted/70">
+            Guides for {brand.name} are on the way.
+          </p>
+        )}
       </section>
 
       {/* Where to buy / sell — brand-level */}

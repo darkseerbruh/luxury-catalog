@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
+import { listByBrand, listByStyle } from "@/lib/posts";
+import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
 import {
@@ -210,13 +212,22 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images, photos, authMarketplaceLive] = await Promise.all([
-    getResourcesForStyle(v.style.styleId, v.variantId),
-    getStyleVariants(v.style.styleId),
-    getVariantImages([v.variantId]),
-    getApprovedPhotos(v.variantId),
-    hasActiveAuthenticators(),
-  ]);
+  const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts] =
+    await Promise.all([
+      getResourcesForStyle(v.style.styleId, v.variantId),
+      getStyleVariants(v.style.styleId),
+      getVariantImages([v.variantId]),
+      getApprovedPhotos(v.variantId),
+      hasActiveAuthenticators(),
+      listByStyle(v.style.styleId, 4),
+      listByBrand(v.brand.brandId, 4),
+    ]);
+
+  // Articles for this bag, most specific first: style-tagged guides lead, then
+  // brand-tagged guides not already shown. A bag inherits relevance from its
+  // style and (more broadly) its brand.
+  const seen = new Set(stylePosts.map((p) => p.postId));
+  const bagPosts = [...stylePosts, ...brandPosts.filter((p) => !seen.has(p.postId))].slice(0, 4);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -512,7 +523,7 @@ export default async function BagDetailPage({
         </Link>
         <span>/</span>
         <Link
-          href={`/search?q=${encodeURIComponent(v.brand.name)}`}
+          href={`/brand/${v.brand.brandId}`}
           className="hover:text-foreground"
         >
           {v.brand.name}
@@ -656,6 +667,20 @@ export default async function BagDetailPage({
 
       {/* Embedded video reviews — the visual layer while v1 is text-first */}
       <Resources resources={resources} />
+
+      {/* Guides for this bag — style-tagged articles first, then brand-tagged. */}
+      {bagPosts.length > 0 && (
+        <section className="border-t border-border pt-8">
+          <h2 className="font-serif text-2xl text-foreground">Guides for this bag</h2>
+          <p className="mt-1 text-sm text-muted">
+            Articles on the {v.style.name} and {v.brand.name} from our verified
+            experts.
+          </p>
+          <div className="mt-5">
+            <ArticleList posts={bagPosts} />
+          </div>
+        </section>
+      )}
 
       {/* User photo contributions — real, owned reference shots + the rare-find
           recruiting empty state (the UGC engine the tier ladder rewards). */}

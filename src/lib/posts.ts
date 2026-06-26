@@ -197,6 +197,50 @@ export async function listPublished(limit = 50): Promise<PostSummary[]> {
 }
 
 /**
+ * Published posts tagged to a brand or style, newest first. Shared by the brand
+ * hub (brand-level guides) and the bag page (style-level guides). Same env/schema
+ * fallback as listPublished so it degrades to [] rather than throwing.
+ */
+async function listByTopic(
+  column: "topic_brand_id" | "topic_style_id",
+  id: number,
+  limit: number,
+): Promise<PostSummary[]> {
+  if (!hasSupabase()) return [];
+  const supabase = await createServerSupabase();
+
+  const run = (select: string) =>
+    supabase
+      .from("post")
+      .select(select)
+      .eq("status", "published")
+      .eq(column, id)
+      .order("published_at", { ascending: false })
+      .limit(limit);
+
+  const primary = await run(SUMMARY_SELECT);
+  let rows = primary.data as unknown as PostRow[] | null;
+  if (primary.error) {
+    const fb = await run(SUMMARY_SELECT_FALLBACK);
+    if (fb.error || !fb.data) return [];
+    rows = fb.data as unknown as PostRow[];
+  }
+  if (!rows) return [];
+  await attachAuthors(supabase, rows);
+  return rows.map(mapSummary);
+}
+
+/** Published articles tagged to this brand, newest first. */
+export async function listByBrand(brandId: number, limit = 6): Promise<PostSummary[]> {
+  return listByTopic("topic_brand_id", brandId, limit);
+}
+
+/** Published articles tagged to this style, newest first. */
+export async function listByStyle(styleId: number, limit = 6): Promise<PostSummary[]> {
+  return listByTopic("topic_style_id", styleId, limit);
+}
+
+/**
  * One post by slug. Returns published posts to anyone; an author's own
  * draft/archived posts are returned to that author (RLS allows the read, so the
  * row is simply absent for everyone else). Null when missing.

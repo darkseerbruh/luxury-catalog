@@ -21,7 +21,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
 ## Mid-tier breadth (absent brands — create curated variants, then capture)
 - ⬜ Michael Kors top models (eBay/Poshmark sold + asking)
-- 🔄 Kate Spade: brand existed; created Knott v925/926 + Sam v927; Knott sold loaded — 116 rows, median $120 (2026-06-26). Sam capture next.
+- ✅ Kate Spade DONE: Knott (v925/926, 116 rows, med $120) + Sam (v927, 50 rows, med $100), eBay sold (2026-06-26)
 - ⬜ Longchamp Le Pliage
 - ⬜ Mulberry (Bayswater/Alexa)
 
