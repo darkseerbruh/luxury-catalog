@@ -39,6 +39,21 @@ $2,500–$5,416, range $1,500–$13,500 (caviar 23, lambskin 30). Agrees with th
 (median $4,292): the Flap sells around **$4,000**, well under the ~$6,000 asking. Both used in
 the Flap "is it worth it" article (post_id 1).
 
+## Fashionphile — already-stored "sold" is a valid realized price (no capture needed)
+We already hold ~14.5k FP rows in prod, **12,215 flagged `listing_status='sold'`** by the
+reconcile job (listings that left the market between crawls). For the Flap (variant 199):
+**229 sold rows, median $7,995** (IQR $6,930–$8,795). Unlike eBay/Poshmark, FP is **fixed-price
+with no offer mechanism**, so the listed price is what the buyer pays (modulo promo codes).
+Empirically confirmed: FP v199 sold $7,995 vs FP v199 **current ask $8,195** (n=44), ~2.5%
+apart. So FP reconcile-sold is a legitimate **premium-venue realized price**, not weak asking.
+
+Note the venue/condition story: FP realized ~$8,000 vs eBay/Poshmark ~$4,000 is partly venue
+(premium, fixed-price) and partly that FP curates better-kept, full-set bags (condition
+unrecorded, so the two cannot be fully separated). Used in the Flap article's "what it sold
+for, by where you sold it" chart (`FlapVenueChart.tsx`). Caveat for the sold loader: FP
+reconcile rows carry `price_type='listed'` and are sold-at-list; genuine eBay/Poshmark
+accepted-price sold should load as `price_type='sold'` and stay distinct.
+
 ## eBay — browser pull (the dev API is out)
 **The owner was rejected from the eBay Developers Program (2026-06-26)**, so the Browse API
 path is unavailable. That is fine: the Browse API only returned *asking* prices (which we

@@ -15,13 +15,11 @@ const MUTED = "#a89c87";
 const GOLD = "#c9a24c";
 const GOLDSOFT = "#e3c785";
 const BORDER = "#322c22";
-const SURF = "#1a1815";
 
 const money = (n: number) => "$" + n.toLocaleString();
 
 export function FlapValueCharts() {
   const MAX = 12000;
-  const pct = (v: number) => `${((v / MAX) * 100).toFixed(1)}%`;
   const hist = [
     { y: "2019", v: 5800 },
     { y: "2024", v: 10800 },
@@ -31,40 +29,6 @@ export function FlapValueCharts() {
   return (
     <figure style={{ margin: "0.5rem 0 1rem" }}>
       <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c", color: FG }}>
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: 18 }}>New versus pre-owned</div>
-        <div style={{ fontSize: 12.5, color: MUTED, marginBottom: 14 }}>
-          Median asking price on premium resale against the boutique price. Resale n=163, June 2026 (asking, not sold); retail April 2026.
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 }}>
-              <span>New, today</span>
-              <span style={{ color: GOLDSOFT }}>{money(11700)}</span>
-            </div>
-            <div style={{ height: 16, background: SURF, borderRadius: 8, overflow: "hidden" }}>
-              <div style={{ width: pct(11700), height: "100%", background: GOLD }} />
-            </div>
-          </div>
-
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 }}>
-              <span>Pre-owned, typical ask</span>
-              <span style={{ color: GOLDSOFT }}>{money(6000)}</span>
-            </div>
-            <div style={{ position: "relative", height: 16, background: SURF, borderRadius: 8 }}>
-              <div style={{ position: "absolute", left: pct(4500), width: pct(3000), top: 0, bottom: 0, background: "#3a2f12", borderRadius: 8 }} />
-              <div style={{ position: "absolute", left: 0, width: pct(6000), top: 0, bottom: 0, background: GOLDSOFT, borderRadius: 8 }} />
-              <div style={{ position: "absolute", left: pct(6000), top: -2, bottom: -2, width: 2, background: FG }} />
-            </div>
-            <div style={{ fontSize: 10.5, color: MUTED, marginTop: 4 }}>
-              bar marks the median; shaded band is the middle half of listings ({money(4500)} to {money(7500)})
-            </div>
-          </div>
-        </div>
-
-        <div style={{ borderTop: `1px solid ${BORDER}`, margin: "16px 0 12px" }} />
-
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 18 }}>The boutique price keeps climbing</div>
         <div style={{ fontSize: 12.5, color: MUTED, marginBottom: 12 }}>
           Medium Classic Flap retail, USD, by year. Sourced from PurseBop, PurseBlog, and Sotheby&rsquo;s.
@@ -85,7 +49,7 @@ export function FlapValueCharts() {
         </svg>
       </div>
       <figcaption className="sr-only">
-        Charts of the Chanel Medium Classic Flap: new versus pre-owned median price, and retail price by year.
+        Chart of the Chanel Medium Classic Flap boutique retail price by year, 2019 to 2026.
       </figcaption>
     </figure>
   );

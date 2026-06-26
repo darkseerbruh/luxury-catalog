@@ -8,6 +8,7 @@ import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
+import { flapVenueChartRegistry } from "./FlapVenueChart";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
 import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
 import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
@@ -19,6 +20,7 @@ import { TrustBadges } from "@/components/TrustBadges";
 const DIAGRAMS: Record<string, ComponentType> = {
   ...coachDiagramRegistry,
   ...flapChartsRegistry,
+  ...flapVenueChartRegistry,
   ...caviarVsLambskinChartsRegistry,
   ...leatherDiagramRegistry,
   ...whereToSellDiagramRegistry,
