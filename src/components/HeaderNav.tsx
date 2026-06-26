@@ -13,6 +13,8 @@ type NavLink = {
   cta?: boolean;
 };
 
+type BrandGroup = { label: string; brands: { brandId: number; name: string }[] };
+
 /** A top-level item that is itself a link but also reveals a dropdown. */
 const SHOP_MENU: NavLink[] = [
   { href: "/deals", label: "Deals" },
@@ -61,9 +63,11 @@ function Caret() {
 export default function HeaderNav({
   signedIn,
   unread,
+  brandGroups = [],
 }: {
   signedIn: boolean;
   unread: number;
+  brandGroups?: BrandGroup[];
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -130,6 +134,49 @@ export default function HeaderNav({
             </div>
           </div>
         </div>
+
+        {/* Brands — clickable, with a tier-grouped mega-menu */}
+        {brandGroups.length > 0 && (
+          <div className="group relative">
+            <Link
+              href="/brands"
+              className={`${pillBase} ${isActive("/brand") || isActive("/brands") ? pillActive : ""} inline-flex items-center`}
+            >
+              Brands
+              <Caret />
+            </Link>
+            <div className="invisible absolute left-0 top-full z-20 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="w-[34rem] max-w-[90vw] rounded-2xl border border-border bg-bg/95 p-4 shadow-lg backdrop-blur-sm">
+                <div className="grid grid-cols-3 gap-x-5 gap-y-4">
+                  {brandGroups.map((group) => (
+                    <div key={group.label}>
+                      <p className="text-xs uppercase tracking-widest text-muted/70">
+                        {group.label}
+                      </p>
+                      <div className="mt-2 flex flex-col gap-1">
+                        {group.brands.map((b) => (
+                          <Link
+                            key={b.brandId}
+                            href={`/brand/${b.brandId}`}
+                            className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                          >
+                            {b.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  href="/brands"
+                  className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
+                >
+                  All brands →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Search — reveals an inline query box */}
         <div className="relative flex items-center">
@@ -263,6 +310,17 @@ export default function HeaderNav({
                 {l.label}
               </Link>
             ))}
+
+            {/* Brands — single link to the full directory (keeps the mobile menu lean) */}
+            {brandGroups.length > 0 && (
+              <Link
+                href="/brands"
+                onClick={close}
+                className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold"
+              >
+                Brands
+              </Link>
+            )}
 
             {/* Discover section */}
             <p className="mt-2 px-3 pt-1 text-xs uppercase tracking-wide text-muted/70">

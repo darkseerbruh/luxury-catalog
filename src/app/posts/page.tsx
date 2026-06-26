@@ -27,8 +27,42 @@ function formatDate(iso: string | null): string | null {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-export default async function PostsPage() {
-  const [posts, profile] = await Promise.all([listPublished(), getProfile()]);
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ brand?: string }>;
+}) {
+  const { brand = "" } = await searchParams;
+  const [allPosts, profile] = await Promise.all([listPublished(), getProfile()]);
+
+  // Brand filter facets, built only from brands that actually have articles — so we
+  // never offer a brand that leads to an empty list.
+  const facetMap = new Map<number, { brandId: number; name: string; count: number }>();
+  for (const p of allPosts) {
+    if (p.topic.brandId != null && p.topic.brandName) {
+      const e =
+        facetMap.get(p.topic.brandId) ??
+        { brandId: p.topic.brandId, name: p.topic.brandName, count: 0 };
+      e.count += 1;
+      facetMap.set(p.topic.brandId, e);
+    }
+  }
+  const brandFacets = [...facetMap.values()].sort(
+    (a, b) => b.count - a.count || a.name.localeCompare(b.name)
+  );
+
+  const activeBrandId =
+    brand && Number.isFinite(Number(brand)) ? Number(brand) : null;
+  const posts = activeBrandId
+    ? allPosts.filter((p) => p.topic.brandId === activeBrandId)
+    : allPosts;
+
+  const filterPill = (active: boolean) =>
+    `rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
+      active
+        ? "border-gold text-gold"
+        : "border-border text-muted hover:border-gold hover:text-gold"
+    }`;
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
@@ -55,6 +89,24 @@ export default async function PostsPage() {
           </Link>
         )}
       </header>
+
+      {brandFacets.length > 0 && (
+        <nav className="flex flex-wrap gap-2" aria-label="Filter articles by brand">
+          <Link href="/posts" className={filterPill(!activeBrandId)}>
+            All
+          </Link>
+          {brandFacets.map((f) => (
+            <Link
+              key={f.brandId}
+              href={`/posts?brand=${f.brandId}`}
+              className={filterPill(activeBrandId === f.brandId)}
+            >
+              {f.name}{" "}
+              <span className="text-muted/60">{f.count}</span>
+            </Link>
+          ))}
+        </nav>
+      )}
 
       {posts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">

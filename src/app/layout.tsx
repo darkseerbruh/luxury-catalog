@@ -4,6 +4,7 @@ import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { getUnreadCount } from "@/lib/notifications";
+import { BRAND_TIERS, getBrandsOverview } from "@/lib/queries";
 import { Providers } from "./providers";
 import TasteFlusher from "./TasteFlusher";
 import HeaderNav from "@/components/HeaderNav";
@@ -37,6 +38,16 @@ export default async function RootLayout({
 }>) {
   const user = await getCurrentUser();
   const unread = user ? await getUnreadCount() : 0;
+
+  // Tier-grouped brands for the "Brands" nav mega-menu. Brand is a destination in
+  // exactly this one nav slot; everywhere else it's an on-page filter (no nav bloat).
+  const brandsOverview = await getBrandsOverview();
+  const brandGroups = BRAND_TIERS.map((t) => ({
+    label: t.label,
+    brands: brandsOverview
+      .filter((b) => b.tier === t.key)
+      .map((b) => ({ brandId: b.brandId, name: b.name })),
+  })).filter((g) => g.brands.length > 0);
   return (
     <html
       lang="en"
@@ -50,7 +61,7 @@ export default async function RootLayout({
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               The Luxury Catalog
             </Link>
-            <HeaderNav signedIn={!!user} unread={unread} />
+            <HeaderNav signedIn={!!user} unread={unread} brandGroups={brandGroups} />
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
