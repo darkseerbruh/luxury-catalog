@@ -12,11 +12,13 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Coach Tabby 20/26/Std + Rogue all sizes — 421 rows (2026-06-26)
 - ✅ Chanel Classic Flap Medium v199 — 78 rows, median $3,846 (2026-06-26)
 - ✅ LV Neverfull MM v218 — 87 rows, median $770 vs $1,245 ask (2026-06-26)
-- ⬜ LV Speedy (capture asking too; not a curated variant yet — create style/variant first)
-- ⬜ Hermès Birkin 30 v210 + Kelly 28 v214 (low eBay volume; verify enough genuine sold)
+- ✅ LV Speedy DONE (style 433: v497/498 + Bandoulière v934); 146 sold, median $593 (2026-06-26)
+- ⛔ Hermès Birkin/Kelly eBay SKIPPED (deliberate): eBay is dominated by counterfeits/replicas/parts; genuine \$15k+ Hermès sells via specialist auction, not eBay. Loading eBay 'sold' would inject fake-priced noise onto hero variants (never-invent). Use a specialist source if ever needed.
 - ✅ Gucci GG Marmont small v207 sold — 46 rows, median $780 (2026-06-26)
 - ✅ Dior Lady Dior Mini/Small/Med/Large sold — 46 rows (2026-06-26)
 - ✅ Dior Saddle Medium/Mini sold — 88 rows, median ~$1,600 (2026-06-26)
+- ⬜ Coach other models sold (Brooklyn v606, Pillow Tabby v598/599, Willow v609/610) — finish brief-mandated Coach depth
+- ⬜ Poshmark cross-source for other heroes (Neverfull, Flap) when desired
 - ✅ Poshmark cross-source for Coach Tabby 26 — 24 recent sold, median $250 (vs eBay $198); both confirm ~$200-250, well under $365 ask (2026-06-26)
 
 ## Mid-tier breadth (absent brands — create curated variants, then capture)
