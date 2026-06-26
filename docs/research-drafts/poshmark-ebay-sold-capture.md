@@ -31,6 +31,14 @@ Query `chanel classic flap medium`, `availability=sold_out`. 96 raw → **78 kep
   ~$6,000 asking median on the authenticated resellers. Used in the Flap "is it worth it"
   article (post_id 1).
 
+### First pull — Chanel Medium Classic Flap, SOLD on eBay (2026-06-26, browser)
+Sold-completed search (`LH_Sold=1&LH_Complete=1`, category 169291, `_ipg=240`). eBay's current
+markup is `.s-card` with `.s-card__title` and `.s-card__price` (the sold price is the
+non-`strikethrough` `.s-card__price`). 240 cards → **76 kept bags**: **median $3,897**, IQR
+$2,500–$5,416, range $1,500–$13,500 (caviar 23, lambskin 30). Agrees with the Poshmark pull
+(median $4,292): the Flap sells around **$4,000**, well under the ~$6,000 asking. Both used in
+the Flap "is it worth it" article (post_id 1).
+
 ## eBay — browser pull (the dev API is out)
 **The owner was rejected from the eBay Developers Program (2026-06-26)**, so the Browse API
 path is unavailable. That is fine: the Browse API only returned *asking* prices (which we
