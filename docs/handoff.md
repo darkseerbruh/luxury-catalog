@@ -20,7 +20,7 @@ mid-doing, so a cold chat sees what's in flight and picks up where the last one 
 | Lane | Worktree · branch (off `main`) | Usually touches (not a fence) | Deep doc(s) | Live status → next action |
 |---|---|---|---|---|
 | **Content** (editorial suite) | `…/luxury-catalog-content` · `content/editorial` | `post` rows · `src/app/posts/**` · `docs/content-*.md` | [content-writing-handoff.md](content-writing-handoff.md) + [content-strategy.md](content-strategy.md) | Coach auth guide **PUBLISHED** (`post_id 2`, `/posts/how-to-authenticate-a-coach-bag`), by **Arielle, Founder and Editor** (verified, photo, bio; fixed the author-embed bug in `src/lib/posts.ts`). #3 **"Is the Chanel Classic Flap worth it"** (`post_id 1`, slug `is-the-chanel-classic-flap-worth-it`) = **review-ready DRAFT** (third-person, de-AI'd, charts via `FlapValueCharts.tsx`). #2 **"Caviar vs lambskin: which Chanel Flap holds value better"** (`post_id 3`, slug `caviar-vs-lambskin-chanel-flap`) = **review-ready DRAFT** (third-person, charts via `CaviarVsLambskinCharts.tsx`, asking medians re-confirmed vs prod 2026-06-25). **Next: WRITE #1 where-to-sell** (top revenue lever), then #4 LV auth / #5 Birkin vs Kelly; re-apply Skimlinks. New binding rules: AI-tell blacklist (voice §8), third-person articles, **visuals required catalog-wide** (content-strategy), **`docs/data-analysis-standard.md`** (senior-analyst rigor). Post body supports `## `/`- `/`> `/`**bold**`/`[diagram:<id>]`. |
-| **Data / capture** | `…/luxury-catalog-data` · `data/market-capture` | `supabase/ingest/**` · `scripts/**` · `data/ingest/**` | [data-collection-handoff.md](data-collection-handoff.md) + [capture-runbook.md](capture-runbook.md) + [market-sweep-worklist.md](market-sweep-worklist.md) | Market sweep in progress (FP done; TRR/Vestiaire bulk transport is the bottleneck). Mid-tier (Coach via eBay/Poshmark) NOT captured. `promote-discovered` gated on a model-name normalizer. **Next:** merge `claude/multibrand-parser` → load Birkin 30 → mid-tier capture. |
+| **Data / capture** | `…/luxury-catalog-data` · `data/market-capture` | `supabase/ingest/**` · `scripts/**` · `data/ingest/**` | [data-collection-handoff.md](data-collection-handoff.md) + [capture-runbook.md](capture-runbook.md) + [market-sweep-worklist.md](market-sweep-worklist.md) | Market sweep in progress (FP done; TRR/Vestiaire bulk transport is the bottleneck). Mid-tier (Coach via eBay/Poshmark) NOT captured. `promote-discovered` gated on a model-name normalizer. **NEW (2026-06-25):** vetted-reseller "Incoming to-dos" appended to `market-sweep-worklist.md` (Redeluxe + Couture USA open Shopify feeds → mid-tier gap; see `docs/trusted-resellers.md`). **Next:** merge `claude/multibrand-parser` → load Birkin 30 → mid-tier capture (Redeluxe feed). |
 | **UX / shop + auth-UX** | `…/luxury-catalog` (original) · `shop/listings` | `src/app/**` (NOT posts) · `src/components/**` · nav · `next.config.ts` · `docs/ux/**` · `docs/authentication-standard.md` | [authentication-standard.md](authentication-standard.md) + `docs/ux/**` | Nav restructure + 3 auth-UX trims shipped (`6ff1372`). Learn/Check balance addressed (`312058a`): homepage tile now offers Learn (Read the markers → `/posts`) + Check (Scan a bag → `/identify`); `/identify` escalates to Verify (`/authenticate`) + Learn per §4; `/posts` and bag auth section cross-linked. **Open / upstream:** the Learn surfaces are thin until the **Content lane** publishes auth guides (Coach is §5-first); a dedicated `/authenticate` Learn hub was deferred until ≥2 guides exist. **PRIMARY NAV IS PROTECTED — never add to it without asking the owner.** |
 | **Infra / ops** (catch-all) | any clean worktree · `ops/<task>` | `supabase/migrations/**` (announce the number!) · deploy/DNS · `docs/desktop-todo.md` · analytics | [desktop-todo.md](desktop-todo.md) + the setup checklist below | Migration apply-state = **RE-VERIFY** (see the pending-operator block below, do not trust). **Next (open to-do):** site-load / perf investigation, `desktop-todo.md` §J. |
 
@@ -35,6 +35,38 @@ mid-doing, so a cold chat sees what's in flight and picks up where the last one 
 session history goes in the TL;DRs below, then ages out to [handoff-archive.md](handoff-archive.md) — never let it pile up in the registry.*
 
 ---
+
+## TL;DR — trusted-reseller evaluation + data-lane to-dos (2026-06-25)
+
+Researched smaller, vetted luxury resellers beyond Fashionphile + TheRealReal (the owner's
+data sources) for two uses: ingest their prices + hand off (revenue + data moat), and feature
+them editorially (trust). All trust/price/affiliate signals dated 2026-06-25; trust framed as
+reputation signals, not verdicts. **Full evaluation: `docs/trusted-resellers.md`.**
+- **Flagged DO-NOT-REFER: Julia Rose Boston** (owner had cited it positively) — PurseForum
+  complaints + BBB-listed-not-accredited. Recorded so a future session does not re-add it.
+- **Flagship = Redeluxe** (5★ Trustpilot, money-back, mid-tier coverage the giants miss, and
+  already the chosen creator partner). Open Shopify `products.json` feed verified, same path as
+  Fashionphile. **Couture USA** also has an open feed (no affiliate; data/trust only).
+- **Data lane:** appended an **"Incoming to-dos" block** to `docs/market-sweep-worklist.md`
+  (Redeluxe priority + open-feed details, Couture USA, a reusable `shopify-products` adapter,
+  source_url-for-affiliate). The data chat picks these up on its next `git merge origin/main`.
+- **Metric:** these move **engagement + GEO** (denser comps + mid-tier coverage the moat lacks)
+  and **set up revenue** (each captured listing becomes an affiliate hand-off once codes land).
+- Code landed docs-only on `main` (`630d06f`).
+
+### ⬜ Owner-gated to-dos — affiliate applications (recorded 2026-06-25)
+Affiliate signups are outward-facing/paid, so they stay with the owner. Apply, then drop codes
+into the env per `docs/data-collection-handoff.md` §11. Priority order:
+- ⬜ **Redeluxe (priority, DIRECT)** — apply at `partners.redeluxe.com`; **confirm the rate**
+  (the one number not verifiable without applying). Highest fit (flagship + creator partner).
+- ⬜ **Rebag** — Impact (~7%, 3% over $2,500; confirm at signup).
+- ⬜ **Yoogi's Closet** — own affiliate program.
+- ⬜ **The Luxury Closet** — CJ (~5%).
+- ⬜ **Vestiaire Collective** — CJ (~6 to 10%).
+- ⬜ **Sellier Knightsbridge** (UK), **Luxe Du Jour**, **Luxe Collective** (Impact ~4%) — gap-fill.
+- ✅ **Madison Avenue Couture** — MadAve Collective already applied (per data-collection-handoff).
+- Before referring the unverified set (HER Authentic, Mightychic, FashioNica, CODOGIRL, Dallas
+  Designer Handbags, The Luxury Savvy, Handbag Sense): run a reputation check first.
 
 ## TL;DR — overnight article batch + sold-transport solved (2026-06-26 late)
 
