@@ -17,7 +17,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Gucci GG Marmont small v207 sold — 46 rows, median $780 (2026-06-26)
 - ✅ Dior Lady Dior Mini/Small/Med/Large sold — 46 rows (2026-06-26)
 - ✅ Dior Saddle Medium/Mini sold — 88 rows, median ~$1,600 (2026-06-26)
-- ⬜ Poshmark cross-source for Coach Tabby (corroborate the eBay $198 median)
+- ✅ Poshmark cross-source for Coach Tabby 26 — 24 recent sold, median $250 (vs eBay $198); both confirm ~$200-250, well under $365 ask (2026-06-26)
 
 ## Mid-tier breadth (absent brands — create curated variants, then capture)
 - ✅ Michael Kors created (brand 401, Jet Set style 514, v928/929); Jet Set tote sold — 80 rows, median $80 (2026-06-26)
