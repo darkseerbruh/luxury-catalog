@@ -1,3 +1,7 @@
+// Hard guard: importing this module from a Client Component is a build error,
+// so the service-role key can never be bundled into browser JS. This backs up
+// the "server-only" convention below with a compiler-enforced wall.
+import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let adminClient: SupabaseClient | null = null;

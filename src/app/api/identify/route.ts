@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "@/lib/supabase";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -154,6 +155,17 @@ async function findCatalogMatch(
 }
 
 export async function POST(req: Request) {
+  // Abuse guard: this endpoint calls the paid Anthropic vision API on every
+  // request, so throttle per IP BEFORE doing any work. 6 calls / 5 min keeps
+  // a real user's retries flowing while blocking scripted bill-draining.
+  const limit = rateLimit("identify", clientIp(req.headers), 6, 5 * 60 * 1000);
+  if (!limit.ok) {
+    return Response.json(
+      { error: "Too many requests. Please wait a moment and try again." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } }
+    );
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return Response.json(
