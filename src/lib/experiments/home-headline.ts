@@ -26,10 +26,15 @@ export const HOME_HEADLINE_VARIANTS: HomeHeadlineVariant[] = [
   "manifesto",
 ];
 
-/** The three headline arms. Subhead stays constant (single variable). */
+/**
+ * The three headline arms. There is no subhead in any arm (it was cut as
+ * repetitive), so the headline is the only varying element (single variable).
+ * A "\n" in an arm renders as a line break (see HomeHero).
+ */
 export const HOME_HEADLINE_COPY: Record<HomeHeadlineVariant, string> = {
-  // A — utility / GEO (the shipped default, and the control).
-  utility: "Look up any designer bag: real prices, authentication, and history.",
+  // A — utility / GEO (the shipped default, and the control). Two lines; the part
+  // after the colon is capitalized (colon rule), uses an ampersand, no end period.
+  utility: "Look up any designer bag:\nReal prices, authentication, & history",
   // B — decision-moment confidence.
   confidence: "Know any bag before you spend a dollar on it.",
   // C — manifesto echo.

@@ -71,15 +71,15 @@ specific bag to search. Measured by % of new sessions reaching any tile destinat
 
 ### A2-live — headline copy, three arms (shipped 2026-06-26)
 
-The only thing that varies is the H1; the subhead and the search box are byte-for-byte
-identical across arms, so a lift is cleanly attributable to the headline (one-variable
-rule). **Success metric: engagement with the hero search box** (`home_search_engaged`,
-fired on first focus + on submit), read as the funnel `experiment_exposed` →
-`home_search_engaged` broken down by `variant`.
+The only thing that varies is the H1. There is no subhead in any arm (cut as
+repetitive on 2026-06-26), and the search box is identical across arms, so a lift is
+cleanly attributable to the headline (one-variable rule). **Success metric: engagement
+with the hero search box** (`home_search_engaged`, fired on first focus + on submit),
+read as the funnel `experiment_exposed` → `home_search_engaged` broken down by `variant`.
 
 | Arm | Headline |
 |---|---|
-| `utility` (control) | "Look up any designer bag: real prices, authentication, and history." |
+| `utility` (control) | "Look up any designer bag:" / "Real prices, authentication, & history" (two lines) |
 | `confidence` | "Know any bag before you spend a dollar on it." |
 | `manifesto` | "What's real, what it's worth, and where to buy it smart." |
 
