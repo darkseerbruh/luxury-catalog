@@ -9,7 +9,9 @@ import BestDeals from "@/components/BestDeals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { HomeHero } from "@/components/HomeHero";
 import { communityKnowledgeReady } from "@/lib/content-gates";
+import { assignHomeHeadline, HOME_HEADLINE_COPY } from "@/lib/experiments/home-headline";
 
 export const dynamic = "force-dynamic";
 
@@ -36,35 +38,13 @@ export default async function Home() {
     ...closet.map((c) => c.variantId),
   ].filter((n): n is number => n != null));
 
+  // home_headline A/B/C copy test (single variable: the H1). Assigned per
+  // impression, server-side, cookieless. Success metric = hero search engagement.
+  const headlineVariant = assignHomeHeadline();
+
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
-      <section className="border-b border-border px-5 py-10 text-center">
-        <h1 className="mx-auto max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-          Look up any designer bag: real prices, authentication, and history.
-        </h1>
-        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-          One reference for what&rsquo;s real, what it&rsquo;s worth, and where to
-          buy it smart.
-        </p>
-        <form
-          action="/search"
-          method="GET"
-          className="mx-auto mt-6 flex max-w-md items-center gap-2"
-        >
-          <input
-            name="q"
-            type="search"
-            placeholder="Look up any bag: prices, authentication, history"
-            className="min-w-0 flex-1 truncate rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="shrink-0 rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
-          >
-            Search
-          </button>
-        </form>
-      </section>
+      <HomeHero variant={headlineVariant} headline={HOME_HEADLINE_COPY[headlineVariant]} />
 
       {!user && (
         <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
