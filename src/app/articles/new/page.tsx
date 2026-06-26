@@ -17,7 +17,7 @@ export default async function NewPostPage() {
   const profile = await getProfile();
   if (!profile?.isExpert) {
     // Not an expert: no authoring access. Send them to the public list.
-    redirect("/posts");
+    redirect("/articles");
   }
 
   const brands = (await getBrandsOverview()).map((b) => ({ brandId: b.brandId, name: b.name }));
@@ -26,7 +26,7 @@ export default async function NewPostPage() {
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-5 py-10">
       <header>
         <p className="text-sm uppercase tracking-widest text-muted">
-          <Link href="/profile/posts" className="hover:text-gold">My articles</Link> / New
+          <Link href="/profile/articles" className="hover:text-gold">My articles</Link> / New
         </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Write an article</h1>
         <p className="mt-2 text-muted">

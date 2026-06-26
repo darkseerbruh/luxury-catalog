@@ -249,7 +249,7 @@ export default async function Home() {
           {[
             { href: "/quiz", label: "Find your taste" },
             { href: "/coveted-closets", label: "Most coveted closets" },
-            { href: "/posts", label: "Expert articles" },
+            { href: "/articles", label: "Expert articles" },
             ...(user
               ? [
                   { href: "/watchlist", label: "Your watchlist" },

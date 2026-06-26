@@ -8,7 +8,7 @@ import { uniqueSlug } from "./posts-core";
 export interface PostActionResult {
   ok: boolean;
   error?: string;
-  /** The post's slug on success — callers redirect to /posts/[slug] or its edit page. */
+  /** The post's slug on success — callers redirect to /articles/[slug] or its edit page. */
   slug?: string;
 }
 
@@ -122,13 +122,13 @@ export async function createPost(formData: FormData): Promise<PostActionResult> 
       if (retry.error || !retry.data) {
         return { ok: false, error: "Could not create the article. Please try again." };
       }
-      revalidatePath("/posts");
+      revalidatePath("/articles");
       return { ok: true, slug: retry.data.slug };
     }
     return { ok: false, error: "Could not create the article. Please try again." };
   }
 
-  revalidatePath("/posts");
+  revalidatePath("/articles");
   return { ok: true, slug: data.slug };
 }
 
@@ -165,9 +165,9 @@ export async function updatePost(
 
   if (error || !data) return { ok: false, error: "Could not save your changes. Please try again." };
 
-  revalidatePath("/posts");
-  revalidatePath(`/posts/${data.slug}`);
-  revalidatePath("/profile/posts");
+  revalidatePath("/articles");
+  revalidatePath(`/articles/${data.slug}`);
+  revalidatePath("/profile/articles");
   return { ok: true, slug: data.slug };
 }
 
@@ -203,9 +203,9 @@ export async function publishPost(postId: number): Promise<PostActionResult> {
 
   if (error || !data) return { ok: false, error: "Could not publish. Please try again." };
 
-  revalidatePath("/posts");
-  revalidatePath(`/posts/${data.slug}`);
-  revalidatePath("/profile/posts");
+  revalidatePath("/articles");
+  revalidatePath(`/articles/${data.slug}`);
+  revalidatePath("/profile/articles");
   return { ok: true, slug: data.slug };
 }
 
@@ -225,8 +225,8 @@ export async function unpublishPost(postId: number): Promise<PostActionResult> {
     .maybeSingle();
 
   if (error || !data) return { ok: false, error: "Could not unpublish. Please try again." };
-  revalidatePath("/posts");
-  revalidatePath(`/posts/${data.slug}`);
-  revalidatePath("/profile/posts");
+  revalidatePath("/articles");
+  revalidatePath(`/articles/${data.slug}`);
+  revalidatePath("/profile/articles");
   return { ok: true, slug: data.slug };
 }

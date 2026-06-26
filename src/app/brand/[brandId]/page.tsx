@@ -164,7 +164,7 @@ export default async function BrandPage({
           their value.
         </p>
         <Link
-          href={`/posts?brand=${encodeURIComponent(brand.name)}`}
+          href={`/articles?brand=${id}`}
           className="mt-3 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
         >
           {brand.name} articles &amp; guides →

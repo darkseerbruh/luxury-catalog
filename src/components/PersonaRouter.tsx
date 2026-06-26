@@ -101,7 +101,7 @@ export default async function PersonaRouter() {
           </ul>
           <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-gold">
-            <Link href="/posts" className="transition-colors hover:text-gold-soft">Read the markers &rarr;</Link>
+            <Link href="/articles" className="transition-colors hover:text-gold-soft">Read the markers &rarr;</Link>
             <Link href="/identify" className="transition-colors hover:text-gold-soft">Scan a bag &rarr;</Link>
           </div>
         </div>

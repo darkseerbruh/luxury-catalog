@@ -85,7 +85,7 @@ export default async function RootLayout({
               <p className="text-xs uppercase tracking-wide text-muted/70">Discover</p>
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
               <Link href="/quiz" className="hover:text-foreground">Taste quiz</Link>
-              <Link href="/posts" className="hover:text-foreground">Articles</Link>
+              <Link href="/articles" className="hover:text-foreground">Articles</Link>
               <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </div>

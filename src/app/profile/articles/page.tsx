@@ -44,7 +44,7 @@ export default async function MyPostsPage() {
           <h1 className="mt-1 font-serif text-3xl text-foreground">My articles</h1>
         </div>
         <Link
-          href="/posts/new"
+          href="/articles/new"
           className="shrink-0 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
         >
           Write an article
@@ -82,14 +82,14 @@ export default async function MyPostsPage() {
                 <div className="flex shrink-0 gap-2">
                   {p.status === "published" && (
                     <Link
-                      href={`/posts/${p.slug}`}
+                      href={`/articles/${p.slug}`}
                       className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                     >
                       View
                     </Link>
                   )}
                   <Link
-                    href={`/posts/${p.slug}/edit`}
+                    href={`/articles/${p.slug}/edit`}
                     className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                   >
                     Edit

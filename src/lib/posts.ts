@@ -231,7 +231,7 @@ export async function getBySlug(slug: string): Promise<PostDetail | null> {
 /**
  * Posts authored by `userId`. With `publishedOnly`, only published ones (used on
  * the public /u/[handle] profile). Without it, all of the author's posts (used
- * in the author's own /profile/posts dashboard — RLS still scopes to own rows).
+ * in the author's own /profile/articles dashboard — RLS still scopes to own rows).
  */
 export async function listByAuthor(
   userId: string,

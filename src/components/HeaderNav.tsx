@@ -25,7 +25,7 @@ const SHOP_MENU: NavLink[] = [
 const DISCOVER_MENU: NavLink[] = [
   { href: "/identify", label: "Identify" },
   { href: "/quiz", label: "Quiz" },
-  { href: "/posts", label: "Articles" },
+  { href: "/articles", label: "Articles" },
 ];
 
 const pillBase =

@@ -86,7 +86,7 @@ export default async function ProfilePage() {
         </Link>
         {profile?.isExpert && (
           <Link
-            href="/profile/posts"
+            href="/profile/articles"
             className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
           >
             My articles

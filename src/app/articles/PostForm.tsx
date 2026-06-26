@@ -58,9 +58,9 @@ export default function PostForm({
         return;
       }
       if (intent === "publish" && res.slug) {
-        router.push(`/posts/${res.slug}`);
+        router.push(`/articles/${res.slug}`);
       } else {
-        router.push("/profile/posts");
+        router.push("/profile/articles");
       }
       router.refresh();
     });

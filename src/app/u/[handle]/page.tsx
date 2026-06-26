@@ -146,7 +146,7 @@ export default async function PublicProfilePage({
             {posts.map((p) => (
               <li key={p.postId}>
                 <Link
-                  href={`/posts/${p.slug}`}
+                  href={`/articles/${p.slug}`}
                   className="block rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
                 >
                   <p className="font-serif text-foreground">{p.title}</p>

@@ -87,7 +87,7 @@ export async function generateMetadata({
 
   const title = `${post.title} · The Luxury Catalog`;
   const description = plainExcerpt(post);
-  const url = `${SITE_URL}/posts/${post.slug}`;
+  const url = `${SITE_URL}/articles/${post.slug}`;
 
   return {
     title,
@@ -260,7 +260,7 @@ export default async function PostDetailPage({
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    url: `${SITE_URL}/posts/${post.slug}`,
+    url: `${SITE_URL}/articles/${post.slug}`,
     author: {
       "@type": "Person",
       name,
@@ -277,7 +277,7 @@ export default async function PostDetailPage({
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">Home</Link>
         <span>/</span>
-        <Link href="/posts" className="hover:text-foreground">Articles</Link>
+        <Link href="/articles" className="hover:text-foreground">Articles</Link>
       </nav>
 
       <header>
@@ -310,7 +310,7 @@ export default async function PostDetailPage({
         </p>
         {isAuthor && (
           <Link
-            href={`/posts/${post.slug}/edit`}
+            href={`/articles/${post.slug}/edit`}
             className="mt-3 inline-block rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
           >
             Edit article
@@ -362,7 +362,7 @@ export default async function PostDetailPage({
       )}
 
       <footer className="border-t border-border pt-6 text-sm text-muted">
-        <Link href="/posts" className="hover:text-gold">← All articles</Link>
+        <Link href="/articles" className="hover:text-gold">← All articles</Link>
       </footer>
 
       <script

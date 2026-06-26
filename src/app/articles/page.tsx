@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: "Articles — how to spot the real thing, and what it's worth · The Luxury Catalog",
   description:
     "Guides on authenticating designer handbags, their production history, and what holds value — written straight by The Luxury Catalog's verified experts.",
-  alternates: { canonical: `${SITE_URL}/posts` },
+  alternates: { canonical: `${SITE_URL}/articles` },
   openGraph: {
     title: "Articles · The Luxury Catalog",
     description:
       "Guides on authenticating designer handbags, their production history, and what holds value.",
-    url: `${SITE_URL}/posts`,
+    url: `${SITE_URL}/articles`,
     type: "website",
   },
 };
@@ -82,7 +82,7 @@ export default async function PostsPage({
         </div>
         {profile?.isExpert && (
           <Link
-            href="/posts/new"
+            href="/articles/new"
             className="shrink-0 self-start rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
           >
             Write an article
@@ -92,13 +92,13 @@ export default async function PostsPage({
 
       {brandFacets.length > 0 && (
         <nav className="flex flex-wrap gap-2" aria-label="Filter articles by brand">
-          <Link href="/posts" className={filterPill(!activeBrandId)}>
+          <Link href="/articles" className={filterPill(!activeBrandId)}>
             All
           </Link>
           {brandFacets.map((f) => (
             <Link
               key={f.brandId}
-              href={`/posts?brand=${f.brandId}`}
+              href={`/articles?brand=${f.brandId}`}
               className={filterPill(activeBrandId === f.brandId)}
             >
               {f.name}{" "}
@@ -120,7 +120,7 @@ export default async function PostsPage({
             return (
               <li key={p.postId}>
                 <Link
-                  href={`/posts/${p.slug}`}
+                  href={`/articles/${p.slug}`}
                   className="block rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-gold"
                 >
                   <h2 className="font-serif text-xl text-foreground">{p.title}</h2>

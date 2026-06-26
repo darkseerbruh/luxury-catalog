@@ -67,6 +67,11 @@ const nextConfig: NextConfig = {
         destination: "/coveted-closets",
         permanent: true,
       },
+      // Articles moved from `/posts` to `/articles` so the URL matches the nav
+      // label. Keep old links, shares, and indexed URLs working (308).
+      { source: "/posts", destination: "/articles", permanent: true },
+      { source: "/posts/:path*", destination: "/articles/:path*", permanent: true },
+      { source: "/profile/posts", destination: "/profile/articles", permanent: true },
     ];
   },
   async rewrites() {

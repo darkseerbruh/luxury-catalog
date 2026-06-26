@@ -744,7 +744,7 @@ export default async function BagDetailPage({
                 We do not guarantee authenticity; verify high-stakes details in person.
               </p>
               <Link
-                href="/posts"
+                href="/articles"
                 className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
               >
                 Read our authentication guides &rarr;
