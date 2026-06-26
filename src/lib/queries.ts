@@ -81,6 +81,38 @@ function embeddedName(relation: unknown): string {
   return (row as { name?: string } | null | undefined)?.name ?? "";
 }
 
+/**
+ * Each house's signature styles, in iconic order, from the owner-approved
+ * permanent-collection backbone (`supabase/seed/research/catalog-backbone.json`,
+ * tier 1 = perennial icons). Used to lead the homepage brand directory with the
+ * styles people actually come for (Neverfull, Birkin, Classic Flap) instead of
+ * whatever breadth seeding happened to catalogue deepest. This is owner-curated
+ * editorial order, not a popularity stat we don't have — so the UI never claims
+ * "most popular," it just surfaces the house's signatures first.
+ */
+const SIGNATURE_STYLES: Record<string, string[]> = {
+  Hermès: ["Birkin", "Kelly", "Constance", "Evelyne", "Garden Party", "Picotin Lock", "Bolide", "Lindy", "Herbag"],
+  Chanel: ["Classic Flap", "2.55 Reissue", "Boy", "Chanel 19", "Gabrielle", "Wallet on Chain", "Coco Handle"],
+  "Louis Vuitton": ["Neverfull", "Speedy", "Alma", "NéoNoé", "Capucines", "OnTheGo", "Pochette Métis", "Twist"],
+  Gucci: ["GG Marmont", "Dionysus", "Jackie 1961", "Horsebit 1955", "Ophidia", "Bamboo 1947"],
+  Dior: ["Lady Dior", "Saddle", "Book Tote", "30 Montaigne", "Caro"],
+  "Saint Laurent": ["Loulou", "Sac de Jour", "Kate", "Niki", "Lou Camera", "College", "Cassandre Envelope"],
+  "Bottega Veneta": ["Cassette", "Jodie", "The Pouch", "Andiamo", "Arco", "Loop"],
+  Fendi: ["Baguette", "Peekaboo", "Sunshine Shopper", "First", "Mon Trésor"],
+  Celine: ["Triomphe", "Luggage Tote", "Belt Bag", "Classic Box", "Ava", "16 (Sixteen)"],
+  Prada: ["Galleria", "Re-Edition", "Cleo"],
+  Coach: ["Tabby", "Rogue", "Willow", "Pillow Tabby", "Brooklyn"],
+  Loewe: ["Puzzle", "Hammock", "Flamenco", "Gate", "Goya", "Amazona"],
+};
+
+/** Position of a style within its house's signature list, or Infinity if it isn't a signature. */
+function signatureRank(brandName: string, styleName: string): number {
+  const icons = SIGNATURE_STYLES[brandName];
+  if (!icons) return Infinity;
+  const i = icons.findIndex((s) => s.toLowerCase() === styleName.trim().toLowerCase());
+  return i === -1 ? Infinity : i;
+}
+
 /** Brands with whether they have at least one fully-detailed variant ("live") vs. breadth-only stub styles ("coming soon"). */
 export async function getBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
@@ -92,15 +124,20 @@ export async function getBrandsOverview(): Promise<BrandOverview[]> {
   const brands = data.map((brand) => {
     const styles = (brand.style ?? []) as StyleWithVariants[];
     const variantCount = styles.reduce((n, s) => n + (s.variant ?? []).length, 0);
-    // "Top" styles = most documented (deepest variant coverage), then alphabetical
-    // as a stable tiebreak. Honest proxy: we surface what we know best, not a
-    // popularity claim we have no data for.
+    // "Top" styles = the house's signature icons first (owner-curated backbone
+    // order), then the most-documented remaining styles (deepest variant
+    // coverage), with name as a stable tiebreak. Surfaces what people come for
+    // (Neverfull, Birkin) and what we know best, never a popularity claim.
     const topStyles = [...styles]
-      .sort(
-        (a, b) =>
+      .sort((a, b) => {
+        const ra = signatureRank(brand.name, a.name);
+        const rb = signatureRank(brand.name, b.name);
+        if (ra !== rb) return ra - rb;
+        return (
           (b.variant ?? []).length - (a.variant ?? []).length ||
           a.name.localeCompare(b.name)
-      )
+        );
+      })
       .slice(0, 3)
       .map((s) => ({
         styleId: s.style_id,
