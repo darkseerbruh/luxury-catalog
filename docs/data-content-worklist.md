@@ -45,4 +45,4 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 ## Mid-tier insight (2026-06-26) — ready to wire as article
 - ✅ Draft written: `midtier-holds-value-draft.md` (which accessible bags hold value). Leather heritage
   (Bayswater $519, Rogue $645) >> logo/nylon (MK Jet Set $70, Le Pliage $90, Kate Spade $100-114, Tabby $198).
-- ⬜ Wire midtier-holds-value as a post (build MidTierHoldsValueChart, seed draft).
+- ✅ Wired midtier-holds-value as LIVE draft post #19 (MidTierHoldsValueChart), now under /articles route (Content lane renamed /posts→/articles) (2026-06-26)
