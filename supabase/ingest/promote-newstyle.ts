@@ -116,6 +116,7 @@ async function main() {
       if (error) { console.error(`variant create failed ${p.brand} ${p.style} ${p.size}:`, error.message); continue; }
       variantId = vi!.variant_id; createdVariants++;
     }
+    if (variantId == null) continue;
     const members = byKey.get(`${p.brandId}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
     const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", variantId);
     const seen = new Set((existRefs ?? []).map((r: any) => r.listing_ref));
