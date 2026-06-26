@@ -153,7 +153,7 @@ export function CaviarVsLambskinCharts() {
           ))}
         </div>
         <div style={{ fontSize: 10.5, color: MUTED, marginTop: 14, lineHeight: 1.5 }}>
-          Asking medians re-confirmed against our listings on June 25, 2026. Sold medians from completed eBay and Poshmark listings, same period. Leather read from each listing title. Condition is not recorded anywhere, so it is the one factor this cannot rule out.
+          Asking medians re-confirmed against our current listings, June 2026. Sold medians from completed eBay and Poshmark listings that span a range of sale dates (lambskin skews a little older), so we lean on the current asking premium and treat the sold figures as support. Leather read from each listing title. Condition is not recorded anywhere, so it is the one factor this cannot rule out.
         </div>
       </div>
       <figcaption className="sr-only">
