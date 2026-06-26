@@ -40,12 +40,14 @@ export function HomeHero({
   return (
     <section className="border-b border-border px-5 py-10 text-center">
       <h1 className="mx-auto max-w-2xl font-serif text-3xl leading-tight text-foreground sm:text-4xl">
-        {headline}
+        {/* A "\n" in an arm's copy renders as a line break (the utility arm is
+            two lines); single-line arms render as one block. */}
+        {headline.split("\n").map((line, i) => (
+          <span key={i} className="block">
+            {line}
+          </span>
+        ))}
       </h1>
-      <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-        Production history, authentication markers, and real resale prices, all
-        in one place.
-      </p>
       <form
         action="/search"
         method="GET"
@@ -56,7 +58,7 @@ export function HomeHero({
           name="q"
           type="search"
           onFocus={() => engage("focus")}
-          placeholder="Look up any bag: prices, authentication, history"
+          placeholder="Look up any bag"
           className="min-w-0 flex-1 truncate rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
         <button
