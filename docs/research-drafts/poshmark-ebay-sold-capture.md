@@ -54,6 +54,21 @@ for, by where you sold it" chart (`FlapVenueChart.tsx`). Caveat for the sold loa
 reconcile rows carry `price_type='listed'` and are sold-at-list; genuine eBay/Poshmark
 accepted-price sold should load as `price_type='sold'` and stay distinct.
 
+## TheRealReal + Vestiaire — no sold data yet (verified 2026-06-26)
+Every `listing_status='sold'` row in prod is **Fashionphile** (12,215). TheRealReal (4,729
+rows) and Vestiaire (15 rows) are **asking-only, 0 sold**, because reconcile is automated for
+Fashionphile only; TRR/Vestiaire are browser-gated. Their asking is already represented in any
+blended "typical ask" figure. To add them as sold later:
+- **TheRealReal:** no public sold archive (items vanish when sold), so the only path is a
+  reconcile proxy (vanished = sold-at-last-asking). Noisier than Fashionphile because TRR
+  allows offers and does markdowns, so the last asking overstates the accepted price. Needs two
+  full TRR crawls (browser-gated).
+- **Vestiaire:** keeps sold listings browsable with their price (observable sold, like
+  eBay/Poshmark), so it is capturable, but low-yield (~15 per search) and deprioritized.
+Deliberately excluded from the Flap venue box plot (`FlapVenueChart.tsx`): TRR would be a
+noisier proxy, Vestiaire a tiny-n capture. Three clean observable sold sources beat five where
+two are weak.
+
 ## eBay — browser pull (the dev API is out)
 **The owner was rejected from the eBay Developers Program (2026-06-26)**, so the Browse API
 path is unavailable. That is fine: the Browse API only returned *asking* prices (which we
