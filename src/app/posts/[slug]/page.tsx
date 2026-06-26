@@ -20,6 +20,8 @@ import { iconicPricesChartRegistry } from "./IconicPricesChart";
 import { neverfullSpeedyChartRegistry } from "./NeverfullSpeedyChart";
 import { rentVsBuyDiagramRegistry } from "./RentVsBuyDiagram";
 import { resaleRedFlagsDiagramRegistry } from "./ResaleRedFlagsDiagram";
+import { holdsValueDiagramRegistry } from "./HoldsValueDiagram";
+import { entryBagsChartRegistry } from "./EntryBagsChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -40,6 +42,8 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...neverfullSpeedyChartRegistry,
   ...rentVsBuyDiagramRegistry,
   ...resaleRedFlagsDiagramRegistry,
+  ...holdsValueDiagramRegistry,
+  ...entryBagsChartRegistry,
 };
 
 export const dynamic = "force-dynamic";
