@@ -106,7 +106,7 @@ async function main() {
     if (!styleId) {
       const { data: ins, error } = await db.from("style").insert({ brand_id: p.brandId, name: p.style }).select("style_id").single();
       if (error) { console.error(`style create failed ${p.brand} ${p.style}:`, error.message); continue; }
-      styleId = ins!.style_id; styleCache.set(skey, styleId); createdStyles++;
+      styleId = ins!.style_id as number; styleCache.set(skey, styleId); createdStyles++;
     }
     // find-or-create variant
     const { data: existingVars } = await db.from("variant").select("variant_id,size_label").eq("style_id", styleId);
@@ -117,11 +117,12 @@ async function main() {
       variantId = vi!.variant_id; createdVariants++;
     }
     if (variantId == null) continue;
+    const vid: number = variantId;
     const members = byKey.get(`${p.brandId}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
-    const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", variantId);
+    const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", vid);
     const seen = new Set((existRefs ?? []).map((r: any) => r.listing_ref));
     const toInsert = members.filter((m) => !seen.has(m.listing_ref)).map((m) => ({
-      variant_id: variantId, platform: m.platform, price_type: m.price_type || "listed",
+      variant_id: vid, platform: m.platform, price_type: m.price_type || "listed",
       sale_price: m.sale_price, currency: m.currency || "USD",
       listing_status: (m.price_type === "sold") ? "sold" : "available",
       listing_ref: m.listing_ref, source_url: m.source_url, observed_on: m.observed_on,
@@ -136,10 +137,10 @@ async function main() {
     insertedRows += toInsert.length;
     const ids = members.map((m) => m.discovered_id);
     for (let i = 0; i < ids.length; i += 500) {
-      await db.from("discovered_listing").update({ promoted_variant_id: variantId, promoted_at: new Date().toISOString() }).in("discovered_id", ids.slice(i, i + 500));
+      await db.from("discovered_listing").update({ promoted_variant_id: vid, promoted_at: new Date().toISOString() }).in("discovered_id", ids.slice(i, i + 500));
     }
     markedPromoted += ids.length;
-    console.log(`  ✓ ${p.brand} ${p.style} ${p.size} (style ${styleId}, v${variantId}): +${toInsert.length} prices, ${ids.length} marked`);
+    console.log(`  ✓ ${p.brand} ${p.style} ${p.size} (style ${styleId}, v${vid}): +${toInsert.length} prices, ${ids.length} marked`);
   }
   console.log(`\nDone. styles created: ${createdStyles}, variants created: ${createdVariants}, price rows inserted: ${insertedRows}, discovered marked: ${markedPromoted}`);
 }
