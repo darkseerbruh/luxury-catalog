@@ -59,3 +59,32 @@ authentication needs sourcing; mid-tier needs data capture.**
 - **All copy passes `docs/voice-and-tone.md`** §8 slop sweep + the review checklist (incl. the AI-tell blacklist).
 - **Visuals are required, catalog-wide (locked 2026-06-25).** If a piece states numbers, it gets a **data visualization** (the distribution, comparison, or trend). If it describes a bag's shape or markers, it gets an **original schematic** (`docs/authentication-standard.md` §3). Numbers and shapes are shown, not just told. Applies to articles and the catalog UI.
 - **Control for confounders, and show the work (locked 2026-06-25).** Before claiming a value gap is caused by one factor (e.g. caviar > lambskin), control for what we can (year, color, platform) and **state plainly what we cannot** (condition is usually unrecorded). Put the controlled finding and its limits in the article, framed as a leaning when it is one. A raw median gap is not a causal claim. **Full method (significance tests, bootstrap CIs, stratification, the publish bar): `docs/data-analysis-standard.md`.**
+
+## North star: self-updating, shoppable data-viz (recorded 2026-06-26)
+
+The end state for every data-backed article. Three goals, all serving the real objective:
+**affiliate monetization.** Not built yet; this is the target a future build aims at. Until
+then, articles ship with dated snapshot numbers and the CTA block carries the affiliate links.
+
+1. **Self-updating from regular pulls.** Article figures and charts read **live** from captured
+   data (`price_history`), not baked-in constants, so they refresh as the scheduled asking/sold
+   pulls land. The chart components become data-driven (query at render, cached) instead of
+   hard-coded numbers; the "Last updated" date reflects the data date. Foundation already in
+   place: the scheduled captures, the sold loader (`supabase/ingest/load-sold.ts`), and the
+   quarterly freshness routine. Factuality rules still hold (live numbers stay dated, n-stated,
+   framed as estimate-not-appraisal).
+2. **Diagrams link to individual for-sale bags.** Each data point ties to a real **live
+   listing**. On hover, a popup shows that specific bag at its price (photo where licensed),
+   linking out through the affiliate wrapper (Awin tracking). The data-viz becomes shoppable,
+   not just illustrative, so every chart is a monetization surface on top of its editorial job.
+3. **Dense-cluster fallback.** When points are too tight to hover individually (box plots,
+   dense scatters), surface listings another way: click a bar or region → a side panel or list
+   of matching live, affiliate-linked listings ("shop these"). The point is always to route the
+   reader to a buyable bag.
+
+**Dependencies (so a future build is grounded):** solve the browser→repo capture transport
+(currently CSP-blocked, see `docs/research-drafts/poshmark-ebay-sold-capture.md`); refactor
+diagrams from baked constants to live queries; make listing-level data queryable per data point
+(`source_url` + affiliate-wrapped link + licensed photo); keep the never-AI-images rule
+(diagrams stay original schematics, now data-bound). Sequence it **after** the sold/asking
+pipeline runs regularly.
