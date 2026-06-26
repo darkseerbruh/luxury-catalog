@@ -34,7 +34,15 @@ function Bag({ kind }: { kind: Kind }) {
       ? "Schematic of a quilted flap bag with a pebbled, grainy caviar surface and crisp, structured corners."
       : "Schematic of a quilted flap bag with a smooth lambskin surface, a soft sheen, and a small scuff at one corner.";
   return (
-    <svg viewBox="0 0 180 158" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style={{ display: "block" }} role="img" aria-label={label}>
+    <svg
+      viewBox="0 0 180 158"
+      width="150"
+      height="132"
+      preserveAspectRatio="xMidYMid meet"
+      style={{ display: "block", maxWidth: "100%", height: "auto", margin: "0 auto" }}
+      role="img"
+      aria-label={label}
+    >
       <defs>
         <clipPath id={`body-${id}`}>
           <rect x="34" y="54" width="112" height="86" rx="8" />
@@ -96,9 +104,7 @@ function Side({ kind }: { kind: Kind }) {
   const t = TRAITS[kind];
   return (
     <div style={{ minWidth: 0, border: `1px solid ${BORDER}`, borderRadius: 12, background: "#1a1712", padding: 14 }}>
-      <div style={{ width: "100%", maxWidth: 160, aspectRatio: "180 / 158", margin: "0 auto" }}>
-        <Bag kind={kind} />
-      </div>
+      <Bag kind={kind} />
       <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: FG, marginTop: 6 }}>{t.name}</div>
       <div style={{ fontSize: 12, color: GOLDSOFT, marginBottom: 10 }}>{t.texture}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
