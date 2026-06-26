@@ -8,12 +8,17 @@ import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
+import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
 // Registered article visuals. A body line `[diagram: <id>]` renders the matching
 // original schematic or data-viz component (never a photo) in place.
-const DIAGRAMS: Record<string, ComponentType> = { ...coachDiagramRegistry, ...flapChartsRegistry };
+const DIAGRAMS: Record<string, ComponentType> = {
+  ...coachDiagramRegistry,
+  ...flapChartsRegistry,
+  ...caviarVsLambskinChartsRegistry,
+};
 
 export const dynamic = "force-dynamic";
 
