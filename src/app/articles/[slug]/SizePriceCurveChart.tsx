@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { getMedians } from "../../../lib/article-data";
 
 /**
  * The size-price question, by model. Asking medians from our capture 2026-06-26
@@ -6,6 +7,11 @@ import type { ComponentType } from "react";
  * Each model is scaled to its OWN largest bar so the DIRECTION reads at a glance:
  * Lady Dior and Constance slope down (smaller costs more); Triomphe slopes up.
  * Original SVG/CSS.
+ *
+ * Self-updating: async server component reads each size's live listed median + n per
+ * variant at render (getMedians), falling back per-field to the baked capture when n=0 or
+ * the DB is unavailable. Chart-only; prose stays honest via the drift check
+ * (docs/article-freshness-report.md).
  */
 const FG = "#f3ede0";
 const MUTED = "#a89c87";
@@ -15,38 +21,48 @@ const BORDER = "#322c22";
 
 const money = (n: number) => "$" + n.toLocaleString();
 
-type Bar = { size: string; v: number; n: number };
+type Bar = { size: string; variant: number; v: number; n: number };
 type Group = { model: string; note: string; inverts: boolean; bars: Bar[] };
 
 const GROUPS: Group[] = [
   {
     model: "Dior Lady Dior", note: "smaller costs more", inverts: true,
     bars: [
-      { size: "Mini", v: 3925, n: 146 },
-      { size: "Small", v: 3890, n: 105 },
-      { size: "Medium", v: 2475, n: 184 },
-      { size: "Large", v: 1750, n: 73 },
+      { size: "Mini", variant: 570, v: 3925, n: 146 },
+      { size: "Small", variant: 571, v: 3890, n: 105 },
+      { size: "Medium", variant: 572, v: 2475, n: 184 },
+      { size: "Large", variant: 573, v: 1750, n: 73 },
     ],
   },
   {
     model: "Hermès Constance", note: "smaller costs more", inverts: true,
     bars: [
-      { size: "18 cm", v: 11950, n: 183 },
-      { size: "24 cm", v: 9995, n: 57 },
+      { size: "18 cm", variant: 529, v: 11950, n: 183 },
+      { size: "24 cm", variant: 530, v: 9995, n: 57 },
     ],
   },
   {
     model: "Celine Triomphe", note: "bigger costs more", inverts: false,
     bars: [
-      { size: "Mini", v: 1089, n: 46 },
-      { size: "Small", v: 1395, n: 69 },
-      { size: "Medium", v: 2295, n: 95 },
-      { size: "Teen", v: 2370, n: 46 },
+      { size: "Mini", variant: 543, v: 1089, n: 46 },
+      { size: "Small", variant: 544, v: 1395, n: 69 },
+      { size: "Medium", variant: 545, v: 2295, n: 95 },
+      { size: "Teen", variant: 546, v: 2370, n: 46 },
     ],
   },
 ];
 
-export function SizePriceCurveChart() {
+export async function SizePriceCurveChart() {
+  const ids = GROUPS.flatMap((g) => g.bars.map((b) => b.variant));
+  const stats = await getMedians(ids, "listed");
+  // Live listed median overrides the baked fallback per-bar; a size with no rows (n=0) keeps its baked number.
+  const groups = GROUPS.map((g) => ({
+    ...g,
+    bars: g.bars.map((b) => {
+      const s = stats[b.variant];
+      return s && s.n > 0 ? { ...b, v: s.median, n: s.n } : b;
+    }),
+  }));
   return (
     <figure style={{ margin: "0.5rem 0 1rem" }}>
       <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c", color: FG, maxWidth: 600 }}>
@@ -55,7 +71,7 @@ export function SizePriceCurveChart() {
           Asking median by size, June 2026. Each bag is scaled to its own range so the direction shows. Labeled with the number of listings.
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          {GROUPS.map((g) => {
+          {groups.map((g) => {
             const max = Math.max(...g.bars.map((b) => b.v));
             return (
               <div key={g.model}>
