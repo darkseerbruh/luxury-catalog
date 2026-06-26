@@ -36,7 +36,7 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ⬜ Neverfull vs Speedy (NeverfullSpeedyChart exists; needs Speedy data + the ask-vs-sold +
   Trends fading-icon angle). Coordinate with Content lane (owns that component).
 - ⬜ "Most wanted vs most expensive" icon demand–price gap (Trends + our icon prices)
-- ⬜ "Dior Saddle is back" (Trends riser + our Saddle pricing)
+- ✅ "Dior Saddle is back" draft written (dior-saddle-is-back-draft.md); ready to wire
 - ✅ "The asking-price illusion" LIVE draft post #17 (AskVsSoldGapChart) (2026-06-26)
 
 ## Trends
