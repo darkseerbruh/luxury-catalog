@@ -215,6 +215,11 @@ export default async function PostDetailPage({
   const user = await getCurrentUser();
   const isAuthor = user?.id === post.author?.userId;
   const date = formatDate(post.publishedAt) ?? formatDate(post.createdAt);
+  // Show a "Last updated" date when the post has been edited on a later day than
+  // it was published. This is the freshness signal for evergreen/fee/value posts
+  // (it also feeds dateModified in the Article JSON-LD below for GEO).
+  const updatedDate = formatDate(post.updatedAt);
+  const showUpdated = Boolean(updatedDate && updatedDate !== date);
   const name = authorName(post);
 
   const hasTopic = Boolean(
@@ -273,6 +278,7 @@ export default async function PostDetailPage({
             />
           )}
           {date ? ` · ${date}` : ""}
+          {showUpdated ? ` · Updated ${updatedDate}` : ""}
         </p>
         {isAuthor && (
           <Link
