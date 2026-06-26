@@ -24,6 +24,21 @@ const GOLDSOFT = "#e3c785";
 const LAMB = "#6f6450";
 const BORDER = "#322c22";
 
+// Texture, not color, separates the two leathers (accessibility: never encode
+// meaning by color alone). Caviar is the pebbled leather, so it gets a dot
+// stipple; lambskin is smooth, so it gets a fine diagonal weave. The legend
+// swatches carry the same fill so the pattern reads as a key.
+const CAVIAR_FILL = {
+  backgroundColor: GOLD,
+  backgroundImage: "radial-gradient(rgba(40,28,4,0.5) 0.9px, transparent 1.1px)",
+  backgroundSize: "5px 5px",
+} as const;
+const LAMBSKIN_FILL = {
+  backgroundColor: LAMB,
+  backgroundImage:
+    "repeating-linear-gradient(45deg, rgba(243,237,224,0.22) 0, rgba(243,237,224,0.22) 1.5px, transparent 1.5px, transparent 5px)",
+} as const;
+
 const money = (n: number) => "$" + n.toLocaleString();
 
 type Row = {
@@ -70,10 +85,10 @@ export function CaviarVsLambskinCharts() {
         {/* legend */}
         <div style={{ display: "flex", gap: 16, fontSize: 11.5, color: MUTED, marginBottom: 14 }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 11, height: 11, borderRadius: 3, background: GOLD, display: "inline-block" }} /> Caviar
+            <span style={{ width: 13, height: 13, borderRadius: 3, display: "inline-block", ...CAVIAR_FILL }} /> Caviar (dotted)
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 11, height: 11, borderRadius: 3, background: LAMB, display: "inline-block" }} /> Lambskin
+            <span style={{ width: 13, height: 13, borderRadius: 3, display: "inline-block", ...LAMBSKIN_FILL }} /> Lambskin (striped)
           </span>
         </div>
 
@@ -87,7 +102,7 @@ export function CaviarVsLambskinCharts() {
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <div style={{ flex: 1, height: 15, background: "#1a1815", borderRadius: 7, overflow: "hidden" }}>
-                    <div style={{ width: barW(r.caviar), height: "100%", background: GOLD, borderRadius: 7 }} />
+                    <div style={{ width: barW(r.caviar), height: "100%", borderRadius: 7, ...CAVIAR_FILL }} />
                   </div>
                   <span style={{ fontSize: 11.5, color: GOLDSOFT, width: 92, textAlign: "right" }}>
                     {money(r.caviar)} <span style={{ color: MUTED }}>· {r.nC}</span>
@@ -95,7 +110,7 @@ export function CaviarVsLambskinCharts() {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <div style={{ flex: 1, height: 15, background: "#1a1815", borderRadius: 7, overflow: "hidden" }}>
-                    <div style={{ width: barW(r.lambskin), height: "100%", background: LAMB, borderRadius: 7 }} />
+                    <div style={{ width: barW(r.lambskin), height: "100%", borderRadius: 7, ...LAMBSKIN_FILL }} />
                   </div>
                   <span style={{ fontSize: 11.5, color: FG, width: 92, textAlign: "right" }}>
                     {money(r.lambskin)} <span style={{ color: MUTED }}>· {r.nL}</span>
