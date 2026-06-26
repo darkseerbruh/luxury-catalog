@@ -71,8 +71,10 @@ export default async function PersonaRouter() {
       <p className="mt-1 text-sm text-muted">Pick a goal. We&rsquo;ll take you straight there.</p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {/* Tile 1 — Is it real? (the photographable authentication hook) */}
-        <Link href="/identify" className={`${TILE} border-gold/40 bg-gold/5 hover:border-gold`}>
+        {/* Tile 1 — Is it real? The authentication ladder: Learn (read the
+            markers) + Check (scan a bag). Two explicit actions, not one camera
+            link, so Learn gets a homepage on-ramp too. */}
+        <div className={`${TILE} border-gold/40 bg-gold/5`}>
           <div className="flex items-start justify-between gap-3">
             <div>
               <h3 className="font-serif text-xl text-foreground">Is it real?</h3>
@@ -93,12 +95,16 @@ export default async function PersonaRouter() {
             </svg>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm">
-            <li className="flex items-center gap-2 text-foreground"><Check /> Even stitching</li>
-            <li className="flex items-center gap-2 text-foreground"><Check /> Date code checks out</li>
-            <li className="flex items-center gap-2 text-muted"><Cross /> Crooked logo? Fake.</li>
+            <li className="flex items-center gap-2 text-foreground"><Check /> Stitching and edges</li>
+            <li className="flex items-center gap-2 text-foreground"><Check /> Stamps and date codes</li>
+            <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
-          <span className={CTA}>Scan a bag &rarr;</span>
-        </Link>
+          <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-gold">
+            <Link href="/posts" className="transition-colors hover:text-gold-soft">Read the markers &rarr;</Link>
+            <Link href="/identify" className="transition-colors hover:text-gold-soft">Scan a bag &rarr;</Link>
+          </div>
+        </div>
 
         {/* Tile 2 — Collect & invest (track a whole collection) */}
         <Link href="/closet" className={TILE}>

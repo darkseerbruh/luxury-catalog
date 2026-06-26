@@ -60,9 +60,51 @@ const AFFILIATE_CODES: Record<string, string | undefined> = {
   NEXT_PUBLIC_AFFILIATE_FASHIONPHILE: process.env.NEXT_PUBLIC_AFFILIATE_FASHIONPHILE,
   NEXT_PUBLIC_AFFILIATE_THEREALREAL: process.env.NEXT_PUBLIC_AFFILIATE_THEREALREAL,
   NEXT_PUBLIC_AFFILIATE_VESTIAIRE: process.env.NEXT_PUBLIC_AFFILIATE_VESTIAIRE,
+  NEXT_PUBLIC_AFFILIATE_VIVRELLE: process.env.NEXT_PUBLIC_AFFILIATE_VIVRELLE,
+  NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY: process.env.NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY,
 };
 
 const WRAP_TEMPLATE = process.env.NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE;
+
+// eBay Partner Network needs its own treatment: monetized eBay links carry a fixed
+// set of tracking params plus the campaign id, not a single affiliate code. The
+// campaign id is NOT a secret (it rides openly in every affiliate URL), so it lives
+// in code and works out of the box on deploy — no env config required. An optional
+// NEXT_PUBLIC_EBAY_CAMPAIGN_ID env var overrides it (e.g. to swap campaigns) without
+// a code change.
+const EBAY_CAMPAIGN_ID = process.env.NEXT_PUBLIC_EBAY_CAMPAIGN_ID || "5339158071";
+/** EPN rotation id for the US marketplace (network 711). */
+const EBAY_US_ROTATION = "711-53200-19255-0";
+
+/** True for any eBay domain (ebay.com, ebay.co.uk, …). */
+export function isEbayUrl(url: string): boolean {
+  try {
+    return /(^|\.)ebay\.[a-z.]+$/i.test(new URL(url).hostname);
+  } catch {
+    return /\bebay\.[a-z.]+/i.test(url);
+  }
+}
+
+/**
+ * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
+ * campaign id configured this returns the URL unchanged, so eBay links always work
+ * and monetization is purely additive. `customId` (≤256 chars) is EPN's free-form
+ * sub-id for our own click attribution (e.g. the bag/page it came from).
+ */
+export function applyEbayAffiliate(url: string, customId?: string): string {
+  if (!url || !EBAY_CAMPAIGN_ID) return url;
+  const params = new URLSearchParams({
+    mkcid: "1", // eBay Partner Network
+    mkrid: EBAY_US_ROTATION,
+    siteid: "0", // US
+    campid: EBAY_CAMPAIGN_ID,
+    toolid: "10001",
+    mkevt: "1", // link-click event
+  });
+  if (customId) params.set("customid", customId.slice(0, 256));
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}${params.toString()}`;
+}
 
 function applyAffiliate(url: string, platform: Platform): string {
   const code = AFFILIATE_CODES[platform.paramEnv];
@@ -86,6 +128,10 @@ function applyAffiliate(url: string, platform: Platform): string {
  */
 export function affiliateListingUrl(url: string, platformRaw: string | null): string {
   if (!url) return url;
+  // eBay uses EPN's multi-param scheme, not a single affiliate code — route it first.
+  if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
+    return applyEbayAffiliate(url);
+  }
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);
@@ -163,6 +209,54 @@ export function buildConsignmentLinks(brand: string, style: string): ConsignLink
     key: p.key,
     name: p.name,
     mode: p.mode,
+    url: applyAffiliate(p.search(q), p),
+  }));
+}
+
+/**
+ * Rental — the third transaction fork (buy / sell / RENT), mapped to the "want"
+ * intent ("not ready to buy? try it first"). Both players are reachable via
+ * networks already held (Vivrelle on Awin; Rent the Runway on Skimlinks/FlexOffers).
+ * Links work now (useful "rent it first" routing) and pick up affiliate attribution
+ * when the codes land, exactly like buy/sell. URLs are best-effort search deep-links;
+ * verify the exact format against each affiliate dashboard once approved.
+ */
+interface RentalPlatform extends Platform {
+  /** Short model note for the UI (e.g. how the rental works). */
+  note: string;
+}
+
+const RENTAL_PLATFORMS: RentalPlatform[] = [
+  {
+    key: "vivrelle",
+    name: "Vivrelle",
+    note: "membership",
+    search: (q) => `https://vivrelle.com/search?q=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_VIVRELLE",
+    paramName: "utm_source",
+  },
+  {
+    key: "renttherunway",
+    name: "Rent the Runway",
+    note: "membership + single rentals",
+    search: (q) => `https://www.renttherunway.com/search?query=${q}`,
+    paramEnv: "NEXT_PUBLIC_AFFILIATE_RENTTHERUNWAY",
+    paramName: "utm_source",
+  },
+];
+
+export interface RentalLink extends ResaleLink {
+  note: string;
+}
+
+/** Rental search links for a bag, with affiliate attribution applied when configured. */
+export function buildRentalLinks(brand: string, style: string): RentalLink[] {
+  const q = encodeURIComponent([brand, style].filter(Boolean).join(" ").trim());
+  if (!q) return [];
+  return RENTAL_PLATFORMS.map((p) => ({
+    key: p.key,
+    name: p.name,
+    note: p.note,
     url: applyAffiliate(p.search(q), p),
   }));
 }

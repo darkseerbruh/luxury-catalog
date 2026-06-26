@@ -108,7 +108,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 - [x] 🧠 **H3. Admin auth gate** — BUILT: `/admin/*` gated behind `profile.is_admin` (migration `0008`, fail-closed). **Operator:** after applying `0008`, set your own flag (`update profile set is_admin = true where id = '<your-id>';`) or you're locked out.
 - [ ] 🧠 **H4. Social links policy** — confirm allowed networks (IG/TikTok/YouTube/Poshmark/Substack) + verified-link treatment.
 - [ ] ⚠️ **H6. Identify / camera tool isn't "real" yet — DO NOT public-launch it as-is (owner flag, 2026-06-22).** Like the authenticator marketplace was, the `/identify` camera tool presents as a working feature but doesn't actually deliver trustworthy results yet. **Before public launch, either (a) make it genuinely work, or (b) give it the same coming-soon / "notify me" fake-door treatment we used for authentication** (gate the real flow, capture demand). Keep this item on the to-do list until resolved — **no in-chat reminders needed** (owner preference). Next step: audit `/identify` (`src/app/identify/page.tsx`) to confirm current behavior, then decide build-vs-fake-door.
-- [x] 🧠 **H5. Photo-contribution system** — BUILT (2026-06-22): `bag_photo` + contributor tiers, hybrid moderation, bag-page gallery/upload, `/admin/photos`, `/photos/most-wanted`, profile tier card. **Operator actions:** (1) apply **`0016_photo_contributions.sql`** (`supabase db push` — it also creates the public `bag-photos` Storage bucket + policies); (2) ensure `SUPABASE_SERVICE_ROLE_KEY` is set (admin queue + auto-publish + Most-Wanted demand ranking need it); (3) grant `is_authenticator` to vetted contributors so they auto-publish; (4) **register a DMCA agent before promoting UGC widely** (see G2). Galleries/upload degrade gracefully until 0016 is applied. **Smoke-test checklist: `docs/photo-smoke-test.md`** (run on your laptop after applying 0016).
+- [x] 🧠 **H5. Photo-contribution system** — BUILT (2026-06-22): `bag_photo` + contributor tiers, hybrid moderation, bag-page gallery/upload, `/admin/photos`, `/photos/most-wanted`, profile tier card. **Operator actions:** (1) apply **`0016_photo_contributions.sql`** (`supabase db push` — it also creates the public `bag-photos` Storage bucket + policies); (2) ensure `SUPABASE_SERVICE_ROLE_KEY` is set (admin queue + auto-publish + Most-Wanted demand ranking need it); (3) grant `is_authenticator` to vetted contributors so they auto-publish; (4) **register a DMCA agent before promoting UGC widely** (see G2). Galleries/upload degrade gracefully until 0016 is applied. **Smoke-test checklist: `docs/archive/photo-smoke-test.md`** (run on your laptop after applying 0016).
 
 ---
 
@@ -121,6 +121,12 @@ hosts), which is why migrations/seeding had to run from the laptop. To let futur
 cloud sessions do DB work directly (no laptop, no `.env.local` syncing):
 - [ ] 🔧 **I1.** Edit this environment (claude.ai/code → cloud icon → hover env → gear): **Network access → Custom**, add allowed domains `pewmdztviyrtbhtebcct.supabase.co` + `api.supabase.com`, and ✅ keep "Also include default list of common package managers."
 - [ ] 🔧 **I2.** In the same dialog, add env vars `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (note: stored in env config, visible to anyone who can edit it — no secrets store yet). Changes apply to **new** sessions.
+
+---
+
+## J. Performance / site load time (explore)
+
+- [ ] 🔧 **J1. Audit site load time & find speed wins.** Not yet investigated. Confirmed *not* caused by `docs/*.md` (markdown is never bundled or served — it's repo/AI context only, 0 bytes to the browser). Real levers to measure: production-build performance (judge on `next build`, not `npm run dev`, which recompiles per route and *feels* slow), Core Web Vitals (LCP/CLS/INP) via PostHog or Lighthouse, image weight/formats once real photos land, font loading, and any heavy client components / unsplit bundles. Deliverable: a measured before/after with the top 3 fixes. *(Engagement lever: faster pages lift bounce/return-visit + SEO/GEO ranking, the #1 growth channel.)*
 
 ---
 

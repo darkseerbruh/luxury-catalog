@@ -1,10 +1,42 @@
-import { cache } from "react";
+import { cache, type ComponentType, type ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBySlug } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
-import { AUTHOR_NAME, SITE_URL } from "@/lib/geo";
+import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
+import { PostBagCTA } from "./PostBagCTA";
+import { coachDiagramRegistry } from "./CoachAuthDiagram";
+import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
+import { gucciMarmontAuthDiagramRegistry } from "./GucciMarmontAuthDiagram";
+import { flapChartsRegistry } from "./FlapValueCharts";
+import { flapVenueChartRegistry } from "./FlapVenueChart";
+import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
+import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
+import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
+import { birkinKellyChartRegistry } from "./BirkinKellyChart";
+import { neverfullSizeChartRegistry } from "./NeverfullSizeChart";
+import { iconicPricesChartRegistry } from "./IconicPricesChart";
+import { neverfullSpeedyChartRegistry } from "./NeverfullSpeedyChart";
+import { AuthorCard } from "./AuthorCard";
+import { TrustBadges } from "@/components/TrustBadges";
+
+// Registered article visuals. A body line `[diagram: <id>]` renders the matching
+// original schematic or data-viz component (never a photo) in place.
+const DIAGRAMS: Record<string, ComponentType> = {
+  ...coachDiagramRegistry,
+  ...lvAuthDiagramRegistry,
+  ...gucciMarmontAuthDiagramRegistry,
+  ...flapChartsRegistry,
+  ...flapVenueChartRegistry,
+  ...caviarVsLambskinChartsRegistry,
+  ...leatherDiagramRegistry,
+  ...whereToSellDiagramRegistry,
+  ...birkinKellyChartRegistry,
+  ...neverfullSizeChartRegistry,
+  ...iconicPricesChartRegistry,
+  ...neverfullSpeedyChartRegistry,
+};
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +53,11 @@ function authorName(post: Awaited<ReturnType<typeof getBySlug>>): string {
 
 function plainExcerpt(post: NonNullable<Awaited<ReturnType<typeof getBySlug>>>): string {
   if (post.excerpt) return post.excerpt;
-  const text = (post.body ?? "").replace(/\s+/g, " ").trim();
+  const text = (post.body ?? "")
+    .replace(/^(#{1,6}|>|-)\s+/gm, "") // strip leading block markers
+    .replace(/\*\*/g, "") // strip bold markers
+    .replace(/\s+/g, " ")
+    .trim();
   if (text.length <= 157) return text;
   return text.slice(0, 154).replace(/\s+\S*$/, "") + "…";
 }
@@ -62,20 +98,123 @@ function formatDate(iso: string | null): string | null {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-/** Render the body as paragraphs (plain text, newline-delimited). No HTML is
- * injected from user content — each block is rendered as escaped text. */
+/** Minimal inline formatting: **bold** only. No links render from article
+ * bodies on purpose, so monetization stays in the PostBagCTA block. Text nodes
+ * are escaped by React, so this never injects HTML. */
+function renderInline(text: string, keyPrefix: string) {
+  return text.split(/\*\*/).map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={`${keyPrefix}-${i}`} className="font-semibold text-foreground">
+        {part}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
+/** Render the article body from its plain-text field with a small, safe markup
+ * vocabulary, parsed line by line so a "## heading" sitting directly above its
+ * paragraph still renders as a heading:
+ *   "## heading"      -> a serif subheading
+ *   "- item" lines    -> a bulleted list
+ *   "> line" lines    -> a callout box (set apart from the body)
+ *   "[diagram: <id>]" -> a registered schematic component
+ *   anything else     -> a paragraph
+ * No raw HTML is injected: every value renders as an escaped React text node. */
 function Body({ body }: { body: string | null }) {
   if (!body) return null;
-  const blocks = body.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
-  return (
-    <div className="flex flex-col gap-4 text-foreground">
-      {blocks.map((block, i) => (
-        <p key={i} className="whitespace-pre-line text-base leading-relaxed">
-          {block}
-        </p>
-      ))}
-    </div>
-  );
+  const out: ReactNode[] = [];
+  let para: string[] = [];
+  let list: string[] = [];
+  let quote: string[] = [];
+  let k = 0;
+  const flushPara = () => {
+    if (!para.length) return;
+    const text = para.join(" ");
+    out.push(<p key={k} className="text-base leading-relaxed">{renderInline(text, `p${k}`)}</p>);
+    para = [];
+    k++;
+  };
+  const flushList = () => {
+    if (!list.length) return;
+    const items = list;
+    out.push(
+      <ul key={k} className="flex flex-col gap-1.5 pl-1">
+        {items.map((l, j) => (
+          <li key={j} className="flex gap-2.5 text-base leading-relaxed">
+            <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+            <span>{renderInline(l, `b${k}-${j}`)}</span>
+          </li>
+        ))}
+      </ul>,
+    );
+    list = [];
+    k++;
+  };
+  const flushQuote = () => {
+    if (!quote.length) return;
+    const text = quote.join(" ");
+    out.push(
+      <aside key={k} className="rounded-2xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm leading-relaxed text-muted">
+        {renderInline(text, `c${k}`)}
+      </aside>,
+    );
+    quote = [];
+    k++;
+  };
+  const flushAll = () => {
+    flushPara();
+    flushList();
+    flushQuote();
+  };
+
+  for (const raw of body.replace(/\r\n/g, "\n").split("\n")) {
+    const line = raw.trim();
+    if (!line) {
+      flushAll();
+      continue;
+    }
+    const diagram = line.match(/^\[diagram:\s*([\w-]+)\]$/);
+    if (diagram) {
+      flushAll();
+      const D = DIAGRAMS[diagram[1]];
+      if (D) {
+        out.push(<D key={k} />);
+        k++;
+      }
+      continue;
+    }
+    if (line.startsWith("## ")) {
+      flushAll();
+      const heading = line.replace(/^##\s+/, "");
+      const id = heading.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      out.push(
+        <h2 key={k} id={id} className="mt-2 scroll-mt-24 font-serif text-xl text-foreground">
+          {renderInline(heading, `h${k}`)}
+        </h2>,
+      );
+      k++;
+      continue;
+    }
+    if (line.startsWith("- ")) {
+      flushPara();
+      flushQuote();
+      list.push(line.replace(/^-\s+/, ""));
+      continue;
+    }
+    if (line.startsWith(">")) {
+      flushPara();
+      flushList();
+      quote.push(line.replace(/^>\s?/, ""));
+      continue;
+    }
+    flushList();
+    flushQuote();
+    para.push(line);
+  }
+  flushAll();
+  return <div className="flex flex-col gap-4 text-foreground">{out}</div>;
 }
 
 export default async function PostDetailPage({
@@ -90,6 +229,11 @@ export default async function PostDetailPage({
   const user = await getCurrentUser();
   const isAuthor = user?.id === post.author?.userId;
   const date = formatDate(post.publishedAt) ?? formatDate(post.createdAt);
+  // Show a "Last updated" date when the post has been edited on a later day than
+  // it was published. This is the freshness signal for evergreen/fee/value posts
+  // (it also feeds dateModified in the Article JSON-LD below for GEO).
+  const updatedDate = formatDate(post.updatedAt);
+  const showUpdated = Boolean(updatedDate && updatedDate !== date);
   const name = authorName(post);
 
   const hasTopic = Boolean(
@@ -138,12 +282,17 @@ export default async function PostDetailPage({
           ) : (
             name
           )}
-          {post.author?.isExpert && (
-            <span className="ml-2 rounded-full bg-gold/10 px-2 py-0.5 text-xs text-gold">
-              Verified expert
-            </span>
+          {post.author && `, ${AUTHOR_ROLE}`}
+          {post.author && (
+            <TrustBadges
+              isVerified={post.author.isVerified}
+              isExpert={post.author.isExpert}
+              isAuthenticator={post.author.isAuthenticator}
+              className="ml-2 inline-flex align-middle"
+            />
           )}
           {date ? ` · ${date}` : ""}
+          {showUpdated ? ` · Updated ${updatedDate}` : ""}
         </p>
         {isAuthor && (
           <Link
@@ -164,6 +313,14 @@ export default async function PostDetailPage({
       <article>
         <Body body={post.body} />
       </article>
+
+      {/* Money-moment: topic-tagged posts hand off to commissionable buy/sell links */}
+      {hasTopic && (post.topic.brandName || post.topic.styleName) && (
+        <PostBagCTA brandName={post.topic.brandName} styleName={post.topic.styleName} slug={post.slug} />
+      )}
+
+      {/* Author credibility card (E-E-A-T): who wrote this and why to trust it. */}
+      {post.author && <AuthorCard author={post.author} />}
 
       {/* Sources / related — link to the brand or style this article covers */}
       {hasTopic && (

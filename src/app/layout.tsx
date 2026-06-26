@@ -75,14 +75,26 @@ export default async function RootLayout({
               <Link href="/identify" className="hover:text-foreground">Identify</Link>
               <Link href="/quiz" className="hover:text-foreground">Taste quiz</Link>
               <Link href="/posts" className="hover:text-foreground">Articles</Link>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs uppercase tracking-wide text-muted/70">You</p>
-              <Link href="/closet" className="hover:text-foreground">Your closet</Link>
-              <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
               <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </div>
+            {/* "You" = personal, auth-gated surfaces. Hidden when logged out so
+                signed-out visitors are never sent to a link that just bounces
+                them to /login (mirrors the header, which also hides these). */}
+            {user ? (
+              <div className="flex flex-col gap-2">
+                <p className="text-xs uppercase tracking-wide text-muted/70">You</p>
+                <Link href="/feed" className="hover:text-foreground">Feed</Link>
+                <Link href="/closet" className="hover:text-foreground">Your closet</Link>
+                <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <p className="text-xs uppercase tracking-wide text-muted/70">Account</p>
+                <Link href="/login" className="hover:text-foreground">Log in</Link>
+                <Link href="/signup" className="hover:text-foreground">Create account</Link>
+              </div>
+            )}
           </div>
           <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
             <p className="max-w-xl text-muted/60">

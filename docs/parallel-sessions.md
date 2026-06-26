@@ -1,17 +1,24 @@
 # Running multiple Claude chats at once without collisions
 
+*This doc is the **worktree mechanics**. The **lane ownership + live status** (who owns which
+files, what each lane is mid-doing) live in the **Active-lanes registry** at the top of
+[handoff.md](handoff.md) — that is the source of truth a new chat hydrates from. Read it first;
+this doc is how you physically isolate the work.*
+
 Two+ chats developing this repo **simultaneously** must NOT share one working folder —
 a folder can only have one branch checked out, so a branch switch or stray uncommitted
 file in one chat clobbers the other. (We hit this twice on 2026-06-24.) The fix is a
 separate **git worktree** per chat: distinct folders, one shared `.git` (same history,
 same remote, same branches).
 
-## The setup
-| Chat | Folder | Branch |
+## The setup (one worktree per lane — see the registry for what each owns)
+| Lane | Folder | Branch |
 |---|---|---|
+| Content / editorial | `~/Documents/luxury-catalog-content` | `content/editorial` |
 | Data / ingest | `~/Documents/luxury-catalog-data` | `data/market-capture` |
-| Shop / UI | `~/Documents/luxury-catalog` (original checkout) | `shop/listings` (own branch, NOT `main`) |
-| Integration target | — | `main` — both merge into it |
+| UX / shop + auth-UX | `~/Documents/luxury-catalog` (original checkout) | `shop/listings` (own branch, NOT `main`) |
+| Infra / ops (catch-all) | a fresh worktree per task | `ops/<task>` |
+| Integration target | — | `main` — every lane merges into it |
 
 Create a worktree:  `git worktree add -b <branch> ~/Documents/<folder> origin/main`
 List / remove:       `git worktree list` · `git worktree remove <folder>`
@@ -24,8 +31,11 @@ List / remove:       `git worktree list` · `git worktree remove <folder>`
 
 ## Rules that keep it clean
 1. Each chat stays in **its own folder, on its own branch** off `main`.
-2. Each chat edits files **only in its own folder**. Natural split here: ingest/pipeline
-   (`supabase/ingest/**`, `scripts/**`) vs. shop UI (`src/app/shop/**`, `src/components/**`).
+2. Each chat works **only in its own folder** (its worktree). Within that folder a chat may
+   edit **any file its task needs** — lanes are not file-fences (see the registry). The only
+   collision risk is two **live** chats editing the same files at once; when that happens, the
+   natural split is ingest/pipeline (`supabase/ingest/**`, `scripts/**`) vs. shop UI
+   (`src/app/**`, `src/components/**`).
 3. **Land work onto `main`** without touching the other chat's checkout:
    ```
    git fetch origin

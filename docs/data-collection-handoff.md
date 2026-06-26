@@ -6,8 +6,9 @@ shapes + legal posture). Last updated 2026-06-22.
 
 > ⚠️ **Run this workstream in ONE chat / its own git worktree.** Two chats sharing
 > the same working tree both pushed to `main` and caused branch-switch churn + near
-> clobbers. The "value module" chat owns the **bag-page UI/visualizations**; this
-> workstream owns the **data pipeline + loaded data**. Keep them separate.
+> clobbers. This is the **Data / capture** lane; the **UX / shop** lane owns the
+> bag-page UI/visualizations. Keep them separate. Lane ownership + live status: the
+> 🧭 Active-lanes registry at the top of [handoff.md](handoff.md) (this is its deep doc).
 
 ---
 
@@ -176,7 +177,7 @@ partners but it does not carry the resale players.
 
 | Partner | Network to join | Commission | Notes |
 |---|---|---|---|
-| **The RealReal** | **Direct** (`therealreal.com/affiliates` + `/real-partners`) | Buyer 5% (existing) / 7% (new) | ⭐ **Real Partners** consignor referral = the seller lever in `preferences.md`: ~$1,250 avg, up to $20k, earns on referred consignor's sales for first 120 days. "Real Friends" $125 promo through 2026-06. |
+| **The RealReal** | **Direct** (`therealreal.com/affiliates`) | Buyer 5% (existing) / 7% (new) | ✅ Buyer-side affiliate — keep. ❌ **Real Partners** consignor referral (`/real-partners`) is **NOT viable for this model** — see call finding below. |
 | **Rebag** | **CJ (Commission Junction)** | 7% (3% over $2,500), 30-day cookie, AOV ~$1,800 | product feed available |
 | **Fashionphile** | **Impact** (confirmed 2026-06-24; older listings mention ShareASale — ignore) | 5% + $50/new buyer, 30-day, net-60 | no self-referred sales |
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
@@ -194,14 +195,47 @@ new-retail apparel, not resale, so Rebag is the one relevant CJ fit. Once progra
 outbound links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps
 matches the locked monetization strategy.
 
+**⚠️ TRR Real Partners — closed for this model (call with the program lead, 2026-06-24).** The
+consignor-referral "Real Partners" program is **high-touch and relationship-based**, with **no
+trackable codes or links** for consignor referrals (their words: "we can't be blasting out codes… it
+would be untenable" — not offered even to influencers). There is therefore **no digital attribution
+mechanism** to wire into a bag page. They also don't want a partner that shows users *competing*
+consignment options (exactly what LC does), and prefer sole-recommendation organic relationships. The
+offer to "circle back in 2 weeks" was a soft close. **Action:** drop TRR Real Partners as the
+seller/consignor channel. **Keep** TRR's buyer-side affiliate (5%/7%, direct) — the lead confirmed it's
+a separate program, unaffected. The `$1,250` seller lever in the model now needs re-sourcing (see
+Madison Avenue Couture below; most other partners are buyer-side) or down-weighting — flag for
+`docs/monetization-projections.md`.
+
 **Additional appropriate brands (researched 2026-06-24):**
 - **The Luxury Closet** (CJ advertiser 5312449) — pre-loved + new designer, **flat 7.69%** all sales,
   7-day cookie, 60-day lock (better structure than Rebag; low historical EPC though). ✅ Applied via CJ 2026-06-24.
 - **eBay Partner Network (EPN)** — eBay is a major authenticated pre-owned luxury market; its own
-  network. ✅ **Applied 2026-06-24, under review** (≤24h). Registered the website property
-  (luxurycatalog.com, business model Content/Reviews). Commission is modest (Sale 1-4% USD) but value
-  = volume + a huge authenticated-resale price source for comparison pages.
-- **1stDibs** — vintage/high-end marketplace; **covered by Skimlinks** (network 67427), no separate app.
+  network. ✅ **APPROVED 2026-06-24** (eBay "accepted your proposed contract terms"; EPN accounts are
+  Impact-hosted, which is why the approval email linked to app.impact.com — legit, not phishing).
+  Registered the website property (luxurycatalog.com, business model Content/Reviews). Commission is
+  modest (Sale 1-4% USD) but value = volume + huge authenticated-resale catalog.
+  - **Affiliate LINKS: ✅ shipped in code** — `src/lib/affiliate.ts` `applyEbayAffiliate()` adds EPN
+    params (campaign id `5339158071`, non-secret, defaulted in code so it monetizes on deploy with no
+    env setup; commit f36d97f). eBay listing URLs auto-wrap via `affiliateListingUrl()`.
+  - **Data PULL via Browse API: 🟡 MAYBE / FUTURE (deprioritized).** Needs `EBAY_APP_ID` + `EBAY_CERT_ID`
+    from the eBay **Developer Program**, but **dev-program registration was REJECTED 2026-06-24**
+    ("problems with the data provided or other irregularities"). Low value: eBay was always **data +
+    links only, NO photos** (co-mingling ban in eBay's API License + seller-owned photos — see image
+    note below). Fallbacks if ever wanted: appeal eBay dev support / retry, or use the §5 browser-capture
+    method (no API keys). **Not blocking images** — those come from affiliate product feeds, not eBay.
+  - **eBay images: ❌ do not use.** EPN requires image rights/permission (seller-owned photos), and the
+    API License bans co-mingling eBay content with non-eBay listings — incompatible with our multi-platform
+    comparison UI. Licensed product images come from the CJ/Awin/Impact **product feeds** instead (see
+    "Product feeds = licensed images" below).
+- **1stDibs** — vintage/high-end marketplace; was to be **covered by Skimlinks** (network 67427) — but Skimlinks declined (below), so 1stDibs is uncovered for now.
+- **Skimlinks (catch-all) — ❌ REJECTED 2026-06-24.** "Your website is not suitable... at this time."
+  Per their criteria, the cause is **insufficient original content** for reviewers to determine the
+  site's purpose/value (NOT the fake-door/"coming soon" surfaces — those are fine, real sites use them;
+  owner corrected this). **Re-appliable** ("we regularly re-evaluate") once the site has real editorial
+  content (see Content plan in `docs/handoff.md`). **Impact:** **Vestiaire + 1stDibs are now uncovered**
+  (they were Skimlinks-only); directly-joined programs (eBay, myGemma, Rebag/TLC/TRR/Fashionphile) are
+  unaffected. Re-apply after the content batch ships.
 - **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
   myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
   Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
@@ -213,6 +247,82 @@ matches the locked monetization strategy.
   inquiry form (madisonavenuecouture.com/pages/affiliate); their client team follows up with next steps.
 - **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
   trade-dress/legal risk). **Cudoni** is defunct (closed 2023).
+
+**Product feeds = licensed images (the real photo pipeline; researched 2026-06-24).** This is how we
+get **real product images compliantly** — the locked image rule's "licensed affiliate galleries." CJ,
+Awin, and Impact all provide **product data feeds** (images + price + description + deep link, refreshed
+daily) and merchants supply "approved images… so publishers showcasing your brand have high-quality
+images" — i.e. **feed images are licensed for affiliate display** (verify each program's terms). This is
+fundamentally different from scraping a reseller (no license) and from eBay (off-limits, above).
+- **Awin** (myGemma): Toolbox → **Create-a-Feed** → "Enhanced (Google)" format → feed URL w/ a feed API
+  key (`https://productdata.awin.com/datafeed/list/apikey/<key>`); has `image_link`.
+- **CJ** (Rebag, The Luxury Closet): **Product Search API** (GraphQL, developers.cj.com) with CJ creds.
+- **Impact** (TheRealReal, Fashionphile): download **Product Catalog** via the impact.com platform/FTP.
+- **Gating:** each feed unlocks only once that program **approves** (all pending). **Build plan:** as each
+  approval lands, build a per-network feed ingester (extend the existing adapter pattern) → images +
+  prices + links land together, auto-refreshed. **UI:** show each listing with **loud origin-site
+  attribution + an obvious external-purchase handoff** (owner's call) — satisfies FTC disclosure + eBay's
+  "label clearly" rule + the compare-and-hand-off model, all at once.
+
+**Rental partners — NEW stream (researched 2026-06-24).** Rental is a third transaction type (buy /
+sell / **rent**) that maps onto the `want` intent ("not ready to buy? rent it first"). Both major
+handbag-rental players are reachable through networks already held — no new approval gate. Modeled as
+the 5th revenue stream in `monetization-projections.md`.
+
+| Partner | Network | Commission | Notes |
+|---|---|---|---|
+| **Vivrelle** | **ShareASale = Awin** (existing acct 2945769) | **~20%/sale** | Membership rental ($139–339/mo; Privée $800/mo). High rate; recurring. ⭐ best rental fit. |
+| **Rent the Runway** | **Skimlinks** (network 4419) + FlexOffers | **7%**, 30-day cookie | Covered by the Skimlinks catch-all. |
+
+**Gating (owner's call, 2026-06-24):** **apply to and get approved for the rental programs BEFORE building the bag-page "Rent it first" CTA** — same "after approval, not before" pattern as the Skimlinks install. **Status: ✅ owner applied to Vivrelle (Awin) 2026-06-24** + **BriteCo** (insurance, Awin). Rent the Runway rides the Skimlinks catch-all once Skimlinks approves. Only after a program approves: spec + build the rental CTA module (held until then).
+
+**Consignor-affiliate dig — Fashionphile / Rebag / Luxury Closet all ❌ (researched 2026-06-24).**
+Confirmed none has a consignor/seller-referral *affiliate* beyond its buyer-side program — **TRR Real
+Partners was the only formal one, and it's ruled out (above).** Don't keep hunting for a consignor
+affiliate at these:
+- **Fashionphile** — affiliate is buyer-side (5% + $50). Its "Partners Program" is **tax-free shopping
+  for resellers**, not a referral payout.
+- **Rebag** — buyer affiliate (CJ 7%) + a refer-a-friend that pays **$100 in Rebag *credit*** on a
+  *buyer's* purchase >$500. No consignor affiliate.
+- **The Luxury Closet** — buyer affiliate only (7.69% CJ); notably **welcomes price-comparison/review
+  sites** = clean buyer-side fit. No consignor affiliate.
+
+**Refer-a-friend codes — NOT a usable revenue mechanism (researched 2026-06-24).** Asked: could the
+owner paste a *personal* refer-a-friend code into LC outbound links? Verdict **no** — all pay store
+credit/personal discount (not cash to the LLC), are capped, and undermine the neutral-authority brand
+(coupon-farming look; the exact "blasting codes" vibe TRR's lead disliked). FTC disclosure would still
+apply. Specifics: **Poshmark/eBay** prohibit public posting of personal codes (friends-only; ban risk);
+**Vestiaire** allows public sharing but caps at 100 referees and pays a *discount code*; **Rebag** pays
+$100 *store credit*. Use proper affiliate/publisher programs instead.
+
+**Adjacent revenue streams (researched 2026-06-24)** — beyond buy/sell/rent, kept out of the model
+until pursued; listed in `monetization-projections.md` "other streams":
+- **Insurance lead-gen — BriteCo:** affiliate via **ShareASale (= Awin, existing acct)**, **$10 per
+  *lead*** (CPL — pays on the lead, not a sale). Fits the `have` state (owners insure). On-brand
+  (protection = trust). **Jewelers Mutual / Lavalier:** no public affiliate program (agent channel) —
+  direct outreach only if pursued.
+- **Amazon Associates — pursue (owner's call 2026-06-24):** two fits, not one. (a) **Care/accessories**
+  — base shapers, organizers, leather cleaner/conditioner (low per-unit, evergreen, fits `have`); plus
+  organizer brands (LUX LAIR, Handbag Social Club) run their own programs. (b) **Actual bags** — Amazon
+  sells contemporary/accessible-luxury brands (Marc Jacobs, Coach, Michael Kors, etc.) and runs official
+  **Amazon Luxury Stores**, so it's also a **buyer-affiliate channel**. ⚠️ **Authenticity guardrail:**
+  only link **Amazon-fulfilled / brand-sold / Luxury Stores** items — avoid third-party marketplace
+  "designer" listings (counterfeit risk → cuts against the authenticity mission). Apply directly at
+  affiliate-program.amazon.com (list luxurycatalog.com; describe content/comparison model). Note Amazon's
+  low, category-specific rates + short (24h) cookie.
+  - **📋 BACKLOG — Amazon Associates signup (paused 2026-06-24).** Started the signup via the browser;
+    **paused at the Amazon login gate** (Claude won't enter credentials). To resume: owner signs into the
+    Amazon account tied to Luxury Catalog LLC → Claude fills the **Account Info → Website/App List →
+    Profile** descriptive fields (website `luxurycatalog.com`; the "what's your site about" blurb + topics
+    + traffic/link-building answers are drafted in the chat log). **Owner-only steps:** tax interview
+    (SSN/EIN, W-9), payment/bank details, final accept+submit of the Operating Agreement. Reminder: Amazon
+    needs **~3 qualifying sales within 180 days** of signup or it auto-closes — time it for when the site
+    has live traffic.
+- **Repair/restoration:** **no public affiliate programs** (Leather Spa, Leather Surgeons, The Handbag
+  Spa/Clinic are direct/agent) — would need bespoke referral deals, not turnkey. Lower priority.
+- **Later/at scale:** premium display ads (Raptive/Mediavine at ~50–100K sessions/mo; UX/trust tax),
+  **B2B data/insights** from the per-spec price DB (the real moat — "WatchCharts for bags"), digital
+  products/courses off the expert-contributor ladder.
 
 **Skimlinks site install (dev task — owner's call: do AFTER approval, not before):** Skimlinks gave a JS snippet to drop just
 before `</body>`, scoped to `luxurycatalog.com` (publisher JS id `305125X1793317` — public, ships
