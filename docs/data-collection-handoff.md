@@ -117,9 +117,9 @@ Each new source = a parser to the shared `PriceObservation` contract + a target 
 
 | Thing | Status | Env var |
 |---|---|---|
-| **Skimlinks** (auto-affiliate, revenue) | ✅ live (script in layout) | `NEXT_PUBLIC_SKIMLINKS_ID` (defaults to `305125X1793317`) + `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` |
-| **Fashionphile / Impact** (5% + datafeed) | applied, awaiting approval | `NEXT_PUBLIC_AFFILIATE_FASHIONPHILE` |
-| **Rebag / CJ** (7%) | blocked — CJ signup flaky; retry or use Skimlinks | `NEXT_PUBLIC_AFFILIATE_THEREALREAL/…` |
+| **Skimlinks** (auto-affiliate, revenue) | ❌ **REJECTED 2026-06-25** ("site not suitable at this time" — generic, no specific fault; they re-evaluate). Likely cause = thin PUBLISHED content + low traffic (17 articles still drafts). Reapply after publishing a content batch. Script still in layout but earns nothing until approved. | `NEXT_PUBLIC_SKIMLINKS_ID` (defaults to `305125X1793317`) + `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` |
+| **Fashionphile / Impact** (5% + datafeed) | applied, awaiting approval (same content gate likely applies) | `NEXT_PUBLIC_AFFILIATE_FASHIONPHILE` |
+| **Rebag / CJ** (7%) | blocked — CJ signup flaky; retry after publishing (Skimlinks fallback is gone) | `NEXT_PUBLIC_AFFILIATE_THEREALREAL/…` |
 | **eBay Browse API** (current resale) | dev account pending (~1 day) | `EBAY_APP_ID`, `EBAY_CERT_ID` |
 | **eBay Marketplace Insights** (sold) | gated — Application Growth Check | — |
 | **LLM enrichment** | ready | `ANTHROPIC_API_KEY` |
