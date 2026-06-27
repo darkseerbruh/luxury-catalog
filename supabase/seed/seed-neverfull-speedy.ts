@@ -17,7 +17,7 @@ Start with attention, because attention is what props a resale price up. Over th
 
 ## What they ask vs what they sell for
 
-Now the prices, and here it flips. On the premium resellers, the **Speedy 30 lists at a median around $1,623** (n=82), higher than the **Neverfull MM at about $1,245** (n=141). The smaller sizes track the same order: Speedy 25 near $1,520 (n=48), Neverfull PM near $1,185 (n=54). So the more-searched, higher-listed bag is the Speedy.
+Now the prices. On the premium resellers the two ask in much the same band: the **Speedy 30 lists at a median around $1,623** (n=82, June 2026), a touch above the **Neverfull MM at about $1,500** (n=336). So on attention and on the asking tag, the Speedy is at least the Neverfull's equal.
 
 But a listing price is a hope, not a sale. Look at what each bag actually closes at on eBay completed sales, and the order reverses:
 
@@ -25,7 +25,7 @@ But a listing price is a hope, not a sale. Look at what each bag actually closes
 
 The **Neverfull MM sells at a median near $770** (n=87). The **Speedy 30 sells near $566** (n=93). The bag that lists higher sells for less. Across all its sizes the Speedy realizes about $593 (n=146), still under the Neverfull. The Neverfull is the better value holder of the two, even as it loses the search race.
 
-> The useful takeaway sits in the gap between the two bars. Both bags ask far above what they fetch: the Neverfull MM lists around $1,245 and sells near $770, the Speedy 30 lists around $1,623 and sells near $566. The asking price is where a seller starts. The sold price is the market.
+> The useful takeaway sits in the gap between the two bars. Both bags ask far above what they fetch: the Neverfull MM lists around $1,500 and sells near $770, the Speedy 30 lists around $1,623 and sells near $566. The asking price is where a seller starts. The sold price is the market.
 
 Part of that ask-to-sold spread is venue. The premium resellers authenticate and price at the top; eBay's peer-to-peer sales run cheaper. But the spread is wide enough on both bags that a buyer has real room below any listing.
 

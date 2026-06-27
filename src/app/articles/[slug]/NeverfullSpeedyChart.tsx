@@ -25,7 +25,7 @@ const money = (n: number) => "$" + n.toLocaleString();
 
 type Bag = { label: string; variant: number; accent: string; ask: number; askN: number; sold: number; soldN: number };
 const BAGS: Bag[] = [
-  { label: "Neverfull MM", variant: 218, accent: GOLD, ask: 1245, askN: 141, sold: 770, soldN: 87 },
+  { label: "Neverfull MM", variant: 218, accent: GOLD, ask: 1500, askN: 336, sold: 770, soldN: 87 },
   { label: "Speedy 30", variant: 498, accent: SPEEDY, ask: 1623, askN: 82, sold: 566, soldN: 93 },
 ];
 
@@ -83,7 +83,7 @@ export async function NeverfullSpeedyChart() {
         </div>
       </div>
       <figcaption className="sr-only">
-        Louis Vuitton Neverfull versus Speedy, asking versus sold: the Neverfull MM asks about $1,245 and sells near $770, while the Speedy 30 asks about $1,623 but sells near $566. The Speedy lists higher yet the Neverfull sells for more, and both sell well under their asking price.
+        Louis Vuitton Neverfull versus Speedy, asking versus sold: the Neverfull MM asks about $1,500 and sells near $770, while the Speedy 30 asks about $1,623 but sells near $566. The Speedy lists a little higher yet the Neverfull sells for more, and both sell well under their asking price.
       </figcaption>
     </figure>
   );
