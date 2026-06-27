@@ -1,0 +1,45 @@
+name: Publish articles (by slug)
+
+# Operator one-shot to take a vetted set of draft articles live (batch equivalent of the
+# author UI's publish button). Manual only. Lists drafts, and with write=true flips an
+# explicit slug allowlist from draft -> published. Reversible via the UI (unpublish).
+#
+# SECRETS: SUPABASE_SERVICE_ROLE_KEY (already on this repo, same as market-refresh).
+
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Comma-separated slugs to publish (empty = list drafts only)"
+        required: false
+        default: ""
+      write:
+        description: "Apply? false = dry run (list + preview, no DB writes)"
+        required: false
+        default: "false"
+
+concurrency:
+  group: publish-articles
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Publish (or list / dry-run)
+        run: |
+          if [ "${{ github.event.inputs.write }}" = "true" ]; then
+            npx tsx supabase/ingest/publish-articles.ts --slugs="${{ github.event.inputs.slugs }}" --write
+          else
+            npx tsx supabase/ingest/publish-articles.ts --slugs="${{ github.event.inputs.slugs }}"
+          fi
