@@ -108,8 +108,17 @@ layer rather than new pipelines. Each `/bag/[id]` keeps its own URL; the new pag
    `/search`. Built only on data we already hold; leather pages show only real `material`
    fields (no fabricated definition); the resale read uses the curated `resale_value_impact`
    column, hedged as an estimate.
-2. **Phase 2 (one migration for Follow):** brand artist-header (Follow + About + Similar houses);
-   `/era/[decade]` and `/color/[slug]` pages; follower-count social proof (gated until real).
+2. **Phase 2 — SHIPPED 2026-06-27 (same branch, gates green, awaiting owner merge + migration):**
+   `/era/[slug]` (by production-start decade) and `/color/[slug]` object pages; Bag DNA extended
+   to 6 nodes (House/Leather/Hardware/Shape/Colour/Era); brand **artist-header** with a **Follow**
+   control + **Similar houses** rail (same-tier-first). Follow is backed by **migration 0032
+   (`brand_follow`)** and degrades gracefully (renders nothing until the table exists; signed-out
+   gets a sign-in nudge; follower count read via service-role + **content-gated at 10**, no
+   fabricated proof). About this house already existed on the brand page; an Explore-styles rail
+   was left out as redundant with the existing styles list. Files: `src/lib/brand-follow.ts`,
+   `brand-follow-actions.ts`, `src/app/brand/[brandId]/BrandFollow.tsx`, `getColorObject`/
+   `getEraObject` in `queries.ts`. **Owner action: apply `0032` via the db-migrate Action to
+   activate Follow.**
 3. **Blocked:** the Designer / creative-director object, until we source and store that field.
 
 ## Open dependencies
