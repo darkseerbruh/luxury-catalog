@@ -272,6 +272,31 @@ export async function getTopReviewers(limit = 25): Promise<TopReviewer[]> {
     .slice(0, limit);
 }
 
+/**
+ * Batch-look up avatar URLs for a set of user ids, keyed by user id. Reads the
+ * public-readable `profile` rows directly (same RLS surface as getPublicProfile),
+ * so it never exposes a private avatar. Used to put faces on the leaderboards
+ * without touching the closet_stats view (which carries no avatar column). Returns
+ * an empty map when env/migrations are absent, so callers degrade to initials.
+ */
+export async function getAvatarUrls(
+  userIds: string[],
+): Promise<Map<string, string | null>> {
+  const out = new Map<string, string | null>();
+  const ids = [...new Set(userIds)].filter(Boolean);
+  if (!hasSupabase() || ids.length === 0) return out;
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("profile")
+    .select("id, avatar_url")
+    .in("id", ids);
+  if (error || !data) return out;
+  for (const row of data as { id: string; avatar_url: string | null }[]) {
+    out.set(row.id, row.avatar_url ?? null);
+  }
+  return out;
+}
+
 /** Whether the current user is following (favoriting) the given closet owner. */
 export async function isFavoritingCloset(ownerUserId: string): Promise<boolean> {
   if (!hasSupabase()) return false;

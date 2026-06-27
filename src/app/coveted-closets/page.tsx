@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getCovetedClosets, getTopReviewers } from "@/lib/social";
+import { getCovetedClosets, getTopReviewers, getAvatarUrls } from "@/lib/social";
+import { Avatar } from "@/components/Avatar";
 import { TrustBadges } from "@/components/TrustBadges";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,12 @@ export default async function LeaderboardsPage() {
   const [closets, reviewers] = await Promise.all([
     getCovetedClosets(50),
     getTopReviewers(25),
+  ]);
+  // One batch lookup puts faces on both boards without touching the
+  // closet_stats view; missing avatars fall back to the branded initial.
+  const avatars = await getAvatarUrls([
+    ...closets.map((c) => c.userId),
+    ...reviewers.map((r) => r.userId),
   ]);
 
   return (
@@ -52,6 +59,11 @@ export default async function LeaderboardsPage() {
               const inner = (
                 <div className="flex items-center gap-4 rounded-2xl border border-border bg-surface px-5 py-4 transition-colors hover:border-gold">
                   <span className="w-7 shrink-0 font-serif text-lg text-gold">{i + 1}</span>
+                  <Avatar
+                    src={avatars.get(c.userId)}
+                    name={c.displayName || c.handle}
+                    size="sm"
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-serif text-foreground">
                       {c.displayName || (c.handle ? `@${c.handle}` : "A collector")}
@@ -109,6 +121,11 @@ export default async function LeaderboardsPage() {
               const inner = (
                 <div className="flex items-center gap-4 rounded-2xl border border-border bg-surface px-5 py-4 transition-colors hover:border-gold">
                   <span className="w-7 shrink-0 font-serif text-lg text-gold">{i + 1}</span>
+                  <Avatar
+                    src={avatars.get(r.userId)}
+                    name={r.displayName || r.handle}
+                    size="sm"
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-serif text-foreground">
                       {r.displayName || (r.handle ? `@${r.handle}` : "A reviewer")}
