@@ -1431,6 +1431,228 @@ export async function getThriftFinds(limit = 200): Promise<ThriftFindEntry[]> {
   }));
 }
 
+// ============ Attribute objects (Bag DNA destination pages) ============
+//
+// The Spotify "object-oriented UX" lesson: an attribute (leather, silhouette,
+// hardware) is a first-class object with its own page and a rail of bags that
+// share it, not a flat search link. Spec: docs/ux/object-oriented-ux.md.
+// Everything here is built ONLY from catalogued attributes (never-invent).
+
+/** URL-safe slug from a display name ("Caviar Leather" -> "caviar-leather"). */
+export function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** A bag that carries a given attribute, for the object page's "Explore" rail. */
+export interface AttributeBag {
+  variantId: number;
+  styleName: string;
+  brandName: string;
+  sizeLabel: string | null;
+  exteriorColorway: string | null;
+}
+
+type AttrVariantRow = {
+  variant_id: number;
+  size_label: string | null;
+  exterior_colorway: string | null;
+  style:
+    | { name: string; brand: { brand_id: number; name: string } | { brand_id: number; name: string }[] | null }
+    | { name: string; brand: { brand_id: number; name: string } | { brand_id: number; name: string }[] | null }[]
+    | null;
+};
+
+const ATTR_VARIANT_SELECT =
+  "variant_id, size_label, exterior_colorway, style:style_id!inner(name, silhouette, brand:brand_id(brand_id, name))";
+
+function mapAttrBags(rows: AttrVariantRow[]): AttributeBag[] {
+  return rows.flatMap((r) => {
+    const style = (Array.isArray(r.style) ? r.style[0] : r.style) ?? null;
+    if (!style) return [];
+    return [
+      {
+        variantId: r.variant_id,
+        styleName: style.name,
+        brandName: embeddedName(style.brand),
+        sizeLabel: r.size_label,
+        exteriorColorway: r.exterior_colorway,
+      },
+    ];
+  });
+}
+
+/** Distinct house names from a bag set, in first-seen order. */
+function distinctHouses(bags: AttributeBag[]): string[] {
+  return [...new Set(bags.map((b) => b.brandName).filter((n): n is string => Boolean(n)))];
+}
+
+export interface LeatherObject {
+  slug: string;
+  name: string;
+  materialType: string | null;
+  waterResistance: string | null;
+  scratchResistance: string | null;
+  weatherFriendliness: string | null;
+  hardinessOverall: string | null;
+  careNotes: string | null;
+  authenticationNotes: string | null;
+  resaleValueImpact: string | null;
+  brandContext: string | null;
+  bagCount: number;
+  houses: string[];
+  bags: AttributeBag[];
+}
+
+type MaterialRow = {
+  material_id: number;
+  name: string;
+  material_type: string | null;
+  water_resistance: string | null;
+  scratch_resistance: string | null;
+  weather_friendliness: string | null;
+  hardiness_overall: string | null;
+  care_notes: string | null;
+  authentication_notes: string | null;
+  resale_value_impact: string | null;
+  brand_context: string | null;
+};
+
+/** How many descriptive fields a material row actually has (to pick the richest duplicate). */
+function materialFieldsPopulated(m: MaterialRow): number {
+  return [
+    m.water_resistance,
+    m.scratch_resistance,
+    m.weather_friendliness,
+    m.hardiness_overall,
+    m.care_notes,
+    m.authentication_notes,
+    m.resale_value_impact,
+    m.brand_context,
+  ].filter(Boolean).length;
+}
+
+/**
+ * The leather/material object page. Identity + real durability/care/authentication
+ * detail from the `material` table, plus the bags that carry it. RESILIENT: returns
+ * null on any error so the route 404s cleanly rather than crashing. Never invents a
+ * definition — only the catalogued fields are shown.
+ */
+export async function getLeatherObject(slug: string): Promise<LeatherObject | null> {
+  try {
+    const { data: mats, error } = await getSupabase()
+      .from("material")
+      .select(
+        "material_id, name, material_type, water_resistance, scratch_resistance, weather_friendliness, hardiness_overall, care_notes, authentication_notes, resale_value_impact, brand_context",
+      );
+    if (error || !mats) return null;
+    const matching = (mats as MaterialRow[]).filter((m) => slugify(m.name) === slug);
+    if (matching.length === 0) return null;
+    const pick = matching.slice().sort((a, b) => materialFieldsPopulated(b) - materialFieldsPopulated(a))[0];
+    const ids = matching.map((m) => m.material_id);
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .in("exterior_material_id", ids)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+
+    return {
+      slug,
+      name: pick.name,
+      materialType: pick.material_type,
+      waterResistance: pick.water_resistance,
+      scratchResistance: pick.scratch_resistance,
+      weatherFriendliness: pick.weather_friendliness,
+      hardinessOverall: pick.hardiness_overall,
+      careNotes: pick.care_notes,
+      authenticationNotes: pick.authentication_notes,
+      resaleValueImpact: pick.resale_value_impact,
+      brandContext: pick.brand_context,
+      bagCount: count ?? bags.length,
+      houses: distinctHouses(bags),
+      bags,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export interface GroupingObject {
+  slug: string;
+  name: string;
+  bagCount: number;
+  houses: string[];
+  bags: AttributeBag[];
+}
+
+/**
+ * The silhouette object page — bags built on a given silhouette (a `style` column).
+ * Resolves the slug to the real catalogued value, never a guess. RESILIENT.
+ */
+export async function getSilhouetteObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: sils, error } = await getSupabase()
+      .from("style")
+      .select("silhouette")
+      .not("silhouette", "is", null);
+    if (error || !sils) return null;
+    const values = [
+      ...new Set(
+        (sils as { silhouette: string | null }[]).map((s) => s.silhouette).filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("style.silhouette", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The hardware object page — bags with a given hardware colour (a `variant` column).
+ * Resolves the slug to a real catalogued value. RESILIENT.
+ */
+export async function getHardwareObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: hw, error } = await getSupabase()
+      .from("variant")
+      .select("hardware_color")
+      .not("hardware_color", "is", null)
+      .limit(3000);
+    if (error || !hw) return null;
+    const values = [
+      ...new Set(
+        (hw as { hardware_color: string | null }[]).map((r) => r.hardware_color).filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("hardware_color", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
 // ============ Sitemap targets (programmatic SEO/GEO) ============
 
 /** All indexable entity IDs for sitemap.xml — bag variants + brands. */
