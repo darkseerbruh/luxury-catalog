@@ -37,6 +37,8 @@ import { hasActiveAuthenticators } from "@/lib/authentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
+import BagStory, { type StoryMarketFact } from "./BagStory";
+import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import VariantSelector from "./VariantSelector";
 import { BagImage } from "@/components/BagImage";
@@ -470,6 +472,24 @@ export default async function BagDetailPage({
     });
   }
 
+  // "The Story" editorial module — cited origin/design/culture tidbits for the
+  // hero icons, plus a self-updating market fact derived from the resale rows
+  // above (no new data source; renders only when we've seeded a story).
+  const bagStory = getBagStory(v.style.name);
+  const storyMarketFact: StoryMarketFact | null =
+    bagStory && fairMarket
+      ? {
+          medianResale: fairMarket.med,
+          count: fairMarket.count,
+          currency: fairMarket.currency,
+          retentionPct:
+            v.retailPriceOriginal && v.retailPriceOriginal > 0
+              ? Math.round((fairMarket.med / v.retailPriceOriginal) * 100)
+              : null,
+          asOf: resaleAsOf,
+        }
+      : null;
+
   // Whether the outbound resale / consignor links resolve (drives the top
   // action cluster's Buy/Sell CTAs and the jump-nav entries).
   const hasBuyLinks = buildResaleLinks(v.brand.name, v.style.name).length > 0;
@@ -477,6 +497,7 @@ export default async function BagDetailPage({
 
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
+    bagStory ? { id: "the-story", label: "The story" } : null,
     photos.length > 0 ? { id: "photos", label: "Photos" } : null,
     { id: "specifications", label: "Specs" },
     authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
@@ -664,6 +685,17 @@ export default async function BagDetailPage({
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
+
+      {/* The Story — cited origin/design/culture tidbits + the people + a
+          self-updating market fact (our "About this bag" / "Bag DNA" layer). */}
+      {bagStory && (
+        <BagStory
+          story={bagStory}
+          brandName={v.brand.name}
+          styleName={v.style.name}
+          marketFact={storyMarketFact}
+        />
+      )}
 
       {/* Embedded video reviews — the visual layer while v1 is text-first */}
       <Resources resources={resources} />
