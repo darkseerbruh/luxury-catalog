@@ -524,4 +524,136 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
   },
+  {
+    match: ["jackie"],
+    tagline: "First called the G1244, until Jackie Kennedy bought six and was rarely photographed without one.",
+    people: [
+      {
+        name: "Jackie Kennedy Onassis",
+        role: "Namesake",
+        note: "Carried the bag so constantly that Gucci renamed it in her honor.",
+      },
+      {
+        name: "Alessandro Michele",
+        role: "Gucci creative director",
+        note: "Revived it as the Jackie 1961 in 2020.",
+      },
+    ],
+    watchQuery: "Gucci Jackie 1961 bag history Jackie Kennedy",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "From a product code to a first lady",
+        body:
+          "Gucci introduced the bag in 1961 as the G1244. Jacqueline Kennedy Onassis was photographed with it so often that the house simply started calling it the Jackie.",
+        sources: [
+          { name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Gucci_Jackie" },
+          { name: "Editorialist", url: "https://editorialist.com/fashion/gucci-jackie-bag/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "A relaxed half-moon",
+        body:
+          "The Jackie is a half-moon hobo shape with a piston-shaped closure, looser and softer than the structured bags of its day. Jackie reportedly used its wide base to shield her face from the paparazzi.",
+        sources: [{ name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Gucci_Jackie" }],
+      },
+      {
+        kind: "trivia",
+        title: "Six in one visit",
+        body:
+          "As the story goes, in 1964 she walked into a Gucci boutique and left with six of the bags. Decades later Alessandro Michele brought it back as the Jackie 1961 at Gucci's Men's Fall 2020 show.",
+        sources: [
+          { name: "Editorialist", url: "https://editorialist.com/fashion/gucci-jackie-bag/" },
+          { name: "Bustle", url: "https://www.bustle.com/style/gucci-jackie-1961-bag" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["bamboo"],
+    tagline: "Born from postwar scarcity, its handle is still bent over an open flame in Florence.",
+    people: [
+      {
+        name: "Guccio Gucci",
+        role: "Founder",
+        note: "The house whose Florentine artisans improvised the bamboo handle in 1947.",
+      },
+    ],
+    watchQuery: "Gucci Bamboo 1947 bag history",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Made from what was left",
+        body:
+          "Gucci introduced the Bamboo bag in 1947, in the lean years after the war when leather and metal were scarce in Italy. Short on materials, the house's artisans turned to bamboo imported from Japan.",
+        sources: [
+          { name: "Into Archive", url: "https://www.intoarchive.com/editorials/gucci-bamboo-bag-history" },
+          { name: "Weekly Lux Drop", url: "https://www.weeklyluxdrop.com/blogs/news/an-iconic-gucci-piece-the-gucci-bamboo-bag-a-timeless-creation-born-from-adversity" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Bent over a flame",
+        body:
+          "Craftsmen heated and curved the bamboo over an open flame into its signature arched handle, a method that holds its shape once cooled. Each handle is still shaped by hand in Florence using that 1947 technique.",
+        sources: [
+          { name: "Into Archive", url: "https://www.intoarchive.com/editorials/gucci-bamboo-bag-history" },
+          { name: "Barnebys", url: "https://www.barnebys.com/blog/how-the-gucci-bag-got-its-bamboo-handle" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "Patented in 1958",
+        body:
+          "The design was distinctive enough that Gucci secured a patent on the bamboo bag in 1958, so no other house could copy it.",
+        sources: [{ name: "Into Archive", url: "https://www.intoarchive.com/editorials/gucci-bamboo-bag-history" }],
+      },
+    ],
+  },
+  {
+    match: ["triomphe"],
+    tagline: "A logo Céline Vipiana spotted on the Arc de Triomphe in 1971, revived as a clasp by Hedi Slimane in 2018.",
+    people: [
+      {
+        name: "Céline Vipiana",
+        role: "Founder",
+        note: "Noticed the interlocking chains around the Arc de Triomphe and turned them into the house emblem.",
+      },
+      {
+        name: "Hedi Slimane",
+        role: "Celine creative director",
+        note: "Revived the 1970s emblem as the Triomphe clasp for his 2018 debut.",
+      },
+    ],
+    watchQuery: "Celine Triomphe bag history Hedi Slimane",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A chain around a monument",
+        body:
+          "The name and clasp trace to the Arc de Triomphe. One afternoon in 1971 the founder, Céline Vipiana, broke down at Place de l'Étoile in Paris and noticed the interlocking chain links circling the monument, each like a pair of joined Cs. That became the Triomphe emblem.",
+        sources: [
+          { name: "The Hosta", url: "https://www.the-hosta.com/en-us/blogs/handbag-faqs/what-is-the-story-behind-the-celine-triomphe-logo" },
+          { name: "Celine", url: "https://www.celine.com/en-int/cm/the-triomphe-bag" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The clasp is the logo",
+        body:
+          "Hedi Slimane revived that archival double-C emblem as the bag's clasp for his debut Celine collection in 2018, so the closure that holds the bag shut is also the house signature.",
+        sources: [
+          { name: "Bagaholicboy", url: "https://bagaholicboy.com/2023/05/celine-everything-to-know-about-the-iconic-triomphe" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "The quiet-luxury signature",
+        body:
+          "Under Slimane the Triomphe became Celine's defining bag and a staple of the quiet-luxury look, recognized by its clasp rather than a loud logo.",
+        sources: [{ name: "myGemma", url: "https://mygemma.com/blogs/news/the-history-of-celine" }],
+      },
+    ],
+  },
 ];
