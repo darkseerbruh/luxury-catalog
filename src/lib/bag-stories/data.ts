@@ -399,4 +399,129 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
   },
+  {
+    match: ["saddle"],
+    tagline:
+      "John Galliano's equestrian bag became the first It bag of the 2000s, faded, then came roaring back.",
+    people: [
+      {
+        name: "John Galliano",
+        role: "Dior creative director",
+        note: "Introduced the asymmetrical saddle-shaped bag in 1999.",
+      },
+      {
+        name: "Sarah Jessica Parker",
+        role: "The screen moment",
+        note: "Carried it as Carrie Bradshaw on Sex and the City, sealing its Y2K fame.",
+      },
+    ],
+    watchQuery: "Dior Saddle bag history John Galliano",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A curve borrowed from a horse",
+        body:
+          "Dior introduced the Saddle in 1999 under John Galliano. Its asymmetrical, saddle-shaped body, hand-stitched piping and dangling D charm debuted in the Spring/Summer 2000 collection.",
+        sources: [{ name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Dior_Saddle_bag" }],
+      },
+      {
+        kind: "culture",
+        title: "Carrie Bradshaw's bag",
+        body:
+          "The Saddle took off in the early 2000s on figures like Paris Hilton and, most famously, Carrie Bradshaw in Sex and the City, styled by Patricia Field in season three. Vogue later called it a pop-culture phenomenon and a defining Y2K piece.",
+        sources: [
+          { name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Dior_Saddle_bag" },
+          { name: "Hypebae", url: "https://hypebae.com/2018/10/dior-saddle-bag-history-john-galliano" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "Gone, then back again",
+        body:
+          "By 2001 Dior's accessories sales had reportedly jumped about 60 percent. The bag faded with the era, then Maria Grazia Chiuri revived it in 2018 and a new generation made it a hit all over again.",
+        sources: [{ name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Dior_Saddle_bag" }],
+      },
+    ],
+  },
+  {
+    match: ["marmont"],
+    tagline: "Alessandro Michele scaled up a 1970s belt buckle and made one of the decade's most-searched bags.",
+    people: [
+      {
+        name: "Alessandro Michele",
+        role: "Gucci creative director",
+        note: "Launched the Marmont early in his tenure and built it around an archival Double G.",
+      },
+    ],
+    watchQuery: "Gucci GG Marmont bag history Alessandro Michele",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A belt buckle, supersized",
+        body:
+          "The GG Marmont arrived for Fall/Winter 2016, early in Alessandro Michele's tenure. He pulled the Double G from a 1970s Gucci belt buckle, scaled it up, gave it an antiqued finish and set it front and center.",
+        sources: [
+          { name: "Rebag", url: "https://www.rebag.com/thevault/gucci-101-marmont-collection/" },
+          { name: "PurseBlog", url: "https://www.purseblog.com/gucci/the-ultimate-gucci-marmont-bag-guide/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The chevron quilt",
+        body:
+          "The Marmont is instantly known for its soft matelassé chevron leather. Matelassé is a padded, quilted texture, here stitched into a raised chevron pattern.",
+        sources: [
+          { name: "Fashionphile", url: "https://www.fashionphile.com/blogs/academy/a-gucci-marmont-guide" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "The resale obsession",
+        body:
+          "The Double G hardware and matelassé leather became shorthand for Gucci's maximalist resurgence. Over the decade since, the Marmont has stayed one of the most bought, resold and searched designer bags in the world.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/gucci-101-marmont-collection/" }],
+      },
+    ],
+  },
+  {
+    match: ["dionysus"],
+    tagline: "Named for a Greek god who, the myth says, rode a tiger across a river.",
+    people: [
+      {
+        name: "Alessandro Michele",
+        role: "Gucci creative director",
+        note: "Introduced the Dionysus in 2015 as a statement of his archival, maximalist Gucci.",
+      },
+    ],
+    watchQuery: "Gucci Dionysus bag history tiger clasp",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A god among bags",
+        body:
+          "When Alessandro Michele became Gucci's creative director in 2015 he introduced the Dionysus, named for the ancient Greek god of wine, celebration and a touch of madness.",
+        sources: [
+          { name: "Rebag", url: "https://www.rebag.com/thevault/gucci-101-the-dionysus-collection/" },
+          { name: "Bustle", url: "https://www.bustle.com/style/gucci-dionysus-bag" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The tiger-head clasp",
+        body:
+          "The two tiger heads on the closure come from a myth in which Dionysus crossed a river on a tiger's back, the river later named the Tigris. The horseshoe shape behind them nods to Gucci's long equestrian heritage.",
+        sources: [
+          { name: "Rebag", url: "https://www.rebag.com/thevault/gucci-101-the-dionysus-collection/" },
+          { name: "NGV", url: "https://www.ngv.vic.gov.au/essay/dionysus-bag/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "Michele's calling card",
+        body:
+          "Layered with mythology and archival references, the Dionysus helped define Michele's eclectic, maximalist era at Gucci and became one of the house's signature modern bags.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/gucci-101-the-dionysus-collection/" }],
+      },
+    ],
+  },
 ];
