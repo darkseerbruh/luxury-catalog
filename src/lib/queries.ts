@@ -1653,6 +1653,67 @@ export async function getHardwareObject(slug: string): Promise<GroupingObject | 
   }
 }
 
+/**
+ * The colour object page — bags in a given exterior colourway (a `variant` column).
+ * Resolves the slug to a real catalogued value. RESILIENT.
+ */
+export async function getColorObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: cols, error } = await getSupabase()
+      .from("variant")
+      .select("exterior_colorway")
+      .not("exterior_colorway", "is", null)
+      .limit(5000);
+    if (error || !cols) return null;
+    const values = [
+      ...new Set(
+        (cols as { exterior_colorway: string | null }[])
+          .map((r) => r.exterior_colorway)
+          .filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("exterior_colorway", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The era object page — bags whose production began in a given decade (from
+ * `variant.year_start`). The slug is a decade like "2010s". RESILIENT; returns null
+ * for a malformed decade or when no bags fall in it (a decade with no bags is not a
+ * page worth showing).
+ */
+export async function getEraObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const m = /^(\d{4})s$/.exec(slug);
+    if (!m) return null;
+    const decade = parseInt(m[1], 10);
+    if (decade % 10 !== 0) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .gte("year_start", decade)
+      .lte("year_start", decade + 9)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    if (bags.length === 0) return null;
+    return { slug, name: `${decade}s`, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
 // ============ Sitemap targets (programmatic SEO/GEO) ============
 
 /** All indexable entity IDs for sitemap.xml — bag variants + brands. */

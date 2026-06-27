@@ -477,8 +477,10 @@ export default async function BagDetailPage({
   const hasSellLinks = buildConsignmentLinks(v.brand.name, v.style.name).length > 0;
 
   // Bag DNA renders when the bag has at least one composition attribute beyond its
-  // house (leather / hardware / silhouette) — see BagDNA's own ≥2-card guard.
-  const hasDna = Boolean(v.exteriorMaterial?.name || v.hardwareColor || v.style.silhouette);
+  // house (leather / hardware / shape / colour / era) — see BagDNA's ≥2-card guard.
+  const hasDna = Boolean(
+    v.exteriorMaterial?.name || v.hardwareColor || v.style.silhouette || v.exteriorColorway || v.yearStart,
+  );
 
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
@@ -679,6 +681,9 @@ export default async function BagDetailPage({
         leather={v.exteriorMaterial?.name ?? null}
         hardware={v.hardwareColor}
         silhouette={v.style.silhouette}
+        colorway={v.exteriorColorway}
+        yearStart={v.yearStart}
+        yearEnd={v.yearEnd}
       />
 
       {/* Embedded video reviews — the visual layer while v1 is text-first */}

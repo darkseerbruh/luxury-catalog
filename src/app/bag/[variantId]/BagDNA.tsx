@@ -8,9 +8,8 @@ import { slugify } from "@/lib/queries";
  * value exists, so it degrades gracefully on thin variants. Pure server-rendered
  * links (no client JS) so every edge is crawlable for GEO.
  *
- * Phase 1 nodes: House, Leather, Hardware, Shape. Era and Colour join in Phase 2
- * (their own object pages); the Designer node waits on creative-director data the
- * catalog does not hold yet. See docs/ux/object-oriented-ux.md.
+ * Nodes: House, Leather, Hardware, Shape, Colour, Era. The Designer node waits on
+ * creative-director data the catalog does not hold yet. See docs/ux/object-oriented-ux.md.
  */
 export default function BagDNA({
   brandId,
@@ -19,6 +18,9 @@ export default function BagDNA({
   leather,
   hardware,
   silhouette,
+  colorway,
+  yearStart,
+  yearEnd,
 }: {
   brandId: number;
   brandName: string;
@@ -26,7 +28,13 @@ export default function BagDNA({
   leather: string | null;
   hardware: string | null;
   silhouette: string | null;
+  colorway: string | null;
+  yearStart: number | null;
+  yearEnd: number | null;
 }) {
+  const eraDecade = yearStart != null ? Math.floor(yearStart / 10) * 10 : null;
+  const eraYears =
+    yearStart != null ? (yearEnd != null ? `${yearStart}–${yearEnd}` : `${yearStart} to now`) : null;
   const dnaCards: (DnaCardProps | null)[] = [
     {
       label: "House",
@@ -60,6 +68,24 @@ export default function BagDNA({
           meta: null,
           href: `/silhouette/${slugify(silhouette)}`,
           swatch: "#262019",
+        }
+      : null,
+    colorway
+      ? {
+          label: "Colour",
+          value: colorway,
+          meta: null,
+          href: `/color/${slugify(colorway)}`,
+          swatch: colorSwatch(colorway),
+        }
+      : null,
+    eraDecade != null
+      ? {
+          label: "Era",
+          value: `${eraDecade}s`,
+          meta: eraYears,
+          href: `/era/${eraDecade}s`,
+          swatch: "conic-gradient(from 180deg,#2a2620,#3a342a,#2a2620)",
         }
       : null,
   ];
@@ -133,4 +159,24 @@ function hardwareSwatch(color: string): string {
     return "linear-gradient(135deg,#d8d8de,#8b8b93)";
   if (k.includes("black")) return "linear-gradient(135deg,#2c2c2c,#0f0f0f)";
   return "linear-gradient(135deg,#3a342a,#242019)";
+}
+
+/** A swatch keyed to the colour word, so the card reads at a glance. Never claims a
+ *  precise shade; it is a gentle visual cue over the real colourway label. */
+function colorSwatch(colorway: string): string {
+  const k = colorway.toLowerCase();
+  const map: { test: RegExp; bg: string }[] = [
+    { test: /black|noir|nero/, bg: "linear-gradient(135deg,#2c2c2c,#0d0d0d)" },
+    { test: /white|blanc|chalk|ivory|cream|beige|tan|etoupe|trench/, bg: "linear-gradient(135deg,#efe7d6,#cdbfa3)" },
+    { test: /brown|chocolate|coffee|cognac|caramel|camel|gold|tan/, bg: "linear-gradient(135deg,#9a6f43,#5e3f24)" },
+    { test: /red|rouge|cherry|burgundy|bordeaux|wine/, bg: "linear-gradient(135deg,#a23b34,#5e1f1c)" },
+    { test: /pink|rose|blush|fuchsia/, bg: "linear-gradient(135deg,#e3a9b8,#b9697f)" },
+    { test: /blue|navy|denim|cobalt|teal/, bg: "linear-gradient(135deg,#4a6a8a,#26384d)" },
+    { test: /green|olive|khaki|emerald|sage/, bg: "linear-gradient(135deg,#5d6f4a,#33402a)" },
+    { test: /grey|gray|silver|charcoal|slate/, bg: "linear-gradient(135deg,#9a9a9f,#5b5b60)" },
+    { test: /purple|violet|lilac|plum|mauve/, bg: "linear-gradient(135deg,#8a6fa3,#4f3a63)" },
+    { test: /orange|rust|terracotta/, bg: "linear-gradient(135deg,#c47a3c,#7e4a22)" },
+    { test: /yellow|mustard|canary/, bg: "linear-gradient(135deg,#d9be5a,#9a832e)" },
+  ];
+  return map.find((m) => m.test.test(k))?.bg ?? "linear-gradient(135deg,#3a342a,#242019)";
 }
