@@ -21,9 +21,9 @@ have stale numbers BEFORE you publish. Never-invent rule: these are our captured
 | Coach Tabby 26 (sold) | #15, #17, #19 | $198 | $202 (n=201) | Within noise |
 
 ## Enrichment available
-- **#10 Neverfull vs Speedy:** we now hold **Speedy 30 sold median $566 (n=93)**. The piece currently
-  uses asking only; add the realized figure for a stronger story (Speedy out-searches Neverfull but sells
-  for less). Owner/Content-lane call.
+- **#10 Neverfull vs Speedy:** DONE 2026-06-27. The piece + chart now carry the realized figures
+  (Speedy 30 sold $566/n93 vs Neverfull MM $770/n87) on the self-updating ask-vs-sold chart. Story
+  is the reversal: more-searched/higher-listed Speedy sells for less. Owner publishes.
 
 ## Recommendation
 Publish the **evergreen, no-figure pieces first** (#5 LV auth, #7 Marmont auth, #12 red flags, #13
