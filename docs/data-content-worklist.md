@@ -35,8 +35,12 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 ## Articles (write as DRAFTS, wire + chart + seed, gates green)
 - ✅ #15 what-a-coach-tabby-actually-sells-for (CoachResaleRealityChart) (2026-06-26)
 - ✅ #16 does-a-smaller-bag-cost-more (SizePriceCurveChart) (2026-06-26)
-- ⬜ Neverfull vs Speedy (NeverfullSpeedyChart exists; needs Speedy data + the ask-vs-sold +
-  Trends fading-icon angle). Coordinate with Content lane (owns that component).
+- ✅ Neverfull vs Speedy DONE (2026-06-27): wired as LIVE draft `neverfull-vs-speedy` via
+  seed-neverfull-speedy.ts (LV/Neverfull-tagged so CTA renders). Angle = the reversal: Speedy
+  out-searches Neverfull (Trends 27.8 vs 17.9; Neverfull fading 5y) AND lists higher (Speedy 30
+  $1,623 vs MM $1,245) but SELLS for less (MM $770/n87 vs Speedy 30 $566/n93). NeverfullSpeedyChart
+  rebuilt to the self-updating async ask-vs-sold pattern (getMedians on v218/v498, baked fallback).
+  Gates green. Owner publishes.
 - ✅ "Most searched vs most expensive" LIVE draft post #20 (SearchVsPriceChart): Kelly/Birkin top both; Flap least-searched yet 3rd priciest (2026-06-26)
 - ✅ "Dior Saddle is back" LIVE draft post (dior-saddle-resale-price), reuses ask-vs-sold-gap chart (2026-06-26)
 - ✅ "The asking-price illusion" LIVE draft post #17 (AskVsSoldGapChart) (2026-06-26)
