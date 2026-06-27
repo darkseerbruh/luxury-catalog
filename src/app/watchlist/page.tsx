@@ -77,6 +77,8 @@ export default async function WatchlistPage() {
                   variantId={w.variantId}
                   initialTarget={w.targetPrice}
                   initialAlert={w.alertEnabled}
+                  initialMode={w.alertMode}
+                  initialPct={w.alertPct}
                 />
               </li>
             );

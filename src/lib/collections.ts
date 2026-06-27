@@ -20,6 +20,10 @@ export interface ClosetEntry extends SavedBag {
 export interface WatchlistEntry extends SavedBag {
   targetPrice: number | null;
   alertEnabled: boolean;
+  /** "absolute" (dollar target) or "pct_below_median" (deal-hunting default). */
+  alertMode: "absolute" | "pct_below_median";
+  /** Percent below the typical resale price, when alertMode is pct_below_median. */
+  alertPct: number | null;
   /** Most recent recorded sale price, for "is it near my target?" context. */
   latestSalePrice: number | null;
 }
@@ -126,10 +130,21 @@ export async function getWatchlist(): Promise<WatchlistEntry[]> {
   if (!user) return [];
 
   const supabase = await createServerSupabase();
-  const { data, error } = await supabase
+  const variantJoin = `variant:variant_id(${VARIANT_SELECT}, price_history(sale_price, date_recorded))`;
+  // Try the 0033 columns; fall back to the legacy select if the migration is unapplied.
+  let { data, error } = await supabase
     .from("watchlist")
-    .select(`target_price, currency, alert_enabled, variant:variant_id(${VARIANT_SELECT}, price_history(sale_price, date_recorded))`)
+    .select(`target_price, currency, alert_enabled, alert_mode, alert_pct, ${variantJoin}`)
     .order("created_at", { ascending: false });
+
+  if (error && (error.code === "42703" || /column .* does not exist/i.test(error.message ?? ""))) {
+    const fb = await supabase
+      .from("watchlist")
+      .select(`target_price, currency, alert_enabled, ${variantJoin}`)
+      .order("created_at", { ascending: false });
+    data = fb.data as unknown as typeof data;
+    error = fb.error;
+  }
 
   if (error || !data) return [];
 
@@ -141,11 +156,14 @@ export async function getWatchlist(): Promise<WatchlistEntry[]> {
     const prices = (v.price_history ?? [])
       .filter((p) => p.sale_price != null)
       .sort((a, b) => b.date_recorded.localeCompare(a.date_recorded));
+    const r = row as typeof row & { alert_mode?: string | null; alert_pct?: number | null };
     return [
       {
         ...baseSaved(v),
-        targetPrice: row.target_price != null ? Number(row.target_price) : null,
-        alertEnabled: Boolean(row.alert_enabled),
+        targetPrice: r.target_price != null ? Number(r.target_price) : null,
+        alertEnabled: Boolean(r.alert_enabled),
+        alertMode: r.alert_mode === "pct_below_median" ? ("pct_below_median" as const) : ("absolute" as const),
+        alertPct: r.alert_pct != null ? Number(r.alert_pct) : null,
         latestSalePrice: prices[0]?.sale_price != null ? Number(prices[0].sale_price) : null,
       },
     ];
