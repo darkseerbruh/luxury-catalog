@@ -3,11 +3,8 @@ import { notFound } from "next/navigation";
 import { getBrandDetail, getBrandResaleStats, getVariantImages, getBrandsOverview } from "@/lib/queries";
 import { listByBrand } from "@/lib/posts";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
-import { getBrandFollowState } from "@/lib/brand-follow";
-import { getCurrentUser } from "@/lib/auth";
 import { BagImage } from "@/components/BagImage";
 import { ArticleList } from "@/components/ArticleList";
-import BrandFollow from "./BrandFollow";
 
 export const dynamic = "force-dynamic";
 
@@ -64,15 +61,13 @@ export default async function BrandPage({
   const stubStyles = brand.styles.filter((s) => s.variants.length === 0);
   const allVariants = brand.styles.flatMap((s) => s.variants);
 
-  const [resale, images, brandPosts, followState, allBrands, user] = await Promise.all([
+  const [resale, images, brandPosts, allBrands] = await Promise.all([
     getBrandResaleStats(id),
     getVariantImages(
       liveStyles.map((s) => s.variants[0]?.variantId).filter((n): n is number => n != null),
     ),
     listByBrand(id, 4),
-    getBrandFollowState(id),
     getBrandsOverview(),
-    getCurrentUser(),
   ]);
 
   // "Similar houses" — the Spotify "similar artists" edge. Same tier first (what a
@@ -119,15 +114,6 @@ export default async function BrandPage({
         </p>
         <h1 className="mt-1 font-serif text-4xl text-foreground">{brand.name}</h1>
         {brand.description && <p className="mt-4 max-w-prose text-muted">{brand.description}</p>}
-        <div className="mt-5">
-          <BrandFollow
-            brandId={id}
-            available={followState.available}
-            signedIn={Boolean(user)}
-            initialFollowing={followState.following}
-            count={followState.count}
-          />
-        </div>
       </header>
 
       {/* At a glance */}
