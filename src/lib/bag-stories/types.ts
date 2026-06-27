@@ -36,6 +36,17 @@ export interface StoryPerson {
   note?: string;
 }
 
+/**
+ * A curated video for the bag. Only ever seeded with a real YouTube id and the
+ * title/source as indexed (never-invent). `source` is the publishing channel or
+ * outlet as it appears in the video title (e.g. "60 Minutes", "Louis Vuitton").
+ */
+export interface StoryVideo {
+  youtubeId: string;
+  title: string;
+  source: string;
+}
+
 export interface BagStory {
   /**
    * Lowercased style-name fragments this story applies to. Matched against the
@@ -48,6 +59,12 @@ export interface BagStory {
   tidbits: StoryTidbit[];
   /** The "Bag DNA" people strip (designer / namesake / creative director). */
   people: StoryPerson[];
+  /**
+   * Curated, real videos (designer interviews / runway / house films). Optional;
+   * seeded only where a clip can be attributed confidently. Bags without curated
+   * videos still get the per-intent search link-out.
+   */
+  videos?: StoryVideo[];
   /**
    * Seeds a "Watch interviews & runway" link-out to YouTube search. We link to
    * a search (not a specific video id) so nothing is invented; real curated
