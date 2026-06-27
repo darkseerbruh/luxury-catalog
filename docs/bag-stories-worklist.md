@@ -43,22 +43,22 @@ buy/sell CTA).
 
 ## Wave 2 — more bags (match fragment in parens)
 - ✅ Louis Vuitton Alma (`alma`)
-- ⬜ Louis Vuitton Petite Malle (`petite malle`)
+- ✅ Louis Vuitton Petite Malle (`petite malle`)
 - ✅ Dior 30 Montaigne (`30 montaigne`)
 - ⬜ Dior Book Tote (`book tote`)
 - ✅ Celine Luggage (`luggage`)
 - ✅ Gucci Horsebit 1955 (`horsebit`)
 - ✅ Saint Laurent Sac de Jour (`sac de jour`)
-- ⬜ Bottega Veneta Pouch (`pouch`)
-- ⬜ Prada Galleria (`galleria`)
+- ✅ Bottega Veneta Pouch (`pouch`)
+- ✅ Prada Galleria (`galleria`)
 - ✅ Chloé Paddington (`paddington`)
 - ⬜ Chanel Gabrielle (`gabrielle`)
 - ⬜ Goyard Saint Louis (`saint louis`, `st louis`)
 
 ## DB promotion — style_story table (so content is editable without a deploy)
-- ⬜ Migration `0033` (after the OO-UX lane's `0032`): `style_story` table, JSONB payload.
-- ⬜ Loader script: serialize code-defined `BAG_STORIES` into the table (idempotent).
-- ⬜ `getBagStory` reads DB-first, falls back to code data (resilient; never 404s).
+- ✅ Migration `0033` (after the OO-UX lane's `0032`): `style_story` table, JSONB payload.
+- ✅ Loader script: serialize code-defined `BAG_STORIES` into the table (idempotent).
+- ✅ `getBagStory` reads DB-first, falls back to code data (resilient; never 404s).
 - ⬜ Human-gated: owner applies `0033` + runs the loader; code stays the seed/fallback.
 
 ## Notes
