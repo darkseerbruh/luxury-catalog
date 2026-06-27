@@ -656,4 +656,388 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
   },
+  {
+    match: ["loulou"],
+    tagline: "Named for the muse who shaped Yves Saint Laurent, with quilting that traces a Y.",
+    people: [
+      {
+        name: "Loulou de la Falaise",
+        role: "Namesake and muse",
+        note: "The jewelry designer and close friend who became Yves Saint Laurent's muse from the late 1960s.",
+      },
+      {
+        name: "Anthony Vaccarello",
+        role: "Saint Laurent creative director",
+        note: "Designed the bag in 2017 and named it for her.",
+      },
+    ],
+    watchQuery: "Saint Laurent Loulou bag history Loulou de la Falaise",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Named for a muse",
+        body:
+          "Saint Laurent introduced the Loulou in 2017 under Anthony Vaccarello, naming it for Loulou de la Falaise, the designer and confidante who was one of Yves Saint Laurent's closest muses for decades.",
+        sources: [
+          { name: "Luxfy", url: "https://luxfy.com/the-history-of-the-saint-laurent-loulou-bag/" },
+          { name: "Handbagholic", url: "https://www.handbagholic.co.uk/blog/ysl-loulou-bag/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Quilting shaped like a Y",
+        body:
+          "The bag's chevron quilting is stitched to echo the letter Y, a quiet tribute to Yves Saint Laurent himself.",
+        sources: [{ name: "Fashionphile", url: "https://blog.fashionphile.com/authenticate-the-loulou-satchel/" }],
+      },
+      {
+        kind: "trivia",
+        title: "Two bags in one strap",
+        body:
+          "A sliding chain strap lets the Loulou switch from a shoulder bag to a crossbody in a moment, part of why it caught on so quickly.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/size-guide-ysl-loulou/" }],
+      },
+    ],
+  },
+  {
+    match: ["baguette"],
+    tagline: "The little bag tucked under the arm like a loaf of bread, and arguably the first It bag.",
+    people: [
+      {
+        name: "Silvia Venturini Fendi",
+        role: "Fendi designer",
+        note: "Created the Baguette in 1997, a small tactile bag against the era's oversized minimalism.",
+      },
+      {
+        name: "Sarah Jessica Parker",
+        role: "The screen moment",
+        note: "As Carrie Bradshaw, gave it the line that made it famous.",
+      },
+    ],
+    watchQuery: "Fendi Baguette bag history Silvia Venturini Fendi",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Carried like a loaf of bread",
+        body:
+          "Silvia Venturini Fendi designed the Baguette in 1997 as a reaction to the big, minimalist bags of the decade. She wanted something small and tactile, made to be tucked under the arm like a French baguette, which is how it got its shape and its name.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/accessories-news/handbags/feature/fendi-baguette-bag-history-1236314155/" },
+          { name: "Fashionphile", url: "https://blog.fashionphile.com/legend-of-the-fendi-baguette/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "It's not a bag, it's a Baguette",
+        body:
+          "Carrie Bradshaw's line in Sex and the City turned the bag into a must-have and helped make it, for many, the very first It bag.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/accessories-news/handbags/feature/fendi-baguette-bag-history-1236314155/" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "100,000 in its first year",
+        body:
+          "Not everyone at Fendi backed it at first; some thought it too small and too soft. It sold more than 100,000 in its debut year and proved them wrong.",
+        sources: [{ name: "Fashionphile", url: "https://blog.fashionphile.com/legend-of-the-fendi-baguette/" }],
+      },
+    ],
+  },
+  {
+    match: ["peekaboo"],
+    tagline: "A bag designed to be left open, so the luxury inside peeks out.",
+    people: [
+      {
+        name: "Silvia Venturini Fendi",
+        role: "Fendi designer",
+        note: "Created the Peekaboo in 2008 as a return to a classic shape, done the Fendi way.",
+      },
+    ],
+    watchQuery: "Fendi Peekaboo bag history Silvia Venturini Fendi",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A whisper, not a logo",
+        body:
+          "The Peekaboo launched in 2008, first under the name Hide and Seek, as Silvia Venturini Fendi's answer to the logo-heavy bags of the early 2000s. She wanted a classic shape that whispered luxury instead of shouting it.",
+        sources: [
+          { name: "PurseBlog", url: "https://www.purseblog.com/fendi/handbag-history-the-fendi-peekaboo/" },
+          { name: "FASHION", url: "https://fashionmagazine.com/style/fendi-peekaboo-bag/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The inside is the point",
+        body:
+          "The Peekaboo is meant to be carried open so its contrasting lining peeks out, a bright color or rich texture against a quiet exterior. The name comes from the children's game peek-a-boo.",
+        sources: [
+          { name: "The Week", url: "https://theweek.com/96729/the-story-of-silvia-venturini-fendi-s-peekaboo-bag-from-tongue-in-cheek-accessory-to-timeless" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "It falls open on its own",
+        body:
+          "The front panel leans slightly forward, balanced so the bag eases open by itself, as if inviting your hand inside.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/fendi/handbag-history-the-fendi-peekaboo/" }],
+      },
+    ],
+  },
+  {
+    match: ["boy"],
+    tagline: "Karl Lagerfeld named Chanel's edgiest bag after the great love of Coco's life.",
+    people: [
+      {
+        name: "Karl Lagerfeld",
+        role: "Chanel creative director",
+        note: "Introduced the Boy in 2011 and explained its name.",
+      },
+      {
+        name: "Arthur \"Boy\" Capel",
+        role: "Namesake",
+        note: "Coco Chanel's muse and great love, who financed her first Paris stores.",
+      },
+    ],
+    watchQuery: "Chanel Boy bag history Boy Capel Karl Lagerfeld",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Named for Boy Capel",
+        body:
+          "The Boy debuted in Chanel's Fall/Winter 2011 collection, introduced by Karl Lagerfeld. He named it for Arthur 'Boy' Capel, the English polo player who was Coco Chanel's muse, great love and the backer of her first stores.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/chanel-boy-bag-the-it-girl-staple" },
+          { name: "l'Étoile", url: "https://etoile-luxuryvintage.com/blogs/the-history-of/history-of-the-bag-chanel-boy-bag" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Built like a hunter's bag",
+        body:
+          "Lagerfeld drew on a cartridge bag, the kind hunters use to carry ammunition, for a boxier, more masculine shape with bold hardware, a deliberate contrast to the soft Classic Flap.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/chanel-boy-bag-the-it-girl-staple" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "The very spirit of Chanel",
+        body:
+          "As Lagerfeld put it, Coco Chanel had a boyish attitude she got from Boy Capel, the great love of her life, which is why the bag is called the Boy Chanel.",
+        sources: [{ name: "Sotheby's", url: "https://www.sothebys.com/en/articles/chanel-boy-bag-the-it-girl-staple" }],
+      },
+    ],
+  },
+  {
+    match: ["bayswater"],
+    tagline: "A West London neighborhood gave its name to Mulberry's most British bag.",
+    people: [
+      {
+        name: "Nicholas Knightly",
+        role: "Mulberry designer",
+        note: "Designed the Bayswater in 2003 and named it for the West London district.",
+      },
+      {
+        name: "Roger Saul",
+        role: "Mulberry founder",
+        note: "Started Mulberry in Somerset, England in 1971.",
+      },
+    ],
+    watchQuery: "Mulberry Bayswater bag history British craftsmanship",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Named for a neighborhood",
+        body:
+          "The Bayswater arrived in 2003, designed by Nicholas Knightly and named after the Bayswater area of West London. It quickly became Mulberry's flagship bag.",
+        sources: [
+          { name: "Love A Preloved", url: "https://loveapreloved.com/blogs/welcome-to-love-a-preloved/mulberry-and-the-bayswater-a-legacy-of-british-craftsmanship" },
+          { name: "Mulberry", url: "https://www.mulberry.com/row/bayswater" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The Postman's Lock",
+        body:
+          "Its structured satchel shape and brass Postman's Lock trace back to Mulberry's 1975 Hunting, Shooting, Fishing collection. Every Bayswater is still made by craftspeople in Somerset, England.",
+        sources: [
+          { name: "Love A Preloved", url: "https://loveapreloved.com/blogs/welcome-to-love-a-preloved/mulberry-and-the-bayswater-a-legacy-of-british-craftsmanship" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "An early-2000s British icon",
+        body:
+          "Carried by Kate Moss and other It girls of the moment, the Bayswater became a defining piece of early-2000s British style.",
+        sources: [
+          { name: "Love A Preloved", url: "https://loveapreloved.com/blogs/welcome-to-love-a-preloved/mulberry-and-the-bayswater-a-legacy-of-british-craftsmanship" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["jodie"],
+    tagline: "Named for a 1990s photo of Jodie Foster using a Bottega hobo to hide from the cameras.",
+    people: [
+      {
+        name: "Jodie Foster",
+        role: "Namesake",
+        note: "Photographed in the 1990s using a Bottega hobo as a shield from paparazzi.",
+      },
+      {
+        name: "Daniel Lee",
+        role: "Bottega Veneta creative director",
+        note: "Reinvented the hobo for 2020 and gave it her name.",
+      },
+    ],
+    watchQuery: "Bottega Veneta Jodie bag history Daniel Lee",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A bag named after a moment",
+        body:
+          "Daniel Lee reintroduced Bottega's knotted hobo for 2020. It took the name Jodie in tribute to photos of Jodie Foster in the 1990s using a Bottega hobo to shield her face from an unwanted photo-op.",
+        sources: [
+          { name: "Rebag", url: "https://www.rebag.com/thevault/bottega-veneta-101-the-jodie-bag/" },
+          { name: "PurseBlog", url: "https://www.purseblog.com/bottega-veneta/the-ultimate-bag-guide-bottega-veneta-jodie-bag/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "The intrecciato knot",
+        body:
+          "The Jodie is built around Bottega's signature intrecciato, its hand-woven leather, finished with a knotted top handle. Intrecciato is the house's woven-leather technique.",
+        sources: [{ name: "SACLÀB", url: "https://saclab.com/bottega-veneta-jodie/" }],
+      },
+      {
+        kind: "culture",
+        title: "The logo-free It bag",
+        body:
+          "Part of Daniel Lee's quiet, logo-free revival of Bottega Veneta, the Jodie became an instant It bag for shoppers who wanted craft without branding.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/bottega-veneta-101-the-jodie-bag/" }],
+      },
+    ],
+  },
+  {
+    match: ["puzzle"],
+    tagline: "Jonathan Anderson's first bag for Loewe, cut flat from geometric panels and folded into a cube.",
+    people: [
+      {
+        name: "Jonathan Anderson",
+        role: "Loewe creative director",
+        note: "Designed the Puzzle as his first original bag for the house.",
+      },
+    ],
+    watchQuery: "Loewe Puzzle bag history Jonathan Anderson",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Anderson's first design for Loewe",
+        body:
+          "The Puzzle was Jonathan Anderson's first original bag for Loewe after he arrived in 2013, shown in the spring 2015 men's collection. It was the first new bag shape Loewe had introduced since the 1980s.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/accessories-news/handbags/loewe-puzzle-bag-jonathan-anderson-history-1236319670/" },
+          { name: "V&A", url: "https://collections.vam.ac.uk/item/O1464999/puzzle-handbag-jonathan-anderson/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Flat panels, folded into a cube",
+        body:
+          "Made from precise geometric leather panels, the Puzzle lies flat yet folds into a three-dimensional cuboid. Each one is handmade in Madrid and takes roughly nine hours to build.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/accessories-news/handbags/loewe-puzzle-bag-jonathan-anderson-history-1236319670/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "The bag that repositioned Loewe",
+        body:
+          "The Puzzle helped turn Loewe from a quiet leather house into one of the most fashion-forward brands in the LVMH group.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/accessories-news/handbags/loewe-puzzle-bag-jonathan-anderson-history-1236319670/" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["tabby"],
+    tagline: "Coach began with a baseball glove, and the Tabby revives a 1970s shoulder bag.",
+    people: [
+      {
+        name: "Bonnie Cashin",
+        role: "Coach's first creative director",
+        note: "Brought industrial hardware and a layering sportswear sensibility to Coach from 1961.",
+      },
+    ],
+    watchQuery: "Coach history Bonnie Cashin Tabby bag",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Founded on a baseball glove",
+        body:
+          "Coach started in 1941 in Manhattan as a men's leather goods workshop. Taken with how a well-worn baseball glove softened with use, its makers developed the supple Glove-Tanned cowhide that became the brand's signature.",
+        sources: [
+          { name: "Luxtodo", url: "https://www.luxtodo.com/2025/01/20/coach-history-heritage-guide/" },
+          { name: "Coach Heritage", url: "https://coachinc.wordpress.com/assignment-1/the-heritage-of-coach/the-heritage/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Bonnie Cashin's hardware",
+        body:
+          "Bonnie Cashin became Coach's first creative director in 1961 and brought industrial hardware and a layering, sportswear sensibility, ideas that still shape Coach's look today.",
+        sources: [{ name: "Luxtodo", url: "https://www.luxtodo.com/2025/01/20/coach-history-heritage-guide/" }],
+      },
+      {
+        kind: "trivia",
+        title: "A 1970s bag, brought back",
+        body:
+          "The Tabby is a revival of a classic 1970s Coach shoulder bag. The version we know today was released in fall 2019 and quickly became a favorite.",
+        sources: [{ name: "vintagecoachie", url: "https://www.vintagecoachie.com/style-guide" }],
+      },
+    ],
+  },
+  {
+    match: ["telfar", "shopping bag"],
+    tagline: "The Bushwick Birkin, modeled on a department-store shopping bag, made for everyone.",
+    people: [
+      {
+        name: "Telfar Clemens",
+        role: "Founder and designer",
+        note: "The American-Liberian designer who built Telfar around accessibility.",
+      },
+    ],
+    watchQuery: "Telfar Shopping Bag history Telfar Clemens",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Inspired by a Bloomingdale's bag",
+        body:
+          "Telfar Clemens debuted the Shopping Bag at his Fall/Winter 2014 runway show. The team drew on classic department-store shopping bags, even measuring a Bloomingdale's bag as a reference.",
+        sources: [
+          { name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Telfar_Clemens" },
+          { name: "Rebag", url: "https://www.rebag.com/thevault/telfar-101-the-shopping-bag/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Vegan leather, embossed T",
+        body:
+          "The bag is made of vegan leather with an embossed T logo and designed to be unisex and carried by anyone, in three sizes that nest from small to large.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/telfar-101-the-shopping-bag/" }],
+      },
+      {
+        kind: "culture",
+        title: "Not for you, for everyone",
+        body:
+          "Nicknamed the Bushwick Birkin, the bag became a symbol of both status and accessibility. The brand's motto is not for you, for everyone, and after a 2017 CFDA/Vogue Fashion Fund win Clemens scaled it into the mainstream.",
+        sources: [
+          { name: "Fashionphile", url: "https://blog.fashionphile.com/shaping-history-the-telfar-story/" },
+          { name: "Wikipedia", url: "https://en.wikipedia.org/wiki/Telfar_Clemens" },
+        ],
+      },
+    ],
+  },
 ];
