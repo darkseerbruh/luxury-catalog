@@ -1050,4 +1050,251 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
   },
+  {
+    match: ["alma"],
+    tagline: "A 1934 Art Deco design that only took the name Alma, after a Paris bridge, decades later.",
+    people: [
+      {
+        name: "Gaston-Louis Vuitton",
+        role: "Louis Vuitton designer",
+        note: "Grandson of the founder, who designed the structured top-handle bag in 1934.",
+      },
+    ],
+    watchQuery: "Louis Vuitton Alma bag history",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "From the Squire to the Alma",
+        body:
+          "Gaston-Louis Vuitton designed the structured top-handle bag in 1934, first calling it the Squire. It translated the house's trunk-making into a handbag, was renamed more than once over the years, and only formally became the Alma in 1992, after Place de l'Alma in Paris.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/louis-vuitton-alma-a-quintessential-piece-of-handbag-history" },
+          { name: "Rebag", url: "https://www.rebag.com/thevault/the-louis-vuitton-alma-a-history/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Art Deco architecture",
+        body:
+          "Its bold, symmetrical lines reflect the 1930s Art Deco movement, finished with the rounded rolled-leather handles the house calls Toron. Toron is the name for that twisted leather handle.",
+        sources: [
+          { name: "l'Étoile", url: "https://etoile-luxuryvintage.com/blogs/the-history-of/history-of-the-bag-louis-vuitton-alma" },
+        ],
+      },
+      {
+        kind: "trivia",
+        title: "A Chanel connection, so the story goes",
+        body:
+          "An often-repeated story holds that Gabrielle Chanel commissioned an early version of the shape as a custom order in the 1920s, then later agreed to let Louis Vuitton produce it for the public. It is widely told, though hard to confirm.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/the-louis-vuitton-alma-a-history/" }],
+      },
+    ],
+  },
+  {
+    match: ["luggage"],
+    tagline: "Phoebe Philo's first It bag, with a winged shape and a zip that reads like a face.",
+    people: [
+      {
+        name: "Phoebe Philo",
+        role: "Céline creative director",
+        note: "Designed the Luggage as her first It bag for the house.",
+      },
+    ],
+    watchQuery: "Celine Luggage tote history Phoebe Philo",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Philo's first It bag",
+        body:
+          "The Luggage arrived in Céline's Spring 2010 collection as Phoebe Philo's first It bag, based on one of the house's suitcase designs from the 1970s.",
+        sources: [
+          { name: "W Magazine", url: "https://www.wmagazine.com/fashion/celine-luggage-bag-comeback-pheobe-philo" },
+          { name: "Rebag", url: "https://www.rebag.com/thevault/phoebe-philos-most-iconic-handbags/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "A bag with a face",
+        body:
+          "Its structured, box-like body, winged sides, top handles and front zip give it an almost face-like front, which is exactly how most people remember it.",
+        sources: [
+          { name: "PurseBlog", url: "https://www.purseblog.com/opinion/the-celine-luggage-tote-forever-classic-or-dated-trend/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "The bag of the early 2010s",
+        body:
+          "A 2011 campaign with Philo's muses Daria Werbowy and Stella Tennant introduced it, and it became one of the defining It bags of the decade, carried by Rihanna, Gwyneth Paltrow and many more.",
+        sources: [
+          { name: "W Magazine", url: "https://www.wmagazine.com/fashion/celine-luggage-bag-comeback-pheobe-philo" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["30 montaigne"],
+    tagline: "Named for the Paris address where Christian Dior built his house and showed the New Look.",
+    people: [
+      {
+        name: "Maria Grazia Chiuri",
+        role: "Dior creative director",
+        note: "Launched the 30 Montaigne in 2019 as a new house icon.",
+      },
+      {
+        name: "Christian Dior",
+        role: "Founder",
+        note: "Established his couture house at 30 Avenue Montaigne in 1946.",
+      },
+    ],
+    watchQuery: "Dior 30 Montaigne bag history",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "An address as a name",
+        body:
+          "Maria Grazia Chiuri launched the bag in 2019 and named it for 30 Avenue Montaigne, the Paris address where Christian Dior founded his house in 1946 and revealed the New Look in 1947.",
+        sources: [
+          { name: "Elle India", url: "https://elle.in/article/behind-the-scenes-the-origin-of-the-newest-dior-bag/" },
+          { name: "PaperMag", url: "https://www.papermag.com/dior-avenue-montaigne-history" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "A clasp from a perfume seal",
+        body:
+          "The front metal CD clasp was inspired by the seal of a Christian Dior perfume bottle. Chiuri reportedly reviewed ten prototypes before settling on the simple, boxy shoulder bag.",
+        sources: [
+          { name: "Elle India", url: "https://elle.in/article/behind-the-scenes-the-origin-of-the-newest-dior-bag/" },
+          { name: "SACLÀB", url: "https://saclab.com/dior-30-montaigne-first-time-purchase/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "Part of a whole wardrobe",
+        body:
+          "The bag launched inside Chiuri's wider 30 Montaigne wardrobe, a set of pieces that reimagined house staples, and quickly became one of Dior's defining modern icons.",
+        sources: [{ name: "SACLÀB", url: "https://saclab.com/dior-30-montaigne-first-time-purchase/" }],
+      },
+    ],
+  },
+  {
+    match: ["paddington"],
+    tagline: "The noughties It bag whose giant padlock helped invent statement hardware.",
+    people: [
+      {
+        name: "Phoebe Philo",
+        role: "Chloé creative director",
+        note: "Designed the Paddington during her 2001 to 2006 tenure at Chloé.",
+      },
+    ],
+    watchQuery: "Chloé Paddington bag history It bag",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A 2005 phenomenon",
+        body:
+          "Phoebe Philo designed the Paddington for Chloé's Spring/Summer 2005 collection. Demand was such that all 8,000 of the first run were spoken for before they reached store shelves.",
+        sources: [
+          { name: "SCMP", url: "https://www.scmp.com/magazines/style/luxury/article/3215633/how-chloe-paddington-revolutionised-handbags-today-launched-phoebe-philo-2005-coveted-it-bag-kick" },
+          { name: "Coveteur", url: "https://coveteur.com/chloe-paddington-bag" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "A padlock you could barely lift",
+        body:
+          "Its signature is an oversized leather-wrapped padlock weighing close to half a kilogram, a literal nod to a bag's job of safekeeping, hung on slouchy, worn-in leather.",
+        sources: [
+          { name: "SCMP", url: "https://www.scmp.com/magazines/style/luxury/article/3215633/how-chloe-paddington-revolutionised-handbags-today-launched-phoebe-philo-2005-coveted-it-bag-kick" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "It helped invent handbag hardware",
+        body:
+          "By loading a bag with industrial-sized metal, Philo helped kick off the statement-hardware trend. The Paddington was everywhere on mid-2000s It girls, from Kate Bosworth to Mischa Barton.",
+        sources: [
+          { name: "WWD", url: "https://wwd.com/fashion-news/fashion-scoops/chloe-paddington-bag-history-1237992923/" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["horsebit"],
+    tagline: "Built around the bridle hardware Gucci borrowed from the stable in the 1950s.",
+    people: [
+      {
+        name: "Alessandro Michele",
+        role: "Gucci creative director",
+        note: "Revived the motif as the Horsebit 1955 line in 2020.",
+      },
+    ],
+    watchQuery: "Gucci Horsebit 1955 bag history equestrian",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Named for a year in the saddle",
+        body:
+          "The Horsebit 1955 takes its name from the mid-1950s, when Gucci first used the horsebit on its bags. Alessandro Michele brought the motif back as the Horsebit 1955 line in 2020.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/gucci/handbag-history-the-gucci-horsebit/" }],
+      },
+      {
+        kind: "design",
+        title: "A bit from a bridle",
+        body:
+          "The signature clasp is the horsebit itself: a double ring joined by a bar, lifted straight from horse bridles. It nods to Gucci's equestrian roots and its early days outfitting riders.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/gucci/handbag-history-the-gucci-horsebit/" }],
+      },
+      {
+        kind: "trivia",
+        title: "One of Gucci's oldest signatures",
+        body:
+          "The horsebit is among Gucci's longest-running motifs, just as recognizable on its loafers, which ties the bag to decades of house heritage.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/gucci/handbag-history-the-gucci-horsebit/" }],
+      },
+    ],
+  },
+  {
+    match: ["sac de jour"],
+    tagline: "The bag of the day, built by Hedi Slimane as Saint Laurent's everyday classic.",
+    people: [
+      {
+        name: "Hedi Slimane",
+        role: "Saint Laurent creative director",
+        note: "Designed the Sac de Jour in 2013 as the house's everyday bag.",
+      },
+    ],
+    watchQuery: "Saint Laurent Sac de Jour bag history Hedi Slimane",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Bag of the day",
+        body:
+          "Hedi Slimane designed the Sac de Jour in 2013. Its name is French for bag of the day, a statement of intent: the ultimate everyday bag, built to keep up with real life.",
+        sources: [
+          { name: "Who What Wear", url: "https://www.whowhatwear.com/fashion/handbags/saint-laurent-sac-de-jour" },
+          { name: "SecondSense", url: "https://secondsense.co/blog/the-history-of-the-saint-laurent-sac-de-jour-top-handle-bag-1746596033" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Structure and discretion",
+        body:
+          "A crisp rectangular top-handle shape with structured lines, quiet branding and a small leather padlock, balancing polish with everyday practicality and tidy interior compartments.",
+        sources: [
+          { name: "Who What Wear", url: "https://www.whowhatwear.com/fashion/handbags/saint-laurent-sac-de-jour" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "Slimane's calling card",
+        body:
+          "The bag carried Slimane's sleek, minimal vision of Saint Laurent to popularity and remains in the lineup more than a decade after he left the house.",
+        sources: [
+          { name: "Who What Wear", url: "https://www.whowhatwear.com/fashion/handbags/saint-laurent-sac-de-jour" },
+        ],
+      },
+    ],
+  },
 ];
