@@ -59,6 +59,9 @@ the price floor "heavily worn" when condition was unknown. Tighter than plain "n
 2. **Label the anchor.** State **date, sample size (n), and what the number is relative to.** A
    retail/price figure MUST carry its **year** (e.g. "2019 retail $6,500"); never call a stale
    figure "recent"/"current" without verifying. A retention/% claim must name what it is a % *of*.
+   **Article body prices are a dated snapshot as of publish date** (owner ruled 2026-06-27): they do
+   NOT need ongoing refresh to stay published, as long as the article visibly shows its publish/updated
+   date. (Live charts still self-update; this covers prose figures only.)
 3. **Derived stats conservatively.** When a number depends on bucketing/grouping, report the
    **aggregate/conservative** figure and show the grouping; never pick the bucket that yields the
    most dramatic number.
