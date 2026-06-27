@@ -38,6 +38,7 @@ import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
 import SimilarBags from "./SimilarBags";
+import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
 import { BagImage } from "@/components/BagImage";
 
@@ -475,9 +476,16 @@ export default async function BagDetailPage({
   const hasBuyLinks = buildResaleLinks(v.brand.name, v.style.name).length > 0;
   const hasSellLinks = buildConsignmentLinks(v.brand.name, v.style.name).length > 0;
 
+  // Bag DNA renders when the bag has at least one composition attribute beyond its
+  // house (leather / hardware / shape / colour / era) — see BagDNA's ≥2-card guard.
+  const hasDna = Boolean(
+    v.exteriorMaterial?.name || v.hardwareColor || v.style.silhouette || v.exteriorColorway || v.yearStart,
+  );
+
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
     photos.length > 0 ? { id: "photos", label: "Photos" } : null,
+    hasDna ? { id: "dna", label: "DNA" } : null,
     { id: "specifications", label: "Specs" },
     authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
@@ -664,6 +672,19 @@ export default async function BagDetailPage({
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
+
+      {/* Bag DNA — each attribute is a tappable object (SongDNA for bags). */}
+      <BagDNA
+        brandId={v.brand.brandId}
+        brandName={v.brand.name}
+        brandTier={v.brand.tier || null}
+        leather={v.exteriorMaterial?.name ?? null}
+        hardware={v.hardwareColor}
+        silhouette={v.style.silhouette}
+        colorway={v.exteriorColorway}
+        yearStart={v.yearStart}
+        yearEnd={v.yearEnd}
+      />
 
       {/* Embedded video reviews — the visual layer while v1 is text-first */}
       <Resources resources={resources} />

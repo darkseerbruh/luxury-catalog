@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBrandDetail, getBrandResaleStats, getVariantImages } from "@/lib/queries";
+import { getBrandDetail, getBrandResaleStats, getVariantImages, getBrandsOverview } from "@/lib/queries";
 import { listByBrand } from "@/lib/posts";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
+import { getBrandFollowState } from "@/lib/brand-follow";
+import { getCurrentUser } from "@/lib/auth";
 import { BagImage } from "@/components/BagImage";
 import { ArticleList } from "@/components/ArticleList";
+import BrandFollow from "./BrandFollow";
 
 export const dynamic = "force-dynamic";
 
@@ -61,13 +64,27 @@ export default async function BrandPage({
   const stubStyles = brand.styles.filter((s) => s.variants.length === 0);
   const allVariants = brand.styles.flatMap((s) => s.variants);
 
-  const [resale, images, brandPosts] = await Promise.all([
+  const [resale, images, brandPosts, followState, allBrands, user] = await Promise.all([
     getBrandResaleStats(id),
     getVariantImages(
       liveStyles.map((s) => s.variants[0]?.variantId).filter((n): n is number => n != null),
     ),
     listByBrand(id, 4),
+    getBrandFollowState(id),
+    getBrandsOverview(),
+    getCurrentUser(),
   ]);
+
+  // "Similar houses" — the Spotify "similar artists" edge. Same tier first (what a
+  // shopper is most likely cross-considering), then by catalogue depth. Live only.
+  const similarHouses = allBrands
+    .filter((b) => b.brandId !== id && b.isLive)
+    .sort((a, b) => {
+      const sameA = a.tier === brand.tier ? 0 : 1;
+      const sameB = b.tier === brand.tier ? 0 : 1;
+      return sameA - sameB || b.variantCount - a.variantCount || a.name.localeCompare(b.name);
+    })
+    .slice(0, 6);
 
   // At-a-glance, all derived from the catalogued variants (real, never invented).
   const prices = allVariants.map((v) => v.retailPrice).filter((n): n is number => n != null);
@@ -102,6 +119,15 @@ export default async function BrandPage({
         </p>
         <h1 className="mt-1 font-serif text-4xl text-foreground">{brand.name}</h1>
         {brand.description && <p className="mt-4 max-w-prose text-muted">{brand.description}</p>}
+        <div className="mt-5">
+          <BrandFollow
+            brandId={id}
+            available={followState.available}
+            signedIn={Boolean(user)}
+            initialFollowing={followState.following}
+            count={followState.count}
+          />
+        </div>
       </header>
 
       {/* At a glance */}
@@ -325,6 +351,28 @@ export default async function BrandPage({
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
           No {brand.name} styles in the catalog yet — they&rsquo;re on the list.
         </div>
+      )}
+
+      {/* Similar houses — lateral discovery across brands (Spotify "similar artists"). */}
+      {similarHouses.length > 0 && (
+        <section className="border-t border-border pt-8">
+          <h2 className="mb-4 font-serif text-xl text-foreground">Similar houses</h2>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {similarHouses.map((b) => (
+              <Link
+                key={b.brandId}
+                href={`/brand/${b.brandId}`}
+                className="group flex w-24 shrink-0 flex-col items-center text-center"
+              >
+                <span className="flex h-20 w-20 items-center justify-center rounded-full border border-border font-serif text-2xl text-gold-soft transition-colors group-hover:border-gold">
+                  {b.name.charAt(0)}
+                </span>
+                <span className="mt-2 line-clamp-2 font-serif text-sm text-foreground">{b.name}</span>
+                <span className="text-xs capitalize text-muted">{b.tier.replace("-", " ")}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
     </main>
   );
