@@ -29,6 +29,16 @@ describe("getBagStory", () => {
     }
   });
 
+  it("every seeded video has a valid YouTube id, title, and source (never-invent)", () => {
+    for (const story of BAG_STORIES) {
+      for (const v of story.videos ?? []) {
+        expect(v.youtubeId).toMatch(/^[a-zA-Z0-9_-]{11}$/);
+        expect(v.title.trim().length).toBeGreaterThan(0);
+        expect(v.source.trim().length).toBeGreaterThan(0);
+      }
+    }
+  });
+
   it("contains no em dashes in user-facing copy (voice gate)", () => {
     for (const story of BAG_STORIES) {
       const copy = [

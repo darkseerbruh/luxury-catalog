@@ -1,4 +1,5 @@
 import type { BagStory as Story, TidbitKind } from "@/lib/bag-stories";
+import StoryVideos from "./StoryVideos";
 
 /**
  * "The Story" module — the per-bag editorial layer (our honest analog of
@@ -144,10 +145,6 @@ export default function BagStory({
   styleName: string;
   marketFact?: StoryMarketFact | null;
 }) {
-  const watchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(
-    `${brandName} ${styleName} ${story.watchQuery}`,
-  )}`;
-
   return (
     <section id="the-story" className="scroll-mt-4 border-t border-border pt-8">
       <h2 className="font-serif text-2xl text-foreground">The Story</h2>
@@ -222,16 +219,8 @@ export default function BagStory({
         </div>
       )}
 
-      {/* Watch link-out (real curated embeds live in the video section below). */}
-      <a
-        href={watchUrl}
-        target="_blank"
-        rel="nofollow noopener"
-        className="mt-6 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-      >
-        Watch interviews &amp; runway footage
-        <span aria-hidden>↗</span>
-      </a>
+      {/* Watch: curated clips (when seeded) + per-intent search link-outs. */}
+      <StoryVideos brandName={brandName} styleName={styleName} videos={story.videos} />
     </section>
   );
 }

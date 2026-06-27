@@ -26,6 +26,10 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
     watchQuery: "Hermès Birkin bag history Jane Birkin interview",
+    videos: [
+      { youtubeId: "ah2eAynWzEg", title: "Hermès and the success of the coveted Birkin bag", source: "60 Minutes" },
+      { youtubeId: "KDj7IxGziVE", title: "The History of the Hermès Birkin Bag", source: "Harper's BAZAAR" },
+    ],
     tidbits: [
       {
         kind: "origin",
@@ -238,6 +242,9 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
     watchQuery: "Louis Vuitton Neverfull history design",
+    videos: [
+      { youtubeId: "nQYbnt2tPo4", title: "Neverfull Inside Out Bag", source: "Louis Vuitton" },
+    ],
     tidbits: [
       {
         kind: "origin",
@@ -369,6 +376,9 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
     watchQuery: "Lady Dior bag history Princess Diana",
+    videos: [
+      { youtubeId: "xeLbg7rW9M8", title: "Lady Dior, an intimate story with Lady Diana", source: "LUXE.TV" },
+    ],
     tidbits: [
       {
         kind: "origin",

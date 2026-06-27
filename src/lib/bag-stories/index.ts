@@ -1,7 +1,7 @@
 import { BAG_STORIES } from "./data";
 import type { BagStory } from "./types";
 
-export type { BagStory, StoryTidbit, StoryPerson, StorySource, TidbitKind } from "./types";
+export type { BagStory, StoryTidbit, StoryPerson, StorySource, StoryVideo, TidbitKind } from "./types";
 
 /**
  * Looks up the editorial story for a bag by its style name. Returns null when
