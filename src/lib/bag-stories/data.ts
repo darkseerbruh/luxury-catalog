@@ -1297,4 +1297,125 @@ export const BAG_STORIES: BagStory[] = [
       },
     ],
   },
+  {
+    match: ["pouch"],
+    tagline: "Daniel Lee's oversized clutch became the fastest-selling bag in Bottega's history.",
+    people: [
+      {
+        name: "Daniel Lee",
+        role: "Bottega Veneta creative director",
+        note: "Designed the Pouch among his first pieces for the house.",
+      },
+    ],
+    watchQuery: "Bottega Veneta Pouch history Daniel Lee",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A spontaneous debut that took off",
+        body:
+          "The Pouch was one of Daniel Lee's first designs for Bottega Veneta, shown for Spring 2019. He later said he was honestly shocked when it became the brand's best-selling bag almost overnight.",
+        sources: [
+          { name: "Rebag", url: "https://www.rebag.com/thevault/bottega-veneta-101-the-pouch/" },
+          { name: "PurseBlog", url: "https://www.purseblog.com/bottega-veneta/bottega-veneta-pouch/" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Soft folds over a rigid frame",
+        body:
+          "Lee's take on a clutch is exaggerated and voluminous: a structured frame wrapped in folds of soft leather, also made in Bottega's signature woven intrecciato.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/bottega-veneta/bottega-veneta-pouch/" }],
+      },
+      {
+        kind: "culture",
+        title: "World's most wanted, 2019",
+        body:
+          "The Pouch was named the world's most wanted product of 2019 by the search platform Lyst and helped Bottega Veneta win Brand of the Year at that year's British Fashion Awards.",
+        sources: [{ name: "Rebag", url: "https://www.rebag.com/thevault/bottega-veneta-101-the-pouch/" }],
+      },
+    ],
+  },
+  {
+    match: ["petite malle"],
+    tagline: "A wearable miniature of the 19th-century Louis Vuitton steamer trunk.",
+    people: [
+      {
+        name: "Nicolas Ghesquière",
+        role: "Louis Vuitton creative director",
+        note: "Introduced the Petite Malle at his debut collection for the house.",
+      },
+    ],
+    watchQuery: "Louis Vuitton Petite Malle history Nicolas Ghesquière",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "A debut-collection statement",
+        body:
+          "Nicolas Ghesquière introduced the Petite Malle at his first Louis Vuitton show, Fall/Winter 2014, shrinking the house's 19th-century trunk into a handbag to signal a return to its travel roots.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/louis-vuitton-petite-malle-the-mini-trunk-with-a-massive-legacy" },
+          { name: "AnOther", url: "https://www.anothermag.com/fashion-beauty/12497/nicolas-ghesquiere-louis-vuitton-aw14-first-show-debut-met-about-time" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "A trunk you can carry",
+        body:
+          "It is built like the full-size trunks, with brass corners, a calfskin trim and an engraved LV S-lock, made by a small team of artisans in Ducey, France.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/louis-vuitton-petite-malle-the-mini-trunk-with-a-massive-legacy" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "An instant modern icon",
+        body:
+          "The little trunk became one of Ghesquière's signatures at Louis Vuitton and has been reworked in countless materials and prints since its debut.",
+        sources: [
+          { name: "Sotheby's", url: "https://www.sothebys.com/en/articles/louis-vuitton-petite-malle-the-mini-trunk-with-a-massive-legacy" },
+        ],
+      },
+    ],
+  },
+  {
+    match: ["galleria"],
+    tagline: "Named for the Milan arcade where Mario Prada opened his first store in 1913.",
+    people: [
+      {
+        name: "Mario Prada",
+        role: "Founder",
+        note: "Opened Prada's first store in 1913 in the Galleria Vittorio Emanuele II.",
+      },
+    ],
+    watchQuery: "Prada Galleria bag history Saffiano",
+    tidbits: [
+      {
+        kind: "origin",
+        title: "Named for a Milan landmark",
+        body:
+          "The Galleria takes its name from the original Prada store that Mario Prada opened in 1913 inside the Galleria Vittorio Emanuele II, Italy's oldest active shopping arcade.",
+        sources: [
+          { name: "PurseBlog", url: "https://www.purseblog.com/handbag-history/handbag-history-the-prada-galleria/" },
+          { name: "Prada", url: "https://www.prada.com/us/en/pradasphere/campaigns/2021/the-prada-galleria-bag.html" },
+        ],
+      },
+      {
+        kind: "design",
+        title: "Saffiano, the house's own leather",
+        body:
+          "It is made from Saffiano leather, the crosshatched, waxed finish patented by the house's founder. Each bag is built from 83 pieces and takes more than six hours to make at the Scandicci factory in Italy.",
+        sources: [
+          { name: "Prada", url: "https://www.prada.com/us/en/pradasphere/campaigns/2021/the-prada-galleria-bag.html" },
+          { name: "PurseBlog", url: "https://www.purseblog.com/handbag-history/handbag-history-the-prada-galleria/" },
+        ],
+      },
+      {
+        kind: "culture",
+        title: "A modern archetype",
+        body:
+          "Conceived in 2007 and reissued endlessly since, the Galleria has become a Prada neo-classic and one of the house's defining bags.",
+        sources: [{ name: "PurseBlog", url: "https://www.purseblog.com/handbag-history/handbag-history-the-prada-galleria/" }],
+      },
+    ],
+  },
 ];
