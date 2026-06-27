@@ -108,7 +108,7 @@ layer rather than new pipelines. Each `/bag/[id]` keeps its own URL; the new pag
    `/search`. Built only on data we already hold; leather pages show only real `material`
    fields (no fabricated definition); the resale read uses the curated `resale_value_impact`
    column, hedged as an estimate.
-2. **Phase 2 — SHIPPED 2026-06-27 (same branch, gates green, awaiting owner merge + migration):**
+2. **Phase 2 — SHIPPED 2026-06-27 (same branch, gates green, MERGED to main 1fad6de + migration):**
    `/era/[slug]` (by production-start decade) and `/color/[slug]` object pages; Bag DNA extended
    to 6 nodes (House/Leather/Hardware/Shape/Colour/Era); brand **artist-header** with a **Follow**
    control + **Similar houses** rail (same-tier-first). Follow is backed by **migration 0032
