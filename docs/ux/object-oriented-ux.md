@@ -99,9 +99,15 @@ layer rather than new pipelines. Each `/bag/[id]` keeps its own URL; the new pag
 - **About cards** → GEO and trust (E-E-A-T), gated on real, dated, sourced content.
 
 ## Build order
-1. **Phase 1 (no migration):** `/leather/[slug]` + `/silhouette/[slug]` + `/hardware/[slug]`
-   object pages; the shared Explore rail; point the bag page's Bag DNA module (cards) at them.
-   Ships on data we already hold.
+1. **Phase 1 — SHIPPED 2026-06-27 (no migration), on branch `claude/spotify-oo-ux-bags-brands-w1lye5`, gates green (tsc/eslint/next build/448 tests), awaiting owner merge to `main`:**
+   `/leather/[slug]` + `/silhouette/[slug]` + `/hardware/[slug]` object pages (shared
+   `src/components/AttributeObjectPage.tsx`); the Bag DNA cards module on the bag page
+   (`src/app/bag/[variantId]/BagDNA.tsx`) pointing House/Leather/Hardware/Shape at them;
+   query layer `getLeatherObject` / `getSilhouetteObject` / `getHardwareObject` + `slugify`
+   in `src/lib/queries.ts`. Each object page carries the bag rail + a shop hand-off into
+   `/search`. Built only on data we already hold; leather pages show only real `material`
+   fields (no fabricated definition); the resale read uses the curated `resale_value_impact`
+   column, hedged as an estimate.
 2. **Phase 2 (one migration for Follow):** brand artist-header (Follow + About + Similar houses);
    `/era/[decade]` and `/color/[slug]` pages; follower-count social proof (gated until real).
 3. **Blocked:** the Designer / creative-director object, until we source and store that field.
