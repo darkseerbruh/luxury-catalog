@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import { notifyFollowersOfActivity } from "./notifications";
+import type { WantSpec } from "./want-spec";
 
 /** A short "@handle" / display-name label for the acting user, for notifications. */
 async function actorLabel(userId: string): Promise<string> {
@@ -74,6 +75,31 @@ export async function saveToCloset(variantId: number, status: ClosetStatus = "wa
   revalidatePath(`/bag/${variantId}`);
   revalidatePath("/closet");
   revalidatePath("/feed");
+  return { ok: true };
+}
+
+/**
+ * Save a "want" at a chosen breadth (exact variant / any colour family / any
+ * colourway). The variant stays as the representative row; the breadth lives in
+ * want_spec. Degrades to a plain exact want if migration 0035 isn't applied.
+ */
+export async function saveWantSpec(variantId: number, spec: WantSpec): Promise<ActionResult> {
+  if (!validVariant(variantId)) return { ok: false, error: "Invalid item." };
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, error: "Please log in to save bags." };
+
+  const supabase = await createServerSupabase();
+  const legacyRow = { user_id: user.id, variant_id: variantId, status: "want" as const };
+  let { error } = await supabase
+    .from("closet_item")
+    .upsert({ ...legacyRow, want_spec: spec } as typeof legacyRow, { onConflict: "user_id,variant_id" });
+  if (isMissingColumn(error)) {
+    ({ error } = await supabase.from("closet_item").upsert(legacyRow, { onConflict: "user_id,variant_id" }));
+  }
+
+  if (error) return { ok: false, error: "Could not save. Please try again." };
+  revalidatePath(`/bag/${variantId}`);
+  revalidatePath("/closet");
   return { ok: true };
 }
 

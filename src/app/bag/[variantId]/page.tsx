@@ -42,6 +42,8 @@ import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
+import WantBreadth from "./WantBreadth";
+import { colorFamily } from "@/lib/listings-taxonomy";
 import { BagImage } from "@/components/BagImage";
 
 export const dynamic = "force-dynamic";
@@ -691,6 +693,19 @@ export default async function BagDetailPage({
         initialClosetStatus={userState.closetStatus}
         initialWatching={userState.watching}
       />
+
+      {/* Broaden a want across colourways, when the style actually has colour variation. */}
+      {(() => {
+        const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
+        if (colours.size < 2) return null;
+        return (
+          <WantBreadth
+            variantId={v.variantId}
+            colorFamily={colorFamily(v.exteriorColorway)}
+            initialBreadth={userState.closetStatus === "want" ? "exact" : null}
+          />
+        );
+      })()}
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />

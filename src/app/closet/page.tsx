@@ -199,7 +199,13 @@ export default async function ClosetPage() {
                           {c.brandName}
                         </p>
                         <p className="font-serif text-foreground">{c.styleName}</p>
-                        <p className="text-sm text-muted">{c.label}</p>
+                        <p className="text-sm text-muted">
+                          {c.status === "want" && c.wantSpec
+                            ? c.wantSpec.colorFamily
+                              ? `Any ${c.wantSpec.colorFamily.toLowerCase()}`
+                              : "Any colourway"
+                            : c.label}
+                        </p>
                         </div>
                       </div>
                       <div className="shrink-0 text-right">

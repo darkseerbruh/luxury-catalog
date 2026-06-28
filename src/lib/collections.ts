@@ -1,5 +1,6 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import type { WantSpec } from "./want-spec";
 
 /** A saved bag (closet or watchlist) resolved for list display. */
 export interface SavedBag {
@@ -15,6 +16,8 @@ export interface SavedBag {
 export interface ClosetEntry extends SavedBag {
   status: string;
   note: string | null;
+  /** Breadth of a want (any green / any colourway). null = the exact variant. */
+  wantSpec: WantSpec;
 }
 
 export interface WatchlistEntry extends SavedBag {
@@ -68,17 +71,29 @@ export async function getCloset(): Promise<ClosetEntry[]> {
   if (!user) return [];
 
   const supabase = await createServerSupabase();
-  const { data, error } = await supabase
+  const join = `variant:variant_id(${VARIANT_SELECT})`;
+  // Try the 0035 want_spec column; fall back to the legacy select if unapplied.
+  let { data, error } = await supabase
     .from("closet_item")
-    .select(`status, note, variant:variant_id(${VARIANT_SELECT})`)
+    .select(`status, note, want_spec, ${join}`)
     .order("created_at", { ascending: false });
+  if (error && (error.code === "42703" || /column .* does not exist/i.test(error.message ?? ""))) {
+    const fb = await supabase
+      .from("closet_item")
+      .select(`status, note, ${join}`)
+      .order("created_at", { ascending: false });
+    data = fb.data as unknown as typeof data;
+    error = fb.error;
+  }
 
   if (error || !data) return [];
 
   return data.flatMap((row) => {
     const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) as VariantJoin | null;
     if (!v) return [];
-    return [{ ...baseSaved(v), status: row.status as string, note: row.note as string | null }];
+    const ws = (row as { want_spec?: unknown }).want_spec;
+    const wantSpec = (ws && typeof ws === "object" ? ws : null) as WantSpec;
+    return [{ ...baseSaved(v), status: row.status as string, note: row.note as string | null, wantSpec }];
   });
 }
 
