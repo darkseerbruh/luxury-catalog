@@ -239,6 +239,40 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 11)** — Did the CELINE lexicon (house 8, "other houses" queue, after Saint Laurent).
+  Output `docs/research-drafts/seasonal-archive/celine.{md,jsonl}` (37 jsonl data rows: 23 models / 9
+  materials-motifs / 5 colors). **THE KEY VALUE was the THREE-ERA + ACCENT attribution, and it held
+  clean:** **Phoebe Philo (2008-2018) = accented "Céline"** (Luggage Spring 2010 / Trapeze 2010 / Box
+  2011 / Belt Pre-Fall 2014 / Trio / Phantom / Cabas / Sangle bucket / Big Bag Winter 2017 — minimalist
+  icons, near all now DISCONTINUED: Trapeze 2017, Box 2023, Luggage+Belt March 2025); **Hedi Slimane
+  (2018-2024) DROPPED the accent to "CELINE"**, new logo from the 1960s typeface, REVIVED the Triomphe
+  clasp (a 1970s archive motif, the canvas monogram "first revealed in 1972," double-C from the Arc de
+  Triomphe chains) + built the 16 (his FIRST bag, Nov 2018, named after 16 Rue Vivienne, 16-turn lock,
+  Lady Gaga first) / Triomphe (Spring 2019 runway) / Ava (2020) / Cuir Triomphe (2022) canon; **Michael
+  Rider (2024-present)** kept "CELINE", reviving Philo shapes (the "New Luggage", Printemps 2026 debut).
+  **BRIEF CORRECTION (flag it): the post-Slimane CD is MICHAEL RIDER, not Marco De Vincenzo** — sourced
+  across Numéro/Vogue/Le Monde/Brown Alumni (Rider officially succeeded Slimane Oct 2024, debut SS2026
+  shown in Paris July 6 2025). De Vincenzo is at Etro, not Celine; the brief's name was wrong and I did
+  NOT propagate it. **HONEST COLOR FINDING HELD (Dior/Gucci/YSL camp, NOT Hermès/Bottega): Celine does
+  NOT name its per-season colors** — Tan/Black/Camel/Natural/Brown are plain descriptors; the naming
+  weight sits on the MODEL + the MATERIAL/CANVAS (Triomphe Canvas, Drummed grained calfskin), so the
+  color layer is short + honest, not invented. HELD RIGOR: five briefed smaller models (Conti, Romy,
+  Folco, Tabou, Ring) did NOT surface in a usable source — logged low/unsourced leads, NOT fabricated;
+  undated models (Trio/Phantom/Cabas/Sangle/Besace) have IDENTITY sourced but YEAR flagged null/medium,
+  not invented. Triomphe DOUBLE-sourced (PurseBlog Spring 2019 + a+ Singapore 2019/1970s-archive); the
+  1972 canvas monogram is auction-grade (celine.com product copy). Appended 1 content idea (#22, the
+  "Céline vs CELINE: the accent tells the era" GEO + Old-Céline-revival explainer; Celine brand CTA,
+  flagged check-if-bag-page-exists). **Next unit: FENDI (Baguette/Peekaboo), then Prada/Loewe, or the
+  Hermès seasonal backfill (2020-2023 + pre-2020, the highest-GEO-value open gap).**
+- Tooling note (run 11): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 3 raw scrapes
+  (Spotted Fashion Philo-era guide = the PHILO-era WORKHORSE w/ debut years; Weekly Lux Drop discontinued
+  guide = the DISCONTINUATION-DATE workhorse; PurseBlog "Four Most Important Hedi Slimane Celine Bags" =
+  the SLIMANE-era workhorse; a+ Singapore = the Triomphe-heritage second source) = ~7 credits net.
+  **celine.com NOT scraped** (Akamai bot-shell risk per LV/Dior/Gucci/BV/YSL); the 1972-monogram fact +
+  the 16's Nov-2018 in-store date came through as search SNIPPETS (celine.com product copy + FB/EmQuartier).
+  No Christie's/Sotheby's Celine collecting-guide page surfaced (same as BV/YSL) — Celine's clean free
+  sources were Spotted Fashion + Weekly Lux Drop + PurseBlog + a+ Singapore. The five unsourced smaller
+  models + the undated Philo bags are the queued Chrome/PurseForum backfill.
 - **2026-06-28 (run 10)** — Did the SAINT LAURENT (YSL) lexicon (house 7, "other houses" queue).
   Output `docs/research-drafts/seasonal-archive/saint-laurent.{md,jsonl}` (39 jsonl data rows: 23
   models / 9 materials-motifs / 7 colors). **The honest finding HELD: YSL does NOT name its per-season
@@ -456,7 +490,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Gucci | ✅ canon + heritage/discontinued + 4 collabs (24 rows) | ✅ Diamante/GG monogram/GG Supreme/Web/Horsebit/Bamboo handle/Flora/matelassé (11, mostly auction-anchored) | 🟨 named layer is small: Rosso Ancora (De Sarno SS24) + Flora + Ken Scott + Hacker finishes (4). Gucci does NOT name most per-season colors (honest finding) | 2026-06-28 (run 6: ✅ → `gucci.{md,jsonl}`) | gucci.com Ancora/Jackie/Bamboo season pages (owner-present Chrome path) for any named colors; confirm low-confidence model years (Zumi/Bree/Aphrodite/Queen Margaret) + adidas/Disney/North Face collab years |
 | Bottega Veneta | ✅ canon + heritage/era (17 sourced; Loop/Mount/Point/Sunshine logged unsourced not invented) | ✅ Intrecciato DNA + Maxi/Padded variants + leathers (9) | ✅ NAMED layer real (50 colors: Parakeet official SS2021 + 49 descriptive/reseller-attributed incl. Fondant/Porridge/Barolo/Travertine) | 2026-06-28 (run 9: ✅ → `bottega-veneta.{md,jsonl}`) | promote 49 descriptive colors to official + add debut seasons via bottegaveneta.com (Chrome path) + luxbags.fr color-code DB; source Loop/Mount/Point/Sunshine/Campana debut years; resolve Cabat 2001-vs-2002 |
 | Saint Laurent (YSL) | ✅ canon + heritage/era (23 rows; Tom Ford/Pilati/Slimane/Vaccarello attributed; undated ones flagged null/low not invented) | ✅ Cassandre monogram (1963) + matelassé chevron vs diamond + Grain de Poudre + croc/smooth calf + Rive Gauche + Mombasa horn (9) | 🟨 honest finding: YSL does NOT name per-season colors (Dior/Gucci camp). 7 rows: plain neutrals/darks + gold/silver Cassandre hardware-tone axis + Rive Gauche print | 2026-06-28 (run 10: ✅ → `saint-laurent.{md,jsonl}`) | exact debut seasons for Le 5 à 7/Manhattan/Solferino/Jamie/College/Lou/Muse Two/Downtown/modern Loulou/Icare/Kate via ysl.com heritage + Vogue Runway (Chrome path; ysl.com Akamai-blocks Firecrawl) + the Vogue 101 slideshow (JS gallery, Chrome); Christie's/Sotheby's YSL lots for auction-grade heritage years |
-| Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Celine next (Triomphe/Luggage/Belt), then Fendi/Prada/Loewe |
+| Celine | ✅ canon + 3-era/accent attribution (16 sourced incl. Teen Triomphe; Conti/Romy/Folco/Tabou/Ring logged unsourced not invented) | ✅ Triomphe clasp (1970s archive) + Triomphe Canvas (1972 monogram) + Drummed/smooth calf + exotics + winged silhouette (9) | 🟨 honest finding: Celine does NOT name per-season colors (Dior/Gucci/YSL camp). 5 plain neutrals (Tan/Black/Camel/Natural/Brown) | 2026-06-28 (run 11: ✅ → `celine.{md,jsonl}`) | exact debut years for Trio/Phantom/Cabas/Sangle/Besace + source Conti/Romy/Folco/Tabou/Ring via celine.com (Chrome path; Akamai-risk) + PurseForum Celine subforum; Christie's/Sotheby's Celine lots for Philo heritage dating |
+| Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Fendi next (Baguette/Peekaboo), then Prada/Loewe |
 
 ---
 
@@ -496,7 +531,11 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    `saint-laurent.{md,jsonl}`): models with designer era (Ford/Pilati/Slimane/Vaccarello) + the
    Cassandre monogram (1963) / matelassé chevron / Grain de Poudre material DNA. Honest finding: YSL
    does NOT name per-season colors (Dior/Gucci camp) — naming weight is on material + hardware tone
-   (gold/silver Cassandre). **NEXT: Celine** (Triomphe/Luggage/Belt), then Fendi, Prada, Loewe.
+   (gold/silver Cassandre). ✅ **Celine** (run 11, `celine.{md,jsonl}`): models with the THREE-era +
+   accent attribution (Philo "Céline" 2008-2018 / Slimane "CELINE" 2018-2024 / Rider 2024-present) +
+   the Triomphe clasp (1970s archive) / Triomphe Canvas (1972) material DNA. Honest finding: Celine does
+   NOT name per-season colors (Dior/Gucci/YSL camp). Brief-correction: post-Slimane CD is Michael Rider,
+   not Marco De Vincenzo. **NEXT: Fendi** (Baguette/Peekaboo), then Prada, Loewe.
    Hermès seasonal-color backfill (2020-2023 + pre-2020) also still open and is the highest-GEO-value gap.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
