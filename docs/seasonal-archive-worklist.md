@@ -7,6 +7,10 @@
 Companion docs: `docs/brand-naming-research.md` (the naming regimes), `docs/data-collection-handoff.md`
 §0b (the price/reseller registry — do not redo it here), `docs/data-analysis-standard.md` (rigor bar).
 
+**Content feed:** `docs/research-drafts/seasonal-archive/content-ideas.md` is the standing,
+ranked idea feed for the Content lane / `copywriter`, built from these findings (research-to-ideas,
+not finished copy). Update it when a run banks a new finding worth a piece.
+
 ---
 
 ## The mission
@@ -235,6 +239,18 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 7)** — CONTENT-IDEAS unit (not a naming pull). Built the first ranked
+  content-ideas slate from the already-banked findings: `docs/research-drafts/seasonal-archive/content-ideas.md`,
+  16 ideas (6 article-led, 6 IG-carousel-led/mixed, 4 TikTok/Short-led; most carry a cross-format
+  cutdown). Each grounded in a specific finding + its source file row, split GEO (citable naming
+  facts that compound) vs ENGAGEMENT (trend-read plays, each shelf-life flagged). DO-FIRST picks:
+  Chanel date-code decoder (GEO), Hermès color-code guide (GEO), Hermès leather guide (GEO),
+  Birkin 25-vs-30 size discourse (ENGAGEMENT, ~1-season hook). Honest gaps recorded in-doc (no
+  per-season Chanel/Dior/Gucci color piece — those houses don't name seasonal colors; no newest-
+  season LV/Dior/Gucci color piece — Akamai-blocked, queued for Chrome; no value/appreciation
+  piece — compliance + no own price data). NO Firecrawl searches this run (worked from banked
+  findings only), $0 credits. **Next unit: back to the naming pull — Hermès seasonal colors
+  2020-2023 + pre-2020 (deepest archive, highest GEO value), then Bottega backfill.**
 - **2026-06-28 (run 6)** — Did Early Task 4 house 5 of 5: the GUCCI lexicon. **Early Task 4
   (big-five first pass) is now COMPLETE** (LV, Dior, Hermès leathers, Chanel codes, Gucci all
   drafted). Output in `docs/research-drafts/seasonal-archive/gucci.{md,jsonl}` (39 jsonl data rows:

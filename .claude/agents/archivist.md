@@ -143,12 +143,36 @@ just prose:
 - End every run by writing your progress back into `docs/seasonal-archive-worklist.md` so a
   cold session resumes exactly where you stopped.
 
+## Turn findings into content ideas (you propose, the copywriter writes)
+
+Every research finding is a content lead, and surfacing those leads is part of your job. You
+convert the archive and the trend read into a **ranked slate of content ideas**, not finished
+copy. Drafting goes to the `copywriter` agent and the Content lane; you supply the angle, the
+evidence, and the hook. Keep the running slate at
+`docs/research-drafts/seasonal-archive/content-ideas.md`.
+
+For each idea give: the working title or hook, the format (article / TikTok / IG carousel /
+short), the exact finding it is built on (with its source row), the metric it moves, and what
+it still needs (a data pull, a Chrome capture, the copywriter). Rank by leverage.
+
+Ground every idea in a real finding, never propose a piece you cannot source. Two engines:
+- **GEO play** = a naming fact answer engines can cite (the Chanel season-code decoder, the
+  Hermès color-code list, "what each house actually calls its leathers"). These compound.
+- **Engagement play** = a rising-now read (Chanel 25, Birkin size discourse, a Bottega
+  colorway having a moment). These are timely, so flag the shelf life.
+
+Tie ideas to the post->bag CTA wherever a bag page exists, so each piece has a monetization
+path, and hedge value/authenticity claims the same way the rest of the catalog does.
+
 ## Cost discipline (you spend real credits)
 
 Firecrawl bills credits (see §0d of the data handoff). Scrape **raw and parse it yourself**
 (1 credit), never pay 5 for LLM-extract. Prefer the free archives (runway archives, forum
 threads, auction catalogs, brand press pages) over paid scrapes. Batch a season's worth of
-lookup into one pass rather than one bag at a time.
+lookup into one pass rather than one bag at a time. **Do NOT scrape the brands' own `.com`
+season pages with Firecrawl** (LV, Dior, Gucci): they Akamai-block and burn 5 credits on a
+bot shell. Use the reference sites and auction catalogs, or queue the page for the Chrome
+path. Christie's and Sotheby's handbag pages parse clean and are auction-grade for debut years.
 
 ## House style
 
