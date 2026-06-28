@@ -9,18 +9,6 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 
 ## Open decisions
 
-### 2026-06-28 DECISION: Verify the value-proxy events actually fire before reading any funnel
-- **Evidence (PostHog, 30d window; data history begins ~2026-06-20, so n is ~8 days):** depth events fire fine (`price_history_viewed` 23, `value_module_viewed` 20, `variant_viewed` 26), but **every money-line event is 0**: `outbound_resale_clicked` 0, `outbound_consign_clicked` 0, `monetization_interest` 0, `authentication_interest` 0, `inquiry_submitted` 0, `item_saved` 0. Also `style_viewed` 0 while `variant_viewed` 26 (bag pages are clearly being opened), and `auth_section_engaged` 0 despite the Coach auth article being the #2 entry page (21 entries). Traffic is dominated by `$direct` (171) plus `localhost:3000` / vercel-preview referrers, i.e. mostly first-party dev/preview, not external users.
-- **Options:**
-  | Option | Effort | Fit with how you work |
-  |---|---|---|
-  | **(Recommended) Manually click a real outbound buy link + a save + a fake-door on a live bag page, confirm each lands in PostHog, wire any that do not** | ~20 min | Matches "instrument it, then let usage decide"; cheap insurance before launch |
-  | Assume the zeros are just thin pre-launch traffic, revisit after launch | 0 | Risk: launch with a blind revenue meter |
-  | Defer until external traffic arrives | 0 | Same blindness, later |
-- **Moves:** protects the **buyer-affiliate backbone** proxy (`outbound_resale_clicked`) plus the auth + premium fake-door proxies. If these are unwired, every revenue read is blind, so this gates the whole metric tree.
-- **Confidence:** my read, not a verdict. 20 value-module views with 0 outbound clicks is suspicious enough to check, but it could also be genuinely no buyers among self-traffic. It is cheap to verify, so verify rather than assume.
-- **Status:** OPEN
-
 ### 2026-06-28 DECISION: Add a rental-affiliate outbound event (known taxonomy gap)
 - **Evidence:** `src/lib/analytics/events.ts` has no rental event, but `monetization-projections.md` models rental as the 5th revenue stream on the `want` intent. The Vivrelle program is Pending approval (as of 2026-06-27); once it clears and the "Rent it first" CTA ships, rental clicks would go unmeasured.
 - **Options:** (Recommended) add `outbound_rental_clicked` to the taxonomy when you build the CTA (which is itself gated on approval), so measurement ships with the feature, vs. add it now, vs. skip.
@@ -32,6 +20,14 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 ---
 
 ## Decided / archived
+
+### 2026-06-28 DECIDED — wiring audited in code; fixed the one real gap (`auth_section_engaged`)
+The "verify the value-proxy events fire" decision, resolved by a source audit of every value event's `track()` call site in `src/` (more reliable than one self-traffic click):
+- **Wired and reachable, so the 0s are thin/first-party traffic, not bugs:** `outbound_resale_clicked` (`WhereToBuy.tsx`, `/identify`), `outbound_consign_clicked` (`WhereToSell.tsx`, `ThriftFindForm`, `/identify`), `item_saved` (`BagActions`/`StickyActionBar`/`ReviewForm`), `authentication_interest` (`RequestAuthentication`, `AuthInterestButton`).
+- **Unwired but no surface exists yet, so expected:** `monetization_interest` (no premium fake-door built), `inquiry_submitted` (no contact/lead form), `style_viewed` (the app is variant-PDP, so `variant_viewed` is the page view; this taxonomy entry is effectively dead).
+- **Unwired WITH a live surface = the real gap, now FIXED:** `auth_section_engaged`. The bag page has authentication disclosures (the "How to authenticate" checklist and the "Serial & authentication tags" expander) but nothing fired the event. Added `AuthEngagementTracker.tsx` (client island, matches the `TrackBagView` idiom): fires once when the auth checklist scrolls into view (`section: how_to_authenticate`) and once when the serial-tags disclosure is expanded (`section: serial_tags`). Gates green (tsc / eslint / build / 448 tests).
+- **Moves:** unblocks the **Authentication Marketplace (Rev #2)** top-of-funnel read (who actually engages the auth/trust pillar), and confirms the **buyer-affiliate backbone** proxy is wired.
+- **Follow-ups:** wire `monetization_interest` when a premium fake-door ships; consider deleting the dead `style_viewed` from `events.ts` + the pulse query.
 
 _Decisions move here once you act on them. Kept as a short audit trail of what the data
 drove, then pruned when the list gets long._

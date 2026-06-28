@@ -27,6 +27,7 @@ import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
 import ValueModule, { type ValueFraming } from "./ValueModule";
 import TrackBagView from "./TrackBagView";
+import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
 import WhereToSell from "./WhereToSell";
@@ -545,6 +546,7 @@ export default async function BagDetailPage({
         silhouette={v.style.silhouette}
         hasPriceHistory={v.priceHistory.length > 0}
       />
+      <AuthEngagementTracker variantId={v.variantId} />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">
@@ -987,7 +989,7 @@ export default async function BagDetailPage({
 
       {/* Serial / authentication tags */}
       {v.serialTags.length > 0 && (
-        <Collapsible title="Serial & authentication tags">
+        <Collapsible title="Serial & authentication tags" id="authentication-tags">
           <div className="flex flex-col gap-3">
             {v.serialTags.map((t) => (
               <div
