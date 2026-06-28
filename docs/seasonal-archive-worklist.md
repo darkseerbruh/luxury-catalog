@@ -239,6 +239,58 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 14)** — Did the LOEWE lexicon (house 11, the LAST house in the "other houses"
+  queue, after Prada). **THE "OTHER HOUSES" FIRST PASS IS NOW COMPLETE** (BV, YSL, Celine, Fendi,
+  Prada, Loewe all drafted). Output `docs/research-drafts/seasonal-archive/loewe.{md,jsonl}` (33
+  jsonl data rows: 19 models incl. 3 honest leads / 7 materials / 7 colors). **THE KEY VALUE was the
+  ANDERSON-ERA attribution + the 1970 Vicente Vela ANAGRAM, and the brief's framing held: Jonathan
+  Anderson (JW Anderson) was CD 2013-March 2025 and built essentially the ENTIRE modern bag canon** -
+  Puzzle (men's spring **2015**, his first bag, Loewe's first new shape since the 1980s, origami
+  patchwork leather), Hammock (re-intro **spring 2016** after a 1999 archive style), Basket (spring
+  **2017**), Squeeze (fall **2023**), Puzzle Fold (July **2023**), Pebble Bucket (men's **SS2024**),
+  plus the viral Pigeon Clutch (SJP in And Just Like That) + Tomato Clutch ("meme to reality," 2024)
+  + the Paula's Ibiza woven line + Studio Ghibli collabs. He LEFT for Dior 2025; **Proenza Schouler's
+  Jack McCollough + Lazaro Hernandez** are the new co-CDs, debut **spring 2026** (Loewe's 180th anniv,
+  the **Amazona 180**, Flamenco metal coils). HERITAGE anchored on Christie's (auction-grade): founded
+  Madrid **1846** (OLDEST LVMH house, acquired 1996), official supplier to the Spanish Royal Crown
+  **1905**; the **Amazona** debuted **1975** (reintroduced by Anderson fall 2021, 175th anniv); the
+  **Flamenco** launched **1970s** (Vevers reprise 2010 w/ tassels, Anderson rework w/ knots+Anagram);
+  **Barcelona** confirmed a real heritage Loewe model name (Christie's 'Barcelona'-style lot). The
+  **ANAGRAM** (four interlocking/scrolling L's) was **designed in 1970 by Spanish artist Vicente Vela**
+  - TRIPLE-sourced (Vogue + Christie's + official Loewe FB), the GEO-valuable decoder; in 2025 the
+  house began also using a single half of it. CRAFT VOCABULARY captured (the real naming
+  distinctiveness): patchwork leather (Puzzle), handwoven raffia/palm-leaf (Basket, woven in Spain),
+  leather marquetry, nappa/lambskin/goatskin. **HONEST COLOR FINDING - LOEWE IS THE MIDDLE CASE (a NEW
+  third camp): Loewe DOES publish a per-season color list** (loewe.com SS24 Flamenco names four
+  colours: **Emerald Green, Dark Burgundy, Sahara, Black**) which is MORE than Dior/Gucci/YSL/Celine/
+  Fendi/Prada (bare shop descriptors), but the names are MOSTLY DESCRIPTIVE (Emerald Green, Black) with
+  only the occasional evocative one (**Sahara**), so it is LESS than the deep Hermès/Bottega proprietary
+  lexicon. Loewe sits BETWEEN the two camps - logged honestly, NOT invented. HELD RIGOR: **Cushion/Puffer
+  Goya**, a **2022 'Pebble'** distinct from the SS2024 Pebble Bucket, and the **'Anton' men's bag** did
+  NOT surface in a usable source - logged as leads, NOT invented or dated (the Goya + the Pebble Bucket
+  ARE sourced). BRIEF DATE CORRECTIONS held: Squeeze resolved to **2023** (brief said 2024; Vogue +
+  Christie's agree 2023, 2024 = the beaded variant); Hammock resolved to **spring 2016** re-intro (brief
+  said 2018). CONFLICTS flagged not smoothed: Flamenco origin 1970s (Vogue) vs 1980s (ottodisanpietro);
+  Puzzle leather-piece count ~9 (Vogue) vs 75 (Fashionphile, likely major-panels-vs-total-cut-pieces).
+  Appended 1 content idea (#25, the Anderson-era Loewe retrospective now that he has left + the 1970
+  Vicente Vela Anagram GEO explainer; Loewe brand CTA, flagged check-if-bag-page-exists). **Next unit:
+  the HERMÈS seasonal-color backfill (2020-2023 + pre-2020), the highest-GEO-value open gap, now that the
+  named-house first pass is done; the owner-present Chrome .com batch (LV/Dior/Gucci/BV/Celine/YSL/Fendi/
+  Prada/Loewe season pages) is the other open track.**
+- Tooling note (run 14): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 3 raw scrapes
+  (Vogue 'Best Loewe Handbags of 2026' = the per-model DEBUT-YEAR WORKHORSE w/ Puzzle/Amazona/Flamenco/
+  Basket/Squeeze/Puzzle-Fold/Pebble-Bucket/Hammock prose; Fashionphile 'Anderson Retrospective' = the
+  ERA + FULL-CANON WORKHORSE w/ Gate/Goya/Balloon/Paseo/Cubi/Luna + the novelty bags + Anderson 2013-March
+  2025; Christie's Loewe artist page = AUCTION-GRADE: Anagram 1970 Vicente Vela, founded 1846, Royal Crown
+  1905, Anderson 2013, Puzzle 2015 to Squeeze 2023, a Gate tote dated 2019, a 'Barcelona'-style heritage
+  bag, Craft Prize 2016) = ~7 credits net. **loewe.com NOT scraped wholesale** (Akamai bot-shell risk per
+  LV/Dior/Gucci/BV/YSL/Celine/Fendi/Prada); the SS24 Flamenco color list (Emerald Green/Dark Burgundy/
+  Sahara/Black) + the Anagram-2025-half + leather-marquetry came via loewe.com + official Loewe FB SEARCH
+  SNIPPETS. **Christie's Loewe artist page DOES exist and parses CLEAN** (unlike YSL/Celine/Fendi/Prada,
+  where no Christie's collecting page surfaced) - it is the auction-grade Loewe source, reuse it. The
+  per-model debut years for the medium-confidence Anderson shapes (Goya/Balloon/Paseo/Anagram-Tote/Cubi/
+  Luna/Gate/Pigeon) + the Cushion-Puffer-Goya/2022-Pebble/Anton leads are the queued Chrome/PurseForum
+  backfill.
 - **2026-06-28 (run 13)** — Did the PRADA lexicon (house 10, "other houses" queue, after Fendi).
   Output `docs/research-drafts/seasonal-archive/prada.{md,jsonl}` (32 jsonl data rows: 18 models incl.
   2 honest leads / 8 materials / 6 colors). **THE KEY VALUE was the TWO-DNA material regime + the
@@ -576,7 +628,7 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Celine | ✅ canon + 3-era/accent attribution (16 sourced incl. Teen Triomphe; Conti/Romy/Folco/Tabou/Ring logged unsourced not invented) | ✅ Triomphe clasp (1970s archive) + Triomphe Canvas (1972 monogram) + Drummed/smooth calf + exotics + winged silhouette (9) | 🟨 honest finding: Celine does NOT name per-season colors (Dior/Gucci/YSL camp). 5 plain neutrals (Tan/Black/Camel/Natural/Brown) | 2026-06-28 (run 11: ✅ → `celine.{md,jsonl}`) | exact debut years for Trio/Phantom/Cabas/Sangle/Besace + source Conti/Romy/Folco/Tabou/Ring via celine.com (Chrome path; Akamai-risk) + PurseForum Celine subforum; Christie's/Sotheby's Celine lots for Philo heritage dating |
 | Fendi | ✅ canon + designer attribution (22 rows; bags=Silvia Venturini Fendi, logos=Lagerfeld, First/Fendigraphy=Kim Jones; Kan I/Kan U + Touch logged unsourced-year not invented, C'mon omitted not invented) | ✅ TWO-signature DNA: FF Zucca + Zucchino + FF 1974 + Karligraphy (logos) + Selleria saddle-stitch (1925) on Cuoio Romano + Pequin + fur + exotics (9) | 🟨 honest finding: Fendi does NOT name per-season colors (Dior/Gucci/YSL/Celine camp). 6 rows: plain shade descriptors (Brown/Camelia/Black/Tobacco/Spring Turquoise) + the no-lexicon finding | 2026-06-28 (run 12: ✅ → `fendi.{md,jsonl}`) | clean debut years for Kan I/Kan U + Touch + verify/date 'C'mon' via fendi.com (Chrome path; Akamai-risk) + PurseForum Fendi subforum; original debut years for Sunshine/2Jours/Way; Christie's/Sotheby's/Heritage Fendi lots for Baguette/Peekaboo heritage dating; resolve FF Zucca 1965-vs-1966 + Peekaboo 2008-vs-2009 via fendi.com heritage |
 | Prada | ✅ canon + era (16 sourced: Galleria 2007/Re-Edition 1995-2000-2005/Cleo 2021/Symbole 2022/Arque 2023/Moon SS2002/Cahier FW2016/Promenade 2007/Sidonie FW2018/Vela 1984/Bowler 2000/Dynamique 2020/Logo Tote 2021/Nappa Antique SS2023; Triangle bag + Double Bag logged low not invented) | ✅ TWO DNAs: Saffiano (Mario Prada patent 1913) + nylon/Tessuto (Vela 1984) + Re-Nylon/Econyl (2019) + inverted-triangle 'dal 1913' plaque + Vitello/spazzolato/antique nappa/raffia (8) | 🟨 honest finding: Prada does NOT name per-season colors (Dior/Gucci/YSL/Celine/Fendi camp). 6 rows: flat Italian shade names (Rosa/Cammeo/Talco) + editorial descriptors + the no-lexicon finding | 2026-06-28 (run 13: ✅ → `prada.{md,jsonl}`) | confirm 'Pocone'/'Pocono' nylon trade name + resolve 'Triangle bag'/'Double Bag' model status + the BR4651 style-code prefix via prada.com (Chrome path; Akamai-risk) + PurseForum Prada subforum; verify Promenade=Saffiano Lux Tote vs Galleria; Christie's/Sotheby's Prada lots for Galleria/Cahier heritage dating |
-| Loewe | ⬜ | ⬜ | ⬜ none | — | Loewe next (Puzzle/Hammock/Flamenco/Amazona/Gate), the LAST other house, then the Hermès seasonal backfill |
+| Loewe | ✅ canon + Anderson-era attribution (19 rows: Puzzle 2015/Hammock 2016/Gate ~2017-auction-2019/Flamenco 1970s/Amazona 1975/Amazona 180 SS2026/Goya/Basket 2017/Squeeze 2023/Puzzle Fold 2023/Pebble Bucket SS2024/Balloon/Paseo/Anagram Tote/Cubi/Luna/Barcelona heritage/Pigeon+Tomato clutches; Cushion-Puffer-Goya/2022-'Pebble'/Anton logged leads not invented) | ✅ Anagram (1970, Vicente Vela) + Spanish leather craft (Madrid 1846, Craft Prize 2016) + patchwork-leather (Puzzle) + handwoven raffia (Basket) + leather marquetry + nappa/lambskin/goatskin + repeat-Anagram jacquard (7) | 🟨 MIDDLE case: Loewe DOES publish a per-season color list (SS24 Flamenco: Emerald Green/Dark Burgundy/Sahara/Black, loewe.com) but mostly DESCRIPTIVE — more than Dior/Gucci/etc., less than Hermès/Bottega (4 sourced + 3 editorial descriptors) | 2026-06-28 (run 14: ✅ → `loewe.{md,jsonl}`) | exact debut years for Goya/Balloon/Paseo/Anagram-Tote/Cubi/Luna/Gate/Pigeon via loewe.com stories pages (Chrome path; Akamai-risk) + PurseForum Loewe subforum; source Cushion-Puffer-Goya + 2022-'Pebble' + Anton men's; resolve Flamenco 1970s-vs-1980s + Puzzle 9-vs-75-pieces; deeper per-season color lists beyond SS24; Sotheby's/Bonhams Loewe lots for Amazona/Flamenco heritage dating |
 
 ---
 
@@ -633,8 +685,20 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    and the inverted-triangle 'dal 1913' plaque. Miuccia Prada long-time designer; Raf Simons co-CD from 2020.
    Honest finding: Prada does NOT name per-season colors (Dior/Gucci/YSL/Celine/Fendi camp) — flat Italian
    shade names (Rosa/Cammeo/Talco). 'Triangle bag'/'Double Bag'/'Pocone' nylon name logged low/lead not invented.
-   **NEXT: Loewe** (Puzzle/Hammock/Flamenco/Amazona/Gate), the LAST other house.
-   Hermès seasonal-color backfill (2020-2023 + pre-2020) also still open and is the highest-GEO-value gap.
+   ✅ **Loewe** (run 14, `loewe.{md,jsonl}`) — **the LAST other house; the "other houses" first pass is now
+   COMPLETE.** Models with ANDERSON-ERA attribution: Jonathan Anderson (CD 2013-March 2025) built the modern
+   canon (Puzzle 2015 / Hammock re-intro 2016 / Basket 2017 / Squeeze 2023 / Puzzle Fold 2023 / Pebble Bucket
+   SS2024 + the viral Pigeon + Tomato clutches); he LEFT for Dior 2025, Proenza Schouler's McCollough+Hernandez
+   are the new co-CDs (spring 2026 debut, the Amazona 180, Loewe's 180th anniv). Heritage: founded Madrid 1846
+   (oldest LVMH house), Amazona 1975, Flamenco 1970s, Barcelona heritage. MATERIAL DNA = the Anagram (1970,
+   Vicente Vela, the GEO decoder) + Spanish leather craft (patchwork leather / handwoven raffia / leather
+   marquetry). Honest finding: **Loewe is the MIDDLE case (a new third camp)** — it DOES publish a per-season
+   color list (SS24 Flamenco: Emerald Green/Dark Burgundy/Sahara/Black) but mostly descriptively, more than
+   Dior/Gucci/etc. yet less than Hermès/Bottega. Cushion-Puffer-Goya / 2022-'Pebble' / 'Anton' logged leads
+   not invented.
+   **NEXT: the HERMÈS seasonal-color backfill (2020-2023 + pre-2020), the highest-GEO-value open gap now that
+   the named-house first pass is done.** The owner-present Chrome .com batch (LV/Dior/Gucci/BV/Celine/YSL/Fendi/
+   Prada/Loewe season pages) is the other open track.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
 

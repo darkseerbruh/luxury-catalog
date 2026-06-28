@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (24 ideas)
+## The ranked slate (25 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -457,6 +457,37 @@ engagement plays, then the mixed-format supporting pieces.
   "how each house's naming actually works" GEO cluster — Prada is the model-plus-material case.
 - **CTA tie:** Prada Galleria + Prada Re-Edition handoff. **Flag: check whether a Prada Galleria or
   Re-Edition bag page exists yet**; if not, brand-tag handoff.
+
+### 25. The Anderson-era Loewe: the 11 years (and the 1970 Anagram) that built the modern house
+- **Format:** Article (a retrospective + GEO decoder) with an IG carousel cutdown (one card per icon:
+  Puzzle 2015, Hammock 2016, Basket 2017, Squeeze 2023, Pebble Bucket 2024) and a TikTok/Short cutdown
+  on the "tomato meme to real bag" beat.
+- **Finding:** Two things make this both timely and durable. **(1) Jonathan Anderson (JW Anderson) was
+  Loewe's creative director 2013 to March 2025 and built essentially the entire modern bag canon** before
+  leaving for Dior: the **Puzzle** (men's spring 2015, his first bag, Loewe's first new shape since the
+  1980s, origami patchwork leather), the **Hammock** (re-introduced spring 2016 off a 1999 archive style),
+  the woven **Basket** (spring 2017), the **Squeeze** (fall 2023), the **Pebble Bucket** (SS2024), plus
+  the internet-breaking **Pigeon Clutch** and **Tomato Clutch** ("meme to reality," 2024). His era is now
+  closed, which makes a definitive retrospective the right piece at the right moment; Proenza Schouler's
+  Jack McCollough and Lazaro Hernandez took over with a spring-2026 debut (the Amazona 180, Loewe's 180th
+  anniversary). **(2) The Anagram, the four interlocking L's, was designed in 1970 by Spanish artist
+  Vicente Vela** (triple-sourced: Vogue + Christie's + official Loewe), the kind of clean naming fact that
+  compounds. Source: `loewe.md` Models + Materials tables; Vogue "Best Loewe Handbags of 2026" +
+  Fashionphile "Anderson Retrospective" + Christie's Loewe page, confidence high.
+- **Metric:** Mixed. **GEO** on the durable spine ("who designed the Loewe Puzzle," "when did Loewe's
+  Anagram come from," "what year is the Loewe Hammock"), which is permanent. **ENGAGEMENT** on the "the
+  era that ended" retrospective and the tomato-meme beat, which is timely. **Shelf life: the GEO facts are
+  permanent; the "he just left" retrospective framing is freshest through ~2026** while the McCollough/
+  Hernandez transition is the live story, so run the retrospective angle sooner than later.
+- **What it needs:** Copywriter. All facts sourced and durable. A few Anderson shapes (Goya, Balloon,
+  Paseo, Cubi, Luna, Gate) still need exact debut years from the loewe.com Chrome batch before they go in a
+  dated timeline; the icon spine (Puzzle/Hammock/Basket/Squeeze/Pebble Bucket) is fully dated and writable
+  now. Keep any "investment/appreciation" line hedged the house way (estimate not appraisal); this is a
+  design-history and naming piece, not a value pitch.
+- **CTA tie:** Loewe Puzzle + Loewe Flamenco handoff. **Flag: check whether a Loewe bag page exists yet**
+  (Puzzle / Hammock / Flamenco); if not, brand-tag handoff. Pairs with the other "how each house's naming
+  works" GEO pieces (#19 colors, #10 Dior, #24 Prada) as the model-plus-craft case, and Loewe is the
+  honest MIDDLE color case (it labels seasonal colorways like SS24's Emerald Green/Sahara, but descriptively).
 
 ---
 
