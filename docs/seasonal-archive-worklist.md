@@ -235,6 +235,32 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 5)** — Did Early Task 4 house 2 of 5: the DIOR lexicon. Output in
+  `docs/research-drafts/seasonal-archive/dior.{md,jsonl}` (39 jsonl data rows: 20 models / 10
+  materials-techniques / 9 named capsules+art editions). Models cover the full brief canon +
+  heritage/discontinued (Diorama 2015, Diorever 2016, Be Dior 2014, Dioraddict, Diorissimo tote,
+  Dior Key, Toujours, Miss Dior bag, Nolita), each with a sourced or low-flagged debut year.
+  Anchor facts are AUCTION-grade (Christie's Dior-handbag history page): Lady Dior 1995 (orig.
+  "Chouchou"), Saddle 1999, Book Tote 2018, 30 Montaigne 2019, Caro 2021; cross-checked Vogue.
+  Materials/techniques double-sourced: Cannage (1947 Napoleon III chairs, Vogue+Christie's),
+  Oblique (Bohan 1967, SS1969 debut, Kim Jones 2018 resurgence — myGemma+Vogue), Toile de Jouy,
+  Diorissimo canvas (distinct from the tote), cannage lambskin vs grained calfskin (Bag Religion).
+  Held rigor hard: (1) the HONEST FINDING that Dior does NOT publish a unique official name per
+  Lady Dior seasonal colorway (unlike Hermès codes / Chanel season codes), so the named-seasonal
+  layer is capsules — Dior Lady Art #1/#2/#5/#10 (2016/2017/2020/2025, artnet+Christie's), My
+  ABCDior, Toile de Jouy, Gradient/Ombré, Dioramour, Graphic Cannage AW24 — captured, not
+  invented; (2) the Lady Dior 1999-vs-1995 conflict flagged not smoothed (Bag Religion's 1999 is
+  a single-source error; logged 1995 high). Low-confidence model debut years (D-Joy, Be Dior,
+  Dior Key, Toujours, Miss Dior, Bobby) labelled low. CULTURAL READ logged: Jonathan Anderson named
+  Dior Creative Director 2025, succeeding Maria Grazia Chiuri (2016-25) — the live Dior story.
+  **Next unit: Gucci (GG Marmont + Dionysus colorways), then Chanel/Hermès seasonal-color backfill.**
+- Tooling note (run 5): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 5 raw
+  scrapes (Vogue Dior history, Christie's Dior auction page — both free-archive WORKHORSES — Bag
+  Religion, myGemma Oblique, artnet Lady Art) = ~9 credits net. **dior.com NOT scraped**: per the
+  LV Akamai warning I avoided the brand .com bot-shell trap; the Lady 95.22 + Lady Dior pages
+  surfaced as search snippets only. dior.com newsroom (95.22, craft/Cannage, capsules) is queued
+  for the owner-present Chrome path. Christie's auction page parses as plain markdown and is the
+  single cleanest free source for Dior model dating — reuse it for the Gucci run if Gucci has one.
 - **2026-06-28 (run 4)** — Started Early Task 4 (big-five sweep): the Louis Vuitton lexicon,
   house 1 of 5. Output in `docs/research-drafts/seasonal-archive/louis-vuitton.{md,jsonl}`
   (73 jsonl data rows: 30 model rows / 19 materials / 24 colors). Models cover the full canon
@@ -297,8 +323,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Hermès | ⬜ | ✅ leathers + exotics (31, near-complete) | 🟨 permanent-core (codes partial) + seasonal 2024–2025 only | 2026-06-28 (run 3: ✅ → `hermes.{md,jsonl}`) | seasonal colors 2020–2023 + pre-2020; OCR/auction-catalog pass for null color codes |
 | Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
 | Louis Vuitton | ✅ canon + heritage/discontinued (30 rows) | ✅ Monogram/Damier/Epi/Empreinte/Mahina/Taurillon/Taiga/Suhali families (19, well-dated) | 🟨 Vernis + Epi dated archive (sample, through ~2015) + Empreinte name list (undated); 2023–2026 season-labeled queued | 2026-06-28 (run 4: ✅ → `louis-vuitton.{md,jsonl}`) | 2023–2026 named Empreinte/Epi seasonal colors w/ house season labels (Chrome owner-present path; LV site Akamai-blocks Firecrawl) + confirm low-confidence model debut years |
-| Dior — NEXT | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Lady Dior cannage colors by season |
-| Gucci | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | GG Marmont + Dionysus colorways |
+| Dior | ✅ canon + heritage/discontinued (20) | ✅ Cannage/Oblique/Toile de Jouy/Diorissimo + leathers (10, well-dated) | 🟨 named capsules + art editions (9: Lady Art #1/#2/#5/#10, ABCDior, Toile, Gradient, Dioramour, Graphic Cannage); per-season plain colors are descriptive not named (Dior doesn't name them) | 2026-06-28 (run 5: ✅ → `dior.{md,jsonl}`) | dior.com newsroom (95.22, craft, capsules) via owner-present Chrome path; Lady Art #3/#4/#6-#9 per-edition rows; confirm low-confidence model debut years |
+| Gucci — NEXT | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | GG Marmont + Dionysus colorways |
 | Bottega / YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | 2026-06-28 (BV trend read: Jodie/Andiamo/Sardine + "fondant"/"porridge" leads) | verify BV colorways, then rest after big five |
 
 ---
@@ -323,7 +349,10 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    season by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
    ✅ **Louis Vuitton** done (run 4, `louis-vuitton.{md,jsonl}`): models + lines/canvases/leathers +
    Vernis/Epi dated colorways; Empreinte name list + 2023–2026 season-labeled colors queued.
-   **NEXT: Dior**, then Gucci, then Chanel/Hermès seasonal-color backfill.
+   ✅ **Dior** done (run 5, `dior.{md,jsonl}`): models + Cannage/Oblique/Toile de Jouy techniques +
+   named capsules/Lady Art editions. Honest finding: Dior doesn't name per-season Lady Dior colors,
+   so the named layer is capsules. dior.com newsroom queued for owner-present Chrome path.
+   **NEXT: Gucci**, then Chanel/Hermès seasonal-color backfill.
 5. **Backfill the rest** — Bottega, YSL, Celine, Fendi, Prada, Loewe.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
