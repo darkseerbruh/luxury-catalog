@@ -12,6 +12,55 @@ shapes + legal posture). Last updated 2026-06-22.
 
 ---
 
+## 0. Capture standard (owner rule, 2026-06-28) — one complete pass, every surface
+
+**Rule:** the moment we have a list of styles/bags we care about (e.g. a brand add, a
+backbone expansion, a hero list), we do the FULL capture in one go — never stop at
+names and "get prices later," never make her ask for a pass. "Get everything once so
+queries stay minimal." A `price_history` row already holds price **+** colour, material,
+hardware, year, condition, region, source URL, so one capture = all attributes.
+
+**The one-pass sequence (do all four, in order, for the target list):**
+1. **Scaffold variants** — `scaffold-variants.ts "<Brand>" "<Style>" <sizes…> --write`.
+   *Required first:* `load:prices` DROPS any observation whose style has zero variants.
+   New backbone styles land variant-less, so this step is what made the 2026-06-28
+   brand add stop at names. Chain it, don't defer it.
+2. **Capture across EVERY available source** into the landing zone (not one, then another
+   later) — see the surface map below.
+3. **`load:prices -- <source> --write`** for each source (resolves brand→style→variant,
+   attaches per-listing specs; idempotent).
+4. **`summary:refresh`** so bag pages update.
+
+**Surface map — where the "searches" actually run, and how each is reachable:**
+
+| Source | Coverage | How it runs | Runnable hands-off? |
+|---|---|---|---|
+| **Fashionphile** | asking + full specs (Shopify `/collections/<brand>/products.json`) | server-side fetch, no key | ✅ yes (throttles bursts → back off) |
+| **Wayback** | **historical** asking (archived listing pages, CDX API) | server-side fetch | ✅ yes — this is how we partly backfill *before* today |
+| **Auction** | hammer prices | server-side fetch | ✅ yes |
+| **MSRP** | retail anchor (cited dataset) | curated | ✅ yes |
+| **eBay Browse** | current asking, every seller | API | ⚠️ needs `EBAY_APP_ID`/`EBAY_CERT_ID` (her one-time signup) |
+| **eBay Marketplace Insights** | **sold** | API | ⚠️ gated (Application Growth Check) |
+| **TheRealReal** | asking, richest specs | Claude-in-Chrome logged-in session | ❌ browser-only (bot-blocked to fetch; can't cron) |
+| **Vestiaire** | asking, best region/cross-currency | Claude-in-Chrome session | ❌ browser-only |
+
+**Honest constraints (why this is a runbook, not one button — she asked):**
+- **No reason not to adopt the rule** — the schema is built for one-pass completeness.
+- **"Every surface, automatically" splits in two:** Fashionphile + Wayback + Auction +
+  (eBay once keyed) are headless/cron-able; **TRR + Vestiaire are bot-blocked and need a
+  Claude-in-Chrome logged-in session**, so they can't run in a hands-off nightly job.
+- **Completeness is capped by what each source exposes.** Per §below + the locked
+  data-source finding: hyped/contemporary models carry structured specs; mass-market/
+  vintage come back model-less → those fields stay **null because the source is silent,
+  not because we skipped**. We always take everything offered.
+- **Historical series:** we can only start the daily series **today** (Wayback partly
+  backfills the past). A true daily time-series needs a **scheduled job** hitting the
+  cron-able sources; `/api/cron/price-summary` already refreshes summaries.
+- **Lane discipline still holds:** run captures from the **Data lane** chat/worktree (a
+  Chrome session for TRR/Vestiaire), not mixed into UX-lane work.
+
+---
+
 ## 1. What this is
 
 Pull **real** bag + price data from the internet into the catalog. Resale value is

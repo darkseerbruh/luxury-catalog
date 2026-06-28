@@ -22,6 +22,7 @@
 7. Just do it: run what the environment can run; confirm a destructive action once, then finish the whole sequence; leave only outward-facing/irreversible ops (email, public posts, paid sign-ups, DNS, DB migrations) for her.
 8. Calibrated hedging on uncertain domains (value/authenticity/fit/taste/money/legal): frame as evidence + opinion ("our estimate," "markers to check," "my take"), never a verdict ("authentic," "worth $X," "you should"). State X, not Y. (Frames below.)
 9. On a multi-hour/"run until done" task: do NOT stop to summarize, check in, or ask. Keep firing the next tool call off `docs/data-content-worklist.md`, committing after each unit. ONLY valid stops: worklist empty, hard technical blocker, or an outward-facing/irreversible op needs her. "Context is getting long" is NOT a stop reason; checkpoint to the worklist and continue. (Protocol below.)
+10. Data pulls are complete + multi-surface: when a target list of styles/bags exists, capture EVERY attribute (price/colour/material/hardware/year/condition/region) across EVERY available source in ONE pass, then load + summarize. Never fragment (names now, specs later); never ask permission to run a capture. (Standard + surface map + the one-pass runbook: `docs/data-collection-handoff.md` §0.)
 <!-- ENFORCED:end -->
 
 ## Autonomous run protocol (added 2026-06-26, after she flagged premature stopping)
