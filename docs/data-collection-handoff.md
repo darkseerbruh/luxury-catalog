@@ -31,33 +31,71 @@ hardware, year, condition, region, source URL, so one capture = all attributes.
    attaches per-listing specs; idempotent).
 4. **`summary:refresh`** so bag pages update.
 
-**Surface map — where the "searches" actually run, and how each is reachable:**
+### 0a. STRATEGY (locked 2026-06-28): browser-gathering only, Firecrawl engine
 
-| Source | Coverage | How it runs | Runnable hands-off? |
+The API/affiliate doors are shut, so capture leans **exclusively on browser gathering**:
+- **eBay Developer Program — REJECTED.** No Browse API, no Marketplace Insights. Dead as a
+  data source. (eBay sold *could* be browser-scraped but is counterfeit-noisy on Hermès; low priority.)
+- **No affiliate program accepted** (Skimlinks/CJ/Impact/Awin all rejected or pending), so
+  **no product datafeeds** — which also means **no licensed image pipeline** yet (prices/specs
+  we can gather as facts; their photos we still cannot use — locked rule).
+- **Firecrawl is the engine** (account added 2026-06-28). Verified 2026-06-28: a Firecrawl
+  `scrape` with JSON schema defeated **TheRealReal's bot-block** (HTTP 200, 16 structured
+  Goyard Saint Louis listings: price + size + year + URL) with **no logged-in session and no
+  key** — so the sources that previously needed a babysat Claude-in-Chrome session are now
+  **cron-able**. Firecrawl `monitor` (recurring scrape that diffs each run) is the native
+  fit for our dual goal below.
+
+**Dual purpose of the recurring capture:** (1) build the **price-over-time history** (a dated
+snapshot each run) AND (2) **keep current listings fresh + accurate** — a listing whose
+`listing_ref` stops appearing is sold/pulled (mark it; derive days-on-market), and prices
+update in place. One job, both jobs.
+
+### 0b. Source registry (comprehensive — keep this current)
+
+*Tiering: prices are facts (store `source_url`, never their photos/descriptions); refer/feature
+only behind the trust gate in `docs/trusted-resellers.md`. Capture is separate from referral.*
+
+| Source | Reach via | Specs | Notes |
 |---|---|---|---|
-| **Fashionphile** | asking + full specs (Shopify `/collections/<brand>/products.json`) | server-side fetch, no key | ✅ yes (throttles bursts → back off) |
-| **Wayback** | **historical** asking (archived listing pages, CDX API) | server-side fetch | ✅ yes — this is how we partly backfill *before* today |
-| **Auction** | hammer prices | server-side fetch | ✅ yes |
-| **MSRP** | retail anchor (cited dataset) | curated | ✅ yes |
-| **eBay Browse** | current asking, every seller | API | ⚠️ needs `EBAY_APP_ID`/`EBAY_CERT_ID` (her one-time signup) |
-| **eBay Marketplace Insights** | **sold** | API | ⚠️ gated (Application Growth Check) |
-| **TheRealReal** | asking, richest specs | Claude-in-Chrome logged-in session | ❌ browser-only (bot-blocked to fetch; can't cron) |
-| **Vestiaire** | asking, best region/cross-currency | Claude-in-Chrome session | ❌ browser-only |
+| **Fashionphile** | Shopify `products.json` (server fetch, no Firecrawl) | full | already live; cheapest, keep direct |
+| **TheRealReal** | Firecrawl scrape (JS, stealth) | richest (JSON-LD detail) | bot-blocked to plain fetch; proven 2026-06-28 |
+| **Vestiaire Collective** | Firecrawl scrape (`__NEXT_DATA__`) | rich + **region/currency** | best cross-border signal |
+| **Rebag** | Firecrawl scrape | full | large US |
+| **The Luxury Closet** | Firecrawl scrape | full | Dubai, broad |
+| **1stDibs** | Firecrawl scrape | vintage/high-end | uncovered by any affiliate |
+| **StockX** | Firecrawl scrape | hyped/collab + sold | streetwear-luxe crossover |
+| **myGemma** | Firecrawl scrape (Awin pending) | bags/jewelry/watches | |
+| **Redeluxe** ⭐ | Shopify `products.json` | full | flagship reseller, creator partner (Georgia Swain); mid-tier coverage the giants miss |
+| **Couture USA** | Shopify `products.json` | full | open feed verified; vet trust before *referral* |
+| **Yoogi's Closet** | Firecrawl / site feed | full | trusted since 2008 |
+| **Madison Avenue Couture** | Firecrawl scrape | Hermès/Chanel only | consignment; niche |
+| **Sellier Knightsbridge** (UK) | Firecrawl scrape | full | UK pricing |
+| **Luxe Collective / Luxe Du Jour** | Firecrawl scrape | full | UK / own programs |
+| **Wayback (CDX)** | server fetch | historical asking | partial backfill of the *past* |
+| **Auction archives** | server fetch | historical realized | high-end |
+| **MSRP** | curated dataset | retail anchor | |
 
-**Honest constraints (why this is a runbook, not one button — she asked):**
-- **No reason not to adopt the rule** — the schema is built for one-pass completeness.
-- **"Every surface, automatically" splits in two:** Fashionphile + Wayback + Auction +
-  (eBay once keyed) are headless/cron-able; **TRR + Vestiaire are bot-blocked and need a
-  Claude-in-Chrome logged-in session**, so they can't run in a hands-off nightly job.
-- **Completeness is capped by what each source exposes.** Per §below + the locked
-  data-source finding: hyped/contemporary models carry structured specs; mass-market/
-  vintage come back model-less → those fields stay **null because the source is silent,
-  not because we skipped**. We always take everything offered.
-- **Historical series:** we can only start the daily series **today** (Wayback partly
-  backfills the past). A true daily time-series needs a **scheduled job** hitting the
-  cron-able sources; `/api/cron/price-summary` already refreshes summaries.
-- **Lane discipline still holds:** run captures from the **Data lane** chat/worktree (a
-  Chrome session for TRR/Vestiaire), not mixed into UX-lane work.
+**Vet-before-referral (capture OK, do not link until trust-gated):** HER Authentic, The Luxury
+Savvy, Handbag Sense, Mightychic, FashioNica, CODOGIRL, Dallas Designer Handbags.
+**Never:** Julia Rose Boston (reputation red flags), replica programs, Privé Porter (IG-DM only,
+no feed). **Defunct:** Cudoni.
+
+### 0c. To automate on a schedule — what's needed (owner inputs)
+
+1. **`FIRECRAWL_API_KEY` in Vercel env** (and locally for testing) — the only secret. Set via the
+   Vercel UI (no .env editing). The in-session Firecrawl MCP can't run a deployed cron.
+2. **A credit budget + cadence ceiling.** Firecrawl bills credits (the TRR search page = 5). Detail
+   scrapes (for colour/material/condition) cost more per listing. The breadth × depth × frequency
+   must fit her plan. Recommended default: **hero/T1 daily, the long tail weekly**, detail-scrape
+   only top-N per style.
+3. **Go-ahead to switch the recurring job on** (a standing external job that spends credits nightly —
+   owner-gated like any standing/paid config). Mechanism: Firecrawl `monitor` per source, OR a Vercel
+   Cron route (`/api/cron/capture`) → Firecrawl → parse → load → `summary:refresh` → reconcile freshness.
+
+**Still true regardless of engine:** completeness is capped by what each page exposes (null where the
+source is silent, never invented); search pages give price+size+year, detail pages give colour/material/
+condition; run captures from the **Data lane**, not mixed into UX work.
 
 ---
 

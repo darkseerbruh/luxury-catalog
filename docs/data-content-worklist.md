@@ -30,8 +30,9 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 ## New backbone brands (2026-06-28) — ONE-PASS capture (scaffold → all surfaces → load → summarize)
 
 *Per the §0 capture standard: each new house's T1 styles need variants scaffolded FIRST
-(loader drops zero-variant styles), then capture every source, load, refresh. Headless now
-= Fashionphile + Wayback; TRR/Vestiaire need a Chrome session; eBay needs her keys.*
+(loader drops zero-variant styles), then capture every source, load, refresh. Engines:
+Fashionphile + Wayback = server fetch; TRR/Vestiaire/Rebag/etc = Firecrawl (bot-block
+defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).*
 
 - 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (134 rows, 2026-06-28: PM med $2,465 n=89, GM med $2,460 n=45, w/ colour+material). ⬜ Anjou, Artois, Belvédère, Saïgon + TRR/Vestiaire (Chrome) + eBay (keys)
 - 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
