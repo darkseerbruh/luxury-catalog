@@ -235,6 +235,40 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 6)** — Did Early Task 4 house 5 of 5: the GUCCI lexicon. **Early Task 4
+  (big-five first pass) is now COMPLETE** (LV, Dior, Hermès leathers, Chanel codes, Gucci all
+  drafted). Output in `docs/research-drafts/seasonal-archive/gucci.{md,jsonl}` (39 jsonl data rows:
+  24 models incl. 4 collabs / 11 materials-motifs / 4 named signatures). Models cover the full
+  brief canon + heritage/discontinued, each with a sourced or low-flagged debut year. AUCTION-grade
+  anchors (Christie's "Gucci trio" stories page + Sotheby's): Bamboo 1947 (orig. product no. "0633"),
+  Horsebit bag 1955 (motif on a 1953 loafer), Jackie 1961 (orig. "Fifties Constance"), Diana 1991,
+  Dionysus 2015, GG Marmont 2016, Ophidia Cruise 2018, Sylvie SS2016, Padlock SS2016 (Sylvie + Blondie
+  also confirmed by OFFICIAL Gucci FB posts; Blondie Interlocking-G patented 1971). Collabs sourced:
+  Hacker Project (Gucci x Balenciaga, Aria, 2021; Sotheby's dates a Hacker Hourglass to 2021); adidas/
+  Disney/North Face logged low (established beat). Materials/motifs auction-anchored on the Christie's
+  trio page: Diamante 1930s, GG monogram patent 1969, Web stripe early 1950s (girth-strap origin),
+  Horsebit hardware 1953, Bamboo handle 1947, plus Flora (Grace Kelly 1960s scarf, Vogue). HELD RIGOR:
+  (1) the HONEST FINDING that Gucci, like Dior, does NOT publish a unique per-season color name for
+  most bags; the one genuinely-named house color is Rosso Ancora (Sabato De Sarno, SS2024 debut,
+  Vogue + Gucci posts), captured, not invented; (2) motif debut vs bag debut kept separate (Horsebit
+  motif 1953 vs bag 1955; GG patent 1969 vs Jackie bag 1961); (3) low-confidence model years (Zumi,
+  Bree, Aphrodite, Queen Margaret) + the adidas/Disney/North Face collab years flagged low. CULTURAL
+  READ logged: 3 creative directors in ~3 years (De Sarno 2023 SS24 debut, then Demna 2025- with a
+  digital lookbook + film "The Tiger"); the safe long-term keys are the dated heritage models, not the
+  per-director names. BONUS cross-house color data (sourced to the Vogue De Sarno piece): named house
+  colors Valentino PP Pink (FW22), Bottega Parakeet Green (Lee 2021, Vogue notes it being phased out),
+  Burberry Knight Blue (Lee), Hermès orange — feeds the BV/YSL backfill.
+  **Next unit: the queued backfills. Recommend Hermès seasonal colors 2020-2023 + pre-2020 (the
+  worklist's oldest-flagged gap, and the Hermès archive is the deepest/highest-GEO-value), then the
+  Other-houses queue (Bottega first, given the live trend-read leads + the now-sourced Parakeet Green).**
+- Tooling note (run 6): 5 firecrawl_search (all refunded 2->1 via feedback within 2 min) + 4 raw
+  scrapes (Christie's Gucci-trio stories page + Vogue Gucci guide + LuisaViaRoma + Vogue De Sarno red
+  = the WORKHORSES) = ~9 credits net. **No Christie's Gucci artist page exists** (the /artists/gucci/
+  gucci-handbag URL redirects to a generic search showing Hermès lots, cost 1 credit, no Gucci data) -
+  unlike Dior, Gucci's clean auction-grade source is the Christie's "stories" collecting-guide page,
+  not an artist page. gucci.com NOT scraped (Akamai bot-shell trap per LV/Dior); Sylvie/Blondie/Ancora
+  came from official Gucci FB posts as search snippets. Vogue Gucci guide is a huge single-line body
+  (111k chars) - sliced with Python str.find, never regex over the whole line (catastrophic backtracking).
 - **2026-06-28 (run 5)** — Did Early Task 4 house 2 of 5: the DIOR lexicon. Output in
   `docs/research-drafts/seasonal-archive/dior.{md,jsonl}` (39 jsonl data rows: 20 models / 10
   materials-techniques / 9 named capsules+art editions). Models cover the full brief canon +
@@ -324,8 +358,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
 | Louis Vuitton | ✅ canon + heritage/discontinued (30 rows) | ✅ Monogram/Damier/Epi/Empreinte/Mahina/Taurillon/Taiga/Suhali families (19, well-dated) | 🟨 Vernis + Epi dated archive (sample, through ~2015) + Empreinte name list (undated); 2023–2026 season-labeled queued | 2026-06-28 (run 4: ✅ → `louis-vuitton.{md,jsonl}`) | 2023–2026 named Empreinte/Epi seasonal colors w/ house season labels (Chrome owner-present path; LV site Akamai-blocks Firecrawl) + confirm low-confidence model debut years |
 | Dior | ✅ canon + heritage/discontinued (20) | ✅ Cannage/Oblique/Toile de Jouy/Diorissimo + leathers (10, well-dated) | 🟨 named capsules + art editions (9: Lady Art #1/#2/#5/#10, ABCDior, Toile, Gradient, Dioramour, Graphic Cannage); per-season plain colors are descriptive not named (Dior doesn't name them) | 2026-06-28 (run 5: ✅ → `dior.{md,jsonl}`) | dior.com newsroom (95.22, craft, capsules) via owner-present Chrome path; Lady Art #3/#4/#6-#9 per-edition rows; confirm low-confidence model debut years |
-| Gucci — NEXT | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | GG Marmont + Dionysus colorways |
-| Bottega / YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | 2026-06-28 (BV trend read: Jodie/Andiamo/Sardine + "fondant"/"porridge" leads) | verify BV colorways, then rest after big five |
+| Gucci | ✅ canon + heritage/discontinued + 4 collabs (24 rows) | ✅ Diamante/GG monogram/GG Supreme/Web/Horsebit/Bamboo handle/Flora/matelassé (11, mostly auction-anchored) | 🟨 named layer is small: Rosso Ancora (De Sarno SS24) + Flora + Ken Scott + Hacker finishes (4). Gucci does NOT name most per-season colors (honest finding) | 2026-06-28 (run 6: ✅ → `gucci.{md,jsonl}`) | gucci.com Ancora/Jackie/Bamboo season pages (owner-present Chrome path) for any named colors; confirm low-confidence model years (Zumi/Bree/Aphrodite/Queen Margaret) + adidas/Disney/North Face collab years |
+| Bottega / YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | 🟨 BV Parakeet Green now SOURCED (Daniel Lee 2021, Vogue; being phased out) | 2026-06-28 (BV trend read: Jodie/Andiamo/Sardine + "fondant"/"porridge" leads; Parakeet Green sourced run 6) | Bottega first (verify Jodie/Andiamo/Cassette/Sardine + colorways fondant/porridge/Parakeet), then YSL/Celine/rest |
 
 ---
 
@@ -345,14 +379,19 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    for Hermès: seasonal colors 2020–2023 and pre-2020 (PurseBop "New Hermès Colors 20XX" archive
    + PurseForum per-year color charts), and an OCR/auction-catalog pass to fill the null numeric
    color codes for the staple neutrals (Gris Tourterelle, Nata, Béton, Gris Meyer, etc.).
-4. **Lookbook + runway sweep, big five — IN PROGRESS** — walk Vogue Runway and each house's newsroom
-   season by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
-   ✅ **Louis Vuitton** done (run 4, `louis-vuitton.{md,jsonl}`): models + lines/canvases/leathers +
+4. ✅ **Lookbook + runway sweep, big five — COMPLETE (first pass)** — walked Vogue Runway, auction
+   catalogs (Christie's/Sotheby's), and reseller guides house by house, pulling debut/reissue/retire
+   facts for each model + the named layer.
+   ✅ **Louis Vuitton** (run 4, `louis-vuitton.{md,jsonl}`): models + lines/canvases/leathers +
    Vernis/Epi dated colorways; Empreinte name list + 2023–2026 season-labeled colors queued.
-   ✅ **Dior** done (run 5, `dior.{md,jsonl}`): models + Cannage/Oblique/Toile de Jouy techniques +
+   ✅ **Dior** (run 5, `dior.{md,jsonl}`): models + Cannage/Oblique/Toile de Jouy techniques +
    named capsules/Lady Art editions. Honest finding: Dior doesn't name per-season Lady Dior colors,
    so the named layer is capsules. dior.com newsroom queued for owner-present Chrome path.
-   **NEXT: Gucci**, then Chanel/Hermès seasonal-color backfill.
+   ✅ **Gucci** (run 6, `gucci.{md,jsonl}`): models incl. collabs + Diamante/GG/Web/Horsebit/Bamboo/
+   Flora motifs + the named layer (Rosso Ancora + Flora + Ken Scott + Hacker). Same honest finding as
+   Dior: Gucci doesn't name most per-season colors; Rosso Ancora (De Sarno SS24) is the exception.
+   (Hermès leathers + Chanel codes were done in earlier tasks.) gucci.com season pages queued for Chrome.
+   **NEXT: backfills — Hermès seasonal 2020-2023 + pre-2020 (deepest archive), then Bottega/YSL/Celine.**
 5. **Backfill the rest** — Bottega, YSL, Celine, Fendi, Prada, Loewe.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
