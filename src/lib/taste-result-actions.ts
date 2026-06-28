@@ -3,6 +3,7 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import { tasteIdentity, type Mark, type Vibe, type Logo } from "./taste-identity";
+import { getShopProducts } from "./listings";
 
 /** The raw quiz answers sent from the client. */
 export interface TasteQuizAnswers {
@@ -43,4 +44,48 @@ export async function saveTasteResult(quiz: TasteQuizAnswers): Promise<{ ok: boo
   // Pre-0034: the columns don't exist yet. Degrade silently, don't surface an error.
   if (error && !isMissingColumn(error)) return { ok: false };
   return { ok: !error };
+}
+
+export interface StyleReadMatch {
+  variantId: number;
+  brandName: string;
+  styleName: string;
+  fromPrice: number;
+  currency: string | null;
+}
+
+function lovedKeys(marks: Record<string, Mark> | undefined): string[] {
+  return marks ? Object.keys(marks).filter((k) => marks[k] === "love") : [];
+}
+function notKeys(marks: Record<string, Mark> | undefined): string[] {
+  return marks ? Object.keys(marks).filter((k) => marks[k] === "not") : [];
+}
+
+/**
+ * Real bags to start someone on after their Style read. Honest v1: pulls live
+ * shop products, drops any "not for me" house, and floats the loved houses to the
+ * front. Attribute-level (vibe/material/hardware) matching needs per-bag fields we
+ * don't carry yet, so we don't claim it. Always returns [] on any failure.
+ */
+export async function getStyleReadMatches(quiz: TasteQuizAnswers): Promise<StyleReadMatch[]> {
+  try {
+    const loved = new Set(lovedKeys(quiz.houses));
+    const excluded = new Set(notKeys(quiz.houses));
+    const res = await getShopProducts({}, 60);
+    const products = res.products
+      .filter((p) => !excluded.has(p.brandName))
+      .sort((a, b) => (loved.has(b.brandName) ? 1 : 0) - (loved.has(a.brandName) ? 1 : 0));
+    // Dedupe by variant so a rail doesn't repeat the same bag.
+    const seen = new Set<number>();
+    const out: StyleReadMatch[] = [];
+    for (const p of products) {
+      if (seen.has(p.variantId)) continue;
+      seen.add(p.variantId);
+      out.push({ variantId: p.variantId, brandName: p.brandName, styleName: p.styleName, fromPrice: p.fromPrice, currency: p.currency });
+      if (out.length >= 8) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
 }

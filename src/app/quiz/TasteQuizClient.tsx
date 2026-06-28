@@ -4,7 +4,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { QUIZ_FLOW, MARKS, type QuizQuestion } from "@/lib/taste-quiz";
 import { tasteIdentity, type Mark, type TasteAnswers, type Vibe, type Logo } from "@/lib/taste-identity";
-import { saveTasteResult } from "@/lib/taste-result-actions";
+import { saveTasteResult, getStyleReadMatches, type StyleReadMatch } from "@/lib/taste-result-actions";
+import { BagImage } from "@/components/BagImage";
+import { QuickSaveHeart } from "@/components/QuickSaveHeart";
+
+function fromPrice(amount: number | null, currency: string | null) {
+  if (amount == null) return null;
+  const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
+  return `From ${symbol}${amount.toLocaleString()}`;
+}
 
 type MarkMap = Record<string, Mark>;
 
@@ -134,21 +142,24 @@ export default function TasteQuizClient({
   const next = () => setStep((s) => Math.min(s + 1, flow.length));
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
-  // Signed-in users get their result saved automatically when they reach it.
-  const savedRef = useRef(false);
+  // When the result is reached: save it for signed-in users, and fetch a few real
+  // bags to start them on. Runs once.
+  const doneRef = useRef(false);
+  const [matches, setMatches] = useState<StyleReadMatch[]>([]);
   useEffect(() => {
-    if (signedIn && onResult && !savedRef.current) {
-      savedRef.current = true;
-      void saveTasteResult({
-        occasions: a.occasions,
-        vibe: a.vibe,
-        logo: a.logo,
-        carry: a.carry,
-        finishes: a.finishes,
-        hardware: a.hardware,
-        houses: a.houses,
-      });
-    }
+    if (!onResult || doneRef.current) return;
+    doneRef.current = true;
+    const quiz = {
+      occasions: a.occasions,
+      vibe: a.vibe,
+      logo: a.logo,
+      carry: a.carry,
+      finishes: a.finishes,
+      hardware: a.hardware,
+      houses: a.houses,
+    };
+    if (signedIn) void saveTasteResult(quiz);
+    void getStyleReadMatches(quiz).then(setMatches);
   }, [signedIn, onResult, a]);
 
   return (
@@ -318,6 +329,30 @@ export default function TasteQuizClient({
               Start over
             </button>
           </div>
+
+          {matches.length > 0 && (
+            <div className="mt-10 w-full">
+              <h3 className="mb-3 font-serif text-lg text-foreground">Bags to start you on</h3>
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {matches.map((m) => (
+                  <div key={m.variantId} className="relative w-[160px] flex-shrink-0">
+                    <QuickSaveHeart variantId={m.variantId} source="style-read" className="absolute right-2 top-2 z-10" />
+                    <Link
+                      href={`/bag/${m.variantId}`}
+                      className="block rounded-2xl border border-border bg-surface p-3 transition-colors hover:border-gold"
+                    >
+                      <BagImage imageUrl={null} brand={m.brandName} className="mb-2 aspect-square w-full rounded-lg" />
+                      <p className="text-xs uppercase tracking-wide text-muted">{m.brandName}</p>
+                      <p className="line-clamp-1 font-serif text-sm text-foreground">{m.styleName}</p>
+                      {fromPrice(m.fromPrice, m.currency) && (
+                        <p className="mt-1 text-xs text-gold">{fromPrice(m.fromPrice, m.currency)}</p>
+                      )}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

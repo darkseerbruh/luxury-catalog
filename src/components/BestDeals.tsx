@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getDeals } from "@/lib/deals";
 import { getVariantImages } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
+import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 
 /**
  * "Best deals right now" — its own homepage section (not a single goal tile).
@@ -46,28 +47,30 @@ export default async function BestDeals() {
         {deals.map((d) => {
           const name = [d.brandName, d.styleName].filter(Boolean).join(" ");
           return (
-            <Link
-              key={d.variantId}
-              href={`/bag/${d.variantId}`}
-              className="min-w-[200px] max-w-[220px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-            >
-              <div className="relative">
-                <BagImage
-                  imageUrl={images[d.variantId]}
-                  brand={d.brandName}
-                  className="mb-3 aspect-square w-full rounded-xl"
-                />
-                <span className="absolute right-2 top-2 rounded-full border border-gold/40 bg-bg/90 px-2.5 py-0.5 text-xs font-medium text-gold-soft">
-                  {d.pctUnder}% under
-                </span>
-              </div>
-              <p className="truncate font-serif text-lg text-foreground">{name}</p>
-              {d.sizeLabel && <p className="mt-0.5 text-sm text-muted">{d.sizeLabel}</p>}
-              <p className="mt-2 text-sm">
-                <span className="text-foreground">{formatPrice(d.currentPrice, d.currency)}</span>
-                <span className="text-muted"> vs. {formatPrice(d.medianPrice, d.currency)} median</span>
-              </p>
-            </Link>
+            <div key={d.variantId} className="relative min-w-[200px] max-w-[220px] flex-shrink-0">
+              <QuickSaveHeart variantId={d.variantId} source="deals" className="absolute left-2 top-2 z-10" />
+              <Link
+                href={`/bag/${d.variantId}`}
+                className="block rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
+              >
+                <div className="relative">
+                  <BagImage
+                    imageUrl={images[d.variantId]}
+                    brand={d.brandName}
+                    className="mb-3 aspect-square w-full rounded-xl"
+                  />
+                  <span className="absolute right-2 top-2 rounded-full border border-gold/40 bg-bg/90 px-2.5 py-0.5 text-xs font-medium text-gold-soft">
+                    {d.pctUnder}% under
+                  </span>
+                </div>
+                <p className="truncate font-serif text-lg text-foreground">{name}</p>
+                {d.sizeLabel && <p className="mt-0.5 text-sm text-muted">{d.sizeLabel}</p>}
+                <p className="mt-2 text-sm">
+                  <span className="text-foreground">{formatPrice(d.currentPrice, d.currency)}</span>
+                  <span className="text-muted"> vs. {formatPrice(d.medianPrice, d.currency)} median</span>
+                </p>
+              </Link>
+            </div>
           );
         })}
       </div>
