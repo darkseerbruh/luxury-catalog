@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (18 ideas)
+## The ranked slate (20 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -315,6 +315,47 @@ engagement plays, then the mixed-format supporting pieces.
   this is a 2024–2025 snapshot, dated as such, not a full history.
 - **CTA tie:** Hermès brand handoff → Birkin/Kelly pages, color-filtered.
 
+### 19. Which luxury houses actually name their bag colors (and which don't)
+- **Format:** Article (GEO, cross-house reference) + IG carousel.
+- **Finding:** A real, now-fully-sourced binary contrast across the archive. **Houses that NAME their
+  per-season colors** (a real named-color lexicon exists): **Hermès** (every color has an official name
+  + numeric code — Étoupe 18, Rouge H 46) and **Bottega Veneta** (Parakeet, Fondant, Porridge, Barolo,
+  Travertine, the "Washed" pastels). **Houses that do NOT** (color is a plain descriptor, no house
+  lexicon): **Dior** (Lady Dior cannage rotates unnamed colors), **Gucci** (GG Marmont/Dionysus rotate
+  descriptors; Rosso Ancora is the lone named exception), **Chanel** (style code + season code, color
+  left unnamed). Source: `bottega-veneta.md` Cross-house context + §3; `hermes.md`, `dior.md`,
+  `gucci.md`, `chanel.md`. BV is the new evidence that completes the contrast.
+- **Metric:** GEO. "Does Bottega name its colors / what is Parakeet / which brands name their colors"
+  is a clean, no-competition, citable answer that ties five house files together. Compounds, and the
+  counter-intuitive split ("Hermès and Bottega do, the others mostly don't") is shareable. This is a
+  stronger, archive-spanning evolution of #14 (which only listed the named-signature exceptions).
+- **What it needs:** Copywriter. Honest caveat that BV's full color list is reseller-attributed
+  (Fashionphile) pending a bottegaveneta.com confirm; **Parakeet is the one BV color confirmed
+  official** (SS2021). State the per-house findings as sourced, the BV descriptive layer as a strong
+  lead not yet house-confirmed.
+- **CTA tie:** Cross-brand handoff. Hermès + Bottega primary (the "name their colors" pair), Dior/Gucci/
+  Chanel as the contrast. **Flag: no BV bag page exists yet** (BV is fresh out of the queue) — Bottega
+  is a brand-tag handoff / hold until a BV page ships.
+
+### 20. What Bottega actually calls its bags: Jodie, Andiamo, Sardine (a logo-less house's name game)
+- **Format:** Article (GEO/heritage) + TikTok/Short riding the live trend.
+- **Finding:** BV is the no-logo house ("When your own initials are enough"), so the MODEL NAME is the
+  only identifier — and the names are dated and designer-attributed: **Cabat** (Maier, 2001/2002, first
+  Intrecciato tote), **Knot** (Maier, 2001), **Pouch** (Lee, SS2020, his first, "most-wanted product of
+  2019"), **Jodie** (Lee, Resort 2020, named after a paparazzi shot of Jodie Foster), **Cassette** (Lee,
+  pre-fall 2019, Padded FW2019), **Sardine** (Blazy debut, FW2022, the fish-shaped rod handle),
+  **Andiamo** (Blazy, SS2023, "let's go," brass knot), **Hop** (Blazy, FW2023). Plus the DNA: Intrecciato,
+  the woven leather born as a workaround for weak Veneto sewing machines (not a design flourish).
+  Source: `bottega-veneta.md` Models table + Materials §; Vogue + SACLÀB, confidence high.
+- **Metric:** ENGAGEMENT (rides the live #BagTok BV conversation — the 2026-06-28 pull showed Maxi
+  Jodie / Large Andiamo / Sardine named by line + color) with a GEO floor (the dated model names are
+  permanent facts). **Shelf life: the trend hook is live now; the model-name/origin facts are
+  permanent.** The Jodie-Foster and Intrecciato-origin stories are the shareable texture.
+- **What it needs:** Copywriter. The live-trend framing is a "read of the room" (small relevance sample)
+  per the hedge rule; the model-name facts are sourced and durable. Cabat 2001-vs-2002 stated as a range.
+- **CTA tie:** Bottega brand handoff → Jodie / Andiamo / Sardine. **Flag: no BV bag page exists yet** —
+  brand-tag handoff / hold until a BV page ships (same gap as #9).
+
 ---
 
 ## DO FIRST (the 5 highest-leverage picks)
@@ -390,5 +431,10 @@ data does not exist at the house. (Contrast: the season-CODE work IS done and wr
 - **Any value/appreciation "investment return" piece.** Banned by the compliance stance and I have no
   price data of my own (that is the Data lane's registry). Birkin-size value (#8) is flagged as needing
   the price pull before it can carry a value claim, and even then it is estimate-not-appraisal.
-- **Bottega bag pages for the CTA (#9).** BV is in the post-big-five queue, so the colorway-naming
-  trend piece has no built bag page to hand off to yet. Flagged as brand-tag handoff / hold.
+- **Bottega bag pages for the CTA (#9, #19, #20).** The BV lexicon is now DONE (`bottega-veneta.md`,
+  run 9: 17 models, Intrecciato DNA, 50 named colors), so the colorway-naming and "what BV calls its
+  bags" pieces are sourced and writable. But no BV bag PAGE exists in the catalog yet, so all three BV
+  ideas are brand-tag handoff / hold on the CTA until a BV page (Jodie / Andiamo / Sardine) ships.
+- **BV colors as "official" (#19/#20).** Only **Parakeet** is confirmed an official BV house color
+  (SS2021). The other 49 BV colors are reseller-attributed (Fashionphile) pending a bottegaveneta.com
+  confirm via the Chrome path; the pieces frame them as strong leads, not house-verified names.
