@@ -15,12 +15,14 @@ const API = "https://api.firecrawl.dev/v2/scrape";
 export interface ScrapeResult {
   rawHtml?: string;
   markdown?: string;
+  links?: string[];
   json?: unknown;
   creditsUsed: number;
   statusCode?: number;
 }
 
 export interface ScrapeOpts {
+  /** v2 string formats: "rawHtml" | "markdown" | "links". */
   formats?: string[];
   includeTags?: string[];
   onlyMainContent?: boolean;
@@ -38,18 +40,18 @@ function key(): string {
 
 /** Scrape one URL. Throws on transport failure; returns the page payload + credits used. */
 export async function scrape(url: string, opts: ScrapeOpts = {}): Promise<ScrapeResult> {
+  // v2: formats is an array of strings OR objects (json is `{ type: "json", prompt, schema }`).
+  const formats: unknown[] = opts.jsonOptions
+    ? [{ type: "json", ...opts.jsonOptions }]
+    : (opts.formats ?? ["rawHtml"]);
   const body: Record<string, unknown> = {
     url,
-    formats: opts.formats ?? ["rawHtml"],
+    formats,
     onlyMainContent: opts.onlyMainContent ?? false,
     proxy: opts.proxy ?? "auto",
   };
   if (opts.includeTags) body.includeTags = opts.includeTags;
   if (opts.waitFor) body.waitFor = opts.waitFor;
-  if (opts.jsonOptions) {
-    body.formats = ["json"];
-    body.jsonOptions = opts.jsonOptions;
-  }
 
   const res = await fetch(API, {
     method: "POST",
@@ -61,13 +63,14 @@ export async function scrape(url: string, opts: ScrapeOpts = {}): Promise<Scrape
   }
   const data = (await res.json()) as {
     success?: boolean;
-    data?: { rawHtml?: string; markdown?: string; json?: unknown; metadata?: { creditsUsed?: number; statusCode?: number } };
+    data?: { rawHtml?: string; markdown?: string; links?: string[]; json?: unknown; metadata?: { creditsUsed?: number; statusCode?: number } };
     error?: string;
   };
   if (!data.success || !data.data) throw new Error(`Firecrawl no data for ${url}: ${data.error ?? "unknown"}`);
   return {
     rawHtml: data.data.rawHtml,
     markdown: data.data.markdown,
+    links: data.data.links,
     json: data.data.json,
     creditsUsed: data.data.metadata?.creditsUsed ?? 0,
     statusCode: data.data.metadata?.statusCode,

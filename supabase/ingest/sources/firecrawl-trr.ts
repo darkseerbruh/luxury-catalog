@@ -41,21 +41,6 @@ const TARGETS: Record<string, TrrTarget> = {
   },
 };
 
-const SEARCH_SCHEMA = {
-  type: "object",
-  properties: {
-    listings: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: { title: { type: "string" }, price_usd: { type: "number" }, url: { type: "string" } },
-        required: ["url"],
-      },
-    },
-  },
-  required: ["listings"],
-};
-
 /** Pull the JSON-LD `Product` out of a TRR product page's raw HTML. TRR escapes the
  *  ld+json (it sits double-encoded inside the Next.js payload), so we decode twice. */
 export function parseTrrProduct(html: string): { name: string; price: number; currency: string; condition: string | null; desc: string | null } | null {
@@ -106,19 +91,25 @@ async function main() {
 
   const searchUrl = `https://www.therealreal.com/products?keywords=${encodeURIComponent(target.query)}`;
   console.log(`search: ${searchUrl}`);
-  const search = await scrape(searchUrl, { jsonOptions: { prompt: "Extract every handbag listing on this search page: title, price in USD, and product URL.", schema: SEARCH_SCHEMA }, waitFor: 5000 });
+  // Scrape the search page for its LINKS (1 credit) — cheaper than json/LLM extract (5)
+  // and gives us the product URLs we need. Specs come from each product's JSON-LD below.
+  const search = await scrape(searchUrl, { formats: ["links"], waitFor: 5000 });
   let credits = search.creditsUsed;
-  const raw = ((search.json as { listings?: { url: string; title?: string }[] })?.listings ?? []);
+  const links = (search.links ?? []).map((u) => u.split("?")[0].split("#")[0]);
 
-  const candidates = raw.filter((l) => {
-    const u = (l.url ?? "").toLowerCase();
-    if (!u.startsWith("http")) return false;
+  // Unique product URLs that are this style (not adjacent SLGs / sub-styles).
+  const seen = new Set<string>();
+  const candidates = links.filter((u0) => {
+    const u = u0.toLowerCase();
+    if (!u.startsWith("http") || !u.includes("/products/")) return false;
     if (!u.includes("louis")) return false;
     if (!target.urlIncludes.every((t) => u.includes(t))) return false;
     if (target.urlExcludes.some((t) => u.includes(t))) return false;
+    if (seen.has(u0)) return false;
+    seen.add(u0);
     return true;
-  }).slice(0, limit);
-  console.log(`candidates: ${candidates.length} (of ${raw.length} raw)`);
+  }).map((url) => ({ url })).slice(0, limit);
+  console.log(`candidates: ${candidates.length} (of ${links.length} links)`);
 
   const today = new Date().toISOString().slice(0, 10);
   const obs: PriceObservation[] = [];
