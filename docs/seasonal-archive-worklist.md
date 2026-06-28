@@ -239,6 +239,46 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 13)** — Did the PRADA lexicon (house 10, "other houses" queue, after Fendi).
+  Output `docs/research-drafts/seasonal-archive/prada.{md,jsonl}` (32 jsonl data rows: 18 models incl.
+  2 honest leads / 8 materials / 6 colors). **THE KEY VALUE was the TWO-DNA material regime + the
+  ARCHIVE-YEAR reissue decoder.** (1) **Prada has TWO house DNAs, not one: SAFFIANO + NYLON.** Saffiano
+  = the cross-hatch treated leather **invented + patented by Mario Prada in 1913** (the Galleria 2007
+  flagship); nylon = the woven Tessuto Miuccia elevated to luxury, debuted as the **Vela backpack 1984**,
+  "an emblem of the brand's DNA" (Prada Group's words), remade as recycled **Re-Nylon/Econyl 2019** (Aquafil
+  partnership). A Prada listing is identified first by which DNA it is built in. (2) **The Re-Edition bags
+  are named by ARCHIVE YEAR** - Re-Edition **1995** (FW1995 archive, reissued 2022, CBK favorite), **2000**
+  + **2005** (early-2000s nylon shoulder bags, reprised late 2019 in Re-Nylon; the **2000=fabric strap**,
+  **2005=Saffiano-leather strap** distinction). The number = the year the original debuted, NOT a size/style
+  code. This is the GEO-valuable Prada decoder. (3) **The inverted-triangle enamel plaque stamped 'dal 1913'**
+  is the signature mark (the triptych motif Mario Prada first used on vintage trunks). DESIGNER: **Miuccia
+  Prada is the long-time designer; Raf Simons joined as co-creative-director 2020** (sourced via Vogue's Cleo
+  note "a year shy of Raf Simons' appointment"), so Cleo SS2021 / Symbole 2022 / Arque 2023 / Moon revival are
+  Miuccia+Raf era. **HONEST COLOR FINDING HELD (Dior/Gucci/YSL/Celine/Fendi camp, NOT Hermes/Bottega): Prada
+  does NOT name its per-season colors** - descriptors are plain, often flat Italian shade names (**Rosa**=pink,
+  **Cammeo**=cameo nude, **Talco**=talc/off-white) + editorial descriptors (inky black, cherry red, millennial
+  pink); naming weight sits on MODEL + MATERIAL + the triangle plaque. The Galleria "pop colors" special edition
+  (Alex Da Corte / Scarlett Johansson, Spring 2023) is an art-collab capsule, NOT a named-color system. HELD
+  RIGOR: a standalone **'Triangle bag'** model + the **'Double Bag'** did NOT surface with a clean source -
+  logged low/lead NOT fabricated (the triangle LOGO plaque is fully sourced as a material); the **'Pocone'/'Pocono'**
+  nylon trade name did NOT surface - logged as an unverified beat lead NOT stated as fact (sourced nylon terms
+  are Tessuto + Re-Nylon/Econyl); **'BR4651-era classics'** is a style-code prefix NOT a model name - NOT logged
+  as a model. Brief framing checked: the brief tied "Saffiano Lux Tote" to the GALLERIA, but Luxe Digital ties
+  the "Saffiano Lux Tote" name to the **PROMENADE** - logged per the source, flagged for verification. Appended
+  1 content idea (#24, the Re-Edition archive-year decoder + the Saffiano-vs-nylon two-Pradas explainer, GEO;
+  Prada brand CTA, flagged check-if-bag-page-exists). **Next unit: LOEWE** (Puzzle/Hammock/Flamenco/Amazona/Gate),
+  the LAST "other house", then the Hermes seasonal backfill (2020-2023 + pre-2020, the highest-GEO-value open gap).
+- Tooling note (run 13): 4 firecrawl_search (one returned 0 results / 0 credits = no feedback needed; the other 3
+  all refunded 2->1 via feedback within 2 min) + 4 raw scrapes (Vogue 'Prada Handbags 101' = the debut-year
+  WORKHORSE w/ per-model prose; Fashionphile Academy '10 Styles' = the Bowler/Cahier/Dynamique/Symbole-years +
+  2000-vs-2005-strap WORKHORSE; Luxe Digital Jan-2026 buyer's guide = the per-model RELEASE-YEAR WORKHORSE +
+  Promenade=Saffiano Lux Tote + Sidonie/Arque/Moon; Prada Group sustainability = the OFFICIAL Re-Nylon source)
+  = ~7 credits net. **prada.com retail site NOT scraped wholesale** (Akamai bot-shell risk per LV/Dior/Gucci/BV/
+  YSL/Celine/Fendi); the Saffiano-1913-patent + Galleria-Saffiano facts came via Rebag + prada.com search
+  snippets, and **pradagroup.com corporate sustainability page scraped CLEAN** (it is NOT the Akamai retail .com -
+  it is the auction-grade equivalent for the Re-Nylon material). No Christie's/Sotheby's Prada collecting-guide
+  page surfaced (same as BV/YSL/Celine/Fendi). The 'Pocone' nylon name + the Triangle/Double-Bag model status +
+  the BR-prefix code decoder are the queued Chrome/PurseForum backfill.
 - **2026-06-28 (run 12)** — Did the FENDI lexicon (house 9, "other houses" queue, after Celine).
   Output `docs/research-drafts/seasonal-archive/fendi.{md,jsonl}` (37 jsonl data rows: 22 models / 9
   materials-motifs / 6 colors incl. the honest-finding row). **THE KEY VALUE was the DESIGNER
@@ -535,7 +575,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Saint Laurent (YSL) | ✅ canon + heritage/era (23 rows; Tom Ford/Pilati/Slimane/Vaccarello attributed; undated ones flagged null/low not invented) | ✅ Cassandre monogram (1963) + matelassé chevron vs diamond + Grain de Poudre + croc/smooth calf + Rive Gauche + Mombasa horn (9) | 🟨 honest finding: YSL does NOT name per-season colors (Dior/Gucci camp). 7 rows: plain neutrals/darks + gold/silver Cassandre hardware-tone axis + Rive Gauche print | 2026-06-28 (run 10: ✅ → `saint-laurent.{md,jsonl}`) | exact debut seasons for Le 5 à 7/Manhattan/Solferino/Jamie/College/Lou/Muse Two/Downtown/modern Loulou/Icare/Kate via ysl.com heritage + Vogue Runway (Chrome path; ysl.com Akamai-blocks Firecrawl) + the Vogue 101 slideshow (JS gallery, Chrome); Christie's/Sotheby's YSL lots for auction-grade heritage years |
 | Celine | ✅ canon + 3-era/accent attribution (16 sourced incl. Teen Triomphe; Conti/Romy/Folco/Tabou/Ring logged unsourced not invented) | ✅ Triomphe clasp (1970s archive) + Triomphe Canvas (1972 monogram) + Drummed/smooth calf + exotics + winged silhouette (9) | 🟨 honest finding: Celine does NOT name per-season colors (Dior/Gucci/YSL camp). 5 plain neutrals (Tan/Black/Camel/Natural/Brown) | 2026-06-28 (run 11: ✅ → `celine.{md,jsonl}`) | exact debut years for Trio/Phantom/Cabas/Sangle/Besace + source Conti/Romy/Folco/Tabou/Ring via celine.com (Chrome path; Akamai-risk) + PurseForum Celine subforum; Christie's/Sotheby's Celine lots for Philo heritage dating |
 | Fendi | ✅ canon + designer attribution (22 rows; bags=Silvia Venturini Fendi, logos=Lagerfeld, First/Fendigraphy=Kim Jones; Kan I/Kan U + Touch logged unsourced-year not invented, C'mon omitted not invented) | ✅ TWO-signature DNA: FF Zucca + Zucchino + FF 1974 + Karligraphy (logos) + Selleria saddle-stitch (1925) on Cuoio Romano + Pequin + fur + exotics (9) | 🟨 honest finding: Fendi does NOT name per-season colors (Dior/Gucci/YSL/Celine camp). 6 rows: plain shade descriptors (Brown/Camelia/Black/Tobacco/Spring Turquoise) + the no-lexicon finding | 2026-06-28 (run 12: ✅ → `fendi.{md,jsonl}`) | clean debut years for Kan I/Kan U + Touch + verify/date 'C'mon' via fendi.com (Chrome path; Akamai-risk) + PurseForum Fendi subforum; original debut years for Sunshine/2Jours/Way; Christie's/Sotheby's/Heritage Fendi lots for Baguette/Peekaboo heritage dating; resolve FF Zucca 1965-vs-1966 + Peekaboo 2008-vs-2009 via fendi.com heritage |
-| Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Prada next (Galleria/Re-Edition/Cleo), then Loewe (Puzzle/Hammock/Flamenco) |
+| Prada | ✅ canon + era (16 sourced: Galleria 2007/Re-Edition 1995-2000-2005/Cleo 2021/Symbole 2022/Arque 2023/Moon SS2002/Cahier FW2016/Promenade 2007/Sidonie FW2018/Vela 1984/Bowler 2000/Dynamique 2020/Logo Tote 2021/Nappa Antique SS2023; Triangle bag + Double Bag logged low not invented) | ✅ TWO DNAs: Saffiano (Mario Prada patent 1913) + nylon/Tessuto (Vela 1984) + Re-Nylon/Econyl (2019) + inverted-triangle 'dal 1913' plaque + Vitello/spazzolato/antique nappa/raffia (8) | 🟨 honest finding: Prada does NOT name per-season colors (Dior/Gucci/YSL/Celine/Fendi camp). 6 rows: flat Italian shade names (Rosa/Cammeo/Talco) + editorial descriptors + the no-lexicon finding | 2026-06-28 (run 13: ✅ → `prada.{md,jsonl}`) | confirm 'Pocone'/'Pocono' nylon trade name + resolve 'Triangle bag'/'Double Bag' model status + the BR4651 style-code prefix via prada.com (Chrome path; Akamai-risk) + PurseForum Prada subforum; verify Promenade=Saffiano Lux Tote vs Galleria; Christie's/Sotheby's Prada lots for Galleria/Cahier heritage dating |
+| Loewe | ⬜ | ⬜ | ⬜ none | — | Loewe next (Puzzle/Hammock/Flamenco/Amazona/Gate), the LAST other house, then the Hermès seasonal backfill |
 
 ---
 
@@ -586,7 +627,13 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    Selleria saddle-stitch leather line, 1925, on Cuoio Romano). Honest finding: Fendi does NOT name
    per-season colors (Dior/Gucci/YSL/Celine camp). 2025-2026 update (post-dates the brief): Silvia →
    Honorary President Oct 2025; Maria Grazia Chiuri = new Womenswear/Couture CD, debut Feb 2026.
-   **NEXT: Prada** (Galleria/Re-Edition/Cleo), then Loewe (Puzzle/Hammock/Flamenco).
+   ✅ **Prada** (run 13, `prada.{md,jsonl}`): the TWO-DNA regime — Saffiano (Mario Prada patent 1913, the
+   Galleria 2007) + nylon (Tessuto/Vela 1984, Re-Nylon/Econyl 2019) — plus the ARCHIVE-YEAR reissue decoder
+   (Re-Edition 1995/2000/2005 = the year the original debuted; 2000=fabric strap, 2005=Saffiano-leather strap)
+   and the inverted-triangle 'dal 1913' plaque. Miuccia Prada long-time designer; Raf Simons co-CD from 2020.
+   Honest finding: Prada does NOT name per-season colors (Dior/Gucci/YSL/Celine/Fendi camp) — flat Italian
+   shade names (Rosa/Cammeo/Talco). 'Triangle bag'/'Double Bag'/'Pocone' nylon name logged low/lead not invented.
+   **NEXT: Loewe** (Puzzle/Hammock/Flamenco/Amazona/Gate), the LAST other house.
    Hermès seasonal-color backfill (2020-2023 + pre-2020) also still open and is the highest-GEO-value gap.
 
 ## Recommendation to flag to the owner (do not build unsolicited)

@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (23 ideas)
+## The ranked slate (24 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -431,6 +431,32 @@ engagement plays, then the mixed-format supporting pieces.
   as the "how this icon was born" heritage cluster.
 - **CTA tie:** Fendi Baguette bag handoff. **Flag: check whether a Fendi Baguette bag page exists yet**;
   if not, brand-tag handoff.
+
+---
+
+### 24. The two Pradas: Saffiano (leather) vs nylon, and why "Re-Edition 1995" is a year, not a size
+- **Format:** Article (GEO/decoder) with an IG carousel cutdown (one card = Saffiano, one = nylon, three
+  cards = the Re-Edition archive-year decoder).
+- **Finding:** Two clean, citable Prada facts most buyers get wrong. **(1) Prada has two material DNAs,
+  not one.** **Saffiano** is the cross-hatch treated leather **invented and patented by Mario Prada in
+  1913** (the material of the **Galleria**, debuted 2007); **nylon** (Tessuto) is the workaday fabric
+  Miuccia Prada elevated to luxury, debuting the **Vela backpack in 1984**, now remade as recycled
+  **Re-Nylon/Econyl since 2019**. Both wear the same inverted-triangle plaque stamped **"dal 1913."**
+  **(2) The "Re-Edition" number is the archive year, not a size or style code.** **Re-Edition 1995** =
+  a Fall-1995 archive bag (reissued 2022, a Carolyn Bessette-Kennedy favorite); **Re-Edition 2000** and
+  **2005** = early-2000s nylon shoulder bags reprised in late 2019, and the practical tell between them
+  is the strap (**2000 = fabric strap, 2005 = Saffiano-leather strap**). Source: `prada.md` Models +
+  Materials tables; Vogue "Prada Handbags 101" + Fashionphile + Luxe Digital + Prada Group, confidence high.
+- **Metric:** GEO (compounding). "What is Saffiano leather," "what year is the Prada Re-Edition," and
+  "Re-Edition 2000 vs 2005 difference" are real, recurring search/answer-engine queries with clean,
+  permanent answers no house page lays out side by side. **Shelf life: permanent** (1913 patent, 1984
+  Vela, 2019 Re-Nylon, and the archive-year naming convention do not expire).
+- **What it needs:** Copywriter. All facts sourced and durable. Hedge any value/appreciation line the
+  house rules way (estimate not appraisal); the piece is a naming/decoder explainer, not an investment
+  pitch. Pairs with #19 (which houses name their colors) and #10 (Dior does not name its colors) as the
+  "how each house's naming actually works" GEO cluster — Prada is the model-plus-material case.
+- **CTA tie:** Prada Galleria + Prada Re-Edition handoff. **Flag: check whether a Prada Galleria or
+  Re-Edition bag page exists yet**; if not, brand-tag handoff.
 
 ---
 
