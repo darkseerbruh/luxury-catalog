@@ -33,8 +33,8 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 (loader drops zero-variant styles), then capture every source, load, refresh. Headless now
 = Fashionphile + Wayback; TRR/Vestiaire need a Chrome session; eBay needs her keys.*
 
-- ⬜ **Goyard** — Saint Louis, Anjou, Artois, Belvédère, Saïgon (+ Rouette, Bohème)
-- ⬜ **The Row** — Margaux, Half Moon, Bindle, Park Tote, Soft Margaux (+ Terrasse)
+- 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (134 rows, 2026-06-28: PM med $2,465 n=89, GM med $2,460 n=45, w/ colour+material). ⬜ Anjou, Artois, Belvédère, Saïgon + TRR/Vestiaire (Chrome) + eBay (keys)
+- 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
 - ⬜ **Balenciaga** — Le Cagole, Hourglass, City, Neo Classic (+ Velo, Papier)
 - ⬜ **Chloé** — Marcie, Drew, Faye, Woody Tote, C Bag (+ Aby, Penelope)
 - ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
