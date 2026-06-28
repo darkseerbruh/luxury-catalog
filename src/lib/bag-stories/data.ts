@@ -7,7 +7,7 @@ import type { BagStory } from "./types";
  *
  * Sourcing note (date: 2026-06): facts below were pulled from the cited pages.
  * Re-verify on a refresh pass; figures (e.g. the auction record) carry their
- * year so they are never read as "current" once stale.
+ * year so an older figure is never misread as "current".
  */
 export const BAG_STORIES: BagStory[] = [
   {

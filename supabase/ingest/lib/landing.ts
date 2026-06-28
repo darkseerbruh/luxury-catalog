@@ -27,7 +27,7 @@ export function writeObservations(
   const dir = sourceDir(source);
   fs.mkdirSync(dir, { recursive: true });
   // Each run is the canonical snapshot for this source — clear prior files so the
-  // loader doesn't double-count stale captures (the DB index would dedup on
+  // loader doesn't double-count prior captures (the DB index would dedup on
   // write, but a clean landing keeps dry-run counts honest).
   for (const f of fs.readdirSync(dir)) {
     if (f.endsWith(".json")) fs.rmSync(path.join(dir, f));

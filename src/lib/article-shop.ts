@@ -84,7 +84,7 @@ export async function getStyleShopData(styleId: number | null): Promise<StyleSho
     // The 3 surfaced "view" links are the actual affiliate clicks, so prefer sources whose
     // live status is genuinely maintained: Fashionphile is re-crawled + retired every few hours
     // (headless), so a still-shown Fashionphile listing is very likely live. eBay/Poshmark/TRR
-    // rows only flip to sold on the browser-gated re-capture, so they go stale fastest and a
+    // rows only flip to sold on the browser-gated re-capture, so their live status decays fastest and a
     // "view" click can land on a sold page (dead affiliate click). Rank reliable-live first,
     // then freshest observation, then lowest price. This re-ranks the 3 links only; the count +
     // median (dated by asOf) still reflect every live row.
