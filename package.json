@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "analytics:digest": "tsx scripts/analytics-digest.ts",
+    "analytics:pulse": "tsx scripts/analytics-pulse.ts",
     "analyze:deals": "tsx supabase/ingest/analyze-deal-spread.ts",
     "classify:families": "tsx supabase/ingest/classify-spec-families.ts",
     "import:images": "tsx supabase/seed/import-variant-images.ts",
