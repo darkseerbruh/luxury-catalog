@@ -97,6 +97,31 @@ no feed). **Defunct:** Cudoni.
 source is silent, never invented); search pages give price+size+year, detail pages give colour/material/
 condition; run captures from the **Data lane**, not mixed into UX work.
 
+### 0d. Firecrawl cost model (evidence 2026-06-28; re-confirm at signup)
+
+**Credit cost (verified by observation):** a plain scrape (markdown/rawHtml) = **1 credit/page**;
+a **`json`/LLM-extract scrape = 5 credits/page**. So the #1 cost lever: **scrape raw + parse with our
+OWN adapters (trr.ts/vestiaire/fashionphile) = 1 credit**, never pay 5 for Firecrawl's LLM extract.
+Monitor = 1 credit/page/check. Credits **don't roll over** (size to monthly need).
+**Plans (firecrawl.dev/pricing + corroborated):** Free 1k/mo $0 · Hobby 5k/mo **$16** · Standard 100k/mo
+**$83** · Growth 500k/mo **$333** · Scale 1M/mo **$749** ($599 billed yearly; ~17-20% off annual).
+
+**Catalog scale (DB, 2026-06-28):** 27 brands · 431 styles · 366 with variants · 804 variants.
+**Free sources (0 Firecrawl credits):** Fashionphile, Redeluxe, Couture USA (open Shopify feeds).
+
+**Cost model** (1 search-page scrape per style×source returns many listings; detail-scrape only NEW
+listings for colour/material; assume ~6 Firecrawl sources, parse-ourselves = 1 credit):
+
+| Design | Recurrence | ~Credits/mo | Plan | $/mo |
+|---|---|---|---|---|
+| Pilot (≈25 hero styles, search-only) | daily | ~4.5k | Hobby | $16 |
+| **Steady (≈60 hero+T1, search daily + new-listing detail weekly)** | daily+weekly | ~13k | Standard | **$83** |
+| Broad (all ~366 styles search daily + detail weekly) | daily+weekly | ~70k | Standard | $83 |
+| Aggressive (all styles × 8 srcs, per-listing detail DAILY) | daily | ~800k+ | Growth/Scale | $333+ |
+
+**Takeaway:** even *broad* daily coverage fits the **$83 Standard** plan if we parse ourselves and
+detail-scrape only new listings. Budget blows up only via LLM-extract (5×) or daily per-listing detail.
+
 ---
 
 ## 1. What this is
