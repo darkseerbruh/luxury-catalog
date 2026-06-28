@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { QUIZ_FLOW, MARKS, type QuizQuestion } from "@/lib/taste-quiz";
 import { tasteIdentity, type Mark, type TasteAnswers, type Vibe, type Logo } from "@/lib/taste-identity";
+import { saveTasteResult } from "@/lib/taste-result-actions";
 
 type MarkMap = Record<string, Mark>;
 
@@ -133,6 +134,23 @@ export default function TasteQuizClient({
   const next = () => setStep((s) => Math.min(s + 1, flow.length));
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
+  // Signed-in users get their result saved automatically when they reach it.
+  const savedRef = useRef(false);
+  useEffect(() => {
+    if (signedIn && onResult && !savedRef.current) {
+      savedRef.current = true;
+      void saveTasteResult({
+        occasions: a.occasions,
+        vibe: a.vibe,
+        logo: a.logo,
+        carry: a.carry,
+        finishes: a.finishes,
+        hardware: a.hardware,
+        houses: a.houses,
+      });
+    }
+  }, [signedIn, onResult, a]);
+
   return (
     <div>
       <div className="mb-5 flex items-center gap-3">
@@ -143,7 +161,7 @@ export default function TasteQuizClient({
           />
         </div>
         <span className="shrink-0 text-xs text-muted">
-          {onResult ? "Your read" : `Step ${step + 1} of ${total}`}
+          {onResult ? "Your result" : `Step ${step + 1} of ${total}`}
         </span>
       </div>
 
@@ -251,7 +269,7 @@ export default function TasteQuizClient({
       {onResult && (
         <div className="flex flex-col items-center">
           <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-7 text-center">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-muted">What your style does</div>
+            <div className="text-[11px] uppercase tracking-[0.18em] text-muted">What your style says</div>
             <div className="mt-3 font-serif text-3xl leading-tight text-foreground">{identity.headline}</div>
             <p className="mt-3 font-serif text-base italic text-gold-soft">{identity.read}</p>
             {identity.tags.length > 0 && (
@@ -269,23 +287,30 @@ export default function TasteQuizClient({
             )}
           </div>
 
-          <div className="mt-6 flex flex-col items-center gap-3">
+          <div className="mt-6 flex w-full max-w-sm flex-col items-center gap-4">
             {signedIn ? (
               <Link
                 href="/search"
                 className="rounded-full bg-gold px-6 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
               >
-                See bags that are you
+                See my bags
               </Link>
             ) : (
               <>
+                <div className="w-full rounded-xl border border-border bg-surface-raised p-4 text-left">
+                  <p className="mb-2 text-center text-sm text-foreground">An account does more with it</p>
+                  <ul className="flex flex-col gap-1.5 text-sm text-muted">
+                    <li className="flex gap-2"><span className="text-gold">+</span> Keeps your read and your boards</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Tells you when a bag you want drops</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Saves the bags matched to your taste</li>
+                  </ul>
+                </div>
                 <Link
                   href="/signup"
                   className="rounded-full bg-gold px-6 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
                 >
-                  Save your read, get your matches
+                  Create account
                 </Link>
-                <p className="text-xs text-muted">It&apos;s yours either way. Saving keeps it and unlocks price alerts.</p>
               </>
             )}
             <button type="button" onClick={() => setStep(0)} className="text-sm text-muted/80 hover:text-foreground">

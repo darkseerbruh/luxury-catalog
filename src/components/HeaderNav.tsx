@@ -24,7 +24,7 @@ const SHOP_MENU: NavLink[] = [
 
 const DISCOVER_MENU: NavLink[] = [
   { href: "/identify", label: "Identify" },
-  { href: "/quiz", label: "Quiz" },
+  { href: "/quiz", label: "Style read" },
   { href: "/articles", label: "Articles" },
 ];
 
