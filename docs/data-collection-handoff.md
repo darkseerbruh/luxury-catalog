@@ -122,6 +122,19 @@ listings for colour/material; assume ~6 Firecrawl sources, parse-ourselves = 1 c
 **Takeaway:** even *broad* daily coverage fits the **$83 Standard** plan if we parse ourselves and
 detail-scrape only new listings. Budget blows up only via LLM-extract (5×) or daily per-listing detail.
 
+**MEASURED (live CI run 2026-06-28, TheRealReal):** the 1-credit ideal does NOT hold for TRR — its
+product pages ERR_ABORT the cheap proxy ~half the time, so we retry on the stealth proxy, and a Goyard
+Saint Louis run of 20 listings cost **57 credits (~2.85/listing)** + 1 for the search. Real TRR burn ≈
+**3× the parse-ourselves ideal.** Revised: a daily pilot of even ~10 styles × ~20 listings ≈ ~17k
+credits/mo, which **exceeds the free 1k tier** and points at **Standard ($83) sooner than the table
+implies.** Free-tier validation must stay tiny (1 style/day, low `--limit`). Cost levers: detail-scrape
+only NEW `listing_ref`s (not all, daily), cap `--limit`, lean on the 0-credit Shopify feeds (Fashionphile,
+Redeluxe, Couture USA) for breadth and reserve Firecrawl for the bot-blocked sources.
+
+**PROVEN LIVE 2026-06-28:** GitHub Actions `firecrawl-capture.yml` → `firecrawl-trr.ts` → `load:prices`
+→ `summary:refresh` ran green in CI and wrote real multi-source asking data (Goyard Saint Louis PM:
+Fashionphile n=89 $2,465 median + TheRealReal n=20 $2,065 median). Daily cron is live (`23 6 * * *`).
+
 ---
 
 ## 1. What this is
