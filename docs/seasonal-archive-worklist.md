@@ -239,6 +239,37 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 9)** — Did the BOTTEGA VENETA lexicon (house 6, first of the "other houses"
+  queue). Output `docs/research-drafts/seasonal-archive/bottega-veneta.{md,jsonl}` (77 jsonl data
+  rows: 18 models incl. 1 caption-lead / 9 materials / 50 colors). **The important finding held:
+  BV genuinely NAMES its colors** (the counter-case to Dior/Gucci), so this is a real Hermès-like
+  named-color layer — 50 colors captured, but only **Parakeet** logged `official` (double-sourced,
+  reintroduced SS2021, the BV house green); the other 49 are `descriptive (reseller-attributed)`
+  at medium confidence (Fashionphile's BV color guide), queued for promotion to official + debut
+  seasons via bottegaveneta.com (Chrome path). The live trend leads CHECKED OUT: "porridge" and
+  "fondant" ARE real BV color names (Fashionphile). MODELS sourced with designer era (Vogue
+  workhorse + SACLÀB history): Maier era — Cabat (2001/2002, conflict flagged), Knot (2001), Veneta
+  hobo, Roma; Lee era — Pouch (SS2020, his first), Jodie (Resort 2020), Cassette (pre-fall 2019,
+  Padded FW2019), Arco; Blazy era — Sardine (FW2022 debut), Kalimero (FW2022), Clicker (resort 2023),
+  Andiamo (SS2023), Hop (FW2023), Parachute (pre-fall 2024 re-release), Lauren 1980, Liberta (FW2024).
+  HELD RIGOR: Loop/Mount/Point/Sunshine were briefed but NOT sourced — logged honestly as unsourced,
+  NOT invented; Campana logged as a caption-attested model-name lead (no year). INTRECCIATO given DNA
+  treatment with its SOURCED origin (a workaround for weak Veneto sewing machines, not a design
+  flourish); Maxi Intrecciato (Lee 2019) + Padded Intreccio (Lee FW2019) variants captured. CULTURAL
+  fact (official Kering): Matthieu Blazy left for Chanel (Dec 2024); **Louise Trotter** (ex-Carven)
+  named Creative Director, joined end Jan 2025 — Trotter's new names are the live unknown to watch.
+  Appended 2 BV content ideas (the "houses that name their colors vs houses that don't" GEO play +
+  the "what BV actually calls its bags" Jodie/Andiamo/Sardine explainer riding the live trend).
+  **Next unit: YSL (Loulou/Kate/Le 5 à 7), or the Hermès seasonal backfill (2020-2023 + pre-2020).**
+- Tooling note (run 9): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 3 raw
+  scrapes (Vogue BV history = the model WORKHORSE; Fashionphile BV color guide = the color
+  WORKHORSE; SACLÀB BV history = Intrecciato origin + Maier-era heritage) = ~7 credits net.
+  **bottegaveneta.com NOT scraped** (Akamai bot-shell risk per LV/Dior/Gucci). No Christie's/Sotheby's
+  BV collecting-guide page surfaced this run (unlike Dior/Gucci) — BV's clean free sources were Vogue
+  + Fashionphile + SACLÀB. The Vogue BV article is a 171k-char escaped-`\n` body — decode `\\n`→newline
+  in Python before regex on `## ` headers (raw `\n##` won't match the escaped file). luxbags.fr BV
+  color-code database surfaced but not scraped — it's the source to turn colors into a code-keyed
+  lexicon next run.
 - **2026-06-28 (run 8)** — CONTENT-IDEAS expansion (code-driven). Added 2 ideas to the slate
   (now 18): **#2 "Decode your Chanel" interactive widget** (flagged a UX-LANE BUILD handoff, the
   flagship code play — deterministic, ships off the `chanel.md` map with no backend, no house/reseller
@@ -388,7 +419,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Louis Vuitton | ✅ canon + heritage/discontinued (30 rows) | ✅ Monogram/Damier/Epi/Empreinte/Mahina/Taurillon/Taiga/Suhali families (19, well-dated) | 🟨 Vernis + Epi dated archive (sample, through ~2015) + Empreinte name list (undated); 2023–2026 season-labeled queued | 2026-06-28 (run 4: ✅ → `louis-vuitton.{md,jsonl}`) | 2023–2026 named Empreinte/Epi seasonal colors w/ house season labels (Chrome owner-present path; LV site Akamai-blocks Firecrawl) + confirm low-confidence model debut years |
 | Dior | ✅ canon + heritage/discontinued (20) | ✅ Cannage/Oblique/Toile de Jouy/Diorissimo + leathers (10, well-dated) | 🟨 named capsules + art editions (9: Lady Art #1/#2/#5/#10, ABCDior, Toile, Gradient, Dioramour, Graphic Cannage); per-season plain colors are descriptive not named (Dior doesn't name them) | 2026-06-28 (run 5: ✅ → `dior.{md,jsonl}`) | dior.com newsroom (95.22, craft, capsules) via owner-present Chrome path; Lady Art #3/#4/#6-#9 per-edition rows; confirm low-confidence model debut years |
 | Gucci | ✅ canon + heritage/discontinued + 4 collabs (24 rows) | ✅ Diamante/GG monogram/GG Supreme/Web/Horsebit/Bamboo handle/Flora/matelassé (11, mostly auction-anchored) | 🟨 named layer is small: Rosso Ancora (De Sarno SS24) + Flora + Ken Scott + Hacker finishes (4). Gucci does NOT name most per-season colors (honest finding) | 2026-06-28 (run 6: ✅ → `gucci.{md,jsonl}`) | gucci.com Ancora/Jackie/Bamboo season pages (owner-present Chrome path) for any named colors; confirm low-confidence model years (Zumi/Bree/Aphrodite/Queen Margaret) + adidas/Disney/North Face collab years |
-| Bottega / YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | 🟨 BV Parakeet Green now SOURCED (Daniel Lee 2021, Vogue; being phased out) | 2026-06-28 (BV trend read: Jodie/Andiamo/Sardine + "fondant"/"porridge" leads; Parakeet Green sourced run 6) | Bottega first (verify Jodie/Andiamo/Cassette/Sardine + colorways fondant/porridge/Parakeet), then YSL/Celine/rest |
+| Bottega Veneta | ✅ canon + heritage/era (17 sourced; Loop/Mount/Point/Sunshine logged unsourced not invented) | ✅ Intrecciato DNA + Maxi/Padded variants + leathers (9) | ✅ NAMED layer real (50 colors: Parakeet official SS2021 + 49 descriptive/reseller-attributed incl. Fondant/Porridge/Barolo/Travertine) | 2026-06-28 (run 9: ✅ → `bottega-veneta.{md,jsonl}`) | promote 49 descriptive colors to official + add debut seasons via bottegaveneta.com (Chrome path) + luxbags.fr color-code DB; source Loop/Mount/Point/Sunshine/Campana debut years; resolve Cabat 2001-vs-2002 |
+| YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | YSL next (Loulou/Kate/Le 5 à 7), then Celine/rest |
 
 ---
 
@@ -421,7 +453,12 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    Dior: Gucci doesn't name most per-season colors; Rosso Ancora (De Sarno SS24) is the exception.
    (Hermès leathers + Chanel codes were done in earlier tasks.) gucci.com season pages queued for Chrome.
    **NEXT: backfills — Hermès seasonal 2020-2023 + pre-2020 (deepest archive), then Bottega/YSL/Celine.**
-5. **Backfill the rest** — Bottega, YSL, Celine, Fendi, Prada, Loewe.
+5. **Backfill the rest** — ✅ **Bottega Veneta** (run 9, `bottega-veneta.{md,jsonl}`): models with
+   designer era (Maier/Lee/Blazy) + Intrecciato DNA + a REAL named-color layer (50 colors; Parakeet
+   official, the rest reseller-attributed, queued for bottegaveneta.com promotion). BV is the
+   counter-case to Dior/Gucci: it genuinely names its colors. **NEXT: YSL** (Loulou/Kate/Le 5 à 7),
+   then Celine, Fendi, Prada, Loewe. Hermès seasonal-color backfill (2020-2023 + pre-2020) also
+   still open and is the highest-GEO-value gap.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
 
