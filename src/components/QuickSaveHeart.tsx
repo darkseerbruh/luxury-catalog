@@ -35,7 +35,9 @@ export function QuickSaveHeart({
       const res = next ? await saveToCloset(variantId, "want") : await removeFromCloset(variantId);
       if (!res.ok) {
         setSaved(!next);
-        if (/log in/i.test(res.error ?? "")) router.push("/login");
+        // Signed-out save = the moment to create an account (not log in). The
+        // intended bag rides along so the save can finish after signup.
+        if (/log in/i.test(res.error ?? "")) router.push(`/signup?next=/bag/${variantId}`);
       } else if (next) {
         track(EVENTS.itemSaved, { variant_id: variantId, status: "want", source });
       }
