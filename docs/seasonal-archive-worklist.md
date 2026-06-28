@@ -239,6 +239,19 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 8)** — CONTENT-IDEAS expansion (code-driven). Added 2 ideas to the slate
+  (now 18): **#2 "Decode your Chanel" interactive widget** (flagged a UX-LANE BUILD handoff, the
+  flagship code play — deterministic, ships off the `chanel.md` map with no backend, no house/reseller
+  offers it) and **#3 "How to date your Chanel from the tag/code"** (copywriter-ready, no new data,
+  auth-adjacent so bound by `authentication-standard.md`). Re-ranked DO-FIRST to 5 picks; the
+  interactive widget now sits at #2, alongside the decoder article (#1) and the Hermès color-code (#4)
+  / leather (#5) GEO plays. **Made the Chanel codes-vs-colors distinction binding in-doc** (new "Two
+  Chanel things that are NOT the same" header + a "What we cannot publish yet and why" note): season
+  CODES (18C/23P/26A) ARE official Chanel names and are done/writable; a per-season COLOR-name
+  dictionary does NOT exist because Chanel does not name seasonal colors — that is a future DESCRIPTIVE
+  data unit (sourced from listings, tagged descriptive/community, never "official"), not a now piece.
+  Guards re-proposal of an unsourceable color dictionary. NO Firecrawl searches, $0 credits.
+  **Next unit: back to the naming pull — Hermès seasonal colors 2020-2023 + pre-2020.**
 - **2026-06-28 (run 7)** — CONTENT-IDEAS unit (not a naming pull). Built the first ranked
   content-ideas slate from the already-banked findings: `docs/research-drafts/seasonal-archive/content-ideas.md`,
   16 ideas (6 article-led, 6 IG-carousel-led/mixed, 4 TikTok/Short-led; most carry a cross-format
