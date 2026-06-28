@@ -94,9 +94,14 @@ Log notable shifts (a line going quiet, a color "having a moment") as dated, hed
 - **Login-walled depth: the Claude-in-Chrome extension ($0, owner-present).** Full comment
   threads / engagement / login-walled IG via the owner's logged-in browser
   (`tabs_context_mcp` → `navigate` → `get_page_text`/`read_page`). Interactive only.
-- **Not now:** Apify free tier ($5/mo credits) only if the owner later wants unattended
-  scheduled pulls (owner-gated signup). TikTok official API is gated to vetted US/Europe
-  researchers, not a path for this site.
+- **Unattended depth: Apify (free tier, CONNECTED 2026-06-28).** The owner's chosen
+  hands-off path. Use `call-actor` with `apidojo/tiktok-scraper` ($0.0003/post, cheap
+  breadth) or `clockworks/tiktok-scraper` ($0.0037/result, rich fields). Cap every run
+  with `maxItems` + `resultsPerPage`; never use the $0.048/min transcript add-on (the
+  free `transcriptionLink` field already carries it); the $5/mo credits do not roll over,
+  so size weekly pulls well under $5. Proven 2026-06-28: a "chanel bag" search returned
+  captions + engagement + sounds + hashtags + naming signal (e.g. "Chanel 25 mini black
+  GHW"). TikTok official API stays gated to vetted researchers, not a path here.
 - **Legal:** capture names/hashtags/trends as facts and leads; never republish video,
   images, or verbatim captions; attribute with a source URL.
 
