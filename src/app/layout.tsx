@@ -9,6 +9,7 @@ import { covetedBagsReady } from "@/lib/content-gates";
 import { Providers } from "./providers";
 import TasteFlusher from "./TasteFlusher";
 import HeaderNav from "@/components/HeaderNav";
+import { FirstAlertNudge } from "@/components/FirstAlertNudge";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -70,6 +71,7 @@ export default async function RootLayout({
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
+        <FirstAlertNudge />
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
             <div className="col-span-2 sm:col-span-1">

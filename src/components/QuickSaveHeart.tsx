@@ -40,6 +40,15 @@ export function QuickSaveHeart({
         if (/log in/i.test(res.error ?? "")) router.push(`/signup?next=/bag/${variantId}`);
       } else if (next) {
         track(EVENTS.itemSaved, { variant_id: variantId, status: "want", source });
+        // First-ever save: nudge the price alert once (FirstAlertNudge gates on a
+        // local flag, so this is a no-op after the first time).
+        try {
+          if (!localStorage.getItem("lc:first-alert-nudge")) {
+            window.dispatchEvent(new CustomEvent("lc:first-save", { detail: { variantId } }));
+          }
+        } catch {
+          /* localStorage blocked: skip the nudge */
+        }
       }
     });
   }
