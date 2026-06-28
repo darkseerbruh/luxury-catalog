@@ -141,9 +141,9 @@ Knightsbridge (verified) post naming-rich authentication and size-comparison con
 authentication-signal accounts, not official-naming sources. Treat their naming as a lead
 and confirm against the house or an auction catalog.
 
-**Note on Firecrawl feedback:** `firecrawl_search_feedback` is NOT in this agent's tool
-allowlist as of 2026-06-28, so searches bill the full 2 credits and cannot be refunded.
-Budget accordingly: keep searches few and broad, lean on the verified anchors above.
+**Note on Firecrawl feedback:** `firecrawl_search_feedback` IS in this agent's allowlist
+(added 2026-06-28) and refunds 1 of the 2 credits per search. Always call it right after
+each search, within the ~2 minute window. Keep searches few and broad regardless.
 
 **How you reach it (free-only, verified 2026-06-28):**
 - **Default: Firecrawl free tier (1,000 credits/mo, $0).** `firecrawl_search` returns
@@ -235,6 +235,22 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 3)** — Did Early Task 3: the Hermès lexicon. Output in
+  `docs/research-drafts/seasonal-archive/hermes.{md,jsonl}` (69 jsonl rows: 31 leathers/skins
+  + Electrum hardware, 23 permanent/staple colors, 13 recent seasonal colors). Leathers are
+  near-complete with official "Veau X" names, introduction years, and current/heritage/discontinued
+  status, cross-checked PurseBlog leather guide + Sellier Knightsbridge. Permanent color core
+  anchored on official codes (Noir 89, Rouge H 46, Etoupe 18, Gold 06, Orange H 93, Blanc 01,
+  Etain 8F, Rouge Casaque Q5, Craie 10, Bleu Nuit 2Z) from RareCollection, cross-checked
+  jewelsaficionado. Recent seasonal (SS2025 five new + 2024/2025 returns) double-sourced
+  PurseBlog SS25 + PurseBop 2025. Held the rigor line: fuzzy permanent-vs-seasonal rows tagged
+  "permanent-or-recurring, unverified" at lowered confidence; numeric codes that live in swatch
+  images left null + queued, not invented. **Next unit: Early Task 4, the big-five
+  lookbook/runway sweep (Vogue Runway + house newsrooms, season by season).**
+- Tooling note (run 3): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 5 raw
+  scrapes = ~9 credits net. Parsed raw with Python; never the 5-credit LLM-extract. Caution: huge
+  single-line markdown bodies hang naive `grep -oE` regex (catastrophic backtracking) — read in
+  chunks or use Python `str.find`, not regex over the whole line.
 - **2026-06-28 (run 2)** — Did Early Task 2: the Chanel season-code + serial-series map, back
   to the mid-1980s. Output in `docs/research-drafts/seasonal-archive/chanel.{md,jsonl}`. Mapped
   TWO systems kept deliberately separate: (1) serial series number 1→31 → approximate year
@@ -258,7 +274,7 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 
 | House | Models done | Materials done | Colors: decades covered | Last touched | Next unit |
 |---|---|---|---|---|---|
-| Hermès | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat + trend read only) | leathers + permanent colors first |
+| Hermès | ⬜ | ✅ leathers + exotics (31, near-complete) | 🟨 permanent-core (codes partial) + seasonal 2024–2025 only | 2026-06-28 (run 3: ✅ → `hermes.{md,jsonl}`) | seasonal colors 2020–2023 + pre-2020; OCR/auction-catalog pass for null color codes |
 | Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
 | Louis Vuitton | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Monogram + Empreinte colorways |
 | Dior | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Lady Dior cannage colors by season |
@@ -277,10 +293,13 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    season/year` map (17B, 18C, 23S…) back ~30 years, PLUS the serial-series → year-range map
    for the pre-2021 sticker era. Output `docs/research-drafts/seasonal-archive/chanel.{md,jsonl}`.
    Deterministic and reusable; unblocks all Chanel seasonal color work.
-3. **Hermès lexicon first — NEXT** — leathers (permanent set) + the permanent color core, then
-   the seasonal color rotations year by year. Hermès has the most official, stable naming, so it
-   is the highest-confidence place to prove the format end to end.
-4. **Lookbook + runway sweep, big five** — walk Vogue Runway and each house's newsroom season
+3. ✅ **Hermès lexicon** (done 2026-06-28, run 3) — leathers (near-complete, official "Veau X"
+   names + intro years + status) and permanent color core (anchored on official codes), plus
+   recent seasonal colors (2024–2025, double-sourced). Output `hermes.{md,jsonl}`. STILL QUEUED
+   for Hermès: seasonal colors 2020–2023 and pre-2020 (PurseBop "New Hermès Colors 20XX" archive
+   + PurseForum per-year color charts), and an OCR/auction-catalog pass to fill the null numeric
+   color codes for the staple neutrals (Gris Tourterelle, Nata, Béton, Gris Meyer, etc.).
+4. **Lookbook + runway sweep, big five — NEXT** — walk Vogue Runway and each house's newsroom season
    by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
 5. **Backfill the rest** — Bottega, YSL, Celine, Fendi, Prada, Loewe.
 
