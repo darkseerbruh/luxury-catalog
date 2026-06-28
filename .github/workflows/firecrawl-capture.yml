@@ -1,0 +1,78 @@
+name: Firecrawl capture (TheRealReal)
+
+# Browser-gathering capture, hands-off in CI. eBay API was rejected and no affiliate
+# datafeed was accepted, so Firecrawl is our data engine — it defeats TheRealReal's
+# bot-block headless (no logged-in browser), which market-refresh.yml could not do.
+# See docs/data-collection-handoff.md §0.
+#
+# Each run: scrape TRR for the target styles via Firecrawl -> land PriceObservations
+# (price + colour/material/hardware/year) -> load into price_history -> refresh the
+# per-variant summary. This builds the price-over-time history AND keeps listings fresh.
+#
+# PILOT scope (validate-first): a small style set on a daily schedule so we can watch
+# real Firecrawl credit burn on the free tier before committing to a paid plan. Tune
+# TARGETS / cadence as the budget is confirmed.
+#
+# SECRETS (repo -> Settings -> Secrets and variables -> Actions):
+#   FIRECRAWL_API_KEY        (NEW — the capture engine; the Vercel copy powers the app, not CI)
+#   SUPABASE_SERVICE_ROLE_KEY (already set on this repo)
+# Supabase URL is public (NEXT_PUBLIC_*), inlined as a fallback like market-refresh.yml.
+
+on:
+  schedule:
+    # Once daily, off the hour. Pilot cadence — bump up once the plan is sized.
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Target style key (firecrawl-trr TARGETS)"
+        required: false
+        default: "goyard-saint-louis"
+      limit:
+        description: "Max product detail scrapes per style (credit ceiling)"
+        required: false
+        default: "40"
+      write:
+        description: "Apply DB writes? false = capture + report only"
+        required: false
+        default: "true"
+
+concurrency:
+  group: firecrawl-capture
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+      TARGET: ${{ github.event.inputs.target || 'goyard-saint-louis' }}
+      LIMIT: ${{ github.event.inputs.limit || '40' }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Fail early if the Firecrawl key is missing
+        run: |
+          if [ -z "$FIRECRAWL_API_KEY" ]; then
+            echo "::error::FIRECRAWL_API_KEY secret is not set on this repo (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+
+      - name: Capture TheRealReal via Firecrawl (writes landing snapshot)
+        run: npx tsx supabase/ingest/sources/firecrawl-trr.ts "$TARGET" --limit="$LIMIT"
+
+      - name: Load prices + refresh summary
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- therealreal --write
+          npm run summary:refresh
