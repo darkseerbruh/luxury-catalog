@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "./supabase/server";
+import { sanitizeMotivations, type Motivation } from "./maturity";
 
 export interface CurrentUser {
   id: string;
@@ -27,6 +28,10 @@ export interface UserProfile {
   id: string;
   displayName: string | null;
   persona: string | null;
+  /** Axis-B motivations (persona model v2). Empty until 0035 is applied + selected. */
+  motivations: Motivation[];
+  /** Axis-A maturity, derived from behavior. Null until computed. */
+  maturityStage: string | null;
   onboarded: boolean;
   handle: string | null;
   bio: string | null;
@@ -59,6 +64,8 @@ const EMPTY_PROFILE = (id: string): UserProfile => ({
   id,
   displayName: null,
   persona: null,
+  motivations: [],
+  maturityStage: null,
   onboarded: false,
   handle: null,
   bio: null,
@@ -76,6 +83,8 @@ type ProfileRow = {
   id: string;
   display_name: string | null;
   persona: string | null;
+  motivations?: string[] | null;
+  maturity_stage?: string | null;
   onboarded: boolean;
   handle?: string | null;
   bio?: string | null;
@@ -94,6 +103,8 @@ function mapProfileRow(row: ProfileRow): UserProfile {
     id: row.id,
     displayName: row.display_name,
     persona: row.persona,
+    motivations: sanitizeMotivations(row.motivations ?? []),
+    maturityStage: row.maturity_stage ?? null,
     onboarded: row.onboarded,
     handle: row.handle ?? null,
     bio: row.bio ?? null,
