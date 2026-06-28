@@ -3,6 +3,7 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { captureServer } from "@/lib/analytics/server";
 import { sendEmail } from "@/lib/email";
 import { isOptedIn } from "@/lib/notifications";
+import { matchSpecAlert, type AlertSpec, type SpecCandidate } from "@/lib/price-alert-match";
 
 export const dynamic = "force-dynamic";
 
@@ -45,10 +46,15 @@ type WatchRow = {
   currency: string | null;
   last_notified_at: string | null;
   variant:
-    | { style: unknown; price_history: PriceRow[] | null }
-    | { style: unknown; price_history: PriceRow[] | null }[]
+    | { style_id?: number | null; style: unknown; price_history: PriceRow[] | null }
+    | { style_id?: number | null; style: unknown; price_history: PriceRow[] | null }[]
     | null;
 };
+
+/** A "want" with a breadth spec, keyed by `${user_id}|${variant_id}`. */
+function specKey(userId: string, variantId: number): string {
+  return `${userId}|${variantId}`;
+}
 
 function one<T>(v: T | T[] | null | undefined): T | null {
   return (Array.isArray(v) ? v[0] : v) ?? null;
@@ -137,7 +143,7 @@ export async function GET(request: NextRequest) {
 
   const admin = getSupabaseAdmin();
   const fullJoin =
-    "watch_id, user_id, variant_id, target_price, alert_mode, alert_pct, currency, last_notified_at, variant:variant_id(style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency, price_type))";
+    "watch_id, user_id, variant_id, target_price, alert_mode, alert_pct, currency, last_notified_at, variant:variant_id(style_id, style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency, price_type))";
   const legacyJoin =
     "watch_id, user_id, variant_id, target_price, currency, last_notified_at, variant:variant_id(style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency))";
 
@@ -160,6 +166,27 @@ export async function GET(request: NextRequest) {
   }
 
   const rows = (data ?? []) as unknown as WatchRow[];
+
+  // Spec map: for the users in this batch, which (user, variant) wants carry a
+  // breadth spec (any green / any colourway)? Resilient: pre-0035 there is no
+  // want_spec column, so the map is empty and every alert stays exact-variant.
+  const specMap = new Map<string, AlertSpec>();
+  const userIds = [...new Set(rows.map((r) => r.user_id))];
+  if (userIds.length > 0) {
+    const { data: wants } = await admin
+      .from("closet_item")
+      .select("user_id, variant_id, want_spec")
+      .in("user_id", userIds)
+      .eq("status", "want");
+    for (const w of (wants ?? []) as { user_id: string; variant_id: number; want_spec: unknown }[]) {
+      const ws = w.want_spec;
+      if (ws && typeof ws === "object") {
+        const s = ws as AlertSpec;
+        if (s.anyColor || s.colorFamily) specMap.set(specKey(w.user_id, w.variant_id), s);
+      }
+    }
+  }
+
   let triggered = 0;
   const now = new Date().toISOString();
 
@@ -168,7 +195,35 @@ export async function GET(request: NextRequest) {
     if (!variant) continue;
     const prices = variant.price_history ?? [];
 
-    const hit = evaluate(row, prices, row.last_notified_at);
+    const spec = specMap.get(specKey(row.user_id, row.variant_id));
+    const pct = row.alert_pct ?? 0;
+    let hit: { price: number; currency: string | null; body: string } | null = null;
+    let notifyVariantId = row.variant_id;
+
+    if (spec && row.alert_mode === "pct_below_median" && pct > 0 && variant.style_id != null) {
+      // Spec alert ("any green"): match across the style's variants.
+      const { data: sibs } = await admin
+        .from("variant")
+        .select("variant_id, exterior_colorway, price_history(sale_price, date_recorded, currency, price_type)")
+        .eq("style_id", variant.style_id);
+      const candidates: SpecCandidate[] = ((sibs ?? []) as {
+        variant_id: number;
+        exterior_colorway: string | null;
+        price_history: PriceRow[] | null;
+      }[]).map((s) => ({ variantId: s.variant_id, colorway: s.exterior_colorway, prices: s.price_history ?? [] }));
+      const sm = matchSpecAlert(candidates, spec, pct, row.last_notified_at);
+      if (sm) {
+        notifyVariantId = sm.variantId;
+        const which = spec.colorFamily ? `a ${spec.colorFamily.toLowerCase()} one` : "one";
+        hit = {
+          price: sm.price,
+          currency: sm.currency,
+          body: `Found ${which} at ${money(sm.price, sm.currency)}, about ${sm.off}% below the typical resale price (around ${money(sm.median, sm.currency)}).`,
+        };
+      }
+    } else {
+      hit = evaluate(row, prices, row.last_notified_at);
+    }
     if (!hit) continue;
 
     // Respect the user's price-alert opt-out (default-on).
@@ -182,7 +237,7 @@ export async function GET(request: NextRequest) {
       type: "price_alert",
       title,
       body: hit.body,
-      variant_id: row.variant_id,
+      variant_id: notifyVariantId,
     });
     if (insErr) {
       console.error("notification insert error:", insErr);
@@ -200,7 +255,7 @@ export async function GET(request: NextRequest) {
         await sendEmail({
           to: email,
           subject: title,
-          html: `<p>${hit.body}</p><p><a href="https://luxurycatalog.com/bag/${row.variant_id}">View the bag →</a></p>`,
+          html: `<p>${hit.body}</p><p><a href="https://luxurycatalog.com/bag/${notifyVariantId}">View the bag →</a></p>`,
         });
       }
     } catch (e) {
@@ -211,7 +266,8 @@ export async function GET(request: NextRequest) {
       distinctId: row.user_id,
       event: "price_alert_triggered",
       properties: {
-        variant_id: row.variant_id,
+        variant_id: notifyVariantId,
+        spec: spec ? (spec.colorFamily ?? "any") : null,
         price: hit.price,
         mode: row.alert_mode ?? "absolute",
         pct: row.alert_pct ?? null,
