@@ -298,11 +298,12 @@ export default function TasteQuizClient({
             ) : (
               <>
                 <div className="w-full rounded-xl border border-border bg-surface-raised p-4 text-left">
-                  <p className="mb-2 text-center text-sm text-foreground">An account does more with it</p>
+                  <p className="mb-2 text-center text-sm text-foreground">With an account</p>
                   <ul className="flex flex-col gap-1.5 text-sm text-muted">
-                    <li className="flex gap-2"><span className="text-gold">+</span> Keeps your read and your boards</li>
-                    <li className="flex gap-2"><span className="text-gold">+</span> Tells you when a bag you want drops</li>
-                    <li className="flex gap-2"><span className="text-gold">+</span> Saves the bags matched to your taste</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Start building your closet</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Save your wish list</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Price alerts when a want drops</li>
+                    <li className="flex gap-2"><span className="text-gold">+</span> Matched bags saved for you</li>
                   </ul>
                 </div>
                 <Link
