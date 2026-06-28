@@ -1,19 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { getBagStory } from "@/lib/bag-stories";
+import { matchBagStory } from "@/lib/bag-stories";
 import { BAG_STORIES } from "@/lib/bag-stories/data";
 
-describe("getBagStory", () => {
+describe("matchBagStory", () => {
   it("matches a hero style by name fragment (case-insensitive)", () => {
-    expect(getBagStory("Birkin")?.match).toContain("birkin");
-    expect(getBagStory("birkin 30")?.tagline).toMatch(/sick bag/i);
-    expect(getBagStory("Classic Flap")?.people[0].name).toMatch(/Chanel/);
+    expect(matchBagStory("Birkin")?.match).toContain("birkin");
+    expect(matchBagStory("birkin 30")?.tagline).toMatch(/sick bag/i);
+    expect(matchBagStory("Classic Flap")?.people[0].name).toMatch(/Chanel/);
   });
 
   it("returns null for unseeded styles and empty input", () => {
-    expect(getBagStory("Some Unknown Tote")).toBeNull();
-    expect(getBagStory(null)).toBeNull();
-    expect(getBagStory(undefined)).toBeNull();
-    expect(getBagStory("")).toBeNull();
+    expect(matchBagStory("Some Unknown Tote")).toBeNull();
+    expect(matchBagStory(null)).toBeNull();
+    expect(matchBagStory(undefined)).toBeNull();
+    expect(matchBagStory("")).toBeNull();
+  });
+
+  it("has a unique story_key (first match fragment) per story — no DB upsert collisions", () => {
+    const keys = BAG_STORIES.map((s) => s.match[0]);
+    expect(new Set(keys).size).toBe(keys.length);
+    for (const s of BAG_STORIES) expect(s.match.length).toBeGreaterThan(0);
   });
 
   it("every seeded tidbit carries at least one real https source (never-invent)", () => {
@@ -25,6 +31,16 @@ describe("getBagStory", () => {
           expect(s.url).toMatch(/^https:\/\//);
           expect(s.name.trim().length).toBeGreaterThan(0);
         }
+      }
+    }
+  });
+
+  it("every seeded video has a valid YouTube id, title, and source (never-invent)", () => {
+    for (const story of BAG_STORIES) {
+      for (const v of story.videos ?? []) {
+        expect(v.youtubeId).toMatch(/^[a-zA-Z0-9_-]{11}$/);
+        expect(v.title.trim().length).toBeGreaterThan(0);
+        expect(v.source.trim().length).toBeGreaterThan(0);
       }
     }
   });

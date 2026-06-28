@@ -1,4 +1,10 @@
-# Proposal: a video layer for "The Story" (NOT shipped yet)
+# Proposal: a video layer for "The Story"
+
+*Status update (greenlit): the video capability is now BUILT and on the branch.
+`StoryVideos.tsx` renders curated YouTube facades plus per-intent search link-outs;
+attributable clips are seeded for Birkin (60 Minutes, Harper's BAZAAR), Neverfull
+(Louis Vuitton), and Lady Dior (LUXE.TV). The plan below is the rationale and the
+path to expand curation. The original proposal text follows.*
 
 *Status: proposal only. Owner greenlight required before any build. The shipped
 "The Story" module (`src/lib/bag-stories/`, `BagStory.tsx`) currently carries cited

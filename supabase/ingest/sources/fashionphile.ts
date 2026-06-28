@@ -96,6 +96,19 @@ const TARGETS: FashionphileTarget[] = [
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull-pm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["gg-marmont", "small"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Medium", requireTokens: ["gg-marmont", "medium"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
+  // Goyard Saint Louis (backbone Tier-1). Fashionphile handle: goyard-goyardine-saint-louis-<pm|gm>-<colour>-.
+  // excludeTokens drop the adjacent Saint-Pierre card holder + other SLGs that share "saint".
+  { brand: "Goyard", style: "Saint Louis", size_label: "PM", requireTokens: ["saint-louis", "pm"], excludeTokens: ["saint-pierre", "card", "wallet", "coin", "pouch"], minPrice: 800, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  { brand: "Goyard", style: "Saint Louis", size_label: "GM", requireTokens: ["saint-louis", "gm"], excludeTokens: ["saint-pierre", "card", "wallet", "coin", "pouch"], minPrice: 800, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  // The Row Soft Margaux (backbone Tier-1). Handles: the-row-...-soft-margaux-<10|12|15|17>-...
+  // The size token is anchored ("soft-margaux-NN") so belts ("soft-margaux-belt-..."), EW, and
+  // shoulder variants don't collect into a sized bucket; excludeTokens guard the belt anyway.
+  ...(["10", "12", "15", "17"] as const).map((size) => ({
+    brand: "The Row", style: "Soft Margaux", size_label: size,
+    requireTokens: [`soft-margaux-${size}`], excludeTokens: ["belt"],
+    minPrice: 800, maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json",
+  })),
   // Chanel Boy (backbone Tier-1). Fashionphile titles it "<material> ... <size> Boy Flap <colour>"
   // (New/Old Medium both fold to Medium). excludeTokens drop the Boy-LINE accessories that share
   // the name (WOC/wallet, bucket bag, cosmetic/vanity case, card holder, mini pochette, brick).

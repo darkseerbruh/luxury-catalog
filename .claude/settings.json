@@ -1,4 +1,27 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git checkout *)",
+      "Bash(git remote *)",
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(gh repo *)",
+      "Bash(npm -v)",
+      "Bash(npm run lint)",
+      "Bash(npm test)",
+      "Bash(npm run build)",
+      "Bash(npx tsc --noEmit)",
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

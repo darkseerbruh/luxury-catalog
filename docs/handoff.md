@@ -81,6 +81,15 @@ into the env per `docs/data-collection-handoff.md` §11. Priority order:
 - Before referring the unverified set (HER Authentic, Mightychic, FashioNica, CODOGIRL, Dallas
   Designer Handbags, The Luxury Savvy, Handbag Sense): run a reputation check first.
 
+**⬜ Engineering follow-on (the real freshness fix) — unblocks once any code lands:** build a
+per-network **feed ingester** (CJ / Impact / Awin product feeds), extending the existing
+`supabase/ingest/sources/*` adapter pattern. Feeds deliver live inventory + prices + images
+server-side with no browser and no rate limit, so they **retire the manual monthly re-capture**
+(`docs/monthly-recapture-task.md`) and make both the ShopThisBag cards and the chart medians
+self-fresh. Moves the metric twice: fresher listings (engagement/GEO) **and** commissioned clicks
+(monetization), since the feed links carry our affiliate ID. Gated only on the approvals above —
+first code in unblocks the first adapter. Detail: `docs/freshness-runbook.md` "the real fix".
+
 ## TL;DR — overnight article batch + sold-transport solved (2026-06-26 late)
 
 Autonomous batch (owner asleep, bypass perms). All seeded as DRAFTS; **publishing left to owner.**

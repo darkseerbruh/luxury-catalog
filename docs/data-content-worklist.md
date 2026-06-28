@@ -27,6 +27,25 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Longchamp created (brand 402, Le Pliage style 515, v930/931); nylon tote sold — 84 rows, median $99.50 (2026-06-26)
 - ✅ Mulberry created (brand 403, Bayswater 516/v932 + Alexa 517/v933); Bayswater sold — 93 rows, median $519, holds best of mid-tier (2026-06-26)
 
+## New backbone brands (2026-06-28) — ONE-PASS capture (scaffold → all surfaces → load → summarize)
+
+*Per the §0 capture standard: each new house's T1 styles need variants scaffolded FIRST
+(loader drops zero-variant styles), then capture every source, load, refresh. Engines:
+Fashionphile + Wayback = server fetch; TRR/Vestiaire/Rebag/etc = Firecrawl (bot-block
+defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).*
+
+- 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (134 rows, 2026-06-28: PM med $2,465 n=89, GM med $2,460 n=45, w/ colour+material). ⬜ Anjou, Artois, Belvédère, Saïgon + TRR/Vestiaire (Chrome) + eBay (keys)
+- 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
+- ⬜ **Balenciaga** — Le Cagole, Hourglass, City, Neo Classic (+ Velo, Papier)
+- ⬜ **Chloé** — Marcie, Drew, Faye, Woody Tote, C Bag (+ Aby, Penelope)
+- ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
+- ⬜ **Valentino** — Rockstud Spike, Roman Stud, Locò, One Stud, VLogo Signature (+ Supervee)
+- ⬜ **Alexander McQueen** — The Knuckle, The Jewelled Satchel, The Bow Tote, Skull, Manta
+- ⬜ **Off-White** — Binder Clip, Jitney, Burrow
+- ⬜ **Jacquemus** — Le Chiquito, Le Bambino, Le Bambimou, Le Chouchou (+ Le Grand Bambino)
+- ⬜ **Miu Miu** — Wander, Arcadie, Aventure, Matelassé
+- ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
+
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
   PLUS min=10 pass: +25 styles, +30 variants, +404 rows (Diane, Favorite, Boulogne, Delightful, Palermo, Tivoli, Reissue, Hop, Sylvie, Boston, Diorama, In-The-Loop, Jige, Trim, Jamie, Urban Spirit...). Strengthened blocklist excludes footwear/apparel/colour-soup. Total: 41 styles, 50 variants, ~1,016 rows.
@@ -64,7 +83,10 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ UX BUILT: ShopThisBag (inline card injected after first chart + dismissible floating bar, mobile bottom / desktop bottom-right) pulling REAL live listings via getStyleShopData() (src/lib/article-shop.ts), affiliate-attributed. Data-led copy ("43 listed, from $130"), dismissible, 375px-safe. Gates green. Preview for owner to commit.
 - ✅ FRESHNESS: runbook written (docs/freshness-runbook.md) — Fashionphile auto-daily; eBay/Poshmark/TRR browser-gated → MONTHLY re-capture cadence; real fix = affiliate product feeds (hands-off).
 - ✅ MONTHLY RE-CAPTURE: durable trigger = .github/workflows/monthly-recapture-reminder.yml (1st of month → opens `recapture` GitHub issue; survives ephemeral container, unlike a 7-day session cron). Paste-ready loop prompt + bag list in docs/monthly-recapture-task.md. Capture stays browser-gated (Claude-in-Chrome), not CI (2026-06-26).
-- ⬜ AFFILIATE GATE (confirmed 2026-06-25): Skimlinks REJECTED ("site not suitable at this time", generic). Root cause across ALL networks (Skimlinks rejected, Impact pending, CJ blocked) = thin PUBLISHED content + low traffic; 17 articles sit as drafts so reviewers see a near-empty site. UNLOCK = publish a content batch (start with the 6 data articles #15-#20: original data, charts, gated, fresh — NOT the drift-flagged #6/#8/#9/#14), then reapply to Skimlinks + nudge Impact. Publishing is OWNER-gated. No code fix; privacy-disclosure criterion already met.
+- 🔄 AFFILIATE GATE (confirmed 2026-06-25): Skimlinks REJECTED ("site not suitable at this time", generic). Root cause across ALL networks = thin PUBLISHED content + low traffic; articles sat as drafts so reviewers saw a near-empty site.
+  - ✅ PUBLISHED 6 data articles 2026-06-27 (owner said "publish"): #15 what-a-coach-tabby-actually-sells-for, #16 does-a-smaller-bag-cost-more, #17 asking-price-vs-sold-price, #18 dior-saddle-resale-price, #19 which-accessible-bags-hold-value, #20 most-searched-vs-most-expensive-bags. Via publish-articles.ts + publish-articles.yml (CI holds the service-role key; this env has none). Slug-scoped, idempotent, reversible (UI unpublish). Picked the fresh, drift-clean set (NOT #6/#8/#9/#14). Log: "published 6/6". The other 11 drafts stay owner-gated.
+  - ✅ PUBLISHED the remaining 11 drafts 2026-06-27 (owner said "push all unpublished live"): #4–#14 (where-to-sell, authenticate-LV, birkin-vs-kelly, fake-marmont, neverfull-mm-or-pm, iconic-resale-costs, neverfull-vs-speedy, rent-or-buy, resale-red-flags, good-investment, marmont-vs-neverfull-vs-speedy). Via publish-articles.yml write=true. Log: "published 11/11". ALL 17 articles now live. Owner ruled prices are a dated snapshot (page already shows the publish date in the byline) — the #6/#8/#9/#14 drift figures stay as-published, no refresh required.
+  - ⬜ OWNER: reapply to Skimlinks + nudge Impact now that all 17 articles are live.
 - ✅ LISTING FRESHNESS (owner: "listings sell every hour, monthly too long"): split medians (aggregate, monthly OK) from live listings (churn hourly). DID: (1) Fashionphile retire job daily→every 3h (headless); (2) ShopThisBag "view" links now rank reliable-live sources (Fashionphile→TRR) first so affiliate clicks avoid stale eBay/Poshmark rows. REAL hourly fix = affiliate product feeds (owner-gated on approvals); browser-gated eBay/Poshmark status can't refresh headless (2026-06-26).
 - ✅ SELF-UPDATING CHARTS: all 6 data-article charts refactored to async server components reading live via getMedians() with per-field baked fallback (n=0/DB down never renders empty): CoachResaleRealityChart, AskVsSoldGapChart (Dior Saddle row stays baked — id 574/575 unresolved), SizePriceCurveChart, MidTierHoldsValueChart, SearchVsPriceChart (asking-only; Birkin/Kelly stay baked as cross-size aggregates; Trends bars static). Dior Saddle post reuses ask-vs-sold-gap. Gates green, pushed (2026-06-26).
 - ✅ Drift check done → docs/article-freshness-report.md: #8/#9/#14 (Neverfull $1245→$1500, Marmont $911→$1095) + #6 (Birkin $18k→$19,995) STALE; Flap/Kelly/Tabby match. #10 can add Speedy sold $566. Owner updates figures before publishing those.

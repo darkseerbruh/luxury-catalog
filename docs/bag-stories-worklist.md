@@ -36,9 +36,30 @@ buy/sell CTA).
 - ✅ Coach Tabby (`tabby`)
 - ✅ Telfar Shopping Bag (`telfar`, `shopping bag`)
 
-## Deferred (proposal, not shipped)
-- Video content layer (designer interviews / runway / archival). See
-  `docs/bag-stories-video-proposal.md`. Owner to greenlight before any embed work.
+## Video layer — GREENLIT + shipped (curated facades + per-intent search link-outs)
+- ✅ Capability built (`StoryVideos.tsx`, reuses youtube-nocookie facade).
+- ✅ Seeded attributable clips: Birkin (60 Minutes, Harper's BAZAAR), Neverfull (Louis Vuitton), Lady Dior (LUXE.TV).
+- ⬜ Expand curated clips to more bags as confidently-attributable videos are found.
+
+## Wave 2 — more bags (match fragment in parens)
+- ✅ Louis Vuitton Alma (`alma`)
+- ✅ Louis Vuitton Petite Malle (`petite malle`)
+- ✅ Dior 30 Montaigne (`30 montaigne`)
+- ⬜ Dior Book Tote (`book tote`)
+- ✅ Celine Luggage (`luggage`)
+- ✅ Gucci Horsebit 1955 (`horsebit`)
+- ✅ Saint Laurent Sac de Jour (`sac de jour`)
+- ✅ Bottega Veneta Pouch (`pouch`)
+- ✅ Prada Galleria (`galleria`)
+- ✅ Chloé Paddington (`paddington`)
+- ⬜ Chanel Gabrielle (`gabrielle`)
+- ⬜ Goyard Saint Louis (`saint louis`, `st louis`)
+
+## DB promotion — style_story table (so content is editable without a deploy)
+- ✅ Migration `0033` (after the OO-UX lane's `0032`): `style_story` table, JSONB payload.
+- ✅ Loader script: serialize code-defined `BAG_STORIES` into the table (idempotent).
+- ✅ `getBagStory` reads DB-first, falls back to code data (resilient; never 404s).
+- ⬜ Human-gated: owner applies `0033` + runs the loader; code stays the seed/fallback.
 
 ## Notes
 - Skip `19`/bare-numeric matches (would false-match `1955`/`1961` style names).
