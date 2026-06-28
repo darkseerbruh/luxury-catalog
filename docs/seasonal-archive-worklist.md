@@ -235,20 +235,31 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
-- **2026-06-28** — First archivist run. Did Early Task 1 (community-beat registry, dated, per
-  house) and a first dated TikTok trend read (Apify clockworks, 3 capped pulls of 12). Naming
-  pull itself not started yet. Apify spend this run ~$0.15 (well under $5/mo). **Next unit:
-  Early Task 2, the Chanel season-code → season/year map (deterministic, unblocks all Chanel
-  seasonal color work).** Then Early Task 3, Hermès leathers + permanent color core.
-- Tooling note: apidojo/tiktok-scraper search returned `noResults` on all three keyword/URL
-  variants this run; clockworks/tiktok-scraper worked. Prefer clockworks for keyword search
-  until apidojo search recovers. `firecrawl_search_feedback` is not in this agent's allowlist,
-  so searches cost the full 2 credits (no refund) — keep them few.
+- **2026-06-28 (run 2)** — Did Early Task 2: the Chanel season-code + serial-series map, back
+  to the mid-1980s. Output in `docs/research-drafts/seasonal-archive/chanel.{md,jsonl}`. Mapped
+  TWO systems kept deliberately separate: (1) serial series number 1→31 → approximate year
+  RANGES (pre-2021 sticker era; first digit(s) ≈ production year, no collection), and (2) the
+  `[YY][letter]` season code → collection+year (deterministic once the legend is fixed). Letter
+  legend C/P/S/A/B/K (+M Coco Beach) cross-checked across PurseForum + PurseBop + Coco Approved;
+  serial→year cross-checked Xupes (explicit 1984–2021 table) + Couture USA (anchors) +
+  Fashionphile (era framework). Flagged the vintage-A (Automne/Fall) vs modern-A (Métiers d'Art,
+  ~2012 boundary) trap as medium confidence. No house-published reference exists, so serial→year
+  stays as RANGES and nothing is rated above the cross-check. **Next unit: Early Task 3, Hermès
+  leathers (permanent set) + permanent color core, then seasonal color rotations.**
+- Tooling note (run 2): `firecrawl_search_feedback` IS now in the allowlist and works — both
+  searches this run refunded 2→1 credit. Net Firecrawl spend: 2 searches (1 credit each after
+  refund) + 6 raw scrapes = ~8 credits. Always send feedback within ~2 min of each search.
+- **2026-06-28 (run 1)** — First archivist run. Did Early Task 1 (community-beat registry, dated,
+  per house) and a first dated TikTok trend read (Apify clockworks, 3 capped pulls of 12). Naming
+  pull itself not started yet. Apify spend this run ~$0.15 (well under $5/mo).
+- Tooling note (run 1): apidojo/tiktok-scraper search returned `noResults` on all three
+  keyword/URL variants; clockworks/tiktok-scraper worked. Prefer clockworks for keyword search
+  until apidojo search recovers.
 
 | House | Models done | Materials done | Colors: decades covered | Last touched | Next unit |
 |---|---|---|---|---|---|
 | Hermès | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat + trend read only) | leathers + permanent colors first |
-| Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat + trend read only) | **build season-code map (18C…) — NEXT** |
+| Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
 | Louis Vuitton | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Monogram + Empreinte colorways |
 | Dior | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Lady Dior cannage colors by season |
 | Gucci | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | GG Marmont + Dionysus colorways |
@@ -262,11 +273,12 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    into a dated per-house registry (see "Authoritative-source registry per house" above). Hermès
    + Chanel anchors URL-verified; LV/Dior/Gucci marked "lead, verify". Re-run to URL-confirm the
    "lead, verify" anchors and add per-house reference threads.
-2. **Decode the Chanel season-code system** — produce the full `season-code → season/year` map
-   (17B, 18C, 23S…) back ~30 years. Deterministic and reusable; unblocks all Chanel seasonal
-   color work.
-3. **Hermès lexicon first** — leathers (permanent set) + the permanent color core, then the
-   seasonal color rotations year by year. Hermès has the most official, stable naming, so it
+2. ✅ **Decode the Chanel season-code system** (done 2026-06-28, run 2) — full `season-code →
+   season/year` map (17B, 18C, 23S…) back ~30 years, PLUS the serial-series → year-range map
+   for the pre-2021 sticker era. Output `docs/research-drafts/seasonal-archive/chanel.{md,jsonl}`.
+   Deterministic and reusable; unblocks all Chanel seasonal color work.
+3. **Hermès lexicon first — NEXT** — leathers (permanent set) + the permanent color core, then
+   the seasonal color rotations year by year. Hermès has the most official, stable naming, so it
    is the highest-confidence place to prove the format end to end.
 4. **Lookbook + runway sweep, big five** — walk Vogue Runway and each house's newsroom season
    by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
