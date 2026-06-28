@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { safeNext } from "./safe-next";
 import { createServerSupabase } from "./supabase/server";
 import { identifyUserToPostHog } from "./analytics/flags";
 import { getUserProfile } from "./personalization/user-profile";
@@ -72,7 +73,10 @@ export async function signUp(
   }
 
   revalidatePath("/", "layout");
-  redirect("/onboarding");
+  // Carry an intended destination (e.g. the bag they tried to save) through
+  // onboarding so the save resumes after the account exists.
+  const next = safeNext(formData.get("next"));
+  redirect(next ? `/onboarding?next=${encodeURIComponent(next)}` : "/onboarding");
 }
 
 /** Email + password sign-in. */
@@ -100,7 +104,7 @@ export async function signIn(
   }
 
   revalidatePath("/", "layout");
-  redirect("/closet");
+  redirect(safeNext(formData.get("next")) ?? "/closet");
 }
 
 /**
