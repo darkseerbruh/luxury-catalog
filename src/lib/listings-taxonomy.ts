@@ -30,28 +30,13 @@ const COLOR_FAMILIES: [string, string[]][] = [
   ["Purple", ["purple", "violet", "mauve", "lilac", "lavender", "lavande", "plum", "prune", "aubergine"]],
 ];
 
-/** Material family → substrings. "Leather" is the catch-all for grained/smooth calf leathers. */
-const MATERIAL_FAMILIES: [string, string[]][] = [
-  ["Exotic", ["crocodile", "croco", "alligator", "niloticus", "porosus", "ostrich", "autruche", "lizard", "lézard", "lezard", "python", "exotic", "stingray", "galuchat"]],
-  ["Suede", ["suede", "suède", "nubuck", "doblis", "veau doblis", "chamois"]],
-  ["Patent", ["patent", "vernis", "verni"]],
-  ["Coated canvas", ["coated", "monogram", "damier", "gg supreme", "gg canvas", "toile", "coated canvas", "phw canvas"]],
-  ["Fabric", ["tweed", "jersey", "wool", "laine", "felt", "feutre", "raffia", "raphia", "straw", "paille", "denim", "satin", "velvet", "velours", "shearling", "fabric", "textile", "mesh", "knit"]],
-  [
-    "Leather",
-    [
-      "togo", "clemence", "clémence", "epsom", "caviar", "lambskin", "agneau", "calfskin", "veau", "box calf",
-      "box leather", "swift", "chevre", "chèvre", "barenia", "fjord", "evercolor", "evergrain", "taurillon",
-      "novillo", "madame", "sombrero", "grained", "smooth leather", "calf", "goatskin", "deerskin", "leather",
-    ],
-  ],
-];
-
 import overrides from "./data/spec-families.json";
+import { MATERIAL_CHIP_LABELS, materialChip } from "./materials";
 
 /** The controlled vocabulary of families (for the LLM classifier to choose from). */
 export const COLOR_FAMILY_NAMES: string[] = COLOR_FAMILIES.map(([f]) => f);
-export const MATERIAL_FAMILY_NAMES: string[] = MATERIAL_FAMILIES.map(([f]) => f);
+/** Material chips now live in the single source `materials.ts`. */
+export const MATERIAL_FAMILY_NAMES: string[] = MATERIAL_CHIP_LABELS;
 
 const COLOR_OVERRIDES = (overrides.colors ?? {}) as Record<string, string>;
 const MATERIAL_OVERRIDES = (overrides.materials ?? {}) as Record<string, string>;
@@ -77,7 +62,8 @@ export function colorFamily(name: string | null): string | null {
   return classify(name, COLOR_FAMILIES, COLOR_OVERRIDES);
 }
 
-/** The broad material family for a specific leather/material (e.g. "Togo" → "Leather"), or null. */
+/** The material chip for a specific leather/material (e.g. "Togo" → "Pebbled or grained leather"),
+ *  or null. Sourced from the single material taxonomy in `materials.ts`. */
 export function materialFamily(name: string | null): string | null {
-  return classify(name, MATERIAL_FAMILIES, MATERIAL_OVERRIDES);
+  return materialChip(name, MATERIAL_OVERRIDES);
 }

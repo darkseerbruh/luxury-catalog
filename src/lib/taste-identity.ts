@@ -99,8 +99,8 @@ const FINISH_TEXTURE: Record<string, string> = {
   exotic: "daring",
   tweed: "polished",
   embellished: "a little theatrical",
-  woven: "sunlit",
-  fur: "cozy",
+  raffia: "sunlit",
+  shearling: "cozy",
 };
 
 /**

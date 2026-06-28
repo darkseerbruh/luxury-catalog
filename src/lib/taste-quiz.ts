@@ -11,6 +11,7 @@
  */
 
 import { OCCASIONS } from "./occasions";
+import { QUIZ_FINISHES } from "./materials";
 
 export type QuizInput = "multi" | "mark" | "single";
 
@@ -102,23 +103,14 @@ export const CARRY_QUESTION: QuizQuestion = {
   ],
 };
 
+// Finishes pull from the single material source (materials.ts), so the quiz and
+// the shop filter can never drift. The quiz shows the curated taste subset.
 export const FINISH_QUESTION: QuizQuestion = {
   id: "finishes",
   input: "mark",
   skippable: true,
   prompt: "Which finishes are you?",
-  options: [
-    { value: "smooth-leather", label: "Smooth leather" },
-    { value: "pebbled", label: "Pebbled or grained leather", hint: "the textured kind" },
-    { value: "suede", label: "Suede" },
-    { value: "fabric", label: "Nylon or fabric", hint: "like Prada's nylon" },
-    { value: "exotic", label: "Exotic skins", hint: "like crocodile" },
-    { value: "tweed", label: "Tweed" },
-    { value: "patent", label: "Patent" },
-    { value: "embellished", label: "Embellished or artistic", hint: "crystals, pearls, hand-painted" },
-    { value: "woven", label: "Woven or raffia" },
-    { value: "fur", label: "Fur or shearling" },
-  ],
+  options: QUIZ_FINISHES.map((m) => ({ value: m.value, label: m.label, hint: m.hint })),
 };
 
 export const HARDWARE_QUESTION: QuizQuestion = {
