@@ -235,6 +235,26 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 4)** — Started Early Task 4 (big-five sweep): the Louis Vuitton lexicon,
+  house 1 of 5. Output in `docs/research-drafts/seasonal-archive/louis-vuitton.{md,jsonl}`
+  (73 jsonl data rows: 30 model rows / 19 materials / 24 colors). Models cover the full canon
+  + key heritage/discontinued (Lockit, Tivoli, Galliera, Sologne, Papillon), each with a sourced
+  or low-flagged debut year. Materials are near-complete and well-dated, double-sourced Xupes +
+  Yoogi's: Monogram 1896, Damier Ebene 1888 / Azur 2006 / Graphite 2008, Epi 1985, Empreinte 2010,
+  Multicolore 2003 (ended 2015), Vernis 1997, Mahina 2007, Taiga 1993, Eclipse/Reverse 2016, plus
+  Taurillon/Suhali/Idylle/Mini Lin/Denim/Nomade/Antheia. Colors: Vernis + Epi DATED archive
+  (sample through ~2015, with intro/discontinue years from Yoogi's) + the Empreinte name list
+  (undated, queued). Held rigor: two intro-year conflicts flagged not smoothed (Empreinte
+  2010-leather vs 2012-handbag-line; Vernis 1997-MJ vs 1998-first-color); low-confidence debut
+  years labelled as established-beat-not-resourced; recent 2025 Empreinte names (Cognac/Blue Jean/
+  Brume) logged as a single-source LEAD (low), not a fact. **Next unit: Dior (Lady Dior cannage
+  colors by season), then Gucci.**
+- Tooling note (run 4): 4 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 2 useful
+  raw scrapes (Vogue LV history, Xupes materials, Yoogi's guide — Yoogi's+Xupes were the workhorses)
+  = ~6 credits net. **LV warning confirmed:** louisvuitton.com Akamai-blocks Firecrawl; the Heritage
+  page scrape returned only the Akamai shell AND cost 5 credits (stealth-proxy auto-upgrade). Do NOT
+  scrape louisvuitton.com via Firecrawl; use the search SNIPPET (which carried OnTheGo 2019 + Petite
+  Malle 2014) or the owner-present Chrome path for season-labeled 2023-2026 colors.
 - **2026-06-28 (run 3)** — Did Early Task 3: the Hermès lexicon. Output in
   `docs/research-drafts/seasonal-archive/hermes.{md,jsonl}` (69 jsonl rows: 31 leathers/skins
   + Electrum hardware, 23 permanent/staple colors, 13 recent seasonal colors). Leathers are
@@ -276,8 +296,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 |---|---|---|---|---|---|
 | Hermès | ⬜ | ✅ leathers + exotics (31, near-complete) | 🟨 permanent-core (codes partial) + seasonal 2024–2025 only | 2026-06-28 (run 3: ✅ → `hermes.{md,jsonl}`) | seasonal colors 2020–2023 + pre-2020; OCR/auction-catalog pass for null color codes |
 | Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
-| Louis Vuitton | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Monogram + Empreinte colorways |
-| Dior | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Lady Dior cannage colors by season |
+| Louis Vuitton | ✅ canon + heritage/discontinued (30 rows) | ✅ Monogram/Damier/Epi/Empreinte/Mahina/Taurillon/Taiga/Suhali families (19, well-dated) | 🟨 Vernis + Epi dated archive (sample, through ~2015) + Empreinte name list (undated); 2023–2026 season-labeled queued | 2026-06-28 (run 4: ✅ → `louis-vuitton.{md,jsonl}`) | 2023–2026 named Empreinte/Epi seasonal colors w/ house season labels (Chrome owner-present path; LV site Akamai-blocks Firecrawl) + confirm low-confidence model debut years |
+| Dior — NEXT | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | Lady Dior cannage colors by season |
 | Gucci | ⬜ | ⬜ | ⬜ none | 2026-06-28 (beat only) | GG Marmont + Dionysus colorways |
 | Bottega / YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | 2026-06-28 (BV trend read: Jodie/Andiamo/Sardine + "fondant"/"porridge" leads) | verify BV colorways, then rest after big five |
 
@@ -299,8 +319,11 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    for Hermès: seasonal colors 2020–2023 and pre-2020 (PurseBop "New Hermès Colors 20XX" archive
    + PurseForum per-year color charts), and an OCR/auction-catalog pass to fill the null numeric
    color codes for the staple neutrals (Gris Tourterelle, Nata, Béton, Gris Meyer, etc.).
-4. **Lookbook + runway sweep, big five — NEXT** — walk Vogue Runway and each house's newsroom season
-   by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
+4. **Lookbook + runway sweep, big five — IN PROGRESS** — walk Vogue Runway and each house's newsroom
+   season by season, pulling debut/reissue/retire seasons for each model and the named seasonal colors.
+   ✅ **Louis Vuitton** done (run 4, `louis-vuitton.{md,jsonl}`): models + lines/canvases/leathers +
+   Vernis/Epi dated colorways; Empreinte name list + 2023–2026 season-labeled colors queued.
+   **NEXT: Dior**, then Gucci, then Chanel/Hermès seasonal-color backfill.
 5. **Backfill the rest** — Bottega, YSL, Celine, Fendi, Prada, Loewe.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
