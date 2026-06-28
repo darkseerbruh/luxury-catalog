@@ -34,6 +34,11 @@ mid-doing, so a cold chat sees what's in flight and picks up where the last one 
 *Keep each status cell to one current line (the live state + the single next action). Dated
 session history goes in the TL;DRs below, then ages out to [handoff-archive.md](handoff-archive.md) — never let it pile up in the registry.*
 
+**📊 Analyst decision feed (check at session start):** open strategy decisions surfaced by the
+`analyst` agent live in [analyst-decisions.md](analyst-decisions.md). Lead with anything marked
+OPEN; flip it to `DECIDED` once the owner acts. A daily scan + weekly brief run automatically and
+populate it (canon: [analyst-standard.md](analyst-standard.md)).
+
 ---
 
 ## TL;DR — data expansion: first p2p sold + 349 new priced variants (2026-06-26)
