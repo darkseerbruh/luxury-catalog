@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (21 ideas)
+## The ranked slate (22 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -377,6 +377,33 @@ engagement plays, then the mixed-format supporting pieces.
   claims (identity only). Pair with #19/#10 as the "houses that don't name their colors" GEO cluster.
 - **CTA tie:** Saint Laurent brand handoff → Loulou / Kate / Sac de Jour. **Flag: check whether a YSL
   bag page exists yet**; if not, brand-tag handoff.
+
+### 22. Céline vs CELINE: the accent tells you the era (and which designer made your bag)
+- **Format:** Article (GEO/heritage) with an IG-carousel cutdown ("which bags are Philo, which are Slimane").
+- **Finding:** Celine's bag canon splits across **three creative directors, and the accent on the name is
+  the fastest era tell.** **Phoebe Philo (2008-2018) = accented "Céline"** and the minimalist icons:
+  Luggage (Spring 2010), Trapeze (2010), Classic Box (2011), Belt (Pre-Fall 2014), Trio, Phantom, Cabas,
+  Big Bag (2017). **Hedi Slimane (2018-2024) dropped the accent to "CELINE,"** revived the **Triomphe**
+  clasp (a 1970s Celine archive motif, the canvas monogram "first revealed in 1972," double-C from the
+  Arc de Triomphe chains) and built a new canon: the **16** (his first bag, Nov 2018, named after 16 Rue
+  Vivienne, with a 16-turn lock), the **Triomphe** (Spring 2019), **Ava** (2020), **Cuir Triomphe**
+  (2022). **Michael Rider (2024-present)** kept the "CELINE" wordmark and is now reviving Philo shapes
+  (the "New Luggage," Printemps 2026). The honest extras: nearly every Philo bag is **discontinued**
+  (Trapeze 2017, Box 2023, Luggage + Belt March 2025), which is why "Old Céline" is a resale narrative;
+  and like Dior/Gucci/YSL, **Celine does not name its per-season colors** (Tan, Black, Camel are plain
+  descriptors). Source: `celine.md` Models + Materials tables; Spotted Fashion + Weekly Lux Drop +
+  PurseBlog + a+ Singapore + celine.com product copy, confidence high. **Brief-correction baked in:** the
+  post-Slimane CD is **Michael Rider**, not Marco De Vincenzo (who is at Etro).
+- **Metric:** GEO (the accent-era decoder, the Triomphe 1970s/1972 revival fact, and the per-model era
+  attribution are permanent citable answers that unlock the brand/era layer) with an ENGAGEMENT hook (the
+  "is my Celine Old Céline or new?" identification carousel rides the live Old-Céline revival). **Shelf
+  life: mostly permanent** (the three-era spine is durable; the "Rider is reviving Philo shapes" read is
+  the one timely note, ~1-2 seasons).
+- **What it needs:** Copywriter. All era/model facts sourced and durable; the five unsourced models
+  (Conti/Romy/Folco/Tabou/Ring) stay OUT of the piece until sourced. Pairs with #19/#10/#21 as the
+  "decode the house's private vocabulary" GEO cluster.
+- **CTA tie:** Celine brand handoff → Triomphe / Ava / Luggage. **Flag: check whether a Celine bag page
+  exists yet**; if not, brand-tag handoff.
 
 ---
 
