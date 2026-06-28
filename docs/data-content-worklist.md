@@ -27,6 +27,24 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 - ✅ Longchamp created (brand 402, Le Pliage style 515, v930/931); nylon tote sold — 84 rows, median $99.50 (2026-06-26)
 - ✅ Mulberry created (brand 403, Bayswater 516/v932 + Alexa 517/v933); Bayswater sold — 93 rows, median $519, holds best of mid-tier (2026-06-26)
 
+## New backbone brands (2026-06-28) — ONE-PASS capture (scaffold → all surfaces → load → summarize)
+
+*Per the §0 capture standard: each new house's T1 styles need variants scaffolded FIRST
+(loader drops zero-variant styles), then capture every source, load, refresh. Headless now
+= Fashionphile + Wayback; TRR/Vestiaire need a Chrome session; eBay needs her keys.*
+
+- ⬜ **Goyard** — Saint Louis, Anjou, Artois, Belvédère, Saïgon (+ Rouette, Bohème)
+- ⬜ **The Row** — Margaux, Half Moon, Bindle, Park Tote, Soft Margaux (+ Terrasse)
+- ⬜ **Balenciaga** — Le Cagole, Hourglass, City, Neo Classic (+ Velo, Papier)
+- ⬜ **Chloé** — Marcie, Drew, Faye, Woody Tote, C Bag (+ Aby, Penelope)
+- ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
+- ⬜ **Valentino** — Rockstud Spike, Roman Stud, Locò, One Stud, VLogo Signature (+ Supervee)
+- ⬜ **Alexander McQueen** — The Knuckle, The Jewelled Satchel, The Bow Tote, Skull, Manta
+- ⬜ **Off-White** — Binder Clip, Jitney, Burrow
+- ⬜ **Jacquemus** — Le Chiquito, Le Bambino, Le Bambimou, Le Chouchou (+ Le Grand Bambino)
+- ⬜ **Miu Miu** — Wander, Arcadie, Aventure, Matelassé
+- ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
+
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
   PLUS min=10 pass: +25 styles, +30 variants, +404 rows (Diane, Favorite, Boulogne, Delightful, Palermo, Tivoli, Reissue, Hop, Sylvie, Boston, Diorama, In-The-Loop, Jige, Trim, Jamie, Urban Spirit...). Strengthened blocklist excludes footwear/apparel/colour-soup. Total: 41 styles, 50 variants, ~1,016 rows.
