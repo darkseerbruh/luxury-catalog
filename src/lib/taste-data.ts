@@ -18,6 +18,33 @@ import {
 export { VARIANT_ATTR_SELECT, foldVariantIntoVector };
 export type { VariantAttrs };
 
+export interface SavedTasteIdentity {
+  headline: string;
+  read: string;
+  tags: string[];
+}
+
+/**
+ * The current user's saved Style-read result (migration 0034). Returns null when
+ * signed out, not taken yet, or the column doesn't exist yet (pre-migration).
+ */
+export async function getSavedTasteIdentity(): Promise<SavedTasteIdentity | null> {
+  const user = await getCurrentUser();
+  if (!user) return null;
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("profile")
+    .select("taste_identity")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (error || !data) return null;
+  const ti = (data as { taste_identity?: unknown }).taste_identity;
+  if (!ti || typeof ti !== "object") return null;
+  const o = ti as { headline?: string; read?: string; tags?: string[] };
+  if (!o.headline) return null;
+  return { headline: o.headline, read: o.read ?? "", tags: Array.isArray(o.tags) ? o.tags : [] };
+}
+
 export interface UserTaste {
   vector: TasteVector;
   completeness: number;

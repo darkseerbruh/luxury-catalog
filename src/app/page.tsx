@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BRAND_TIERS, getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
+import { getSavedTasteIdentity } from "@/lib/taste-data";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import PersonaRouter from "@/components/PersonaRouter";
@@ -29,9 +30,9 @@ export default async function Home() {
     getCurrentUser(),
     communityKnowledgeReady(),
   ]);
-  const [closet, feed] = user
-    ? await Promise.all([getCloset(), getFeed(8)])
-    : [[], []];
+  const [closet, feed, tasteRead] = user
+    ? await Promise.all([getCloset(), getFeed(8), getSavedTasteIdentity()])
+    : [[], [], null];
 
   // Real photos for the hero + closet cards when available; placeholders otherwise.
   const images = await getVariantImages([
@@ -63,6 +64,42 @@ export default async function Home() {
           >
             Start
           </Link>
+        </section>
+      )}
+
+      {user && (
+        <section className="border-b border-border px-5 py-8">
+          {tasteRead ? (
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-6 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted">Your style read</p>
+                <p className="mt-1 font-serif text-xl text-foreground">{tasteRead.headline}</p>
+                {tasteRead.tags.length > 0 && (
+                  <p className="mt-1 text-sm text-muted">{tasteRead.tags.join(" · ")}</p>
+                )}
+              </div>
+              <Link
+                href="/quiz"
+                className="shrink-0 rounded-full border border-border px-5 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Retake
+              </Link>
+            </div>
+          ) : (
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-6 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-gold">Style read</p>
+                <p className="mt-1 font-serif text-xl text-foreground">See what your style says</p>
+                <p className="mt-1 text-sm text-muted">Two minutes, and we tune the catalog to you.</p>
+              </div>
+              <Link
+                href="/quiz"
+                className="shrink-0 rounded-full bg-gold px-5 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+              >
+                Start
+              </Link>
+            </div>
+          )}
         </section>
       )}
 

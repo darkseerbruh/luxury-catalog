@@ -9,6 +9,7 @@ import type {
 } from "@/lib/queries";
 import { track, EVENTS } from "@/lib/analytics/events";
 import { BagImage } from "@/components/BagImage";
+import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 
 type SortKey = "relevance" | "az" | "count";
 type Variant = StyleSearchResult["variants"][number];
@@ -377,10 +378,10 @@ export default function SearchFilters({
           {style.variants.length > 0 && (
             <ul className="mt-4 divide-y divide-border">
               {style.variants.map((variant) => (
-                <li key={variant.variantId}>
+                <li key={variant.variantId} className="flex items-center gap-2">
                   <Link
                     href={`/bag/${variant.variantId}`}
-                    className="flex items-center justify-between py-2 text-sm transition-colors hover:text-gold"
+                    className="flex flex-1 items-center justify-between py-2 text-sm transition-colors hover:text-gold"
                   >
                     <span>
                       {[variant.sizeLabel, variant.exteriorColorway].filter(Boolean).join(" · ") ||
@@ -390,6 +391,7 @@ export default function SearchFilters({
                       <span className="text-muted">{variant.hardwareColor} hardware</span>
                     )}
                   </Link>
+                  <QuickSaveHeart variantId={variant.variantId} source="search" className="shrink-0" />
                 </li>
               ))}
             </ul>
