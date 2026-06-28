@@ -20,6 +20,7 @@
     "ingest:ebay": "tsx supabase/ingest/sources/ebay.ts",
     "ingest:fashionphile:raw": "tsx supabase/ingest/sources/fashionphile.ts --raw",
     "ingest:vestiaire": "tsx supabase/ingest/sources/vestiaire.ts",
+    "ingest:firecrawl-trr": "tsx supabase/ingest/sources/firecrawl-trr.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
     "reconcile:sold": "tsx supabase/ingest/reconcile-sold.ts",
     "normalize:discovered": "tsx supabase/ingest/normalize-discovered.ts",
