@@ -19,10 +19,15 @@ function norm(s: string): string {
   return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
 }
 
-interface Backbone { brands: Record<string, Record<string, string[]>>; }
+interface BrandMeta { country_of_origin: string; tier: "thrift" | "mid" | "ultra-luxury"; }
+interface Backbone {
+  brands: Record<string, Record<string, string[]>>;
+  brandMeta?: Record<string, BrandMeta>;
+}
 
 async function main() {
   const bb: Backbone = JSON.parse(fs.readFileSync(path.resolve(__dirname, "research/catalog-backbone.json"), "utf8"));
+  const meta = bb.brandMeta ?? {};
 
   const { data: brandRows } = await supabaseAdmin.from("brand").select("brand_id, name");
   const brandByNorm = new Map((brandRows ?? []).map((b) => [norm(b.name), b]));
@@ -36,11 +41,12 @@ async function main() {
     if (!brand) {
       brandsToCreate++; newBrands.push(brandName);
       if (WRITE) {
-        // `tier` is a NOT-NULL enum (thrift|mid|ultra-luxury). New backbone brands
-        // (currently only Saint Laurent) are peer luxury houses → "mid", matching
-        // Dior/Celine/Bottega/Fendi/Prada.
+        // `tier` is a NOT-NULL enum (thrift|mid|ultra-luxury). Per-brand country +
+        // tier come from `brandMeta` in the backbone JSON; fall back to France/mid
+        // (peer luxury house, matching Dior/Celine/Bottega/Fendi/Prada) when absent.
+        const m = meta[brandName] ?? { country_of_origin: "France", tier: "mid" as const };
         const { data, error } = await supabaseAdmin.from("brand")
-          .insert({ name: brandName, country_of_origin: "France", tier: "mid" }).select("brand_id, name").single();
+          .insert({ name: brandName, country_of_origin: m.country_of_origin, tier: m.tier }).select("brand_id, name").single();
         if (error) throw new Error(`brand ${brandName}: ${error.message}`);
         brand = data!; brandByNorm.set(norm(brandName), brand);
       } else {
