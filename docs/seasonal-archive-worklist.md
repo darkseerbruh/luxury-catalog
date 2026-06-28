@@ -239,6 +239,41 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 10)** — Did the SAINT LAURENT (YSL) lexicon (house 7, "other houses" queue).
+  Output `docs/research-drafts/seasonal-archive/saint-laurent.{md,jsonl}` (39 jsonl data rows: 23
+  models / 9 materials-motifs / 7 colors). **The honest finding HELD: YSL does NOT name its per-season
+  colors** (same as Dior/Gucci, the opposite of Hermès/Bottega) — colors are plain descriptors (Noir,
+  Crème, Dark Beige, Rouge); the naming weight sits on the MATERIAL (Grain de Poudre, matelassé
+  chevron) and the HARDWARE TONE (gold vs silver Cassandre), so the color layer is short and honest,
+  not invented. MODELS sourced with DESIGNER ERA — Tom Ford era: Mombasa (Spring 2002 collection /
+  stores Dec 2001, deer-horn handle, DOUBLE-sourced PurseBlog + Vogue Adria; relaunched 2025/2026 w/
+  Bella Hadid), Downtown (mid-2000s, year null); Pilati era: Muse (intro 2005, released Feb 2006),
+  Muse Two (~2008, year null); Slimane era: Sac de Jour (2013), Sunset (2016, named after Sunset
+  Blvd), + THE REBRAND (Slimane dropped "Yves" from the RTW logo 2012 → "Saint Laurent"; YSL/Cassandre
+  emblem KEPT); Vaccarello era: Niki (Spring 2018, OFFICIAL YSL campaign tag), Cassandra (Summer 2020,
+  official campaign), Kaia (SS2020, named for Kaia Gerber), All Over (AW2019), Loulou (named for Loulou
+  de la Falaise) + Puffer/Toy, Kate (+ Tassel), Le 5 à 7, Manhattan (revival), Solferino, Jamie,
+  Envelope, College, Lou camera, Icare. MATERIALS got the DNA treatment: the **Cassandre monogram
+  (A.M. Cassandre, 1963)** is the house emblem AND the bag clasp; **matelassé CHEVRON** is the YSL
+  quilt (distinct from Chanel's diamond — brief's chevron-vs-diamond ask held, both logged);
+  **Grain de Poudre** is the powder-grain embossed calfskin (official product-name confirmed across
+  Saks/Poshmark/Caroline's); + croc-embossed, smooth calf, Rive Gauche canvas (1969 store), Mombasa
+  deer-horn. HELD RIGOR: undated models (Le 5 à 7, Manhattan, Solferino, Jamie, College, Lou, Muse Two,
+  Downtown, modern Loulou, Puffer/Toy, Icare, Kate) have IDENTITY sourced but YEAR flagged null/low,
+  NOT fabricated; Solferino/College logged low (beat knowledge, single-source) not invented. Noted
+  Sac de Jour = official spelling, "Sac du Jour" = misspelling alias. Appended 1 content idea (the
+  Cassandre-monogram GEO explainer + the Loulou-vs-Kate practical breakdown). **Next unit: CELINE
+  (Triomphe/Luggage/Belt), then Fendi/Prada/Loewe, or the Hermès seasonal backfill (2020-2023 +
+  pre-2020, the highest-GEO-value open gap).**
+- Tooling note (run 10): 5 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 3 raw
+  scrapes (Rebag YSL history = the model+era WORKHORSE; Who What Wear = current canon + four-longevity
+  styles; PurseBlog Mombasa = auction-grade Tom Ford detail) = ~8 credits net. **ysl.com NOT scraped**
+  (Akamai bot-shell risk per LV/Dior/Gucci/BV). **No Christie's/Sotheby's YSL collecting-guide page
+  surfaced** (same as BV — YSL's clean free sources were Rebag + Vogue + Who What Wear + PurseBlog).
+  The Vogue "Saint Laurent Handbags 101" slideshow (Mombasa-to-Icare) is a JS gallery that did NOT
+  render via Firecrawl (only the intro came through) — queue it for the Chrome path for the cleanest
+  full-canon per-model dating. Official YSL social posts (X/YouTube) were the auction-grade equivalent
+  for the Niki (Spring 2018) and Cassandra (Summer 2020) debut dates.
 - **2026-06-28 (run 9)** — Did the BOTTEGA VENETA lexicon (house 6, first of the "other houses"
   queue). Output `docs/research-drafts/seasonal-archive/bottega-veneta.{md,jsonl}` (77 jsonl data
   rows: 18 models incl. 1 caption-lead / 9 materials / 50 colors). **The important finding held:
@@ -420,7 +455,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Dior | ✅ canon + heritage/discontinued (20) | ✅ Cannage/Oblique/Toile de Jouy/Diorissimo + leathers (10, well-dated) | 🟨 named capsules + art editions (9: Lady Art #1/#2/#5/#10, ABCDior, Toile, Gradient, Dioramour, Graphic Cannage); per-season plain colors are descriptive not named (Dior doesn't name them) | 2026-06-28 (run 5: ✅ → `dior.{md,jsonl}`) | dior.com newsroom (95.22, craft, capsules) via owner-present Chrome path; Lady Art #3/#4/#6-#9 per-edition rows; confirm low-confidence model debut years |
 | Gucci | ✅ canon + heritage/discontinued + 4 collabs (24 rows) | ✅ Diamante/GG monogram/GG Supreme/Web/Horsebit/Bamboo handle/Flora/matelassé (11, mostly auction-anchored) | 🟨 named layer is small: Rosso Ancora (De Sarno SS24) + Flora + Ken Scott + Hacker finishes (4). Gucci does NOT name most per-season colors (honest finding) | 2026-06-28 (run 6: ✅ → `gucci.{md,jsonl}`) | gucci.com Ancora/Jackie/Bamboo season pages (owner-present Chrome path) for any named colors; confirm low-confidence model years (Zumi/Bree/Aphrodite/Queen Margaret) + adidas/Disney/North Face collab years |
 | Bottega Veneta | ✅ canon + heritage/era (17 sourced; Loop/Mount/Point/Sunshine logged unsourced not invented) | ✅ Intrecciato DNA + Maxi/Padded variants + leathers (9) | ✅ NAMED layer real (50 colors: Parakeet official SS2021 + 49 descriptive/reseller-attributed incl. Fondant/Porridge/Barolo/Travertine) | 2026-06-28 (run 9: ✅ → `bottega-veneta.{md,jsonl}`) | promote 49 descriptive colors to official + add debut seasons via bottegaveneta.com (Chrome path) + luxbags.fr color-code DB; source Loop/Mount/Point/Sunshine/Campana debut years; resolve Cabat 2001-vs-2002 |
-| YSL / Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | YSL next (Loulou/Kate/Le 5 à 7), then Celine/rest |
+| Saint Laurent (YSL) | ✅ canon + heritage/era (23 rows; Tom Ford/Pilati/Slimane/Vaccarello attributed; undated ones flagged null/low not invented) | ✅ Cassandre monogram (1963) + matelassé chevron vs diamond + Grain de Poudre + croc/smooth calf + Rive Gauche + Mombasa horn (9) | 🟨 honest finding: YSL does NOT name per-season colors (Dior/Gucci camp). 7 rows: plain neutrals/darks + gold/silver Cassandre hardware-tone axis + Rive Gauche print | 2026-06-28 (run 10: ✅ → `saint-laurent.{md,jsonl}`) | exact debut seasons for Le 5 à 7/Manhattan/Solferino/Jamie/College/Lou/Muse Two/Downtown/modern Loulou/Icare/Kate via ysl.com heritage + Vogue Runway (Chrome path; ysl.com Akamai-blocks Firecrawl) + the Vogue 101 slideshow (JS gallery, Chrome); Christie's/Sotheby's YSL lots for auction-grade heritage years |
+| Celine / Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Celine next (Triomphe/Luggage/Belt), then Fendi/Prada/Loewe |
 
 ---
 
@@ -456,9 +492,12 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 5. **Backfill the rest** — ✅ **Bottega Veneta** (run 9, `bottega-veneta.{md,jsonl}`): models with
    designer era (Maier/Lee/Blazy) + Intrecciato DNA + a REAL named-color layer (50 colors; Parakeet
    official, the rest reseller-attributed, queued for bottegaveneta.com promotion). BV is the
-   counter-case to Dior/Gucci: it genuinely names its colors. **NEXT: YSL** (Loulou/Kate/Le 5 à 7),
-   then Celine, Fendi, Prada, Loewe. Hermès seasonal-color backfill (2020-2023 + pre-2020) also
-   still open and is the highest-GEO-value gap.
+   counter-case to Dior/Gucci: it genuinely names its colors. ✅ **Saint Laurent** (run 10,
+   `saint-laurent.{md,jsonl}`): models with designer era (Ford/Pilati/Slimane/Vaccarello) + the
+   Cassandre monogram (1963) / matelassé chevron / Grain de Poudre material DNA. Honest finding: YSL
+   does NOT name per-season colors (Dior/Gucci camp) — naming weight is on material + hardware tone
+   (gold/silver Cassandre). **NEXT: Celine** (Triomphe/Luggage/Belt), then Fendi, Prada, Loewe.
+   Hermès seasonal-color backfill (2020-2023 + pre-2020) also still open and is the highest-GEO-value gap.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
 

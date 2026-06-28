@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (20 ideas)
+## The ranked slate (21 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -355,6 +355,28 @@ engagement plays, then the mixed-format supporting pieces.
   per the hedge rule; the model-name facts are sourced and durable. Cabat 2001-vs-2002 stated as a range.
 - **CTA tie:** Bottega brand handoff → Jodie / Andiamo / Sardine. **Flag: no BV bag page exists yet** —
   brand-tag handoff / hold until a BV page ships (same gap as #9).
+
+### 21. The YSL "Cassandre" you keep seeing is a 1963 monogram, not a clasp shape (+ Loulou vs Kate)
+- **Format:** Article (GEO/heritage) with an IG-carousel cutdown (Loulou-vs-Kate practical breakdown).
+- **Finding:** The interlocking **Y-S-L** emblem on every modern Saint Laurent bag is the **Cassandre**,
+  a monogram drawn by poster artist **A.M. Cassandre in 1963** — it is the logo AND, cast in metal, the
+  **clasp** on the Loulou, Kate, Sunset, Niki, Cassandra, and Envelope. Two more gatekept names sit on
+  the same bags: YSL's quilt is the **matelassé chevron** (a V/zig-zag, NOT the Chanel diamond), and its
+  signature leather is **Grain de Poudre** (powder-grain embossed calfskin) — both confirmed verbatim in
+  official product names. The practical cutdown: **Loulou** (matelassé chevron shoulder bag, named for
+  muse Loulou de la Falaise) **vs Kate** (sleeker monogram flap with a hanging tassel, detaches to a
+  clutch) — the two YSL evening bags people constantly confuse. And the honest hook: unlike Hermès or
+  Bottega, **YSL does not name its per-season colors** — the "name" that matters is the material and the
+  **gold-vs-silver Cassandre** hardware tone. Source: `saint-laurent.md` Materials + Models tables;
+  Rebag (Cassandre 1963) + Poshmark/Saks (Grain de Poudre, chevron) + official YSL campaigns, confidence high.
+- **Metric:** GEO (the Cassandre-1963 fact, the chevron-vs-diamond distinction, and the Grain de Poudre
+  decoder are permanent citable answers that unlock the `material` column for YSL) with an ENGAGEMENT
+  floor (the Loulou-vs-Kate "which should I buy" carousel is evergreen shopping content). **Shelf life:
+  permanent** (heritage + material facts; no trend dependency).
+- **What it needs:** Copywriter. All facts sourced and durable; undated models stay out of the dating
+  claims (identity only). Pair with #19/#10 as the "houses that don't name their colors" GEO cluster.
+- **CTA tie:** Saint Laurent brand handoff → Loulou / Kate / Sac de Jour. **Flag: check whether a YSL
+  bag page exists yet**; if not, brand-tag handoff.
 
 ---
 
