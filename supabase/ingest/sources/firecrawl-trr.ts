@@ -113,9 +113,18 @@ async function main() {
 
   const today = new Date().toISOString().slice(0, 10);
   const obs: PriceObservation[] = [];
+  let failed = 0;
   for (const c of candidates) {
     try {
-      const page = await scrape(c.url, { formats: ["rawHtml"], includeTags: ["script"] });
+      // TRR sometimes ERR_ABORTs the cheap "basic" proxy on product pages. Retry once
+      // with the stealth proxy (pricier, but recovers the listing) before giving up.
+      let page;
+      try {
+        page = await scrape(c.url, { formats: ["rawHtml"], includeTags: ["script"] });
+      } catch {
+        await sleep(1500);
+        page = await scrape(c.url, { formats: ["rawHtml"], includeTags: ["script"], proxy: "stealth" });
+      }
       credits += page.creditsUsed;
       const prod = page.rawHtml ? parseTrrProduct(page.rawHtml) : null;
       if (!prod) continue;
@@ -141,13 +150,14 @@ async function main() {
         notes: `Firecrawl TRR capture ${today}`,
       });
     } catch (e) {
+      failed++;
       console.warn(`  skip ${c.url}: ${(e as Error).message}`);
     }
-    await sleep(400);
+    await sleep(1000);
   }
 
   const res = writeObservations("therealreal", obs);
-  console.log(`landing: kept ${res.kept}, dropped ${res.dropped} -> ${res.file}`);
+  console.log(`landing: kept ${res.kept}, dropped ${res.dropped} (${failed} scrape failures) -> ${res.file}`);
   console.log(`Firecrawl credits used this run: ${credits}`);
 }
 
