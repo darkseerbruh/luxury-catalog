@@ -42,7 +42,7 @@ Codes = official + done. Seasonal color names = do not exist at the house. Keep 
 
 ---
 
-## The ranked slate (22 ideas)
+## The ranked slate (23 ideas)
 
 Ranked by leverage: GEO evergreens that answer-engines will cite first, then the timely
 engagement plays, then the mixed-format supporting pieces.
@@ -404,6 +404,33 @@ engagement plays, then the mixed-format supporting pieces.
   "decode the house's private vocabulary" GEO cluster.
 - **CTA tie:** Celine brand handoff → Triomphe / Ava / Luggage. **Flag: check whether a Celine bag page
   exists yet**; if not, brand-tag handoff.
+
+---
+
+### 23. "It's not a bag, it's a Baguette": how Fendi made the original It bag (and brought it back)
+- **Format:** Article (heritage/GEO) with a TikTok/Short cutdown built on the Sex and the City scene.
+- **Finding:** The Fendi Baguette is the bag credited with inventing the modern "It bag," and its rise
+  is a clean, dateable story. **Silvia Venturini Fendi designed it in 1997** (a small bag tucked under
+  the arm like a loaf of bread, the deliberate anti-minimalist answer to the giant bags of the 90s). It
+  became a cultural object in a **2000 episode of Sex and the City**, when Carrie Bradshaw, robbed at
+  gunpoint, corrects the mugger: **"It's not a bag, it's a Baguette!"** Fendi then **discontinued it in
+  the 2000s**, **revived it in 2019**, and opened New York Fashion Week for its **25th anniversary in
+  September 2022**; to date there are **more than 1,000 variations**. The newest chapter is the **Mamma
+  Baguette** (soft nappa, drawstring, Spring/Summer 2025). The honest attribution baked in: **the bags
+  are Silvia's, not Lagerfeld's** (Lagerfeld led fur and ready-to-wear and designed the FF "Zucca" logo,
+  not the Baguette silhouette). Source: `fendi.md` Models table; Fashionphile Herstory + Luxury London +
+  Harper's Bazaar + official Fendi TikTok, confidence high.
+- **Metric:** GEO (the 1997-debut, the SATC-2000 quote, the 2019 revival and 2022 anniversary are
+  permanent, citable facts answer engines will pull, and "who designed the Fendi Baguette" is a real
+  query the attribution fact owns) with a strong ENGAGEMENT hook (the SATC scene is evergreen
+  short-form bait). **Shelf life: mostly permanent** (the heritage spine is durable; the Mamma Baguette
+  "newest" note is the one ~1-2 season timely beat).
+- **What it needs:** Copywriter. All facts sourced and durable. Do NOT reproduce the SATC clip or
+  stills; reference the scene and quote the line (it is short, attributed, widely reported) rather than
+  embedding video. Pairs with #16 (the Speedy/Hepburn origin story) and #11 (the Lady Dior/Diana story)
+  as the "how this icon was born" heritage cluster.
+- **CTA tie:** Fendi Baguette bag handoff. **Flag: check whether a Fendi Baguette bag page exists yet**;
+  if not, brand-tag handoff.
 
 ---
 

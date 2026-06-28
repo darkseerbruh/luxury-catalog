@@ -239,6 +239,49 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-06-28 (run 12)** — Did the FENDI lexicon (house 9, "other houses" queue, after Celine).
+  Output `docs/research-drafts/seasonal-archive/fendi.{md,jsonl}` (37 jsonl data rows: 22 models / 9
+  materials-motifs / 6 colors incl. the honest-finding row). **THE KEY VALUE was the DESIGNER
+  ATTRIBUTION, and the brief's framing held: the BAGS are SILVIA VENTURINI FENDI's** — she created
+  the **Baguette (1997)**, the **Spy (2005)**, and the **Peekaboo (~2008/2009)** — while **Karl
+  Lagerfeld led FUR + RTW (1965-2019)** and designed the **LOGOS only** (the FF 'Zucca' double-F =
+  'Fun Fur', 1965/66; **Karligraphy** 1981). Did NOT over-credit Lagerfeld for the bag silhouettes.
+  **Kim Jones led womenswear/couture 2020-2024** (the **First**, his debut bag, Fall 2021, F-shaped
+  clasp; **Fendigraphy** 2022; reimagined the Peekaboo ISeeU/Sunshine). **2025-2026 UPDATE that
+  POST-DATES THE BRIEF (flag it): Silvia moved to Honorary President Oct 1 2025 (stays on
+  accessories/menswear); MARIA GRAZIA CHIURI became Creative Director of Womenswear+Couture, debut
+  Feb 2026** (remixing Silvia's Baguette/Spy/Peekaboo). The brief's Kim-Jones-2020-2024 line was
+  correct; Chiuri is the current womenswear lead. **CULTURAL: the Baguette is the It-bag origin via
+  Sex and the City** ('It's not a bag, it's a Baguette!', 2000 episode), discontinued in the 2000s,
+  **revived 2019**, 25th-anniv at NYFW Sept 2022, **1000+ variations** (auction-near-grade across
+  Fashionphile + Luxury London + Harper's). **TWO-SIGNATURE MATERIAL DNA captured: the LOGO** (FF
+  Zucca = larger double-F / **Zucchino** = smaller FF, discontinued / **FF 1974** = modern embossed /
+  Karligraphy 1981) **AND the LEATHER CRAFT** (the **Selleria** hand-saddle-stitch line — 'saddlery'
+  in Italian, technique to the family **1925**, modern handbag introduced by Adele Fendi **1960s**, on
+  **Cuoio Romano** leather, silver tag engraved 1925; W Magazine + L'Officiel) — plus **Pequin stripe**,
+  fur/shearling, exotics. The Zucca-vs-Zucchino distinction is the GEO-valuable decoder. **HONEST COLOR
+  FINDING HELD (Dior/Gucci/YSL/Celine camp, NOT Hermès/Bottega): Fendi does NOT name its per-season
+  colors** — fendi.com lists flat shade descriptors (Brown, Camelia listed 'White', Black, Tobacco,
+  Spring Turquoise); naming weight sits on the MODEL + the LOGO/MATERIAL treatment, so the color layer
+  is short + honest, not invented. HELD RIGOR: **Kan I / Kan U** and **Touch** did NOT surface with a
+  clean debut year — logged low/unsourced leads, NOT fabricated; **'C'mon'** did not surface at all and
+  is **omitted, not invented**; undated models (Sunshine/2Jours/Way original debuts) have IDENTITY
+  sourced but YEAR flagged null/medium. Two source conflicts flagged in-row not smoothed (FF Zucca
+  1965-vs-1966; Peekaboo 2008-vs-2009). Appended 1 content idea (#23, the Baguette / Sex-and-the-City
+  heritage-and-revival explainer, GEO + engagement; Fendi Baguette bag CTA, flagged check-if-bag-page-
+  exists). **Next unit: PRADA** (Galleria/Re-Edition/Cleo), then LOEWE (Puzzle/Hammock/Flamenco), or the
+  Hermès seasonal backfill (2020-2023 + pre-2020, the highest-GEO-value open gap).
+- Tooling note (run 12): 6 firecrawl_search (all refunded 2→1 via feedback within 2 min) + 4 raw
+  scrapes (Fashionphile Herstory = the DESIGNER-ATTRIBUTION + Baguette/Spy/Peekaboo WORKHORSE;
+  Fashionphile Iconic Logos = the LOGO/Zucca-vs-Zucchino WORKHORSE; PurseBop Kim Jones Fall 2021 = the
+  First/ISeeU debut-date WORKHORSE; Luxury London buyer's guide = the multi-model debut-year WORKHORSE;
+  W Magazine Selleria = the leather-craft second source) = ~10 credits net. **fendi.com NOT scraped
+  wholesale** (Akamai bot-shell risk per LV/Dior/Gucci/BV/YSL/Celine); fendi.com product copy (Mon
+  Tresor colors, Selleria) + official Fendi FB/TikTok (Roll bag 1997 + Pequin; Mamma Baguette FendiSS25)
+  came through as search SNIPPETS. No Christie's/Sotheby's/Heritage Fendi collecting-guide page surfaced
+  (same as BV/YSL/Celine) — Fendi's clean free sources were Fashionphile Academy + PurseBop + Luxury
+  London + W Magazine + PurseBlog + Spotted Fashion. The Kan I/Kan U + Touch + C'mon dating is the queued
+  Chrome/PurseForum backfill.
 - **2026-06-28 (run 11)** — Did the CELINE lexicon (house 8, "other houses" queue, after Saint Laurent).
   Output `docs/research-drafts/seasonal-archive/celine.{md,jsonl}` (37 jsonl data rows: 23 models / 9
   materials-motifs / 5 colors). **THE KEY VALUE was the THREE-ERA + ACCENT attribution, and it held
@@ -491,7 +534,8 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 | Bottega Veneta | ✅ canon + heritage/era (17 sourced; Loop/Mount/Point/Sunshine logged unsourced not invented) | ✅ Intrecciato DNA + Maxi/Padded variants + leathers (9) | ✅ NAMED layer real (50 colors: Parakeet official SS2021 + 49 descriptive/reseller-attributed incl. Fondant/Porridge/Barolo/Travertine) | 2026-06-28 (run 9: ✅ → `bottega-veneta.{md,jsonl}`) | promote 49 descriptive colors to official + add debut seasons via bottegaveneta.com (Chrome path) + luxbags.fr color-code DB; source Loop/Mount/Point/Sunshine/Campana debut years; resolve Cabat 2001-vs-2002 |
 | Saint Laurent (YSL) | ✅ canon + heritage/era (23 rows; Tom Ford/Pilati/Slimane/Vaccarello attributed; undated ones flagged null/low not invented) | ✅ Cassandre monogram (1963) + matelassé chevron vs diamond + Grain de Poudre + croc/smooth calf + Rive Gauche + Mombasa horn (9) | 🟨 honest finding: YSL does NOT name per-season colors (Dior/Gucci camp). 7 rows: plain neutrals/darks + gold/silver Cassandre hardware-tone axis + Rive Gauche print | 2026-06-28 (run 10: ✅ → `saint-laurent.{md,jsonl}`) | exact debut seasons for Le 5 à 7/Manhattan/Solferino/Jamie/College/Lou/Muse Two/Downtown/modern Loulou/Icare/Kate via ysl.com heritage + Vogue Runway (Chrome path; ysl.com Akamai-blocks Firecrawl) + the Vogue 101 slideshow (JS gallery, Chrome); Christie's/Sotheby's YSL lots for auction-grade heritage years |
 | Celine | ✅ canon + 3-era/accent attribution (16 sourced incl. Teen Triomphe; Conti/Romy/Folco/Tabou/Ring logged unsourced not invented) | ✅ Triomphe clasp (1970s archive) + Triomphe Canvas (1972 monogram) + Drummed/smooth calf + exotics + winged silhouette (9) | 🟨 honest finding: Celine does NOT name per-season colors (Dior/Gucci/YSL camp). 5 plain neutrals (Tan/Black/Camel/Natural/Brown) | 2026-06-28 (run 11: ✅ → `celine.{md,jsonl}`) | exact debut years for Trio/Phantom/Cabas/Sangle/Besace + source Conti/Romy/Folco/Tabou/Ring via celine.com (Chrome path; Akamai-risk) + PurseForum Celine subforum; Christie's/Sotheby's Celine lots for Philo heritage dating |
-| Fendi / Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Fendi next (Baguette/Peekaboo), then Prada/Loewe |
+| Fendi | ✅ canon + designer attribution (22 rows; bags=Silvia Venturini Fendi, logos=Lagerfeld, First/Fendigraphy=Kim Jones; Kan I/Kan U + Touch logged unsourced-year not invented, C'mon omitted not invented) | ✅ TWO-signature DNA: FF Zucca + Zucchino + FF 1974 + Karligraphy (logos) + Selleria saddle-stitch (1925) on Cuoio Romano + Pequin + fur + exotics (9) | 🟨 honest finding: Fendi does NOT name per-season colors (Dior/Gucci/YSL/Celine camp). 6 rows: plain shade descriptors (Brown/Camelia/Black/Tobacco/Spring Turquoise) + the no-lexicon finding | 2026-06-28 (run 12: ✅ → `fendi.{md,jsonl}`) | clean debut years for Kan I/Kan U + Touch + verify/date 'C'mon' via fendi.com (Chrome path; Akamai-risk) + PurseForum Fendi subforum; original debut years for Sunshine/2Jours/Way; Christie's/Sotheby's/Heritage Fendi lots for Baguette/Peekaboo heritage dating; resolve FF Zucca 1965-vs-1966 + Peekaboo 2008-vs-2009 via fendi.com heritage |
+| Prada / Loewe | ⬜ | ⬜ | ⬜ none | — | Prada next (Galleria/Re-Edition/Cleo), then Loewe (Puzzle/Hammock/Flamenco) |
 
 ---
 
@@ -535,7 +579,14 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
    accent attribution (Philo "Céline" 2008-2018 / Slimane "CELINE" 2018-2024 / Rider 2024-present) +
    the Triomphe clasp (1970s archive) / Triomphe Canvas (1972) material DNA. Honest finding: Celine does
    NOT name per-season colors (Dior/Gucci/YSL camp). Brief-correction: post-Slimane CD is Michael Rider,
-   not Marco De Vincenzo. **NEXT: Fendi** (Baguette/Peekaboo), then Prada, Loewe.
+   not Marco De Vincenzo. ✅ **Fendi** (run 12, `fendi.{md,jsonl}`): models with DESIGNER attribution —
+   the bags are Silvia Venturini Fendi's (Baguette 1997, Spy 2005, Peekaboo ~2008/2009), Lagerfeld did
+   the LOGOS only (FF Zucca 'Fun Fur' 1965/66, Karligraphy 1981), Kim Jones did the First (2021) +
+   Fendigraphy (2022) — plus the TWO-signature material DNA (FF Zucca/Zucchino/FF 1974 logos + the
+   Selleria saddle-stitch leather line, 1925, on Cuoio Romano). Honest finding: Fendi does NOT name
+   per-season colors (Dior/Gucci/YSL/Celine camp). 2025-2026 update (post-dates the brief): Silvia →
+   Honorary President Oct 2025; Maria Grazia Chiuri = new Womenswear/Couture CD, debut Feb 2026.
+   **NEXT: Prada** (Galleria/Re-Edition/Cleo), then Loewe (Puzzle/Hammock/Flamenco).
    Hermès seasonal-color backfill (2020-2023 + pre-2020) also still open and is the highest-GEO-value gap.
 
 ## Recommendation to flag to the owner (do not build unsolicited)
