@@ -49,6 +49,20 @@ Built the always-on **product-strategy analyst** (the judgment layer above `anal
 - **The body:** two scheduled cloud runs in `~/.claude/scheduled-tasks/` — `analyst-daily-scan` (08:12, push-to-phone only if an urgent threshold trips) and `analyst-weekly-brief` (Mon 08:41, emails the digest). They run from a dedicated worktree **`~/Documents/luxury-catalog-analyst` kept on `main`** (real `node_modules`, symlinked `.env.local`), so they never touch lane worktrees. Notification model locked in preferences: chat-surface always, email weekly, push urgent-only.
 - **First run (2026-06-28):** mostly first-party/dev traffic, history starts ~06-20, so no strategy bet is callable yet. One real fix shipped: **`auth_section_engaged` was defined but never fired** despite the bag page's auth disclosures, so added [AuthEngagementTracker.tsx](../src/app/bag/[variantId]/AuthEngagementTracker.tsx) (fires on the "How to authenticate" checklist scrolling into view + the "Serial & authentication tags" expander opening). Revenue-backbone proxy `outbound_resale_clicked` confirmed already wired (its 0 is just thin traffic).
 - **Open:** add `outbound_rental_clicked` when the rental CTA ships; consider deleting the dead `style_viewed`. **Your turn:** open a `/bag/...` page + scroll to the auth section to confirm the event lands; optionally "Run now" the daily task once to pre-approve its push/email perms.
+## TL;DR — analytics: live dashboards + persona-journey instrumentation (2026-06-28)
+
+Built the analytics layer the owner asked for ("dashboards I can read"), worked **persona → outcome → journey → flow gap → instrument last** (canon: new `docs/analytics-strategy.md`; method also in `preferences.md`). PostHog read key (`phx_…`, project `478100`, US cloud) stored in `.env.local`; `npm run analytics:pulse` pulls live numbers any chat can render. First live read (30d): ~216 visitors, deep-read healthy (23 opened a bag → ~20 read value), but intent actions were **0** (saves/outbound/inquiry) and four taxonomy events were dead.
+
+**UPDATE 2026-06-29: all five landed to `main`** (PRs #5/#6/#8 merged, #9 bag-compare merged earlier, #10 instrument-journeys closed because its commits were already an ancestor of `main`). The migration file `0035_persona_model.sql` is now on `main`; the **owner still applies it to the DB via the db-migrate Action** to activate G1's `motivations`/`maturity_stage` columns (onboarding degrades gracefully until then). Original branch list:
+1. `analytics/pulse-dashboards` — `analytics:pulse` + refreshed 3-dashboard `setup-posthog.mjs`. No migration.
+2. `analytics/persona-model` — **G1**: onboarding motivation multi-select + behavior-derived `maturity_stage`; legacy `persona` kept populated. **Needs migration `0035_persona_model.sql` (apply FIRST).**
+3. `ux/bag-compare` — **G2**: `/compare` side-by-side + add-to-compare tray (`CompareControls`). No migration.
+4. `analytics/instrument-journeys` (stacked on G2) — wires `catalog_filtered` on `/shop`, revives `auth_section_engaged`, adds `article_viewed` + `attribute_object_viewed` + `bags_compared`. No migration.
+5. `feat/premium-fake-door` — premium-tools fake-door on `/watchlist` giving `monetization_interest` a home (~$40/yr M9, grounded in monetization-moments-audit). No migration.
+
+Gates per branch: tsc, **eslint src** (the AGENTS gate; whole-repo `npm run lint` has pre-existing `any` errors in `supabase/ingest/*` from the data lane, not these branches), next build, npm test. **Still open (deliberate):** `inquiry_submitted` has no UI home (needs a lead form — a product decision); `style_viewed` has no style route (retire or repurpose). **DONE 2026-06-29: merged in order #6, #8, #5; #9 already in; #10 closed. Remaining owner action: apply `0035` to the DB.**
+
+---
 
 ## TL;DR — data expansion: first p2p sold + 349 new priced variants (2026-06-26)
 
