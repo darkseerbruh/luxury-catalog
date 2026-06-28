@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getWatchlist } from "@/lib/collections";
 import WatchControls from "./WatchControls";
+import PremiumInterest from "@/components/PremiumInterest";
 
 export const dynamic = "force-dynamic";
 
@@ -83,6 +84,8 @@ export default async function WatchlistPage() {
           })}
         </ul>
       )}
+
+      <PremiumInterest surface="watchlist" />
     </main>
   );
 }
