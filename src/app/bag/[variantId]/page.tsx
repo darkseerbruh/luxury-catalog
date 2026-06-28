@@ -619,6 +619,7 @@ export default async function BagDetailPage({
         styleName={v.style.name}
         variants={styleVariants}
         currentVariantId={v.variantId}
+        savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
