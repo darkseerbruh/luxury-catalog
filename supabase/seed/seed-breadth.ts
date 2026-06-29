@@ -25,13 +25,13 @@ import { resolveMaterialId } from "./lib/material-resolver";
 
 const DATA_DIR = path.resolve(__dirname, "../../data/raw");
 
-const BRAND_TIERS: Record<string, { tier: "thrift" | "mid" | "ultra-luxury"; country: string; founded: number | null }> = {
+const BRAND_TIERS: Record<string, { tier: "thrift" | "mid" | "premium" | "ultra-luxury"; country: string; founded: number | null }> = {
   Coach: { tier: "thrift", country: "USA", founded: 1941 },
   "Kate Spade": { tier: "thrift", country: "USA", founded: 1993 },
   Burberry: { tier: "thrift", country: "UK", founded: 1856 },
-  Gucci: { tier: "mid", country: "Italy", founded: 1921 },
-  Prada: { tier: "mid", country: "Italy", founded: 1913 },
-  Fendi: { tier: "mid", country: "Italy", founded: 1925 },
+  Gucci: { tier: "premium", country: "Italy", founded: 1921 },
+  Prada: { tier: "premium", country: "Italy", founded: 1913 },
+  Fendi: { tier: "premium", country: "Italy", founded: 1925 },
   Celine: { tier: "mid", country: "France", founded: 1945 },
   Dior: { tier: "mid", country: "France", founded: 1946 },
   "Bottega Veneta": { tier: "mid", country: "Italy", founded: 1966 },
