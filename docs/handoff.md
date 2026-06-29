@@ -42,6 +42,14 @@ populate it (canon: [analyst-standard.md](analyst-standard.md)).
 
 ---
 
+## TL;DR — background strategy-analyst agent + first run + wiring fix (2026-06-28)
+
+Built the always-on **product-strategy analyst** (the judgment layer above `analytics-pulse`/`digest`). All on `main`, gates green (tsc/eslint/next build/448 tests).
+- **The brain:** `analyst` subagent ([.claude/agents/analyst.md](../.claude/agents/analyst.md)) + canon [analyst-standard.md](analyst-standard.md) (metric tree → 5 revenue lanes → funnel; strategy-assumption register; urgent-push thresholds; decision format; escalation ladder). It surfaces *decisions* (options + recommendation + metric moved), not dashboards, into [analyst-decisions.md](analyst-decisions.md).
+- **The body:** two scheduled cloud runs in `~/.claude/scheduled-tasks/` — `analyst-daily-scan` (08:12, push-to-phone only if an urgent threshold trips) and `analyst-weekly-brief` (Mon 08:41, emails the digest). They run from a dedicated worktree **`~/Documents/luxury-catalog-analyst` kept on `main`** (real `node_modules`, symlinked `.env.local`), so they never touch lane worktrees. Notification model locked in preferences: chat-surface always, email weekly, push urgent-only.
+- **First run (2026-06-28):** mostly first-party/dev traffic, history starts ~06-20, so no strategy bet is callable yet. One real fix shipped: **`auth_section_engaged` was defined but never fired** despite the bag page's auth disclosures, so added [AuthEngagementTracker.tsx](../src/app/bag/[variantId]/AuthEngagementTracker.tsx) (fires on the "How to authenticate" checklist scrolling into view + the "Serial & authentication tags" expander opening). Revenue-backbone proxy `outbound_resale_clicked` confirmed already wired (its 0 is just thin traffic).
+- **Open:** add `outbound_rental_clicked` when the rental CTA ships; consider deleting the dead `style_viewed`. **Your turn:** open a `/bag/...` page + scroll to the auth section to confirm the event lands; optionally "Run now" the daily task once to pre-approve its push/email perms.
+
 ## TL;DR — data expansion: first p2p sold + 349 new priced variants (2026-06-26)
 
 Data/capture session against the measured gap (high-end deep, mid-tier + realized prices absent). All on `main`, gates green (tsc/eslint/next build/439 tests).
