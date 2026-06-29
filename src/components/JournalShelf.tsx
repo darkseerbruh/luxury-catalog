@@ -66,7 +66,6 @@ export default async function JournalShelf() {
                     </span>
                     <span className="mt-0.5 block text-[11px] tracking-wide text-muted">
                       {byline(p)}
-                      {p.topic.brandName ? ` · ${p.topic.brandName}` : ""}
                     </span>
                   </span>
                 </Link>
