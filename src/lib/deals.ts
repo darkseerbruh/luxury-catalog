@@ -1,4 +1,14 @@
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
+
+/** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
+export const MIN_DEALS_TO_RENDER = 3;
+
+/**
+ * Discount ceiling. A listing more than this far below the variant's resale median is
+ * treated as a data error (accessory, parts listing, mis-grouped row), not a deal, and
+ * dropped. Real underpriced listings rarely exceed ~50% off; 70% is a conservative guard.
+ */
+const MAX_DEAL_PCT_UNDER = 70;
 
 /**
  * "Today's deals" — current resale listings priced BELOW their variant's recorded
@@ -45,6 +55,21 @@ export interface Deal {
   currency: string | null;
   /** Whole-number percent the current listing sits below the median (e.g. 18 = 18% under). */
   pctUnder: number;
+  /** Lowest recorded resale price for the variant (range floor), in `currency`. */
+  lowPrice: number;
+  /** Highest recorded resale price for the variant (range ceiling), in `currency`. */
+  highPrice: number;
+  /** How many recorded resale prices the median + range are built from. */
+  sampleSize: number;
+  /**
+   * Our READ of where this listing sits in the variant's own recorded resale range,
+   * never an appraisal: "great" = in the cheapest quarter of recorded sales, "good" =
+   * below median but above that. `null` when `sampleSize < 5` (too few sales to grade
+   * honestly) — the row still shows, just without a verdict label.
+   */
+  verdict: "great" | "good" | null;
+  /** Share of recorded sales priced ABOVE this listing, e.g. 85 = lower than 85% of them. */
+  pctCheaper: number;
   /** Where the listing was read from, if recorded (for attribution / link-back). */
   sourceUrl: string | null;
   /** Platform the listing was observed on, if recorded (e.g. "eBay"). */
@@ -59,6 +84,16 @@ function median(nums: number[]): number {
   const s = nums.slice().sort((a, b) => a - b);
   const mid = Math.floor(s.length / 2);
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/** Linear-interpolated quantile of an ascending-sorted array (q in [0,1]). */
+function quantile(sortedAsc: number[], q: number): number {
+  if (sortedAsc.length === 0) return 0;
+  const pos = (sortedAsc.length - 1) * q;
+  const base = Math.floor(pos);
+  const rest = pos - base;
+  const next = sortedAsc[base + 1];
+  return next !== undefined ? sortedAsc[base] + rest * (next - sortedAsc[base]) : sortedAsc[base];
 }
 
 function embeddedName(relation: unknown): string {
@@ -95,19 +130,21 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
 
   try {
-    // One read: every resale price row with its variant → style → brand. Selecting
-    // `price_type` means a pre-0021 environment (no such column) throws, which we
-    // catch below and turn into []. We over-fetch and group/compute in JS — the
-    // catalog is small and this keeps the query a single resilient round trip.
-    const { data, error } = await getSupabase()
-      .from("price_history")
-      .select(
-        "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
-      )
-      .not("sale_price", "is", null)
-      .limit(50000);
+    // Every resale price row with its variant → style → brand. PostgREST caps each
+    // response at 1000 rows, so we PAGE through the whole table (fetchAllRows) rather
+    // than a single `.limit()` that would silently see only the first 1000 of ~33k
+    // rows. Selecting `price_type` means a pre-0021 environment (no such column)
+    // throws inside the pager, which yields [] and is caught below.
+    const data = await fetchAllRows<PriceRow>(() =>
+      getSupabase()
+        .from("price_history")
+        .select(
+          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
+        )
+        .not("sale_price", "is", null),
+    );
 
-    if (error || !data) return [];
+    if (data.length === 0) return [];
 
     // Group rows per variant, splitting resale (for the median) from listed (the
     // current asking prices we hunt deals in).
@@ -162,12 +199,29 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
       const med = median(g.resalePrices);
       if (med <= 0) continue;
 
+      const sorted = g.resalePrices.slice().sort((a, b) => a - b);
+      const sampleSize = sorted.length;
+
       // The best (lowest) current listing is the strongest deal for the variant.
       const best = g.listed.reduce((lo, c) => (c.price < lo.price ? c : lo), g.listed[0]);
       if (best.price >= med) continue; // only listings BELOW median are "deals"
 
       const pctUnder = Math.round(((med - best.price) / med) * 100);
       if (pctUnder <= 0) continue;
+
+      // Sanity ceiling on the discount. A listing 70%+ below the (robust) median isn't the
+      // same bag in sellable condition — it's almost always an accessory (twilly/charm), a
+      // parts/repair listing, or a mispriced/mis-grouped row. The median resists a few bad
+      // low rows, so this cleanly drops the "$370 Hermès Kelly, 99% under median" noise.
+      if (pctUnder > MAX_DEAL_PCT_UNDER) continue;
+
+      // Where this listing sits in the variant's OWN recorded resale spread. The
+      // verdict is gated to >= 5 sales so we never grade a price on a handful of comps.
+      const q25 = quantile(sorted, 0.25);
+      const cheaperThanCount = sorted.filter((p) => p > best.price).length;
+      const pctCheaper = Math.round((cheaperThanCount / sampleSize) * 100);
+      const verdict: Deal["verdict"] =
+        sampleSize < 5 ? null : best.price <= q25 ? "great" : "good";
 
       deals.push({
         variantId: g.variantId,
@@ -178,6 +232,11 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
         medianPrice: Math.round(med),
         currency: best.currency ?? g.currency,
         pctUnder,
+        lowPrice: Math.round(sorted[0]),
+        highPrice: Math.round(sorted[sorted.length - 1]),
+        sampleSize,
+        verdict,
+        pctCheaper,
         sourceUrl: best.sourceUrl,
         platform: best.platform,
       });

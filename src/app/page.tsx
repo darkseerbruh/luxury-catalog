@@ -7,6 +7,7 @@ import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import PersonaRouter from "@/components/PersonaRouter";
 import BestDeals from "@/components/BestDeals";
+import { getDeals, MIN_DEALS_TO_RENDER } from "@/lib/deals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
@@ -24,21 +25,23 @@ function formatPrice(amount: number | null, currency: string | null) {
 }
 
 export default async function Home() {
-  const [brands, heroCards, user, communityReady] = await Promise.all([
+  const [brands, heroCards, user, communityReady, deals] = await Promise.all([
     getBrandsOverview(),
     getHeroCarousel(),
     getCurrentUser(),
     communityKnowledgeReady(),
+    getDeals(5),
   ]);
+  const hasDeals = deals.length >= MIN_DEALS_TO_RENDER;
   const [closet, feed, tasteRead] = user
     ? await Promise.all([getCloset(), getFeed(8), getSavedTasteIdentity()])
     : [[], [], null];
 
-  // Real photos for the hero + closet cards when available; placeholders otherwise.
-  const images = await getVariantImages([
-    ...heroCards.map((c) => c.variantId),
-    ...closet.map((c) => c.variantId),
-  ].filter((n): n is number => n != null));
+  // Real photos for the closet cards when available; placeholders otherwise. (The
+  // "It bags" canon is image-free by design — the resale figures carry it.)
+  const images = await getVariantImages(
+    closet.map((c) => c.variantId).filter((n): n is number => n != null)
+  );
 
   // home_headline A/B/C copy test (single variable: the H1). Assigned per
   // impression, server-side, cookieless. Success metric = hero search engagement.
@@ -105,45 +108,70 @@ export default async function Home() {
 
       <PersonaRouter />
 
-      <BestDeals />
-
       {/* "What the community knows" — gated until there are enough real reviews
           to fill the boards (docs/ux/content-gating-strategy.md). No ghost town. */}
       {communityReady && <CommunityLeaderboards />}
 
-      {heroCards.length > 0 && (
+      {/* It bags + the "Priced well today" research rail, paired. The rail is a ⅓
+          sidebar on large screens and stacks below on mobile; when there are no real
+          deals it drops out and "It bags" reclaims the full width. */}
+      {(heroCards.length > 0 || hasDeals) && (
         <section className="border-b border-border px-5 py-12">
-          <h2 className="font-serif text-2xl text-foreground">
-            It bags of all time
-          </h2>
-          <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
-            {heroCards.map((card) => (
-              <Link
-                key={card.styleId}
-                href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
-                className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-              >
-                <BagImage
-                  imageUrl={card.variantId != null ? images[card.variantId] : null}
-                  brand={card.brandName}
-                  className="mb-3 aspect-[4/3] w-full rounded-xl"
-                />
-                <p className="text-sm uppercase tracking-wide text-muted">
-                  {card.brandName}
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+            {heroCards.length > 0 && (
+              <div className="min-w-0 flex-1">
+                <h2 className="font-serif text-2xl text-foreground">
+                  It bags of all time
+                </h2>
+                <p className="mt-1 text-sm text-muted">
+                  Our pick of the icons, and what each typically fetches on the resale
+                  market. Our read, not an appraisal.
                 </p>
-                <p className="mt-1 font-serif text-lg text-foreground">
-                  {card.styleName}
-                </p>
-                {card.sizeLabel && (
-                  <p className="mt-2 text-sm text-muted">{card.sizeLabel}</p>
-                )}
-                {formatPrice(card.priceFrom, card.currency) && (
-                  <p className="mt-3 text-sm text-gold">
-                    From {formatPrice(card.priceFrom, card.currency)} retail
-                  </p>
-                )}
-              </Link>
-            ))}
+                <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2">
+                  {heroCards.map((card, i) => (
+                    <li key={card.styleId} className="flex gap-3.5">
+                      <span className="font-serif text-4xl leading-none text-gold-soft">
+                        {i + 1}
+                      </span>
+                      <Link
+                        href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
+                        className="group min-w-0 flex-1"
+                      >
+                        <p className="text-xs uppercase tracking-wide text-muted">
+                          {card.brandName}
+                        </p>
+                        <p className="font-serif text-xl text-foreground transition-colors group-hover:text-gold">
+                          {card.styleName}
+                        </p>
+                        {card.medianResale != null && (
+                          <>
+                            <p
+                              className="mt-1.5 font-serif text-xl text-gold-soft"
+                              title={`Based on ${card.sampleSize.toLocaleString()} recorded resale prices`}
+                            >
+                              {formatPrice(card.medianResale, card.currency)}{" "}
+                              <span className="text-xs font-normal text-muted">typical resale</span>
+                            </p>
+                            <p className="mt-1 text-xs text-muted">
+                              low {formatPrice(card.lowResale, card.currency)} &middot; high{" "}
+                              <span className="text-gold-soft">
+                                {formatPrice(card.highResale, card.currency)}
+                              </span>
+                            </p>
+                          </>
+                        )}
+                        <p className="mt-2 text-xs text-muted/80">{card.hook}</p>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            {hasDeals && (
+              <div className="lg:w-[320px] lg:flex-shrink-0">
+                <BestDeals deals={deals} />
+              </div>
+            )}
           </div>
         </section>
       )}

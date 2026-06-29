@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
 
@@ -34,8 +34,16 @@ export interface HeroCard {
   styleName: string;
   brandName: string;
   variantId: number | null;
-  sizeLabel: string | null;
-  priceFrom: number | null;
+  /** One-line "why it's iconic" hook (curated editorial, sourced). */
+  hook: string;
+  /** Recorded resale median for the style (the typical figure, the headline number). */
+  medianResale: number | null;
+  /** Lowest recorded resale price (text only). */
+  lowResale: number | null;
+  /** Highest recorded resale price (the eye-opener, text only). */
+  highResale: number | null;
+  /** How many recorded resale prices the figures are built from. */
+  sampleSize: number;
   currency: string | null;
 }
 
@@ -165,57 +173,137 @@ export async function getBrandsOverview(): Promise<BrandOverview[]> {
   );
 }
 
-const HERO_STYLES: { brand: string; style: string }[] = [
-  { brand: "Chanel", style: "Classic Flap" },
-  { brand: "Hermès", style: "Birkin" },
-  { brand: "Hermès", style: "Kelly" },
-  { brand: "Coach", style: "Tabby" },
-  { brand: "Coach", style: "Swagger" },
+/**
+ * "It bags of all time" — a curated, RANKED canon (the blend lens: heritage mythology +
+ * real-world recognition). Order is the ranking shown. Hooks are sourced editorial one-liners;
+ * verify any year before publish. Resale figures are computed live from price_history below.
+ */
+const HERO_STYLES: { brand: string; style: string; hook: string }[] = [
+  { brand: "Hermès", style: "Birkin", hook: "Named for Jane Birkin, 1984" },
+  { brand: "Hermès", style: "Kelly", hook: "Named for Grace Kelly, 1956" },
+  { brand: "Chanel", style: "Classic Flap", hook: "The quilted flap with the CC turn-lock" },
+  { brand: "Louis Vuitton", style: "Speedy", hook: "An LV icon since 1930" },
+  { brand: "Dior", style: "Lady Dior", hook: "Named for Princess Diana, 1995" },
+  { brand: "Louis Vuitton", style: "Neverfull", hook: "The everyday luxury tote, 2007" },
 ];
 
-/** "It bags of all time" carousel — real seeded hero styles only, no invented ratings or review counts. */
+/** A row is retail (not resale) if it's an explicit retail_msrp or a legacy null-type row on a retail platform. */
+const HERO_RETAIL_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+
+function medianOf(nums: number[]): number {
+  const s = nums.slice().sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/**
+ * "It bags of all time" — the ranked canon, each carrying live resale figures (median /
+ * low / high + sample size) computed from price_history, NOT retail. Order follows
+ * HERO_STYLES (the ranking). Resilient: returns [] on any missing env / column / error.
+ */
 export async function getHeroCarousel(): Promise<HeroCard[]> {
-  const { data, error } = await getSupabase()
-    .from("style")
-    .select(
-      "style_id, name, brand:brand_id(name), variant(variant_id, size_label, retail_price_original, currency)"
-    )
-    .in(
-      "name",
-      HERO_STYLES.map((h) => h.style)
-    );
+  try {
+    const { data, error } = await getSupabase()
+      .from("style")
+      .select(
+        "style_id, name, brand:brand_id(name), variant(variant_id, currency)"
+      )
+      .in(
+        "name",
+        HERO_STYLES.map((h) => h.style)
+      );
 
-  if (error || !data) return [];
+    if (error || !data) return [];
 
-  const cards = data
-    .filter((row) =>
-      HERO_STYLES.some((h) => h.style === row.name && h.brand === embeddedName(row.brand))
-    )
-    .map((row) => {
+    // Match each seeded style to its HERO_STYLES entry (by brand + name), collect variant ids.
+    type Matched = {
+      styleId: number;
+      styleName: string;
+      brandName: string;
+      hook: string;
+      variantIds: number[];
+      currency: string | null;
+    };
+    const matched: Matched[] = [];
+    const allVariantIds: number[] = [];
+    for (const row of data) {
+      const brandName = embeddedName(row.brand);
+      const entry = HERO_STYLES.find((h) => h.style === row.name && h.brand === brandName);
+      if (!entry) continue;
       const variants = row.variant ?? [];
-      const priced = variants.filter((v) => v.retail_price_original != null);
-      const cheapest = priced.sort(
-        (a, b) => Number(a.retail_price_original) - Number(b.retail_price_original)
-      )[0];
-      const primary = cheapest ?? variants[0];
-      return {
+      const variantIds = variants.map((v) => v.variant_id);
+      allVariantIds.push(...variantIds);
+      matched.push({
         styleId: row.style_id,
         styleName: row.name,
-        brandName: embeddedName(row.brand),
-        variantId: primary?.variant_id ?? null,
-        sizeLabel: cheapest?.size_label ?? variants[0]?.size_label ?? null,
-        priceFrom: cheapest ? Number(cheapest.retail_price_original) : null,
-        currency: cheapest?.currency ?? null,
+        brandName,
+        hook: entry.hook,
+        variantIds,
+        currency: variants[0]?.currency ?? null,
+      });
+    }
+    if (allVariantIds.length === 0) return [];
+
+    // Every resale price row for these variants, paged past the 1000-row cap; group + compute per style.
+    type HeroPriceRow = { variant_id: number; sale_price: number | string | null; currency: string | null; price_type: string | null; platform: string | null };
+    const priceRows = await fetchAllRows<HeroPriceRow>(() =>
+      getSupabase()
+        .from("price_history")
+        .select("variant_id, sale_price, currency, price_type, platform")
+        .in("variant_id", allVariantIds)
+        .not("sale_price", "is", null),
+    );
+
+    // variant_id -> resale prices (excluding retail), and -> count (for picking the link target).
+    const byVariant = new Map<number, { prices: number[]; currency: string | null }>();
+    for (const r of priceRows) {
+      const price = r.sale_price != null ? Number(r.sale_price) : null;
+      if (price == null || !Number.isFinite(price) || price <= 0) continue;
+      const isRetail =
+        r.price_type === "retail_msrp" ||
+        (r.price_type == null && r.platform != null && HERO_RETAIL_RX.test(r.platform));
+      if (isRetail) continue;
+      let g = byVariant.get(r.variant_id);
+      if (!g) { g = { prices: [], currency: r.currency }; byVariant.set(r.variant_id, g); }
+      g.prices.push(price);
+    }
+
+    const cards: HeroCard[] = matched.map((m) => {
+      const prices: number[] = [];
+      let bestVariant: number | null = null;
+      let bestCount = -1;
+      let currency: string | null = m.currency;
+      for (const vid of m.variantIds) {
+        const g = byVariant.get(vid);
+        const count = g?.prices.length ?? 0;
+        if (count > bestCount) { bestCount = count; bestVariant = vid; }
+        if (g) { prices.push(...g.prices); currency = currency ?? g.currency; }
+      }
+      const hasData = prices.length > 0;
+      return {
+        styleId: m.styleId,
+        styleName: m.styleName,
+        brandName: m.brandName,
+        variantId: bestVariant ?? m.variantIds[0] ?? null,
+        hook: m.hook,
+        medianResale: hasData ? Math.round(medianOf(prices)) : null,
+        lowResale: hasData ? Math.round(Math.min(...prices)) : null,
+        highResale: hasData ? Math.round(Math.max(...prices)) : null,
+        sampleSize: prices.length,
+        currency,
       };
     });
 
-  const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
-  cards.sort(
-    (a, b) =>
-      order.indexOf(`${a.brandName}:${a.styleName}`) -
-      order.indexOf(`${b.brandName}:${b.styleName}`)
-  );
-  return cards;
+    const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
+    cards.sort(
+      (a, b) =>
+        order.indexOf(`${a.brandName}:${a.styleName}`) -
+        order.indexOf(`${b.brandName}:${b.styleName}`)
+    );
+    return cards;
+  } catch {
+    return [];
+  }
 }
 
 export interface VariantDetail {

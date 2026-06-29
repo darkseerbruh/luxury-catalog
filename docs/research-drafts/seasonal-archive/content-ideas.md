@@ -576,3 +576,35 @@ data does not exist at the house. (Contrast: the season-CODE work IS done and wr
 - **BV colors as "official" (#19/#20).** Only **Parakeet** is confirmed an official BV house color
   (SS2021). The other 49 BV colors are reseller-attributed (Fashionphile) pending a bottegaveneta.com
   confirm via the Chrome path; the pieces frame them as strong leads, not house-verified names.
+
+## Added 2026-06-29 (from the homepage "It bags of all time" design session)
+
+### "Why are these the it bags of all time?" — ranked canon piece (GEO + ENGAGEMENT)
+
+The homepage now shows a ranked, price-led canon of 6 (Birkin, Kelly, Classic Flap, Speedy,
+Lady Dior, Neverfull). This article is its full-length companion; the homepage teaser links into it.
+**Two engines:** GEO (a sourced, naming-precise "most iconic bags ever" list is exactly what answer
+engines cite, and it compounds) + ENGAGEMENT (the *ranking* is the hook).
+
+- **Angle: "the blend, made visible."** Open by naming the tension (a $19k Birkin and a $1.5k
+  Neverfull on the same list) and *why both are right* (an it-bag earns it on heritage/mythology
+  AND on real-world recognition). Let the tier breaks do the drama: the locked 6, the strong
+  middle, the "even we debate these" closers.
+- **The sourced backbone is the archivist's ranked TOP 20** (built 2026-06-29):
+  1-6 (locked, consensus): Birkin · Kelly · Classic Flap · Speedy · Lady Dior · Neverfull.
+  7-11 (strong): Fendi Baguette · Gucci Jackie · Céline Luggage · Chanel Boy · Hermès Constance.
+  12-16 (arguable): BV Pouch · Dior Saddle · YSL Loulou · Balenciaga City · Loewe Puzzle.
+  17-20 (editor's call): Mulberry Bayswater · Telfar Shopping Bag · Prada Galleria/nylon · Chanel 19.
+  Each entry has a one-line sourced "why" (launch year + cultural anchor) in the archivist run output.
+  Re-pull it before drafting; verify exact years (Lady Dior 1995, GG Marmont 2016 season).
+- **CTA:** each in-catalog pick links to its bag page (post→bag). Three picks need a data pull before
+  they can carry a CTA: **Balenciaga City, Mulberry Bayswater, Telfar Shopping Bag** (queued in the
+  data worklist).
+- **Hedge:** taste is subjective past the top two; frame as "our canon," not a decree. No
+  appreciation/value claims; any price is estimate-not-appraisal.
+- **What it needs:** the copywriter to draft (run `brand-voice` first); the 3 data pulls for full CTA
+  coverage; otherwise writable now on the in-catalog 17.
+- **STATUS: DRAFT WRITTEN 2026-06-29** → `drafts/why-these-are-the-it-bags-of-all-time.md` (copywriter,
+  brand-voice applied, on-voice, no em dashes, value framed estimate-not-appraisal, no dollar figures).
+  Pending owner review, then Content lane wires it as a post. Origin years held/hedged in the draft can
+  be enriched from the archivist top-20 on review; 3 not-in-catalog bags carry no CTA until their data pull lands.
