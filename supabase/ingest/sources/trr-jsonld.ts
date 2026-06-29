@@ -28,6 +28,7 @@ import fs from "fs";
 import path from "path";
 import { writeObservations } from "../lib/landing";
 import { parseTrrDescription } from "../../../src/lib/ingest/trr";
+import { mapTrrItemCondition } from "../../../src/lib/ingest/condition";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 
 /** One captured TRR product (JSON-LD Product block, saved by the browser flow). */
@@ -1276,12 +1277,13 @@ export function recordToCatchAllObservation(
       season: spec.season,
       inclusions: spec.includes,
       listing_ref: listingRefFromUrl(rec.url),
+      condition_detail: rec.condition ?? null,
     },
     platform: "The RealReal",
     price_type: "listed",
     sale_price: rec.price,
     currency: rec.currency ?? "USD",
-    condition: null,
+    condition: mapTrrItemCondition(rec.condition),
     observed_on: observedOn,
     source_url: rec.url,
     confidence: "low", // best-guess identity — lower confidence than a curated target
@@ -1322,14 +1324,18 @@ export function recordToObservation(
       season: spec.season,
       inclusions: spec.includes,
       listing_ref: listingRefFromUrl(rec.url),
+      // Keep the raw itemCondition string so the enrichment pass (and any later
+      // grading) has the source signal; the graded write-up lives off-JSON-LD.
+      condition_detail: rec.condition ?? null,
     },
     platform: "The RealReal",
     price_type: "listed",
     sale_price: rec.price,
     currency: rec.currency ?? "USD",
-    // TRR JSON-LD only exposes a generic "UsedCondition" — never fake a graded
-    // SaleCondition tier; leave it null (the enrichment pass fills real condition).
-    condition: null,
+    // TRR JSON-LD only exposes the schema.org binary (NewCondition/UsedCondition):
+    // tag genuinely-new listings "new", leave used null — never fake a graded tier
+    // (the graded wear write-up is a separate product-page section we capture later).
+    condition: mapTrrItemCondition(rec.condition),
     observed_on: observedOn,
     source_url: rec.url,
     confidence: "high",
