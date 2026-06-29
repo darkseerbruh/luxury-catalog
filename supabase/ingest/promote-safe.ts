@@ -14,13 +14,32 @@
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
 import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
-import { promotableClusters, type DiscoveredRow } from "./promote-discovered";
+import { promotableClusters, type DiscoveredRow, type DiscoveredCluster } from "./promote-discovered";
 
 const MIN = Number((process.argv.find((a) => a.startsWith("--min=")) || "--min=20").split("=")[1]);
 const WRITE = process.argv.includes("--write");
 
-async function loadAllDiscovered(): Promise<(DiscoveredRow & Record<string, unknown>)[]> {
-  const out: any[] = [];
+/** discovered_listing row as selected below (DiscoveredRow + the extra capture columns). */
+type DiscoveredFullRow = DiscoveredRow & {
+  platform: string | null;
+  listing_ref: string | null;
+  source_url: string | null;
+  colorway: string | null;
+  material: string | null;
+  hardware_color: string | null;
+  production_year: number | null;
+  season: string | null;
+  condition: string | null;
+  price_type: string | null;
+  observed_on: string | null;
+};
+type BrandRow = { brand_id: number; name: string };
+type StyleRow = { style_id: number; brand_id: number; name: string };
+type VariantRow = { variant_id: number; size_label: string | null };
+type RefRow = { listing_ref: string | null };
+
+async function loadAllDiscovered(): Promise<DiscoveredFullRow[]> {
+  const out: DiscoveredFullRow[] = [];
   let from = 0;
   for (;;) {
     const { data, error } = await db
@@ -51,21 +70,21 @@ async function main() {
   // index brands + styles
   const { data: brands } = await db.from("brand").select("brand_id,name");
   const brandByNorm = new Map<string, number>();
-  (brands ?? []).forEach((b: any) => brandByNorm.set(norm(normalizeDesigner(b.name)), b.brand_id));
+  (brands ?? []).forEach((b: BrandRow) => brandByNorm.set(norm(normalizeDesigner(b.name)), b.brand_id));
   const { data: styles } = await db.from("style").select("style_id,brand_id,name");
   const styleByKey = new Map<string, number>(); // `${brand_id}|${normStyle}` -> style_id
-  (styles ?? []).forEach((s: any) => styleByKey.set(`${s.brand_id}|${norm(s.name)}`, s.style_id));
+  (styles ?? []).forEach((s: StyleRow) => styleByKey.set(`${s.brand_id}|${norm(s.name)}`, s.style_id));
 
   // group discovered rows by cluster key for re-pointing
-  const byKey = new Map<string, any[]>();
-  for (const r of rows as any[]) {
+  const byKey = new Map<string, DiscoveredFullRow[]>();
+  for (const r of rows) {
     const bId = brandByNorm.get(norm(normalizeDesigner(r.brand_guess)));
     const k = `${bId ?? "?"}|${norm(r.style_guess || "")}|${sizeKey(r.size_label)}`;
     (byKey.get(k) ?? byKey.set(k, []).get(k))!.push(r);
   }
 
   let promotableExisting = 0, needNewStyle = 0, rowsToRepoint = 0;
-  const plan: { brand: string; style: string; size: string; styleId: number; count: number; cluster: any }[] = [];
+  const plan: { brand: string; style: string; size: string; styleId: number; count: number; cluster: DiscoveredCluster }[] = [];
   for (const c of clusters) {
     const bId = brandByNorm.get(norm(normalizeDesigner(c.brandGuess)));
     if (!bId) { needNewStyle++; continue; }
@@ -92,7 +111,7 @@ async function main() {
     const sizeLabel = p.size;
     // find-or-create variant by (style_id, size_label)
     const { data: existingVars } = await db.from("variant").select("variant_id,size_label").eq("style_id", p.styleId);
-    let variantId = (existingVars ?? []).find((v: any) => sizeKey(v.size_label) === sizeKey(sizeLabel))?.variant_id;
+    let variantId = (existingVars ?? []).find((v: VariantRow) => sizeKey(v.size_label) === sizeKey(sizeLabel))?.variant_id;
     if (!variantId) {
       const { data: ins, error } = await db.from("variant").insert({ style_id: p.styleId, size_label: sizeLabel, market_availability: "resale" }).select("variant_id").single();
       if (error) { console.error(`variant create failed for ${p.brand} ${p.style} ${sizeLabel}:`, error.message); continue; }
@@ -101,7 +120,7 @@ async function main() {
     const members = byKey.get(`${brandByNorm.get(norm(normalizeDesigner(p.brand)))}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
     // existing price_history listing_refs for this variant to dedup
     const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", variantId);
-    const seen = new Set((existRefs ?? []).map((r: any) => r.listing_ref));
+    const seen = new Set((existRefs ?? []).map((r: RefRow) => r.listing_ref));
     const toInsert = members.filter((m) => !seen.has(m.listing_ref)).map((m) => ({
       variant_id: variantId, platform: m.platform, price_type: m.price_type || "listed",
       sale_price: m.sale_price, currency: m.currency || "USD",

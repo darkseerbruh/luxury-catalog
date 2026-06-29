@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBySlug } from "@/lib/posts";
+import TrackArticleView from "./TrackArticleView";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
@@ -316,6 +317,9 @@ export default async function PostDetailPage({
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-5 py-10">
+      {post.status === "published" && (
+        <TrackArticleView slug={post.slug} postId={post.postId} title={post.title} />
+      )}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">Home</Link>
         <span>/</span>
