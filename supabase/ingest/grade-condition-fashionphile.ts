@@ -40,35 +40,45 @@ async function main() {
   const write = process.argv.includes("--write");
   const limit = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("=")[1]) || 300;
 
-  const { data, error } = await db
-    .from("price_history")
-    .select("price_id, source_url")
-    .eq("platform", "Fashionphile")
-    .is("condition", null)
-    .eq("listing_status", "available") // only LIVE listings are gradeable (sold pages are gone)
-    .not("source_url", "is", null)
-    .like("source_url", "%/products/%")
-    .limit(limit);
-  if (error) throw error;
-  const rows = (data ?? []) as Row[];
-  console.log(`grade-condition-fashionphile: ${rows.length} null-condition rows to grade${write ? "" : " (DRY RUN)"}.`);
-  if (rows.length === 0) return;
+  console.log(`grade-condition-fashionphile: grading up to ${limit} null-condition rows${write ? "" : " (DRY RUN)"}.`);
 
-  let graded = 0, missed = 0;
-  for (const row of rows) {
-    const html = await fetchHtml(row.source_url!);
-    const condition = html ? mapFashionphileCondition(parseConditionGrade(html)) : null;
-    if (condition) {
-      if (write) {
-        const { error: upErr } = await db.from("price_history").update({ condition }).eq("price_id", row.price_id);
-        if (upErr) { console.error(`  price_id ${row.price_id}: ${upErr.message}`); }
-      }
-      graded++;
-    } else missed++;
-    await sleep(PAGE_DELAY_MS);
-    if ((graded + missed) % 50 === 0) console.log(`  …${graded + missed}/${rows.length} (graded ${graded}, missed ${missed})`);
+  // Cursor-paginate by price_id (PostgREST caps a single fetch at 1000). Graded rows go
+  // non-null and misses stay null, but the price_id cursor moves past both, so each row is
+  // processed exactly once per run.
+  let graded = 0, missed = 0, processed = 0, cursor = 0;
+  while (processed < limit) {
+    const { data, error } = await db
+      .from("price_history")
+      .select("price_id, source_url")
+      .eq("platform", "Fashionphile")
+      .is("condition", null)
+      .eq("listing_status", "available") // only LIVE listings are gradeable (sold pages are gone)
+      .not("source_url", "is", null)
+      .like("source_url", "%/products/%")
+      .gt("price_id", cursor)
+      .order("price_id", { ascending: true })
+      .limit(Math.min(1000, limit - processed));
+    if (error) throw error;
+    const rows = (data ?? []) as Row[];
+    if (rows.length === 0) break;
+
+    for (const row of rows) {
+      cursor = row.price_id;
+      processed++;
+      const html = await fetchHtml(row.source_url!);
+      const condition = html ? mapFashionphileCondition(parseConditionGrade(html)) : null;
+      if (condition) {
+        if (write) {
+          const { error: upErr } = await db.from("price_history").update({ condition }).eq("price_id", row.price_id);
+          if (upErr) console.error(`  price_id ${row.price_id}: ${upErr.message}`);
+        }
+        graded++;
+      } else missed++;
+      await sleep(PAGE_DELAY_MS);
+      if (processed % 50 === 0) console.log(`  …${processed} (graded ${graded}, missed ${missed})`);
+    }
   }
-  console.log(`${write ? "Graded" : "Would grade"} ${graded}, missed ${missed}.`);
+  console.log(`${write ? "Graded" : "Would grade"} ${graded}, missed ${missed} (processed ${processed}).`);
 }
 
 main().then(() => process.exit(0)).catch((e) => { console.error(e.message || e); process.exit(1); });
