@@ -216,6 +216,19 @@ describe("parseFashionphileProduct — hardware extraction", () => {
     const spec = parseFashionphileProduct(minimalProduct);
     expect(spec.hardwareColor).toBeNull();
   });
+
+  it("catches metal in a hardware context without the word 'Hardware'", () => {
+    // Real FP phrasings: "gold chain", "silver lock", "polished palladium".
+    const goldChain = { title: "Caviar Tote", body_html: "<p>crafted of black caviar with a gold chain strap</p>", variants: [{ price: "3000", sku: "x" }] };
+    expect(parseFashionphileProduct(goldChain).hardwareColor).toBe("gold");
+    const palladium = { title: "Birkin", body_html: "<p>features polished palladium hardware accents</p>", variants: [{ price: "9000", sku: "y" }] };
+    expect(parseFashionphileProduct(palladium).hardwareColor).toBe("palladium");
+  });
+
+  it("does NOT read a gold/silver colourway as hardware", () => {
+    const goldBag = { title: "Metallic Gold Calfskin Tote", body_html: "<p>crafted of metallic gold calfskin leather</p>", variants: [{ price: "2000", sku: "z" }] };
+    expect(parseFashionphileProduct(goldBag).hardwareColor).toBeNull();
+  });
 });
 
 // ---------------------------------------------------------------------------

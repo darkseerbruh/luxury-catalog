@@ -81,6 +81,15 @@ const HARDWARE_RE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass
 // Lighter form — catches "gold-tone" / "gold tone" without trailing "Hardware"
 const HARDWARE_TONE_RE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)[- ](?:Tone|Plated)\b/i;
 
+// Metal in a HARDWARE context (chain/lock/clasp/zipper/stud…) — catches "gold chain",
+// "silver lock", "palladium hardware" where the metal describes hardware, not a colourway.
+// "rose gold" precedes "gold" so the longer match wins. The trailing hardware noun is what
+// keeps a gold/silver *colourway* ("gold caviar leather") from matching.
+const HARDWARE_CONTEXT_RE = /\b(Rose Gold|Gold|Silver|Ruthenium|Palladium|Gunmetal|Brass|Bronze)[- ](?:tone|plated|chain(?:[- ]link)?|lock|clasp|zipper|zip|hardware|stud|studs|buckle|metal|finish|accents?|detailing|chain strap)\b/i;
+
+// Finish-qualified metal — "aged gold", "polished palladium", "brushed silver".
+const HARDWARE_FINISH_RE = /\b(?:aged|polished|brushed|shiny|matte|antique|light)\s+(Rose Gold|Gold|Silver|Ruthenium|Palladium|Gunmetal|Brass|Bronze)\b/i;
+
 // ---------------------------------------------------------------------------
 // Condition mapping
 // ---------------------------------------------------------------------------
@@ -218,7 +227,12 @@ function extractMaterial(text: string): string | null {
  * (e.g. "gold", "silver", "rose-gold") or null.
  */
 function extractHardware(text: string): string | null {
-  const m = HARDWARE_RE.exec(text) ?? HARDWARE_TONE_RE.exec(text);
+  // Most-specific-first: explicit "Hardware" > tone/plated > metal-in-context > finish.
+  const m =
+    HARDWARE_RE.exec(text) ??
+    HARDWARE_TONE_RE.exec(text) ??
+    HARDWARE_CONTEXT_RE.exec(text) ??
+    HARDWARE_FINISH_RE.exec(text);
   if (!m) return null;
   return m[1].toLowerCase().replace(/\s+/g, "-");
 }
