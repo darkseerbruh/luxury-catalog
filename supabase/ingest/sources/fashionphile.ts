@@ -1629,6 +1629,12 @@ function fpAttrsAndEnrichment(spec: ReturnType<typeof parseFashionphileProduct>)
   const enrichment: Record<string, unknown> = {};
   if (spec.listedAt) enrichment.listed_at = spec.listedAt;
   if (spec.compareAtPrice != null) enrichment.compare_at_price = spec.compareAtPrice;
+  // Description-mined facts + a PII-scrubbed private reference copy of the text.
+  // INTERNAL ONLY: never select enrichment.source_description into user-facing output.
+  if (spec.descFacts && Object.values(spec.descFacts).some((v) => v !== null && v !== false)) {
+    enrichment.desc_facts = spec.descFacts;
+  }
+  if (spec.sourceDescription) enrichment.source_description = spec.sourceDescription;
   return {
     attrs: {
       exterior_colorway: spec.color,

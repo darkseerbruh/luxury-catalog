@@ -34,6 +34,7 @@
  */
 
 import type { SaleCondition } from "./types";
+import { extractDescriptionFacts, scrubPii, type DescriptionFacts } from "./description-facts";
 
 // ---------------------------------------------------------------------------
 // Shared vocab — mirrors trr.ts constants (expanded for multi-brand coverage)
@@ -164,6 +165,10 @@ export interface FashionphileSpec {
   compareAtPrice: number | null;
   /** Raw per-listing condition write-up (free-text), when captured from the page. */
   conditionDetail: string | null;
+  /** Structured facts mined from the description (strap/closure/interior/measurements…). */
+  descFacts: DescriptionFacts | null;
+  /** Scrubbed (PII-removed) description text, kept as a private reference only. */
+  sourceDescription: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -278,6 +283,8 @@ export function parseFashionphileProduct(
     listedAt: null,
     compareAtPrice: null,
     conditionDetail: null,
+    descFacts: null,
+    sourceDescription: null,
   };
 
   // --- SKU + price + compare-at (was-price) from first variant ---
@@ -346,6 +353,16 @@ export function parseFashionphileProduct(
 
   // --- Condition from optional captured grade ---
   spec.condition = mapFashionphileCondition(conditionGrade);
+
+  // --- Description facts + private reference text ---
+  // Mine the description for facts the feed fields miss (strap/closure/interior/
+  // measurements…) and keep a PII-scrubbed copy as a private reference, so a colour
+  // or detail the structured fields left null can still be recovered later.
+  const facts = extractDescriptionFacts(bodyText);
+  spec.descFacts = facts;
+  spec.sourceDescription = scrubPii(bodyText);
+  // Backfill colour from the description when the structured scan came back null.
+  if (!spec.color && facts.color) spec.color = facts.color;
 
   return spec;
 }
