@@ -59,7 +59,7 @@ export default async function Home() {
         <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
           <p className="text-sm uppercase tracking-widest text-gold">Style read</p>
           <h2 className="mx-auto mt-2 max-w-xl font-serif text-2xl text-foreground sm:text-3xl">
-            Find out what your bags say about you
+            What&rsquo;s your handbag style, really?
           </h2>
           <p className="mx-auto mt-3 max-w-md text-muted">
             A two-minute style read. We hand you the words for your taste, then match
@@ -118,7 +118,7 @@ export default async function Home() {
             Our pick of the icons, and what each typically fetches on the resale market.
             Our read, not an appraisal.
           </p>
-          <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2">
+          <ol className="mt-6 grid grid-cols-2 gap-x-6 gap-y-7 lg:grid-cols-3">
             {heroCards.map((card, i) => (
               <li key={card.styleId} className="flex gap-3.5">
                 <span className="font-serif text-4xl leading-none text-gold-soft">{i + 1}</span>
