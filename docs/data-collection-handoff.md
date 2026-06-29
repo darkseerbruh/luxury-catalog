@@ -165,10 +165,22 @@ mechanism verified, enrichment 0→**46%**.
 **OWNER-GATED:** apply **migration 0038** (GitHub → Actions → "Apply database migrations")
 so the discovered tier persists region/condition_detail/enrichment.
 
+**Description facts (2026-06-29):** `description-facts.ts` mines the description for facts
+the feed misses (strap/closure/interior/pattern/hardware-finish/measurements/date-code) +
+backfills colour when null, and keeps a **PII-scrubbed private reference** of the text in
+`enrichment.source_description` (never served). For messy seller free-text (esp. **eBay**)
+the deterministic regex isn't enough, so **`enrich-descriptions.ts`** (Haiku 4.5) is wired:
+`npm run enrich:descriptions [--platform=eBay] [--write]` — reads source_description, merges
+LLM facts into `desc_facts` (regex wins where non-null; LLM owns measurements/date-code),
+stamps `desc_llm_on` so re-runs don't re-spend. Cost: ~1 cheap Haiku call/listing, run it
+only on rows with a stored description.
+
 **Still-open backlog:**
 - **condition_detail** + granular condition come from **TheRealReal**, not FP. Fix
   `firecrawl-trr.ts` (maps every used bag → null ~line 72; never captures the product-page
   condition section). Metered — fold into the next scheduled TRR run.
+- **eBay product-page capture**: the LLM description pass is ready, but our eBay data is
+  sold-listing snapshots, not full descriptions yet — capture eBay product pages to feed it.
 - **hardware_color** (47%) + **production_year** (~8%): parser-coverage, extend vocab/regex.
 - **promote-safe.ts**: after 0038, carry region/condition_detail/enrichment on promotion.
 - **days-on-market**: now have `enrichment.listed_at`; a column + derivation is a later migration.
