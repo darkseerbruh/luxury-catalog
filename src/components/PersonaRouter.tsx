@@ -81,7 +81,6 @@ export default async function PersonaRouter() {
             <li className="flex items-center gap-2 text-foreground"><Check /> Stamps and date codes</li>
             <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
-          <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
           <Link
             href="/articles?department=authentication"
             className="mt-4 text-sm font-medium text-gold transition-colors hover:text-gold-soft"

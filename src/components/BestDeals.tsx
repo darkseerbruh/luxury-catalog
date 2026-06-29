@@ -93,7 +93,7 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
         href="/shop?deals=1&sort=best-deal"
         className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
       >
-        See all deals
+        See all today&rsquo;s deals
       </Link>
     </section>
   );

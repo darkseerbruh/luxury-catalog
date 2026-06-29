@@ -161,12 +161,7 @@ export default async function Home() {
 
       {/* Brands */}
       <section id="brands" className="border-b border-border px-5 py-12">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Brands</h2>
-          <Link href="/brands" className="text-sm text-muted transition-colors hover:text-gold">
-            All brands
-          </Link>
-        </div>
+        <h2 className="font-serif text-2xl text-foreground">Brands</h2>
         <div className="mt-8 flex flex-col gap-10">
           {BRAND_TIERS.map((tier) => {
             const group = brands.filter((b) => b.tier === tier.key);
@@ -214,6 +209,12 @@ export default async function Home() {
             );
           })}
         </div>
+        <Link
+          href="/brands"
+          className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
+        >
+          All brands
+        </Link>
       </section>
 
       {/* What the community knows — gated until enough real reviews fill the boards. */}
