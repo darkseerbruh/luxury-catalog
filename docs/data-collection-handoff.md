@@ -179,8 +179,17 @@ only on rows with a stored description.
 - **condition_detail** + granular condition come from **TheRealReal**, not FP. Fix
   `firecrawl-trr.ts` (maps every used bag → null ~line 72; never captures the product-page
   condition section). Metered — fold into the next scheduled TRR run.
-- **eBay product-page capture**: the LLM description pass is ready, but our eBay data is
-  sold-listing snapshots, not full descriptions yet — capture eBay product pages to feed it.
+- **eBay live capture — BUILT (2026-06-29), metered + owner-gated.** `firecrawl-ebay.ts`
+  (parser `ebay-item.ts`). eBay 403s plain fetch; Firecrawl defeats it (verified live).
+  eBay item-specifics are the richest of any source: Condition (+ written detail), material,
+  hardware, pattern, style, features, measurements. Per item: 1-credit markdown scrape →
+  deterministic Condition + price + PII-scrubbed specifics text as `source_description`;
+  the Haiku pass mines the rest (beats 5-credit json extract). Run:
+  `firecrawl-ebay.ts <targetKey> [--limit]` → `load:prices -- ebay --write` →
+  `summary:refresh` → `enrich:descriptions -- --platform=ebay --write`. **Needs
+  FIRECRAWL_API_KEY (CI/GH secret; not local).** **LIVE only** — eBay purges ended-listing
+  descriptions, so our 1,641 SOLD eBay rows can't be back-enriched; capture while active.
+  Add TARGETS + greenlight the credit spend before a full run.
 - **hardware_color** (47%) + **production_year** (~8%): parser-coverage, extend vocab/regex.
 - **promote-safe.ts**: after 0038, carry region/condition_detail/enrichment on promotion.
 - **days-on-market**: now have `enrichment.listed_at`; a column + derivation is a later migration.
