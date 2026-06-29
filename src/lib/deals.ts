@@ -1,4 +1,4 @@
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -123,19 +123,21 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
 
   try {
-    // One read: every resale price row with its variant → style → brand. Selecting
-    // `price_type` means a pre-0021 environment (no such column) throws, which we
-    // catch below and turn into []. We over-fetch and group/compute in JS — the
-    // catalog is small and this keeps the query a single resilient round trip.
-    const { data, error } = await getSupabase()
-      .from("price_history")
-      .select(
-        "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
-      )
-      .not("sale_price", "is", null)
-      .limit(50000);
+    // Every resale price row with its variant → style → brand. PostgREST caps each
+    // response at 1000 rows, so we PAGE through the whole table (fetchAllRows) rather
+    // than a single `.limit()` that would silently see only the first 1000 of ~33k
+    // rows. Selecting `price_type` means a pre-0021 environment (no such column)
+    // throws inside the pager, which yields [] and is caught below.
+    const data = await fetchAllRows<PriceRow>(() =>
+      getSupabase()
+        .from("price_history")
+        .select(
+          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
+        )
+        .not("sale_price", "is", null),
+    );
 
-    if (error || !data) return [];
+    if (data.length === 0) return [];
 
     // Group rows per variant, splitting resale (for the median) from listed (the
     // current asking prices we hunt deals in).

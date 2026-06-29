@@ -37,11 +37,11 @@ export default async function Home() {
     ? await Promise.all([getCloset(), getFeed(8), getSavedTasteIdentity()])
     : [[], [], null];
 
-  // Real photos for the hero + closet cards when available; placeholders otherwise.
-  const images = await getVariantImages([
-    ...heroCards.map((c) => c.variantId),
-    ...closet.map((c) => c.variantId),
-  ].filter((n): n is number => n != null));
+  // Real photos for the closet cards when available; placeholders otherwise. (The
+  // "It bags" canon is image-free by design — the resale figures carry it.)
+  const images = await getVariantImages(
+    closet.map((c) => c.variantId).filter((n): n is number => n != null)
+  );
 
   // home_headline A/B/C copy test (single variable: the H1). Assigned per
   // impression, server-side, cookieless. Success metric = hero search engagement.
@@ -123,35 +123,51 @@ export default async function Home() {
                 <h2 className="font-serif text-2xl text-foreground">
                   It bags of all time
                 </h2>
-                <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
-                  {heroCards.map((card) => (
-                    <Link
-                      key={card.styleId}
-                      href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
-                      className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-                    >
-                      <BagImage
-                        imageUrl={card.variantId != null ? images[card.variantId] : null}
-                        brand={card.brandName}
-                        className="mb-3 aspect-[4/3] w-full rounded-xl"
-                      />
-                      <p className="text-sm uppercase tracking-wide text-muted">
-                        {card.brandName}
-                      </p>
-                      <p className="mt-1 font-serif text-lg text-foreground">
-                        {card.styleName}
-                      </p>
-                      {card.sizeLabel && (
-                        <p className="mt-2 text-sm text-muted">{card.sizeLabel}</p>
-                      )}
-                      {formatPrice(card.priceFrom, card.currency) && (
-                        <p className="mt-3 text-sm text-gold">
-                          From {formatPrice(card.priceFrom, card.currency)} retail
+                <p className="mt-1 text-sm text-muted">
+                  Our pick of the icons, and what each typically fetches on the resale
+                  market. Our read, not an appraisal.
+                </p>
+                <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2">
+                  {heroCards.map((card, i) => (
+                    <li key={card.styleId} className="flex gap-3">
+                      <span className="font-serif text-lg text-muted/50">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <Link
+                        href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
+                        className="group min-w-0 flex-1"
+                      >
+                        <p className="text-xs uppercase tracking-wide text-muted">
+                          {card.brandName}
                         </p>
-                      )}
-                    </Link>
+                        <p className="font-serif text-lg text-foreground transition-colors group-hover:text-gold">
+                          {card.styleName}
+                        </p>
+                        <p className="mt-0.5 text-xs text-muted/80">{card.hook}</p>
+                        {card.medianResale != null ? (
+                          <>
+                            <p className="mt-2.5">
+                              <span className="font-serif text-2xl text-gold-soft">
+                                {formatPrice(card.medianResale, card.currency)}
+                              </span>{" "}
+                              <span className="text-xs text-muted">
+                                typical resale &middot; n={card.sampleSize}
+                              </span>
+                            </p>
+                            <p className="mt-1.5 text-xs text-muted">
+                              low {formatPrice(card.lowResale, card.currency)} &middot; high{" "}
+                              <span className="text-gold-soft">
+                                {formatPrice(card.highResale, card.currency)}
+                              </span>
+                            </p>
+                          </>
+                        ) : (
+                          <p className="mt-2.5 text-sm text-muted">An all-time icon.</p>
+                        )}
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ol>
               </div>
             )}
             {hasDeals && (
