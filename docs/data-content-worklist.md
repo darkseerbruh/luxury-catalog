@@ -93,7 +93,8 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 
 ## "It bags of all time" canon gaps (for the ranked-canon article + tier-4; added 2026-06-29)
 *These bags are in the archivist's top-20 canon but NOT in the catalog, so they can't carry a post→bag CTA in the "Why are these the it bags of all time?" article. Capture asking + sold across sources per §0, create the style/variant, load, refresh-summary.*
-- ⬜ **Balenciaga City / Motorcycle** — brand exists (Le Cagole/Hourglass seeded) but the City/Motorcycle style is missing. The defining 2000s indie-sleaze It bag.
-- ⬜ **Mulberry Bayswater** — no Mulberry house in the roster at all; add the brand + Bayswater (and likely Alexa).
-- ⬜ **Telfar Shopping Bag** — no Telfar house; add the brand + Shopping Bag (the "Bushwick Birkin"). Premium resellers barely carry it, so eBay/Poshmark sold capture is the path (Coach-style).
+- ✅ **Balenciaga City** — DONE 2026-06-29. Created style City (variant 991); loaded 191 rows (eBay sold 76 + Fashionphile 115). Resale median ~$1,495 ($137–$2,965).
+- ✅ **Mulberry Bayswater** — DONE 2026-06-29. Brand/style/variant already existed (variant 932); loaded eBay sold 112 + Fashionphile 15 → 220 total rows. Resale median ~$560 ($118–$1,468).
+- ✅ **Telfar Shopping Bag** — DONE 2026-06-29. Created brand Telfar (tier thrift) + style Shopping Bag (variant 992); loaded 82 rows (eBay sold 45 + Fashionphile 37). Resale median ~$120 ($50–$330); eBay floor ~$81 is the accessible-market read, Fashionphile premium pulls the blend up.
+- Loader: `supabase/ingest/load-canon-gaps.ts` (dry-run default, `--write`, idempotent). Captures were browser-gated (Claude-in-Chrome, owner-present); raw landed in gitignored `data/ingest/_raw/`. **NOTE:** migration 0038 added a FUNCTION `variant_price_summary()` that shares a name with the pre-existing 0021 materialized view of the same name — reconcile in the deals/hero RPC rewire (use one or the other).
 - (also flagged separately, chip task_646da12f) ⬜ Backfill `price_history.condition` from source listings so the rail's "great price" verdict can become condition-aware (only 15 of ~31.8k listed rows have condition today).
