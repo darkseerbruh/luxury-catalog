@@ -1,6 +1,41 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { rebuildUserProfile } from "@/lib/personalization/user-profile";
+import { deriveMaturityStage } from "@/lib/maturity";
+
+/**
+ * Recompute Axis-A maturity_stage for every user from current closet state and
+ * write it back. Best-effort: if 0035_persona_model is not applied yet the first
+ * update errors on the missing column, so we bail out quietly. Returns the count
+ * updated.
+ */
+async function refreshMaturity(
+  admin: ReturnType<typeof getSupabaseAdmin>,
+  ids: string[],
+): Promise<number> {
+  const { data: closet } = await admin
+    .from("closet_item")
+    .select("user_id, status");
+  const counts = new Map<string, { owned: number; wishlist: number }>();
+  for (const row of closet ?? []) {
+    const c = counts.get(row.user_id) ?? { owned: 0, wishlist: 0 };
+    if (row.status === "owned") c.owned++;
+    else c.wishlist++;
+    counts.set(row.user_id, c);
+  }
+
+  let updated = 0;
+  for (const userId of ids) {
+    const stage = deriveMaturityStage(counts.get(userId) ?? { owned: 0, wishlist: 0 });
+    const { error } = await admin
+      .from("profile")
+      .update({ maturity_stage: stage })
+      .eq("id", userId);
+    if (error) return updated; // column missing (0035 unapplied) — stop quietly.
+    updated++;
+  }
+  return updated;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -53,5 +88,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ total: ids.length, rebuilt, failed });
+  const maturityUpdated = await refreshMaturity(admin, ids);
+
+  return NextResponse.json({ total: ids.length, rebuilt, failed, maturityUpdated });
 }
