@@ -4,6 +4,13 @@ import { getSupabase, fetchAllRows } from "./supabase";
 export const MIN_DEALS_TO_RENDER = 3;
 
 /**
+ * Discount ceiling. A listing more than this far below the variant's resale median is
+ * treated as a data error (accessory, parts listing, mis-grouped row), not a deal, and
+ * dropped. Real underpriced listings rarely exceed ~50% off; 70% is a conservative guard.
+ */
+const MAX_DEAL_PCT_UNDER = 70;
+
+/**
  * "Today's deals" — current resale listings priced BELOW their variant's recorded
  * resale median, ranked by how far under the median they sit.
  *
@@ -192,6 +199,9 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
       const med = median(g.resalePrices);
       if (med <= 0) continue;
 
+      const sorted = g.resalePrices.slice().sort((a, b) => a - b);
+      const sampleSize = sorted.length;
+
       // The best (lowest) current listing is the strongest deal for the variant.
       const best = g.listed.reduce((lo, c) => (c.price < lo.price ? c : lo), g.listed[0]);
       if (best.price >= med) continue; // only listings BELOW median are "deals"
@@ -199,10 +209,14 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
       const pctUnder = Math.round(((med - best.price) / med) * 100);
       if (pctUnder <= 0) continue;
 
+      // Sanity ceiling on the discount. A listing 70%+ below the (robust) median isn't the
+      // same bag in sellable condition — it's almost always an accessory (twilly/charm), a
+      // parts/repair listing, or a mispriced/mis-grouped row. The median resists a few bad
+      // low rows, so this cleanly drops the "$370 Hermès Kelly, 99% under median" noise.
+      if (pctUnder > MAX_DEAL_PCT_UNDER) continue;
+
       // Where this listing sits in the variant's OWN recorded resale spread. The
       // verdict is gated to >= 5 sales so we never grade a price on a handful of comps.
-      const sorted = g.resalePrices.slice().sort((a, b) => a - b);
-      const sampleSize = sorted.length;
       const q25 = quantile(sorted, 0.25);
       const cheaperThanCount = sorted.filter((p) => p > best.price).length;
       const pctCheaper = Math.round((cheaperThanCount / sampleSize) * 100);
