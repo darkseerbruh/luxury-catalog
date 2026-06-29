@@ -1,0 +1,74 @@
+name: Firecrawl capture (eBay pilot)
+
+# OWNER-GATED, dispatch-only (NO schedule) — eBay live-listing capture spends Firecrawl
+# credits, so it never runs on its own. Fire it from Actions -> this workflow -> "Run
+# workflow" once you've okayed the credit burn. eBay item pages 403 plain fetch but
+# Firecrawl defeats the block; eBay item-specifics are the richest source we have
+# (condition + written detail, material, hardware, pattern, measurements). See §0e.
+#
+# Per item ≈ 1 markdown scrape (~1 credit). Default pilot: hero list, limit 15/style ≈
+# ~5 styles × 15 ≈ ~80 item scrapes + 5 searches ≈ ~90 credits. LIVE listings only
+# (eBay purges ended-listing descriptions). Watch real burn here before scaling.
+#
+# SECRETS: FIRECRAWL_API_KEY + SUPABASE_SERVICE_ROLE_KEY (set). ANTHROPIC_API_KEY is
+# optional — the LLM description pass is skipped if it's absent.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "eBay target key (firecrawl-ebay TARGETS), or 'all' for the hero list"
+        required: false
+        default: "all"
+      limit:
+        description: "Max item scrapes per style (credit ceiling)"
+        required: false
+        default: "15"
+      write:
+        description: "Apply DB writes? false = capture + report only"
+        required: false
+        default: "true"
+
+concurrency:
+  group: firecrawl-ebay
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      TARGET: ${{ github.event.inputs.target || 'all' }}
+      LIMIT: ${{ github.event.inputs.limit || '15' }}
+      WRITE: ${{ github.event.inputs.write || 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Fail early if the Firecrawl key is missing
+        run: |
+          if [ -z "$FIRECRAWL_API_KEY" ]; then
+            echo "::error::FIRECRAWL_API_KEY secret is not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+
+      - name: Capture eBay via Firecrawl (writes landing snapshot)
+        run: npx tsx supabase/ingest/sources/firecrawl-ebay.ts "$TARGET" --limit="$LIMIT"
+
+      - name: Load prices + refresh summary
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- ebay --write
+          npm run summary:refresh
+
+      - name: Mine description facts with the LLM pass (skipped if no key)
+        if: env.WRITE == 'true' && env.ANTHROPIC_API_KEY != ''
+        run: npm run enrich:descriptions -- --platform=ebay --limit=200 --write

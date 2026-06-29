@@ -39,12 +39,36 @@ interface EbayTarget {
   maxPrice: number;
 }
 
+// Hero styles (docs §3). One target per style; size is auto-detected per listing.
+// eBay relevance comes from the search query; the curated matcher in load-prices resolves
+// brand→style→variant. NOTE: eBay Hermès is counterfeit-noisy (handoff §0a) — treat its
+// data as lower-trust until an authenticity filter is added.
+const COMMON_EXCLUDES = ["wallet", "pouch", "insert", "organizer", "strap", "lot", "charm", "keychain", "card-holder", "replica"];
 const TARGETS: Record<string, EbayTarget> = {
   "louis-vuitton-neverfull": {
     brand: "Louis Vuitton", style: "Neverfull", query: "louis vuitton neverfull",
-    sizes: ["PM", "MM", "GM"],
-    urlIncludes: [], urlExcludes: ["wallet", "pouch", "insert", "organizer", "strap", "lot", "charm"],
+    sizes: ["PM", "MM", "GM"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES,
     minPrice: 400, maxPrice: 4000,
+  },
+  "chanel-classic-flap": {
+    brand: "Chanel", style: "Classic Flap", query: "chanel classic flap caviar",
+    sizes: ["Maxi", "Jumbo", "Medium", "Small", "Mini"], urlIncludes: [],
+    urlExcludes: [...COMMON_EXCLUDES, "woc", "clutch"], minPrice: 2500, maxPrice: 15000,
+  },
+  "gucci-gg-marmont": {
+    brand: "Gucci", style: "GG Marmont", query: "gucci gg marmont matelasse bag",
+    sizes: ["Small", "Medium", "Mini"], urlIncludes: [],
+    urlExcludes: [...COMMON_EXCLUDES, "belt", "shoe"], minPrice: 700, maxPrice: 3500,
+  },
+  "hermes-birkin": {
+    brand: "Hermès", style: "Birkin", query: "hermes birkin",
+    sizes: ["25", "30", "35", "40"], urlIncludes: [],
+    urlExcludes: [...COMMON_EXCLUDES, "twilly", "inspired", "dupe"], minPrice: 6000, maxPrice: 80000,
+  },
+  "hermes-kelly": {
+    brand: "Hermès", style: "Kelly", query: "hermes kelly bag",
+    sizes: ["25", "28", "32"], urlIncludes: [],
+    urlExcludes: [...COMMON_EXCLUDES, "pochette", "depeche", "inspired", "dupe"], minPrice: 6000, maxPrice: 80000,
   },
 };
 
@@ -55,17 +79,10 @@ function sizeOf(text: string, sizes: string[]): string | null {
   return null;
 }
 
-async function main() {
-  const key = process.argv[2];
-  const limit = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("=")[1] ?? 25);
-  const target = key && TARGETS[key];
-  if (!target) {
-    console.error(`unknown targetKey "${key}". known: ${Object.keys(TARGETS).join(", ")}`);
-    process.exit(1);
-  }
-
+/** Capture one target's live listings into observations. Returns obs + credits spent. */
+async function captureTarget(target: EbayTarget, limit: number, today: string): Promise<{ obs: PriceObservation[]; credits: number; failed: number }> {
   const searchUrl = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(target.query)}&_sop=12`;
-  console.log(`search: ${searchUrl}`);
+  console.log(`  search: ${searchUrl}`);
   const search = await scrape(searchUrl, { formats: ["links"], waitFor: 4000 });
   let credits = search.creditsUsed;
 
@@ -74,17 +91,15 @@ async function main() {
   for (const raw of search.links ?? []) {
     const m = raw.match(ITEM_RE);
     if (!m) continue;
-    const url = m[0];
-    const u = url.toLowerCase();
+    const u = m[0].toLowerCase();
     if (target.urlExcludes.some((t) => u.includes(t)) || !target.urlIncludes.every((t) => u.includes(t))) continue;
     if (seen.has(m[1])) continue;
     seen.add(m[1]);
-    items.push({ url, id: m[1] });
+    items.push({ url: m[0], id: m[1] });
     if (items.length >= limit) break;
   }
-  console.log(`candidates: ${items.length}`);
+  console.log(`  candidates: ${items.length}`);
 
-  const today = new Date().toISOString().slice(0, 10);
   const obs: PriceObservation[] = [];
   let failed = 0;
   for (const it of items) {
@@ -128,12 +143,34 @@ async function main() {
       });
     } catch (e) {
       failed++;
-      console.warn(`  skip ${it.url}: ${(e as Error).message}`);
+      console.warn(`    skip ${it.url}: ${(e as Error).message}`);
     }
     await sleep(1000);
   }
+  return { obs, credits, failed };
+}
 
-  const res = writeObservations("ebay", obs);
+async function main() {
+  const key = process.argv[2];
+  const limit = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("=")[1] ?? 25);
+  const keys = key === "all" ? Object.keys(TARGETS) : [key];
+  if (!key || keys.some((k) => !TARGETS[k])) {
+    console.error(`usage: firecrawl-ebay.ts <targetKey|all> [--limit=N]. known: ${Object.keys(TARGETS).join(", ")}`);
+    process.exit(1);
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const all: PriceObservation[] = [];
+  let credits = 0, failed = 0;
+  for (const k of keys) {
+    console.log(`target: ${k}`);
+    const r = await captureTarget(TARGETS[k], limit, today);
+    all.push(...r.obs);
+    credits += r.credits;
+    failed += r.failed;
+  }
+
+  const res = writeObservations("ebay", all);
   console.log(`landing: kept ${res.kept}, dropped ${res.dropped} (${failed} scrape failures) -> ${res.file}`);
   console.log(`Firecrawl credits used this run: ${credits}`);
 }
