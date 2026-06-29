@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import { safeNext } from "./safe-next";
 
 const PERSONAS = [
   "collector",
@@ -53,5 +54,5 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
   }
 
   revalidatePath("/", "layout");
-  redirect("/closet");
+  redirect(safeNext(formData.get("next")) ?? "/closet");
 }

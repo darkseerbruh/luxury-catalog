@@ -10,7 +10,7 @@ const OAUTH = [
   { provider: "google", label: "Continue with Google" },
 ];
 
-export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
+export default function AuthForm({ mode, next }: { mode: "login" | "signup"; next?: string }) {
   const action = mode === "login" ? signIn : signUp;
   const [state, formAction, pending] = useActionState(action, initial);
 
@@ -37,6 +37,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       </div>
 
       <form action={formAction} className="flex flex-col gap-4">
+      {next && <input type="hidden" name="next" value={next} />}
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-muted">Email</span>
         <input

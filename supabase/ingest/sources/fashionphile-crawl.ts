@@ -116,7 +116,8 @@ async function main() {
 
   // Current-run LIVE snapshot (overwrite, NOT merged): exactly what this crawl saw on
   // the site right now. The accumulating dump above is the loader's history staging and
-  // keeps stale entries forever, so it can't tell "still for sale" from "sold". This
+  // retains every past observation on purpose, so on its own it can't tell "still for
+  // sale" from "sold". This
   // snapshot is the authoritative live set reconcile-sold.ts diffs against to retire the
   // listings that have since sold/been pulled. Only written for a full crawl (start at
   // page 1) — a resumed/partial crawl must not be mistaken for the whole live inventory.

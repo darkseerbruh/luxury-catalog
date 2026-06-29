@@ -43,6 +43,8 @@ import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
+import WantBreadth from "./WantBreadth";
+import { colorFamily } from "@/lib/listings-taxonomy";
 import { BagImage } from "@/components/BagImage";
 import CompareControls from "@/components/CompareControls";
 
@@ -622,6 +624,7 @@ export default async function BagDetailPage({
         styleName={v.style.name}
         variants={styleVariants}
         currentVariantId={v.variantId}
+        savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
@@ -698,6 +701,19 @@ export default async function BagDetailPage({
         variantId={v.variantId}
         label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
       />
+
+      {/* Broaden a want across colourways, when the style actually has colour variation. */}
+      {(() => {
+        const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
+        if (colours.size < 2) return null;
+        return (
+          <WantBreadth
+            variantId={v.variantId}
+            colorFamily={colorFamily(v.exteriorColorway)}
+            initialBreadth={userState.closetStatus === "want" ? "exact" : null}
+          />
+        );
+      })()}
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />

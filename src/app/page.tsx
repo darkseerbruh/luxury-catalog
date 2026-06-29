@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BRAND_TIERS, getBrandsOverview, getHeroCarousel, getVariantImages } from "@/lib/queries";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset } from "@/lib/collections";
+import { getSavedTasteIdentity } from "@/lib/taste-data";
 import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import PersonaRouter from "@/components/PersonaRouter";
@@ -29,9 +30,9 @@ export default async function Home() {
     getCurrentUser(),
     communityKnowledgeReady(),
   ]);
-  const [closet, feed] = user
-    ? await Promise.all([getCloset(), getFeed(8)])
-    : [[], []];
+  const [closet, feed, tasteRead] = user
+    ? await Promise.all([getCloset(), getFeed(8), getSavedTasteIdentity()])
+    : [[], [], null];
 
   // Real photos for the hero + closet cards when available; placeholders otherwise.
   const images = await getVariantImages([
@@ -49,21 +50,56 @@ export default async function Home() {
 
       {!user && (
         <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
-          <p className="text-sm uppercase tracking-widest text-gold">Find your taste</p>
+          <p className="text-sm uppercase tracking-widest text-gold">Style read</p>
           <h2 className="mx-auto mt-2 max-w-xl font-serif text-2xl text-foreground sm:text-3xl">
-            Discover your handbag taste in 60 seconds
+            Find out what your bags say about you
           </h2>
           <p className="mx-auto mt-3 max-w-md text-muted">
-            A few quick taps and we&rsquo;ll name your taste and match you to bags
-            you&rsquo;ll love. <span className="text-foreground">No account needed</span> to
-            see your result.
+            A two-minute style read. We hand you the words for your taste, then match
+            you to bags. <span className="text-foreground">No account needed.</span>
           </p>
           <Link
             href="/quiz"
             className="mt-6 inline-block rounded-full bg-gold px-6 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
           >
-            Take the taste quiz →
+            Start
           </Link>
+        </section>
+      )}
+
+      {user && (
+        <section className="border-b border-border px-5 py-8">
+          {tasteRead ? (
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-6 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted">Your style read</p>
+                <p className="mt-1 font-serif text-xl text-foreground">{tasteRead.headline}</p>
+                {tasteRead.tags.length > 0 && (
+                  <p className="mt-1 text-sm text-muted">{tasteRead.tags.join(" · ")}</p>
+                )}
+              </div>
+              <Link
+                href="/quiz"
+                className="shrink-0 rounded-full border border-border px-5 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+              >
+                Retake
+              </Link>
+            </div>
+          ) : (
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-6 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-gold">Style read</p>
+                <p className="mt-1 font-serif text-xl text-foreground">See what your style says</p>
+                <p className="mt-1 text-sm text-muted">Two minutes, and we tune the catalog to you.</p>
+              </div>
+              <Link
+                href="/quiz"
+                className="shrink-0 rounded-full bg-gold px-5 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+              >
+                Start
+              </Link>
+            </div>
+          )}
         </section>
       )}
 

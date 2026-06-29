@@ -35,20 +35,24 @@ describe("colorFamily", () => {
 });
 
 describe("materialFamily", () => {
-  it("rolls specific leathers up into Leather", () => {
-    expect(materialFamily("Togo Leather")).toBe("Leather");
-    expect(materialFamily("Togo")).toBe("Leather");
-    expect(materialFamily("Caviar")).toBe("Leather");
-    expect(materialFamily("Lambskin")).toBe("Leather");
-    expect(materialFamily("Leather")).toBe("Leather");
+  it("splits leather into grained vs smooth, brand-neutrally", () => {
+    expect(materialFamily("Togo Leather")).toBe("Pebbled or grained leather");
+    expect(materialFamily("Togo")).toBe("Pebbled or grained leather");
+    expect(materialFamily("Caviar")).toBe("Pebbled or grained leather");
+    expect(materialFamily("Lambskin")).toBe("Smooth leather");
+    expect(materialFamily("Leather")).toBe("Smooth leather");
   });
 
-  it("separates exotics, suede, canvas, and fabric from smooth leather", () => {
+  it("separates exotics, suede, canvas, and the distinctive fabrics", () => {
     expect(materialFamily("Niloticus Crocodile")).toBe("Exotic");
     expect(materialFamily("Ostrich")).toBe("Exotic");
     expect(materialFamily("Suede")).toBe("Suede");
-    expect(materialFamily("Monogram Coated Canvas")).toBe("Coated canvas");
-    expect(materialFamily("Tweed")).toBe("Fabric");
+    expect(materialFamily("Monogram Coated Canvas")).toBe("Canvas");
+    expect(materialFamily("Tweed")).toBe("Tweed");
+    expect(materialFamily("Nylon")).toBe("Nylon");
+    expect(materialFamily("Denim")).toBe("Denim");
+    expect(materialFamily("Satin")).toBe("Fabric");
+    expect(materialFamily("Crochet")).toBe("Raffia or woven");
     expect(materialFamily("Patent Leather")).toBe("Patent");
   });
 

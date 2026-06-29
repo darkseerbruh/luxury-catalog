@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
 import { completeOnboarding } from "@/lib/profile-actions";
+import { safeNext } from "@/lib/safe-next";
 
 export const dynamic = "force-dynamic";
 
@@ -14,10 +15,15 @@ const PERSONAS: { value: string; label: string; description: string }[] = [
   { value: "thrift-hunter", label: "Thrift / estate hunter", description: "Finding the steal in the wild." },
 ];
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   const profile = await getProfile();
+  const next = safeNext((await searchParams).next);
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col px-5 py-16">
@@ -28,6 +34,7 @@ export default async function OnboardingPage() {
       </p>
 
       <form action={completeOnboarding} className="flex flex-col gap-6">
+        {next && <input type="hidden" name="next" value={next} />}
         <label className="flex flex-col gap-1.5 text-sm">
           <span className="text-muted">What should we call you?</span>
           <input
