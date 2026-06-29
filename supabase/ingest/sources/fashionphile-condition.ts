@@ -85,6 +85,9 @@ async function main() {
     else missed++;
     await sleep(PAGE_DELAY_MS);
     if ((graded + missed) % 50 === 0) console.log(`  …${graded + missed}/${todo.length} (graded ${graded}, missed ${missed})`);
+    // Checkpoint to disk periodically so a long run's grades survive an interruption
+    // (the pass is multi-hour; without this, a killed run loses everything).
+    if (graded > 0 && graded % 250 === 0) fs.writeFileSync(RAW_DUMP, JSON.stringify(dump));
   }
 
   fs.writeFileSync(RAW_DUMP, JSON.stringify(dump));
