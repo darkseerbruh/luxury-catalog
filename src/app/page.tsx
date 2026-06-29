@@ -129,9 +129,9 @@ export default async function Home() {
                 </p>
                 <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2">
                   {heroCards.map((card, i) => (
-                    <li key={card.styleId} className="flex gap-3">
-                      <span className="font-serif text-lg text-muted/50">
-                        {String(i + 1).padStart(2, "0")}
+                    <li key={card.styleId} className="flex gap-3.5">
+                      <span className="font-serif text-4xl leading-none text-gold-soft">
+                        {i + 1}
                       </span>
                       <Link
                         href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
@@ -140,30 +140,27 @@ export default async function Home() {
                         <p className="text-xs uppercase tracking-wide text-muted">
                           {card.brandName}
                         </p>
-                        <p className="font-serif text-lg text-foreground transition-colors group-hover:text-gold">
+                        <p className="font-serif text-xl text-foreground transition-colors group-hover:text-gold">
                           {card.styleName}
                         </p>
-                        <p className="mt-0.5 text-xs text-muted/80">{card.hook}</p>
-                        {card.medianResale != null ? (
+                        {card.medianResale != null && (
                           <>
-                            <p className="mt-2.5">
-                              <span className="font-serif text-2xl text-gold-soft">
-                                {formatPrice(card.medianResale, card.currency)}
-                              </span>{" "}
-                              <span className="text-xs text-muted">
-                                typical resale &middot; n={card.sampleSize}
-                              </span>
+                            <p
+                              className="mt-1.5 font-serif text-xl text-gold-soft"
+                              title={`Based on ${card.sampleSize.toLocaleString()} recorded resale prices`}
+                            >
+                              {formatPrice(card.medianResale, card.currency)}{" "}
+                              <span className="text-xs font-normal text-muted">typical resale</span>
                             </p>
-                            <p className="mt-1.5 text-xs text-muted">
+                            <p className="mt-1 text-xs text-muted">
                               low {formatPrice(card.lowResale, card.currency)} &middot; high{" "}
                               <span className="text-gold-soft">
                                 {formatPrice(card.highResale, card.currency)}
                               </span>
                             </p>
                           </>
-                        ) : (
-                          <p className="mt-2.5 text-sm text-muted">An all-time icon.</p>
                         )}
+                        <p className="mt-2 text-xs text-muted/80">{card.hook}</p>
                       </Link>
                     </li>
                   ))}
