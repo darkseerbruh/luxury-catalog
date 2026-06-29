@@ -1,5 +1,11 @@
 # Dior — seasonal naming archive (models + materials/techniques + named colorways/capsules)
 
+> **CORRECTION (2026-06-28, Chrome `.com` capture):** the "Dior does not name its seasonal colors"
+> finding below (Hard Rule 3, §3) is **WRONG and superseded.** dior.com names its current colors
+> plainly: **Rose Tendre, Garance Red, Gris Flanelle, Craie, Trench** and others. The earlier finding
+> came from reseller/forum sourcing, not the house site. Corrected ground truth: most houses DO name
+> their colors; only Gucci and Fendi genuinely do not. See `chrome-com-colors-2026.md`.
+
 *Archivist run, 2026-06-28 (Early Task 4, second house of the big-five sweep, after Louis
 Vuitton). Dior is a Regime A house: the house assigns permanent model names, so the model name
 IS the canonical key. Three layers below: a Models table, a Materials/signature-techniques

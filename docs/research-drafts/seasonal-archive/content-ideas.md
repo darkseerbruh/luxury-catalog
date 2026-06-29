@@ -325,6 +325,11 @@ engagement plays, then the mixed-format supporting pieces.
   descriptors; Rosso Ancora is the lone named exception), **Chanel** (style code + season code, color
   left unnamed). Source: `bottega-veneta.md` Cross-house context + §3; `hermes.md`, `dior.md`,
   `gucci.md`, `chanel.md`. BV is the new evidence that completes the contrast.
+- **CORRECTION (2026-06-28, Chrome `.com` capture, `chrome-com-colors-2026.md`):** the "Dior/most houses
+  do NOT name colors" framing above is WRONG. The brand sites show Dior (Rose Tendre, Garance Red...),
+  Celine, YSL, Prada, and Loewe all DO name their current colors. Recast the piece as **depth, not a
+  binary**: Hermès + Bottega = deep proprietary lexicon (with codes for Hermès); most houses name colors
+  plainly; only **Gucci and Fendi** use family/descriptor labels. The copywriter draft is flagged for rewrite.
 - **Metric:** GEO. "Does Bottega name its colors / what is Parakeet / which brands name their colors"
   is a clean, no-competition, citable answer that ties five house files together. Compounds, and the
   counter-intuitive split ("Hermès and Bottega do, the others mostly don't") is shareable. This is a

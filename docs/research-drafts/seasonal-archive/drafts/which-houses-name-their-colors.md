@@ -1,5 +1,11 @@
 # DRAFT — Which luxury houses actually name their bag colors (and which don't)
 
+> **SUPERSEDED, NEEDS REWRITE (2026-06-28):** this draft's thesis ("Hermès and Bottega name colors,
+> the others mostly don't") is **wrong.** The Chrome `.com` capture (`chrome-com-colors-2026.md`) shows
+> Dior, Celine, YSL, Prada, and Loewe all DO name their current colors; only **Gucci and Fendi** do not.
+> The real story is depth: Hermès + Bottega run a deep proprietary lexicon, most houses name colors
+> plainly, two houses use family/descriptor labels only. Do NOT publish this version. A rewrite is queued.
+
 *Copywriter draft from content-ideas.md idea #19 (the GEO flagship of this batch). Brand-voice
 skill run before drafting. Third person, no em dashes, calibrated hedge on the descriptive/
 reseller-attributed color names. No prices, no value claims. Every fact traced to a house file in
