@@ -1,5 +1,18 @@
 {
-  "_note": "Permanent-collection backbone — the bags each house makes every season, prioritised over seasonal/one-offs. tier 1 = perennial icons (catalog first, in depth); tier 2 = permanent but secondary. Approved by owner 2026-06-23 (Celine Luggage kept T1; Coach full depth). Drives catalog build + capture order; not the listings.",
+  "_note": "Permanent-collection backbone — the bags each house makes every season, prioritised over seasonal/one-offs. tier 1 = perennial icons (catalog first, in depth); tier 2 = permanent but secondary. Approved by owner 2026-06-23 (Celine Luggage kept T1; Coach full depth). 2026-06-28: added Goyard + 11 bag houses from the Vivrelle roster (jewelry-only houses skipped). Drives catalog build + capture order; not the listings.",
+  "brandMeta": {
+    "Goyard": { "country_of_origin": "France", "tier": "ultra-luxury" },
+    "The Row": { "country_of_origin": "United States", "tier": "ultra-luxury" },
+    "Balenciaga": { "country_of_origin": "France", "tier": "mid" },
+    "Burberry": { "country_of_origin": "United Kingdom", "tier": "mid" },
+    "Chloé": { "country_of_origin": "France", "tier": "mid" },
+    "Givenchy": { "country_of_origin": "France", "tier": "mid" },
+    "Valentino": { "country_of_origin": "Italy", "tier": "mid" },
+    "Alexander McQueen": { "country_of_origin": "United Kingdom", "tier": "mid" },
+    "Off-White": { "country_of_origin": "Italy", "tier": "mid" },
+    "Jacquemus": { "country_of_origin": "France", "tier": "mid" },
+    "Miu Miu": { "country_of_origin": "Italy", "tier": "mid" }
+  },
   "brands": {
     "Hermès": {
       "1": ["Birkin", "Kelly", "Constance", "Evelyne", "Garden Party", "Picotin Lock", "Bolide", "Lindy", "Herbag", "Kelly Pochette"],
@@ -48,6 +61,47 @@
     "Loewe": {
       "1": ["Puzzle", "Hammock", "Flamenco", "Gate", "Goya", "Amazona"],
       "2": ["Puzzle Edge", "Squeeze", "Basket", "Paseo"]
+    },
+    "Goyard": {
+      "1": ["Saint Louis", "Anjou", "Artois", "Belvédère", "Saïgon"],
+      "2": ["Rouette", "Bohème"]
+    },
+    "Balenciaga": {
+      "1": ["Le Cagole", "Hourglass", "City", "Neo Classic"],
+      "2": ["Velo", "Papier"]
+    },
+    "Burberry": {
+      "1": ["Lola", "Catherine", "Pocket", "TB Bag", "Title"],
+      "2": ["Banner", "Note"]
+    },
+    "Chloé": {
+      "1": ["Marcie", "Drew", "Faye", "Woody Tote", "C Bag"],
+      "2": ["Aby", "Penelope"]
+    },
+    "Givenchy": {
+      "1": ["Antigona", "Pandora", "GV3", "Cut Out", "4G"],
+      "2": ["Voyou"]
+    },
+    "Valentino": {
+      "1": ["Rockstud Spike", "Roman Stud", "Locò", "One Stud", "VLogo Signature"],
+      "2": ["Supervee"]
+    },
+    "Alexander McQueen": {
+      "1": ["The Knuckle", "The Jewelled Satchel", "The Bow Tote", "Skull", "Manta"]
+    },
+    "Off-White": {
+      "1": ["Binder Clip", "Jitney", "Burrow"]
+    },
+    "The Row": {
+      "1": ["Margaux", "Half Moon", "Bindle", "Park Tote", "Soft Margaux"],
+      "2": ["Terrasse"]
+    },
+    "Jacquemus": {
+      "1": ["Le Chiquito", "Le Bambino", "Le Bambimou", "Le Chouchou"],
+      "2": ["Le Grand Bambino"]
+    },
+    "Miu Miu": {
+      "1": ["Wander", "Arcadie", "Aventure", "Matelassé"]
     }
   }
 }

@@ -78,6 +78,15 @@ export const EVENTS = {
   personalizedRecsViewed: "personalized_recs_viewed",
   /** A user subscribed to the newsletter. */
   newsletterSubscribed: "newsletter_subscribed",
+  /** The homepage hero search box was engaged (focused or submitted) — the success
+   *  metric for the home_headline copy test. Carries `flag`, `variant`, `kind`. */
+  homeSearchEngaged: "home_search_engaged",
+  /** An editorial article was read — a content-channel engagement + acquisition signal. */
+  articleViewed: "article_viewed",
+  /** An object-oriented attribute page (leather/silhouette/hardware/era/color) was viewed. */
+  attributeObjectViewed: "attribute_object_viewed",
+  /** Two or more bags were taken to the side-by-side compare — a decision-intent signal. */
+  bagsCompared: "bags_compared",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

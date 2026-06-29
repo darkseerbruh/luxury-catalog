@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
 
@@ -8,16 +8,42 @@ export interface BrandOverview {
   name: string;
   tier: "thrift" | "mid" | "ultra-luxury";
   styleCount: number;
+  /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
+  variantCount: number;
   isLive: boolean;
+  /** Up to 3 most-documented styles (by catalogued variant count), each with a representative variant id to link to its bag page. */
+  topStyles: { styleId: number; name: string; variantId: number | null }[];
 }
+
+/** Display order for the brand directory: the tiers most people shop for lead. */
+export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
+  "ultra-luxury": 0,
+  mid: 1,
+  thrift: 2,
+};
+
+/** Tier groups for the brand directory, in display order, with section labels. */
+export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
+  { key: "ultra-luxury", label: "Ultra-luxury" },
+  { key: "mid", label: "Mid-tier" },
+  { key: "thrift", label: "Thrift & contemporary" },
+];
 
 export interface HeroCard {
   styleId: number;
   styleName: string;
   brandName: string;
   variantId: number | null;
-  sizeLabel: string | null;
-  priceFrom: number | null;
+  /** One-line "why it's iconic" hook (curated editorial, sourced). */
+  hook: string;
+  /** Recorded resale median for the style (the typical figure, the headline number). */
+  medianResale: number | null;
+  /** Lowest recorded resale price (text only). */
+  lowResale: number | null;
+  /** Highest recorded resale price (the eye-opener, text only). */
+  highResale: number | null;
+  /** How many recorded resale prices the figures are built from. */
+  sampleSize: number;
   currency: string | null;
 }
 
@@ -63,79 +89,221 @@ function embeddedName(relation: unknown): string {
   return (row as { name?: string } | null | undefined)?.name ?? "";
 }
 
+/**
+ * Each house's signature styles, in iconic order, from the owner-approved
+ * permanent-collection backbone (`supabase/seed/research/catalog-backbone.json`,
+ * tier 1 = perennial icons). Used to lead the homepage brand directory with the
+ * styles people actually come for (Neverfull, Birkin, Classic Flap) instead of
+ * whatever breadth seeding happened to catalogue deepest. This is owner-curated
+ * editorial order, not a popularity stat we don't have — so the UI never claims
+ * "most popular," it just surfaces the house's signatures first.
+ */
+const SIGNATURE_STYLES: Record<string, string[]> = {
+  Hermès: ["Birkin", "Kelly", "Constance", "Evelyne", "Garden Party", "Picotin Lock", "Bolide", "Lindy", "Herbag"],
+  Chanel: ["Classic Flap", "2.55 Reissue", "Boy", "Chanel 19", "Gabrielle", "Wallet on Chain", "Coco Handle"],
+  "Louis Vuitton": ["Neverfull", "Speedy", "Alma", "NéoNoé", "Capucines", "OnTheGo", "Pochette Métis", "Twist"],
+  Gucci: ["GG Marmont", "Dionysus", "Jackie 1961", "Horsebit 1955", "Ophidia", "Bamboo 1947"],
+  Dior: ["Lady Dior", "Saddle", "Book Tote", "30 Montaigne", "Caro"],
+  "Saint Laurent": ["Loulou", "Sac de Jour", "Kate", "Niki", "Lou Camera", "College", "Cassandre Envelope"],
+  "Bottega Veneta": ["Cassette", "Jodie", "The Pouch", "Andiamo", "Arco", "Loop"],
+  Fendi: ["Baguette", "Peekaboo", "Sunshine Shopper", "First", "Mon Trésor"],
+  Celine: ["Triomphe", "Luggage Tote", "Belt Bag", "Classic Box", "Ava", "16 (Sixteen)"],
+  Prada: ["Galleria", "Re-Edition", "Cleo"],
+  Coach: ["Tabby", "Rogue", "Willow", "Pillow Tabby", "Brooklyn"],
+  Loewe: ["Puzzle", "Hammock", "Flamenco", "Gate", "Goya", "Amazona"],
+};
+
+/** Position of a style within its house's signature list, or Infinity if it isn't a signature. */
+function signatureRank(brandName: string, styleName: string): number {
+  const icons = SIGNATURE_STYLES[brandName];
+  if (!icons) return Infinity;
+  const i = icons.findIndex((s) => s.toLowerCase() === styleName.trim().toLowerCase());
+  return i === -1 ? Infinity : i;
+}
+
 /** Brands with whether they have at least one fully-detailed variant ("live") vs. breadth-only stub styles ("coming soon"). */
 export async function getBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
     .from("brand")
-    .select("brand_id, name, tier, style(style_id, variant(variant_id))")
-    .order("name");
+    .select("brand_id, name, tier, style(style_id, name, variant(variant_id))");
 
   if (error || !data) return [];
 
-  return data.map((brand) => {
+  const brands = data.map((brand) => {
     const styles = (brand.style ?? []) as StyleWithVariants[];
-    const isLive = styles.some((s) => (s.variant ?? []).length > 0);
+    const variantCount = styles.reduce((n, s) => n + (s.variant ?? []).length, 0);
+    // "Top" styles = the house's signature icons first (owner-curated backbone
+    // order), then the most-documented remaining styles (deepest variant
+    // coverage), with name as a stable tiebreak. Surfaces what people come for
+    // (Neverfull, Birkin) and what we know best, never a popularity claim.
+    const topStyles = [...styles]
+      .sort((a, b) => {
+        const ra = signatureRank(brand.name, a.name);
+        const rb = signatureRank(brand.name, b.name);
+        if (ra !== rb) return ra - rb;
+        return (
+          (b.variant ?? []).length - (a.variant ?? []).length ||
+          a.name.localeCompare(b.name)
+        );
+      })
+      .slice(0, 3)
+      .map((s) => ({
+        styleId: s.style_id,
+        name: s.name,
+        variantId: (s.variant ?? [])[0]?.variant_id ?? null,
+      }));
     return {
       brandId: brand.brand_id,
       name: brand.name,
-      tier: brand.tier,
+      tier: brand.tier as BrandOverview["tier"],
       styleCount: styles.length,
-      isLive,
+      variantCount,
+      isLive: styles.some((s) => (s.variant ?? []).length > 0),
+      topStyles,
     };
   });
+
+  // Rank by tier (ultra-luxury first), then by catalogue depth, then name — so the
+  // brands most people come for lead, not whatever sorts first alphabetically.
+  return brands.sort(
+    (a, b) =>
+      BRAND_TIER_RANK[a.tier] - BRAND_TIER_RANK[b.tier] ||
+      b.variantCount - a.variantCount ||
+      a.name.localeCompare(b.name)
+  );
 }
 
-const HERO_STYLES: { brand: string; style: string }[] = [
-  { brand: "Chanel", style: "Classic Flap" },
-  { brand: "Hermès", style: "Birkin" },
-  { brand: "Hermès", style: "Kelly" },
-  { brand: "Coach", style: "Tabby" },
-  { brand: "Coach", style: "Swagger" },
+/**
+ * "It bags of all time" — a curated, RANKED canon (the blend lens: heritage mythology +
+ * real-world recognition). Order is the ranking shown. Hooks are sourced editorial one-liners;
+ * verify any year before publish. Resale figures are computed live from price_history below.
+ */
+const HERO_STYLES: { brand: string; style: string; hook: string }[] = [
+  { brand: "Hermès", style: "Birkin", hook: "Named for Jane Birkin, 1984" },
+  { brand: "Hermès", style: "Kelly", hook: "Named for Grace Kelly, 1956" },
+  { brand: "Chanel", style: "Classic Flap", hook: "The quilted flap with the CC turn-lock" },
+  { brand: "Louis Vuitton", style: "Speedy", hook: "An LV icon since 1930" },
+  { brand: "Dior", style: "Lady Dior", hook: "Named for Princess Diana, 1995" },
+  { brand: "Louis Vuitton", style: "Neverfull", hook: "The everyday luxury tote, 2007" },
 ];
 
-/** "It bags of all time" carousel — real seeded hero styles only, no invented ratings or review counts. */
+/** A row is retail (not resale) if it's an explicit retail_msrp or a legacy null-type row on a retail platform. */
+const HERO_RETAIL_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
+
+function medianOf(nums: number[]): number {
+  const s = nums.slice().sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/**
+ * "It bags of all time" — the ranked canon, each carrying live resale figures (median /
+ * low / high + sample size) computed from price_history, NOT retail. Order follows
+ * HERO_STYLES (the ranking). Resilient: returns [] on any missing env / column / error.
+ */
 export async function getHeroCarousel(): Promise<HeroCard[]> {
-  const { data, error } = await getSupabase()
-    .from("style")
-    .select(
-      "style_id, name, brand:brand_id(name), variant(variant_id, size_label, retail_price_original, currency)"
-    )
-    .in(
-      "name",
-      HERO_STYLES.map((h) => h.style)
-    );
+  try {
+    const { data, error } = await getSupabase()
+      .from("style")
+      .select(
+        "style_id, name, brand:brand_id(name), variant(variant_id, currency)"
+      )
+      .in(
+        "name",
+        HERO_STYLES.map((h) => h.style)
+      );
 
-  if (error || !data) return [];
+    if (error || !data) return [];
 
-  const cards = data
-    .filter((row) =>
-      HERO_STYLES.some((h) => h.style === row.name && h.brand === embeddedName(row.brand))
-    )
-    .map((row) => {
+    // Match each seeded style to its HERO_STYLES entry (by brand + name), collect variant ids.
+    type Matched = {
+      styleId: number;
+      styleName: string;
+      brandName: string;
+      hook: string;
+      variantIds: number[];
+      currency: string | null;
+    };
+    const matched: Matched[] = [];
+    const allVariantIds: number[] = [];
+    for (const row of data) {
+      const brandName = embeddedName(row.brand);
+      const entry = HERO_STYLES.find((h) => h.style === row.name && h.brand === brandName);
+      if (!entry) continue;
       const variants = row.variant ?? [];
-      const priced = variants.filter((v) => v.retail_price_original != null);
-      const cheapest = priced.sort(
-        (a, b) => Number(a.retail_price_original) - Number(b.retail_price_original)
-      )[0];
-      const primary = cheapest ?? variants[0];
-      return {
+      const variantIds = variants.map((v) => v.variant_id);
+      allVariantIds.push(...variantIds);
+      matched.push({
         styleId: row.style_id,
         styleName: row.name,
-        brandName: embeddedName(row.brand),
-        variantId: primary?.variant_id ?? null,
-        sizeLabel: cheapest?.size_label ?? variants[0]?.size_label ?? null,
-        priceFrom: cheapest ? Number(cheapest.retail_price_original) : null,
-        currency: cheapest?.currency ?? null,
+        brandName,
+        hook: entry.hook,
+        variantIds,
+        currency: variants[0]?.currency ?? null,
+      });
+    }
+    if (allVariantIds.length === 0) return [];
+
+    // Every resale price row for these variants, paged past the 1000-row cap; group + compute per style.
+    type HeroPriceRow = { variant_id: number; sale_price: number | string | null; currency: string | null; price_type: string | null; platform: string | null };
+    const priceRows = await fetchAllRows<HeroPriceRow>(() =>
+      getSupabase()
+        .from("price_history")
+        .select("variant_id, sale_price, currency, price_type, platform")
+        .in("variant_id", allVariantIds)
+        .not("sale_price", "is", null),
+    );
+
+    // variant_id -> resale prices (excluding retail), and -> count (for picking the link target).
+    const byVariant = new Map<number, { prices: number[]; currency: string | null }>();
+    for (const r of priceRows) {
+      const price = r.sale_price != null ? Number(r.sale_price) : null;
+      if (price == null || !Number.isFinite(price) || price <= 0) continue;
+      const isRetail =
+        r.price_type === "retail_msrp" ||
+        (r.price_type == null && r.platform != null && HERO_RETAIL_RX.test(r.platform));
+      if (isRetail) continue;
+      let g = byVariant.get(r.variant_id);
+      if (!g) { g = { prices: [], currency: r.currency }; byVariant.set(r.variant_id, g); }
+      g.prices.push(price);
+    }
+
+    const cards: HeroCard[] = matched.map((m) => {
+      const prices: number[] = [];
+      let bestVariant: number | null = null;
+      let bestCount = -1;
+      let currency: string | null = m.currency;
+      for (const vid of m.variantIds) {
+        const g = byVariant.get(vid);
+        const count = g?.prices.length ?? 0;
+        if (count > bestCount) { bestCount = count; bestVariant = vid; }
+        if (g) { prices.push(...g.prices); currency = currency ?? g.currency; }
+      }
+      const hasData = prices.length > 0;
+      return {
+        styleId: m.styleId,
+        styleName: m.styleName,
+        brandName: m.brandName,
+        variantId: bestVariant ?? m.variantIds[0] ?? null,
+        hook: m.hook,
+        medianResale: hasData ? Math.round(medianOf(prices)) : null,
+        lowResale: hasData ? Math.round(Math.min(...prices)) : null,
+        highResale: hasData ? Math.round(Math.max(...prices)) : null,
+        sampleSize: prices.length,
+        currency,
       };
     });
 
-  const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
-  cards.sort(
-    (a, b) =>
-      order.indexOf(`${a.brandName}:${a.styleName}`) -
-      order.indexOf(`${b.brandName}:${b.styleName}`)
-  );
-  return cards;
+    const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
+    cards.sort(
+      (a, b) =>
+        order.indexOf(`${a.brandName}:${a.styleName}`) -
+        order.indexOf(`${b.brandName}:${b.styleName}`)
+    );
+    return cards;
+  } catch {
+    return [];
+  }
 }
 
 export interface VariantDetail {
@@ -1349,6 +1517,289 @@ export async function getThriftFinds(limit = 200): Promise<ThriftFindEntry[]> {
     note: r.note,
     date: r.created_at,
   }));
+}
+
+// ============ Attribute objects (Bag DNA destination pages) ============
+//
+// The Spotify "object-oriented UX" lesson: an attribute (leather, silhouette,
+// hardware) is a first-class object with its own page and a rail of bags that
+// share it, not a flat search link. Spec: docs/ux/object-oriented-ux.md.
+// Everything here is built ONLY from catalogued attributes (never-invent).
+
+/** URL-safe slug from a display name ("Caviar Leather" -> "caviar-leather"). */
+export function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** A bag that carries a given attribute, for the object page's "Explore" rail. */
+export interface AttributeBag {
+  variantId: number;
+  styleName: string;
+  brandName: string;
+  sizeLabel: string | null;
+  exteriorColorway: string | null;
+}
+
+type AttrVariantRow = {
+  variant_id: number;
+  size_label: string | null;
+  exterior_colorway: string | null;
+  style:
+    | { name: string; brand: { brand_id: number; name: string } | { brand_id: number; name: string }[] | null }
+    | { name: string; brand: { brand_id: number; name: string } | { brand_id: number; name: string }[] | null }[]
+    | null;
+};
+
+const ATTR_VARIANT_SELECT =
+  "variant_id, size_label, exterior_colorway, style:style_id!inner(name, silhouette, brand:brand_id(brand_id, name))";
+
+function mapAttrBags(rows: AttrVariantRow[]): AttributeBag[] {
+  return rows.flatMap((r) => {
+    const style = (Array.isArray(r.style) ? r.style[0] : r.style) ?? null;
+    if (!style) return [];
+    return [
+      {
+        variantId: r.variant_id,
+        styleName: style.name,
+        brandName: embeddedName(style.brand),
+        sizeLabel: r.size_label,
+        exteriorColorway: r.exterior_colorway,
+      },
+    ];
+  });
+}
+
+/** Distinct house names from a bag set, in first-seen order. */
+function distinctHouses(bags: AttributeBag[]): string[] {
+  return [...new Set(bags.map((b) => b.brandName).filter((n): n is string => Boolean(n)))];
+}
+
+export interface LeatherObject {
+  slug: string;
+  name: string;
+  materialType: string | null;
+  waterResistance: string | null;
+  scratchResistance: string | null;
+  weatherFriendliness: string | null;
+  hardinessOverall: string | null;
+  careNotes: string | null;
+  authenticationNotes: string | null;
+  resaleValueImpact: string | null;
+  brandContext: string | null;
+  bagCount: number;
+  houses: string[];
+  bags: AttributeBag[];
+}
+
+type MaterialRow = {
+  material_id: number;
+  name: string;
+  material_type: string | null;
+  water_resistance: string | null;
+  scratch_resistance: string | null;
+  weather_friendliness: string | null;
+  hardiness_overall: string | null;
+  care_notes: string | null;
+  authentication_notes: string | null;
+  resale_value_impact: string | null;
+  brand_context: string | null;
+};
+
+/** How many descriptive fields a material row actually has (to pick the richest duplicate). */
+function materialFieldsPopulated(m: MaterialRow): number {
+  return [
+    m.water_resistance,
+    m.scratch_resistance,
+    m.weather_friendliness,
+    m.hardiness_overall,
+    m.care_notes,
+    m.authentication_notes,
+    m.resale_value_impact,
+    m.brand_context,
+  ].filter(Boolean).length;
+}
+
+/**
+ * The leather/material object page. Identity + real durability/care/authentication
+ * detail from the `material` table, plus the bags that carry it. RESILIENT: returns
+ * null on any error so the route 404s cleanly rather than crashing. Never invents a
+ * definition — only the catalogued fields are shown.
+ */
+export async function getLeatherObject(slug: string): Promise<LeatherObject | null> {
+  try {
+    const { data: mats, error } = await getSupabase()
+      .from("material")
+      .select(
+        "material_id, name, material_type, water_resistance, scratch_resistance, weather_friendliness, hardiness_overall, care_notes, authentication_notes, resale_value_impact, brand_context",
+      );
+    if (error || !mats) return null;
+    const matching = (mats as MaterialRow[]).filter((m) => slugify(m.name) === slug);
+    if (matching.length === 0) return null;
+    const pick = matching.slice().sort((a, b) => materialFieldsPopulated(b) - materialFieldsPopulated(a))[0];
+    const ids = matching.map((m) => m.material_id);
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .in("exterior_material_id", ids)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+
+    return {
+      slug,
+      name: pick.name,
+      materialType: pick.material_type,
+      waterResistance: pick.water_resistance,
+      scratchResistance: pick.scratch_resistance,
+      weatherFriendliness: pick.weather_friendliness,
+      hardinessOverall: pick.hardiness_overall,
+      careNotes: pick.care_notes,
+      authenticationNotes: pick.authentication_notes,
+      resaleValueImpact: pick.resale_value_impact,
+      brandContext: pick.brand_context,
+      bagCount: count ?? bags.length,
+      houses: distinctHouses(bags),
+      bags,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export interface GroupingObject {
+  slug: string;
+  name: string;
+  bagCount: number;
+  houses: string[];
+  bags: AttributeBag[];
+}
+
+/**
+ * The silhouette object page — bags built on a given silhouette (a `style` column).
+ * Resolves the slug to the real catalogued value, never a guess. RESILIENT.
+ */
+export async function getSilhouetteObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: sils, error } = await getSupabase()
+      .from("style")
+      .select("silhouette")
+      .not("silhouette", "is", null);
+    if (error || !sils) return null;
+    const values = [
+      ...new Set(
+        (sils as { silhouette: string | null }[]).map((s) => s.silhouette).filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("style.silhouette", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The hardware object page — bags with a given hardware colour (a `variant` column).
+ * Resolves the slug to a real catalogued value. RESILIENT.
+ */
+export async function getHardwareObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: hw, error } = await getSupabase()
+      .from("variant")
+      .select("hardware_color")
+      .not("hardware_color", "is", null)
+      .limit(3000);
+    if (error || !hw) return null;
+    const values = [
+      ...new Set(
+        (hw as { hardware_color: string | null }[]).map((r) => r.hardware_color).filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("hardware_color", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The colour object page — bags in a given exterior colourway (a `variant` column).
+ * Resolves the slug to a real catalogued value. RESILIENT.
+ */
+export async function getColorObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const { data: cols, error } = await getSupabase()
+      .from("variant")
+      .select("exterior_colorway")
+      .not("exterior_colorway", "is", null)
+      .limit(5000);
+    if (error || !cols) return null;
+    const values = [
+      ...new Set(
+        (cols as { exterior_colorway: string | null }[])
+          .map((r) => r.exterior_colorway)
+          .filter((v): v is string => Boolean(v)),
+      ),
+    ];
+    const match = values.find((v) => slugify(v) === slug);
+    if (!match) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .eq("exterior_colorway", match)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    return { slug, name: match, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The era object page — bags whose production began in a given decade (from
+ * `variant.year_start`). The slug is a decade like "2010s". RESILIENT; returns null
+ * for a malformed decade or when no bags fall in it (a decade with no bags is not a
+ * page worth showing).
+ */
+export async function getEraObject(slug: string): Promise<GroupingObject | null> {
+  try {
+    const m = /^(\d{4})s$/.exec(slug);
+    if (!m) return null;
+    const decade = parseInt(m[1], 10);
+    if (decade % 10 !== 0) return null;
+
+    const { data: rows, count } = await getSupabase()
+      .from("variant")
+      .select(ATTR_VARIANT_SELECT, { count: "exact" })
+      .gte("year_start", decade)
+      .lte("year_start", decade + 9)
+      .limit(300);
+    const bags = mapAttrBags((rows ?? []) as AttrVariantRow[]);
+    if (bags.length === 0) return null;
+    return { slug, name: `${decade}s`, bagCount: count ?? bags.length, houses: distinctHouses(bags), bags };
+  } catch {
+    return null;
+  }
 }
 
 // ============ Sitemap targets (programmatic SEO/GEO) ============

@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
+import { listByBrand, listByStyle } from "@/lib/posts";
+import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
 import {
@@ -25,6 +27,7 @@ import BagActions from "./BagActions";
 import PriceTrend from "./PriceTrend";
 import ValueModule, { type ValueFraming } from "./ValueModule";
 import TrackBagView from "./TrackBagView";
+import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
 import WhereToSell from "./WhereToSell";
@@ -35,9 +38,15 @@ import { hasActiveAuthenticators } from "@/lib/authentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import Resources from "./Resources";
+import BagStory, { type StoryMarketFact } from "./BagStory";
+import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
+import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
+import WantBreadth from "./WantBreadth";
+import { colorFamily } from "@/lib/listings-taxonomy";
 import { BagImage } from "@/components/BagImage";
+import CompareControls from "@/components/CompareControls";
 
 export const dynamic = "force-dynamic";
 
@@ -210,13 +219,22 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images, photos, authMarketplaceLive] = await Promise.all([
-    getResourcesForStyle(v.style.styleId, v.variantId),
-    getStyleVariants(v.style.styleId),
-    getVariantImages([v.variantId]),
-    getApprovedPhotos(v.variantId),
-    hasActiveAuthenticators(),
-  ]);
+  const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts] =
+    await Promise.all([
+      getResourcesForStyle(v.style.styleId, v.variantId),
+      getStyleVariants(v.style.styleId),
+      getVariantImages([v.variantId]),
+      getApprovedPhotos(v.variantId),
+      hasActiveAuthenticators(),
+      listByStyle(v.style.styleId, 4),
+      listByBrand(v.brand.brandId, 4),
+    ]);
+
+  // Articles for this bag, most specific first: style-tagged guides lead, then
+  // brand-tagged guides not already shown. A bag inherits relevance from its
+  // style and (more broadly) its brand.
+  const seen = new Set(stylePosts.map((p) => p.postId));
+  const bagPosts = [...stylePosts, ...brandPosts.filter((p) => !seen.has(p.postId))].slice(0, 4);
 
   const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
     .filter(Boolean)
@@ -459,14 +477,40 @@ export default async function BagDetailPage({
     });
   }
 
+  // "The Story" editorial module — cited origin/design/culture tidbits for the
+  // hero icons, plus a self-updating market fact derived from the resale rows
+  // above (no new data source; renders only when we've seeded a story).
+  const bagStory = await getBagStory(v.style.name);
+  const storyMarketFact: StoryMarketFact | null =
+    bagStory && fairMarket
+      ? {
+          medianResale: fairMarket.med,
+          count: fairMarket.count,
+          currency: fairMarket.currency,
+          retentionPct:
+            v.retailPriceOriginal && v.retailPriceOriginal > 0
+              ? Math.round((fairMarket.med / v.retailPriceOriginal) * 100)
+              : null,
+          asOf: resaleAsOf,
+        }
+      : null;
+
   // Whether the outbound resale / consignor links resolve (drives the top
   // action cluster's Buy/Sell CTAs and the jump-nav entries).
   const hasBuyLinks = buildResaleLinks(v.brand.name, v.style.name).length > 0;
   const hasSellLinks = buildConsignmentLinks(v.brand.name, v.style.name).length > 0;
 
+  // Bag DNA renders when the bag has at least one composition attribute beyond its
+  // house (leather / hardware / shape / colour / era) — see BagDNA's ≥2-card guard.
+  const hasDna = Boolean(
+    v.exteriorMaterial?.name || v.hardwareColor || v.style.silhouette || v.exteriorColorway || v.yearStart,
+  );
+
   // Jump-nav: only link to sections that actually render.
   const jumpItems = [
+    bagStory ? { id: "the-story", label: "The story" } : null,
     photos.length > 0 ? { id: "photos", label: "Photos" } : null,
+    hasDna ? { id: "dna", label: "DNA" } : null,
     { id: "specifications", label: "Specs" },
     authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
@@ -505,6 +549,7 @@ export default async function BagDetailPage({
         silhouette={v.style.silhouette}
         hasPriceHistory={v.priceHistory.length > 0}
       />
+      <AuthEngagementTracker variantId={v.variantId} />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">
@@ -512,7 +557,7 @@ export default async function BagDetailPage({
         </Link>
         <span>/</span>
         <Link
-          href={`/search?q=${encodeURIComponent(v.brand.name)}`}
+          href={`/brand/${v.brand.brandId}`}
           className="hover:text-foreground"
         >
           {v.brand.name}
@@ -579,6 +624,7 @@ export default async function BagDetailPage({
         styleName={v.style.name}
         variants={styleVariants}
         currentVariantId={v.variantId}
+        savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
@@ -651,11 +697,67 @@ export default async function BagDetailPage({
         initialWatching={userState.watching}
       />
 
+      <CompareControls
+        variantId={v.variantId}
+        label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
+      />
+
+      {/* Broaden a want across colourways, when the style actually has colour variation. */}
+      {(() => {
+        const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
+        if (colours.size < 2) return null;
+        return (
+          <WantBreadth
+            variantId={v.variantId}
+            colorFamily={colorFamily(v.exteriorColorway)}
+            initialBreadth={userState.closetStatus === "want" ? "exact" : null}
+          />
+        );
+      })()}
+
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
 
+      {/* Bag DNA — each attribute is a tappable object (SongDNA for bags). */}
+      <BagDNA
+        brandId={v.brand.brandId}
+        brandName={v.brand.name}
+        brandTier={v.brand.tier || null}
+        leather={v.exteriorMaterial?.name ?? null}
+        hardware={v.hardwareColor}
+        silhouette={v.style.silhouette}
+        colorway={v.exteriorColorway}
+        yearStart={v.yearStart}
+        yearEnd={v.yearEnd}
+      />
+
+      {/* The Story — cited origin/design/culture tidbits + the people behind the
+          bag + a self-updating market fact (our "About this bag" editorial layer). */}
+      {bagStory && (
+        <BagStory
+          story={bagStory}
+          brandName={v.brand.name}
+          styleName={v.style.name}
+          marketFact={storyMarketFact}
+        />
+      )}
+
       {/* Embedded video reviews — the visual layer while v1 is text-first */}
       <Resources resources={resources} />
+
+      {/* Guides for this bag — style-tagged articles first, then brand-tagged. */}
+      {bagPosts.length > 0 && (
+        <section className="border-t border-border pt-8">
+          <h2 className="font-serif text-2xl text-foreground">Guides for this bag</h2>
+          <p className="mt-1 text-sm text-muted">
+            Articles on the {v.style.name} and {v.brand.name} from our verified
+            experts.
+          </p>
+          <div className="mt-5">
+            <ArticleList posts={bagPosts} />
+          </div>
+        </section>
+      )}
 
       {/* User photo contributions — real, owned reference shots + the rare-find
           recruiting empty state (the UGC engine the tier ladder rewards). */}
@@ -744,7 +846,7 @@ export default async function BagDetailPage({
                 We do not guarantee authenticity; verify high-stakes details in person.
               </p>
               <Link
-                href="/posts"
+                href="/articles"
                 className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
               >
                 Read our authentication guides &rarr;
@@ -909,7 +1011,7 @@ export default async function BagDetailPage({
 
       {/* Serial / authentication tags */}
       {v.serialTags.length > 0 && (
-        <Collapsible title="Serial & authentication tags">
+        <Collapsible title="Serial & authentication tags" id="authentication-tags">
           <div className="flex flex-col gap-3">
             {v.serialTags.map((t) => (
               <div

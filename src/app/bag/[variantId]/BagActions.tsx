@@ -141,7 +141,7 @@ export default function BagActions({
                     : "border-border text-muted hover:border-gold hover:text-gold"
                 }`}
               >
-                {watching ? "★ Watching price" : "☆ Watch price"}
+                {watching ? "Alerts on" : "Alert me"}
               </button>
             </div>
           </div>
@@ -165,13 +165,13 @@ export default function BagActions({
           {closetStatus === "want" && (
             <p className="text-sm text-muted">
               {watching ? (
-                <>We&rsquo;ll watch the price and tell you when it dips on your{" "}
+                <>We&rsquo;ll tell you when it dips below the typical resale price, here and on your{" "}
                 <Link href="/watchlist" className="text-gold hover:underline">watchlist</Link>.</>
               ) : (
-                <>Want it at the right price?{" "}
+                <>Want a price-drop alert too?{" "}
                 <button type="button" onClick={toggleWatch} disabled={pending} className="text-gold hover:underline disabled:opacity-40">
-                  Watch the price
-                </button>{" "}and we&rsquo;ll track it for you.</>
+                  Turn on alerts
+                </button>{" "}and we&rsquo;ll tell you when it dips below the typical resale price.</>
               )}
             </p>
           )}
@@ -181,13 +181,13 @@ export default function BagActions({
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted">
-              Save it to your closet, or watch the price and we&rsquo;ll track it for you.
+              Save it to your closet, and we&rsquo;ll alert you when it dips below the typical resale price.
             </p>
             <Link
-              href="/login"
+              href={`/signup?next=/bag/${variantId}`}
               className="shrink-0 rounded-full bg-gold px-5 py-2.5 text-center text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
             >
-              Log in to save
+              Create account
             </Link>
           </div>
           {(buyCta || sellCta) && (

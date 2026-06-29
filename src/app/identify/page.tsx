@@ -505,7 +505,7 @@ export default function IdentifyPage() {
               <Link href="/authenticate" className="transition-colors hover:text-gold-soft">
                 Get it checked by a pro &rarr;
               </Link>
-              <Link href="/posts" className="transition-colors hover:text-gold-soft">
+              <Link href="/articles" className="transition-colors hover:text-gold-soft">
                 Read the authentication guides &rarr;
               </Link>
             </div>

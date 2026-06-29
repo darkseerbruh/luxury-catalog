@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import type { StyleVariantOption } from "@/lib/queries";
+import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 
 /**
  * Amazon-style dimensional variant selector. Instead of one flat list of every
@@ -69,11 +70,15 @@ export default function VariantSelector({
   styleName,
   variants,
   currentVariantId,
+  savedVariantIds = [],
 }: {
   styleName: string;
   variants: StyleVariantOption[];
   currentVariantId: number;
+  /** Variant ids already on the user's want list, for the pre-filled heart. */
+  savedVariantIds?: number[];
 }) {
+  const saved = new Set(savedVariantIds);
   const router = useRouter();
   const current = variants.find((v) => v.variantId === currentVariantId) ?? variants[0];
 
@@ -98,6 +103,7 @@ export default function VariantSelector({
   return (
     <section className="rounded-2xl border border-border bg-surface/50 px-5 py-4">
       <h2 className="font-serif text-lg text-foreground">Choose your {styleName}</h2>
+      <p className="mt-0.5 text-xs text-muted">Tap to switch, or tap the heart to save any of them.</p>
       <div className="mt-3 flex flex-col gap-4">
         {dims.map(({ dim, values }) => {
           const currentVal = dim.get(current);
@@ -109,18 +115,7 @@ export default function VariantSelector({
               <div className="flex flex-wrap gap-2">
                 {values.map((value) => {
                   const active = value === currentVal;
-                  const target = resolveTarget(variants, current, dim, value);
-                  if (active) {
-                    return (
-                      <span
-                        key={value}
-                        aria-current="true"
-                        className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
-                      >
-                        {value}
-                      </span>
-                    );
-                  }
+                  const target = active ? currentVariantId : resolveTarget(variants, current, dim, value);
                   if (target == null) {
                     return (
                       <span
@@ -133,15 +128,30 @@ export default function VariantSelector({
                     );
                   }
                   return (
-                    <Link
-                      key={value}
-                      href={`/bag/${target}`}
-                      prefetch
-                      scroll={false}
-                      className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                    >
-                      {value}
-                    </Link>
+                    <span key={value} className="inline-flex items-center gap-1">
+                      {active ? (
+                        <span
+                          aria-current="true"
+                          className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
+                        >
+                          {value}
+                        </span>
+                      ) : (
+                        <Link
+                          href={`/bag/${target}`}
+                          prefetch
+                          scroll={false}
+                          className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                        >
+                          {value}
+                        </Link>
+                      )}
+                      <QuickSaveHeart
+                        variantId={target}
+                        initialSaved={saved.has(target)}
+                        source="variant-selector"
+                      />
+                    </span>
                   );
                 })}
               </div>

@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-3xl text-foreground">Privacy policy</h1>
-      <p className="mt-2 text-sm text-muted">Last updated June 22, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated June 26, 2026</p>
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-muted">
         <p>
@@ -63,6 +63,29 @@ export default function PrivacyPage() {
         </section>
 
         <section className="space-y-3">
+          <h2 className="font-serif text-xl text-foreground">Affiliate links and tracking</h2>
+          <p>
+            Some links to retailers and resale marketplaces are affiliate links. If you click one and
+            make a purchase, we may earn a commission at no extra cost to you. We always say so on the
+            page where these links appear.
+          </p>
+          <p>
+            To credit those purchases, our affiliate partners and the networks they use set their own
+            third-party cookies or similar identifiers in your browser when you click out to a merchant.
+            Partners and networks we work with include the eBay Partner Network, Impact, CJ (Commission
+            Junction), Awin, and Skimlinks, among others. These are{" "}
+            <span className="text-foreground">separate from our own analytics</span>, which stay
+            privacy-first and cookieless by default. The affiliate partners process the data they collect
+            under their own privacy policies, and we do not control those cookies.
+          </p>
+          <p>
+            You can limit this tracking by declining non-essential cookies in our consent notice, using
+            your browser&rsquo;s cookie controls, or sending a Global Privacy Control (GPC) signal, which
+            we honor.
+          </p>
+        </section>
+
+        <section className="space-y-3">
           <h2 className="font-serif text-xl text-foreground">Your choices and rights</h2>
           <ul className="list-disc space-y-2 pl-5">
             <li>
@@ -90,7 +113,7 @@ export default function PrivacyPage() {
 
         <section className="space-y-3">
           <h2 className="font-serif text-xl text-foreground">Contact</h2>
-          <p>Questions or requests: hello@luxurycatalog.com.</p>
+          <p>Questions or requests? Email hello@luxurycatalog.com.</p>
         </section>
 
         <p className="text-muted/70">

@@ -12,6 +12,131 @@ shapes + legal posture). Last updated 2026-06-22.
 
 ---
 
+## 0. Capture standard (owner rule, 2026-06-28) — one complete pass, every surface
+
+**Rule:** the moment we have a list of styles/bags we care about (e.g. a brand add, a
+backbone expansion, a hero list), we do the FULL capture in one go — never stop at
+names and "get prices later," never make her ask for a pass. "Get everything once so
+queries stay minimal." A `price_history` row already holds price **+** colour, material,
+hardware, year, condition, region, source URL, so one capture = all attributes.
+
+**The one-pass sequence (do all four, in order, for the target list):**
+1. **Scaffold variants** — `scaffold-variants.ts "<Brand>" "<Style>" <sizes…> --write`.
+   *Required first:* `load:prices` DROPS any observation whose style has zero variants.
+   New backbone styles land variant-less, so this step is what made the 2026-06-28
+   brand add stop at names. Chain it, don't defer it.
+2. **Capture across EVERY available source** into the landing zone (not one, then another
+   later) — see the surface map below.
+3. **`load:prices -- <source> --write`** for each source (resolves brand→style→variant,
+   attaches per-listing specs; idempotent).
+4. **`summary:refresh`** so bag pages update.
+
+### 0a. STRATEGY (locked 2026-06-28): browser-gathering only, Firecrawl engine
+
+The API/affiliate doors are shut, so capture leans **exclusively on browser gathering**:
+- **eBay Developer Program — REJECTED.** No Browse API, no Marketplace Insights. Dead as a
+  data source. (eBay sold *could* be browser-scraped but is counterfeit-noisy on Hermès; low priority.)
+- **No affiliate program accepted** (Skimlinks/CJ/Impact/Awin all rejected or pending), so
+  **no product datafeeds** — which also means **no licensed image pipeline** yet (prices/specs
+  we can gather as facts; their photos we still cannot use — locked rule).
+- **Firecrawl is the engine** (account added 2026-06-28). Verified 2026-06-28: a Firecrawl
+  `scrape` with JSON schema defeated **TheRealReal's bot-block** (HTTP 200, 16 structured
+  Goyard Saint Louis listings: price + size + year + URL) with **no logged-in session and no
+  key** — so the sources that previously needed a babysat Claude-in-Chrome session are now
+  **cron-able**. Firecrawl `monitor` (recurring scrape that diffs each run) is the native
+  fit for our dual goal below.
+
+**Dual purpose of the recurring capture:** (1) build the **price-over-time history** (a dated
+snapshot each run) AND (2) **keep current listings fresh + accurate** — a listing whose
+`listing_ref` stops appearing is sold/pulled (mark it; derive days-on-market), and prices
+update in place. One job, both jobs.
+
+### 0b. Source registry (comprehensive — keep this current)
+
+*Tiering: prices are facts (store `source_url`, never their photos/descriptions); refer/feature
+only behind the trust gate in `docs/trusted-resellers.md`. Capture is separate from referral.*
+
+| Source | Reach via | Specs | Notes |
+|---|---|---|---|
+| **Fashionphile** | Shopify `products.json` (server fetch, no Firecrawl) | full | already live; cheapest, keep direct |
+| **TheRealReal** | Firecrawl scrape (JS, stealth) | richest (JSON-LD detail) | bot-blocked to plain fetch; proven 2026-06-28 |
+| **Vestiaire Collective** | Firecrawl scrape (`__NEXT_DATA__`) | rich + **region/currency** | best cross-border signal |
+| **Rebag** | Firecrawl scrape | full | large US |
+| **The Luxury Closet** | Firecrawl scrape | full | Dubai, broad |
+| **1stDibs** | Firecrawl scrape | vintage/high-end | uncovered by any affiliate |
+| **StockX** | Firecrawl scrape | hyped/collab + sold | streetwear-luxe crossover |
+| **myGemma** | Firecrawl scrape (Awin pending) | bags/jewelry/watches | |
+| **Redeluxe** ⭐ | Shopify `products.json` | full | flagship reseller, creator partner (Georgia Swain); mid-tier coverage the giants miss |
+| **Couture USA** | Shopify `products.json` | full | open feed verified; vet trust before *referral* |
+| **Yoogi's Closet** | Firecrawl / site feed | full | trusted since 2008 |
+| **Madison Avenue Couture** | Firecrawl scrape | Hermès/Chanel only | consignment; niche |
+| **Sellier Knightsbridge** (UK) | Firecrawl scrape | full | UK pricing |
+| **Luxe Collective / Luxe Du Jour** | Firecrawl scrape | full | UK / own programs |
+| **Wayback (CDX)** | server fetch | historical asking | partial backfill of the *past* |
+| **Auction archives** | server fetch | historical realized | high-end |
+| **MSRP** | curated dataset | retail anchor | |
+
+**Vet-before-referral (capture OK, do not link until trust-gated):** HER Authentic, The Luxury
+Savvy, Handbag Sense, Mightychic, FashioNica, CODOGIRL, Dallas Designer Handbags.
+**Never:** Julia Rose Boston (reputation red flags), replica programs, Privé Porter (IG-DM only,
+no feed). **Defunct:** Cudoni.
+
+### 0c. To automate on a schedule — what's needed (owner inputs)
+
+1. **`FIRECRAWL_API_KEY` in Vercel env** (and locally for testing) — the only secret. Set via the
+   Vercel UI (no .env editing). The in-session Firecrawl MCP can't run a deployed cron.
+2. **A credit budget + cadence ceiling.** Firecrawl bills credits (the TRR search page = 5). Detail
+   scrapes (for colour/material/condition) cost more per listing. The breadth × depth × frequency
+   must fit her plan. Recommended default: **hero/T1 daily, the long tail weekly**, detail-scrape
+   only top-N per style.
+3. **Go-ahead to switch the recurring job on** (a standing external job that spends credits nightly —
+   owner-gated like any standing/paid config). Mechanism: Firecrawl `monitor` per source, OR a Vercel
+   Cron route (`/api/cron/capture`) → Firecrawl → parse → load → `summary:refresh` → reconcile freshness.
+
+**Still true regardless of engine:** completeness is capped by what each page exposes (null where the
+source is silent, never invented); search pages give price+size+year, detail pages give colour/material/
+condition; run captures from the **Data lane**, not mixed into UX work.
+
+### 0d. Firecrawl cost model (evidence 2026-06-28; re-confirm at signup)
+
+**Credit cost (verified by observation):** a plain scrape (markdown/rawHtml) = **1 credit/page**;
+a **`json`/LLM-extract scrape = 5 credits/page**. So the #1 cost lever: **scrape raw + parse with our
+OWN adapters (trr.ts/vestiaire/fashionphile) = 1 credit**, never pay 5 for Firecrawl's LLM extract.
+Monitor = 1 credit/page/check. Credits **don't roll over** (size to monthly need).
+**Plans (firecrawl.dev/pricing + corroborated):** Free 1k/mo $0 · Hobby 5k/mo **$16** · Standard 100k/mo
+**$83** · Growth 500k/mo **$333** · Scale 1M/mo **$749** ($599 billed yearly; ~17-20% off annual).
+
+**Catalog scale (DB, 2026-06-28):** 27 brands · 431 styles · 366 with variants · 804 variants.
+**Free sources (0 Firecrawl credits):** Fashionphile, Redeluxe, Couture USA (open Shopify feeds).
+
+**Cost model** (1 search-page scrape per style×source returns many listings; detail-scrape only NEW
+listings for colour/material; assume ~6 Firecrawl sources, parse-ourselves = 1 credit):
+
+| Design | Recurrence | ~Credits/mo | Plan | $/mo |
+|---|---|---|---|---|
+| Pilot (≈25 hero styles, search-only) | daily | ~4.5k | Hobby | $16 |
+| **Steady (≈60 hero+T1, search daily + new-listing detail weekly)** | daily+weekly | ~13k | Standard | **$83** |
+| Broad (all ~366 styles search daily + detail weekly) | daily+weekly | ~70k | Standard | $83 |
+| Aggressive (all styles × 8 srcs, per-listing detail DAILY) | daily | ~800k+ | Growth/Scale | $333+ |
+
+**Takeaway:** even *broad* daily coverage fits the **$83 Standard** plan if we parse ourselves and
+detail-scrape only new listings. Budget blows up only via LLM-extract (5×) or daily per-listing detail.
+
+**MEASURED (live CI run 2026-06-28, TheRealReal):** the 1-credit ideal does NOT hold for TRR — its
+product pages ERR_ABORT the cheap proxy ~half the time, so we retry on the stealth proxy, and a Goyard
+Saint Louis run of 20 listings cost **57 credits (~2.85/listing)** + 1 for the search. Real TRR burn ≈
+**3× the parse-ourselves ideal.** Revised: a daily pilot of even ~10 styles × ~20 listings ≈ ~17k
+credits/mo, which **exceeds the free 1k tier** and points at **Standard ($83) sooner than the table
+implies.** Free-tier validation must stay tiny (1 style/day, low `--limit`). Cost levers: detail-scrape
+only NEW `listing_ref`s (not all, daily), cap `--limit`, lean on the 0-credit Shopify feeds (Fashionphile,
+Redeluxe, Couture USA) for breadth and reserve Firecrawl for the bot-blocked sources.
+
+**PROVEN LIVE 2026-06-28:** GitHub Actions `firecrawl-capture.yml` → `firecrawl-trr.ts` → `load:prices`
+→ `summary:refresh` ran green in CI and wrote real multi-source asking data (Goyard Saint Louis PM:
+Fashionphile n=89 $2,465 median + TheRealReal n=20 $2,065 median). Daily cron is live (`23 6 * * *`).
+
+---
+
 ## 1. What this is
 
 Pull **real** bag + price data from the internet into the catalog. Resale value is
@@ -117,9 +242,9 @@ Each new source = a parser to the shared `PriceObservation` contract + a target 
 
 | Thing | Status | Env var |
 |---|---|---|
-| **Skimlinks** (auto-affiliate, revenue) | ✅ live (script in layout) | `NEXT_PUBLIC_SKIMLINKS_ID` (defaults to `305125X1793317`) + `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` |
-| **Fashionphile / Impact** (5% + datafeed) | applied, awaiting approval | `NEXT_PUBLIC_AFFILIATE_FASHIONPHILE` |
-| **Rebag / CJ** (7%) | blocked — CJ signup flaky; retry or use Skimlinks | `NEXT_PUBLIC_AFFILIATE_THEREALREAL/…` |
+| **Skimlinks** (auto-affiliate, revenue) | ❌ **REJECTED 2026-06-25** ("site not suitable at this time" — generic, no specific fault; they re-evaluate). Likely cause = thin PUBLISHED content + low traffic (17 articles still drafts). Reapply after publishing a content batch. Script still in layout but earns nothing until approved. | `NEXT_PUBLIC_SKIMLINKS_ID` (defaults to `305125X1793317`) + `NEXT_PUBLIC_AFFILIATE_WRAP_TEMPLATE` |
+| **Fashionphile / Impact** (5% + datafeed) | applied, awaiting approval (same content gate likely applies) | `NEXT_PUBLIC_AFFILIATE_FASHIONPHILE` |
+| **Rebag / CJ** (7%) | blocked — CJ signup flaky; retry after publishing (Skimlinks fallback is gone) | `NEXT_PUBLIC_AFFILIATE_THEREALREAL/…` |
 | **eBay Browse API** (current resale) | dev account pending (~1 day) | `EBAY_APP_ID`, `EBAY_CERT_ID` |
 | **eBay Marketplace Insights** (sold) | gated — Application Growth Check | — |
 | **LLM enrichment** | ready | `ANTHROPIC_API_KEY` |
@@ -274,7 +399,7 @@ the 5th revenue stream in `monetization-projections.md`.
 | **Vivrelle** | **ShareASale = Awin** (existing acct 2945769) | **~20%/sale** | Membership rental ($139–339/mo; Privée $800/mo). High rate; recurring. ⭐ best rental fit. |
 | **Rent the Runway** | **Skimlinks** (network 4419) + FlexOffers | **7%**, 30-day cookie | Covered by the Skimlinks catch-all. |
 
-**Gating (owner's call, 2026-06-24):** **apply to and get approved for the rental programs BEFORE building the bag-page "Rent it first" CTA** — same "after approval, not before" pattern as the Skimlinks install. **Status: ✅ owner applied to Vivrelle (Awin) 2026-06-24** + **BriteCo** (insurance, Awin). Rent the Runway rides the Skimlinks catch-all once Skimlinks approves. Only after a program approves: spec + build the rental CTA module (held until then).
+**Gating (owner's call, 2026-06-24):** **apply to and get approved for the rental programs BEFORE building the bag-page "Rent it first" CTA** — same "after approval, not before" pattern as the Skimlinks install. **Status: owner applied to Vivrelle (Awin) 2026-06-24, still PENDING as of 2026-06-27** (Awin dashboard shows Vivrelle with n/a Approval Rate / Conversion / EPC and a 29/07/25 launch date, i.e. a live-but-dormant, low-volume program, links healthy but no application/sales activity to compute from). **myGemma** (Approval 100%) + **BriteCo** (Approval 62.32%) are the actively-processing pending programs by comparison. **To unblock: founder sent a direct LinkedIn intro to Vivrelle VP of Marketing Sophie Krakowski (owns partnerships) on 2026-06-27** rather than wait on the dormant Awin queue; fallback contact Caroline Shasha (Content & Marketing Manager, influencer outreach). She also emailed the Vivrelle advertiser via Awin's contact-advertiser on 2026-06-27 (second parallel channel, in case the LinkedIn intro stalls). Also relevant leverage: she is a long-time Vivrelle member, currently paused (an authentic warm-customer angle for the pitch, not just a cold outreach). Rent the Runway rides the Skimlinks catch-all once Skimlinks approves. Only after a program approves: spec + build the rental CTA module (held until then).
 
 **Consignor-affiliate dig — Fashionphile / Rebag / Luxury Closet all ❌ (researched 2026-06-24).**
 Confirmed none has a consignor/seller-referral *affiliate* beyond its buyer-side program — **TRR Real

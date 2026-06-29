@@ -302,10 +302,16 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   pick the one that fits the thought:
   - aside or pause → comma ("Photograph any bag, and we check it against the markers")
   - hard stop / two ideas → period or semicolon ("Track what you own. Watch it grow.")
-  - setup → payoff → colon ("What it's worth: the real resale range, dated and sourced.")
+  - setup → payoff → colon ("What it's worth: The real resale range, dated and sourced.")
   *(The one deliberate exception is the tagline "Know what it's worth — and what
   it's worth to you," which keeps its dash by owner decision. Everything else obeys
   the rule.)*
+- **Capitalize the first word after a colon (locked 2026-06-26).** In any
+  user-facing copy, the word right after a colon starts with a capital letter
+  ("What it's worth: The real range," "Look up any designer bag: Real prices").
+  Applies everywhere copy ships: headings, labels, taglines, metadata, error
+  strings. (A label like "Brand: Chanel" already complies since the value is a
+  proper noun.)
 - **AI-slop tells:** see §8.
 
 ---

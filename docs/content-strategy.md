@@ -42,7 +42,63 @@ authentication needs sourcing; mid-tier needs data capture.**
 | **Coach authentication** (brand/SEO wedge) | M | H+ | ❌ needs sourcing | Med | 2 |
 | **Market/trend** (most coveted / appreciating / best deals) → `/coveted`, `/deals` | M | M | ✅ | Low | 2 |
 | **Mid-tier value** (Coach/MK) | M | M | ❌ needs eBay/Poshmark capture | Med | 3 |
-| **"Buy vs rent a [bag]"** (rental fork) | M | M | 🟡 rental CTA built; Vivrelle approval pending | Med | 3 |
+| **"Buy vs rent a [bag]"** (rental fork) | M | M | ✅ write as framework now (owner 2026-06-26: Vivrelle approval does NOT block useful content; wire affiliate when a code lands) | Med | 2 |
+
+## The comparison / "worth it" value bar (locked 2026-06-26)
+
+"X vs Y" and "is it worth it" pieces match high-intent search, but **do NOT farm thin ones.**
+A piece ships only if it gives the reader a **real decision aid on at least one meaningful axis**,
+not just a number gap. Meaningful axes (locked 2026-06-26, owner pushback):
+- **price** (a non-obvious finding, e.g. Birkin = Kelly size-for-size; the small-size premium), OR
+- **fit / capacity** (what actually fits, day-to-day usability), OR
+- **durability / wear** (how each ages and holds up), OR
+- **use-case / who it suits**, OR
+- it is a **genuinely high-stakes or high-volume decision** where even a clear answer helps a lot.
+
+**Strong comparison type to mine: two closely-priced bags, often across brands, that serve the
+same purpose** (e.g. similar-price totes or flaps from different houses). Same price, different
+trade-offs is exactly the decision a buyer agonizes over.
+
+What fails: a piece whose only content is "two numbers that are close" with nothing on fit, wear,
+or use. That is a **data point, not an article.** (So small-vs-same-size pieces need a real
+fit/use finding to clear the bar; Marmont small vs medium only ships if it genuinely covers what
+each fits and suits, not just price.) Reason: our moat is being the cited original-data authority;
+thin near-duplicate pages get downweighted by Google's helpful-content system and AI search and
+dilute that authority. A few deep pieces beat dozens of shallow ones. The self-updating +
+shoppable north star makes substantive comparisons compound; it does not rescue thin ones.
+
+## Future: rental-market intelligence (Vivrelle) — recorded 2026-06-26
+
+Owner idea, not now. Subscribe to Vivrelle and **pull their catalog on a schedule** to measure
+**availability depth and rental velocity**, not just whether a bag is listed but whether it is
+ever actually available (a listed-but-never-available Birkin is the example). Output: original
+"findings" articles + an evaluative tool for prospective subscribers (nobody else publishes this).
+**Owner's hypothesis to TEST, not assert:** Vivrelle's selection skews cast-offs (older / less
+desirable) and the marquee bags are rarely available; she is a longtime user and *wants data that
+could prove her wrong.* Frame any finding as evidence, never a verdict, and never disparage
+without the data. Needs: a paid subscription + a scheduled catalog pull (browser or API).
+
+## Mined article ideas + the keyword-data reality (2026-06-26)
+
+**Keyword tooling honesty:** we have NO search-volume tool. WebSearch returns results, not
+volume; never quote a volume we can't source. **Real demand data = Google Search Console**
+(the queries already driving impressions to the live site; owner has it, submitted the sitemap)
+and **Google Trends** (relative interest only). **Operator action to unlock real targeting:**
+export the GSC "Performance → Queries" report and hand it over, then we write to actual demand.
+What we can do without it: qualitative intent-mining (competitor headlines + question patterns).
+
+Mined from intent (all must respect never-invent: NO appreciation/retention/"investment return"
+claims, NO unsourced retail; lean on current-asking data + authentication authority):
+- **⭐ "Are designer bags actually a good investment? The honest answer."** Huge crowded category,
+  but rivals recycle appreciation stats ("retains 136%", "+93% since 2020", "14.2% annual return")
+  we cannot make. Our wedge = honesty + real current prices: classics hold up better than most
+  fashion, but treat value as buy-what-you-love, not a guaranteed return (estimate-not-appraisal;
+  aligns with the no-investment-framing compliance stance). Standout next piece.
+- **Cross-brand entry matchup** (the owner's "closely-priced across brands" type): e.g. Gucci
+  Marmont vs LV Neverfull vs LV Speedy, ~$900–$1,600 entry tier, decided on fit/use/durability,
+  not price. Clears the value bar on multiple axes.
+- **"The cheapest way into each luxury house on resale"** — entry points by brand, current asking
+  data (Neverfull/Speedy/Marmont + entry Chanel/Dior). Data the listicles lack.
 
 ## Operating rules
 - **Lead with Tier 1** (overlap of highest monetization × ready today — our data moat,

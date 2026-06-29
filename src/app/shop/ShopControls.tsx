@@ -2,11 +2,12 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { FAMILY_PREFIX, type ShopSort, type ShopFacets, type Facet, type GroupedFacet } from "@/lib/listings";
+import { track, EVENTS } from "@/lib/analytics/events";
 
 const SORTS: { value: ShopSort; label: string }[] = [
   { value: "best-deal", label: "Best deal first" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
+  { value: "price-asc", label: "Price: Low to high" },
+  { value: "price-desc", label: "Price: High to low" },
 ];
 
 const selectClass =
@@ -158,6 +159,16 @@ export default function ShopControls({ facets, current }: { facets: ShopFacets; 
     for (const [k, v] of Object.entries(patch)) {
       if (v == null || v === "") params.delete(k);
       else params.set(k, v);
+    }
+    // Fire catalog_filtered for real filter changes (sort-only changes don't
+    // count) so /shop discovery shows up in the funnel — previously only /search
+    // emitted this event, which is why shop filtering read as zero.
+    const filterKeys = Object.keys(patch).filter((k) => k !== "sort");
+    if (filterKeys.length > 0) {
+      track(EVENTS.catalogFiltered, {
+        source: "shop",
+        ...Object.fromEntries(filterKeys.map((k) => [`filter_${k}`, patch[k] ?? "cleared"])),
+      });
     }
     const qs = params.toString();
     router.push(qs ? `/shop?${qs}` : "/shop");

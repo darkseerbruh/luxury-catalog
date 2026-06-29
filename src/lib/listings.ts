@@ -247,7 +247,7 @@ function isListed(r: PriceRow): boolean {
 /**
  * Collapse repeat observations of the same listing into one. A re-crawl writes a fresh
  * dated row per listing each time, so a bag live for N crawls would otherwise count N
- * times and show a stale price. Keep the most recent observation per (platform,
+ * times and surface an older observation as the current price. Keep the most recent per (platform,
  * listing_ref); rows without a listing_ref are left as-is (can't be safely merged).
  */
 function dedupeByListing(rows: PriceRow[]): PriceRow[] {

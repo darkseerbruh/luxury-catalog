@@ -1,13 +1,19 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
+import { safeNext } from "@/lib/safe-next";
 import AuthForm from "../login/AuthForm";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Sign up · The Luxury Catalog" };
 
-export default async function SignupPage() {
-  if (await getCurrentUser()) redirect("/closet");
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const next = safeNext((await searchParams).next) ?? undefined;
+  if (await getCurrentUser()) redirect(next ?? "/closet");
 
   return (
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-5 py-16">
@@ -16,7 +22,7 @@ export default async function SignupPage() {
         Build a closet, watch what prices do, and help shape the catalog. The
         catalog itself is always free.
       </p>
-      <AuthForm mode="signup" />
+      <AuthForm mode="signup" next={next} />
     </main>
   );
 }

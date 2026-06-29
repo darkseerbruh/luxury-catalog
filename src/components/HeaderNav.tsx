@@ -13,6 +13,8 @@ type NavLink = {
   cta?: boolean;
 };
 
+type BrandGroup = { label: string; brands: { brandId: number; name: string }[] };
+
 /** A top-level item that is itself a link but also reveals a dropdown. */
 const SHOP_MENU: NavLink[] = [
   { href: "/deals", label: "Deals" },
@@ -22,8 +24,17 @@ const SHOP_MENU: NavLink[] = [
 
 const DISCOVER_MENU: NavLink[] = [
   { href: "/identify", label: "Identify" },
-  { href: "/quiz", label: "Quiz" },
-  { href: "/posts", label: "Articles" },
+  { href: "/quiz", label: "Style read" },
+  { href: "/articles", label: "Articles" },
+];
+
+/** Signed-in account surfaces, tucked under the Profile dropdown to keep the
+ *  top-level row short. Alerts carries the unread badge. */
+const PROFILE_MENU: NavLink[] = [
+  { href: "/feed", label: "Feed" },
+  { href: "/closet", label: "Closet" },
+  { href: "/watchlist", label: "Watchlist" },
+  { href: "/notifications", label: "Alerts" },
 ];
 
 const pillBase =
@@ -49,6 +60,26 @@ function Caret() {
   );
 }
 
+function SearchIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="M21 21l-4.3-4.3" />
+    </svg>
+  );
+}
+
 /**
  * Header navigation.
  *
@@ -61,9 +92,14 @@ function Caret() {
 export default function HeaderNav({
   signedIn,
   unread,
+  brandGroups = [],
+  covetedReady = false,
 }: {
   signedIn: boolean;
   unread: number;
+  brandGroups?: BrandGroup[];
+  /** Show the "Coveted" entry only once there's enough want-signal (content gate). */
+  covetedReady?: boolean;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -91,15 +127,13 @@ export default function HeaderNav({
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const accountLinks: NavLink[] = signedIn
-    ? [
-        { href: "/feed", label: "Feed" },
-        { href: "/closet", label: "Closet" },
-        { href: "/watchlist", label: "Watchlist" },
-        { href: "/notifications", label: "Alerts", badge: unread },
-        { href: "/profile", label: "Profile" },
-      ]
-    : [{ href: "/login", label: "Log in", cta: true }];
+  // "Coveted" (most-coveted bags) stays hidden until there's enough want-signal.
+  const shopMenu = SHOP_MENU.filter((l) => l.href !== "/coveted" || covetedReady);
+
+  // Alerts badge follows the Alerts item inside the Profile dropdown.
+  const profileMenu: NavLink[] = PROFILE_MENU.map((l) =>
+    l.href === "/notifications" ? { ...l, badge: unread } : l,
+  );
 
   const close = () => setOpen(false);
 
@@ -118,7 +152,7 @@ export default function HeaderNav({
           </Link>
           <div className="invisible absolute left-0 top-full z-20 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
             <div className="flex min-w-40 flex-col gap-1 rounded-2xl border border-border bg-bg/95 p-2 shadow-lg backdrop-blur-sm">
-              {SHOP_MENU.map((l) => (
+              {shopMenu.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
@@ -131,7 +165,52 @@ export default function HeaderNav({
           </div>
         </div>
 
-        {/* Search — reveals an inline query box */}
+        {/* Brands — clickable, with a tier-grouped mega-menu */}
+        {brandGroups.length > 0 && (
+          <div className="group relative">
+            <Link
+              href="/brands"
+              className={`${pillBase} ${isActive("/brand") || isActive("/brands") ? pillActive : ""} inline-flex items-center`}
+            >
+              Brands
+              <Caret />
+            </Link>
+            <div className="invisible absolute left-0 top-full z-20 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="w-[34rem] max-w-[90vw] rounded-2xl border border-border bg-bg/95 p-4 shadow-lg backdrop-blur-sm">
+                <div className="grid grid-cols-3 gap-x-5 gap-y-4">
+                  {brandGroups.map((group) => (
+                    <div key={group.label}>
+                      <p className="text-xs uppercase tracking-widest text-muted/70">
+                        {group.label}
+                      </p>
+                      <div className="mt-2 flex flex-col gap-1">
+                        {group.brands.map((b) => (
+                          <Link
+                            key={b.brandId}
+                            href={`/brand/${b.brandId}`}
+                            className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                          >
+                            {b.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  href="/brands"
+                  className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
+                >
+                  All brands →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Search — a click-into field (not an outline pill): it reads as a
+            search box, with a magnifier + muted placeholder, and expands to a
+            real input on click. */}
         <div className="relative flex items-center">
           {searchOpen ? (
             <form action="/search" method="GET" className="flex items-center gap-1">
@@ -141,16 +220,18 @@ export default function HeaderNav({
                 type="search"
                 placeholder="Search bags…"
                 onBlur={() => setSearchOpen(false)}
-                className="w-48 rounded-full border border-gold bg-surface px-4 py-1.5 text-sm text-foreground placeholder:text-muted focus:outline-none"
+                className="w-52 rounded-full border border-gold bg-surface px-4 py-1.5 text-sm text-foreground placeholder:text-muted focus:outline-none"
               />
             </form>
           ) : (
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className={`${pillBase} inline-flex items-center`}
+              aria-label="Search bags"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
             >
-              Search
+              <SearchIcon className="flex-shrink-0" />
+              <span>Search bags</span>
             </button>
           )}
         </div>
@@ -181,25 +262,51 @@ export default function HeaderNav({
           </div>
         </div>
 
-        {/* Account / auth */}
-        {accountLinks.map((l) => (
+        {/* Account / auth. Signed in: a single Profile entry (clickable →
+            /profile) that tucks Feed · Closet · Watchlist · Alerts into a
+            dropdown, keeping the top-level row short. The Alerts badge is
+            mirrored on the Profile trigger so unread isn't buried. */}
+        {signedIn ? (
+          <div className="group relative">
+            <Link
+              href="/profile"
+              className={`${pillBase} ${isActive("/profile") ? pillActive : ""} inline-flex items-center`}
+            >
+              Profile
+              <Caret />
+              {unread > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              )}
+            </Link>
+            <div className="invisible absolute right-0 top-full z-20 pt-2 opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="flex min-w-44 flex-col gap-1 rounded-2xl border border-border bg-bg/95 p-2 shadow-lg backdrop-blur-sm">
+                {profileMenu.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                  >
+                    <span>{l.label}</span>
+                    {l.badge != null && l.badge > 0 && (
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
+                        {l.badge > 9 ? "9+" : l.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
           <Link
-            key={l.href}
-            href={l.href}
-            className={
-              l.cta
-                ? "rounded-full bg-gold px-4 py-1.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-                : `${pillBase} ${isActive(l.href) ? pillActive : ""}`
-            }
+            href="/login"
+            className="rounded-full bg-gold px-4 py-1.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
           >
-            {l.label}
-            {l.badge != null && l.badge > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
-                {l.badge > 9 ? "9+" : l.badge}
-              </span>
-            )}
+            Log in
           </Link>
-        ))}
+        )}
       </nav>
 
       {/* Mobile: hamburger toggle */}
@@ -253,7 +360,7 @@ export default function HeaderNav({
             >
               Shop
             </Link>
-            {SHOP_MENU.map((l) => (
+            {shopMenu.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -263,6 +370,17 @@ export default function HeaderNav({
                 {l.label}
               </Link>
             ))}
+
+            {/* Brands — single link to the full directory (keeps the mobile menu lean) */}
+            {brandGroups.length > 0 && (
+              <Link
+                href="/brands"
+                onClick={close}
+                className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold"
+              >
+                Brands
+              </Link>
+            )}
 
             {/* Discover section */}
             <p className="mt-2 px-3 pt-1 text-xs uppercase tracking-wide text-muted/70">
@@ -281,25 +399,40 @@ export default function HeaderNav({
 
             {/* Account section */}
             <div className="mt-2 border-t border-border pt-2" />
-            {accountLinks.map((l) => (
+            {signedIn ? (
+              <>
+                <Link
+                  href="/profile"
+                  onClick={close}
+                  className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold"
+                >
+                  Profile
+                </Link>
+                {profileMenu.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={close}
+                    className="flex items-center justify-between rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                  >
+                    <span>{l.label}</span>
+                    {l.badge != null && l.badge > 0 && (
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
+                        {l.badge > 9 ? "9+" : l.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </>
+            ) : (
               <Link
-                key={l.href}
-                href={l.href}
+                href="/login"
                 onClick={close}
-                className={
-                  l.cta
-                    ? "mt-1 rounded-full bg-gold px-4 py-2.5 text-center text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-                    : "flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
-                }
+                className="mt-1 rounded-full bg-gold px-4 py-2.5 text-center text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
               >
-                <span>{l.label}</span>
-                {l.badge != null && l.badge > 0 && (
-                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
-                    {l.badge > 9 ? "9+" : l.badge}
-                  </span>
-                )}
+                Log in
               </Link>
-            ))}
+            )}
           </nav>
         </>
       )}

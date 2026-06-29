@@ -12,11 +12,11 @@ export const dynamic = "force-dynamic";
  * No-ops gracefully when SUPABASE_SERVICE_ROLE_KEY is absent.
  */
 export async function GET(request: NextRequest) {
+  // Fail closed: deny unless CRON_SECRET is set AND the bearer token matches.
+  // Vercel Cron auto-sends this header when CRON_SECRET is in the env.
   const secret = process.env.CRON_SECRET;
-  if (secret) {
-    if (request.headers.get("authorization") !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ error: "Not configured" }, { status: 503 });

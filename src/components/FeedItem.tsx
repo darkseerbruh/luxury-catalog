@@ -55,7 +55,7 @@ export function FeedItem({ event }: { event: FeedEvent }) {
         <>
           {actorNode} published{" "}
           {event.postSlug ? (
-            <Link href={`/posts/${event.postSlug}`} className="font-medium text-gold hover:underline">
+            <Link href={`/articles/${event.postSlug}`} className="font-medium text-gold hover:underline">
               {event.postTitle}
             </Link>
           ) : (

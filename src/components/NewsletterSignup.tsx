@@ -41,8 +41,8 @@ export function NewsletterSignup({ className, source }: Props) {
   if (status === "success") {
     return (
       <p className={className ?? ""} aria-live="polite">
-        <span className="text-foreground">You&rsquo;re in</span>
-        <span className="text-muted"> — we&rsquo;ll be in touch.</span>
+        <span className="text-foreground">You&rsquo;re in.</span>
+        <span className="text-muted"> We&rsquo;ll be in touch.</span>
       </p>
     );
   }
@@ -51,7 +51,7 @@ export function NewsletterSignup({ className, source }: Props) {
     <div className={className}>
       <form
         onSubmit={handleSubmit}
-        className="flex max-w-md items-center gap-2"
+        className="flex w-full items-center gap-2"
       >
         <input
           type="email"
@@ -59,19 +59,19 @@ export function NewsletterSignup({ className, source }: Props) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
-          className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
+          className="min-w-0 flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
         <button
           type="submit"
           disabled={status === "pending"}
-          className="rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft disabled:opacity-60"
+          className="shrink-0 whitespace-nowrap rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft disabled:opacity-60"
         >
           Get updates
         </button>
       </form>
       {status === "error" && (
         <p aria-live="polite" className="mt-2 text-sm text-muted">
-          Something went wrong — try again.
+          Something went wrong. Try again.
         </p>
       )}
     </div>

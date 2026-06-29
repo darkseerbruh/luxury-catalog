@@ -60,7 +60,7 @@ flag/`ExperimentExposure` infra already wired into `src/app/page.tsx`.*
 | ID | Single variable | Control | Variant | Primary metric |
 |----|-----------------|---------|---------|----------------|
 | **A1** | The hero / top slot | Tagline + search bar | The goal tiles lead; search demoted to a slim bar inside the hero | % of new sessions that reach any feature destination |
-| **A2** | Hero headline copy (layout frozen) | Value tagline: *"Know what it's worth, and what it's worth to you."* | Utility line: *"Look up any designer bag: real prices, authentication, history."* | Signup rate |
+| **A2** | Hero headline copy (layout frozen) | See A2-live below — now a 3-arm copy test | utility / confidence / manifesto | Hero search-box engagement |
 | **A3** | Tile order (same tiles, same hero) | Money-first (Best deals → What's it worth) | Identity-first (Find the bag → Collect) | Tile-click distribution by persona |
 | **A4** | Sitemap position | Bottom of page | Directly under the goal tiles | Bag pages viewed per session |
 
@@ -68,6 +68,37 @@ flag/`ExperimentExposure` infra already wired into `src/app/page.tsx`.*
 goal-picker (vs. a search-bar hero) will increase the share of *new* visitors who
 reach a feature, because strangers arriving from GEO/social don't yet have a
 specific bag to search. Measured by % of new sessions reaching any tile destination.
+
+### A2-live — headline copy, three arms (shipped 2026-06-26)
+
+The only thing that varies is the H1. There is no subhead in any arm (cut as
+repetitive on 2026-06-26), and the search box is identical across arms, so a lift is
+cleanly attributable to the headline (one-variable rule). **Success metric: engagement
+with the hero search box** (`home_search_engaged`, fired on first focus + on submit),
+read as the funnel `experiment_exposed` → `home_search_engaged` broken down by `variant`.
+
+| Arm | Headline |
+|---|---|
+| `utility` (control) | "Look up any designer bag:" / "Real prices, authentication, & history" (two lines) |
+| `confidence` | "Know any bag before you spend a dollar on it." |
+| `manifesto` | "What's real, what it's worth, and where to buy it smart." |
+
+**Hypothesis:** We believe a more confidence/value-led headline will increase hero
+search-box engagement vs. the utility line, because a new visitor who feels the page
+will *answer their question* is likelier to type one in. Measured by `home_search_engaged`
+rate per impression, by arm.
+
+- **Assignment:** uniform random 3-way split, server-side, **per homepage impression**
+  (cookieless: nothing written to the device, so the unit is the impression, not the
+  person). `src/lib/experiments/home-headline.ts` + `src/components/HomeHero.tsx`.
+- **Why impression-level:** the funnel (see headline → engage search) completes within
+  one homepage view, and the Tier-1 model is cookieless. A reload is a fresh impression.
+  If we later want person-level stats, move assignment to a PostHog multivariate flag
+  (the `evaluatePersonalizationFlag` + bootstrap pattern) once anonymous identity is
+  wired.
+- **QA / pause:** `HOME_HEADLINE_FORCE=utility|confidence|manifesto` pins one arm.
+- **The tagline keeps its home** in `voice-and-tone.md`; this test is the homepage H1
+  only, and the tagline is no longer one of the arms (owner replaced it on the homepage).
 
 ---
 
