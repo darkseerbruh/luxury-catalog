@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getVariantImages, type AttributeBag } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
+import AttributeObjectTracker from "@/components/AttributeObjectTracker";
 
 /** A labelled fact shown in the durability/identity card (leather only today). */
 export interface AttrFact {
@@ -55,6 +56,7 @@ export default async function AttributeObjectPage({ view }: { view: AttributeObj
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
+      <AttributeObjectTracker kind={view.kindLabel} name={view.name} />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">
