@@ -42,6 +42,16 @@ populate it (canon: [analyst-standard.md](analyst-standard.md)).
 
 ---
 
+## TL;DR — homepage redesign: "Priced well today" rail + "It bags of all time" canon (2026-06-29)
+
+UX-lane design session, all landed on `main` (`5454b82..5b48d05`, 8 commits, gates green: tsc/eslint src/next build/482 tests). Developed in worktree `…/luxury-catalog-priced-well` (branch `ux/priced-well-rail`), fast-forwarded to `main`.
+
+- **"Priced well today" rail** (replaces the old Best-deals image carousel): a ⅓-width sidebar beside It bags, image-free, glanceable. Each row = bag name → **big price + "great price"/"good price"** verdict (gated n≥5) → a labeled range bar (**"this listing"** dot vs **"median $X"** tick) → a **"View on <platform>"** outbound button firing `outbound_resale_clicked` (affiliate-attributed via `affiliateListingUrl`). Verdict is a read on **price, not condition** (condition recorded on ~0% of listings — subhead says so). `deals.ts` exposes low/median/high/sampleSize/verdict; **guard drops listings >70% under median** (accessory/mis-grouped noise, e.g. a "$370 Hermès Kelly"). Code: `BestDeals.tsx`, `DealBuyButton.tsx`, `deals.ts`.
+- **"It bags of all time"** rebuilt as a **ranked top-6, image-free, price-led canon** (archivist-validated, **blend lens** = heritage + recognition): Birkin · Kelly · Classic Flap · Speedy · Lady Dior · Neverfull (dropped Coach Tabby/Swagger). Each cell = big gold numeral + house + bag + **typical resale (median) big** + low/high text + sourced hook. `getHeroCarousel` now returns live resale stats per style. Paired with the rail in one two-column section (stacks on mobile).
+- **Bug found + fixed (affected both + any whole-table read): PostgREST caps every response at 1000 rows regardless of `.limit()`.** Both reads were silently computing on a 1000-row slice of ~33.5k. Added `fetchAllRows()` pager (`src/lib/supabase.ts`); true counts jumped (e.g. Birkin resale n 995→1404). **Follow-up spec to retire the per-render full-table scan: [docs/ux/deals-hero-aggregate-spec.md](ux/deals-hero-aggregate-spec.md)** (owner-gated migration: a `variant_price_summary()` SQL function).
+- **Queued (on the slate/worklist):** the **"Why are these the it bags of all time?"** article (archivist top-20 backbone, [content-ideas.md](research-drafts/seasonal-archive/content-ideas.md)) + **3 catalog data-pull gaps** (Balenciaga City, Mulberry Bayswater, Telfar Shopping Bag) in [data-content-worklist.md](data-content-worklist.md), plus a `condition` backfill (chip) so the verdict can become condition-aware.
+- **Your turn (owner-gated):** apply the `variant_price_summary()` migration when you want the perf fix; the article draft + the 3 data pulls are Content/Data-lane jobs.
+
 ## TL;DR — background strategy-analyst agent + first run + wiring fix (2026-06-28)
 
 Built the always-on **product-strategy analyst** (the judgment layer above `analytics-pulse`/`digest`). All on `main`, gates green (tsc/eslint/next build/448 tests).
