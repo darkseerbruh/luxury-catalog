@@ -60,7 +60,7 @@ Built the analytics layer the owner asked for ("dashboards I can read"), worked 
 4. `analytics/instrument-journeys` (stacked on G2) — wires `catalog_filtered` on `/shop`, revives `auth_section_engaged`, adds `article_viewed` + `attribute_object_viewed` + `bags_compared`. No migration.
 5. `feat/premium-fake-door` — premium-tools fake-door on `/watchlist` giving `monetization_interest` a home (~$40/yr M9, grounded in monetization-moments-audit). No migration.
 
-Gates per branch: tsc, **eslint src** (the AGENTS gate; whole-repo `npm run lint` has pre-existing `any` errors in `supabase/ingest/*` from the data lane, not these branches), next build, npm test. **Still open (deliberate):** `inquiry_submitted` has no UI home (needs a lead form — a product decision); `style_viewed` has no style route (retire or repurpose). **DONE 2026-06-29: merged in order #6, #8, #5; #9 already in; #10 closed. Remaining owner action: apply `0035` to the DB.**
+Gates per branch: tsc, **eslint src** (the AGENTS gate; whole-repo `npm run lint` has pre-existing `any` errors in `supabase/ingest/*` from the data lane, not these branches), next build, npm test. **Still open (deliberate):** `inquiry_submitted` has no UI home (needs a lead form — a product decision); `style_viewed` has no style route (retire or repurpose). **DONE 2026-06-29: merged in order #6, #8, #5; #9 already in; #10 closed. The persona migration was renumbered `0035`→`0037_persona_model.sql` (0035 collided with the already-applied `0035_closet_want_spec`). Remaining owner action: run the db-migrate Action to apply `0037`.**
 
 ---
 

@@ -28,7 +28,7 @@ export interface UserProfile {
   id: string;
   displayName: string | null;
   persona: string | null;
-  /** Axis-B motivations (persona model v2). Empty until 0035 is applied + selected. */
+  /** Axis-B motivations (persona model v2). Empty until 0037 is applied + selected. */
   motivations: Motivation[];
   /** Axis-A maturity, derived from behavior. Null until computed. */
   maturityStage: string | null;
