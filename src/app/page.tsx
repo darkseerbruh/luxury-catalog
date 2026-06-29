@@ -7,6 +7,7 @@ import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import PersonaRouter from "@/components/PersonaRouter";
 import BestDeals from "@/components/BestDeals";
+import { getDeals, MIN_DEALS_TO_RENDER } from "@/lib/deals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
@@ -24,12 +25,14 @@ function formatPrice(amount: number | null, currency: string | null) {
 }
 
 export default async function Home() {
-  const [brands, heroCards, user, communityReady] = await Promise.all([
+  const [brands, heroCards, user, communityReady, deals] = await Promise.all([
     getBrandsOverview(),
     getHeroCarousel(),
     getCurrentUser(),
     communityKnowledgeReady(),
+    getDeals(5),
   ]);
+  const hasDeals = deals.length >= MIN_DEALS_TO_RENDER;
   const [closet, feed, tasteRead] = user
     ? await Promise.all([getCloset(), getFeed(8), getSavedTasteIdentity()])
     : [[], [], null];
@@ -105,45 +108,57 @@ export default async function Home() {
 
       <PersonaRouter />
 
-      <BestDeals />
-
       {/* "What the community knows" — gated until there are enough real reviews
           to fill the boards (docs/ux/content-gating-strategy.md). No ghost town. */}
       {communityReady && <CommunityLeaderboards />}
 
-      {heroCards.length > 0 && (
+      {/* It bags + the "Priced well today" research rail, paired. The rail is a ⅓
+          sidebar on large screens and stacks below on mobile; when there are no real
+          deals it drops out and "It bags" reclaims the full width. */}
+      {(heroCards.length > 0 || hasDeals) && (
         <section className="border-b border-border px-5 py-12">
-          <h2 className="font-serif text-2xl text-foreground">
-            It bags of all time
-          </h2>
-          <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
-            {heroCards.map((card) => (
-              <Link
-                key={card.styleId}
-                href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
-                className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-              >
-                <BagImage
-                  imageUrl={card.variantId != null ? images[card.variantId] : null}
-                  brand={card.brandName}
-                  className="mb-3 aspect-[4/3] w-full rounded-xl"
-                />
-                <p className="text-sm uppercase tracking-wide text-muted">
-                  {card.brandName}
-                </p>
-                <p className="mt-1 font-serif text-lg text-foreground">
-                  {card.styleName}
-                </p>
-                {card.sizeLabel && (
-                  <p className="mt-2 text-sm text-muted">{card.sizeLabel}</p>
-                )}
-                {formatPrice(card.priceFrom, card.currency) && (
-                  <p className="mt-3 text-sm text-gold">
-                    From {formatPrice(card.priceFrom, card.currency)} retail
-                  </p>
-                )}
-              </Link>
-            ))}
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+            {heroCards.length > 0 && (
+              <div className="min-w-0 flex-1">
+                <h2 className="font-serif text-2xl text-foreground">
+                  It bags of all time
+                </h2>
+                <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
+                  {heroCards.map((card) => (
+                    <Link
+                      key={card.styleId}
+                      href={card.variantId ? `/bag/${card.variantId}` : `/search?q=${encodeURIComponent(card.styleName)}`}
+                      className="min-w-[220px] max-w-[240px] flex-shrink-0 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
+                    >
+                      <BagImage
+                        imageUrl={card.variantId != null ? images[card.variantId] : null}
+                        brand={card.brandName}
+                        className="mb-3 aspect-[4/3] w-full rounded-xl"
+                      />
+                      <p className="text-sm uppercase tracking-wide text-muted">
+                        {card.brandName}
+                      </p>
+                      <p className="mt-1 font-serif text-lg text-foreground">
+                        {card.styleName}
+                      </p>
+                      {card.sizeLabel && (
+                        <p className="mt-2 text-sm text-muted">{card.sizeLabel}</p>
+                      )}
+                      {formatPrice(card.priceFrom, card.currency) && (
+                        <p className="mt-3 text-sm text-gold">
+                          From {formatPrice(card.priceFrom, card.currency)} retail
+                        </p>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+            {hasDeals && (
+              <div className="lg:w-[320px] lg:flex-shrink-0">
+                <BestDeals deals={deals} />
+              </div>
+            )}
           </div>
         </section>
       )}

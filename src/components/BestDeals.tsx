@@ -1,18 +1,17 @@
 import Link from "next/link";
-import { getDeals } from "@/lib/deals";
-import { getVariantImages } from "@/lib/queries";
-import { BagImage } from "@/components/BagImage";
-import { QuickSaveHeart } from "@/components/QuickSaveHeart";
+import { type Deal, MIN_DEALS_TO_RENDER } from "@/lib/deals";
+import { DealBuyButton } from "@/components/DealBuyButton";
 
 /**
- * "Best deals right now" — its own homepage section (not a single goal tile).
- * Deals deserve a row, not one bag: this shows several current listings priced
- * under their resale median, ranked by the biggest gap.
+ * "Priced well today" — a narrow research rail (paired with "It bags" on the home
+ * page), NOT a bargain carousel. Each row grades a current listing against the bag's
+ * OWN recorded resale range — low / median / high — and links out to the listing.
  *
- * Every figure is a recorded value (current listing vs. recorded median) — never
- * fabricated. Resilient by contract: getDeals returns [] on any missing env /
- * column / query error, and this section renders nothing when there are no deals,
- * so a credential-less or pre-0021 environment simply omits it.
+ * Deliberately image-free: the credibility is the price read, not a photo. The verdict
+ * ("great" / "good") is OUR read of recorded sales, never an appraisal, and is only
+ * shown when there are >= 5 recorded sales (getDeals gates this). Resilient by
+ * contract: getDeals returns [] on any missing env / column / query error, and we
+ * render nothing below the minimum, so a thin or credential-less environment omits it.
  */
 
 function formatPrice(amount: number, currency: string | null): string {
@@ -20,60 +19,93 @@ function formatPrice(amount: number, currency: string | null): string {
   return `${symbol}${amount.toLocaleString()}`;
 }
 
-export default async function BestDeals() {
-  const deals = await getDeals(8);
-  if (deals.length === 0) return null;
+const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
-  const images = await getVariantImages(deals.map((d) => d.variantId));
+export default function BestDeals({ deals }: { deals: Deal[] }) {
+  if (deals.length < MIN_DEALS_TO_RENDER) return null;
 
   return (
-    <section className="border-b border-border px-5 py-12">
-      <div className="flex items-baseline justify-between gap-3">
-        <div>
-          <h2 className="font-serif text-2xl text-foreground">Best deals right now</h2>
-          <p className="mt-1 text-sm text-muted">
-            Current listings priced under their resale median, biggest gap first.
-          </p>
-        </div>
-        <Link
-          href="/shop?deals=1&sort=best-deal"
-          className="flex-shrink-0 text-sm text-muted transition-colors hover:text-gold"
-        >
-          See all deals
-        </Link>
+    <aside
+      aria-label="Priced well today"
+      className="overflow-hidden rounded-2xl border border-border bg-surface"
+    >
+      <div className="border-b border-border px-4 py-3.5">
+        <h2 className="font-serif text-xl text-foreground">Priced well today</h2>
+        <p className="mt-1 text-xs text-muted">
+          Low against the sales we&rsquo;ve recorded. Our read, not an appraisal.
+        </p>
       </div>
 
-      <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
+      <ul>
         {deals.map((d) => {
           const name = [d.brandName, d.styleName].filter(Boolean).join(" ");
+          const under = d.medianPrice - d.currentPrice;
+          const span = d.highPrice - d.lowPrice || 1;
+          const markerPct = clamp(((d.currentPrice - d.lowPrice) / span) * 100, 3, 97);
+          const medianPct = clamp(((d.medianPrice - d.lowPrice) / span) * 100, 3, 97);
+
           return (
-            <div key={d.variantId} className="relative min-w-[200px] max-w-[220px] flex-shrink-0">
-              <QuickSaveHeart variantId={d.variantId} source="deals" className="absolute left-2 top-2 z-10" />
-              <Link
-                href={`/bag/${d.variantId}`}
-                className="block rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-              >
-                <div className="relative">
-                  <BagImage
-                    imageUrl={images[d.variantId]}
-                    brand={d.brandName}
-                    className="mb-3 aspect-square w-full rounded-xl"
-                  />
-                  <span className="absolute right-2 top-2 rounded-full border border-gold/40 bg-bg/90 px-2.5 py-0.5 text-xs font-medium text-gold-soft">
-                    {d.pctUnder}% under
+            <li key={d.variantId} className="border-b border-border px-4 py-3.5">
+              <div className="flex items-center gap-2">
+                {d.verdict && (
+                  <span
+                    className={
+                      d.verdict === "great"
+                        ? "flex-shrink-0 rounded-full bg-gold px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-bg"
+                        : "flex-shrink-0 rounded-full border border-gold/40 bg-surface-raised px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-gold-soft"
+                    }
+                  >
+                    {d.verdict}
                   </span>
-                </div>
-                <p className="truncate font-serif text-lg text-foreground">{name}</p>
-                {d.sizeLabel && <p className="mt-0.5 text-sm text-muted">{d.sizeLabel}</p>}
-                <p className="mt-2 text-sm">
-                  <span className="text-foreground">{formatPrice(d.currentPrice, d.currency)}</span>
-                  <span className="text-muted"> vs. {formatPrice(d.medianPrice, d.currency)} median</span>
-                </p>
-              </Link>
-            </div>
+                )}
+                <Link
+                  href={`/bag/${d.variantId}`}
+                  className="min-w-0 flex-1 truncate font-serif text-sm text-foreground transition-colors hover:text-gold"
+                >
+                  {name}
+                </Link>
+                <span className="flex-shrink-0 font-serif text-sm text-gold-soft">
+                  {formatPrice(d.currentPrice, d.currency)}
+                </span>
+              </div>
+
+              <div
+                className="relative mt-2.5 h-1.5 rounded-full bg-border"
+                role="img"
+                aria-label={`Listed at ${formatPrice(d.currentPrice, d.currency)}, lower than ${d.pctCheaper}% of ${d.sampleSize} recorded sales (range ${formatPrice(d.lowPrice, d.currency)} to ${formatPrice(d.highPrice, d.currency)}, median ${formatPrice(d.medianPrice, d.currency)})`}
+              >
+                <span
+                  className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-muted/70"
+                  style={{ left: `${medianPct}%` }}
+                />
+                <span
+                  className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-soft"
+                  style={{ left: `${markerPct}%` }}
+                />
+              </div>
+
+              <p className="mt-1.5 text-[11px] text-muted/80">
+                {formatPrice(under, d.currency)} under median &middot; n={d.sampleSize}
+              </p>
+
+              <DealBuyButton
+                variantId={d.variantId}
+                brand={d.brandName}
+                style={d.styleName}
+                platform={d.platform}
+                url={d.sourceUrl}
+              />
+            </li>
           );
         })}
-      </div>
-    </section>
+      </ul>
+
+      <Link
+        href="/shop?deals=1&sort=best-deal"
+        className="block px-4 py-3 text-center text-xs text-gold transition-colors hover:text-gold-soft"
+      >
+        See all deals
+      </Link>
+    </aside>
   );
 }

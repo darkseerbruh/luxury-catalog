@@ -1,5 +1,8 @@
 import { getSupabase } from "./supabase";
 
+/** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
+export const MIN_DEALS_TO_RENDER = 3;
+
 /**
  * "Today's deals" — current resale listings priced BELOW their variant's recorded
  * resale median, ranked by how far under the median they sit.
@@ -45,6 +48,21 @@ export interface Deal {
   currency: string | null;
   /** Whole-number percent the current listing sits below the median (e.g. 18 = 18% under). */
   pctUnder: number;
+  /** Lowest recorded resale price for the variant (range floor), in `currency`. */
+  lowPrice: number;
+  /** Highest recorded resale price for the variant (range ceiling), in `currency`. */
+  highPrice: number;
+  /** How many recorded resale prices the median + range are built from. */
+  sampleSize: number;
+  /**
+   * Our READ of where this listing sits in the variant's own recorded resale range,
+   * never an appraisal: "great" = in the cheapest quarter of recorded sales, "good" =
+   * below median but above that. `null` when `sampleSize < 5` (too few sales to grade
+   * honestly) — the row still shows, just without a verdict label.
+   */
+  verdict: "great" | "good" | null;
+  /** Share of recorded sales priced ABOVE this listing, e.g. 85 = lower than 85% of them. */
+  pctCheaper: number;
   /** Where the listing was read from, if recorded (for attribution / link-back). */
   sourceUrl: string | null;
   /** Platform the listing was observed on, if recorded (e.g. "eBay"). */
@@ -59,6 +77,16 @@ function median(nums: number[]): number {
   const s = nums.slice().sort((a, b) => a - b);
   const mid = Math.floor(s.length / 2);
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/** Linear-interpolated quantile of an ascending-sorted array (q in [0,1]). */
+function quantile(sortedAsc: number[], q: number): number {
+  if (sortedAsc.length === 0) return 0;
+  const pos = (sortedAsc.length - 1) * q;
+  const base = Math.floor(pos);
+  const rest = pos - base;
+  const next = sortedAsc[base + 1];
+  return next !== undefined ? sortedAsc[base] + rest * (next - sortedAsc[base]) : sortedAsc[base];
 }
 
 function embeddedName(relation: unknown): string {
@@ -169,6 +197,16 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
       const pctUnder = Math.round(((med - best.price) / med) * 100);
       if (pctUnder <= 0) continue;
 
+      // Where this listing sits in the variant's OWN recorded resale spread. The
+      // verdict is gated to >= 5 sales so we never grade a price on a handful of comps.
+      const sorted = g.resalePrices.slice().sort((a, b) => a - b);
+      const sampleSize = sorted.length;
+      const q25 = quantile(sorted, 0.25);
+      const cheaperThanCount = sorted.filter((p) => p > best.price).length;
+      const pctCheaper = Math.round((cheaperThanCount / sampleSize) * 100);
+      const verdict: Deal["verdict"] =
+        sampleSize < 5 ? null : best.price <= q25 ? "great" : "good";
+
       deals.push({
         variantId: g.variantId,
         brandName: g.brandName,
@@ -178,6 +216,11 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
         medianPrice: Math.round(med),
         currency: best.currency ?? g.currency,
         pctUnder,
+        lowPrice: Math.round(sorted[0]),
+        highPrice: Math.round(sorted[sorted.length - 1]),
+        sampleSize,
+        verdict,
+        pctCheaper,
         sourceUrl: best.sourceUrl,
         platform: best.platform,
       });
