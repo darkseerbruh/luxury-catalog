@@ -45,6 +45,7 @@ async function main() {
     .select("price_id, source_url")
     .eq("platform", "Fashionphile")
     .is("condition", null)
+    .eq("listing_status", "available") // only LIVE listings are gradeable (sold pages are gone)
     .not("source_url", "is", null)
     .like("source_url", "%/products/%")
     .limit(limit);
