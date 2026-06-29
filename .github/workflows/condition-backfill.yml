@@ -1,0 +1,87 @@
+name: Condition backfill
+
+# Populate price_history.condition for rows ingestion left null, so the homepage
+# "Priced well today" rail can read condition (a worn bag stops looking like a deal).
+# See docs/data-collection-handoff.md §9 item 3.5.
+#
+# Run it from the browser: Actions tab -> "Condition backfill" -> Run workflow.
+# It is SAFE by default (dry-run): it reports what it WOULD grade and changes nothing
+# until you set write = true. It always prints coverage before (and after a write).
+#
+# SECRETS (already on this repo, same as the capture workflow):
+#   SUPABASE_SERVICE_ROLE_KEY   (required — read + write the DB)
+#   FIRECRAWL_API_KEY           (only needed for mode = refetch / both)
+# Supabase URL is public (NEXT_PUBLIC_*), inlined as a fallback below.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "map = free, re-grade stored text · refetch = re-read TRR pages (Firecrawl credits) · both"
+        required: true
+        type: choice
+        default: "map"
+        options: ["map", "refetch", "both"]
+      write:
+        description: "Apply DB writes? Leave false for a safe dry-run first."
+        required: true
+        type: boolean
+        default: false
+      source:
+        description: "Platform filter for refetch (substring, e.g. realreal). Blank = all."
+        required: false
+        default: "realreal"
+      max_credits:
+        description: "Firecrawl credit ceiling for refetch (caps spend)."
+        required: false
+        default: "2000"
+
+concurrency:
+  group: condition-backfill
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+      MODE: ${{ github.event.inputs.mode }}
+      WRITE: ${{ github.event.inputs.write }}
+      SOURCE: ${{ github.event.inputs.source }}
+      MAX_CREDITS: ${{ github.event.inputs.max_credits || '2000' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Fail early if the DB key is missing
+        run: |
+          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::SUPABASE_SERVICE_ROLE_KEY secret is not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+          if [ "$MODE" != "map" ] && [ -z "$FIRECRAWL_API_KEY" ]; then
+            echo "::error::mode=$MODE needs FIRECRAWL_API_KEY, which is not set."
+            exit 1
+          fi
+
+      - name: Coverage BEFORE
+        run: npm run condition:coverage
+
+      - name: Backfill (dry-run unless write=true)
+        run: |
+          ARGS="--mode=$MODE --max-credits=$MAX_CREDITS"
+          if [ -n "$SOURCE" ]; then ARGS="$ARGS --source=$SOURCE"; fi
+          if [ "$WRITE" = "true" ]; then ARGS="$ARGS --write"; fi
+          echo "Running: backfill:condition -- $ARGS"
+          npm run backfill:condition -- $ARGS
+
+      - name: Coverage AFTER
+        if: ${{ github.event.inputs.write == 'true' }}
+        run: npm run condition:coverage
