@@ -175,10 +175,26 @@ LLM facts into `desc_facts` (regex wins where non-null; LLM owns measurements/da
 stamps `desc_llm_on` so re-runs don't re-spend. Cost: ~1 cheap Haiku call/listing, run it
 only on rows with a stored description.
 
+**Backfill mechanism (2026-06-29):** load-prices upserts with `ignoreDuplicates`, so it
+can't add new fields to rows already in price_history. **`backfill-fashionphile.ts`**
+re-parses the (graded) dump and UPDATEs ONLY null fields by listing_ref (idempotent, never
+clobbers): condition, region, hardware_color, enrichment (listed_at/compare_at_price/
+source_description/desc_facts). Run repeatedly as the grade pass advances:
+`npx tsx supabase/ingest/backfill-fashionphile.ts --write` → `summary:refresh`.
+
+**Done this session:** hardware extraction broadened (metal-in-context + finish phrasings;
+live fill 47%→71%); `promote-safe.ts` now carries region/condition_detail/enrichment (0038-
+gated, resilient). Condition grade pass + full backfill running.
+
 **Still-open backlog:**
 - **condition_detail** + granular condition come from **TheRealReal**, not FP. Fix
   `firecrawl-trr.ts` (maps every used bag → null ~line 72; never captures the product-page
-  condition section). Metered — fold into the next scheduled TRR run.
+  condition section). **BLOCKED 2026-06-29:** TRR product pages are px-captcha gated (403
+  even on Firecrawl stealth, 5 cr/try) — can't ground the condition-section structure right
+  now. Retry via the proven `firecrawl-trr` adapter path (rawHtml + includeTags script) or a
+  logged-in browser session; until then eBay covers granular condition + detail.
+- **production_year** (~8%): data-limited, not parser-limited — FP rarely states a year;
+  TRR ("From the YYYY Collection") + eBay ("Year Manufactured") are the year sources.
 - **eBay live capture — BUILT (2026-06-29), metered + owner-gated.** `firecrawl-ebay.ts`
   (parser `ebay-item.ts`). eBay 403s plain fetch; Firecrawl defeats it (verified live).
   eBay item-specifics are the richest of any source: Condition (+ written detail), material,
