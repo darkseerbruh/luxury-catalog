@@ -29,7 +29,7 @@ const BRAND_TIERS: Record<string, { tier: "thrift" | "mid" | "ultra-luxury"; cou
   Coach: { tier: "thrift", country: "USA", founded: 1941 },
   "Kate Spade": { tier: "thrift", country: "USA", founded: 1993 },
   Burberry: { tier: "thrift", country: "UK", founded: 1856 },
-  Gucci: { tier: "thrift", country: "Italy", founded: 1921 },
+  Gucci: { tier: "mid", country: "Italy", founded: 1921 },
   Prada: { tier: "mid", country: "Italy", founded: 1913 },
   Fendi: { tier: "mid", country: "Italy", founded: 1925 },
   Celine: { tier: "mid", country: "France", founded: 1945 },
