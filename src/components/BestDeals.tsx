@@ -39,54 +39,48 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
       <ul>
         {deals.map((d) => {
           const name = [d.brandName, d.styleName].filter(Boolean).join(" ");
-          const under = d.medianPrice - d.currentPrice;
           const span = d.highPrice - d.lowPrice || 1;
           const markerPct = clamp(((d.currentPrice - d.lowPrice) / span) * 100, 3, 97);
           const medianPct = clamp(((d.medianPrice - d.lowPrice) / span) * 100, 3, 97);
 
           return (
             <li key={d.variantId} className="border-b border-border px-4 py-3.5">
-              <div className="flex items-center gap-2">
-                {d.verdict && (
-                  <span
-                    className={
-                      d.verdict === "great"
-                        ? "flex-shrink-0 rounded-full bg-gold px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-bg"
-                        : "flex-shrink-0 rounded-full border border-gold/40 bg-surface-raised px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-gold-soft"
-                    }
-                  >
-                    {d.verdict}
-                  </span>
-                )}
-                <Link
-                  href={`/bag/${d.variantId}`}
-                  className="min-w-0 flex-1 truncate font-serif text-sm text-foreground transition-colors hover:text-gold"
-                >
-                  {name}
-                </Link>
-                <span className="flex-shrink-0 font-serif text-sm text-gold-soft">
+              <Link
+                href={`/bag/${d.variantId}`}
+                className="block truncate font-serif text-sm text-foreground transition-colors hover:text-gold"
+              >
+                {name}
+              </Link>
+
+              <p className="mt-1 flex items-baseline gap-2">
+                <span className="font-serif text-2xl text-gold-soft">
                   {formatPrice(d.currentPrice, d.currency)}
                 </span>
-              </div>
+                {d.verdict && (
+                  <span className="text-xs font-medium text-gold">
+                    {d.verdict === "great" ? "great price" : "good price"}
+                  </span>
+                )}
+              </p>
 
               <div
-                className="relative mt-2.5 h-1.5 rounded-full bg-border"
+                className="relative mt-3 h-1.5 rounded-full bg-border"
                 role="img"
-                aria-label={`Listed at ${formatPrice(d.currentPrice, d.currency)}, lower than ${d.pctCheaper}% of ${d.sampleSize} recorded sales (range ${formatPrice(d.lowPrice, d.currency)} to ${formatPrice(d.highPrice, d.currency)}, median ${formatPrice(d.medianPrice, d.currency)})`}
+                aria-label={`Listed at ${formatPrice(d.currentPrice, d.currency)}, against a recorded median of ${formatPrice(d.medianPrice, d.currency)} (range ${formatPrice(d.lowPrice, d.currency)} to ${formatPrice(d.highPrice, d.currency)})`}
               >
                 <span
-                  className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-muted/70"
+                  className="absolute top-1/2 h-3.5 w-0.5 -translate-y-1/2 bg-muted/70"
                   style={{ left: `${medianPct}%` }}
                 />
                 <span
-                  className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-soft"
+                  className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-soft ring-2 ring-bg"
                   style={{ left: `${markerPct}%` }}
                 />
               </div>
-
-              <p className="mt-1.5 text-[11px] text-muted/80">
-                {formatPrice(under, d.currency)} under median &middot; n={d.sampleSize}
-              </p>
+              <div className="mt-1.5 flex justify-between text-[10px]">
+                <span className="text-gold-soft">this listing</span>
+                <span className="text-muted">median {formatPrice(d.medianPrice, d.currency)}</span>
+              </div>
 
               <DealBuyButton
                 variantId={d.variantId}
