@@ -604,3 +604,7 @@ engines cite, and it compounds) + ENGAGEMENT (the *ranking* is the hook).
   appreciation/value claims; any price is estimate-not-appraisal.
 - **What it needs:** the copywriter to draft (run `brand-voice` first); the 3 data pulls for full CTA
   coverage; otherwise writable now on the in-catalog 17.
+- **STATUS: DRAFT WRITTEN 2026-06-29** → `drafts/why-these-are-the-it-bags-of-all-time.md` (copywriter,
+  brand-voice applied, on-voice, no em dashes, value framed estimate-not-appraisal, no dollar figures).
+  Pending owner review, then Content lane wires it as a post. Origin years held/hedged in the draft can
+  be enriched from the archivist top-20 on review; 3 not-in-catalog bags carry no CTA until their data pull lands.
