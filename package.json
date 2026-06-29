@@ -27,7 +27,9 @@
     "aggregate:aliases": "tsx supabase/ingest/aggregate-aliases.ts",
     "promote:discovered": "tsx supabase/ingest/promote-discovered.ts",
     "summary:refresh": "tsx supabase/ingest/refresh-summary.ts",
-    "enrich:conditions": "tsx supabase/ingest/enrich-conditions.ts"
+    "enrich:conditions": "tsx supabase/ingest/enrich-conditions.ts",
+    "backfill:condition": "tsx supabase/ingest/backfill-condition.ts",
+    "condition:coverage": "tsx supabase/ingest/condition-coverage.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
