@@ -39,6 +39,12 @@ describe("splitEbayCondition", () => {
   it("returns a grade with null detail when there's no colon", () => {
     expect(splitEbayCondition("New with tags")).toEqual({ grade: "New with tags", detail: null });
   });
+
+  it("falls back to the boilerplate lead-in when the markdown drops the colon", () => {
+    const { grade, detail } = splitEbayCondition("Pre-owned - Good This item has been gently used but is in good condition.");
+    expect(grade).toBe("Pre-owned - Good");
+    expect(detail).toMatch(/^This item has been gently used/);
+  });
 });
 
 describe("parseEbayItemSpecifics", () => {

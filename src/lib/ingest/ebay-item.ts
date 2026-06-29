@@ -51,10 +51,16 @@ export function mapEbayCondition(grade: string | null | undefined): SaleConditio
  */
 export function splitEbayCondition(raw: string | null | undefined): { grade: string | null; detail: string | null } {
   if (!raw?.trim()) return { grade: null, detail: null };
-  const idx = raw.indexOf(":");
-  if (idx === -1) return { grade: raw.trim(), detail: null };
-  const grade = raw.slice(0, idx).trim() || null;
-  const detail = raw.slice(idx + 1).trim() || null;
+  // Prefer a colon; otherwise fall back to eBay's standard detail boilerplate lead-in
+  // ("…Good This item has been gently used…"), which the markdown renders without a colon.
+  let idx = raw.indexOf(":");
+  if (idx === -1) {
+    const m = raw.match(/\bThis item (?:has been|is)\b/i);
+    if (m && m.index !== undefined) idx = m.index - 1;
+  }
+  if (idx < 0) return { grade: raw.trim(), detail: null };
+  const grade = raw.slice(0, idx).replace(/[:\s]+$/, "").trim() || null;
+  const detail = raw.slice(idx + 1).replace(/^[:\s]+/, "").trim() || null;
   return { grade, detail };
 }
 
