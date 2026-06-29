@@ -38,8 +38,15 @@ const BACKOFFS = [5000, 15000, 30000, 60000]; // 503/429 retry waits
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 interface RawDumpEntry {
-  product: { title?: string; handle?: string; body_html?: string; tags?: string[]; variants?: unknown[] };
+  product: {
+    title?: string; handle?: string; body_html?: string; tags?: string[]; variants?: unknown[];
+    // Retained so the adapter can surface region (tags), listed-date, clean brand + was-price.
+    vendor?: string; created_at?: string; published_at?: string; updated_at?: string;
+  };
   url?: string;
+  /** Condition grade + write-up, filled by the condition-enrich pass (not in the feed JSON). */
+  conditionGrade?: string | null;
+  conditionDetail?: string | null;
 }
 
 /** Fetch one page with retry-on-throttle. Returns products, or null at true end. */
@@ -83,7 +90,10 @@ async function main() {
     if (products.length === 0) break; // true end
     for (const p of products) {
       fresh.push({
-        product: { title: p.title, handle: p.handle, body_html: p.body_html, tags: p.tags, variants: p.variants },
+        product: {
+          title: p.title, handle: p.handle, body_html: p.body_html, tags: p.tags, variants: p.variants,
+          vendor: p.vendor, created_at: p.created_at, published_at: p.published_at, updated_at: p.updated_at,
+        },
         url: `https://www.fashionphile.com/products/${p.handle}`,
       });
     }

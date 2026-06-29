@@ -1610,11 +1610,39 @@ interface RawDumpEntry {
   /** Canonical listing URL — must be captured alongside the product JSON. */
   url?: string;
   /**
-   * Optional condition grade from the listing/search card.
-   * Not present in the Shopify product JSON; must be captured from the page.
+   * Optional condition grade from the listing/product page.
+   * Not present in the Shopify product JSON; captured by the condition-enrich pass.
    * Example: "Excellent", "Very Good", "Giftable"
    */
   conditionGrade?: string | null;
+  /** Optional free-text condition write-up from the product page. */
+  conditionDetail?: string | null;
+}
+
+/**
+ * Build the shared per-listing spec attrs + enrichment from a parsed FP spec, so the
+ * curated and catch-all mappers stay in lockstep (every field the feed/page exposes
+ * lands on every row). Listed-date + was-price have no dedicated column yet, so they
+ * ride in the `enrichment` jsonb until a migration adds columns.
+ */
+function fpAttrsAndEnrichment(spec: ReturnType<typeof parseFashionphileProduct>) {
+  const enrichment: Record<string, unknown> = {};
+  if (spec.listedAt) enrichment.listed_at = spec.listedAt;
+  if (spec.compareAtPrice != null) enrichment.compare_at_price = spec.compareAtPrice;
+  return {
+    attrs: {
+      exterior_colorway: spec.color,
+      exterior_material: spec.material,
+      hardware_color: spec.hardwareColor,
+      production_year: spec.productionYear,
+      season: spec.season,
+      inclusions: spec.inclusions,
+      condition_detail: spec.conditionDetail,
+      region: spec.region,
+      listing_ref: spec.sku,
+    },
+    enrichment: Object.keys(enrichment).length ? enrichment : null,
+  };
 }
 
 /**
@@ -1641,8 +1669,8 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     return null;
   }
 
-  // Pass conditionGrade so parseFashionphileProduct can map it to a SaleCondition.
-  const spec = parseFashionphileProduct(product, conditionGrade);
+  // Pass conditionGrade/Detail so parseFashionphileProduct maps the SaleCondition + write-up.
+  const spec = parseFashionphileProduct(product, conditionGrade, entry.conditionDetail);
   if (!spec.price) {
     console.warn(`fashionphile: no price parsed for "${product.handle}" — skipping`);
     return null;
@@ -1652,19 +1680,11 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     return null;
   }
 
+  const { attrs, enrichment } = fpAttrsAndEnrichment(spec);
   return {
     brand: target.brand,
     style: target.style,
-    attrs: {
-      size_label: target.size_label,
-      exterior_colorway: spec.color,
-      exterior_material: spec.material,
-      hardware_color: spec.hardwareColor,
-      production_year: spec.productionYear,
-      season: spec.season,
-      inclusions: spec.inclusions,
-      listing_ref: spec.sku,
-    },
+    attrs: { size_label: target.size_label, ...attrs },
     platform: PLATFORM,
     price_type: "listed",
     sale_price: spec.price,
@@ -1674,6 +1694,7 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     source_url: url,
     confidence: "high",
     notes: product.title?.slice(0, 160) ?? null,
+    enrichment,
   };
 }
 
@@ -1741,23 +1762,16 @@ export function guessStyleFromTitle(title: string, brand: string): string {
 function mapRawRecordCatchAll(entry: RawDumpEntry, today: string): PriceObservation | null {
   const { product, url, conditionGrade } = entry;
   if (!url) return null;
-  const spec = parseFashionphileProduct(product, conditionGrade);
+  const spec = parseFashionphileProduct(product, conditionGrade, entry.conditionDetail);
   if (!spec.price) return null;
-  const brand = guessBrandFromHandle(product.handle ?? "");
+  // Prefer the feed's clean vendor string; fall back to slug parsing.
+  const brand = product.vendor?.trim() || guessBrandFromHandle(product.handle ?? "");
   const title = product.title ?? product.handle ?? "";
+  const { attrs, enrichment } = fpAttrsAndEnrichment(spec);
   return {
     brand,
     style: guessStyleFromTitle(title, brand),
-    attrs: {
-      size_label: detectSizeLabel(title),
-      exterior_colorway: spec.color,
-      exterior_material: spec.material,
-      hardware_color: spec.hardwareColor,
-      production_year: spec.productionYear,
-      season: spec.season,
-      inclusions: spec.inclusions,
-      listing_ref: spec.sku,
-    },
+    attrs: { size_label: detectSizeLabel(title), ...attrs },
     platform: PLATFORM,
     price_type: "listed",
     sale_price: spec.price,
@@ -1767,6 +1781,7 @@ function mapRawRecordCatchAll(entry: RawDumpEntry, today: string): PriceObservat
     source_url: url,
     confidence: "low",
     notes: title.slice(0, 160),
+    enrichment,
   };
 }
 
