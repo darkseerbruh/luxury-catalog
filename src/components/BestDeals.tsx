@@ -32,7 +32,8 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
       <div className="border-b border-border px-4 py-3.5">
         <h2 className="font-serif text-xl text-foreground">Priced well today</h2>
         <p className="mt-1 text-xs text-muted">
-          Low against the sales we&rsquo;ve recorded. Our read, not an appraisal.
+          Listed low against past sales for the same bag. A read on price, not on
+          condition.
         </p>
       </div>
 
