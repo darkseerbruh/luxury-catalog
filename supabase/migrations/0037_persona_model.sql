@@ -9,8 +9,10 @@
 -- because ~10 readers across personalization + the profile UI depend on it. This
 -- migration is purely additive; applying it cannot break existing reads.
 --
--- Apply after 0033_style_story.sql. (Numbered 0035 to clear the un-merged
--- 0033_price_alerts / 0034_taste on the ux/pct-below-median-alerts branch.)
+-- Apply after 0036_style_story.sql. (Renumbered from 0035 to 0037 on 2026-06-29:
+-- 0035 was already taken by 0035_closet_want_spec.sql, which is recorded as applied
+-- in the remote DB, so `supabase db push` would have skipped this file as a version
+-- collision. Renumber the UNAPPLIED duplicate, never the one already recorded.)
 
 -- Axis-B motivations the user self-selects at onboarding (pick all that apply).
 -- Free text array rather than an enum so the verb set can evolve without a

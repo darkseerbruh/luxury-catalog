@@ -56,7 +56,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
 
   const supabase = await createServerSupabase();
   // Core upsert: only columns guaranteed to exist, so onboarding can never be
-  // blocked by 0035 not being applied yet.
+  // blocked by 0037 not being applied yet.
   await supabase
     .from("profile")
     .upsert(
@@ -64,7 +64,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
       { onConflict: "id" }
     );
 
-  // Best-effort: persist the v2 columns. If 0035 is not applied yet the update
+  // Best-effort: persist the v2 columns. If 0037 is not applied yet the update
   // errors on the missing columns; swallow it so onboarding still completes.
   const maturityStage = await deriveInitialMaturity(supabase, user.id);
   const { error: v2Error } = await supabase
@@ -72,7 +72,7 @@ export async function completeOnboarding(formData: FormData): Promise<void> {
     .update({ motivations, maturity_stage: maturityStage })
     .eq("id", user.id);
   if (v2Error) {
-    console.warn("completeOnboarding: persona v2 columns not stored (apply 0035):", v2Error.message);
+    console.warn("completeOnboarding: persona v2 columns not stored (apply 0037):", v2Error.message);
   }
 
   // Set the chosen username separately and best-effort: a unique-violation (handle

@@ -31,7 +31,7 @@ async function refreshMaturity(
       .from("profile")
       .update({ maturity_stage: stage })
       .eq("id", userId);
-    if (error) return updated; // column missing (0035 unapplied) — stop quietly.
+    if (error) return updated; // column missing (0037 unapplied) — stop quietly.
     updated++;
   }
   return updated;
