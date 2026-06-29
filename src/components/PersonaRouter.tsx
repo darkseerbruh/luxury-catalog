@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { TASTE_QUESTIONS } from "@/lib/taste";
 import { getClosetValue } from "@/lib/portfolio";
 
 /**
@@ -15,8 +14,6 @@ import { getClosetValue } from "@/lib/portfolio";
  * there's enough want-signal (docs/ux/content-gating-strategy.md) — both live
  * outside this grid now.
  */
-
-const Q1 = TASTE_QUESTIONS[0];
 
 function formatPrice(amount: number, currency: string | null): string {
   const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
@@ -71,18 +68,12 @@ export default async function PersonaRouter() {
               <h3 className="font-serif text-xl text-foreground">Is it real?</h3>
               <p className="mt-1 text-sm text-muted">Found a bag in the wild? We can help.</p>
             </div>
-            {/* phone photographing a bag — makes the camera action obvious */}
-            <svg viewBox="0 0 44 64" className="h-28 w-20 flex-shrink-0 text-gold" fill="none" stroke="currentColor" aria-hidden>
-              <rect x="2" y="2" width="40" height="60" rx="7" strokeWidth="1.5" />
-              <rect x="7" y="9" width="30" height="40" rx="3" className="text-border" strokeWidth="1.2" />
-              <g strokeWidth="1.2" strokeLinecap="round">
-                <path d="M12 16v-3h3M32 13h3v3M12 45h3M32 45h3" />
-              </g>
-              <g transform="translate(15,22)" strokeWidth="0.9" opacity="0.8">
-                <path d="M1 4h12l-1 9a1 1 0 0 1-1 .9H4a1 1 0 0 1-1-.9z" />
-                <path d="M4.5 4V3a3 3 0 0 1 6 0v1" />
-              </g>
-              <circle cx="22" cy="55" r="3.5" strokeWidth="1.5" />
+            {/* magnifier examining a bag — "study the markers", no camera/scan implied */}
+            <svg viewBox="0 0 64 64" className="h-24 w-24 flex-shrink-0 text-gold" fill="none" stroke="currentColor" aria-hidden>
+              <path d="M14 20h26l-2 26a2 2 0 0 1-2 1.9H18a2 2 0 0 1-2-1.9z" strokeWidth="1.4" />
+              <path d="M21 20v-2.5a6 6 0 0 1 12 0V20" strokeWidth="1.4" />
+              <circle cx="41" cy="40" r="11" strokeWidth="2.4" className="text-gold-soft" />
+              <path d="M49 48l7.5 7.5" strokeWidth="2.4" strokeLinecap="round" className="text-gold-soft" />
             </svg>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm">
@@ -91,10 +82,12 @@ export default async function PersonaRouter() {
             <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
           <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
-          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-gold">
-            <Link href="/articles" className="transition-colors hover:text-gold-soft">Read the markers &rarr;</Link>
-            <Link href="/identify" className="transition-colors hover:text-gold-soft">Scan a bag &rarr;</Link>
-          </div>
+          <Link
+            href="/articles?department=authentication"
+            className="mt-4 text-sm font-medium text-gold transition-colors hover:text-gold-soft"
+          >
+            Read the authentication guides &rarr;
+          </Link>
         </div>
 
         {/* Tile 2 — Collect & invest (track a whole collection) */}
@@ -153,35 +146,6 @@ export default async function PersonaRouter() {
           </div>
           <span className={CTA}>See the full price story &rarr;</span>
         </Link>
-
-        {/* Tile 4 — Find the bag for me (the quiz starts inline) */}
-        <div className={`${TILE} hover:border-border`}>
-          <h3 className="font-serif text-xl text-foreground">Find the bag for me</h3>
-          <p className="mt-1 text-sm text-muted">{Q1.prompt}</p>
-          <div className="mt-3 flex flex-1 flex-col gap-2">
-            {Q1.options.map((opt) => (
-              <Link
-                key={opt.value}
-                href={`/quiz?seed=${encodeURIComponent(opt.value)}`}
-                className="rounded-xl border border-border bg-surface-raised px-4 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold-soft"
-              >
-                {opt.label}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <p className="text-xs text-muted">
-              Question 1 of {TASTE_QUESTIONS.length} &middot;{" "}
-              <span className="text-gold">No account needed</span>
-            </p>
-            <Link
-              href="/quiz"
-              className="flex-shrink-0 rounded-full bg-gold px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-            >
-              Continue &rarr;
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );

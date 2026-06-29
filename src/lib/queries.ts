@@ -22,11 +22,17 @@ export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
   thrift: 2,
 };
 
-/** Tier groups for the brand directory, in display order, with section labels. */
+/**
+ * Tier groups for the brand directory, in display order, with section labels.
+ * Labels are the standardized vocabulary (Ultra-luxury / Luxury / Contemporary); the
+ * data keys stay ultra-luxury/mid/thrift so no migration is needed. "Thrift" is never
+ * shown (a judgment word, off-voice). A 4th "Premium" tier would need a new `premium`
+ * key (migration 0038-style, owner-gated) — see docs/ux/deals-hero-aggregate-spec.md sibling note.
+ */
 export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
   { key: "ultra-luxury", label: "Ultra-luxury" },
-  { key: "mid", label: "Mid-tier" },
-  { key: "thrift", label: "Thrift & contemporary" },
+  { key: "mid", label: "Luxury" },
+  { key: "thrift", label: "Contemporary" },
 ];
 
 export interface HeroCard {

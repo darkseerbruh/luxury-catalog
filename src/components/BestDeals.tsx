@@ -26,20 +26,10 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
 
   return (
     <section aria-label="Priced well today" className="border-b border-border px-5 py-12">
-      <div className="flex items-baseline justify-between gap-3">
-        <div>
-          <h2 className="font-serif text-2xl text-foreground">Priced well today</h2>
-          <p className="mt-1 text-sm text-muted">
-            Listed low against past sales for the same bag. A read on price, not on condition.
-          </p>
-        </div>
-        <Link
-          href="/shop?deals=1&sort=best-deal"
-          className="flex-shrink-0 text-sm text-muted transition-colors hover:text-gold"
-        >
-          See all deals
-        </Link>
-      </div>
+      <h2 className="font-serif text-2xl text-foreground">Priced well today</h2>
+      <p className="mt-1 text-sm text-muted">
+        Listed low against past sales for the same bag. A read on price, not on condition.
+      </p>
 
       <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {deals.map((d) => {
@@ -98,6 +88,13 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
           );
         })}
       </ul>
+
+      <Link
+        href="/shop?deals=1&sort=best-deal"
+        className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
+      >
+        See all deals
+      </Link>
     </section>
   );
 }
