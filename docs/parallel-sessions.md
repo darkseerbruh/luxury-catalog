@@ -30,6 +30,16 @@ List / remove:       `git worktree list` · `git worktree remove <folder>`
 (tsc/eslint/vitest tolerate the symlink; only the build breaks — so the symlink hides the problem until build time.)
 
 ## Rules that keep it clean
+
+> **Automated backstop (since 2026-06-28):** a SessionStart hook
+> (`.claude/hooks/worktree-guard.sh`, paired with `worktree-heartbeat.sh` on every turn)
+> heartbeats each chat by its Claude `session_id` into the shared git common-dir, then
+> WARNS at the top of a session when another live chat is sitting in the same folder, with
+> the exact `git worktree add` command to fix it. Warn-only by default (the env auto-switches
+> branches, so a hard block could strand a legit single chat); flip `GUARD_MODE=block` in the
+> hook to harden. No-op on remote/web sessions. The rules below are still the policy; the hook
+> just makes a violation impossible to miss.
+
 1. Each chat stays in **its own folder, on its own branch** off `main`.
 2. Each chat works **only in its own folder** (its worktree). Within that folder a chat may
    edit **any file its task needs** — lanes are not file-fences (see the registry). The only
