@@ -13,8 +13,10 @@ import { BagImage } from "@/components/BagImage";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import JournalShelf from "@/components/JournalShelf";
 import { HomeHero } from "@/components/HomeHero";
+import StyleReadCallout from "@/components/StyleReadCallout";
 import { communityKnowledgeReady } from "@/lib/content-gates";
 import { assignHomeHeadline, HOME_HEADLINE_COPY } from "@/lib/experiments/home-headline";
+import { assignQuizHeadline, QUIZ_HEADLINE_COPY } from "@/lib/experiments/quiz-headline";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +48,7 @@ export default async function Home() {
   // home_headline A/B/C copy test (single variable: the H1). Assigned per
   // impression, server-side, cookieless. Success metric = hero search engagement.
   const headlineVariant = assignHomeHeadline();
+  const quizVariant = assignQuizHeadline();
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
@@ -56,22 +59,7 @@ export default async function Home() {
 
       {/* Quiz / style-read callout */}
       {!user && (
-        <section className="border-b border-border bg-gold/5 px-5 py-12 text-center">
-          <p className="text-sm uppercase tracking-widest text-gold">Style read</p>
-          <h2 className="mx-auto mt-2 max-w-xl font-serif text-2xl text-foreground sm:text-3xl">
-            What&rsquo;s your handbag style, really?
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-muted">
-            A two-minute style read. We hand you the words for your taste, then match
-            you to bags. <span className="text-foreground">No account needed.</span>
-          </p>
-          <Link
-            href="/quiz"
-            className="mt-6 inline-block rounded-full bg-gold px-6 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
-          >
-            Start
-          </Link>
-        </section>
+        <StyleReadCallout variant={quizVariant} headline={QUIZ_HEADLINE_COPY[quizVariant]} />
       )}
 
       {user && (
