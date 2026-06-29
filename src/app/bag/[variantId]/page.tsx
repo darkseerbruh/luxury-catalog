@@ -44,6 +44,7 @@ import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
 import { BagImage } from "@/components/BagImage";
+import CompareControls from "@/components/CompareControls";
 
 export const dynamic = "force-dynamic";
 
@@ -691,6 +692,11 @@ export default async function BagDetailPage({
         hasSellLinks={hasSellLinks}
         initialClosetStatus={userState.closetStatus}
         initialWatching={userState.watching}
+      />
+
+      <CompareControls
+        variantId={v.variantId}
+        label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
       />
 
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
