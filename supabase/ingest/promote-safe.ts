@@ -32,24 +32,41 @@ type DiscoveredFullRow = DiscoveredRow & {
   condition: string | null;
   price_type: string | null;
   observed_on: string | null;
+  // Migration 0038 columns — only selected when present (resilient fallback below).
+  region?: string | null;
+  condition_detail?: string | null;
+  enrichment?: Record<string, unknown> | null;
 };
 type BrandRow = { brand_id: number; name: string };
 type StyleRow = { style_id: number; brand_id: number; name: string };
 type VariantRow = { variant_id: number; size_label: string | null };
 type RefRow = { listing_ref: string | null };
 
+const BASE_COLS = "discovered_id,platform,listing_ref,source_url,brand_guess,style_guess,size_label,colorway,material,hardware_color,production_year,season,condition,price_type,sale_price,currency,observed_on,promoted_variant_id";
+const COLS_0038 = `${BASE_COLS},region,condition_detail,enrichment`;
+
 async function loadAllDiscovered(): Promise<DiscoveredFullRow[]> {
+  // Prefer the full select (migration 0038 columns); fall back to base if not applied yet
+  // (PGRST204/42703 = column missing), mirroring load-prices' strip-and-retry resilience.
+  let cols = COLS_0038;
   const out: DiscoveredFullRow[] = [];
   let from = 0;
   for (;;) {
     const { data, error } = await db
       .from("discovered_listing")
-      .select("discovered_id,platform,listing_ref,source_url,brand_guess,style_guess,size_label,colorway,material,hardware_color,production_year,season,condition,price_type,sale_price,currency,observed_on,promoted_variant_id")
+      .select(cols)
       .is("promoted_variant_id", null)
       .range(from, from + 999);
-    if (error) throw error;
+    if (error) {
+      if (cols === COLS_0038 && (error.code === "42703" || error.code === "PGRST204")) {
+        console.warn("  discovered_listing missing 0038 columns — apply migration 0038 to carry region/condition_detail/enrichment on promotion; proceeding without them.");
+        cols = BASE_COLS;
+        continue; // retry this page with the base column set
+      }
+      throw error;
+    }
     if (!data || data.length === 0) break;
-    out.push(...data);
+    out.push(...(data as unknown as DiscoveredFullRow[]));
     if (data.length < 1000) break;
     from += 1000;
   }
@@ -129,6 +146,9 @@ async function main() {
       date_recorded: today, confidence_level: "medium",
       colorway: m.colorway, material: m.material, hardware_color: m.hardware_color,
       production_year: m.production_year, season: m.season, condition: m.condition,
+      // 0038 fields (undefined when discovered_listing predates the migration → harmless null).
+      region: m.region ?? null, condition_detail: m.condition_detail ?? null,
+      enrichment: m.enrichment ?? null,
     }));
     for (let i = 0; i < toInsert.length; i += 500) {
       const { error } = await db.from("price_history").insert(toInsert.slice(i, i + 500));
