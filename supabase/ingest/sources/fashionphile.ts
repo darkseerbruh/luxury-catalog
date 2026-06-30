@@ -1966,6 +1966,23 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin", "pouch"],
     minPrice: 2000, maxPrice: 5500,
     searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  // ── Mulberry — add Fashionphile asking surface to existing styles (2026-06-30) ──
+  // Bayswater satchel (sold rows already loaded on the size-less v932; this adds asking by size).
+  ...(["small", "mini"] as const).map((size) => ({
+    brand: "Mulberry", style: "Bayswater", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["bayswater", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/mulberry/products.json",
+  })),
+  // Alexa (fills the empty scaffolded style).
+  ...(["small", "medium", "mini"] as const).map((size) => ({
+    brand: "Mulberry", style: "Alexa", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["alexa", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/mulberry/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
