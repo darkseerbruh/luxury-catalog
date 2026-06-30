@@ -37,6 +37,30 @@ idea to fit the library.
 - Test every concept first: "Would the target persona stop, save, or send this, and does it
   teach a real, often counterintuitive thing?" If the answer is no, the asset does not rescue it.
 
+## The funnel + CTA ladder (what every post actually tells them to do)
+
+Social is the on-ramp; the **site is the compounding asset**; affiliate is a **passive layer that
+turns on later**. So **missing affiliate codes do NOT gate posting.** Early traffic's job is the
+audience and the asset, not a commission today. (Per `docs/marketing-plan.md`: the first months
+are near-$0 by design; you build the asset, then it harvests.)
+
+Every post carries this CTA ladder, in order. Use the lowest rung that fits; do not skip to "buy."
+
+1. **On-platform:** follow / save / send. (Builds the rented audience + the algorithm signal.)
+2. **Bridge to the site:** "the full [report card / data / story / size guide] at the link," routed
+   to the real page that goes deeper than a caption can, the authority/data they can't get elsewhere.
+3. **On-site capture (the real early conversion, needs no affiliate):** the **taste quiz**
+   ("find the bag that actually fits your life") and **save / watch a bag**. The quiz is the default
+   CTA when unsure: it is live, needs no codes, is shareable, and *is* the buy-for-your-lifestyle
+   POV made interactive.
+4. **Monetize (passive, later):** the buy / sell / rent affiliate links already placed on the page
+   light up the day codes land, and evergreen pins keep sending traffic, so they **earn
+   retroactively**. Wiring codes is a one-time swap (`NEXT_PUBLIC_AFFILIATE_*`), not a per-post task.
+
+Rules: never promise a destination that is not live (verify the URL); default to the quiz over a
+buy link pre-monetization; the rental-affiliate exception is "rent first" content (Vivrelle), which
+is closest-to-money once that program clears.
+
 ## Before you draft anything, load the ground truth (read, do not work from memory)
 
 You do NOT get the main thread's operating-rules hook, so you load the canon yourself:
