@@ -210,6 +210,50 @@ Balenciaga has more exceptions than most, pre-2012 tag-only bags are especially 
 ## Sources
 Drawn chiefly from the Love that Bag reseller guide, in June 2026. That guide is detailed but single-source and its letter-code table is older, so the most recent season codes are best confirmed with a second opinion before relying on them.`;
 
+const fendiBody = `Fendi is one of the fastest-rising names in resale fakes, and the Baguette most of all, with the Peekaboo close behind. The FF print is the most-copied part of the bag, so the read comes from how it is executed, not the logo itself.
+
+## The serial, by era
+Pre-1980s pieces often have no serial at all. The 1980s to 2000s use a serial leather tag, and a Fendi SAS marking is a reliable older-era indicator. The 2000s added hologram tags, and recent models add a QR code or NFC chip for digital verification. Match the format to the claimed age rather than expecting one system, and remember a present hologram or serial is the most-copied element, so it is never proof on its own.
+
+[diagram: fendi-authentication]
+
+## The FF logo and the Zucca canvas
+The double-F is sharp-edged and symmetrical, holding a set width-to-height ratio that fakes routinely miss. On the Zucca print the two F's sit slightly offset on either side of the rectangle rather than perfectly mirrored, and the print should never look stretched. The canvas itself has a tight weave, clean registration, and a warm tone. It should never read green, and loose weave or color bleed is a warning sign.
+
+## Hardware, zip, and lining
+The FENDI engraving on hardware is crisp and properly deep, not shallow or surface-etched, and on the Baguette clasp backing the screws are flat-head, so a Phillips or star screw is a tell. The zips are quality YKK, Lampo, or branded Fendi and glide smoothly. Inside, the lining is neatly sewn in with no bunching, and glued lining or exposed raw edges point the other way.
+
+## The origin stamp
+The origin line is pressed into the leather in the correct font and reads Made in Italy only. Any other country is a definitive fake tell. Note that Fendi Roma is a brand mark, which is a separate thing from the origin line.
+
+## When to call in a pro
+The print and a clean hologram are exactly what counterfeiters invest in most, so none of them proves a bag on its own, and the NFC chip cannot be read at home. For a costly Baguette or Peekaboo, or before selling or insuring, have a professional authenticator examine it in person.
+
+## Sources
+Drawn from authentication services and reseller guides, including Fashionica, TheRealReal, and 9ine Life, in June 2026. The Fendi SAS era marker rests largely on one source, so treat it as context to corroborate, not a standalone test.`;
+
+const loeweBody = `Loewe is one of the fastest-rising names in resale fakes, and the Puzzle most of all, with the Hammock next. It is also one of the harder houses to check, because there is no public serial lookup and no consumer verification tool. Any site claiming an official Loewe lookup is a scam. So this comes down to craft more than codes.
+
+## The Anagram
+The four interlocking L's must be identical in weight, size, and spacing, and centered. Asymmetry, thick-to-thin variation, or an off-center mark is the most common tell. On the wordmark, the O is not a perfect circle, it has slightly pointed ends, a subtle football shape, and a perfectly round O is a known tell. That last detail is lower confidence, so check it on close photos rather than treating it as decisive.
+
+[diagram: loewe-authentication]
+
+## The leather, by feel
+Authentic Nappa calfskin is exceptionally soft, supple, fine-grained, and slightly heavy. Papery, stiff, or plasticky leather, or an oversized uniform grain, points the other way. This one is feel-based, so weigh it as craft judgment rather than a hard rule, and let it support the harder markers instead of standing alone.
+
+## The Puzzle construction
+On the Puzzle the geometric panels fit with precision, with no gaps, overlaps, or misaligned edges, and the seam lines between them are thick, bold, and clearly defined. Thin seam lines that fade into the leather are a tell, and the knotted strap attachments should be tight and identical on both sides.
+
+## Hardware and the interior tag
+On metal hardware the Anagram is deeply, precisely engraved and fully fills the metal square, so a logo floating with wide margins is a flag, and the zips are Lampo or Riri. The interior leather tab reads LOEWE over Made in Spain over the serial, with defined corners, and the serial is debossed into the leather rather than printed. Mainline handbags are Made in Spain, so a non-Spain origin on a current bag is a strong flag. There is no Loewe authenticity card, so its absence is not a flag.
+
+## When to call in a pro
+Much of Loewe authentication is craft judgment, the leather hand, the stamp feel, the Anagram proportions, none of which you can verify against a database, and the serial cannot be looked up to prove a bag. For a costly Puzzle or Hammock, or before selling or insuring, have a professional authenticator examine it in person.
+
+## Sources
+Drawn from authentication services and reseller guides, including Fashionica, TheRealReal, and Legitique, in June 2026. The softer markers, the football O and the delicate stamp depth, rest on a single strong source plus community consensus, so we show them as points to verify on photos, not binary tells.`;
+
 type SeedPost = {
   slug: string;
   title: string;
@@ -301,27 +345,47 @@ const POSTS: SeedPost[] = [
     topic_brand_id: 405,
     topic_style_id: null,
   },
+  {
+    slug: "fendi-authentication",
+    title: "Fendi authentication: The markers worth checking",
+    excerpt:
+      "The FF print is the most-copied part of a Fendi, so the read is in the execution: the logo geometry, the warm Zucca tone, the flat-head clasp screws, and the serial-to-NFC era timeline. Markers to weigh, not the logo.",
+    body: fendiBody,
+    topic_brand_id: 201,
+    topic_style_id: null,
+  },
+  {
+    slug: "loewe-authentication",
+    title: "Loewe authentication: The markers worth checking",
+    excerpt:
+      "Loewe has no public serial lookup, so this leans on craft: the Anagram symmetry, the Nappa leather hand, the Puzzle panel seams, and the debossed Made-in-Spain tab. Weigh-points and craft judgment, never a verdict.",
+    body: loeweBody,
+    topic_brand_id: 399,
+    topic_style_id: null,
+  },
 ];
 
 async function main() {
   for (const p of POSTS) {
     const { data: existing } = await db.from("post").select("post_id").eq("slug", p.slug).maybeSingle();
-    const row = {
+    // Content fields only. `status` is set on INSERT (new drafts) but NEVER on
+    // UPDATE, so re-running this seed to refresh copy can't silently un-publish a
+    // guide the owner already launched.
+    const content = {
       author_user_id: AUTHOR,
       slug: p.slug,
       title: p.title,
       excerpt: p.excerpt,
       body: p.body,
-      status: "draft" as const,
       topic_brand_id: p.topic_brand_id,
       topic_style_id: p.topic_style_id,
       updated_at: new Date().toISOString(),
     };
     if (existing) {
-      const { error } = await db.from("post").update(row).eq("post_id", existing.post_id);
-      console.log(error ? `UPDATE ${p.slug} ERR ${error.message}` : `updated #${existing.post_id} ${p.slug}`);
+      const { error } = await db.from("post").update(content).eq("post_id", existing.post_id);
+      console.log(error ? `UPDATE ${p.slug} ERR ${error.message}` : `updated #${existing.post_id} ${p.slug} (status preserved)`);
     } else {
-      const { data, error } = await db.from("post").insert(row).select("post_id").single();
+      const { data, error } = await db.from("post").insert({ ...content, status: "draft" as const }).select("post_id").single();
       console.log(error ? `INSERT ${p.slug} ERR ${error.message}` : `inserted #${data!.post_id} ${p.slug}`);
     }
   }
