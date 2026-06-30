@@ -319,10 +319,13 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
 ## 8. AI-assist guardrails (don't let it read like a robot)
 
 We draft with AI (it's the leverage the whole company runs on) but we **never ship
-obviously-AI copy** — same principle as the no-obviously-AI-*video* rule
-(`docs/handoff.md` constraints). AI-generated tells also get *downweighted by the
-very AI search engines we're optimizing for* (`docs/marketing-plan.md` Decision 4),
-so this is strategy, not just taste.
+obviously-AI copy** — same principle as the **video hard line**: *AI never generates
+footage; AI only edits real footage. Never alter reality (face/voice/appearance/
+scene/object), never AI-touch an authentication frame, never strip an AI label*
+(full ruleset + TikTok disclosure map: `docs/social-content-calendar.md` §8).
+AI-generated tells also get *downweighted by the very AI search engines we're
+optimizing for* (`docs/marketing-plan.md` Decision 4), so this is strategy, not just
+taste.
 
 ### The AI-slop tells to strip every time
 - **Hollow tricolons & "not just X but Y":** "It's not just a bag, it's a
