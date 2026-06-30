@@ -1638,6 +1638,49 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 250, maxPrice: 1500,
     searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // ── Chloé backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Marcie satchel/saddle. Size token anchors the bucket; exclude SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Chloé", style: "Marcie", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["marcie", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 350, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Faye shoulder/backpack. Size-anchored.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Chloé", style: "Faye", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["faye", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 250, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Woody tote (incl. ribbon tote). Capture the high-n Medium + Large.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "Chloé", style: "Woody Tote", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["woody", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 350, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Drew shoulder bag — low volume, single bucket (most handles carry no size token).
+  { brand: "Chloé", style: "Drew", size_label: "Standard",
+    requireTokens: ["drew"],
+    excludeTokens: ["wallet", "card", "coin", "clutch"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // Aby day shoulder bag — Medium only on the feed.
+  { brand: "Chloé", style: "Aby", size_label: "Medium",
+    requireTokens: ["aby", "medium"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // C Bag — single Mini on the feed.
+  { brand: "Chloé", style: "C Bag", size_label: "Mini",
+    requireTokens: ["c-bag", "mini"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
