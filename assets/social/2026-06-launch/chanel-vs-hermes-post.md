@@ -1,6 +1,6 @@
 # Post — Chanel vs Hermès: two opposite ways to "hold value"
 
-Status: DRAFTED 2026-06-30 (clarity rewrite: one reference, used vs new). Pillar: honest money / authority. Persona: Maya + Diane + Sofia.
+Status: APPROVED 2026-06-30 (owner; hook B primary).
 Destination (interim): https://www.luxurycatalog.com/articles/are-designer-bags-a-good-investment
 GAP TO COMMISSION: a dedicated "Chanel vs Hermès: two ways to hold value" article.
 Visual: assets/social/2026-06-launch/chanel-vs-hermes-resale.svg (used vs new, both houses)
