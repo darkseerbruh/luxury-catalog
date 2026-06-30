@@ -1681,6 +1681,53 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 400, maxPrice: 2500,
     searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // ── Givenchy backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Antigona satchel. Size-anchored; exclude SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Antigona", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["antigona", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 450, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Pandora — classic only; exclude the distinct Pandora Box sub-model + SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Pandora", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["pandora", size],
+    excludeTokens: ["box", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1400,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // 4G chain bag/tote. Size-anchored.
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "4G", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["4g", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Voyou — capture the high-n Medium + Nano.
+  ...(["nano", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Voyou", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["voyou", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Cut Out (incl. Moon Cut Out) shoulder bag. Size-anchored.
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Givenchy", style: "Cut Out", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["cut-out", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 450, maxPrice: 1400,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // GV3 — low volume, single bucket.
+  { brand: "Givenchy", style: "GV3", size_label: "Standard",
+    requireTokens: ["gv3"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 450, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json" },
 ];
 
 // ---------------------------------------------------------------------------

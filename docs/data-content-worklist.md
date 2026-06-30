@@ -38,7 +38,7 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
 - 🔄 **Balenciaga** — ✅ Fashionphile (2026-06-30, 111 rows): Le Cagole XS $1,072/n20 + Mini $695/n3, Hourglass XS $1,087/n20 + Small $1,150/n21, City(le-city) Small $2,220/n13 + Medium $2,605/n15, Neo Classic Nano $1,175/n6, Velo $1,130/n8, Papier $640/n3. ⬜ TRR/Vestiaire (Firecrawl, credits) + eBay sold (keys)
 - 🔄 **Chloé** — ✅ Fashionphile (2026-06-30, 108 rows): Marcie Mini $650/Small $1,095/Medium $775, Faye Mini $460/Small $375/Medium $550, Woody Tote Medium $635/Large $1,010, Drew $505/n9, Aby Medium $1,017/n2, C Bag Mini $895/n1. Penelope=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
-- ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
+- 🔄 **Givenchy** — ✅ Fashionphile (2026-06-30, 115 rows): Antigona Mini $1,255/n35 + Small $1,015/n29 + Medium $1,050/n11, Pandora Mini $650/Small $485/Medium $450, 4G Small $830/Medium $1,150, Voyou Nano $750/Medium $800, Cut Out Mini/Small, GV3 $692/n2. ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - ⬜ **Valentino** — Rockstud Spike, Roman Stud, Locò, One Stud, VLogo Signature (+ Supervee)
 - ⬜ **Alexander McQueen** — The Knuckle, The Jewelled Satchel, The Bow Tote, Skull, Manta
 - ⬜ **Off-White** — Binder Clip, Jitney, Burrow
