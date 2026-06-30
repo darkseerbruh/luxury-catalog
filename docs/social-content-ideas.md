@@ -28,6 +28,52 @@ The owner's most original, ownable thesis. A series, not one post.
 - **Spin-off posts:** "the phone-pocket every luxury bag is missing," "why the 19 worked and the
   22 didn't," "bags for people who actually work from their bag," "crossbody or it didn't happen."
 
+### Modern-life report card (named examples + the mechanism; owner, 2026-06-30)
+
+**Doing it RIGHT**
+- **Fendi Peekaboo Mini (the standout).** Structure comes from a **metal bar across the middle**
+  that holds the handle, not a fully rigid body. That bar is **also a divider**: two sections,
+  each closes on its own (vs. one flap that opens everything at once). Security: put your phone
+  (the prime pickpocket target) in the body-side compartment and **lock it**, no hand fits in.
+  Genuinely versatile walking a city crossbody. **We have Peekaboo + Peekaboo-ostrich stills, so
+  this is asset-ready.** (Verify the bar/divider/lock mechanics on the current model first.)
+- **Chanel 19.** Big spacious **back pocket** where the phone hides against the body; crossbody +
+  flexibility is why it landed.
+
+**Doing it WRONG (each with the specific failure; her take, not a verdict)**
+- **Kelly (her pick for worst it-bag for modern life).** Has a crossbody strap (good), but the
+  single front-locking flap means: unlocked for access, it's exposed AND it **flops forward**
+  (weight distribution), so things slide out. Floppy when open.
+- **Birkin.** **No crossbody strap**, the cardinal sin, so universal that people pay to mod
+  aftermarket straps onto a five-figure bag. "Too much money for the obvious thing to be missing."
+- **Classic Flap.** The usual misses, but credit due: it has a **back patch pocket** (phone fits
+  vertical, pokes out) and the strap extends to crossbody. "At least."
+- **The table-stakes demand:** accessible phone storage, at minimum a back pocket. None of the
+  holy trinity nails it. "How is this not built in yet?"
+
+### Feet + the Southern folklore hook (a standout single post)
+Why do houses still ship bags with **no feet**? She sets bags on surfaces all day, refuses the
+ground. Cultural layer: a **Southern / Black Southern saying that a bag on the ground means
+you'll lose all your money**, and the practical truth under it (ground = germs, then onto your
+kitchen counter, so the superstition does real hygiene work). Personal + cultural + funny +
+practical. **Caveat:** present the saying as folklore (attribute, don't invent its origin), the
+germ rationale as her common-sense read; light research pass on the folklore's roots first.
+
+### The organizer-industry indictment
+A whole market of (~sub-$100, but still) bag organizers/shapers exists to protect a bag's shape,
+stop pen marks, and preserve resale value. The point: you spent thousands and still have to buy
+an accessory to make the bag usable. "That's crazy." Sharp hook for the thesis.
+
+### The grail that doesn't exist yet: a petite bag that holds a laptop
+The digital-nomad need: a small, cute handbag that fits a MacBook Air for the coffee-shop work
+session, without a giant laptop bag full of charger + headphones. "How hard is that? Hard." A
+"the bag I wish existed" post and a real product-design observation.
+
+### Structure vs. slouch (her taste, stated as taste)
+Slouchy/sack bags drive her crazy; an open tote like the Neverfull she'd never keep clean. She
+knows it's a style choice many love (the 19 slumps into the body on purpose). Frame as taste,
+not a rule.
+
 ## Myth-busts (de-gatekeeping; AUTH-GATE + source before publish)
 
 1. **"The logos have to line up where two panels meet, or it's fake." MYTH.** Lore says matching
