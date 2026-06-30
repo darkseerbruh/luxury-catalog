@@ -36,7 +36,7 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 
 - 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (134 rows, 2026-06-28: PM med $2,465 n=89, GM med $2,460 n=45, w/ colour+material). ⬜ Anjou, Artois, Belvédère, Saïgon + TRR/Vestiaire (Chrome) + eBay (keys)
 - 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
-- ⬜ **Balenciaga** — Le Cagole, Hourglass, City, Neo Classic (+ Velo, Papier)
+- 🔄 **Balenciaga** — ✅ Fashionphile (2026-06-30, 111 rows): Le Cagole XS $1,072/n20 + Mini $695/n3, Hourglass XS $1,087/n20 + Small $1,150/n21, City(le-city) Small $2,220/n13 + Medium $2,605/n15, Neo Classic Nano $1,175/n6, Velo $1,130/n8, Papier $640/n3. ⬜ TRR/Vestiaire (Firecrawl, credits) + eBay sold (keys)
 - ⬜ **Chloé** — Marcie, Drew, Faye, Woody Tote, C Bag (+ Aby, Penelope)
 - ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
 - ⬜ **Valentino** — Rockstud Spike, Roman Stud, Locò, One Stud, VLogo Signature (+ Supervee)

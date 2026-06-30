@@ -1593,6 +1593,51 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 2000,
     searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
   })),
+  // ── Balenciaga backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Le Cagole shoulder bag. excludeTokens drop the Neo Cagole sub-model and the
+  // duffle/sling/bucket sub-shapes so XS/Mini stay the canonical shoulder bag.
+  ...(["xs", "mini"] as const).map((size) => ({
+    brand: "Balenciaga", style: "Le Cagole", size_label: size === "xs" ? "XS" : "Mini",
+    requireTokens: ["le-cagole", size],
+    excludeTokens: ["neo", "duffle", "sling", "bucket", "wallet", "card", "phone"],
+    minPrice: 500, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Hourglass top-handle. excludeTokens drop SLGs + the distinct chain-bag shoulder variant.
+  ...(["xs", "small"] as const).map((size) => ({
+    brand: "Balenciaga", style: "Hourglass", size_label: size === "xs" ? "XS" : "Small",
+    requireTokens: ["hourglass", size],
+    excludeTokens: ["wallet", "card", "coin", "chain-bag"],
+    minPrice: 400, maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Classic City (Fashionphile handle "le-city"). excludeTokens drop the Neo Classic/Neo Cagole
+  // sub-lines that also carry "city" in the handle.
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Balenciaga", style: "City", size_label: size === "small" ? "Small" : "Medium",
+    requireTokens: ["le-city", size],
+    excludeTokens: ["neo", "wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Neo Classic City — Nano is the dominant clean size; exclude the x-Gucci collab outlier + SLGs.
+  { brand: "Balenciaga", style: "Neo Classic", size_label: "Nano",
+    requireTokens: ["neo-classic", "nano"],
+    excludeTokens: ["gucci", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // Velo — older crossbody; single bucket. Exclude clutches/SLGs that share the collection.
+  { brand: "Balenciaga", style: "Velo", size_label: "Standard",
+    requireTokens: ["velo"],
+    excludeTokens: ["wallet", "card", "coin", "envelope", "clutch"],
+    minPrice: 300, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // Papier zip-around tote (A5/A6) — niche; single bucket.
+  { brand: "Balenciaga", style: "Papier", size_label: "Standard",
+    requireTokens: ["papier"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
