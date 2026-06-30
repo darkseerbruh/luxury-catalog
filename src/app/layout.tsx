@@ -29,8 +29,8 @@ const SKIMLINKS_ID = process.env.NEXT_PUBLIC_SKIMLINKS_ID ?? "305125X1793317";
 
 // Impact (impact.com) Universal Tracking Tag — affiliate/partner network. The
 // account UTT id is a public, non-secret value; overridable per environment,
-// defaults to our account. Loaded beforeInteractive so the tag is present in the
-// server-rendered <head>, which is what Impact reads when verifying site ownership.
+// defaults to our account. The script + beacon hosts must be allowlisted in the
+// CSP (next.config.ts) or the browser blocks the tag and impact can't verify.
 const IMPACT_UTT_ID = process.env.NEXT_PUBLIC_IMPACT_UTT_ID ?? "P-A7429371-012a-4557-a513-44f810f4e2321";
 
 export const metadata: Metadata = {
