@@ -1,6 +1,6 @@
 # Post — The small bag is the flex (Drip Too Hard)
 
-Status: DRAFTED 2026-06-30. Pillar: hype/culture. Persona: Maya + viral.
+Status: APPROVED 2026-06-30 (owner). Pillar: hype/culture. Persona: Maya + viral.
 Destination: https://www.luxurycatalog.com/articles/does-a-smaller-bag-cost-more
 UTM: ?utm_source=<channel>&utm_medium=social&utm_campaign=2026-06-launch
 Visual: assets/social/2026-06-launch/lady-dior-smaller-pricier.svg (Pinterest/IG hero) + her on-camera for TikTok.
