@@ -9,15 +9,18 @@ gap map in `docs/handoff.md`.*
 **Be the trusted reference at each buying decision, then hand off to the commissionable
 action.** Content earns the trust and the search traffic; the post→bag **money-moment CTA
 block** (`src/app/posts/[slug]/PostBagCTA.tsx`) converts it into a buy / sell / rent
-referral, weighted to the seller side.
+referral, weighted to the buyer side (the high-payout seller lever was a bust; see below).
 
 ## What we're going for, and why
 - **Decision-moment reference.** Readers arrive *mid-decision*: "is it real / what's it
   worth / which one / where do I buy, sell, or rent." Every post maps 1:1 to one of those.
 - **Compare-and-hand-off monetization.** We don't sell; we inform then route to partners.
-  Every post ends in the CTA block. **Seller/consignor referral is the dominant lever**
-  (~$1,250 vs ~$30–60 a buyer click), so sell is surfaced first; rent is the third fork
-  (the "want" intent); buy is always there.
+  Every post ends in the CTA block. **Buyer affiliate is the backbone** (traffic-bound,
+  ~$30–60 a click, but it scales with pageviews). The seller/consignor referral was the old
+  dominant bet at ~$1,250, but TRR Real Partners was ruled out (2026-06-24) and the final
+  high-payout pitch was rejected (2026-06-30), leaving only a small ~$250 niche line. So buy
+  is surfaced first; sell is a light routing on owner/flip signals; rent is the third fork
+  (the "want" intent).
 - **Two moats.** (1) **Real resale data** nobody else publishes (original, defensible,
   AI-citable). (2) **Authentication authority** (the "is it real" brand position).
 - **GEO/SEO is the channel.** Fact-dense, specific pages get cited by AI and Google. The
@@ -27,7 +30,7 @@ referral, weighted to the seller side.
 commissionable hand-off.
 
 ## Prioritization lens
-Score each piece on **$ (monetization, seller-weighted) · Reach (search + AI-citation +
+Score each piece on **$ (monetization, buyer-affiliate-weighted) · Reach (search + AI-citation +
 shareability) · Ready (can we write it *credibly now*) · Effort (solo-operator).** Honest
 constraint from the 2026-06-24 data audit: **high-end value/comparison is ready now;
 authentication needs sourcing; mid-tier needs data capture.**

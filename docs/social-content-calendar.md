@@ -106,7 +106,7 @@ effort, the affiliate-revenue path, the AI-assist boundary, and UTM usage.
   automatically.
 - **Effort:** Low–Med (the Ledger is the only hand-written piece; the rest automate).
 - **Revenue path:** every email links to bag pages (affiliate) and, for sellers, to
-  consignor-referral links (the higher-payout side — Decision 3).
+  consignor-referral links (a small, down-weighted line now, not the higher-payout side).
 - **AI-assist boundary:** AI drafts the Ledger from real catalog + price data; human
   edits to voice and runs the §8 checklist. Never auto-send unreviewed.
 - **UTM:** `utm_source=newsletter&utm_medium=email&utm_campaign=<yyyy-mm>-<name>&utm_content=<block>`.
@@ -193,9 +193,10 @@ written in the brand voice. These are the columns of the calendar.
 | **Re-engagement** | Taste-match drop / watched-bag move | "A bag matching your taste just dropped" | direct to bag page |
 | **Price-trend digest** | Monthly, collector segment | Movers, comps, what's holding value | buy/sell + premium-tool hook |
 
-- The **consignor-referral** link (Decision 3 — avg ~$1,250/referral vs ~2.4%
-  buyer-side) belongs in any email touching sellers/flippers: "found one? here's
-  where to sell it."
+- The **consignor-referral** link still belongs in any email touching sellers/flippers
+  ("found one? here's where to sell it"), but it is a small ~$250 niche line now, not the
+  ~$1,250 high-payout lever (TRR ruled out 2026-06-24, final pitch rejected 2026-06-30).
+  Buyer affiliate is the backbone.
 - Premium price-trend content is also the soft on-ramp to the future paid
   investment-tracking tier (`monetization_interest` event exists; no UI yet).
 
@@ -215,7 +216,7 @@ revenue path, audience bridge.
    - *Hook:* "$12 in, $180 out — if it's real." Show the math.
    - *Channels:* TikTok hero → IG Reel → newsletter feature.
    - *Cadence:* biweekly. *Effort:* High (batched).
-   - *Revenue:* where-to-**sell** consignor referral (the high-payout side).
+   - *Revenue:* buyer affiliate plus a light where-to-sell consignor referral (down-weighted, not high-payout).
    - *Bridges:* flipper-led.
 3. **Is This Bag Holding Value? (investment series)**
    - *Hook:* retail vs. resale vs. 12-month trend for one icon.
