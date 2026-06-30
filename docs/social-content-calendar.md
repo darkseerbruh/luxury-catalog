@@ -19,11 +19,12 @@ channel strategy this implements), and `docs/utm-conventions.md` (how we tag it)
 1. **One operator, AI leverage.** Time is the only non-scaling resource. Favor
    batchable, repurposable, evergreen formats over daily live obligations
    (`docs/marketing-plan.md` §intro).
-2. **No obviously-AI-generated video.** AI-*assisted* with human review is fine;
-   obviously-synthetic video is not — it's a product constraint and it gets
-   downweighted by AI search anyway (`docs/handoff.md` constraints,
-   `docs/marketing-plan.md` Decision 4). The same rule applies to copy
-   (`docs/voice-and-tone.md` §8).
+2. **AI never generates footage; AI only assists.** The hard line: AI may *edit*
+   real footage (cut, color, caption, clean up), but AI may never *generate* footage
+   or *alter reality* (face, voice, appearance, scene, object), and never touch an
+   authentication frame at all. This is stricter than "no *obviously*-AI video"
+   on purpose, because trust is our product. Full ruleset + the TikTok disclosure
+   map: **§8 below.** Same principle for copy: `docs/voice-and-tone.md` §8.
 3. **Every post drives to a page.** A million views that never reach the site is an
    ego hit, not revenue (`docs/marketing-plan.md` §6). The link is the point.
 4. **Tag everything** per `docs/utm-conventions.md` so we can prove which channel
@@ -280,7 +281,116 @@ revenue, ignore vanity).
 
 ---
 
-## 8. Quick reference
+## 8. AI authenticity rules (video + social)
+
+*Added 2026-06-29. Why this is its own section: for most brands AI-slop is a quality
+problem; for us it's an existential trust problem, because trust is the product. We
+sell "this bag is real" and "this is what it's worth." A single "this is AI" pile-up
+in the comments makes every authentication and value claim we've made look suspect.
+So our bar is not "don't look too AI." It's leave zero AI fingerprints.*
+
+### Why the stakes are higher for us (the landscape, 2026)
+- The feed is saturated. A named study (Kapwing's *TikTok AI Slop Report*) found
+  ~59% of the first 500 videos served to a fresh For-You account were AI slop,
+  roughly 3x YouTube's rate. Viewers are primed and scanning every clip for tells.
+- The comment culture is the real danger. When a video reads as AI, the call-out
+  comments out-like the post, and that backlash still counts as engagement, so the
+  algorithm pushes it wider while the brand eats the reputational hit. You go viral
+  for being fake. Worst possible outcome for a trust brand.
+- Users now object to the *feeling of being tricked*, independent of quality. That
+  is the exact opposite of our "we hand you the gatekept truth straight" positioning.
+
+### The tells commenters hunt for → our never-do list
+The reliable 2026 tells (per NPR, AOL, Colossyan, Faux Lens). Each is a rule: if a
+frame could trip it, the frame does not ship.
+
+| Category | The tell | Our rule |
+|---|---|---|
+| **Hands & objects** | Extra/melting fingers, a handle or clasp that morphs frame to frame, hardware that changes shape | Real hands on a real bag, filmed. AI never renders the product or the hands on it |
+| **Text** | Morphing/garbled text; a logo, serial, or date code that shifts (still the hardest thing for every model) | Never show a serial, date code, creed stamp, or logo in AI footage. These are our credibility. Real macro shots only |
+| **Motion & physics** | Too-smooth "gliding" movement, flickering shadows/hair/fabric, lighting that shifts as the camera pans | If a clip has that uncanny glide or flicker, cut it. Real handheld has micro-imperfection; keep it |
+| **Voice/audio** | Monotone or over-smooth voiceover, no breath, emotion that doesn't track the words | Founder's real voice or a real human voice. No AI voice clone, no synthetic narration |
+| **Faces** | Face-continuity slips, waxy skin, off blink timing | Real face (founder-persona) or no face. Never a synthetic presenter |
+| **Account pattern** | Brand-new account posting viral-optimized content; the same clip reposted with one variable swapped | No template-variant spam. Each post is genuinely distinct |
+| **Writing** | The AI-slop word/phrasing tells | `docs/voice-and-tone.md` §8 blacklist applies to captions + on-screen text |
+
+Caveat from the research: "six fingers" is no longer reliable (Sora 2, Veo 3 mostly
+fixed it). The dependable 2026 tells are stable text, real physics, real voice, and
+real macro detail, which is exactly where authentication content lives. Good for us:
+the hardest things to fake are the things we most need to be real anyway.
+
+### TikTok's actual disclosure rule (what's solid vs. blog-noise)
+- **Solid (TikTok official / reputable):** TikTok requires a visible AI label on
+  content that uses AI to *create or significantly alter* a realistic depiction of a
+  person, place, or event (one a viewer could mistake for authentic). It auto-detects
+  via C2PA Content Credentials + invisible watermarking, so "just don't label it" is
+  not an option, it gets caught. TikTok's stated position: the label is a disclosure
+  mechanism, **not** a ranking penalty by itself.
+- **Treat as unverified (third-party SEO blogs):** the precise scare-figures like
+  "73% reach suppression in 48 hours." Directionally plausible, not from TikTok.
+  Don't build the plan on the exact numbers.
+- **The real takeaway:** the penalty isn't the label, it's (a) getting auto-flagged
+  for *undisclosed* AI (a strike/trust risk) and (b) user behavior (people scroll
+  past or pile on, and *that* tanks ranking). So even allowed, labeled AI video
+  underperforms for a brand like ours.
+
+### Editing real footage: what needs disclosure, what doesn't
+The line is *what kind* of edit, not whether AI touched the file. Ordinary editing is
+exempt; altering reality is not.
+
+| Editing operation | TikTok disclosure? | Safe for us? |
+|---|---|---|
+| Cuts, trims, speed ramps, transitions | No | Yes |
+| Color grading, lighting, filters | No | Yes |
+| Crop, stabilize, zoom | No | Yes |
+| Noise reduction, audio cleanup | No | Yes |
+| Auto-captions, subtitles, text overlays (even AI-generated) | No | Yes |
+| Auto-cut / "assemble my clips" assists | No | Yes |
+| Background music, sound effects | No | Yes |
+| Beauty filter / face retouch (light) | No (light only) | Sparingly; never on an authentication frame |
+| AI background removal / replacement | **Yes** (alters the "place") | Avoid |
+| Generative fill, object add/remove | **Yes** | **Never**, especially on bag detail |
+| Face swap / de-age / substantial appearance change | **Yes** | Never |
+| AI voice clone / synthetic narration / altered lip-sync | **Yes** | Never |
+
+So a real thrift-haul edited in CapCut with cuts, color, auto-captions, and music is
+fully clean and needs no label. That is the bulk of what we actually do.
+
+**Two catches that bite in practice:**
+1. **Metadata auto-labels you, even for innocent edits.** CapCut/Runway-type tools
+   write C2PA/AI tags into the export, and TikTok reads them, so a benign AI feature
+   (or just exporting through an AI editor) can trip an automatic label on real
+   footage. Workflow fix: prefer the non-AI tools inside the editor; if you do use an
+   AI feature, expect the label and don't fight it.
+2. **Never strip the label/metadata to dodge detection.** It's a real cottage
+   industry online; it's against TikTok policy and flatly against our honesty stance.
+   Getting caught scrubbing a label is worse than the label.
+
+### The airtight rules (these are hard rules, not guidance)
+1. No AI-generated or AI-altered footage of a bag, ever. The product is always filmed.
+2. No AI anywhere near a serial, date code, stamp, logo, or hardware. Authentication
+   detail is real macro footage only. "Cleaning up" evidence with AI is tampering.
+3. No synthetic or cloned voice. Real human voice only.
+4. No synthetic face or presenter. Founder-persona on camera, or faceless real footage.
+5. No template-variant spam (same clip, one variable swapped). Each post is distinct.
+6. If a clip has the uncanny glide, flicker, morph, or physics slip, it does not ship,
+   even if you can't say exactly why. Your gut "something's off" is your viewer's too.
+7. AI *is* allowed for: scripting/hooks, editing (cut/color/clean-up/auto-cut),
+   captions and on-screen text (run the §8 voice slop-sweep), research, and shot
+   planning. Disclose per TikTok in the rare case anything generative reaches a frame.
+8. Never alter reality (face, voice, appearance, scene, object), and never AI-touch an
+   authentication frame at all. (Stricter than TikTok requires, on purpose.)
+9. Turn the constraint into the brand. "Real bags, real hands, really checked" is a
+   positioning advantage while most of the feed is slop. Say it out loud sometimes.
+
+**Metric this moves:** protects completion rate + comment sentiment + return visits
+(the trust signals that actually drive ranking) and the brand-trust asset itself; and
+protects reach directly by avoiding undisclosed-AI auto-flags and the AI-search
+downranking we already optimize against (`docs/voice-and-tone.md` §8).
+
+---
+
+## 9. Quick reference
 
 - **Do-first quadrant:** Pinterest + Email + IG carousels (high revenue, low effort,
   repurposable). **Batch** the video.
@@ -292,5 +402,7 @@ revenue, ignore vanity).
 - **Voice:** deeply informed, warmly told; one voice, register flexed by surface —
   see `docs/voice-and-tone.md`. Founder-persona (on-camera, first-person gush) vs.
   brand-system (everywhere else, no empty superlatives) per its §5.
-- **No obviously-AI video. Ever.**
+- **AI never generates footage; it only edits real footage.** Never alter reality
+  (face/voice/appearance/scene/object), never AI-touch an authentication frame, never
+  strip an AI label. Full ruleset + TikTok disclosure map: **§8.**
 </content>

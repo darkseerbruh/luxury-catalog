@@ -14,6 +14,11 @@ const cspDirectives: Record<string, string[]> = {
     "'unsafe-eval'",
     "https://www.instagram.com",
     "https://*.cdninstagram.com",
+    // Affiliate network tags (revenue). Without these the browser blocks the
+    // scripts and they silently never run: impact.com's Universal Tracking Tag
+    // (also needed for impact's ownership verification) and Skimlinks.
+    "https://*.impactcdn.com",
+    "https://s.skimresources.com",
   ],
   "style-src": ["'self'", "'unsafe-inline'"],
   "img-src": ["'self'", "data:", "blob:", "https:"],
@@ -32,6 +37,11 @@ const cspDirectives: Record<string, string[]> = {
     "https://graph.facebook.com",
     "https://www.instagram.com",
     "https://*.cdninstagram.com",
+    // Affiliate beacons: impact.com impression/click events + Skimlinks. img-src
+    // already allows any https pixel; these cover fetch/XHR/sendBeacon beacons.
+    "https://*.impactcdn.com",
+    "https://*.impactradius-event.com",
+    "https://*.skimresources.com",
   ],
   "frame-ancestors": ["'self'"],
   "base-uri": ["'self'"],

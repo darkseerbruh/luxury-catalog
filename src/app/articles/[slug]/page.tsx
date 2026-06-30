@@ -11,6 +11,7 @@ import { ShopThisBag, type ShopThisBagData } from "./ShopThisBag";
 import { getStyleShopData } from "@/lib/article-shop";
 import { buildConsignmentLinks, applyEbayAffiliate, affiliateListingUrl } from "@/lib/affiliate";
 import { coachDiagramRegistry } from "./CoachAuthDiagram";
+import { chanelDiagramRegistry } from "./ChanelAuthDiagram";
 import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
 import { gucciMarmontAuthDiagramRegistry } from "./GucciMarmontAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
@@ -38,6 +39,7 @@ import { TrustBadges } from "@/components/TrustBadges";
 // original schematic or data-viz component (never a photo) in place.
 const DIAGRAMS: Record<string, ComponentType> = {
   ...coachDiagramRegistry,
+  ...chanelDiagramRegistry,
   ...lvAuthDiagramRegistry,
   ...gucciMarmontAuthDiagramRegistry,
   ...flapChartsRegistry,

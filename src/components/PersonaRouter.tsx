@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { TASTE_QUESTIONS } from "@/lib/taste";
 import { getClosetValue } from "@/lib/portfolio";
 
 /**
@@ -15,8 +14,6 @@ import { getClosetValue } from "@/lib/portfolio";
  * there's enough want-signal (docs/ux/content-gating-strategy.md) — both live
  * outside this grid now.
  */
-
-const Q1 = TASTE_QUESTIONS[0];
 
 function formatPrice(amount: number, currency: string | null): string {
   const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
@@ -71,18 +68,12 @@ export default async function PersonaRouter() {
               <h3 className="font-serif text-xl text-foreground">Is it real?</h3>
               <p className="mt-1 text-sm text-muted">Found a bag in the wild? We can help.</p>
             </div>
-            {/* phone photographing a bag — makes the camera action obvious */}
-            <svg viewBox="0 0 44 64" className="h-28 w-20 flex-shrink-0 text-gold" fill="none" stroke="currentColor" aria-hidden>
-              <rect x="2" y="2" width="40" height="60" rx="7" strokeWidth="1.5" />
-              <rect x="7" y="9" width="30" height="40" rx="3" className="text-border" strokeWidth="1.2" />
-              <g strokeWidth="1.2" strokeLinecap="round">
-                <path d="M12 16v-3h3M32 13h3v3M12 45h3M32 45h3" />
-              </g>
-              <g transform="translate(15,22)" strokeWidth="0.9" opacity="0.8">
-                <path d="M1 4h12l-1 9a1 1 0 0 1-1 .9H4a1 1 0 0 1-1-.9z" />
-                <path d="M4.5 4V3a3 3 0 0 1 6 0v1" />
-              </g>
-              <circle cx="22" cy="55" r="3.5" strokeWidth="1.5" />
+            {/* magnifier examining a bag — "study the markers", no camera/scan implied */}
+            <svg viewBox="0 0 64 64" className="h-24 w-24 flex-shrink-0 text-gold" fill="none" stroke="currentColor" aria-hidden>
+              <path d="M14 20h26l-2 26a2 2 0 0 1-2 1.9H18a2 2 0 0 1-2-1.9z" strokeWidth="1.4" />
+              <path d="M21 20v-2.5a6 6 0 0 1 12 0V20" strokeWidth="1.4" />
+              <circle cx="41" cy="40" r="11" strokeWidth="2.4" className="text-gold-soft" />
+              <path d="M49 48l7.5 7.5" strokeWidth="2.4" strokeLinecap="round" className="text-gold-soft" />
             </svg>
           </div>
           <ul className="mt-3 space-y-1.5 text-sm">
@@ -90,17 +81,18 @@ export default async function PersonaRouter() {
             <li className="flex items-center gap-2 text-foreground"><Check /> Stamps and date codes</li>
             <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
-          <p className="mt-2 text-xs text-muted">Consistent never means authentic. We point you to a human.</p>
-          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-gold">
-            <Link href="/articles" className="transition-colors hover:text-gold-soft">Read the markers &rarr;</Link>
-            <Link href="/identify" className="transition-colors hover:text-gold-soft">Scan a bag &rarr;</Link>
-          </div>
+          <Link
+            href="/articles?department=authentication"
+            className="mt-4 text-sm font-medium text-gold transition-colors hover:text-gold-soft"
+          >
+            Read the authentication guides &rarr;
+          </Link>
         </div>
 
         {/* Tile 2 — Collect & invest (track a whole collection) */}
         <Link href="/closet" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Collect &amp; invest</h3>
-          <p className="mt-1 text-sm text-muted">Track what you own. Watch what it&rsquo;s worth.</p>
+          <p className="mt-1 text-sm text-muted">Save the bags you love. Watch what they&rsquo;re worth.</p>
           {closetValue ? (
             // Logged-in collector with priced bags: show the real estimated resale
             // total (never fabricated — only bags with resale history are counted).
@@ -114,27 +106,27 @@ export default async function PersonaRouter() {
               </p>
             </div>
           ) : (
-            // A whole collection: several bags, plus the value-over-time curve.
-            <div className="mt-4 flex flex-1 items-center justify-between gap-3">
-              <div className="flex items-end gap-1.5">
-                <Bag className="h-12 w-12 text-gold/55" />
+            // Want-led for the aspiring majority: the bags you love, saved. Contained
+            // (no full-width curve) so it never spills past the tile at any width.
+            <div className="mt-4 flex flex-1 items-center justify-center gap-3">
+              <Bag className="h-12 w-12 text-gold/50" />
+              <div className="relative">
                 <Bag className="h-16 w-16 text-gold" />
-                <Bag className="h-14 w-14 text-gold/80" />
-                <Bag className="h-10 w-10 text-gold/40" />
+                <svg viewBox="0 0 24 24" className="absolute -right-1 -top-1 h-6 w-6 text-gold-soft" fill="currentColor" aria-hidden>
+                  <path d="M12 21s-7-4.6-9.4-8.6C1 10 2.6 6.6 6 6.6c2 0 3.1 1.3 4 2.6 0.9-1.3 2-2.6 4-2.6 3.4 0 5 3.4 3.4 5.8C19 16.4 12 21 12 21z" />
+                </svg>
               </div>
-              <svg viewBox="0 0 90 40" className="h-12 w-24 flex-shrink-0 text-gold" fill="none" aria-hidden>
-                <path d="M2 34 L20 30 L38 24 L56 22 L74 12 L88 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <circle cx="88" cy="4" r="3" fill="currentColor" className="text-gold-soft" />
-              </svg>
+              <Bag className="h-12 w-12 text-gold/70" />
             </div>
           )}
-          <span className={CTA}>Track your closet &rarr;</span>
+          <span className={CTA}>Start your closet &rarr;</span>
         </Link>
 
-        {/* Tile 3 — What's it worth? (worth demo, not a search box) */}
+        {/* Tile 3 — What's it worth? The price-story demo: SHOW the moat the hero only
+            states. Value to Sofia/Cross-shopper = don't overpay or undersell. */}
         <Link href="/bag/199" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">What&rsquo;s it worth?</h3>
-          <p className="mt-1 text-sm text-muted">A peek at the full price story behind any bag.</p>
+          <p className="mt-1 text-sm text-muted">Before you buy or sell, see what a bag really trades for, every recorded sale.</p>
           <div className="mt-5 flex-1">
             <div className="relative">
               <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[11px] text-foreground">median</span>
@@ -153,35 +145,6 @@ export default async function PersonaRouter() {
           </div>
           <span className={CTA}>See the full price story &rarr;</span>
         </Link>
-
-        {/* Tile 4 — Find the bag for me (the quiz starts inline) */}
-        <div className={`${TILE} hover:border-border`}>
-          <h3 className="font-serif text-xl text-foreground">Find the bag for me</h3>
-          <p className="mt-1 text-sm text-muted">{Q1.prompt}</p>
-          <div className="mt-3 flex flex-1 flex-col gap-2">
-            {Q1.options.map((opt) => (
-              <Link
-                key={opt.value}
-                href={`/quiz?seed=${encodeURIComponent(opt.value)}`}
-                className="rounded-xl border border-border bg-surface-raised px-4 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold-soft"
-              >
-                {opt.label}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <p className="text-xs text-muted">
-              Question 1 of {TASTE_QUESTIONS.length} &middot;{" "}
-              <span className="text-gold">No account needed</span>
-            </p>
-            <Link
-              href="/quiz"
-              className="flex-shrink-0 rounded-full bg-gold px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-            >
-              Continue &rarr;
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );

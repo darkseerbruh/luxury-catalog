@@ -3,9 +3,9 @@ import { type Deal, MIN_DEALS_TO_RENDER } from "@/lib/deals";
 import { DealBuyButton } from "@/components/DealBuyButton";
 
 /**
- * "Priced well today" — a narrow research rail (paired with "It bags" on the home
- * page), NOT a bargain carousel. Each row grades a current listing against the bag's
- * OWN recorded resale range — low / median / high — and links out to the listing.
+ * "Priced well today" — a full-width home section (stacked, NOT a sidebar). Each card
+ * grades a current listing against the bag's OWN recorded resale range — low / median /
+ * high — and links out to the listing.
  *
  * Deliberately image-free: the credibility is the price read, not a photo. The verdict
  * ("great" / "good") is OUR read of recorded sales, never an appraisal, and is only
@@ -25,19 +25,13 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
   if (deals.length < MIN_DEALS_TO_RENDER) return null;
 
   return (
-    <aside
-      aria-label="Priced well today"
-      className="overflow-hidden rounded-2xl border border-border bg-surface"
-    >
-      <div className="border-b border-border px-4 py-3.5">
-        <h2 className="font-serif text-xl text-foreground">Priced well today</h2>
-        <p className="mt-1 text-xs text-muted">
-          Listed low against past sales for the same bag. A read on price, not on
-          condition.
-        </p>
-      </div>
+    <section aria-label="Priced well today" className="border-b border-border px-5 py-12">
+      <h2 className="font-serif text-2xl text-foreground">Priced well today</h2>
+      <p className="mt-1 text-sm text-muted">
+        Listed low against past sales for the same bag. A read on price, not on condition.
+      </p>
 
-      <ul>
+      <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {deals.map((d) => {
           const name = [d.brandName, d.styleName].filter(Boolean).join(" ");
           const span = d.highPrice - d.lowPrice || 1;
@@ -45,7 +39,7 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
           const medianPct = clamp(((d.medianPrice - d.lowPrice) / span) * 100, 3, 97);
 
           return (
-            <li key={d.variantId} className="border-b border-border px-4 py-3.5">
+            <li key={d.variantId} className="rounded-2xl border border-border bg-surface p-4">
               <Link
                 href={`/bag/${d.variantId}`}
                 className="block truncate font-serif text-sm text-foreground transition-colors hover:text-gold"
@@ -97,10 +91,10 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
 
       <Link
         href="/shop?deals=1&sort=best-deal"
-        className="block px-4 py-3 text-center text-xs text-gold transition-colors hover:text-gold-soft"
+        className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
       >
-        See all deals
+        See all today&rsquo;s deals
       </Link>
-    </aside>
+    </section>
   );
 }

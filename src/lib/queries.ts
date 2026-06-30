@@ -6,7 +6,7 @@ import { getInstagramOEmbed } from "./instagram";
 export interface BrandOverview {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "ultra-luxury";
+  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
   styleCount: number;
   /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
   variantCount: number;
@@ -19,14 +19,22 @@ export interface BrandOverview {
 export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
   "ultra-luxury": 0,
   mid: 1,
-  thrift: 2,
+  premium: 2,
+  thrift: 3,
 };
 
-/** Tier groups for the brand directory, in display order, with section labels. */
+/**
+ * Tier groups for the brand directory, in display order, with section labels.
+ * The standardized 4-tier vocabulary (Ultra-luxury / Luxury / Premium / Contemporary).
+ * Keys: ultra-luxury, mid→"Luxury", premium (added in migration 0039), thrift→"Contemporary"
+ * ("thrift" is never shown, a judgment word). A tier group renders nothing until brands carry
+ * that tier, so this is safe before migration 0039/0040 are applied (Premium just shows empty).
+ */
 export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
   { key: "ultra-luxury", label: "Ultra-luxury" },
-  { key: "mid", label: "Mid-tier" },
-  { key: "thrift", label: "Thrift & contemporary" },
+  { key: "mid", label: "Luxury" },
+  { key: "premium", label: "Premium" },
+  { key: "thrift", label: "Contemporary" },
 ];
 
 export interface HeroCard {
@@ -62,7 +70,7 @@ export interface StyleSearchResult {
 export interface BrandSearchResult {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "ultra-luxury";
+  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
   variantCount: number;
   /** Styles under the brand, each with a representative variant id to link to its bag page. */
   styles: { styleId: number; name: string; variantId: number | null }[];
@@ -1231,7 +1239,7 @@ async function searchBrandsByName(names: string[]): Promise<BrandSearchResult[]>
 }
 
 function mapBrandRows(
-  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
+  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "premium" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
 ): BrandSearchResult[] {
   return rows.map((b) => {
     const styles = b.style ?? [];
