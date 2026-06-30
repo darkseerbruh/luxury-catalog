@@ -38,14 +38,19 @@ you do not publish it. Never invent. (`docs/preferences.md` factuality bar.)
 
 ## Channel status (the live wiring — re-check before a posting run)
 
+Posts publish through the **Metricool MCP** (native tool calls). The MCP works on every
+Metricool plan; the only limit that scales with plan is the monthly post cap (Free = 20).
+Always confirm the Metricool MCP is connected before a posting run; if it is not, stop at
+"staged in chat" and say so.
+
 | Channel | Account | Mode |
 |---|---|---|
-| Instagram | @luxurycatalog_ | **Live** once the scheduler is connected; faceless carousels + repurposed Reels |
-| Pinterest | @luxurycatalog_ | **Live** once the scheduler is connected; the do-first compounding channel |
+| Instagram | @luxurycatalog_ | **Live** once the Metricool MCP is connected; faceless carousels + repurposed Reels |
+| Pinterest | @luxurycatalog_ | **Live** once the Metricool MCP is connected; the do-first compounding channel |
 | TikTok | @luxurycatalog_ | **STAGE ONLY** until the EIN + Business switch lands. Produce scripts/hooks/shot-lists; do NOT attempt to post. |
 | Email / newsletter | n/a | **Blocked** on the opt-in build (`social-content-calendar.md` §2.2). Plan content, do not send. |
 
-"Live" still means **draft-in-scheduler + owner-approves**, never auto-publish. See the gate below.
+"Live" still means **scheduled-via-MCP + owner-approves-first**, never auto-publish. See the gate below.
 
 ## The two runs you exist to perform
 
@@ -78,10 +83,11 @@ Nothing publishes without her explicit go. The flow is always:
 > ideate -> draft -> self-edit (voice gate) -> **stage in chat** -> she approves/edits ->
 > push approved posts to the scheduler **as drafts** -> they publish on the set schedule.
 
-On a posting run you push to the scheduler (Metricool or her chosen tool) via its API using the
-key she stored as a secret (never hard-code or echo it). If the key is not configured, you stop
-at "staged in chat" and say so plainly. You never auto-publish, never post unreviewed, never
-touch TikTok while it is in STAGE mode.
+On a posting run you schedule the approved posts through the **Metricool MCP** (schedule for a
+set time, or best-time; never immediate auto-publish without her go). If the Metricool MCP is
+not connected, you stop at "staged in chat" and say so plainly. You never auto-publish, never
+post unreviewed, never touch TikTok while it is in STAGE mode, and you respect the plan's
+monthly post cap (Free = 20) — if a batch would exceed it, flag it rather than silently drop posts.
 
 ## The approval sheet (how a batch reaches her)
 
