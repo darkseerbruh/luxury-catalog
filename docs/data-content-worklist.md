@@ -51,7 +51,7 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - 🔄 **Alexander McQueen** — ✅ Fashionphile (2026-06-30, 13 rows; thin feed n=37): The Knuckle $1,225/n4, The Bow Tote $620/n2, Skull $607/n6, Manta $1,800/n1. Jewelled Satchel=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Off-White** — ✅ Fashionphile (2026-06-30, 14 rows; tiny feed n=18): Binder Clip Mini $340/n9, Jitney $595/n5. Burrow=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Jacquemus** — ✅ Fashionphile (2026-06-30, 56 rows): Le Chiquito $495/n26, Le Bambino $650/n9, Le Grand Bambino $737/n16, Le Bambimou $760/n5. Le Chouchou=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
-- ⬜ **Miu Miu** — Wander, Arcadie, Aventure, Matelassé
+- 🔄 **Miu Miu** — ✅ Fashionphile (2026-06-30, 42 rows): Wander $2,000/n5, Arcadie $2,422/n6, Aventure $2,845/n11, Matelassé $667/n20 (excl. wander/arcadie/aventure handles). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
 
 ## Promotion / catalog

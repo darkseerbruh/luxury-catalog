@@ -1833,6 +1833,32 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 400, maxPrice: 1500,
     searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // ── Miu Miu backbone (2026-06-30, single buckets) ──
+  // Wander hobo.
+  { brand: "Miu Miu", style: "Wander", size_label: "Standard",
+    requireTokens: ["wander"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Arcadie top-handle.
+  { brand: "Miu Miu", style: "Arcadie", size_label: "Standard",
+    requireTokens: ["arcadie"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1500, maxPrice: 3300,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Aventure aviator bag.
+  { brand: "Miu Miu", style: "Aventure", size_label: "Standard",
+    requireTokens: ["aventure"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1800, maxPrice: 4200,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Matelassé quilted bags — "matelasse" is also a material word in Wander/Arcadie
+  // handles, so exclude those styles to keep this bucket the standalone Matelassé bags.
+  { brand: "Miu Miu", style: "Matelassé", size_label: "Standard",
+    requireTokens: ["matelasse"],
+    excludeTokens: ["wander", "arcadie", "aventure", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
