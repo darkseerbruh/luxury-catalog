@@ -59,12 +59,18 @@ Always confirm the Metricool MCP is connected before a posting run; if it is not
 
 ## Media sources (lean on first-party, in this order)
 
-1. **First-party / UGC photos (primary).** The `bag_photo` table + the Public `bag-photos`
-   Supabase bucket hold real, rights-cleared bag photos with bylines (see
-   `docs/archive/photo-smoke-test.md`). Query per bag and pull the real photo URL into the
-   post. **Rule (owner-locked): these are detail-page stills, not for-sale listings, so never
-   frame them with a price tag or "buy this exact one" sellable framing.** Credit the byline
-   where a contributor is named.
+1. **Owner's first-party still library (primary).** Built by `scripts/handbag-stills/`
+   (branch `feat/handbag-stills-pipeline`). The curated index is
+   `scripts/handbag-stills/collection-labels.csv` (123 usable stills: Hermès 56, Chanel 36,
+   YSL 10, LV 9, + Prada/Fendi). JPEGs live on the owner's disk at
+   `~/Documents/handbag-products/_clean/` (`good/`, `thumbnails/`, `_by_bag/<Bag>/`), outside
+   git. Pick by brand+model from the manifest. **Hard rules (README + owner-locked):**
+   - detail-page framing only, never for-sale / pricing / "buy this exact one" framing;
+   - color is reference-only (lighting and screen shift it, so never name a colour off a still);
+   - rows marked `source=Vivrelle rental` are RENTED, never framed as owned;
+   - rows with a `verify` flag need owner confirmation of model/size before that name is published.
+   To post one, upload the chosen still to the Public `bag-photos` Supabase bucket (or the
+   owner's Metricool-linked Drive) and pass that public URL to Metricool.
 2. **Owner's original video** (source location TBD, confirm with owner) for Reels/TikTok.
 3. **Original non-logo schematics / type-led / data-viz** when no real photo fits (never draw a logo).
 4. **Licensed affiliate-feed images** (display + link-back) only as a live gap-filler.
