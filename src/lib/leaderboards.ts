@@ -225,24 +225,25 @@ async function loadValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry
       sb.rpc("variant_price_summary"),
       fetchAllRows<{
         variant_id: number;
+        style_id: number | null;
         retail_price_original: number | string | null;
         style: Parameters<typeof embeddedStyleName>[0];
       }>(() =>
         sb
           .from("variant")
-          .select("variant_id, retail_price_original, style:style_id(name, brand:brand_id(name))"),
+          .select("variant_id, style_id, retail_price_original, style:style_id(name, brand:brand_id(name))"),
       ),
     ]);
     if (summaryRes.error || !summaryRes.data) return [];
 
-    const meta = new Map<number, { retail: number | null; brandName: string; styleName: string }>();
+    const meta = new Map<number, { styleId: number | null; retail: number | null; brandName: string; styleName: string }>();
     for (const v of variants) {
       const retail = v.retail_price_original != null ? Number(v.retail_price_original) : null;
       const { brandName, styleName } = embeddedStyleName(v.style ?? null);
-      meta.set(v.variant_id, { retail, brandName, styleName });
+      meta.set(v.variant_id, { styleId: v.style_id, retail, brandName, styleName });
     }
 
-    return (summaryRes.data as { variant_id: number; resale_n: number | null; resale_median: number | string | null }[])
+    const ranked = (summaryRes.data as { variant_id: number; resale_n: number | null; resale_median: number | string | null }[])
       .map((s) => {
         const m = meta.get(s.variant_id);
         const retail = m?.retail ?? null;
@@ -250,13 +251,24 @@ async function loadValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry
         const n = s.resale_n ?? 0;
         if (retail == null || retail <= 0 || n < MIN_PRICE_OBSERVATIONS || med <= 0) return null;
         const pct = Math.round((med / retail) * 100);
-        return { entry: { variantId: s.variant_id, brandName: m!.brandName, styleName: m!.styleName, value: `${pct}% of retail`, count: n }, pct };
+        const styleKey = m!.styleId != null ? `id:${m!.styleId}` : `name:${m!.brandName}|${m!.styleName}`;
+        return { entry: { variantId: s.variant_id, brandName: m!.brandName, styleName: m!.styleName, value: `${pct}% of retail`, count: n }, pct, styleKey };
       })
-      .filter((x): x is { entry: LeaderboardEntry; pct: number } => x !== null)
-      .sort((a, b) => b.pct - a.pct)
-      .slice(0, perBoard)
-      .map((x) => x.entry)
-      .filter((e) => e.brandName || e.styleName);
+      .filter((x): x is { entry: LeaderboardEntry; pct: number; styleKey: string } => x !== null)
+      .sort((a, b) => b.pct - a.pct);
+
+    // One row per STYLE: with the list sorted high-to-low, the first variant we
+    // see for a style is its best, so later variants of the same style are dropped
+    // (no two "Hermès Birkin" rows for different sizes).
+    const seen = new Set<string>();
+    const deduped: LeaderboardEntry[] = [];
+    for (const r of ranked) {
+      if (seen.has(r.styleKey)) continue;
+      seen.add(r.styleKey);
+      deduped.push(r.entry);
+      if (deduped.length >= perBoard) break;
+    }
+    return deduped.filter((e) => e.brandName || e.styleName);
   } catch {
     return [];
   }
