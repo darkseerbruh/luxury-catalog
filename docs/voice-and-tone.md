@@ -295,6 +295,12 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   utilize, leverage (as a verb), at this time.*
 - **Flip throwaways that undercut real information:** don't write *"it's just…
   here"* about knowledge that took expertise to assemble. Give it its due weight.
+- **Naive declaratives we then overturn (locked 2026-06-30).** Never assert a common
+  assumption in our own flat voice as if we hold it, then contradict it (e.g. "A smaller
+  bag should cost less."). Attribute the to-be-overturned premise, then turn it: *"you'd
+  think…," "the rule says…," "…right?," "common sense says…," "it feels like… it's not."*
+  Bald *should / obviously / everyone knows / of course* statements we then reverse tank
+  credibility. Attribute, not assert.
 - **Movie-trailer cadences:** the portentous three-beat ("Know it. Want it. Then
   decide.") reads cheap. Vary the rhythm.
 - **Em dashes (—).** Hard rule: don't use them. They're an AI-slop tell and they
