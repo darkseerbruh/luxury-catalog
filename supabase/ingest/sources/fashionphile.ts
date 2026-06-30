@@ -1929,6 +1929,43 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 3000, maxPrice: 5500,
     searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  // ── Goyard — remaining backbone styles (2026-06-30; Saint Louis captured above) ──
+  ...(["mini", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Anjou", size_label: size.toUpperCase() === "PM" ? "PM" : "Mini",
+    requireTokens: ["anjou", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 2000, maxPrice: 4600,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  ...(["mm", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Artois", size_label: size.toUpperCase(),
+    requireTokens: ["artois", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1800, maxPrice: 4200,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  { brand: "Goyard", style: "Belvédère", size_label: "PM",
+    requireTokens: ["belvedere", "pm"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1500, maxPrice: 4700,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  ...(["mini", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Saïgon", size_label: size.toUpperCase() === "PM" ? "PM" : "Mini",
+    requireTokens: ["saigon", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch", "souple"],
+    minPrice: 3000, maxPrice: 6500,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  { brand: "Goyard", style: "Rouette", size_label: "PM",
+    requireTokens: ["rouette", "pm"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1800, maxPrice: 3600,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  { brand: "Goyard", style: "Bohème", size_label: "Standard",
+    requireTokens: ["boheme"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 2000, maxPrice: 5500,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
