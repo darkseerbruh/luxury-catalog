@@ -52,7 +52,7 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - 🔄 **Off-White** — ✅ Fashionphile (2026-06-30, 14 rows; tiny feed n=18): Binder Clip Mini $340/n9, Jitney $595/n5. Burrow=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Jacquemus** — ✅ Fashionphile (2026-06-30, 56 rows): Le Chiquito $495/n26, Le Bambino $650/n9, Le Grand Bambino $737/n16, Le Bambimou $760/n5. Le Chouchou=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Miu Miu** — ✅ Fashionphile (2026-06-30, 42 rows): Wander $2,000/n5, Arcadie $2,422/n6, Aventure $2,845/n11, Matelassé $667/n20 (excl. wander/arcadie/aventure handles). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
-- ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
+- 🔄 **Burberry** — ✅ Fashionphile (2026-06-30): Lola (Mini $570/Small $675 — refreshed), + remaining styles 39 rows: Banner Medium $730/n10 + Large $762, Note $1,060/n8, Title $995/n3, TB Bag Small/Medium, Pocket Mini $795. Catherine=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist

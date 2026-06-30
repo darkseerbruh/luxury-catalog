@@ -1859,6 +1859,41 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wander", "arcadie", "aventure", "wallet", "card", "coin"],
     minPrice: 300, maxPrice: 2000,
     searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // ── Burberry backbone — remaining styles (2026-06-30; Lola already captured above) ──
+  // Pocket bag (anchor "pocket-bag" to avoid the generic word "pocket").
+  { brand: "Burberry", style: "Pocket", size_label: "Mini",
+    requireTokens: ["pocket-bag"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // TB Bag (handle "tb-bag"; excludes the camera/tote/scarf that share "tb-").
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Burberry", style: "TB Bag", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["tb-bag", size],
+    excludeTokens: ["camera", "scarf", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  })),
+  // Title two-handle bag.
+  { brand: "Burberry", style: "Title", size_label: "Standard",
+    requireTokens: ["title"],
+    excludeTokens: ["wallet", "card", "coin", "scarf"],
+    minPrice: 700, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // Banner tote.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "Burberry", style: "Banner", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["banner", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1300,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  })),
+  // Note crossbody (strong excludes — "note" is a generic token).
+  { brand: "Burberry", style: "Note", size_label: "Standard",
+    requireTokens: ["note"],
+    excludeTokens: ["notebook", "wallet", "card", "coin", "scarf"],
+    minPrice: 500, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
