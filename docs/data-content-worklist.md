@@ -62,6 +62,22 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 > credit budget (owner greenlight per §0c), eBay sold needs the browser session. Next free lever =
 > a Redeluxe/Couture USA open-Shopify-feed adapter (registry §0b) for a second free asking surface.
 
+**⬜ NEXT FREE UNIT — Redeluxe + Couture USA Shopify adapter (verified fetchable 2026-06-30):**
+- Feeds (200, no key, no Firecrawl): `https://redeluxe.com/products.json?limit=250&page=N` and
+  `https://www.coutureusa.com/products.json?limit=250&page=N`. Paginate like fashionphile-collection.ts.
+- Shape: Redeluxe `vendor`=brand ("Hermes"/"Dior"/"CHANEL"), `product_type`="Handbag", `tags` carry
+  condition ("excellent"), `title`=full descriptive name. Couture USA `vendor`=brand, structured tags
+  (`CH-brand-<X>`, `Color_<X>`, `Condition <X>`, material words like "Damier Ebene").
+- **SAFETY (do this, don't skip):** `load-prices` resolves brand→style with a FUZZY token-overlap
+  `scoreStyleMatch` (accepts any score>0). A catalog-ABSENT style (e.g. LV "Beaubourg") can mis-land on
+  a curated hero variant via a shared token (e.g. "Neverfull MM" via "mm"), corrupting a public median.
+  So the adapter must either (a) map title→style with a curated per-brand allow-list (like the FP
+  TARGETS), or (b) add a min-score threshold so weak matches route to `discovered_listing` not curated.
+  Do NOT do a raw vendor-feed → curated load without one of those guards.
+- Emit `platform:"Redeluxe"`/`"Couture USA"`, `price_type:"listed"`, `source_url` per listing, condition
+  from tags. Then `load:prices <source> --write` → `summary:refresh` → run `clean-fp-contamination`-style
+  brand check before trusting it.
+
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
   PLUS min=10 pass: +25 styles, +30 variants, +404 rows (Diane, Favorite, Boulogne, Delightful, Palermo, Tivoli, Reissue, Hop, Sylvie, Boston, Diorama, In-The-Loop, Jige, Trim, Jamie, Urban Spirit...). Strengthened blocklist excludes footwear/apparel/colour-soup. Total: 41 styles, 50 variants, ~1,016 rows.
