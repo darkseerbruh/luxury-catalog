@@ -6,6 +6,7 @@ import { matchBagStory } from "@/lib/bag-stories";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { BagImage } from "@/components/BagImage";
 import { ArticleList } from "@/components/ArticleList";
+import { HouseStory } from "@/components/HouseStory";
 
 export const dynamic = "force-dynamic";
 
@@ -179,13 +180,15 @@ export default async function BrandPage({
         <h1 className="mt-1 font-serif text-4xl text-foreground">{brand.name}</h1>
       </header>
 
-      {/* The house story — the curated narrative, given its own weight */}
-      {brand.description && (
-        <section>
-          <h2 className="mb-3 font-serif text-2xl text-foreground">The {brand.name} story</h2>
-          <p className="max-w-prose leading-relaxed text-muted">{brand.description}</p>
-        </section>
-      )}
+      {/* The house story — never a wall: serif lead, heritage strip, icon beats */}
+      <HouseStory
+        name={brand.name}
+        description={brand.description}
+        foundedYear={brand.foundedYear}
+        countryOfOrigin={brand.countryOfOrigin}
+        tier={brand.tier}
+        stylesCount={brand.styles.length}
+      />
 
       {/* The icons — signature styles with their sourced origin, the hero of the page */}
       {iconStyles.length > 0 && (
