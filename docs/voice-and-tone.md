@@ -328,6 +328,11 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
 - **Brand name: "Luxury Catalog," never "The Luxury Catalog."** Sitewide.
 - **Open by questioning the reader's default,** not by announcing the finding ("Does a bigger bag
   really cost more?" beats "Smaller bags cost more"). Put a crack in the assumption, then turn it.
+- **Social scripts lead with a HOOK and a POINT OF VIEW, never a topic statement (locked 2026-06-30).**
+  "Two bags, both cost a used car, and both have a flaw nobody admits" beats "Birkin or Kelly, price
+  barely decides it." Inject the owner's real opinion (hedged: "in my experience," "my take") and the
+  de-gatekeeping energy. A data summary with no hook reads dry and dies. **Ship 2-3 rotating hook
+  variants per post** so she can A/B test and repost without it going stale.
 - **Sample sizes (n) live in charts and tables, never in body prose.** The chart carries the
   receipts; the text stays readable.
 - **Multi-point numbers go in scannable bullets,** not a packed sentence.
