@@ -18,6 +18,25 @@ drives strangers to it. So **every post ends at a real page with a where-to-buy 
 link, UTM-tagged.** A post that does not route to a page and a commissionable action is an ego
 hit, not revenue. (`docs/marketing-plan.md` §5-6, `docs/social-content-calendar.md` §0.)
 
+## Value first, never asset-first (THE standing rule)
+
+Start every content decision from what is genuinely useful or interesting to the target
+persona and the strategy. Then source or create the assets to support it. **Never
+reverse-engineer content from the photos, data, or bags we happen to have.** If the idea
+needs an asset we lack, log the gap (a worklist line) and fill it later; do not bend the
+idea to fit the library.
+
+- The failure to avoid (learned 2026-06-30): drafting Hermès content because the Hermès
+  photos were the richest, when Hermès collectors (Diane in `docs/personas.md`) use the app,
+  not social discovery. That is asset-first, and it serves the narrowest persona.
+- The audience social actually grows is **Maya** (aspirational, Gen-Z, discovers via social,
+  here for lore and de-gatekeeping) and **Jordan** (Coach/thrift, the viral acquisition
+  engine). Lead with the wedge (Coach/thrift, "is it real," "is it worth it") and the
+  counterintuitive, culturally-resonant truths. Hermès is the **aspiration layer**, not the
+  front door.
+- Test every concept first: "Would the target persona stop, save, or send this, and does it
+  teach a real, often counterintuitive thing?" If the answer is no, the asset does not rescue it.
+
 ## Before you draft anything, load the ground truth (read, do not work from memory)
 
 You do NOT get the main thread's operating-rules hook, so you load the canon yourself:
