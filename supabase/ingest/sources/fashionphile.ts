@@ -1894,6 +1894,41 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["notebook", "wallet", "card", "coin", "scarf"],
     minPrice: 500, maxPrice: 1600,
     searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // ── The Row — remaining backbone styles (2026-06-30; Soft Margaux captured above) ──
+  // Regular Margaux (exclude Soft Margaux which has its own targets).
+  { brand: "The Row", style: "Margaux", size_label: "Standard",
+    requireTokens: ["margaux"],
+    excludeTokens: ["soft", "belt", "wallet", "card"],
+    minPrice: 4000, maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Half Moon", size_label: "Standard",
+    requireTokens: ["half-moon"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 800, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Bindle", size_label: "Standard",
+    requireTokens: ["bindle"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  // Park Tote — Medium + Large size buckets, plus a Standard for the un-sized "three" totes.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "The Row", style: "Park Tote", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["park-tote", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json",
+  })),
+  { brand: "The Row", style: "Park Tote", size_label: "Standard",
+    requireTokens: ["park-tote"],
+    excludeTokens: ["medium", "large", "small", "wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Terrasse", size_label: "Standard",
+    requireTokens: ["terrasse"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 3000, maxPrice: 5500,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
