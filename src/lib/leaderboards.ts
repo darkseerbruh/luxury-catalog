@@ -1,5 +1,5 @@
 import { unstable_cache } from "next/cache";
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
 import { HOMEPAGE_OCCASION_BOARDS, OCCASIONS, type Occasion } from "./occasions";
 import { CACHE_MARKET } from "./cache";
 
@@ -16,7 +16,16 @@ const OCCASION_TITLE = new Map<Occasion, string>(OCCASIONS.map((o) => [o.value, 
  * minimum number of ratings, so we never show a ranking built on one opinion.
  */
 
-const MIN_RATINGS = 2; // a board needs at least this many ratings to be honest
+const MIN_RATINGS = 2; // a review board needs at least this many ratings to be honest
+
+// A value-retention entry needs at least this many resale OBSERVATIONS before we
+// rank it. Higher than MIN_RATINGS because a "holds value best" percentage is only
+// honest with a real sample: at n=2 a single flukey listing tops the board over the
+// icons (a 2-observation Patchwork Cabas outranking a 552-observation Birkin). At
+// n>=20 the board is exactly the bags we actually track deeply. (2026-06-30: only
+// ~5 bags clear this, since just 49 of 633 priced variants have a retail anchor;
+// filling retail_price_original is the way to widen this board, not lowering n.)
+const MIN_PRICE_OBSERVATIONS = 20;
 
 export interface LeaderboardEntry {
   variantId: number;
@@ -184,13 +193,6 @@ async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards>
 // Value retention is a market FACT (resale median ÷ original retail), never a crowd
 // vote — see the "facts aren't votes" rule in docs/ux/review-data-leaderboards.md.
 
-const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
-
-function median(nums: number[]): number {
-  const s = nums.slice().sort((a, b) => a - b);
-  const mid = Math.floor(s.length / 2);
-  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
-}
 
 function embeddedStyleName(
   style:
@@ -213,53 +215,42 @@ async function loadValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
   try {
     const sb = getSupabase();
-    const { data, error } = await sb
-      .from("price_history")
-      .select(
-        "variant_id, sale_price, platform, price_type, variant:variant_id(retail_price_original, style:style_id(name, brand:brand_id(name)))"
-      )
-      .not("sale_price", "is", null)
-      .limit(50000);
-    if (error || !data) return [];
+    // Per-variant resale median is computed in Postgres (variant_price_summary,
+    // migration 0038) over the WHOLE price_history table, not paged into JS. The
+    // old path read price_history with `.limit(50000)`, which PostgREST silently
+    // capped at 1000 rows, so the percentages were computed from ~2% of the data.
+    // The resale population (exclude retail_msrp + retail-platform rows, sale_price
+    // > 0) and the median (percentile_cont 0.5) match the previous JS heuristic.
+    const [summaryRes, variants] = await Promise.all([
+      sb.rpc("variant_price_summary"),
+      fetchAllRows<{
+        variant_id: number;
+        retail_price_original: number | string | null;
+        style: Parameters<typeof embeddedStyleName>[0];
+      }>(() =>
+        sb
+          .from("variant")
+          .select("variant_id, retail_price_original, style:style_id(name, brand:brand_id(name))"),
+      ),
+    ]);
+    if (summaryRes.error || !summaryRes.data) return [];
 
-    type G = { variantId: number; resale: number[]; retail: number | null; brandName: string; styleName: string };
-    const groups = new Map<number, G>();
-    for (const row of data as {
-      variant_id: number;
-      sale_price: number | string | null;
-      platform: string | null;
-      price_type: string | null;
-      variant:
-        | { retail_price_original: number | string | null; style: Parameters<typeof embeddedStyleName>[0] }
-        | { retail_price_original: number | string | null; style: Parameters<typeof embeddedStyleName>[0] }[]
-        | null;
-    }[]) {
-      const price = row.sale_price != null ? Number(row.sale_price) : null;
-      if (price == null || !Number.isFinite(price) || price <= 0) continue;
-
-      let g = groups.get(row.variant_id);
-      if (!g) {
-        const v = (Array.isArray(row.variant) ? row.variant[0] : row.variant) ?? null;
-        const retail = v?.retail_price_original != null ? Number(v.retail_price_original) : null;
-        const { brandName, styleName } = embeddedStyleName(v?.style ?? null);
-        g = { variantId: row.variant_id, resale: [], retail, brandName, styleName };
-        groups.set(row.variant_id, g);
-      }
-
-      const isRetail =
-        row.price_type === "retail_msrp" ||
-        (row.price_type == null && row.platform != null && RETAIL_PLATFORM_RX.test(row.platform));
-      if (isRetail) continue; // retail/MSRP is the denominator, not part of resale
-      g.resale.push(price);
+    const meta = new Map<number, { retail: number | null; brandName: string; styleName: string }>();
+    for (const v of variants) {
+      const retail = v.retail_price_original != null ? Number(v.retail_price_original) : null;
+      const { brandName, styleName } = embeddedStyleName(v.style ?? null);
+      meta.set(v.variant_id, { retail, brandName, styleName });
     }
 
-    return [...groups.values()]
-      .map((g) => {
-        if (g.retail == null || g.retail <= 0 || g.resale.length < MIN_RATINGS) return null;
-        const med = median(g.resale);
-        if (med <= 0) return null;
-        const pct = Math.round((med / g.retail) * 100);
-        return { entry: { variantId: g.variantId, brandName: g.brandName, styleName: g.styleName, value: `${pct}% of retail`, count: g.resale.length }, pct };
+    return (summaryRes.data as { variant_id: number; resale_n: number | null; resale_median: number | string | null }[])
+      .map((s) => {
+        const m = meta.get(s.variant_id);
+        const retail = m?.retail ?? null;
+        const med = s.resale_median != null ? Number(s.resale_median) : 0;
+        const n = s.resale_n ?? 0;
+        if (retail == null || retail <= 0 || n < MIN_PRICE_OBSERVATIONS || med <= 0) return null;
+        const pct = Math.round((med / retail) * 100);
+        return { entry: { variantId: s.variant_id, brandName: m!.brandName, styleName: m!.styleName, value: `${pct}% of retail`, count: n }, pct };
       })
       .filter((x): x is { entry: LeaderboardEntry; pct: number } => x !== null)
       .sort((a, b) => b.pct - a.pct)
