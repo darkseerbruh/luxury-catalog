@@ -27,6 +27,12 @@ const playfair = Playfair_Display({
 // Skimlinks publisher ID — overridable per environment, defaults to our account.
 const SKIMLINKS_ID = process.env.NEXT_PUBLIC_SKIMLINKS_ID ?? "305125X1793317";
 
+// Impact (impact.com) Universal Tracking Tag — affiliate/partner network. The
+// account UTT id is a public, non-secret value; overridable per environment,
+// defaults to our account. Loaded beforeInteractive so the tag is present in the
+// server-rendered <head>, which is what Impact reads when verifying site ownership.
+const IMPACT_UTT_ID = process.env.NEXT_PUBLIC_IMPACT_UTT_ID ?? "P-A7429371-012a-4557-a513-44f810f4e2321";
+
 export const metadata: Metadata = {
   title: "The Luxury Catalog",
   description:
@@ -139,6 +145,17 @@ export default async function RootLayout({
             strategy="afterInteractive"
             src={`https://s.skimresources.com/js/${SKIMLINKS_ID}.skimlinks.js`}
           />
+        )}
+        {/* Impact (impact.com) Universal Tracking Tag. afterInteractive (same as
+            Skimlinks) so next/script manages injection — keeps it out of body
+            hydration so it doesn't clash with PostHog's client-injected scripts.
+            Impact verifies ownership from the trackImpression beacon this fires on
+            the live site, so it must execute (not just sit in HTML). Affiliate
+            tracking is covered by /privacy + /disclosure. */}
+        {IMPACT_UTT_ID && (
+          <Script id="impact-utt" strategy="afterInteractive">
+            {`(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/${IMPACT_UTT_ID}.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');`}
+          </Script>
         )}
       </body>
     </html>
