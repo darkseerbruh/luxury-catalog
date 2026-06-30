@@ -28,8 +28,7 @@ export function HouseStory({
   const sentences = description ? intoSentences(description) : [];
   const lead = authored?.lead ?? sentences[0] ?? null;
   const bodySentences = authored ? [] : sentences.slice(1);
-
-  if (!authored && !lead) return null;
+  const hasNarrative = Boolean(authored || lead);
 
   const chips: { icon: HeritageIconName; label: string }[] = [
     ...(foundedYear ? [{ icon: "calendar" as const, label: `Est. ${foundedYear}` }] : []),
@@ -40,9 +39,13 @@ export function HouseStory({
       : []),
   ];
 
+  // Nothing to show at all (no narrative and somehow no heritage data): render
+  // nothing. Otherwise every house gets at least the iconographic heritage band.
+  if (!hasNarrative && chips.length === 0) return null;
+
   return (
     <section>
-      <h2 className="font-serif text-2xl text-foreground">The {name} story</h2>
+      {hasNarrative && <h2 className="font-serif text-2xl text-foreground">The {name} story</h2>}
 
       {lead && (
         <p className="mt-3 max-w-md font-serif text-2xl leading-snug text-foreground">{lead}</p>
