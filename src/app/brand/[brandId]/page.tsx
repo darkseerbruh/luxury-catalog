@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBrandDetail, getBrandResaleStats, getVariantImages, getBrandsOverview } from "@/lib/queries";
-import { listByBrand } from "@/lib/posts";
+import { listByBrand, listByStyle } from "@/lib/posts";
+import { matchBagStory } from "@/lib/bag-stories";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { BagImage } from "@/components/BagImage";
 import { ArticleList } from "@/components/ArticleList";
+import { HouseStory } from "@/components/HouseStory";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,24 @@ function symbolFor(currency: string | null): string {
 function fmt(amount: number | null, currency: string | null): string | null {
   if (amount == null) return null;
   return `${symbolFor(currency)}${amount.toLocaleString()}`;
+}
+
+type BrandStyle = Awaited<ReturnType<typeof getBrandDetail>> extends infer B
+  ? B extends { styles: infer S }
+    ? S extends (infer One)[]
+      ? One
+      : never
+    : never
+  : never;
+
+/** The lowest catalogued retail price across a style's variants ("from $X"). */
+function styleFrom(style: BrandStyle): { amount: number; currency: string | null } | null {
+  let best: { amount: number; currency: string | null } | null = null;
+  for (const v of style.variants) {
+    if (v.retailPrice == null) continue;
+    if (best == null || v.retailPrice < best.amount) best = { amount: v.retailPrice, currency: v.currency };
+  }
+  return best;
 }
 
 /** Top-N most common non-null values, by frequency. */
@@ -61,13 +81,39 @@ export default async function BrandPage({
   const stubStyles = brand.styles.filter((s) => s.variants.length === 0);
   const allVariants = brand.styles.flatMap((s) => s.variants);
 
-  const [resale, images, brandPosts, allBrands] = await Promise.all([
+  // The icons — styles we hold a sourced editorial story for. A style with a
+  // story is, by our own curation, one of the house's notable bags; the tagline
+  // is the cited origin line. No story → not an icon (degrades, never invented).
+  //
+  // Many catalogue styles share one story fragment (e.g. "Togo Birkin 35" and
+  // "2021 Epsom Birkin 30" both match "birkin"), so we keep ONE canonical
+  // representative per story — the cleanest name (shortest), then the most
+  // variants — dedupe by the story itself, then rank the icons by catalogue depth.
+  const iconSeen = new Set<string>();
+  const iconStyles = liveStyles
+    .map((style) => ({ style, story: matchBagStory(style.name) }))
+    .filter((x): x is { style: BrandStyle; story: NonNullable<typeof x.story> } => x.story != null)
+    .sort(
+      (a, b) =>
+        a.style.name.length - b.style.name.length ||
+        b.style.variants.length - a.style.variants.length,
+    )
+    .filter((x) => {
+      if (iconSeen.has(x.story.tagline)) return false;
+      iconSeen.add(x.story.tagline);
+      return true;
+    })
+    .sort((a, b) => b.style.variants.length - a.style.variants.length)
+    .slice(0, 6);
+
+  const [resale, images, brandPosts, allBrands, iconPosts] = await Promise.all([
     getBrandResaleStats(id),
     getVariantImages(
       liveStyles.map((s) => s.variants[0]?.variantId).filter((n): n is number => n != null),
     ),
     listByBrand(id, 4),
     getBrandsOverview(),
+    Promise.all(iconStyles.map((x) => listByStyle(x.style.styleId, 1))),
   ]);
 
   // "Similar houses" — the Spotify "similar artists" edge. Same tier first (what a
@@ -89,16 +135,35 @@ export default async function BrandPage({
   const topMaterials = topN(allVariants.map((v) => v.material), 5);
   const topHardware = topN(allVariants.map((v) => v.hardwareColor), 4);
   const topSilhouettes = topN(brand.styles.map((s) => s.silhouette), 5);
-  const recentStyles = brand.styles
+
+  // Through the years — founding plus the dated arrival of notable styles, from
+  // data we already hold. Icons label the line where we have their year; if none
+  // carry a year, fall back to the earliest-dated styles so the line still reads.
+  const iconYearLabels = iconStyles
+    .filter((x) => x.style.yearIntroduced != null)
+    .map((x) => ({ year: x.style.yearIntroduced as number, label: x.style.name }));
+  const fallbackYearLabels = liveStyles
     .filter((s) => s.yearIntroduced != null)
-    .sort((a, b) => (b.yearIntroduced ?? 0) - (a.yearIntroduced ?? 0))
-    .slice(0, 4);
+    .sort((a, b) => (a.yearIntroduced as number) - (b.yearIntroduced as number))
+    .map((s) => ({ year: s.yearIntroduced as number, label: s.name }));
+  const milestones = [
+    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "House founded" }] : []),
+    ...(iconYearLabels.length > 0 ? iconYearLabels : fallbackYearLabels),
+  ]
+    .sort((a, b) => a.year - b.year)
+    .filter((m, i, arr) => i === 0 || m.year !== arr[i - 1].year || m.label !== arr[i - 1].label)
+    .slice(0, 6);
+
+  // The calm catalogue: every style as a compact card, richest (most variants) first.
+  const catalogStyles = [...liveStyles].sort(
+    (a, b) => b.variants.length - a.variants.length || a.name.localeCompare(b.name),
+  );
 
   const buyLinks = buildResaleLinks(brand.name, "");
   const sellLinks = buildConsignmentLinks(brand.name, "");
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10">
+    <main className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-5 py-10">
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">Home</Link>
         <span>/</span>
@@ -113,8 +178,102 @@ export default async function BrandPage({
           {brand.foundedYear ? ` · est. ${brand.foundedYear}` : ""}
         </p>
         <h1 className="mt-1 font-serif text-4xl text-foreground">{brand.name}</h1>
-        {brand.description && <p className="mt-4 max-w-prose text-muted">{brand.description}</p>}
       </header>
+
+      {/* The house story — never a wall: serif lead, heritage strip, icon beats */}
+      <HouseStory
+        name={brand.name}
+        description={brand.description}
+        foundedYear={brand.foundedYear}
+        countryOfOrigin={brand.countryOfOrigin}
+        tier={brand.tier}
+        stylesCount={brand.styles.length}
+      />
+
+      {/* The icons — signature styles with their sourced origin, the hero of the page */}
+      {iconStyles.length > 0 && (
+        <section>
+          <h2 className="font-serif text-2xl text-foreground">The icons</h2>
+          <p className="mt-1 text-sm text-muted">
+            The bags that made the house, and where they came from.
+          </p>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {iconStyles.map(({ style, story }, i) => {
+              const lead = style.variants[0];
+              const from = styleFrom(style);
+              const post = iconPosts[i]?.[0] ?? null;
+              return (
+                <article
+                  key={style.styleId}
+                  className="flex flex-col rounded-2xl border border-gold/30 bg-gold/5 p-5"
+                >
+                  <div className="flex items-start gap-4">
+                    <BagImage
+                      imageUrl={lead ? images[lead.variantId] : null}
+                      brand={brand.name}
+                      className="h-20 w-20 shrink-0 rounded-xl"
+                    />
+                    <div className="min-w-0">
+                      <h3 className="font-serif text-xl text-foreground">{style.name}</h3>
+                      <p className="mt-0.5 text-xs uppercase tracking-wide text-muted/70">
+                        {[
+                          style.silhouette,
+                          from ? `from ${fmt(from.amount, from.currency)}` : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{story.tagline}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                    {lead && (
+                      <Link
+                        href={`/bag/${lead.variantId}`}
+                        className="text-gold transition-colors hover:text-gold-soft"
+                      >
+                        Read the full story →
+                      </Link>
+                    )}
+                    {post && (
+                      <Link
+                        href={`/articles/${post.slug}`}
+                        className="text-muted transition-colors hover:text-foreground"
+                      >
+                        {post.title}
+                      </Link>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Through the years — the house timeline, built from dates we already hold */}
+      {milestones.length >= 2 && (
+        <section>
+          <h2 className="mb-4 font-serif text-2xl text-foreground">Through the years</h2>
+          <ol className="flex gap-0 overflow-x-auto pb-2">
+            {milestones.map((m, i) => (
+              <li key={`${m.year}-${m.label}`} className="flex min-w-0 shrink-0 items-center">
+                <div className="w-32 shrink-0">
+                  <p className="font-serif text-lg text-gold-soft">{m.year}</p>
+                  <p className="mt-0.5 line-clamp-2 text-xs text-muted">{m.label}</p>
+                </div>
+                {i < milestones.length - 1 && (
+                  <span className="mx-1 h-px w-8 shrink-0 bg-border" aria-hidden />
+                )}
+              </li>
+            ))}
+            <li className="flex shrink-0 items-center">
+              <span className="mx-1 h-px w-8 shrink-0 bg-border" aria-hidden />
+              <p className="font-serif text-lg text-muted">today</p>
+            </li>
+          </ol>
+        </section>
+      )}
 
       {/* At a glance */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
@@ -170,30 +329,82 @@ export default async function BrandPage({
         </div>
       </section>
 
-      {/* Culture & buying experience — editorial slot (curated, never invented) */}
-      <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
-        <h2 className="font-serif text-xl text-foreground">Culture &amp; buying experience</h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          What it&rsquo;s actually like to buy {brand.name}: the history, the waitlists
-          and boutique relationships, what it&rsquo;s resold for, and which pieces hold
-          their value.
-        </p>
-        {brandPosts.length > 0 ? (
-          <div className="mt-4">
-            <ArticleList posts={brandPosts} />
-            <Link
-              href={`/articles?brand=${id}`}
-              className="mt-3 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
-            >
-              All {brand.name} articles →
-            </Link>
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-muted/70">
-            Guides for {brand.name} are on the way.
+      {/* The full catalogue — calm style-first grid, variants live one tap down */}
+      {catalogStyles.length > 0 && (
+        <section>
+          <h2 className="font-serif text-2xl text-foreground">Every {brand.name} style</h2>
+          <p className="mt-1 max-w-prose text-sm text-muted">
+            A style is the model. Open one to see its variants: the exact size,
+            colour, leather and hardware.
           </p>
-        )}
-      </section>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {catalogStyles.map((style) => {
+              const lead = style.variants[0];
+              const from = styleFrom(style);
+              return (
+                <Link
+                  key={style.styleId}
+                  href={lead ? `/bag/${lead.variantId}` : "#"}
+                  className="group flex gap-3 rounded-xl border border-border bg-surface p-3 transition-colors hover:border-gold"
+                >
+                  <BagImage
+                    imageUrl={lead ? images[lead.variantId] : null}
+                    brand={brand.name}
+                    className="h-14 w-14 shrink-0 rounded-lg"
+                  />
+                  <div className="flex min-w-0 flex-col">
+                    <h3 className="truncate font-serif text-base text-foreground group-hover:text-gold">
+                      {style.name}
+                    </h3>
+                    <p className="mt-0.5 truncate text-xs text-muted">
+                      {[
+                        style.silhouette,
+                        style.yearIntroduced ? `${style.yearIntroduced}` : null,
+                        style.discontinued ? "discontinued" : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                    <p className="mt-auto pt-1 text-xs text-muted/70">
+                      {style.variants.length} {style.variants.length === 1 ? "variant" : "variants"}
+                      {from ? ` · from ${fmt(from.amount, from.currency)}` : ""}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {stubStyles.length > 0 && (
+        <section>
+          <h2 className="mb-2 font-serif text-xl text-foreground">More {brand.name} styles</h2>
+          <p className="mb-4 text-sm text-muted">
+            These are in the catalog but we haven&rsquo;t fully researched them
+            yet: names and years for now, the full detail to come.
+          </p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {stubStyles.map((style) => (
+              <div
+                key={style.styleId}
+                className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm"
+              >
+                <p className="text-foreground">{style.name}</p>
+                {style.yearIntroduced && (
+                  <p className="mt-0.5 text-xs text-muted">{style.yearIntroduced}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {brand.styles.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
+          No {brand.name} styles in the catalog yet — they&rsquo;re on the list.
+        </div>
+      )}
 
       {/* Where to buy / sell — brand-level */}
       {(buyLinks.length > 0 || sellLinks.length > 0) && (
@@ -238,106 +449,30 @@ export default async function BrandPage({
         </section>
       )}
 
-      {/* Recently introduced */}
-      {recentStyles.length > 0 && (
-        <section>
-          <h2 className="mb-3 font-serif text-xl text-foreground">Recently introduced</h2>
-          <div className="flex flex-wrap gap-2">
-            {recentStyles.map((s) => (
-              <span
-                key={s.styleId}
-                className="rounded-full border border-border px-3 py-1 text-sm text-muted"
-              >
-                {s.name} <span className="text-muted/60">{s.yearIntroduced}</span>
-              </span>
-            ))}
+      {/* Read more on the house — editorial, woven by topic (curated, never invented) */}
+      <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
+        <h2 className="font-serif text-xl text-foreground">Read more on {brand.name}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          What it&rsquo;s actually like to buy {brand.name}: the history, the waitlists
+          and boutique relationships, what it&rsquo;s resold for, and which pieces hold
+          their value.
+        </p>
+        {brandPosts.length > 0 ? (
+          <div className="mt-4">
+            <ArticleList posts={brandPosts} />
+            <Link
+              href={`/articles?brand=${id}`}
+              className="mt-3 inline-block text-sm text-gold transition-colors hover:text-gold-soft"
+            >
+              All {brand.name} articles →
+            </Link>
           </div>
-        </section>
-      )}
-
-      {/* Styles */}
-      {liveStyles.length > 0 && (
-        <section>
-          <h2 className="mb-4 font-serif text-2xl text-foreground">{brand.name} styles</h2>
-          <div className="flex flex-col gap-6">
-            {liveStyles.map((style) => (
-              <div key={style.styleId} className="rounded-2xl border border-border bg-surface p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-4">
-                    <BagImage
-                      imageUrl={style.variants[0] ? images[style.variants[0].variantId] : null}
-                      brand={brand.name}
-                      className="h-16 w-16 shrink-0 rounded-lg"
-                    />
-                    <div className="min-w-0">
-                      <h3 className="font-serif text-xl text-foreground">{style.name}</h3>
-                      <p className="mt-0.5 text-sm text-muted">
-                        {[
-                          style.silhouette,
-                          style.yearIntroduced ? `introduced ${style.yearIntroduced}` : null,
-                          style.discontinued ? "discontinued" : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="shrink-0 text-sm text-muted">
-                    {style.variants.length} {style.variants.length === 1 ? "variant" : "variants"}
-                  </span>
-                </div>
-
-                <ul className="mt-4 divide-y divide-border">
-                  {style.variants.map((v) => (
-                    <li key={v.variantId}>
-                      <Link
-                        href={`/bag/${v.variantId}`}
-                        className="flex items-center justify-between py-2 text-sm transition-colors hover:text-gold"
-                      >
-                        <span className="text-foreground">
-                          {[v.sizeLabel, v.exteriorColorway].filter(Boolean).join(" · ") || "Variant"}
-                        </span>
-                        {v.hardwareColor && (
-                          <span className="text-muted">{v.hardwareColor} hardware</span>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {stubStyles.length > 0 && (
-        <section>
-          <h2 className="mb-2 font-serif text-xl text-foreground">More {brand.name} styles</h2>
-          <p className="mb-4 text-sm text-muted">
-            These are in the catalog but we haven&rsquo;t fully researched them
-            yet — names and years for now, the full detail to come.
+        ) : (
+          <p className="mt-3 text-sm text-muted/70">
+            Guides for {brand.name} are on the way.
           </p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {stubStyles.map((style) => (
-              <div
-                key={style.styleId}
-                className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm"
-              >
-                <p className="text-foreground">{style.name}</p>
-                {style.yearIntroduced && (
-                  <p className="mt-0.5 text-xs text-muted">{style.yearIntroduced}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {brand.styles.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-          No {brand.name} styles in the catalog yet — they&rsquo;re on the list.
-        </div>
-      )}
+        )}
+      </section>
 
       {/* Similar houses — lateral discovery across brands (Spotify "similar artists"). */}
       {similarHouses.length > 0 && (
