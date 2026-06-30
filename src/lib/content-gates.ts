@@ -1,4 +1,6 @@
+import { unstable_cache } from "next/cache";
 import { getSupabase } from "./supabase";
+import { CACHE_GATE } from "./cache";
 
 /**
  * Content gates — keep community-driven surfaces hidden until there is enough
@@ -31,7 +33,7 @@ export const GATE_THRESHOLDS = {
  * Are there enough reviews to show the review leaderboards / "what the community
  * knows"? Counts every review row; below the threshold the whole section is pulled.
  */
-export async function communityKnowledgeReady(): Promise<boolean> {
+async function loadCommunityKnowledgeReady(): Promise<boolean> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return false;
   try {
     const { count, error } = await getSupabase()
@@ -44,12 +46,18 @@ export async function communityKnowledgeReady(): Promise<boolean> {
   }
 }
 
+export const communityKnowledgeReady = unstable_cache(
+  loadCommunityKnowledgeReady,
+  ["gate-community-knowledge"],
+  { revalidate: CACHE_GATE, tags: ["gates"] },
+);
+
 /**
  * Are enough people marking bags as "want" to make the "most coveted" rankings
  * meaningful? Gates the /coveted nav item, the homepage coveted tile, and the
  * footer link. Counts closet rows with status 'want'.
  */
-export async function covetedBagsReady(): Promise<boolean> {
+async function loadCovetedBagsReady(): Promise<boolean> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return false;
   try {
     const { count, error } = await getSupabase()
@@ -62,3 +70,9 @@ export async function covetedBagsReady(): Promise<boolean> {
     return false;
   }
 }
+
+export const covetedBagsReady = unstable_cache(
+  loadCovetedBagsReady,
+  ["gate-coveted-bags"],
+  { revalidate: CACHE_GATE, tags: ["gates"] },
+);

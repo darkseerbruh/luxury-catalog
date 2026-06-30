@@ -1,7 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
+import { CACHE_CATALOG } from "./cache";
 
 export interface BrandOverview {
   brandId: number;
@@ -130,7 +132,7 @@ function signatureRank(brandName: string, styleName: string): number {
 }
 
 /** Brands with whether they have at least one fully-detailed variant ("live") vs. breadth-only stub styles ("coming soon"). */
-export async function getBrandsOverview(): Promise<BrandOverview[]> {
+async function loadBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
     .from("brand")
     .select("brand_id, name, tier, style(style_id, name, variant(variant_id))");
@@ -182,6 +184,16 @@ export async function getBrandsOverview(): Promise<BrandOverview[]> {
 }
 
 /**
+ * Brand directory for the homepage + /brands. Cached because the catalog tree
+ * (brand → style → variant) changes only when we ingest data, not per request.
+ */
+export const getBrandsOverview = unstable_cache(
+  loadBrandsOverview,
+  ["brands-overview"],
+  { revalidate: CACHE_CATALOG, tags: ["catalog"] },
+);
+
+/**
  * "It bags of all time" — a curated, RANKED canon (the blend lens: heritage mythology +
  * real-world recognition). Order is the ranking shown. Hooks are sourced editorial one-liners;
  * verify any year before publish. Resale figures are computed live from price_history below.
@@ -209,7 +221,7 @@ function medianOf(nums: number[]): number {
  * low / high + sample size) computed from price_history, NOT retail. Order follows
  * HERO_STYLES (the ranking). Resilient: returns [] on any missing env / column / error.
  */
-export async function getHeroCarousel(): Promise<HeroCard[]> {
+async function loadHeroCarousel(): Promise<HeroCard[]> {
   try {
     const { data, error } = await getSupabase()
       .from("style")
@@ -313,6 +325,16 @@ export async function getHeroCarousel(): Promise<HeroCard[]> {
     return [];
   }
 }
+
+/**
+ * "It bags of all time" hero canon. Cached: the styles are a fixed list and
+ * their retail prices move only on ingest, not per request.
+ */
+export const getHeroCarousel = unstable_cache(
+  loadHeroCarousel,
+  ["hero-carousel"],
+  { revalidate: CACHE_CATALOG, tags: ["catalog"] },
+);
 
 export interface VariantDetail {
   variantId: number;

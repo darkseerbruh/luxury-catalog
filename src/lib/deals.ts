@@ -1,4 +1,6 @@
+import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
+import { CACHE_MARKET } from "./cache";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -126,7 +128,7 @@ type VariantJoin = {
  * ranked by biggest discount (largest `pctUnder` first). Returns at most `limit`.
  * Always returns [] on any failure — never throws.
  */
-export async function getDeals(limit = 24): Promise<Deal[]> {
+async function loadDeals(limit = 24): Promise<Deal[]> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
 
   try {
@@ -249,3 +251,13 @@ export async function getDeals(limit = 24): Promise<Deal[]> {
     return [];
   }
 }
+
+/**
+ * "Priced well today" deals. Cached because it pages the whole price_history
+ * table (~40k rows) and recomputes medians — far too heavy to run per request.
+ * Resale listings refresh on ingest, so a few minutes of staleness is fine.
+ */
+export const getDeals = unstable_cache(loadDeals, ["deals"], {
+  revalidate: CACHE_MARKET,
+  tags: ["market"],
+});

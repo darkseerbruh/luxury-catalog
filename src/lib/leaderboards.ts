@@ -1,5 +1,7 @@
+import { unstable_cache } from "next/cache";
 import { getSupabase } from "./supabase";
 import { HOMEPAGE_OCCASION_BOARDS, OCCASIONS, type Occasion } from "./occasions";
+import { CACHE_MARKET } from "./cache";
 
 const OCCASION_TITLE = new Map<Occasion, string>(OCCASIONS.map((o) => [o.value, o.board]));
 
@@ -53,7 +55,7 @@ interface Agg {
   occasion: Map<Occasion, { sum: number; count: number }>;
 }
 
-export async function getReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards> {
+async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards> {
   try {
     const sb = getSupabase();
     const { data, error } = await sb
@@ -207,7 +209,7 @@ function embeddedStyleName(
  * ranked high to low. Mirrors the deals.ts resale/retail split exactly. Resilient:
  * any missing env / pre-0021 column / query error yields [].
  */
-export async function getValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry[]> {
+async function loadValueRetentionLeaders(perBoard = 5): Promise<LeaderboardEntry[]> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
   try {
     const sb = getSupabase();
@@ -273,7 +275,7 @@ export async function getValueRetentionLeaders(perBoard = 5): Promise<Leaderboar
 // "Best for X" = a verified catalog attribute (fits a laptop) ranked by review
 // rating. No extra review field needed — just data we already have.
 
-export async function getBestLaptopTotes(perBoard = 5): Promise<LeaderboardEntry[]> {
+async function loadBestLaptopTotes(perBoard = 5): Promise<LeaderboardEntry[]> {
   try {
     const sb = getSupabase();
     const { data: fitRows, error: fitErr } = await sb
@@ -345,3 +347,24 @@ async function resolveVariantNames(
   }
   return out;
 }
+
+// Homepage "What the community knows" boards. All read-only, change only on
+// review/ingest, and render together — cached so the section never re-scans the
+// review + price tables on every load.
+export const getReviewLeaderboards = unstable_cache(
+  loadReviewLeaderboards,
+  ["review-leaderboards"],
+  { revalidate: CACHE_MARKET, tags: ["market"] },
+);
+
+export const getValueRetentionLeaders = unstable_cache(
+  loadValueRetentionLeaders,
+  ["value-retention-leaders"],
+  { revalidate: CACHE_MARKET, tags: ["market"] },
+);
+
+export const getBestLaptopTotes = unstable_cache(
+  loadBestLaptopTotes,
+  ["best-laptop-totes"],
+  { revalidate: CACHE_MARKET, tags: ["market"] },
+);
