@@ -34,6 +34,19 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 Fashionphile + Wayback = server fetch; TRR/Vestiaire/Rebag/etc = Firecrawl (bot-block
 defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).*
 
+> **🔬 Firecrawl probe (2026-06-30, in-session MCP, ~16 credits, Balenciaga City test) — UPDATES §0d:**
+> - **Vestiaire = the cheap rich winner.** ONE search scrape = **5 credits** returns price + **colour +
+>   material** + region per listing (data sits in the page; NO per-listing detail scrape needed). So a
+>   whole-catalog Vestiaire pass ≈ 5 cr × ~56 styles ≈ **~280 credits — fits the FREE 1k tier**, even monthly.
+> - **TheRealReal has HARDENED since 2026-06-28.** Search page still works (5 cr, price + title). But
+>   **product/detail pages are now PerimeterX-captcha-blocked even on the stealth proxy** (403, still
+>   burns 5 cr for nothing). The old ~2.85-cr/listing detail path is currently DEAD. TRR now gives only
+>   price + material-from-title (no colour). Treat TRR as search-only + low priority until PX is solved.
+> - **Verdict: Vestiaire is worth it and ~free; skip TRR detail.** Open quality gap: Vestiaire search
+>   titles lack SIZE, so a clean load needs size-from-title + a per-style fallback (build a proper
+>   `firecrawl-vestiaire.ts` adapter mirroring `firecrawl-trr.ts`; run with FIRECRAWL_API_KEY in env/CI
+>   for repeatability, or one-time via the in-session MCP).
+
 > **Method (2026-06-30, unattended Fashionphile pass):** `sources/fashionphile-collection.ts <slug>`
 > server-fetches the brand's `products.json` (FREE, no Firecrawl credits) → `fashionphile.ts --raw`
 > maps to TARGETS → `load:prices fashionphile --write` → `summary:refresh`. **Brand guard added to
