@@ -1774,6 +1774,29 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 700, maxPrice: 1700,
     searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // ── Alexander McQueen backbone (2026-06-30, thin feed; clean single buckets) ──
+  { brand: "Alexander McQueen", style: "The Knuckle", size_label: "Standard",
+    requireTokens: ["knuckle"],
+    excludeTokens: ["wallet", "card", "coin", "scarf"],
+    minPrice: 400, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  { brand: "Alexander McQueen", style: "The Bow Tote", size_label: "Standard",
+    requireTokens: ["the-bow"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // Skull bag — exclude the scarf/box-clutch/SLG noise that shares "skull".
+  { brand: "Alexander McQueen", style: "Skull", size_label: "Standard",
+    requireTokens: ["skull"],
+    excludeTokens: ["scarf", "clutch", "box", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // Manta bag — exclude the de-manta clutch.
+  { brand: "Alexander McQueen", style: "Manta", size_label: "Standard",
+    requireTokens: ["manta"],
+    excludeTokens: ["clutch", "scarf", "wallet", "card"],
+    minPrice: 600, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
