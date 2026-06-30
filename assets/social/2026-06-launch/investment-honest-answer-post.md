@@ -1,31 +1,33 @@
 # Post — Are designer bags a good investment? (the honest answer)
 
-Status: DRAFTED 2026-06-30. Pillar: honest money. Persona: Sofia + Maya.
+Status: APPROVED 2026-06-30 (owner; hook+POV+one-idea, hook B primary). Pillar: honest money. Persona: Sofia + Maya.
 Destination: https://www.luxurycatalog.com/articles/are-designer-bags-a-good-investment
-Facts from the article: bags hold value better than almost anything you wear, but not a guaranteed return; we publish no appreciation/return figures. Ties to her real emerald-green "I told myself it was an investment" story.
-Visual: "Holds vs Fades" two-column card (jewel house style). [to build]
+Visual: "holds vs fades" card (to build) or her on camera. Ties to her real emerald-green loss.
+Facts: bags hold value better than almost anything you wear, but not a guaranteed return; we publish no appreciation/return figures. Estimate, not a forecast.
 
-## TikTok / Reel
-> Are designer bags a good investment? Anyone who answers with a percentage is selling you something.
->
-> Here's the honest version. The right bags hold their value better than almost anything else you wear, but holding value is not the same as making money, and no bag is a guaranteed return.
->
-> What actually holds up: classic shapes that stay in the lineup, neutral colors, heritage houses that keep production tight, kept in great condition with the box and dust bag. What fades: trend shapes, loud seasonal colors, heavy logos, and brands that flood the market.
->
-> I learned this the expensive way. I once bought a hyped seasonal color I'd never normally carry, told myself it was an investment, and sold it at a loss.
->
-> The only investment thesis that reliably pays: buy something you'll actually carry for years.
+## Hooks (rotate) — primary: B
+- A: "Anyone who calls a designer bag an 'investment' and quotes you a percentage is trying to sell you something."
+- B: "I bought a bag and called it an investment. I lost money on it. Here's the honest version nobody posts."
 
-**Outro:** That's my read, not a forecast. Full honest breakdown at the link. Follow for more where handbags meet data, I put it all on LuxuryCatalog.com so you can spend smart.
+## TikTok / Reel (one idea: it holds value, it doesn't make you money + the confession)
+> Let me save you an expensive lesson. A few years ago I got swept up in a hyped seasonal color, a Chanel everyone in the collector groups was obsessed with. I bought it in a style I'd never normally carry, told myself it was an investment, and never used it. Then I sold it at a loss.
+>
+> Here's the honest version of "are bags an investment." The right ones hold their value better than almost anything else you wear. But holding value is not the same as making money, and no bag is a guaranteed return. Anyone quoting you a percentage is selling something.
+>
+> What actually holds up: classic shapes, neutral colors, the bag kept in great condition. What fades: trends, loud seasonal colors, heavy logos. The thesis that actually pays is the boring one, buy something you'll genuinely carry for years. The cost per wear drops, you enjoy it the whole time, and a good classic hands a lot back if you ever sell.
+>
+> Don't buy a bag to make money. Buy one you'll love and use. That's the only investment that reliably pays.
+
+**Outro:** Full honest breakdown at the link. Follow for real bag data with the gatekeeping cut out, LuxuryCatalog.com. (An estimate of the market, not a forecast.)
 
 ## Instagram caption
-> "Is it an investment?" The honest answer is more useful than the hype.
+> I called a bag an investment. I lost money on it. Here's the honest version.
 >
-> The right bags hold value better than almost anything else you wear. But holding value is not making money, and no bag is a guaranteed return. Anyone quoting you a percentage is selling something.
+> Years ago I got swept up in a hyped seasonal Chanel color, bought it in a style I'd never carry, told myself it was an investment, and sold it at a loss. Lesson learned.
 >
-> Tends to hold: classic shapes kept in the lineup, neutral colors, heritage houses with tight production, great condition with the full set. Tends to fade: trend shapes, loud seasonal colors, heavy logos, brands that flood the market.
+> The honest answer: the right bags hold value better than almost anything else you wear, but holding value is not making money, and no bag is a guaranteed return. Anyone quoting you a percentage is selling something. Classics, neutrals, and great condition hold. Trends, loud colors, and heavy logos fade.
 >
-> I bought a hyped seasonal color once, told myself it was an investment, and took a loss. Lesson learned. The thesis that actually pays is the boring one: buy a classic you'll carry for years. The cost per wear drops, you enjoy it the whole time, and a good one hands back a lot if you sell.
+> The thesis that actually pays is the boring one: buy a bag you'll genuinely carry for years. Don't buy to make money. Buy to love and use.
 >
 > An estimate of today's market, not a forecast, not an appraisal. From a collector and researcher at LuxuryCatalog.com.
 
@@ -33,5 +35,4 @@ Visual: "Holds vs Fades" two-column card (jewel house style). [to build]
 
 ## Pinterest pin
 - **Title:** Are designer bags really an investment?
-- **Description:** The honest answer: the right bags hold value better than almost anything you wear, but that's not a guaranteed return, and anyone quoting a percentage is selling something. Classic shapes, neutral colors, heritage houses, and great condition hold. Trend shapes, loud colors, heavy logos, and flooded brands fade. Buy what you'll carry. Full breakdown at the link. An estimate of the market, not a forecast.
-- **Visual:** Holds vs Fades card.
+- **Description:** The honest answer: the right bags hold value better than almost anything you wear, but that's not a guaranteed return, and anyone quoting a percentage is selling something. Classic shapes, neutral colors, and great condition hold. Trends, loud colors, and heavy logos fade. Buy what you'll carry, that's the only investment that reliably pays. Full breakdown at the link. An estimate of the market, not a forecast.
