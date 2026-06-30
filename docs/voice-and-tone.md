@@ -323,6 +323,26 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
 
 ---
 
+## 7b. Article structure & data rules (locked 2026-06-30, from owner edits)
+
+- **Brand name: "Luxury Catalog," never "The Luxury Catalog."** Sitewide.
+- **Open by questioning the reader's default,** not by announcing the finding ("Does a bigger bag
+  really cost more?" beats "Smaller bags cost more"). Put a crack in the assumption, then turn it.
+- **Sample sizes (n) live in charts and tables, never in body prose.** The chart carries the
+  receipts; the text stays readable.
+- **Multi-point numbers go in scannable bullets,** not a packed sentence.
+- **Surface the governing takeaway early** (right after the first example), and give the single
+  most important line **visual emphasis** (pull quote / callout), not buried in a paragraph.
+- **Hyphenate compound modifiers** (most-wanted, small-size, data-informed).
+- **"Should" is fine for practical instructions** ("what you should do with this data"); **banned
+  for naive premises we debunk and for taste/value verdicts** (those stay "my take / an estimate";
+  see §7 naive-declaratives + §3 hedge).
+- **The data-hedge note is explicit and human:** say what the numbers ARE and ARE NOT (asking not
+  sold, condition varies, an estimate of the market not an appraisal of one bag), a short readable
+  note, not a terse tag.
+
+---
+
 ## 8. AI-assist guardrails (don't let it read like a robot)
 
 We draft with AI (it's the leverage the whole company runs on) but we **never ship

@@ -7,7 +7,7 @@ import ShopControls from "./ShopControls";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Shop the market · The Luxury Catalog",
+  title: "Shop the market · Luxury Catalog",
   description:
     "Compare live resale prices for designer bags across every marketplace we track, each rated against the fair value for its spec. We don't sell these — we find the best offer and link you to the seller.",
 };

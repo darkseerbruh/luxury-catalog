@@ -6,7 +6,7 @@ import RecapShare from "@/components/RecapShare";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Your Year in Bags · The Luxury Catalog" };
+export const metadata = { title: "Your Year in Bags · Luxury Catalog" };
 
 export default async function RecapPage() {
   if (!(await getCurrentUser())) redirect("/login");

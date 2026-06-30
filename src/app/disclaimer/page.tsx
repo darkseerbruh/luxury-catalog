@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Disclaimer — The Luxury Catalog",
+  title: "Disclaimer — Luxury Catalog",
   description:
-    "Prices and information on The Luxury Catalog are for general reference only — not appraisals, offers, or financial, tax, or insurance advice.",
+    "Prices and information on Luxury Catalog are for general reference only — not appraisals, offers, or financial, tax, or insurance advice.",
 };
 
 export default function DisclaimerPage() {

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FITS, CARRY_METHODS } from "@/lib/browse-taxonomy";
 
 export const metadata = {
-  title: "Browse bags · The Luxury Catalog",
+  title: "Browse bags · Luxury Catalog",
   description:
     "Browse designer bags by how they're carried and what they fit — shoulder, crossbody, top handle, and more.",
 };

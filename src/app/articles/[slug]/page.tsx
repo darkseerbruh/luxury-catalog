@@ -93,9 +93,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) return { title: "Article · The Luxury Catalog" };
+  if (!post) return { title: "Article · Luxury Catalog" };
 
-  const title = `${post.title} · The Luxury Catalog`;
+  const title = `${post.title} · Luxury Catalog`;
   const description = plainExcerpt(post);
   const url = `${SITE_URL}/articles/${post.slug}`;
 
@@ -311,7 +311,7 @@ export default async function PostDetailPage({
       name,
       ...(post.author?.handle ? { url: `${SITE_URL}/u/${post.author.handle}` } : {}),
     },
-    publisher: { "@type": "Organization", name: "The Luxury Catalog" },
+    publisher: { "@type": "Organization", name: "Luxury Catalog" },
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.updatedAt ? { dateModified: post.updatedAt } : {}),
     ...(post.excerpt ? { description: post.excerpt } : {}),

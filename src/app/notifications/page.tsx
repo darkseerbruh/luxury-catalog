@@ -6,7 +6,7 @@ import { markAllNotificationsRead } from "@/lib/notification-actions";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Notifications · The Luxury Catalog" };
+export const metadata = { title: "Notifications · Luxury Catalog" };
 
 function formatDate(iso: string): string {
   const d = new Date(iso);

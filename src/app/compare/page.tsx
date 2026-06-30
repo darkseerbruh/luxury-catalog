@@ -6,7 +6,7 @@ import { BagImage } from "@/components/BagImage";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Compare bags · The Luxury Catalog",
+  title: "Compare bags · Luxury Catalog",
   description: "Line up two or more bags side by side: identity, specs, retail and resale estimates.",
 };
 

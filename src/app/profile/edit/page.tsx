@@ -8,7 +8,7 @@ import GrailPicker from "./GrailPicker";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Edit profile · The Luxury Catalog" };
+export const metadata = { title: "Edit profile · Luxury Catalog" };
 
 export default async function EditProfilePage() {
   const user = await getCurrentUser();

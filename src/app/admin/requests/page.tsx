@@ -4,7 +4,7 @@ import { getBagRequests, getThriftFinds } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Requests & finds — Admin · The Luxury Catalog",
+  title: "Requests & finds — Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

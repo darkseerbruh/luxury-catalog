@@ -6,7 +6,7 @@ import PhotoReviewActions from "./PhotoReviewActions";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Photos — Admin · The Luxury Catalog",
+  title: "Photos — Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

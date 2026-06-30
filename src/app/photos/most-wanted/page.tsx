@@ -4,7 +4,7 @@ import { getMostWantedPhotos } from "@/lib/photos";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Most wanted photos · The Luxury Catalog",
+  title: "Most wanted photos · Luxury Catalog",
   description:
     "The bags collectors want most that have no photo yet. Have one in the wild? Add yours.",
 };

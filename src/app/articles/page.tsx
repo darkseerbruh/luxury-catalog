@@ -31,10 +31,10 @@ export async function generateMetadata({
   const { department } = await searchParams;
   const dept = getDepartment(department);
   const title = dept
-    ? `${dept.label} — ${dept.blurb} · The Luxury Catalog`
-    : "The Journal — guides on what's real, what it's worth, and what to buy · The Luxury Catalog";
+    ? `${dept.label} — ${dept.blurb} · Luxury Catalog`
+    : "The Journal — guides on what's real, what it's worth, and what to buy · Luxury Catalog";
   const description = dept
-    ? `${dept.label}: ${dept.blurb} Written straight by The Luxury Catalog's verified experts, built on real resale data.`
+    ? `${dept.label}: ${dept.blurb} Written straight by Luxury Catalog's verified experts, built on real resale data.`
     : "Guides on authenticating designer handbags, what they hold in resale, and which to buy. Sorted by what you came to do, written by verified experts.";
   const canonical = dept ? `${SITE_URL}/articles?department=${dept.id}` : `${SITE_URL}/articles`;
   return {
@@ -53,7 +53,7 @@ function formatDate(iso: string | null): string | null {
 }
 
 function byline(p: PostSummary): string {
-  return p.author?.displayName || (p.author?.handle ? `@${p.author.handle}` : "The Luxury Catalog");
+  return p.author?.displayName || (p.author?.handle ? `@${p.author.handle}` : "Luxury Catalog");
 }
 
 /** Build an /articles href, dropping empty params so URLs stay clean + indexable. */
@@ -449,7 +449,7 @@ export default async function ArticlesPage({
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-8">
       <div className="mb-7">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-gold">The Luxury Catalog · Editorial</p>
+        <p className="text-[11px] uppercase tracking-[0.22em] text-gold">Luxury Catalog · Editorial</p>
         {!activeDept && !q ? (
           <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">The Journal</h1>
         ) : (

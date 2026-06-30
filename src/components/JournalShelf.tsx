@@ -4,7 +4,7 @@ import { DEPARTMENTS, classifyDepartment } from "@/lib/article-departments";
 
 /** Author byline, same fallback chain as the Journal. */
 function byline(p: PostSummary): string {
-  return p.author?.displayName || (p.author?.handle ? `@${p.author.handle}` : "The Luxury Catalog");
+  return p.author?.displayName || (p.author?.handle ? `@${p.author.handle}` : "Luxury Catalog");
 }
 
 /** Newest published_at first; nulls sort last. */

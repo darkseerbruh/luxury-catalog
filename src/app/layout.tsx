@@ -28,7 +28,7 @@ const playfair = Playfair_Display({
 const SKIMLINKS_ID = process.env.NEXT_PUBLIC_SKIMLINKS_ID ?? "305125X1793317";
 
 export const metadata: Metadata = {
-  title: "The Luxury Catalog",
+  title: "Luxury Catalog",
   description:
     "The reference for designer handbags: Production history, authentication markers, and what they actually resell for, brand by brand.",
 };
@@ -65,7 +65,7 @@ export default async function RootLayout({
         <header className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm print:hidden">
           <div className="relative mx-auto flex max-w-5xl items-center justify-between border-b border-border px-5 py-4">
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
-              The Luxury Catalog
+              Luxury Catalog
             </Link>
             <HeaderNav signedIn={!!user} unread={unread} brandGroups={brandGroups} covetedReady={covetedReady} />
           </div>
@@ -75,7 +75,7 @@ export default async function RootLayout({
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-serif text-foreground">The Luxury Catalog</p>
+              <p className="font-serif text-foreground">Luxury Catalog</p>
               <p className="mt-2 max-w-xs text-muted">
                 Production history, authentication markers, and resale prices for designer handbags.
               </p>

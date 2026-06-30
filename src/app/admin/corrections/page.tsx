@@ -5,7 +5,7 @@ import CorrectionActions from "./CorrectionRow";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Corrections — Admin · The Luxury Catalog",
+  title: "Corrections — Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

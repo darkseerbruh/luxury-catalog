@@ -10,7 +10,7 @@ import type { PostAuthor } from "@/lib/posts";
  * E-E-A-T credibility without claiming expertise the content does not have.
  */
 export function AuthorCard({ author }: { author: PostAuthor }) {
-  const name = author.displayName || (author.handle ? `@${author.handle}` : "The Luxury Catalog");
+  const name = author.displayName || (author.handle ? `@${author.handle}` : "Luxury Catalog");
   const profileHref = author.handle ? `/u/${author.handle}` : null;
 
   return (

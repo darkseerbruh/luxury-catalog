@@ -32,7 +32,7 @@ export function ArticleList({ posts }: { posts: PostSummary[] }) {
                 <p className="mt-1 text-sm leading-relaxed text-muted">{p.excerpt}</p>
               )}
               <p className="mt-2 text-xs text-muted/70">
-                {byline ? `By ${byline}` : "The Luxury Catalog"}
+                {byline ? `By ${byline}` : "Luxury Catalog"}
                 {date ? ` · ${date}` : ""}
                 {p.topic.styleName ? ` · ${p.topic.styleName}` : ""}
               </p>

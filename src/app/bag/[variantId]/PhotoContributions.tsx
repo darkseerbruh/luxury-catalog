@@ -130,7 +130,7 @@ export default function PhotoContributions({
           <label className="flex items-start gap-2 text-sm text-muted">
             <input type="checkbox" name="attested" required className="mt-1 accent-gold" />
             <span>
-              I took this photo (or own the rights) and grant The Luxury Catalog a licence to
+              I took this photo (or own the rights) and grant Luxury Catalog a licence to
               display it. <Link href="/disclosure" className="underline hover:text-foreground">Details</Link>.
             </span>
           </label>

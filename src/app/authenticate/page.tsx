@@ -6,7 +6,7 @@ import { ClaimButton, CloseButton } from "./AuthRequestActions";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Get it authenticated · The Luxury Catalog",
+  title: "Get it authenticated · Luxury Catalog",
   description:
     "Request a hands-on review from a verified authenticator. Lead matching only — pricing and the service are arranged directly with the authenticator.",
 };
