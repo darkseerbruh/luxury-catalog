@@ -447,3 +447,146 @@ correct-looking tag proves nothing on its own.
 - **NEVER-INVENT held:** no serial format, era date, or marker here was filled from memory —
   each traces to a cited source + 2026-06-30 check. Gaps were left as hedged or flagged rather
   than guessed.
+
+---
+
+# ROUND 2 — FENDI and LOEWE
+
+*Appended 2026-06-30. The two fastest-rising brands in Entrupy's 2026 report (Fendi +49%,
+Loewe +45%) — the round-2 pair flagged in Part 1. Same format and bar as above. Both are
+honestly thinner than the round-1 nine, for different reasons noted per brand. All markers
+checked 2026-06-30. The binding frame at the top of this file (markers to check, not a verdict)
+applies here too.*
+
+---
+
+## FENDI  *(round 2)*
+
+*Reality check: Fendi authentication overlaps the LV/Gucci logo-canvas playbook — the FF/Zucca
+print and the metal FF logo are the spine, and those are exactly what counterfeiters invest in
+most, so the canvas alone is weak. The stronger signal is execution (print registration, logo
+geometry, hardware, stitching) plus the serial-era timeline.*
+
+**Markers worth checking**
+1. **Serial/tag by era.** Pre-1980s pieces often have **no serial at all**; 1980s–2000s use a
+   serial leather tag, and a **"Fendi SAS"** marking is a reliable older-era indicator;
+   2000s-onward added hologram tags; recent models add QR codes / NFC chips for digital
+   verification — match the format to the claimed age. *(fashionica; reseller-authenticator.)*
+2. **FF logo geometry.** The double-F is sharp-edged, symmetrical, and holds a specific
+   width-to-height ratio that fakes routinely miss; on Zucca-print pieces the two F's sit
+   slightly **offset** on either side of the rectangle (never perfectly mirror-aligned), and
+   the print should never look elongated or stretched. *(fashionica; 9ine Life; reseller +
+   reference site.)*
+3. **Zucca canvas tone + registration.** Genuine Zucca canvas has a tight weave, clean print
+   registration, and a **warm tone — it should never read green**; loose weave or color bleed
+   is a flag. *(fashionica; TheRealReal; reseller-authenticator.)*
+4. **Hardware engraving + screws.** "FENDI" engraving on hardware is crisp and properly deep
+   (not shallow/surface-etched); on the Baguette clasp backing the screws are flat-head — a
+   Phillips or star screw is a tell. *(fashionica; reseller-authenticator.)*
+5. **Zipper brand + feel.** Fendi uses quality YKK, Lampo, or branded-Fendi zippers that glide;
+   flimsy, catching, or unbranded zippers are a flag. *(fashionica; reseller-authenticator.)*
+6. **"Made in Italy" stamp, impressed.** The origin stamp is pressed into the leather (not
+   surface-printed) in the correct font — and it reads **"Made in Italy" only**; "Made in Roma"
+   or any other country is a definitive fake tell (note: "Fendi Roma" appears as a brand mark,
+   which is different from the origin line). *(fashionica; reseller-authenticator.)*
+7. **Lining sewn, not glued.** Fabric/suede/leather lining (commonly brown, beige, burgundy by
+   era) is neatly sewn in with no bunching; glued lining or exposed raw edges are a flag.
+   *(fashionica; reseller-authenticator.)*
+
+**Most-faked model:** the Baguette (the most-counterfeited Fendi), with the Peekaboo close
+behind. *(fashionica.)*
+
+**Era cutoffs:** **no serial** (pre-1980s) → **serial tag / "Fendi SAS"** (1980s–2000s) →
+**hologram tag** (2000s+) → **QR code / NFC chip** (2020s+, scannable via the official Fendi
+app). The hologram should shift color when tilted; a flat hologram is a flag, but a present
+hologram is not proof. *(fashionica.)*
+
+**What we explicitly DON'T claim:** the FF/Zucca print and a correct-looking hologram or serial
+are the most-copied elements, so none of them proves authenticity on its own; we don't scan or
+decode the NFC chip, and the read comes from execution across many markers, not the logo.
+
+---
+
+## LOEWE  *(round 2)*
+
+*Reality check (state it plainly in the guide): Loewe has no publicly decodable date code and
+**no consumer-facing online verification tool** — any site claiming an official Loewe lookup is
+a scam. So this guide leans harder on **craft judgment** than on a code: the embossed Anagram,
+the leather hand, and Puzzle/Hammock construction. Several markers below are explicitly
+craft-judgment, not hard binary tells, and are flagged as such.*
+
+**Markers worth checking**
+1. **Anagram (four interlocking L's) symmetry — the primary checkpoint.** The four L's must be
+   identical in weight, size, and spacing and centered; asymmetry, thick-thin variation, or an
+   off-center mark is the most common fake tell. *(fashionica; TheRealReal; reseller +
+   community, consistent.)*
+2. **The "O" in LOEWE.** On the wordmark the O is **not a perfect circle** — it has slightly
+   sharp/pointed ends (a subtle "football" shape); a perfectly round O is a known counterfeit
+   tell. *(fashionica; reseller — single-strong-source, medium confidence, verify on close
+   photos.)*
+3. **Leather hand (craft judgment).** Authentic Nappa calfskin is exceptionally soft, supple,
+   fine-grained, and slightly heavy; papery, stiff, or plasticky leather — or an excessively
+   uniform "machine" grain — is a flag. *This is feel-based, not a hard marker — call it
+   craft judgment.* *(fashionica; TheRealReal — TRR notes fakes often show a larger grain than
+   the real bag.)*
+4. **Puzzle panel geometry + seam lines.** On the Puzzle the geometric leather panels fit with
+   precision (no gaps, overlaps, or misaligned edges) and the seam lines between panels are
+   **thick, bold, and clearly defined** — thin seam lines that fade into the leather are a tell;
+   the knotted strap attachments should be tight and identical on both sides. *(fashionica;
+   reseller-authenticator.)*
+5. **Hardware Anagram engraving + zipper.** On metal hardware the Anagram is deeply, precisely
+   engraved and **fully fills the palladium/gold square** (a logo floating with big margins is a
+   flag); zippers are Lampo or Riri and the puller's LOEWE logo is thin with wide letter
+   spacing. *(fashionica; reseller-authenticator.)*
+6. **Interior tag execution + serial debossed.** The interior leather tab carries "LOEWE" over
+   "Made in Spain" over the serial; it should have **defined (not fully rounded) corners**, feel
+   as good as the bag, and the serial must be **debossed into the leather, never surface-printed**
+   — and the "Made in Spain" line is deliberately bolder than the "LOEWE" above it. *(fashionica;
+   legitique; reseller-authenticator.)*
+7. **Stamp depth — delicate, not hammered.** The Made-in-Spain/serial stamp and exterior Anagram
+   emboss are applied with a **light, delicate touch**; a stamp pressed far too hard/deep is a
+   replica tell (fakes tend to over-press). *(legitique; community/PurseForum — corroborated,
+   medium confidence.)*
+
+**Most-faked model:** the Puzzle (the viral 2015+ icon and the most-counterfeited Loewe), with
+the Hammock next. *(fashionica.)*
+
+**Era cutoffs:** there is **no serial/date lookup** — the serial is a date/factory code, not a
+unique bag ID (the same number recurs across a production run; the 3rd–4th digits *generally*
+indicate the year — treat as a soft hint, not proof). The one clean era line is the **2013
+Jonathan Anderson redesign of the Anagram** — pre-2013 (e.g. vintage Amazona) carries a
+different logo structure, so research era-specific logos before calling one "wrong." Pre-2013
+pieces may also predate consistent serialing; authenticate those on craft alone. Mainline
+handbags are **Made in Spain** (90%+ local production); a non-Spain origin on a current handbag
+is a strong flag. *(fashionica.)*
+
+**What we explicitly DON'T claim:** much of Loewe authentication is craft judgment (leather
+hand, stamp "feel", Anagram proportions), not a code you can verify — so we present it as
+weigh-points, flag the feel-based ones as judgment, and never imply a serial can be looked up to
+prove a bag. There is no Loewe authenticity card; its absence is not a flag.
+
+---
+
+## Round 2 sourcing notes (confidence)
+
+- **Fendi:** solid. The Fashionica authenticator guide (dated Apr 2026) is detailed and
+  model-specific, corroborated by TheRealReal (Zucca/FF logo + interior-label era) and 9ine Life
+  (offset FF detail). The serial-era timeline is the main thing to re-confirm on a second source
+  before publishing (single primary source for the "Fendi SAS" era marker).
+- **Loewe:** good but craft-heavy by nature. Fashionica (May 2026) + TheRealReal + legitique
+  (2026) agree on the Anagram, leather, Puzzle seams, and the no-public-lookup fact. The two
+  softest markers — the "football O" and the "delicate stamp depth" — rest on a single strong
+  source plus community consensus, so they're flagged medium-confidence and should be shown as
+  verify-on-photos rather than binary tells.
+- **NEVER-INVENT held** for both: every marker traces to a cited source + 2026-06-30 check; the
+  craft-judgment and medium-confidence items are labeled as such rather than dressed up as hard
+  rules.
+
+## Round 2 sources
+
+- Fashionica, "How to Tell If a Fendi Bag Is Real" (Apr 2026) — https://fashionica.com/blogs/designer-bag-authentication/how-to-authenticate-fendi-bag (checked 2026-06-30)
+- TheRealReal RealStyle, "How to Spot a Real Fendi Logo Bag" — https://realstyle.therealreal.com/authentic-fendi-logo-zucca-ff-bag/ (checked 2026-06-30)
+- 9ine Life, "Authenticity check: Recognize original Fendi handbags" — https://www.9inelife.com/en/blogs/news/fendi-bag-authentication (checked 2026-06-30)
+- Fashionica, "How to Tell If a Loewe Bag Is Real" (May 2026) — https://fashionica.com/blogs/designer-bag-authentication/how-to-authenticate-loewe-bag (checked 2026-06-30)
+- TheRealReal RealStyle, "How To Spot A Real vs. Fake Loewe Puzzle Bag" — https://realstyle.therealreal.com/real-vs-fake-loewe-puzzle-bag/ (checked 2026-06-30)
+- Legitique, "Spot a Fake Loewe Puzzle in Seconds (2026)" — https://legitique.com/blogs/loewe/loewe-puzzle-bag-legit-check-guide (checked 2026-06-30)
