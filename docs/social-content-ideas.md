@@ -244,6 +244,36 @@ The insight people miss: how you STORE a bag matters more than how you condition
 it. Evergreen Pinterest gold. Caveat: source the storage specifics (leather pros) before
 publishing as how-to.
 
+## Destination map (content → live page; verified 2026-06-30)
+
+The rule: every post links to a relevant LIVE article or brand/bag page. Most concepts already
+have one. ✅ = ready home; ~ = route to a brand/bag page or the quiz for now; ❌ = content gap,
+build the article (demand-driven site roadmap).
+
+| Concept | Live destination | Status |
+|---|---|---|
+| Small-bag premium ("Drip Too Hard") | `/articles/does-a-smaller-bag-cost-more` | ✅ |
+| Investment that wasn't (behavior, not market) | `/articles/are-designer-bags-a-good-investment` | ✅ |
+| Rent first / luxury-desert hack | `/articles/should-you-rent-or-buy-a-designer-bag` | ✅ |
+| Scam tells / blank-paper-slip | `/articles/red-flags-spotting-a-fake-or-scam-resale-listing` | ✅ |
+| Coach thrift-flip | `/articles/what-a-coach-tabby-actually-sells-for` + `/articles/how-to-authenticate-a-coach-bag` + `/bag/204` | ✅ |
+| Classic Flap overrated | `/articles/is-the-chanel-classic-flap-worth-it` + `/bag/199` | ✅ |
+| Lambskin reality / vintage Chanel | `/articles/caviar-vs-lambskin-chanel-flap` | ✅ |
+| First-bag advice | `should-you-rent-or-buy` + `/articles/which-accessible-bags-hold-value` + `/quiz` | ✅ |
+| Birkin/Kelly worst-for-modern | `/articles/birkin-vs-kelly-which-hermes-bag` + `/bag/210`, `/bag/214` | ✅ |
+| Dream bag / Frankenbag + "what would you fix?" | `/quiz` (the quiz IS the destination) | ✅ |
+| 24/24 underrated | Hermès brand page `/brand/4` or a 24/24 bag page (agent resolves id) | ~ |
+| Peekaboo design | Fendi brand page / Peekaboo bag page (agent resolves id) | ~ |
+| Is-it-real myths (logo-match, quality decline) | `how-to-authenticate-*` articles (general) | ~ partial; a dedicated "bag myths debunked" article is a gap |
+| **Modern-use report card (THE thesis)** | none yet | ❌ build the flagship article; interim route to `/quiz` or `/browse` fits |
+| **Storage > leather care** | none yet | ❌ build "how to store your bags" (evergreen Pinterest) |
+| **Quiet logo, not no logo** | none yet | ❌ build the article |
+
+**Article gaps to commission (demand-driven, from what the content needs):** the modern-use
+thesis (flagship), the storage guide, the quiet-logo piece, and a "handbag myths debunked"
+(logo-match + quality decline). Until a gap article exists, route to the closest live page + the
+quiz, never post without a link.
+
 ## Build order (recommendation)
 1. **Flagship modern-use thesis** (#1 above) — the ownable POV, start the series.
 2. **What renting taught me** (#6–10) — useful + emotional + funnels to the quiz.

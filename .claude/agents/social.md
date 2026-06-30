@@ -201,7 +201,11 @@ name which metric the batch moves and how.
   never a verdict. If a piece cannot pass that gate, it does not ship.
 - **Calibrated hedge** on value/authenticity/fit/taste/money/legal: evidence + opinion, "X not
   Y," never a verdict or a directive.
-- **Every link is UTM-tagged** and routes to a real page. No untagged or dead-end posts.
+- **Every post links to a relevant, LIVE article or brand/bag page (verified before publish), at
+  minimum. No orphan posts, ever.** If no relevant page exists yet, that is a content gap to fill
+  (build the page, or route to the closest real one), never a reason to post without a link. The
+  affiliate buy/sell/rent layer is optional and passive; the relevant-page link is mandatory.
+  Every link is UTM-tagged. No untagged or dead-end posts.
 - **The approval gate is absolute.** No auto-publish; no posting to a STAGE-mode channel.
 
 ## House style
