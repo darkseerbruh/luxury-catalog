@@ -42,10 +42,18 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 >   **product/detail pages are now PerimeterX-captcha-blocked even on the stealth proxy** (403, still
 >   burns 5 cr for nothing). The old ~2.85-cr/listing detail path is currently DEAD. TRR now gives only
 >   price + material-from-title (no colour). Treat TRR as search-only + low priority until PX is solved.
-> - **Verdict: Vestiaire is worth it and ~free; skip TRR detail.** Open quality gap: Vestiaire search
->   titles lack SIZE, so a clean load needs size-from-title + a per-style fallback (build a proper
->   `firecrawl-vestiaire.ts` adapter mirroring `firecrawl-trr.ts`; run with FIRECRAWL_API_KEY in env/CI
->   for repeatability, or one-time via the in-session MCP).
+> - **BLOCKER PROVEN (2026-06-30, $0 local dry-run): Vestiaire cannot be cleanly loaded per-variant.**
+>   Search titles carry NO size (all null); the loader then piles EVERY size-less row onto the style's
+>   first variant (tested: 13 mixed-size Antigona rows all landed on variant 1013 = Antigona **Mini**),
+>   which would corrupt that variant's median. Size only exists on the Vestiaire DETAIL page as raw
+>   DIMENSIONS ("12in x 10in x 6in"), needing fuzzy per-style dimension→label mapping to load cleanly.
+> - **Verdict (my take): do NOT bulk-load Vestiaire per-variant.** Fashionphile already gives these
+>   styles clean per-variant medians; the marginal lift (colour/material spread + region) doesn't beat
+>   the dimension-mapping build + mis-size risk. **Better uses of Vestiaire:** (1) STYLE-LEVEL spread
+>   stats for content (ad-hoc capture, cited in an article, no DB load) — e.g. "Antigona $198-$1,610
+>   across colours on Vestiaire"; (2) single-variant styles only, where size-less rows are unambiguous.
+> - TheRealReal detail stays PX-blocked. Net: the paid Firecrawl pass is NOT worth it right now; the
+>   free Fashionphile per-variant medians stand as the clean dataset.
 
 > **Method (2026-06-30, unattended Fashionphile pass):** `sources/fashionphile-collection.ts <slug>`
 > server-fetches the brand's `products.json` (FREE, no Firecrawl credits) → `fashionphile.ts --raw`
