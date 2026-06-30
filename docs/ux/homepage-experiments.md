@@ -121,6 +121,27 @@ both arms use the same headline ("Find the bag for me") and CTA; the *only*
 difference is whether the first question renders inline. A completion lift is then
 cleanly attributable to the inline mechanic.
 
+**B4 RETIRED (2026-06-29):** the "Find the bag for me" tile was removed, it duplicated the
+style-read quiz, which now has its own callout (below). Don't rebuild it.
+
+## Style-read callout tests (the quiz promo, logged-out)
+
+The style-read quiz is its own logged-out homepage callout (no longer a goal tile).
+
+- **quiz_headline A/B — LIVE (shipped 2026-06-29).** Single variable: the callout H2 (the
+  subhead, the Start button, and the layout are frozen). Arms: **V1 "What's your handbag
+  style, really?"** (taste frame) vs **V2 "Two minutes to your bag style"** (time + payoff).
+  Success metric: **quiz starts** (`quiz_started`), funnel `experiment_exposed` → `quiz_started`
+  by `variant`. The old control ("Find out what your bags say about you") was cut — it assumes
+  ownership the aspiring majority lacks — and a V3 result-tease was cut. Code:
+  `src/lib/experiments/quiz-headline.ts` + `src/components/StyleReadCallout.tsx`. QA pin:
+  `QUIZ_HEADLINE_FORCE=style|time`.
+- **quiz IMAGE test — PARKED (needs a direction).** Run AFTER the headline winner; hold that
+  headline and vary ONLY the supporting visual (one variable). Concepts floated 2026-06-29
+  (result-cards / style-collage / taste-fingerprint) did not land, so this is parked. **This is
+  where the image test lives:** when an image direction clicks, drop it here and it gets wired as
+  the second arm.
+
 ---
 
 ## Bench (ideas not yet slotted)
