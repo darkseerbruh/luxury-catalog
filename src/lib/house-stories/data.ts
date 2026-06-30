@@ -38,4 +38,56 @@ export const HOUSE_STORIES: HouseStory[] = [
       },
     ],
   },
+  {
+    match: ["chanel"],
+    lead: "The couturière who freed women from corsets, then gave them a bag with a strap so their hands were free too.",
+    beats: [
+      {
+        icon: "scissors",
+        lead: "A couturière first.",
+        body: "Gabrielle ‘Coco’ Chanel built the house on freeing women from corsets, long before the first bag.",
+      },
+      {
+        icon: "clasp",
+        lead: "February 1955.",
+        body: "She named the quilted flap for its own birthday, the 2.55, and added a shoulder strap so women had their hands back.",
+      },
+      {
+        icon: "stitch",
+        lead: "The diamond quilt.",
+        body: "The house signature, stitched on pebbled caviar or soft lambskin leather.",
+      },
+      {
+        icon: "family",
+        lead: "Named for a love.",
+        body: "Karl Lagerfeld called Chanel’s edgiest bag the Boy, after Boy Capel, the great love of Coco’s life.",
+      },
+    ],
+  },
+  {
+    match: ["louis vuitton", "vuitton"],
+    lead: "A trunk maker whose canvas, drawn to defeat counterfeiters, became the most copied print in luxury.",
+    beats: [
+      {
+        icon: "trunk",
+        lead: "Paris, 1854.",
+        body: "Louis Vuitton opened as a malletier, a maker of flat-topped trunks that stacked where domed ones could not.",
+      },
+      {
+        icon: "loom",
+        lead: "1896, against the fakes.",
+        body: "Georges Vuitton drew the Monogram canvas to make the house impossible to copy.",
+      },
+      {
+        icon: "tag",
+        lead: "Named from the map of Paris.",
+        body: "The Capucines for the street of the first store, the Alma for a bridge, the Petite Malle a trunk small enough to wear.",
+      },
+      {
+        icon: "clasp",
+        lead: "Travel, shrunk to the city.",
+        body: "The Speedy was a 1930s travel bag made small; the Neverfull, a 2007 tote that turns fully inside out.",
+      },
+    ],
+  },
 ];
