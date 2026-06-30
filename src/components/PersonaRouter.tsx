@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getClosetValue } from "@/lib/portfolio";
+import { getMarketPulse } from "@/lib/market-pulse";
 
 /**
  * "What brings you in?" — the homepage goal-picker. Each tile SHOWS its value
@@ -51,14 +52,13 @@ export default async function PersonaRouter() {
   // total when we have priced bags; the read is resilient (null on any missing
   // env / column / key), so a thin or credential-less environment falls back to
   // the illustrative multi-bag visual.
-  const closetValue = await getClosetValue();
+  const [closetValue, pulse] = await Promise.all([getClosetValue(), getMarketPulse()]);
+  const topHouses = pulse.byHouse.slice(0, 3);
+  const houseMax = topHouses[0]?.observations ?? 0;
 
   return (
     <section className="border-b border-border px-5 py-12">
-      <h2 className="font-serif text-2xl text-foreground">What brings you in?</h2>
-      <p className="mt-1 text-sm text-muted">Pick a goal. We&rsquo;ll take you straight there.</p>
-
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {/* Tile 1 — Is it real? The authentication ladder: Learn (read the
             markers) + Check (scan a bag). Two explicit actions, not one camera
             link, so Learn gets a homepage on-ramp too. */}
@@ -144,6 +144,37 @@ export default async function PersonaRouter() {
             </div>
           </div>
           <span className={CTA}>See the full price story &rarr;</span>
+        </Link>
+
+        {/* Tile 4 — The data behind every page: the data-informed flex. Shows real
+            scale + per-house depth (market pulse), never a famous-bag ranking. */}
+        <Link href="/data" className={TILE}>
+          <h3 className="font-serif text-xl text-foreground">The data behind every page</h3>
+          <p className="mt-1 text-sm text-muted">Real resale prices across every house we cover.</p>
+          {pulse.totalPrices > 0 ? (
+            <div className="mt-4 flex-1">
+              <p className="font-serif text-3xl text-gold">{pulse.totalPrices.toLocaleString()}</p>
+              <p className="mt-1 text-xs text-muted">resale prices across {pulse.houses} houses</p>
+              {topHouses.length > 0 && (
+                <ul className="mt-4 flex flex-col gap-2">
+                  {topHouses.map((h) => (
+                    <li key={h.name} className="flex items-center gap-2">
+                      <span className="w-20 flex-shrink-0 truncate text-[11px] text-muted">{h.name}</span>
+                      <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+                        <span
+                          className="block h-full rounded-full bg-gold"
+                          style={{ width: `${houseMax > 0 ? Math.max(4, Math.round((h.observations / houseMax) * 100)) : 0}%` }}
+                        />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ) : (
+            <p className="mt-4 flex-1 text-sm text-muted">Real resale prices, kept current as new ones come in.</p>
+          )}
+          <span className={CTA}>See the data &rarr;</span>
         </Link>
       </div>
     </section>
