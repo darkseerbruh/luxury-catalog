@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   getReviewLeaderboards,
-  getValueRetentionLeaders,
   getBestLaptopTotes,
   type LeaderboardEntry,
 } from "@/lib/leaderboards";
@@ -45,9 +44,8 @@ function Board({ title, note, entries }: { title: string; note: string; entries:
 }
 
 export default async function CommunityLeaderboards() {
-  const [boards, valueRetention, laptopTotes] = await Promise.all([
+  const [boards, laptopTotes] = await Promise.all([
     getReviewLeaderboards(),
-    getValueRetentionLeaders(),
     getBestLaptopTotes(),
   ]);
   const hasAny =
@@ -55,7 +53,6 @@ export default async function CommunityLeaderboards() {
     boards.highestRated.length > 0 ||
     boards.mostWorthIt.length > 0 ||
     boards.byOccasion.length > 0 ||
-    valueRetention.length > 0 ||
     laptopTotes.length > 0;
 
   return (
@@ -77,7 +74,6 @@ export default async function CommunityLeaderboards() {
             <Board key={b.occasion} title={b.title} note="rated by owners who carried it there" entries={b.entries} />
           ))}
           <Board title="Best laptop totes" note="fits a laptop, by rating" entries={laptopTotes} />
-          <Board title="Best value retention" note="resale median vs original retail" entries={valueRetention} />
         </div>
       )}
 

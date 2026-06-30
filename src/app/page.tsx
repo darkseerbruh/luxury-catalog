@@ -7,6 +7,7 @@ import { getFeed } from "@/lib/feed";
 import { FeedItem } from "@/components/FeedItem";
 import PersonaRouter from "@/components/PersonaRouter";
 import BestDeals from "@/components/BestDeals";
+import ValueRetentionRail from "@/components/ValueRetentionRail";
 import { getDeals, MIN_DEALS_TO_RENDER } from "@/lib/deals";
 import CommunityLeaderboards from "@/components/CommunityLeaderboards";
 import { BagImage } from "@/components/BagImage";
@@ -146,6 +147,10 @@ export default async function Home() {
 
       {/* Priced well today — full-width research section. */}
       {hasDeals && <BestDeals deals={deals} />}
+
+      {/* Bags that hold their value — price-powered board, renders on its own data
+          (independent of the review gate). Self-hides until enough bags qualify. */}
+      <ValueRetentionRail />
 
       {/* Brands */}
       <section id="brands" className="border-b border-border px-5 py-12">
