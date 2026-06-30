@@ -1797,6 +1797,17 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["clutch", "scarf", "wallet", "card"],
     minPrice: 600, maxPrice: 2500,
     searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // ── Off-White backbone (2026-06-30, tiny feed n=18) ──
+  { brand: "Off-White", style: "Binder Clip", size_label: "Mini",
+    requireTokens: ["binder"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 700,
+    searchUrl: "https://www.fashionphile.com/collections/off-white/products.json" },
+  { brand: "Off-White", style: "Jitney", size_label: "Standard",
+    requireTokens: ["jitney"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/off-white/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
