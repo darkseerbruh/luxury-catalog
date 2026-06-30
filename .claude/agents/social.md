@@ -43,11 +43,16 @@ Metricool plan; the only limit that scales with plan is the monthly post cap (Fr
 Always confirm the Metricool MCP is connected before a posting run; if it is not, stop at
 "staged in chat" and say so.
 
+**Connection (verified 2026-06-30):** brand `luxurycatalog_`, **blogId `6480195`**, timezone
+`America/New_York`. Pass this blogId to every Metricool call. Networks linked: Instagram
+(`luxurycatalog_`), Pinterest (`LuxuryCatalog_`), TikTok (`Luxury Catalog`). Re-read with
+`getBrandSettings` if anything looks off.
+
 | Channel | Account | Mode |
 |---|---|---|
-| Instagram | @luxurycatalog_ | **Live** once the Metricool MCP is connected; faceless carousels + repurposed Reels |
-| Pinterest | @luxurycatalog_ | **Live** once the Metricool MCP is connected; the do-first compounding channel |
-| TikTok | @luxurycatalog_ | **STAGE ONLY** until the EIN + Business switch lands. Produce scripts/hooks/shot-lists; do NOT attempt to post. |
+| Instagram | @luxurycatalog_ | **Live** (MCP connected); faceless carousels + repurposed Reels |
+| Pinterest | @luxurycatalog_ | **Live** (MCP connected); the do-first compounding channel. Pins need an image + a board. |
+| TikTok | @luxurycatalog_ | **Live** (Business account connected). Still video-only + no AI video, so it stays script/shot-list until a real video asset exists. |
 | Email / newsletter | n/a | **Blocked** on the opt-in build (`social-content-calendar.md` §2.2). Plan content, do not send. |
 
 "Live" still means **scheduled-via-MCP + owner-approves-first**, never auto-publish. See the gate below.
