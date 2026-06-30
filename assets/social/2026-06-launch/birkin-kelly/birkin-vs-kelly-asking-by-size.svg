@@ -1,0 +1,42 @@
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">Birkin versus Kelly median asking price by size, June 2026</title>
+  <desc id="d">Grouped bar chart. Smallest size: Birkin 25 about $25,900, Kelly 25 about $25,159. Mid: Birkin 30 $18,000, Kelly 28 $17,500. Larger: Birkin 35 $14,000, Kelly 32 $12,410. Asking, not sold.</desc>
+  <rect x="0" y="0" width="1000" height="1500" fill="#FBF8F2"/>
+  <rect x="40" y="40" width="920" height="1420" fill="none" stroke="#B08A3E" stroke-width="3"/>
+
+  <text x="500" y="150" text-anchor="middle" fill="#1A1A1A" font-family="Georgia, serif" font-size="78" font-weight="600">Birkin vs Kelly</text>
+  <text x="500" y="210" text-anchor="middle" fill="#5A5145" font-family="Georgia, serif" font-size="34">Median asking price by size, June 2026</text>
+
+  <rect x="300" y="270" width="34" height="34" fill="#1A1A1A"/>
+  <text x="344" y="297" fill="#1A1A1A" font-family="Georgia, serif" font-size="32">Birkin</text>
+  <rect x="540" y="270" width="34" height="34" fill="#B08A3E"/>
+  <text x="584" y="297" fill="#1A1A1A" font-family="Georgia, serif" font-size="32">Kelly</text>
+
+  <line x1="90" y1="1150" x2="910" y2="1150" stroke="#1A1A1A" stroke-width="2"/>
+
+  <rect x="145" y="473" width="80" height="677" fill="#1A1A1A"/>
+  <rect x="245" y="492" width="80" height="658" fill="#B08A3E"/>
+  <rect x="410" y="679" width="80" height="471" fill="#1A1A1A"/>
+  <rect x="510" y="692" width="80" height="458" fill="#B08A3E"/>
+  <rect x="675" y="784" width="80" height="366" fill="#1A1A1A"/>
+  <rect x="775" y="826" width="80" height="324" fill="#B08A3E"/>
+
+  <g font-family="Georgia, serif" font-size="29" fill="#1A1A1A" text-anchor="middle">
+    <text x="185" y="455">$25,900</text>
+    <text x="285" y="474">$25,159</text>
+    <text x="450" y="661">$18,000</text>
+    <text x="550" y="674">$17,500</text>
+    <text x="715" y="766">$14,000</text>
+    <text x="815" y="808">$12,410</text>
+  </g>
+
+  <g font-family="Georgia, serif" font-size="31" fill="#1A1A1A" text-anchor="middle">
+    <text x="235" y="1195">25 cm</text>
+    <text x="500" y="1195">Mid (30 / 28)</text>
+    <text x="765" y="1195">Larger (35 / 32)</text>
+  </g>
+
+  <text x="500" y="1290" text-anchor="middle" fill="#1A1A1A" font-family="Georgia, serif" font-size="30" font-style="italic">They cost about the same. The smaller size costs more.</text>
+  <text x="500" y="1380" text-anchor="middle" fill="#5A5145" font-family="Georgia, serif" font-size="24">Asking, not sold. Our tracking of live listings, June 2026 (n = 88 to 121 per size).</text>
+  <text x="500" y="1414" text-anchor="middle" fill="#5A5145" font-family="Georgia, serif" font-size="24">Estimate from current listings, not an appraisal. luxurycatalog.com</text>
+</svg>
