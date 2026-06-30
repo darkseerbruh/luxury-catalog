@@ -1,12 +1,12 @@
-<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chanel Flap and Hermes Birkin, new versus resale price">
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Used versus new price, Chanel Flap and Hermes Birkin">
   <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#311525"/><stop offset="1" stop-color="#180a11"/></linearGradient></defs>
   <rect x="0" y="0" width="1000" height="1500" fill="url(#bg)"/>
-  <text x="500" y="116" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="23" letter-spacing="5">SAME "HOLDS VALUE" · OPPOSITE MATH</text>
-  <text x="500" y="216" text-anchor="middle" fill="#f3e9ec" font-family="Georgia, serif" font-size="52" font-weight="600">A used Flap is half of new.</text>
-  <text x="500" y="280" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="52" font-weight="600" font-style="italic">A used Birkin costs more.</text>
+  <text x="500" y="116" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="23" letter-spacing="5">THE USED-IS-CHEAPER RULE</text>
+  <text x="500" y="216" text-anchor="middle" fill="#f3e9ec" font-family="Georgia, serif" font-size="54" font-weight="600">Used costs less than new.</text>
+  <text x="500" y="280" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="54" font-weight="600" font-style="italic">Tell that to a Birkin.</text>
 
-  <rect x="285" y="338" width="28" height="28" fill="#8a6f63"/><text x="323" y="361" fill="#f3e9ec" font-family="Georgia, serif" font-size="27">New retail</text>
-  <rect x="525" y="338" width="28" height="28" fill="#c9a24c"/><text x="563" y="361" fill="#f3e9ec" font-family="Georgia, serif" font-size="27">Resale</text>
+  <rect x="285" y="338" width="28" height="28" fill="#8a6f63"/><text x="323" y="361" fill="#f3e9ec" font-family="Georgia, serif" font-size="27">New</text>
+  <rect x="450" y="338" width="28" height="28" fill="#c9a24c"/><text x="488" y="361" fill="#f3e9ec" font-family="Georgia, serif" font-size="27">Used</text>
 
   <line x1="130" y1="1080" x2="870" y2="1080" stroke="#5a3a46" stroke-width="2"/>
   <rect x="190" y="742" width="95" height="338" fill="#8a6f63"/>
@@ -19,10 +19,10 @@
   </g>
   <g text-anchor="middle" font-family="Georgia, serif">
     <text x="290" y="1132" fill="#f3e9ec" font-size="30">Chanel Flap</text>
-    <text x="290" y="1166" fill="#c9a24c" font-size="24" font-style="italic">about half off new</text>
+    <text x="290" y="1166" fill="#9fd6a0" font-size="24" font-style="italic">used: about half of new</text>
     <text x="710" y="1132" fill="#f3e9ec" font-size="30">Hermès Birkin 30</text>
-    <text x="710" y="1166" fill="#c9a24c" font-size="24" font-style="italic">about 20% over new</text>
+    <text x="710" y="1166" fill="#e6a06a" font-size="24" font-style="italic">used: about 20% over new</text>
   </g>
   <text x="500" y="1290" text-anchor="middle" fill="#cdb8c0" font-family="Georgia, serif" font-size="30" font-style="italic">Chanel hikes the price. Hermès locks the door.</text>
-  <text x="500" y="1418" text-anchor="middle" fill="#9a838c" font-family="Georgia, serif" font-size="21">New retail per 2026 price trackers; resale per our June 2026 listings. Estimate, not an appraisal.</text>
+  <text x="500" y="1418" text-anchor="middle" fill="#9a838c" font-family="Georgia, serif" font-size="21">New retail per 2026 price trackers; used per our June 2026 listings. Estimate, not an appraisal.</text>
 </svg>
