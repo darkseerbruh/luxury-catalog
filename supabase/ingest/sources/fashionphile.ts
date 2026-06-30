@@ -1808,6 +1808,31 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 250, maxPrice: 1500,
     searchUrl: "https://www.fashionphile.com/collections/off-white/products.json" },
+  // ── Jacquemus backbone (2026-06-30, single buckets — feed carries no size tokens) ──
+  // Le Chiquito (incl. Grand Chiquito / Noeud / Moyen variants).
+  { brand: "Jacquemus", style: "Le Chiquito", size_label: "Standard",
+    requireTokens: ["chiquito"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 180, maxPrice: 1200,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Bambino — exclude Le Grand Bambino (its own style) + Bambimou.
+  { brand: "Jacquemus", style: "Le Bambino", size_label: "Standard",
+    requireTokens: ["bambino"],
+    excludeTokens: ["grand", "bambimou", "wallet", "card", "coin"],
+    minPrice: 350, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Grand Bambino — its own backbone style.
+  { brand: "Jacquemus", style: "Le Grand Bambino", size_label: "Standard",
+    requireTokens: ["grand-bambino"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 350, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Bambimou (incl. Le Petit Bambimou).
+  { brand: "Jacquemus", style: "Le Bambimou", size_label: "Standard",
+    requireTokens: ["bambimou"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
 ];
 
 // ---------------------------------------------------------------------------

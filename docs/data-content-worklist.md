@@ -50,7 +50,7 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - 🔄 **Valentino** — ✅ Fashionphile (2026-06-30, 40 rows, slug `valentino-garavani`): Rockstud Spike Small $972/Medium $1,207/n8/Large $1,075, Roman Stud Small $1,420/Medium $1,392/Large $1,345, Locò Small $1,650/n7 + Standard $1,230, One Stud $660, VLogo Signature Mini $950, Supervee $1,142. (Vsling has no catalog style row — skipped.) ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Alexander McQueen** — ✅ Fashionphile (2026-06-30, 13 rows; thin feed n=37): The Knuckle $1,225/n4, The Bow Tote $620/n2, Skull $607/n6, Manta $1,800/n1. Jewelled Satchel=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - 🔄 **Off-White** — ✅ Fashionphile (2026-06-30, 14 rows; tiny feed n=18): Binder Clip Mini $340/n9, Jitney $595/n5. Burrow=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
-- ⬜ **Jacquemus** — Le Chiquito, Le Bambino, Le Bambimou, Le Chouchou (+ Le Grand Bambino)
+- 🔄 **Jacquemus** — ✅ Fashionphile (2026-06-30, 56 rows): Le Chiquito $495/n26, Le Bambino $650/n9, Le Grand Bambino $737/n16, Le Bambimou $760/n5. Le Chouchou=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
 - ⬜ **Miu Miu** — Wander, Arcadie, Aventure, Matelassé
 - ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
 
