@@ -98,6 +98,38 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Mission band — honest about why the catalog needs contributions. The
+          catalog runs on what owners share; this is the standing recruit. No
+          figures here (content-gating rule: fallback visuals never assert a count). */}
+      <section className="border-b border-border bg-surface/40 px-5 py-12">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-gold">Our mission</p>
+          <h2 className="mt-2 font-serif text-2xl text-foreground sm:text-3xl">
+            Luxury knowledge shouldn&apos;t be gatekept.
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted">
+            Resale values, real wear, what a bag is actually like to live with: the
+            people who carry these bags know, and most of the web keeps it behind
+            glass. We are opening it up. The catalog grows with every photo and
+            review you add, so add the bags you own or want, and tell us what you know.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/browse"
+              className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+            >
+              Add to your closet
+            </Link>
+            <Link
+              href="/search"
+              className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+            >
+              Review a bag you&apos;ve carried
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* It bags of all time — full-width ranked canon. */}
       {heroCards.length > 0 && (
         <section className="border-b border-border px-5 py-12">

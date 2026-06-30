@@ -824,14 +824,36 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
   const ids = Array.from(new Set(variantIds.filter((n) => Number.isFinite(n))));
   if (ids.length === 0) return {};
   try {
-    const { data, error } = await getSupabase()
+    const sb = getSupabase();
+    const { data, error } = await sb
       .from("variant")
       .select("variant_id, image_url")
       .in("variant_id", ids);
-    if (error || !data) return {};
+    if (error) return {};
     const map: Record<number, string> = {};
-    for (const r of data as { variant_id: number; image_url: string | null }[]) {
+    for (const r of (data ?? []) as { variant_id: number; image_url: string | null }[]) {
       if (r.image_url) map[r.variant_id] = r.image_url;
+    }
+
+    // Backfill gaps with community photos so a contributed shot becomes the image
+    // the WHOLE catalog shows (grids, search, recs), not only the bag-page gallery.
+    // Featured wins over plain approved. Resilient: any error leaves the placeholder.
+    const missing = ids.filter((id) => !map[id]);
+    if (missing.length > 0) {
+      const { data: photos } = await sb
+        .from("bag_photo")
+        .select("variant_id, storage_path, status")
+        .in("variant_id", missing)
+        .in("status", ["approved", "featured"]);
+      const best = new Map<number, { path: string; featured: boolean }>();
+      for (const p of (photos ?? []) as { variant_id: number; storage_path: string; status: string }[]) {
+        const featured = p.status === "featured";
+        const cur = best.get(p.variant_id);
+        if (!cur || (featured && !cur.featured)) best.set(p.variant_id, { path: p.storage_path, featured });
+      }
+      for (const [vid, { path }] of best) {
+        map[vid] = sb.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
+      }
     }
     return map;
   } catch {

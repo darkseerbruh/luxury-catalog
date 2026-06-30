@@ -344,7 +344,7 @@ export default function TasteQuizClient({
                           href={`/bag/${m.variantId}`}
                           className="block rounded-2xl border border-border bg-surface p-3 transition-colors hover:border-gold"
                         >
-                          <BagImage imageUrl={null} brand={m.brandName} className="mb-2 aspect-square w-full rounded-lg" />
+                          <BagImage imageUrl={null} brand={m.brandName} invite={false} className="mb-2 aspect-square w-full rounded-lg" />
                           <p className="text-xs uppercase tracking-wide text-muted">{m.brandName}</p>
                           <p className="line-clamp-1 font-serif text-sm text-foreground">{m.styleName}</p>
                           {fromPrice(m.fromPrice, m.currency) && (
