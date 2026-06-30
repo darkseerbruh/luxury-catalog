@@ -338,6 +338,12 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   pair every model name with the bag itself: shown on screen in video, a silhouette/photo in a pin,
   or a 3-word descriptor in copy ("the structured leather satchel, the Mulberry Bayswater"). Lead
   with the names people actually know.
+- **Short-form social (TikTok/IG) = ONE idea, one hook, one sticky takeaway (locked 2026-06-30).**
+  Never a list or a ranking, nobody remembers seven names and prices in 30 seconds. Lists, rankings,
+  and full comparisons are ARTICLE content (and fine on Pinterest, which behaves like search/
+  reference). The short-form post extracts ONE beat (ideally a single surprising comparison) and
+  routes to the article for the full list. Example: "the trendy Coach is worth a third of another
+  Coach from the same brand" beats a 7-bag ranked chart on TikTok.
 - **Sample sizes (n) live in charts and tables, never in body prose.** The chart carries the
   receipts; the text stays readable.
 - **Multi-point numbers go in scannable bullets,** not a packed sentence.
