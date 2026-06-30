@@ -1728,6 +1728,52 @@ const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 450, maxPrice: 1600,
     searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json" },
+  // ── Valentino backbone (2026-06-30, slug valentino-garavani, handles validated) ──
+  // Rockstud SPIKE specifically (handle "rockstud-spike"), not the wider Rockstud line.
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Valentino", style: "Rockstud Spike", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["rockstud-spike", size],
+    excludeTokens: ["wallet", "card", "coin", "wristlet"],
+    minPrice: 400, maxPrice: 1900,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+  })),
+  // Roman Stud shoulder/handle bag. Size-anchored.
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Valentino", style: "Roman Stud", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["roman-stud", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 700, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+  })),
+  // Locò shoulder bag. Small (high-n) + a Standard bucket for the un-sized handles.
+  { brand: "Valentino", style: "Locò", size_label: "Small",
+    requireTokens: ["loco", "small"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  { brand: "Valentino", style: "Locò", size_label: "Standard",
+    requireTokens: ["loco"],
+    excludeTokens: ["small", "mini", "micro", "wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // One Stud — low volume, single bucket (exclude the chain clutch).
+  { brand: "Valentino", style: "One Stud", size_label: "Standard",
+    requireTokens: ["one-stud"],
+    excludeTokens: ["clutch", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // VLogo Signature — the chain crossbody; exclude the other VLogo-tagged models.
+  { brand: "Valentino", style: "VLogo Signature", size_label: "Mini",
+    requireTokens: ["vlogo", "crossbody"],
+    excludeTokens: ["loco", "gate", "antibes", "shopping", "wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1800,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // Supervee — low volume, single bucket.
+  { brand: "Valentino", style: "Supervee", size_label: "Standard",
+    requireTokens: ["supervee"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 700, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -1800,8 +1846,15 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
   const handle = (product.handle ?? "").toLowerCase();
   const title = (product.title ?? "").toLowerCase();
 
+  // BRAND GUARD: only match a target whose brand equals the product's own brand
+  // (derived from the handle slug). Without this, a brand's dump can match another
+  // brand's target when a loose requireToken appears as a substring — e.g. a
+  // Valentino "rockstud-spike-shoulder-bag" was matching a Celine target. Compare
+  // accent-/punctuation-insensitively so "Chloé"==="Chloe", "Hermès"==="hermes".
+  const productBrand = asciiBrandKey(guessBrandFromHandle(handle));
   const target = TARGETS.find(
     (t) =>
+      asciiBrandKey(t.brand) === productBrand &&
       t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
       !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
   );
@@ -1871,6 +1924,7 @@ const FP_BRAND_SLUGS: [string, string][] = [
   ["yves-saint-laurent", "Saint Laurent"], ["christian-dior", "Dior"],
   ["bottega-veneta", "Bottega Veneta"], ["kate-spade", "Kate Spade"],
   ["the-row", "The Row"], ["valentino-garavani", "Valentino"], ["miu-miu", "Miu Miu"],
+  ["off-white", "Off-White"],
   ["salvatore-ferragamo", "Salvatore Ferragamo"], ["alexander-mcqueen", "Alexander McQueen"],
   ["alexander-wang", "Alexander Wang"], ["marc-jacobs", "Marc Jacobs"], ["jimmy-choo", "Jimmy Choo"],
   ["tory-burch", "Tory Burch"], ["stella-mccartney", "Stella McCartney"], ["dolce-gabbana", "Dolce & Gabbana"],
@@ -1881,6 +1935,11 @@ const FP_BRAND_SLUGS: [string, string][] = [
   ["chloe", "Chloe"], ["valentino", "Valentino"], ["givenchy", "Givenchy"], ["versace", "Versace"],
   ["mulberry", "Mulberry"], ["delvaux", "Delvaux"], ["moynat", "Moynat"], ["dolce", "Dolce & Gabbana"],
 ];
+
+/** Brand-comparison key: lowercase, strip accents + punctuation so "Chloé"==="Chloe". */
+export function asciiBrandKey(s: string): string {
+  return (s ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
+}
 
 export function guessBrandFromHandle(handle: string): string {
   const h = (handle ?? "").toLowerCase();
