@@ -193,6 +193,57 @@ first" (the ownable UX angle). What SHE wants, Frankensteined from the best part
 Content: "I'd build my dream bag from these 4 bags" carousel + the engagement play **"what would
 YOU fix?"** (crowdsource → UGC + find-your-taste data; doubles as taste-graph fuel).
 
+## The rules I buy by now (the 3-bag system) — rebuild-era framework
+Her post-lesson decision rules:
+1. **Will I keep it, love it, USE it into the ground?** No resale fallback ("I won't make the
+   money back, period"). The "buy it, try it, resell it" mindset makes you baby it and never use
+   it. So: is there a real spot in my life for this bag?
+2. **Can it hold what I need for that occasion?** → her 3-bag system:
+   - iPad / small laptop → **Chanel 19**.
+   - errands / phone-only → **Fendi Peekaboo Mini**.
+   - third, still forming → maybe a **larger Birkin as a weekender** (change of clothes + toiletries).
+Post: "the only 3 bags I actually need" / "how I decide now." Maya + Sofia; reach + funnels to the fit filters.
+
+## Rent first, rent first, rent first (her #1 rule for others)
+Her top advice. **Monetization:** "rent first" promotes the Vivrelle rental affiliate (modeled
+stream #2 in `monetization-projections.md`), so this is closest-to-money content. Honest caveat
+she names herself: it doesn't work for Birkin/Kelly (almost no one rents them; Vivrelle's top
+tier ~$800/mo, inaccessible), and none of this is accessible at four-figure prices, say so
+plainly (no gatekeeping).
+
+## The "luxury desert" hack: $250 to try a $4k bag
+She lived in Salt Lake City (a "luxury desert," per a Neiman employee), flew to Vegas on a cheap
+ticket + a cheap Strip hotel for one night (~$250 total) just to TOUCH the bags she loved online
+before committing four figures. Try-before-you-buy when no boutique is near you. Relatable,
+actionable, great story. Caveat: she names that even $250 isn't accessible for everyone, keep
+that honesty.
+
+## First-bag advice (for the terrified first buyer, Sofia)
+- Rent first.
+- Buy for your **lifestyle, not just looks** (like a car or a house: it has to *work* for your
+  life). The single most important thing.
+- Willing to baby leather? lambskin's fine. Want a workhorse? **buy resale, not new** (let
+  someone else eat the brand-new markup).
+- Audit the bags you already own + what you don't like about them; be honest about what you
+  truly need. (She's the cautionary tale: cool-girl vintage-Chanel hype vs. rough-on-bags reality.)
+Closest-to-money (routes to resale/buy + rental). On-voice reassuring-friend register.
+
+## Leather care myth: stop over-caring (cite leather workers)
+You do NOT need to over-condition leather. Leather workers / bag + shoe-repair pros say don't
+condition weekly or monthly; "balm it monthly or you're neglecting it" is false. **Caveat:**
+she's not a leather pro, this is her takeaway from leather-worker content and needs a sourcing
+pass (cite real leather-care pros) before publishing as advice. Frame as evidence + her read.
+
+## Storage > leather care (the bigger, ownable evergreen)
+The insight people miss: how you STORE a bag matters more than how you condition it.
+- The original **box is not good long-term storage** (leather needs to breathe, but also not be
+  fully exposed all the time, there's a balance).
+- Storing bags **standing upright makes them slouch over time and ruins the structure** (some
+  like the slouch look, but it degrades the leather).
+"How to store your bags" is the more useful, more important post, and most people don't realize
+it. Evergreen Pinterest gold. Caveat: source the storage specifics (leather pros) before
+publishing as how-to.
+
 ## Build order (recommendation)
 1. **Flagship modern-use thesis** (#1 above) — the ownable POV, start the series.
 2. **What renting taught me** (#6–10) — useful + emotional + funnels to the quiz.
