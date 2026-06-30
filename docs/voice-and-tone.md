@@ -333,6 +333,11 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   barely decides it." Inject the owner's real opinion (hedged: "in my experience," "my take") and the
   de-gatekeeping energy. A data summary with no hook reads dry and dies. **Ship 2-3 rotating hook
   variants per post** so she can A/B test and repost without it going stale.
+- **Never assume the audience knows model names (locked 2026-06-30).** Casual buyers recognize bags
+  by look and brand, not model name (the Coach Tabby is a rare exception, it's TikTok-famous). So
+  pair every model name with the bag itself: shown on screen in video, a silhouette/photo in a pin,
+  or a 3-word descriptor in copy ("the structured leather satchel, the Mulberry Bayswater"). Lead
+  with the names people actually know.
 - **Sample sizes (n) live in charts and tables, never in body prose.** The chart carries the
   receipts; the text stays readable.
 - **Multi-point numbers go in scannable bullets,** not a packed sentence.
