@@ -150,25 +150,49 @@ export default async function PersonaRouter() {
             scale + per-house depth (market pulse), never a famous-bag ranking. */}
         <Link href="/data" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">The data behind every page</h3>
-          <p className="mt-1 text-sm text-muted">Real resale prices across every house we cover.</p>
+          <p className="mt-1 text-sm text-muted">Real resale prices, kept current.</p>
           {pulse.totalPrices > 0 ? (
-            <div className="mt-4 flex-1">
-              <p className="font-serif text-3xl text-gold">{pulse.totalPrices.toLocaleString()}</p>
-              <p className="mt-1 text-xs text-muted">resale prices across {pulse.houses} houses</p>
+            <div className="mt-4 flex flex-1 flex-col">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 min-[480px]:grid-cols-4">
+                <div>
+                  <p className="font-serif text-2xl text-gold">{pulse.totalPrices.toLocaleString()}</p>
+                  <p className="text-[11px] text-muted">prices</p>
+                </div>
+                <div>
+                  <p className="font-serif text-2xl text-gold">{pulse.bags.toLocaleString()}</p>
+                  <p className="text-[11px] text-muted">bags</p>
+                </div>
+                <div>
+                  <p className="font-serif text-2xl text-gold">{pulse.houses.toLocaleString()}</p>
+                  <p className="text-[11px] text-muted">houses</p>
+                </div>
+                {pulse.earliestYear && (
+                  <div>
+                    <p className="font-serif text-2xl text-gold">{pulse.earliestYear}</p>
+                    <p className="text-[11px] text-muted">earliest price</p>
+                  </div>
+                )}
+              </div>
               {topHouses.length > 0 && (
-                <ul className="mt-4 flex flex-col gap-2">
-                  {topHouses.map((h) => (
-                    <li key={h.name} className="flex items-center gap-2">
-                      <span className="w-20 flex-shrink-0 truncate text-[11px] text-muted">{h.name}</span>
-                      <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-                        <span
-                          className="block h-full rounded-full bg-gold"
-                          style={{ width: `${houseMax > 0 ? Math.max(4, Math.round((h.observations / houseMax) * 100)) : 0}%` }}
-                        />
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <p className="mt-5 text-[11px] uppercase tracking-wide text-muted/70">Where our data runs deepest</p>
+                  <ul className="mt-2 flex flex-col gap-1.5">
+                    {topHouses.map((h) => (
+                      <li key={h.name} className="flex items-center gap-2">
+                        <span className="w-24 flex-shrink-0 truncate text-[11px] text-foreground">{h.name}</span>
+                        <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+                          <span
+                            className="block h-full rounded-full bg-gold"
+                            style={{ width: `${houseMax > 0 ? Math.max(4, Math.round((h.observations / houseMax) * 100)) : 0}%` }}
+                          />
+                        </span>
+                        <span className="w-10 flex-shrink-0 text-right text-[11px] text-muted">
+                          {h.observations.toLocaleString()}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
             </div>
           ) : (
