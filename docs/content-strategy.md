@@ -37,7 +37,7 @@ authentication needs sourcing; mid-tier needs data capture.**
 | Post | $ | Reach | Ready | Effort | Tier |
 |---|---|---|---|---|---|
 | **Value pieces, hero high-end bags** (Chanel Flap ✅ drafted, LV Neverfull, Hermès Birkin, Gucci Marmont) | H | H | ✅ data | Low | **1** |
-| **"Where to sell your [bag] for the most"** (seller lever, direct) | H+ | M | ✅ | Low | **1** |
+| **"Where to sell your [bag] for the most"** (secondary sell fork; consignor lever down-weighted 2026-06-30) | M | M | ✅ | Low | 2 |
 | **Comparisons** (Caviar vs Lambskin · Neverfull vs Speedy · Birkin vs Kelly) | H | H | ✅ | Med | **1** |
 | **"Which [Birkin/Kelly] size holds value best"** (data-led) | M | H | ✅ | Low | 2 |
 | **Coach authentication** (brand/SEO wedge) | M | H+ | ❌ needs sourcing | Med | 2 |
