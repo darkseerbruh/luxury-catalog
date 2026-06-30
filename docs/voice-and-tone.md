@@ -312,6 +312,13 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   Applies everywhere copy ships: headings, labels, taglines, metadata, error
   strings. (A label like "Brand: Chanel" already complies since the value is a
   proper noun.)
+- **Naive declaratives we don't actually believe (credibility-tanking, locked 2026-06-30).**
+  Never assert a common assumption in our own flat voice as if we hold it ("A smaller bag should
+  cost less."). We are the knowing narrator, so frame a premise we're about to overturn *as the
+  assumption*, not as our belief: "you'd think a smaller bag costs less," "the rule says…," or
+  the wink "…right?" Then turn it. A bald "should" we immediately contradict reads as naive and
+  tanks trust. Same for any "obviously / everyone knows / of course" we then debunk: attribute
+  the belief, don't own it.
 - **AI-slop tells:** see §8.
 
 ---
