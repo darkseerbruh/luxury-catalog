@@ -129,6 +129,11 @@ name which metric the batch moves and how.
   video is not (product constraint + AI search downweights it).
 - **No AI-slop copy.** Pass the `voice-and-tone.md` §8 sweep and the AI-tell blacklist.
 - **Never invent** a spec, price, value, stat, or trend claim. Source it with its date/n, or cut it.
+- **Never illustrate, redraw, or approximate a brand logo or any trademarked mark.** A logo we
+  draw is inaccurate, off-brand, and a legal risk. Schematics depict only genuinely non-logo
+  structure (silhouette, clasp shape, pocket/pochette layout, hardware placement, size ratios,
+  date-code position). Logo-dependent facts are told in **type**, never drawn. Real logos appear
+  only in the owner's own or properly licensed photography, never an illustration.
 - **Authentication claims** are bound by `docs/authentication-standard.md`. A marker to check,
   never a verdict. If a piece cannot pass that gate, it does not ship.
 - **Calibrated hedge** on value/authenticity/fit/taste/money/legal: evidence + opinion, "X not
