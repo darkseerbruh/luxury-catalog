@@ -1,0 +1,33 @@
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">Lady Dior median asking price by size, June 2026</title>
+  <desc id="d">Bar chart: Lady Dior Mini about $3,925, Small $3,890, Medium $2,475, Large $1,750. The smaller the size, the higher the price.</desc>
+  <rect x="0" y="0" width="1000" height="1500" fill="#FBF8F2"/>
+  <rect x="40" y="40" width="920" height="1420" fill="none" stroke="#B08A3E" stroke-width="3"/>
+
+  <text x="500" y="150" text-anchor="middle" fill="#1A1A1A" font-family="Georgia, serif" font-size="74" font-weight="600">Lady Dior</text>
+  <text x="500" y="212" text-anchor="middle" fill="#1A1A1A" font-family="Georgia, serif" font-size="40" font-style="italic">The smaller, the pricier</text>
+  <text x="500" y="270" text-anchor="middle" fill="#5A5145" font-family="Georgia, serif" font-size="30">Median asking price by size, June 2026</text>
+
+  <line x1="100" y1="1180" x2="900" y2="1180" stroke="#1A1A1A" stroke-width="2"/>
+
+  <rect x="140" y="500" width="120" height="680" fill="#B08A3E"/>
+  <rect x="340" y="506" width="120" height="674" fill="#B08A3E"/>
+  <rect x="540" y="751" width="120" height="429" fill="#1A1A1A"/>
+  <rect x="740" y="877" width="120" height="303" fill="#1A1A1A"/>
+
+  <g font-family="Georgia, serif" font-size="32" fill="#1A1A1A" text-anchor="middle">
+    <text x="200" y="480">$3,925</text>
+    <text x="400" y="486">$3,890</text>
+    <text x="600" y="731">$2,475</text>
+    <text x="800" y="857">$1,750</text>
+  </g>
+  <g font-family="Georgia, serif" font-size="30" fill="#5A5145" text-anchor="middle">
+    <text x="200" y="1225">Mini</text>
+    <text x="400" y="1225">Small</text>
+    <text x="600" y="1225">Medium</text>
+    <text x="800" y="1225">Large</text>
+  </g>
+
+  <text x="500" y="1320" text-anchor="middle" fill="#1A1A1A" font-family="Georgia, serif" font-size="29" font-style="italic">Same bag. More leather. Less money.</text>
+  <text x="500" y="1400" text-anchor="middle" fill="#5A5145" font-family="Georgia, serif" font-size="24">Asking medians, June 2026. Estimate of the market, not an appraisal. luxurycatalog.com</text>
+</svg>
