@@ -53,7 +53,7 @@ export default async function AdminPhotosPage() {
                 className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5 sm:flex-row sm:items-start sm:justify-between"
               >
                 <div className="flex min-w-0 gap-4">
-                  <BagImage imageUrl={p.url} brand={p.brandName ?? undefined} className="h-24 w-24 shrink-0 rounded-lg" />
+                  <BagImage imageUrl={p.url} brand={p.brandName ?? undefined} invite={false} className="h-24 w-24 shrink-0 rounded-lg" />
                   <div className="min-w-0">
                     <Link href={`/bag/${p.variantId}`} className="font-serif text-foreground hover:text-gold">
                       {[p.brandName, p.styleName].filter(Boolean).join(" · ") || `Variant #${p.variantId}`}
