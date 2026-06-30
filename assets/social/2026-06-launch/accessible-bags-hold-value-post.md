@@ -1,12 +1,12 @@
 # Post — The thrift Coach worth buying (one-idea social) + the full list (article/Pinterest)
 
-Status: DRAFTED 2026-06-30 (reframed: short-form = ONE idea, list stays on article/Pinterest). Pillar: thrift wedge / honest money. Persona: Jordan.
+Status: APPROVED 2026-06-30 (owner; one-idea reframe, hook A primary, tightened).
 Destination: https://www.luxurycatalog.com/articles/which-accessible-bags-hold-value
 Short-form visual: coach-tabby-vs-rogue.svg (one comparison). Pinterest visual: accessible-bags-sold.svg (the full 7-bag list, fine for search/reference).
 Facts: Tabby 26 ~$202, Rogue ~$645 (eBay sold, June 2026). Full list in the article. Estimate, not appraisal.
 
 ## Hooks (rotate)
-- A: "The trendy Coach everyone's buying is worth a third of another Coach from the same brand."
+- A: "The trendy Coach everyone's buying is worth a third of another Coach."
 - B: "Everyone's thrifting the wrong Coach. Here's the one that actually holds value."
 
 ## TikTok / Reel (ONE idea; show the Tabby, then the Rogue)
