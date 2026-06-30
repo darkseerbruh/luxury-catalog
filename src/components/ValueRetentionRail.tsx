@@ -37,13 +37,16 @@ export default async function ValueRetentionRail() {
           <li key={e.variantId}>
             <Link
               href={`/bag/${e.variantId}`}
-              className="flex items-baseline gap-3 rounded-xl border border-border bg-surface px-4 py-3 transition-colors hover:border-gold"
+              className="group flex items-baseline gap-3 rounded-xl border border-border bg-surface px-4 py-3 transition-colors hover:border-gold"
             >
               <span className="w-4 flex-shrink-0 font-serif text-gold">{i + 1}</span>
               <span className="min-w-0 flex-1 truncate text-foreground">
                 {e.brandName} {e.styleName}
               </span>
               <span className="flex-shrink-0 font-medium text-gold">{e.value}</span>
+              <span aria-hidden className="flex-shrink-0 text-muted transition-colors group-hover:text-gold">
+                &rsaquo;
+              </span>
             </Link>
           </li>
         ))}
