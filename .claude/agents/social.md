@@ -57,6 +57,20 @@ Always confirm the Metricool MCP is connected before a posting run; if it is not
 
 "Live" still means **scheduled-via-MCP + owner-approves-first**, never auto-publish. See the gate below.
 
+## Media sources (lean on first-party, in this order)
+
+1. **First-party / UGC photos (primary).** The `bag_photo` table + the Public `bag-photos`
+   Supabase bucket hold real, rights-cleared bag photos with bylines (see
+   `docs/archive/photo-smoke-test.md`). Query per bag and pull the real photo URL into the
+   post. **Rule (owner-locked): these are detail-page stills, not for-sale listings, so never
+   frame them with a price tag or "buy this exact one" sellable framing.** Credit the byline
+   where a contributor is named.
+2. **Owner's original video** (source location TBD, confirm with owner) for Reels/TikTok.
+3. **Original non-logo schematics / type-led / data-viz** when no real photo fits (never draw a logo).
+4. **Licensed affiliate-feed images** (display + link-back) only as a live gap-filler.
+
+Never AI-generated imagery, never licensed brand photos outside the affiliate-feed grant.
+
 ## The two runs you exist to perform
 
 ### Content run (batch cadence, default weekly)
