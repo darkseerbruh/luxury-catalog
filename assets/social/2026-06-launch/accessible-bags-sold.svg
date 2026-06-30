@@ -1,0 +1,36 @@
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="What accessible bags actually sell for, eBay sold medians June 2026">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#311525"/><stop offset="1" stop-color="#180a11"/></linearGradient></defs>
+  <rect x="0" y="0" width="1000" height="1500" fill="url(#bg)"/>
+  <text x="500" y="118" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="23" letter-spacing="6">THE THRIFT-FLIP TRUTH</text>
+  <text x="500" y="222" text-anchor="middle" fill="#f3e9ec" font-family="Georgia, serif" font-size="56" font-weight="600">What they actually sell for</text>
+  <text x="500" y="280" text-anchor="middle" fill="#b9a6ad" font-family="Georgia, serif" font-size="26">Median sold price on eBay, June 2026</text>
+
+  <g font-family="Georgia, serif">
+    <text x="70" y="372" fill="#f3e9ec" font-size="27">Coach Rogue</text>
+    <rect x="415" y="348" width="503" height="40" fill="#c9a24c"/><text x="888" y="377" fill="#180a11" font-size="26" text-anchor="end">$645</text>
+
+    <text x="70" y="452" fill="#f3e9ec" font-size="27">Mulberry Bayswater</text>
+    <rect x="415" y="428" width="405" height="40" fill="#c9a24c"/><text x="790" y="457" fill="#180a11" font-size="26" text-anchor="end">$519</text>
+
+    <text x="70" y="532" fill="#f3e9ec" font-size="27">Coach Tabby 26</text>
+    <rect x="415" y="508" width="158" height="40" fill="#8a6f63"/><text x="590" y="537" fill="#e7dccd" font-size="26">$202</text>
+
+    <text x="70" y="612" fill="#f3e9ec" font-size="27">Kate Spade Knott</text>
+    <rect x="415" y="588" width="89" height="40" fill="#8a6f63"/><text x="521" y="617" fill="#e7dccd" font-size="26">$114</text>
+
+    <text x="70" y="692" fill="#f3e9ec" font-size="27">Kate Spade Sam</text>
+    <rect x="415" y="668" width="78" height="40" fill="#8a6f63"/><text x="510" y="697" fill="#e7dccd" font-size="26">$100</text>
+
+    <text x="70" y="772" fill="#f3e9ec" font-size="27">Longchamp Le Pliage</text>
+    <rect x="415" y="748" width="70" height="40" fill="#8a6f63"/><text x="502" y="777" fill="#e7dccd" font-size="26">$90</text>
+
+    <text x="70" y="852" fill="#f3e9ec" font-size="27">Michael Kors Jet Set</text>
+    <rect x="415" y="828" width="55" height="40" fill="#8a6f63"/><text x="487" y="857" fill="#e7dccd" font-size="26">$70</text>
+  </g>
+
+  <text x="70" y="1010" fill="#c9a24c" font-family="Georgia, serif" font-size="30" font-style="italic">Leather and restraint hold.</text>
+  <text x="70" y="1056" fill="#b9a6ad" font-family="Georgia, serif" font-size="30" font-style="italic">Logo and nylon fade.</text>
+  <text x="70" y="1130" fill="#cdb8c0" font-family="Georgia, serif" font-size="26">A bag that's always $150 new can't hold $300 used.</text>
+
+  <text x="500" y="1420" text-anchor="middle" fill="#9a838c" font-family="Georgia, serif" font-size="22">eBay sold medians, June 2026, mostly peer-to-peer prices. An estimate, not an appraisal. luxurycatalog.com</text>
+</svg>
