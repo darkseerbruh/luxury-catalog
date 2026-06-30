@@ -13,7 +13,7 @@ import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 import { parseTrrDescription } from "../ingest/trr";
-import { buildEnrichmentPrompt, parseEnrichmentResponse } from "../ingest/enrich";
+import { buildEnrichmentPrompt, parseEnrichmentResponse, buildDescriptionFactsPrompt, parseDescriptionFactsResponse } from "../ingest/enrich";
 import { buildSpecPrompt, parseSpecResponse } from "../ingest/spec-extract";
 import { mapConditionText, mapTrrItemCondition } from "../ingest/condition";
 
@@ -285,6 +285,25 @@ describe("condition enrichment parser", () => {
     expect(p).toMatch(/JSON only/i);
     expect(p).toMatch(/Do NOT guess/i);
     expect(p).toContain("Light corner wear");
+  });
+
+  it("description-facts parser validates JSON (incl. fences) + caps strings", () => {
+    const out = parseDescriptionFactsResponse('```json\n{"color":"Black","closure":"turn-lock","measurements":"10\\" x 8\\" x 4\\"","has_date_code":true,"pattern":"  "}\n```');
+    expect(out).toMatchObject({ color: "Black", closure: "turn-lock", has_date_code: true });
+    expect(out!.measurements).toMatch(/10/);
+    expect(out!.pattern).toBeNull(); // whitespace-only -> null
+  });
+
+  it("description-facts parser returns null for non-JSON", () => {
+    expect(parseDescriptionFactsResponse("no idea")).toBeNull();
+    expect(parseDescriptionFactsResponse("")).toBeNull();
+  });
+
+  it("description-facts prompt instructs JSON-only and no inference", () => {
+    const p = buildDescriptionFactsPrompt("Vintage Speedy 30, date code SD0911, measures 12 x 8 x 7 inches.");
+    expect(p).toMatch(/JSON only/i);
+    expect(p).toMatch(/Do NOT guess/i);
+    expect(p).toContain("date code SD0911");
   });
 });
 

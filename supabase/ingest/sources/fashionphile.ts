@@ -1593,6 +1593,396 @@ const TARGETS: FashionphileTarget[] = [
     maxPrice: 2000,
     searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
   })),
+  // ── Balenciaga backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Le Cagole shoulder bag. excludeTokens drop the Neo Cagole sub-model and the
+  // duffle/sling/bucket sub-shapes so XS/Mini stay the canonical shoulder bag.
+  ...(["xs", "mini"] as const).map((size) => ({
+    brand: "Balenciaga", style: "Le Cagole", size_label: size === "xs" ? "XS" : "Mini",
+    requireTokens: ["le-cagole", size],
+    excludeTokens: ["neo", "duffle", "sling", "bucket", "wallet", "card", "phone"],
+    minPrice: 500, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Hourglass top-handle. excludeTokens drop SLGs + the distinct chain-bag shoulder variant.
+  ...(["xs", "small"] as const).map((size) => ({
+    brand: "Balenciaga", style: "Hourglass", size_label: size === "xs" ? "XS" : "Small",
+    requireTokens: ["hourglass", size],
+    excludeTokens: ["wallet", "card", "coin", "chain-bag"],
+    minPrice: 400, maxPrice: 3500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Classic City (Fashionphile handle "le-city"). excludeTokens drop the Neo Classic/Neo Cagole
+  // sub-lines that also carry "city" in the handle.
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Balenciaga", style: "City", size_label: size === "small" ? "Small" : "Medium",
+    requireTokens: ["le-city", size],
+    excludeTokens: ["neo", "wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 4000,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json",
+  })),
+  // Neo Classic City — Nano is the dominant clean size; exclude the x-Gucci collab outlier + SLGs.
+  { brand: "Balenciaga", style: "Neo Classic", size_label: "Nano",
+    requireTokens: ["neo-classic", "nano"],
+    excludeTokens: ["gucci", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // Velo — older crossbody; single bucket. Exclude clutches/SLGs that share the collection.
+  { brand: "Balenciaga", style: "Velo", size_label: "Standard",
+    requireTokens: ["velo"],
+    excludeTokens: ["wallet", "card", "coin", "envelope", "clutch"],
+    minPrice: 300, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // Papier zip-around tote (A5/A6) — niche; single bucket.
+  { brand: "Balenciaga", style: "Papier", size_label: "Standard",
+    requireTokens: ["papier"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/balenciaga/products.json" },
+  // ── Chloé backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Marcie satchel/saddle. Size token anchors the bucket; exclude SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Chloé", style: "Marcie", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["marcie", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 350, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Faye shoulder/backpack. Size-anchored.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Chloé", style: "Faye", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["faye", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 250, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Woody tote (incl. ribbon tote). Capture the high-n Medium + Large.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "Chloé", style: "Woody Tote", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["woody", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 350, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json",
+  })),
+  // Drew shoulder bag — low volume, single bucket (most handles carry no size token).
+  { brand: "Chloé", style: "Drew", size_label: "Standard",
+    requireTokens: ["drew"],
+    excludeTokens: ["wallet", "card", "coin", "clutch"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // Aby day shoulder bag — Medium only on the feed.
+  { brand: "Chloé", style: "Aby", size_label: "Medium",
+    requireTokens: ["aby", "medium"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // C Bag — single Mini on the feed.
+  { brand: "Chloé", style: "C Bag", size_label: "Mini",
+    requireTokens: ["c-bag", "mini"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/chloe/products.json" },
+  // ── Givenchy backbone (2026-06-30, handles validated vs live collection JSON) ──
+  // Antigona satchel. Size-anchored; exclude SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Antigona", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["antigona", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 450, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Pandora — classic only; exclude the distinct Pandora Box sub-model + SLGs.
+  ...(["mini", "small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Pandora", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["pandora", size],
+    excludeTokens: ["box", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1400,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // 4G chain bag/tote. Size-anchored.
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "4G", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["4g", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Voyou — capture the high-n Medium + Nano.
+  ...(["nano", "medium"] as const).map((size) => ({
+    brand: "Givenchy", style: "Voyou", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["voyou", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // Cut Out (incl. Moon Cut Out) shoulder bag. Size-anchored.
+  ...(["mini", "small"] as const).map((size) => ({
+    brand: "Givenchy", style: "Cut Out", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["cut-out", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 450, maxPrice: 1400,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json",
+  })),
+  // GV3 — low volume, single bucket.
+  { brand: "Givenchy", style: "GV3", size_label: "Standard",
+    requireTokens: ["gv3"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 450, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/givenchy/products.json" },
+  // ── Valentino backbone (2026-06-30, slug valentino-garavani, handles validated) ──
+  // Rockstud SPIKE specifically (handle "rockstud-spike"), not the wider Rockstud line.
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Valentino", style: "Rockstud Spike", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["rockstud-spike", size],
+    excludeTokens: ["wallet", "card", "coin", "wristlet"],
+    minPrice: 400, maxPrice: 1900,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+  })),
+  // Roman Stud shoulder/handle bag. Size-anchored.
+  ...(["small", "medium", "large"] as const).map((size) => ({
+    brand: "Valentino", style: "Roman Stud", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["roman-stud", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 700, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+  })),
+  // Locò shoulder bag. Small (high-n) + a Standard bucket for the un-sized handles.
+  { brand: "Valentino", style: "Locò", size_label: "Small",
+    requireTokens: ["loco", "small"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  { brand: "Valentino", style: "Locò", size_label: "Standard",
+    requireTokens: ["loco"],
+    excludeTokens: ["small", "mini", "micro", "wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // One Stud — low volume, single bucket (exclude the chain clutch).
+  { brand: "Valentino", style: "One Stud", size_label: "Standard",
+    requireTokens: ["one-stud"],
+    excludeTokens: ["clutch", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // VLogo Signature — the chain crossbody; exclude the other VLogo-tagged models.
+  { brand: "Valentino", style: "VLogo Signature", size_label: "Mini",
+    requireTokens: ["vlogo", "crossbody"],
+    excludeTokens: ["loco", "gate", "antibes", "shopping", "wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1800,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // Supervee — low volume, single bucket.
+  { brand: "Valentino", style: "Supervee", size_label: "Standard",
+    requireTokens: ["supervee"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 700, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/valentino-garavani/products.json" },
+  // ── Alexander McQueen backbone (2026-06-30, thin feed; clean single buckets) ──
+  { brand: "Alexander McQueen", style: "The Knuckle", size_label: "Standard",
+    requireTokens: ["knuckle"],
+    excludeTokens: ["wallet", "card", "coin", "scarf"],
+    minPrice: 400, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  { brand: "Alexander McQueen", style: "The Bow Tote", size_label: "Standard",
+    requireTokens: ["the-bow"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // Skull bag — exclude the scarf/box-clutch/SLG noise that shares "skull".
+  { brand: "Alexander McQueen", style: "Skull", size_label: "Standard",
+    requireTokens: ["skull"],
+    excludeTokens: ["scarf", "clutch", "box", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // Manta bag — exclude the de-manta clutch.
+  { brand: "Alexander McQueen", style: "Manta", size_label: "Standard",
+    requireTokens: ["manta"],
+    excludeTokens: ["clutch", "scarf", "wallet", "card"],
+    minPrice: 600, maxPrice: 2500,
+    searchUrl: "https://www.fashionphile.com/collections/alexander-mcqueen/products.json" },
+  // ── Off-White backbone (2026-06-30, tiny feed n=18) ──
+  { brand: "Off-White", style: "Binder Clip", size_label: "Mini",
+    requireTokens: ["binder"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 700,
+    searchUrl: "https://www.fashionphile.com/collections/off-white/products.json" },
+  { brand: "Off-White", style: "Jitney", size_label: "Standard",
+    requireTokens: ["jitney"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 250, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/off-white/products.json" },
+  // ── Jacquemus backbone (2026-06-30, single buckets — feed carries no size tokens) ──
+  // Le Chiquito (incl. Grand Chiquito / Noeud / Moyen variants).
+  { brand: "Jacquemus", style: "Le Chiquito", size_label: "Standard",
+    requireTokens: ["chiquito"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 180, maxPrice: 1200,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Bambino — exclude Le Grand Bambino (its own style) + Bambimou.
+  { brand: "Jacquemus", style: "Le Bambino", size_label: "Standard",
+    requireTokens: ["bambino"],
+    excludeTokens: ["grand", "bambimou", "wallet", "card", "coin"],
+    minPrice: 350, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Grand Bambino — its own backbone style.
+  { brand: "Jacquemus", style: "Le Grand Bambino", size_label: "Standard",
+    requireTokens: ["grand-bambino"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 350, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // Le Bambimou (incl. Le Petit Bambimou).
+  { brand: "Jacquemus", style: "Le Bambimou", size_label: "Standard",
+    requireTokens: ["bambimou"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/jacquemus/products.json" },
+  // ── Miu Miu backbone (2026-06-30, single buckets) ──
+  // Wander hobo.
+  { brand: "Miu Miu", style: "Wander", size_label: "Standard",
+    requireTokens: ["wander"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Arcadie top-handle.
+  { brand: "Miu Miu", style: "Arcadie", size_label: "Standard",
+    requireTokens: ["arcadie"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1500, maxPrice: 3300,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Aventure aviator bag.
+  { brand: "Miu Miu", style: "Aventure", size_label: "Standard",
+    requireTokens: ["aventure"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1800, maxPrice: 4200,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // Matelassé quilted bags — "matelasse" is also a material word in Wander/Arcadie
+  // handles, so exclude those styles to keep this bucket the standalone Matelassé bags.
+  { brand: "Miu Miu", style: "Matelassé", size_label: "Standard",
+    requireTokens: ["matelasse"],
+    excludeTokens: ["wander", "arcadie", "aventure", "wallet", "card", "coin"],
+    minPrice: 300, maxPrice: 2000,
+    searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
+  // ── Burberry backbone — remaining styles (2026-06-30; Lola already captured above) ──
+  // Pocket bag (anchor "pocket-bag" to avoid the generic word "pocket").
+  { brand: "Burberry", style: "Pocket", size_label: "Mini",
+    requireTokens: ["pocket-bag"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1500,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // TB Bag (handle "tb-bag"; excludes the camera/tote/scarf that share "tb-").
+  ...(["small", "medium"] as const).map((size) => ({
+    brand: "Burberry", style: "TB Bag", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["tb-bag", size],
+    excludeTokens: ["camera", "scarf", "wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  })),
+  // Title two-handle bag.
+  { brand: "Burberry", style: "Title", size_label: "Standard",
+    requireTokens: ["title"],
+    excludeTokens: ["wallet", "card", "coin", "scarf"],
+    minPrice: 700, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // Banner tote.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "Burberry", style: "Banner", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["banner", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1300,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json",
+  })),
+  // Note crossbody (strong excludes — "note" is a generic token).
+  { brand: "Burberry", style: "Note", size_label: "Standard",
+    requireTokens: ["note"],
+    excludeTokens: ["notebook", "wallet", "card", "coin", "scarf"],
+    minPrice: 500, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/burberry/products.json" },
+  // ── The Row — remaining backbone styles (2026-06-30; Soft Margaux captured above) ──
+  // Regular Margaux (exclude Soft Margaux which has its own targets).
+  { brand: "The Row", style: "Margaux", size_label: "Standard",
+    requireTokens: ["margaux"],
+    excludeTokens: ["soft", "belt", "wallet", "card"],
+    minPrice: 4000, maxPrice: 8000,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Half Moon", size_label: "Standard",
+    requireTokens: ["half-moon"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 800, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Bindle", size_label: "Standard",
+    requireTokens: ["bindle"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 900, maxPrice: 2200,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  // Park Tote — Medium + Large size buckets, plus a Standard for the un-sized "three" totes.
+  ...(["medium", "large"] as const).map((size) => ({
+    brand: "The Row", style: "Park Tote", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["park-tote", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json",
+  })),
+  { brand: "The Row", style: "Park Tote", size_label: "Standard",
+    requireTokens: ["park-tote"],
+    excludeTokens: ["medium", "large", "small", "wallet", "card", "coin"],
+    minPrice: 1000, maxPrice: 2600,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  { brand: "The Row", style: "Terrasse", size_label: "Standard",
+    requireTokens: ["terrasse"],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 3000, maxPrice: 5500,
+    searchUrl: "https://www.fashionphile.com/collections/the-row/products.json" },
+  // ── Goyard — remaining backbone styles (2026-06-30; Saint Louis captured above) ──
+  ...(["mini", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Anjou", size_label: size.toUpperCase() === "PM" ? "PM" : "Mini",
+    requireTokens: ["anjou", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 2000, maxPrice: 4600,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  ...(["mm", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Artois", size_label: size.toUpperCase(),
+    requireTokens: ["artois", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1800, maxPrice: 4200,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  { brand: "Goyard", style: "Belvédère", size_label: "PM",
+    requireTokens: ["belvedere", "pm"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1500, maxPrice: 4700,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  ...(["mini", "pm"] as const).map((size) => ({
+    brand: "Goyard", style: "Saïgon", size_label: size.toUpperCase() === "PM" ? "PM" : "Mini",
+    requireTokens: ["saigon", size],
+    excludeTokens: ["wallet", "card", "coin", "pouch", "souple"],
+    minPrice: 3000, maxPrice: 6500,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json",
+  })),
+  { brand: "Goyard", style: "Rouette", size_label: "PM",
+    requireTokens: ["rouette", "pm"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 1800, maxPrice: 3600,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  { brand: "Goyard", style: "Bohème", size_label: "Standard",
+    requireTokens: ["boheme"],
+    excludeTokens: ["wallet", "card", "coin", "pouch"],
+    minPrice: 2000, maxPrice: 5500,
+    searchUrl: "https://www.fashionphile.com/collections/goyard/products.json" },
+  // ── Mulberry — add Fashionphile asking surface to existing styles (2026-06-30) ──
+  // Bayswater satchel (sold rows already loaded on the size-less v932; this adds asking by size).
+  ...(["small", "mini"] as const).map((size) => ({
+    brand: "Mulberry", style: "Bayswater", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["bayswater", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 500, maxPrice: 1700,
+    searchUrl: "https://www.fashionphile.com/collections/mulberry/products.json",
+  })),
+  // Alexa (fills the empty scaffolded style).
+  ...(["small", "medium", "mini"] as const).map((size) => ({
+    brand: "Mulberry", style: "Alexa", size_label: size[0].toUpperCase() + size.slice(1),
+    requireTokens: ["alexa", size],
+    excludeTokens: ["wallet", "card", "coin"],
+    minPrice: 400, maxPrice: 1600,
+    searchUrl: "https://www.fashionphile.com/collections/mulberry/products.json",
+  })),
 ];
 
 // ---------------------------------------------------------------------------
@@ -1610,11 +2000,45 @@ interface RawDumpEntry {
   /** Canonical listing URL — must be captured alongside the product JSON. */
   url?: string;
   /**
-   * Optional condition grade from the listing/search card.
-   * Not present in the Shopify product JSON; must be captured from the page.
+   * Optional condition grade from the listing/product page.
+   * Not present in the Shopify product JSON; captured by the condition-enrich pass.
    * Example: "Excellent", "Very Good", "Giftable"
    */
   conditionGrade?: string | null;
+  /** Optional free-text condition write-up from the product page. */
+  conditionDetail?: string | null;
+}
+
+/**
+ * Build the shared per-listing spec attrs + enrichment from a parsed FP spec, so the
+ * curated and catch-all mappers stay in lockstep (every field the feed/page exposes
+ * lands on every row). Listed-date + was-price have no dedicated column yet, so they
+ * ride in the `enrichment` jsonb until a migration adds columns.
+ */
+function fpAttrsAndEnrichment(spec: ReturnType<typeof parseFashionphileProduct>) {
+  const enrichment: Record<string, unknown> = {};
+  if (spec.listedAt) enrichment.listed_at = spec.listedAt;
+  if (spec.compareAtPrice != null) enrichment.compare_at_price = spec.compareAtPrice;
+  // Description-mined facts + a PII-scrubbed private reference copy of the text.
+  // INTERNAL ONLY: never select enrichment.source_description into user-facing output.
+  if (spec.descFacts && Object.values(spec.descFacts).some((v) => v !== null && v !== false)) {
+    enrichment.desc_facts = spec.descFacts;
+  }
+  if (spec.sourceDescription) enrichment.source_description = spec.sourceDescription;
+  return {
+    attrs: {
+      exterior_colorway: spec.color,
+      exterior_material: spec.material,
+      hardware_color: spec.hardwareColor,
+      production_year: spec.productionYear,
+      season: spec.season,
+      inclusions: spec.inclusions,
+      condition_detail: spec.conditionDetail,
+      region: spec.region,
+      listing_ref: spec.sku,
+    },
+    enrichment: Object.keys(enrichment).length ? enrichment : null,
+  };
 }
 
 /**
@@ -1631,8 +2055,15 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
   const handle = (product.handle ?? "").toLowerCase();
   const title = (product.title ?? "").toLowerCase();
 
+  // BRAND GUARD: only match a target whose brand equals the product's own brand
+  // (derived from the handle slug). Without this, a brand's dump can match another
+  // brand's target when a loose requireToken appears as a substring — e.g. a
+  // Valentino "rockstud-spike-shoulder-bag" was matching a Celine target. Compare
+  // accent-/punctuation-insensitively so "Chloé"==="Chloe", "Hermès"==="hermes".
+  const productBrand = asciiBrandKey(guessBrandFromHandle(handle));
   const target = TARGETS.find(
     (t) =>
+      asciiBrandKey(t.brand) === productBrand &&
       t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
       !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
   );
@@ -1641,8 +2072,8 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     return null;
   }
 
-  // Pass conditionGrade so parseFashionphileProduct can map it to a SaleCondition.
-  const spec = parseFashionphileProduct(product, conditionGrade);
+  // Pass conditionGrade/Detail so parseFashionphileProduct maps the SaleCondition + write-up.
+  const spec = parseFashionphileProduct(product, conditionGrade, entry.conditionDetail);
   if (!spec.price) {
     console.warn(`fashionphile: no price parsed for "${product.handle}" — skipping`);
     return null;
@@ -1652,19 +2083,11 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     return null;
   }
 
+  const { attrs, enrichment } = fpAttrsAndEnrichment(spec);
   return {
     brand: target.brand,
     style: target.style,
-    attrs: {
-      size_label: target.size_label,
-      exterior_colorway: spec.color,
-      exterior_material: spec.material,
-      hardware_color: spec.hardwareColor,
-      production_year: spec.productionYear,
-      season: spec.season,
-      inclusions: spec.inclusions,
-      listing_ref: spec.sku,
-    },
+    attrs: { size_label: target.size_label, ...attrs },
     platform: PLATFORM,
     price_type: "listed",
     sale_price: spec.price,
@@ -1674,6 +2097,7 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
     source_url: url,
     confidence: "high",
     notes: product.title?.slice(0, 160) ?? null,
+    enrichment,
   };
 }
 
@@ -1709,6 +2133,7 @@ const FP_BRAND_SLUGS: [string, string][] = [
   ["yves-saint-laurent", "Saint Laurent"], ["christian-dior", "Dior"],
   ["bottega-veneta", "Bottega Veneta"], ["kate-spade", "Kate Spade"],
   ["the-row", "The Row"], ["valentino-garavani", "Valentino"], ["miu-miu", "Miu Miu"],
+  ["off-white", "Off-White"],
   ["salvatore-ferragamo", "Salvatore Ferragamo"], ["alexander-mcqueen", "Alexander McQueen"],
   ["alexander-wang", "Alexander Wang"], ["marc-jacobs", "Marc Jacobs"], ["jimmy-choo", "Jimmy Choo"],
   ["tory-burch", "Tory Burch"], ["stella-mccartney", "Stella McCartney"], ["dolce-gabbana", "Dolce & Gabbana"],
@@ -1719,6 +2144,11 @@ const FP_BRAND_SLUGS: [string, string][] = [
   ["chloe", "Chloe"], ["valentino", "Valentino"], ["givenchy", "Givenchy"], ["versace", "Versace"],
   ["mulberry", "Mulberry"], ["delvaux", "Delvaux"], ["moynat", "Moynat"], ["dolce", "Dolce & Gabbana"],
 ];
+
+/** Brand-comparison key: lowercase, strip accents + punctuation so "Chloé"==="Chloe". */
+export function asciiBrandKey(s: string): string {
+  return (s ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
+}
 
 export function guessBrandFromHandle(handle: string): string {
   const h = (handle ?? "").toLowerCase();
@@ -1741,23 +2171,16 @@ export function guessStyleFromTitle(title: string, brand: string): string {
 function mapRawRecordCatchAll(entry: RawDumpEntry, today: string): PriceObservation | null {
   const { product, url, conditionGrade } = entry;
   if (!url) return null;
-  const spec = parseFashionphileProduct(product, conditionGrade);
+  const spec = parseFashionphileProduct(product, conditionGrade, entry.conditionDetail);
   if (!spec.price) return null;
-  const brand = guessBrandFromHandle(product.handle ?? "");
+  // Prefer the feed's clean vendor string; fall back to slug parsing.
+  const brand = product.vendor?.trim() || guessBrandFromHandle(product.handle ?? "");
   const title = product.title ?? product.handle ?? "";
+  const { attrs, enrichment } = fpAttrsAndEnrichment(spec);
   return {
     brand,
     style: guessStyleFromTitle(title, brand),
-    attrs: {
-      size_label: detectSizeLabel(title),
-      exterior_colorway: spec.color,
-      exterior_material: spec.material,
-      hardware_color: spec.hardwareColor,
-      production_year: spec.productionYear,
-      season: spec.season,
-      inclusions: spec.inclusions,
-      listing_ref: spec.sku,
-    },
+    attrs: { size_label: detectSizeLabel(title), ...attrs },
     platform: PLATFORM,
     price_type: "listed",
     sale_price: spec.price,
@@ -1767,6 +2190,7 @@ function mapRawRecordCatchAll(entry: RawDumpEntry, today: string): PriceObservat
     source_url: url,
     confidence: "low",
     notes: title.slice(0, 160),
+    enrichment,
   };
 }
 

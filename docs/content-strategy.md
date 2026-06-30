@@ -8,16 +8,17 @@ gap map in `docs/handoff.md`.*
 ## The strategy in one line
 **Be the trusted reference at each buying decision, then hand off to the commissionable
 action.** Content earns the trust and the search traffic; the post→bag **money-moment CTA
-block** (`src/app/posts/[slug]/PostBagCTA.tsx`) converts it into a buy / sell / rent
-referral, weighted to the seller side.
+block** (`src/app/articles/[slug]/PostBagCTA.tsx`) converts it into a buy / sell / rent
+referral, with buy surfaced first (buyer affiliate is the revenue backbone).
 
 ## What we're going for, and why
 - **Decision-moment reference.** Readers arrive *mid-decision*: "is it real / what's it
   worth / which one / where do I buy, sell, or rent." Every post maps 1:1 to one of those.
 - **Compare-and-hand-off monetization.** We don't sell; we inform then route to partners.
-  Every post ends in the CTA block. **Seller/consignor referral is the dominant lever**
-  (~$1,250 vs ~$30–60 a buyer click), so sell is surfaced first; rent is the third fork
-  (the "want" intent); buy is always there.
+  Every post ends in the CTA block. **Buyer affiliate is the revenue backbone**, so buy is
+  surfaced first; sell/consign is a lighter secondary fork on an owner signal; rent is the
+  third fork (the "want" intent). The high-payout consignor lever was ruled out 2026-06-30
+  (TRR Real Partners declined), which is why buy now leads.
 - **Two moats.** (1) **Real resale data** nobody else publishes (original, defensible,
   AI-citable). (2) **Authentication authority** (the "is it real" brand position).
 - **GEO/SEO is the channel.** Fact-dense, specific pages get cited by AI and Google. The
@@ -27,7 +28,7 @@ referral, weighted to the seller side.
 commissionable hand-off.
 
 ## Prioritization lens
-Score each piece on **$ (monetization, seller-weighted) · Reach (search + AI-citation +
+Score each piece on **$ (monetization, buyer-affiliate-weighted) · Reach (search + AI-citation +
 shareability) · Ready (can we write it *credibly now*) · Effort (solo-operator).** Honest
 constraint from the 2026-06-24 data audit: **high-end value/comparison is ready now;
 authentication needs sourcing; mid-tier needs data capture.**
@@ -36,7 +37,7 @@ authentication needs sourcing; mid-tier needs data capture.**
 | Post | $ | Reach | Ready | Effort | Tier |
 |---|---|---|---|---|---|
 | **Value pieces, hero high-end bags** (Chanel Flap ✅ drafted, LV Neverfull, Hermès Birkin, Gucci Marmont) | H | H | ✅ data | Low | **1** |
-| **"Where to sell your [bag] for the most"** (seller lever, direct) | H+ | M | ✅ | Low | **1** |
+| **"Where to sell your [bag] for the most"** (secondary sell fork; consignor lever down-weighted 2026-06-30) | M | M | ✅ | Low | 2 |
 | **Comparisons** (Caviar vs Lambskin · Neverfull vs Speedy · Birkin vs Kelly) | H | H | ✅ | Med | **1** |
 | **"Which [Birkin/Kelly] size holds value best"** (data-led) | M | H | ✅ | Low | 2 |
 | **Coach authentication** (brand/SEO wedge) | M | H+ | ❌ needs sourcing | Med | 2 |

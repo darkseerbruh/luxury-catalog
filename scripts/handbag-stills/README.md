@@ -12,6 +12,8 @@ No pricing or sellable framing. Treat any color you see as reference only
 | File | What it does |
 |---|---|
 | `extract_products.py` | Video to product crops. Probes each clip, samples frames (fps=3 + scene changes), detects the dominant bag (YOLO), ranks by size + sharpness + centeredness, dedups (pHash), crops to the bag at native resolution, writes a per-clip contact sheet and a master `_index.csv` graded good / thumbnail / too-small. |
+| `find_segments.py` | **Finds** the clip-worthy moments automatically: scores every moment on bag presence + prominence + centeredness + sharpness, merges good stretches into time ranges, caps each to a short window, writes a ranked segments CSV. Feed those ranges to `extract_clips.py`. |
+| `cut_best_per_bag.py` | Cuts the single best proposed clip per bag (from `segments_all.csv`) into a muted web loop, placed in `_by_bag/<bag>/` next to the stills. |
 | `extract_clips.py` | Pull video **clips** (segments), not stills. `--ranges 3-7,12-18` cuts exact moments; `--scenes` auto-splits at scene changes; `--web` re-encodes muted + web-optimized (H.264, faststart) for detail-page loops. |
 | `reorg.py` | Rebuilds `_by_bag/` folders from the manifest groups (primary -> detail -> thumb), plus `_by_bag/_index.txt`. |
 | `build_guess_sheet.py` | Labeled montage of unnamed bags + a best-guess name and a confidence dot, for eyeballing guesses against the photo. |

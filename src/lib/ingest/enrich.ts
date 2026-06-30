@@ -9,6 +9,8 @@
  * unstated stays null (matches the catalog's accuracy-over-completeness rule).
  */
 
+import { EMPTY_DESCRIPTION_FACTS, type DescriptionFacts } from "./description-facts";
+
 export type WearLevel = "none" | "minor" | "moderate" | "heavy";
 
 export interface ConditionEnrichment {
@@ -68,5 +70,61 @@ export function parseEnrichmentResponse(raw: string): ConditionEnrichment | null
     const v = obj[f];
     if (typeof v === "boolean") out[f] = v;
   }
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Description-fact extraction (for messy free-text descriptions, esp. eBay).
+// The deterministic extractDescriptionFacts() in description-facts.ts handles the
+// tidy templated reseller text; this LLM pass is the fallback for seller free-text
+// that regex can't parse. Same guardrail: ONLY what the text states.
+// ---------------------------------------------------------------------------
+
+const DESC_STRING_FIELDS = [
+  "color", "pattern", "strap_type", "closure", "interior_material",
+  "hardware_finish", "measurements",
+] as const;
+
+/** Build the extraction prompt for a listing's full description text. */
+export function buildDescriptionFactsPrompt(text: string): string {
+  return [
+    "Extract structured bag facts from this resale listing description.",
+    "Return ONLY a JSON object with these keys (all lowercase):",
+    "  color: the exterior COLOUR only (e.g. black, brown, tan, beige) — never a pattern or material name; null if not stated",
+    "  pattern: surface pattern/print (e.g. monogram, quilted, floral), or null",
+    "  strap_type: the strap description (e.g. 'adjustable leather shoulder strap'), or null",
+    "  closure: closure mechanism (e.g. turn-lock, zipper, snap), or null",
+    "  interior_material: interior lining material (e.g. leather, microfiber), or null",
+    "  hardware_finish: hardware finish, NOT colour (e.g. aged gold, polished), or null",
+    "  measurements: exterior dimensions verbatim (e.g. '10\" x 8\" x 4\"'), or null",
+    "  has_date_code: true if a date code / serial / authenticity number is mentioned, else false",
+    "Use null for anything the text does not state. Do NOT guess or infer. No prose, JSON only.",
+    "",
+    "Listing text:",
+    text.slice(0, 2000),
+  ].join("\n");
+}
+
+/**
+ * Parse + validate the model's JSON reply into DescriptionFacts (tolerates code
+ * fences / surrounding prose). Invalid → null so bad output is never stored. Strings
+ * are trimmed + length-capped; empty strings normalise to null.
+ */
+export function parseDescriptionFactsResponse(raw: string): DescriptionFacts | null {
+  if (!raw) return null;
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) return null;
+  let obj: Record<string, unknown>;
+  try {
+    obj = JSON.parse(match[0]);
+  } catch {
+    return null;
+  }
+  const out: DescriptionFacts = { ...EMPTY_DESCRIPTION_FACTS };
+  for (const f of DESC_STRING_FIELDS) {
+    const v = obj[f];
+    if (typeof v === "string" && v.trim()) out[f] = v.trim().slice(0, 120);
+  }
+  if (typeof obj.has_date_code === "boolean") out.has_date_code = obj.has_date_code;
   return out;
 }

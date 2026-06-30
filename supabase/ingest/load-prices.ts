@@ -145,8 +145,17 @@ function toDiscovered(
     condition: o.condition ?? null,
     unresolved_reason: reason,
     observed_on: o.observed_on,
+    // Migration 0038 columns — kept here so the discovered tier loses nothing the
+    // curated tier captures. Stripped automatically on a 42703 (column-missing) until
+    // 0038 is applied, so this is safe to merge ahead of the migration.
+    condition_detail: o.attrs.condition_detail ?? null,
+    region: o.attrs.region ?? null,
+    enrichment: o.enrichment ?? null,
   };
 }
+
+/** The toDiscovered keys that only exist after migration 0038 (stripped if absent). */
+const DISCOVERED_0038_KEYS = ["condition_detail", "region", "enrichment"] as const;
 
 async function main() {
   const flags = parseFlags(process.argv.slice(2));
@@ -220,9 +229,24 @@ async function main() {
   // the loader keeps working (the unresolved rows are simply not captured this run,
   // as before) so merging this ahead of the migration never breaks a load.
   if (discovered.length > 0) {
-    const { error } = await supabaseAdmin
-      .from("discovered_listing")
-      .upsert(discovered, { onConflict: "platform,listing_ref,observed_on,sale_price", ignoreDuplicates: true });
+    const upsert = (rows: Record<string, unknown>[]) =>
+      supabaseAdmin
+        .from("discovered_listing")
+        .upsert(rows, { onConflict: "platform,listing_ref,observed_on,sale_price", ignoreDuplicates: true });
+    let { error } = await upsert(discovered);
+    // Column missing: migration 0038 (region/condition_detail/enrichment) not applied
+    // yet. PostgREST reports this as PGRST204 (schema cache) on write, Postgres as 42703.
+    // Strip those keys and retry so the rest still loads (mirrors the 42P01 table-missing
+    // resilience) — once 0038 is applied, the full row persists.
+    if (error?.code === "42703" || error?.code === "PGRST204") {
+      console.warn(`  discovered_listing missing 0038 columns — apply migration 0038 to capture region/condition_detail/enrichment; loading without them for now.`);
+      const stripped = discovered.map((d) => {
+        const c = { ...d } as Record<string, unknown>;
+        for (const k of DISCOVERED_0038_KEYS) delete c[k];
+        return c;
+      });
+      ({ error } = await upsert(stripped));
+    }
     if (error) {
       if (error.code === "42P01") {
         console.warn(`  discovered_listing not found — apply migration 0026, then re-run to capture ${discovered.length} unresolved listing(s).`);

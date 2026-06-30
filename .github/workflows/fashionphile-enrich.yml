@@ -1,0 +1,62 @@
+name: Fashionphile enrichment (condition + fields)
+
+# Hands-off daily enrichment of Fashionphile rows — fills the fields the original feed
+# load can't: condition (from the product page), region/hardware/listed-date/was-price/
+# description-facts (re-parsed from a fresh crawl). DB-native + idempotent, so it's
+# resumable across CI runs (no dump-state dependency for condition). See §0e.
+#
+# Each run: refresh the dump (crawl) -> grade a bounded chunk of NULL-condition rows ->
+# backfill the other fields from the fresh dump -> refresh the summary. Over a few days
+# the condition backlog clears, then it just keeps new listings enriched.
+#
+# 0 Firecrawl credits (FP product pages answer plain GET). SECRETS: SUPABASE_SERVICE_ROLE_KEY.
+
+on:
+  schedule:
+    - cron: "41 7 * * *" # daily, off the hour
+  workflow_dispatch:
+    inputs:
+      grade_limit:
+        description: "Max condition grades this run (per-run credit/time ceiling)"
+        required: false
+        default: "4000"
+      write:
+        description: "Apply DB writes? false = dry run"
+        required: false
+        default: "true"
+
+concurrency:
+  group: fashionphile-enrich
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      GRADE_LIMIT: ${{ github.event.inputs.grade_limit || '4000' }}
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Refresh the Fashionphile dump (for the field backfill)
+        run: npx tsx supabase/ingest/sources/fashionphile-crawl.ts handbags
+
+      - name: Grade condition on NULL-condition rows (DB-native, resumable)
+        if: env.WRITE == 'true'
+        run: npx tsx supabase/ingest/grade-condition-fashionphile.ts --limit="$GRADE_LIMIT" --write
+
+      - name: Backfill region / hardware / listed-date / was-price / description facts
+        if: env.WRITE == 'true'
+        run: npx tsx supabase/ingest/backfill-fashionphile.ts --write
+
+      - name: Refresh the per-variant price summary
+        if: env.WRITE == 'true'
+        run: npm run summary:refresh

@@ -135,6 +135,81 @@ Redeluxe, Couture USA) for breadth and reserve Firecrawl for the bot-blocked sou
 → `summary:refresh` ran green in CI and wrote real multi-source asking data (Goyard Saint Louis PM:
 Fashionphile n=89 $2,465 median + TheRealReal n=20 $2,065 median). Daily cron is live (`23 6 * * *`).
 
+### 0e. Capture-completeness fix (2026-06-29) — condition/region/listed-date/was-price
+
+**Problem found:** across 33,482 price rows, `condition` 0.1%, `condition_detail` 0%,
+`region` 0%, `production_year`/`season`/`inclusions` ~8%, `hardware_color` 47%. Root
+cause: the Fashionphile feed (bulk of the catalog) was the only thing crawled at scale,
+and the crawler kept just 5 of the feed's 13 fields and never opened the product page
+where the condition grade lives.
+
+**Fixed (commit on `data/market-capture`):**
+- Crawler retains `vendor`/`created_at`/`published_at`/`updated_at`/variant
+  `compare_at_price`. Parser surfaces **region** (feed country tag, e.g. `US`),
+  **listedAt** (first-published date), **compareAtPrice** (was-price) + a conditionDetail
+  param. Condition ladder updated to FP's current tiers
+  (New | Excellent | Shows Wear | Worn | Fair), mapped position-for-position.
+- **`fashionphile-condition.ts`** — paced/capped/incremental enricher reads the grade off
+  the product page (`Condition: <span>…</span>`), **0 Firecrawl credits**, ~99% hit rate.
+- Adapter maps region→`attrs.region`, condition_detail→`attrs`, listed_at+compare_at_price
+  →`enrichment` (curated + catch-all). `load-prices` `toDiscovered` carries them with a
+  PGRST204/42703 strip-and-retry, safe before **migration 0038** applies.
+
+**Proven live (today's FP rows in `price_history`):** region 0→**99.3%**, condition
+mechanism verified, enrichment 0→**46%**.
+
+**Backfill runbook (free, repeatable):** crawl → `fashionphile-condition.ts --limit=20000`
+→ `fashionphile.ts --raw` + `load:prices -- fashionphile --write` → `fashionphile.ts
+--catch-all` + `load:prices -- fashionphile --discovered-only --write` → `summary:refresh`.
+
+**OWNER-GATED:** apply **migration 0038** (GitHub → Actions → "Apply database migrations")
+so the discovered tier persists region/condition_detail/enrichment.
+
+**Description facts (2026-06-29):** `description-facts.ts` mines the description for facts
+the feed misses (strap/closure/interior/pattern/hardware-finish/measurements/date-code) +
+backfills colour when null, and keeps a **PII-scrubbed private reference** of the text in
+`enrichment.source_description` (never served). For messy seller free-text (esp. **eBay**)
+the deterministic regex isn't enough, so **`enrich-descriptions.ts`** (Haiku 4.5) is wired:
+`npm run enrich:descriptions [--platform=eBay] [--write]` — reads source_description, merges
+LLM facts into `desc_facts` (regex wins where non-null; LLM owns measurements/date-code),
+stamps `desc_llm_on` so re-runs don't re-spend. Cost: ~1 cheap Haiku call/listing, run it
+only on rows with a stored description.
+
+**Backfill mechanism (2026-06-29):** load-prices upserts with `ignoreDuplicates`, so it
+can't add new fields to rows already in price_history. **`backfill-fashionphile.ts`**
+re-parses the (graded) dump and UPDATEs ONLY null fields by listing_ref (idempotent, never
+clobbers): condition, region, hardware_color, enrichment (listed_at/compare_at_price/
+source_description/desc_facts). Run repeatedly as the grade pass advances:
+`npx tsx supabase/ingest/backfill-fashionphile.ts --write` → `summary:refresh`.
+
+**Done this session:** hardware extraction broadened (metal-in-context + finish phrasings;
+live fill 47%→71%); `promote-safe.ts` now carries region/condition_detail/enrichment (0038-
+gated, resilient). Condition grade pass + full backfill running.
+
+**Still-open backlog:**
+- **condition_detail** + granular condition come from **TheRealReal**, not FP. Fix
+  `firecrawl-trr.ts` (maps every used bag → null ~line 72; never captures the product-page
+  condition section). **BLOCKED 2026-06-29:** TRR product pages are px-captcha gated (403
+  even on Firecrawl stealth, 5 cr/try) — can't ground the condition-section structure right
+  now. Retry via the proven `firecrawl-trr` adapter path (rawHtml + includeTags script) or a
+  logged-in browser session; until then eBay covers granular condition + detail.
+- **production_year** (~8%): data-limited, not parser-limited — FP rarely states a year;
+  TRR ("From the YYYY Collection") + eBay ("Year Manufactured") are the year sources.
+- **eBay live capture — BUILT (2026-06-29), metered + owner-gated.** `firecrawl-ebay.ts`
+  (parser `ebay-item.ts`). eBay 403s plain fetch; Firecrawl defeats it (verified live).
+  eBay item-specifics are the richest of any source: Condition (+ written detail), material,
+  hardware, pattern, style, features, measurements. Per item: 1-credit markdown scrape →
+  deterministic Condition + price + PII-scrubbed specifics text as `source_description`;
+  the Haiku pass mines the rest (beats 5-credit json extract). Run:
+  `firecrawl-ebay.ts <targetKey> [--limit]` → `load:prices -- ebay --write` →
+  `summary:refresh` → `enrich:descriptions -- --platform=ebay --write`. **Needs
+  FIRECRAWL_API_KEY (CI/GH secret; not local).** **LIVE only** — eBay purges ended-listing
+  descriptions, so our 1,641 SOLD eBay rows can't be back-enriched; capture while active.
+  Add TARGETS + greenlight the credit spend before a full run.
+- **hardware_color** (47%) + **production_year** (~8%): parser-coverage, extend vocab/regex.
+- **promote-safe.ts**: after 0038, carry region/condition_detail/enrichment on promotion.
+- **days-on-market**: now have `enrichment.listed_at`; a column + derivation is a later migration.
+
 ---
 
 ## 1. What this is
