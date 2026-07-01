@@ -288,9 +288,9 @@ Hot takes (#3–5) and stories (#11–14) slot in as the recurring personality l
 419 trending bag search terms, extracted + sorted by popularity. Popularity = TikTok's search
 volume signal (verified across frames); growth ▲% is directional, verify in-app. Full data:*
 
-- **Living table: `/admin/trends`** (the auto-updating home, backed by the `tiktok_trend` table, migration 0041). Sort, filter, and fill the creator/saturation count + content status right on the page. This replaced the Google Sheets plan after the owner's Workspace org blocked every write path (2026-07-01).
-- **`docs/tiktok-trending-terms.csv`** (all 419; the refresh source, loaded by `supabase/seed/seed-tiktok-trends.ts`)
-- **`assets/social/trending/tiktok-trending-terms-2026-07-01.xlsx`** (formatted: All terms / Fetch-saturation-first / Re-check tabs)
+- **MASTER: Notion → "Luxury Catalog · Social Command Center"** (workspace Luxurycatalog). Two databases: **Social Content Calendar** and **TikTok Trending Terms** (412 rows). Owner manages here: sort/filter, fill the creator/saturation count + content status. Only the connected Notion MCP can write it (session-scoped; no repo token). This is where the Google Sheets plan landed after the owner's Workspace org blocked every Sheets write path (2026-07-01).
+- **Refresh pipeline (`scripts/trends/`):** owner screen-records the TikTok Creative Center "Saved" list → `ocr.swift` (macOS Vision) over extracted frames → `parse.py` (band association) → `clean.py` (dedupe + brand + priority) → a Claude session upserts new/changed terms into the Notion database via the connector, preserving the owner-edited Creators/Status columns. TikTok's Saved list has no API, so the recording step is always manual.
+- **Retired (2026-07-01):** the Supabase `/admin/trends` page + loader and the docs CSV/xlsx exports were removed so Notion is the single master and nothing drifts. The `tiktok_trend` table is now orphaned (migration 0041); safe to drop.
 
 **Workflow:** popularity is only half the read. Saturation (how many creators already make the
 content) is the other half, and it only shows on click-in. So the play is: fetch saturation for
