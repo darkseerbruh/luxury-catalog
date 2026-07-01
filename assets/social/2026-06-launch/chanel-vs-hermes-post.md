@@ -1,8 +1,7 @@
 # Post — Chanel vs Hermès: two opposite ways to "hold value"
 
 Status: APPROVED 2026-06-30 (owner; hook B primary).
-Destination (interim): https://www.luxurycatalog.com/articles/are-designer-bags-a-good-investment
-GAP TO COMMISSION: a dedicated "Chanel vs Hermès: two ways to hold value" article.
+Destination: https://www.luxurycatalog.com/articles/chanel-vs-hermes-two-ways-to-hold-value?utm_source=social&utm_medium=organic&utm_campaign=chanel-vs-hermes (swap utm_source per platform: tiktok / instagram / pinterest). Goes live once the article seed is run in prod (supabase/seed/seed-chanel-vs-hermes.ts).
 Visual: assets/social/2026-06-launch/chanel-vs-hermes-resale.svg (used vs new, both houses)
 Facts + sources: Chanel Med Flap ~$2,850 (2010) → ~$11,700 (2026), ~9-10%/yr long-run, ~2x in 5yr (luxuryevermore, Sotheby's). Birkin 30 ~$10,900 (2018) → ~$14,900 (2026), single-digit yearly + 16% spike 2024 (awisee/XIAOMA). Used: Chanel Flap ~$6,000, Birkin 30 ~$18,000 (our June 2026 listings). Birkin +92% resale over 10yr; quota 2 bags/yr (Rebag Clair 2025). HEDGE: new retail = third-party 2026 trackers (FX caveat); used = our June 2026 tracking; appreciation = Rebag. Estimate, not a forecast/appraisal.
 
