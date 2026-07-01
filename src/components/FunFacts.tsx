@@ -32,7 +32,7 @@ export default async function FunFacts() {
     <>
       {named.length > 0 && (
         <section className="rounded-2xl border border-gold/30 bg-gold/5 p-6">
-          <p className="text-sm uppercase tracking-widest text-gold">The muses</p>
+          <p className="text-sm uppercase tracking-widest text-gold">The people behind the names</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">Named after icons</h2>
           <p className="mt-1 text-sm text-muted">The muses hiding in plain sight across the bags we track.</p>
           <ul className="mt-6 flex flex-col">
@@ -59,7 +59,7 @@ export default async function FunFacts() {
 
       {equations.length > 0 && (
         <section className="rounded-2xl border border-gold/30 bg-gold/5 p-6">
-          <p className="text-sm uppercase tracking-widest text-gold">Pointless, delightful</p>
+          <p className="text-sm uppercase tracking-widest text-gold">One bag, priced in others</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">Bag math</h2>
           <p className="mt-1 text-sm text-muted">What one bag is worth, counted in other bags.</p>
           <ul className="mt-6 flex flex-col gap-3">
