@@ -22,6 +22,16 @@
 
 ---
 
+## TL;DR — /data page + homepage speed + handbag-breadth capture (2026-06-30, all on `main`)
+
+- **Homepage load speed fixed.** Cached the near-static homepage queries (`src/lib/cache.ts`; brands/hero/deals/leaderboards/gates) and made `fetchAllRows` page in PARALLEL (was sequential = ~9s on every uncached load). Warm loads ~9s → ~0.23s.
+- **New `/data` page = "the data behind every page"** (reached from a homepage PersonaRouter tile; the "What brings you in?" heading was removed). Mission copy up top ("The numbers they keep behind glass"), stat cards, a **Typical resale price by house** chart + a **Where our data runs deepest** depth chart (serious zone), then a warm-tinted **"Just for fun"** zone (Named after icons, Bag math, Gold or silver, Colors, Leathers). 2-col tile grid. Data via `getMarketPulse` / `getFunFacts` / `getAttributeStats` (all cached). Attribute data (colour/material/hardware) lives on `price_history`, NOT the sparse variant columns.
+- **Representative per-house pricing (handbag-breadth capture).** Captured every current Fashionphile handbag for the 8 thin houses via archivist-authoritative model clustering: The Row $1,895 (was $4,045), Goyard $2,785, Miu Miu $2,000, Valentino $1,075, McQueen $845, Jacquemus $650, Off-White $385, Telfar $120. Loader `supabase/ingest/load-handbag-breadth.ts` (guarded, idempotent). **Big houses (Hermès/Chanel/LV) left icon-scoped** (owner's call; chart honestly labeled "the bags we track, our read, not an appraisal").
+- **⚠️ Collision + reconciliation (lesson).** My capture ran in parallel with the active data-lane per-size pass and clobbered iconic size variants (dumped all sizes onto one). Reconciled: re-ran the per-size pipeline, deleted the mixed rows on managed size variants, reloaded clean, verified (Soft Margaux ascends 10<12<15<17). **`load-handbag-breadth.ts` now GUARDED to only ADD new styles.** Rule: before running any capture, check `docs/data-content-worklist.md` for an active parallel capture on the same brands.
+- **Value-retention board** fixed (RPC over ALL price data + n>=20 floor + dedupe-by-style); lives in the review-gated CommunityLeaderboards.
+
+---
+
 ## 🧭 Active-lanes registry — the session router (READ FIRST)
 
 **Lanes are durable; chats are disposable.** This project runs as a handful of parallel
