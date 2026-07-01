@@ -164,6 +164,11 @@ async function main() {
       brandPrices = brandPrices.concat(prices);
       console.log(`  ${model}: ${prices.length} listings, median $${Math.round(median(prices)).toLocaleString()}`);
       if (!WRITE) continue;
+      // GUARD (collision fix 2026-06-30): only ADD genuinely new styles. If a style
+      // already exists it is owned by the per-size fashionphile-collection pipeline;
+      // writing here dumps all sizes onto one variant and clobbers per-size medians.
+      const { data: existing } = await sb.from("style").select("style_id").eq("brand_id", bId).ilike("name", model).maybeSingle();
+      if (existing) { console.log(`  ${model}: SKIP (style exists; per-size pipeline owns it)`); continue; }
       const styleId = await ensureStyle(bId, model);
       const variantId = await ensureVariant(styleId);
       const rows = specs.map((s, i) => ({

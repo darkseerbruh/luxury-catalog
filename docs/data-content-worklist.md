@@ -226,3 +226,12 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   the clobbered size variants. Keep the long-tail additions. **Retire load-handbag-breadth.ts** (or
   gate it to only styles with no existing variants) so it can't clobber per-size data again.
 - Medians reported this session are slightly high on the clobbered variants; re-verify after the fix.
+
+- ✅ RESOLVED 2026-06-30/07-01: reconciled the collision. For the 4 overlapping houses (The Row,
+  Goyard, Valentino, Alexander McQueen): re-ran `fashionphile-collection.ts` per-size, DELETED the
+  Fashionphile rows on size-labeled (pipeline-managed) variants to clear the mixed-size contamination,
+  reloaded clean per-size, `summary:refresh`. Verified: Soft Margaux now ascends 10<12<15<17
+  ($4,495/$5,325/$6,265/$6,495); Goyard Saint Louis PM $2,495 / GM $2,515. Long-tail single-variant
+  styles (Marlo, Slouchy Banana, etc.) kept untouched. Per-brand medians steady (The Row $1,895).
+  GUARD added to `load-handbag-breadth.ts`: it now SKIPS any style that already exists, so it can
+  only ADD new long-tail styles and can never clobber per-size data again.
