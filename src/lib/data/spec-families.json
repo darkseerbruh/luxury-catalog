@@ -10,6 +10,8 @@
   "materials": {
     "canvas": "Coated canvas",
     "cotton": "Fabric",
+    "evercolor": "Smooth leather",
+    "goyardine": "Canvas",
     "matelasse": "Fabric",
     "nylon": "Fabric"
   }
