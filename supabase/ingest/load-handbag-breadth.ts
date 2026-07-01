@@ -146,13 +146,14 @@ async function main() {
     if (!bId) { console.log(`SKIP ${cfg.brand}: brand not found`); continue; }
     const all = await fetchCollection(cfg.slug);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bags = all.filter((p) => (p as any).product_type === "Bags" && !isAccessory(p.title));
+    const bags = all.filter((p) => (p as any).product_type === "Bags" && !isAccessory(p.title ?? ""));
     const groups = new Map<string, ShopifyProduct[]>();
     const unmatched: string[] = [];
     for (const p of bags) {
-      const nt = norm(p.title);
+      const title = p.title ?? "";
+      const nt = norm(title);
       const hit = cfg.models.find((m) => m.match.some((tok) => nt.includes(norm(tok))));
-      if (!hit) { unmatched.push(p.title); continue; }
+      if (!hit) { unmatched.push(title); continue; }
       (groups.get(hit.name) ?? groups.set(hit.name, []).get(hit.name)!).push(p);
     }
     console.log(`\n===== ${cfg.brand}: ${bags.length} handbags, ${groups.size} styles, ${unmatched.length} unmatched =====`);

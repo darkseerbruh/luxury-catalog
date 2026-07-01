@@ -31,7 +31,7 @@ export default async function FunFacts() {
   return (
     <>
       {named.length > 0 && (
-        <section className="mt-12">
+        <section className="rounded-2xl border border-border bg-surface p-6">
           <p className="text-sm uppercase tracking-widest text-gold">From the database</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">Named after icons</h2>
           <p className="mt-1 text-sm text-muted">The muses hiding in plain sight across the bags we track.</p>
@@ -58,7 +58,7 @@ export default async function FunFacts() {
       )}
 
       {equations.length > 0 && (
-        <section className="mt-12">
+        <section className="rounded-2xl border border-border bg-surface p-6">
           <p className="text-sm uppercase tracking-widest text-gold">By the numbers</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">Bag math</h2>
           <p className="mt-1 text-sm text-muted">What one bag is worth, counted in other bags.</p>

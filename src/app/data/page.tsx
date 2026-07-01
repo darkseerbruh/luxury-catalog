@@ -41,32 +41,34 @@ export default async function DataPage() {
         <StatCard value={pulse.earliestYear ? `${pulse.earliestYear}` : "—"} label="earliest price on record" />
       </div>
 
-      {pulse.byHouse.length > 0 && (
-        <section className="mt-12">
-          <h2 className="font-serif text-2xl text-foreground">Where our data runs deepest</h2>
-          <p className="mt-1 text-sm text-muted">Resale prices we have logged, by house.</p>
-          <ul className="mt-6 flex flex-col gap-2.5">
-            {pulse.byHouse.map((h) => (
-              <li key={h.name} className="flex items-center gap-3">
-                <span className="w-28 flex-shrink-0 truncate text-sm text-foreground sm:w-36">{h.name}</span>
-                <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-border">
-                  <span
-                    className="block h-full rounded-full bg-gold"
-                    style={{ width: `${max > 0 ? Math.max(2, Math.round((h.observations / max) * 100)) : 0}%` }}
-                  />
-                </span>
-                <span className="w-16 flex-shrink-0 text-right text-sm text-muted">
-                  {h.observations.toLocaleString()}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {pulse.byHouse.length > 0 && (
+          <section className="rounded-2xl border border-border bg-surface p-6">
+            <h2 className="font-serif text-2xl text-foreground">Where our data runs deepest</h2>
+            <p className="mt-1 text-sm text-muted">Resale prices we have logged, by house.</p>
+            <ul className="mt-6 flex flex-col gap-2.5">
+              {pulse.byHouse.map((h) => (
+                <li key={h.name} className="flex items-center gap-3">
+                  <span className="w-24 flex-shrink-0 truncate text-sm text-foreground">{h.name}</span>
+                  <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-border">
+                    <span
+                      className="block h-full rounded-full bg-gold"
+                      style={{ width: `${max > 0 ? Math.max(2, Math.round((h.observations / max) * 100)) : 0}%` }}
+                    />
+                  </span>
+                  <span className="w-14 flex-shrink-0 text-right text-sm text-muted">
+                    {h.observations.toLocaleString()}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
-      <FunFacts />
+        <FunFacts />
 
-      <AttributeFacts />
+        <AttributeFacts />
+      </div>
 
       <p className="mt-12 max-w-2xl text-sm text-muted">
         These are observed prices, listings and sales we have recorded, not appraisals.

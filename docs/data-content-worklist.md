@@ -211,3 +211,18 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   Handbags only (no SLGs). ~75-100% of each house's live listings clustered cleanly; residual tail
   (shape-only / deep-cut titles) dropped, not enough to skew. Attributes (colour/material/hardware)
   captured in the same pass. Loader idempotent for monthly re-run.
+
+### ⚠️ COLLISION (2026-06-30) — two parallel Fashionphile captures clobbered iconic per-size variants
+- My session ran `load-handbag-breadth.ts` (one base variant per style) on the SAME houses the
+  unattended per-size pass (`fashionphile-collection.ts`, above) was doing, at the same time. Both
+  wrote to the shared DB (the multi-chat clobber the session-start guard warns about).
+- NET GOOD: load-handbag-breadth ADDED the long-tail styles the per-size pass skipped (The Row Marlo,
+  Slouchy Banana, 90's, Peggy, India, Sofia, etc. — single-variant, fine).
+- NET HARM: for OVERLAPPING iconic styles it dumped all-size listings onto the LOWEST variant_id,
+  corrupting that one size. PROVEN: The Row Soft Margaux size 10 (v987) now has 32 mixed-size rows
+  ($3,695–$7,795) instead of clean size-10 (~$4,495, n=25); sizes 12/15/17 are intact. Same pattern
+  on Park Tote and every style the per-size pass had already created.
+- ⬜ FIX (data lane, idempotent): re-run `fashionphile-collection.ts` per affected brand → restores
+  the clobbered size variants. Keep the long-tail additions. **Retire load-handbag-breadth.ts** (or
+  gate it to only styles with no existing variants) so it can't clobber per-size data again.
+- Medians reported this session are slightly high on the clobbered variants; re-verify after the fix.

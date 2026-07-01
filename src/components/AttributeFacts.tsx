@@ -33,7 +33,7 @@ export default async function AttributeFacts() {
   return (
     <>
       {hardware.total > 0 && (
-        <section className="mt-12">
+        <section className="rounded-2xl border border-border bg-surface p-6">
           <p className="text-sm uppercase tracking-widest text-gold">From the database</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">Gold or silver</h2>
           <p className="mt-1 text-sm text-muted">
@@ -51,7 +51,7 @@ export default async function AttributeFacts() {
       )}
 
       {colors.length > 0 && (
-        <section className="mt-12">
+        <section className="rounded-2xl border border-border bg-surface p-6">
           <p className="text-sm uppercase tracking-widest text-gold">From the database</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">The colors of luxury</h2>
           <p className="mt-1 text-sm text-muted">Every color we have logged, ranked. Black is not close.</p>
@@ -78,7 +78,7 @@ export default async function AttributeFacts() {
       )}
 
       {materials.length > 0 && (
-        <section className="mt-12">
+        <section className="rounded-2xl border border-border bg-surface p-6">
           <p className="text-sm uppercase tracking-widest text-gold">From the database</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">The leathers</h2>
           <p className="mt-1 text-sm text-muted">
