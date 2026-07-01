@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getMarketPulse } from "@/lib/market-pulse";
 import FunFacts from "@/components/FunFacts";
+import AttributeFacts from "@/components/AttributeFacts";
 
 export const dynamic = "force-dynamic";
 
@@ -64,6 +65,8 @@ export default async function DataPage() {
       )}
 
       <FunFacts />
+
+      <AttributeFacts />
 
       <p className="mt-12 max-w-2xl text-sm text-muted">
         These are observed prices, listings and sales we have recorded, not appraisals.

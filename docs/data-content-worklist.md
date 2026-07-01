@@ -151,3 +151,32 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - ✅ **Telfar Shopping Bag** — DONE 2026-06-29. Created brand Telfar (tier thrift) + style Shopping Bag (variant 992); loaded 82 rows (eBay sold 45 + Fashionphile 37). Resale median ~$120 ($50–$330); eBay floor ~$81 is the accessible-market read, Fashionphile premium pulls the blend up.
 - Loader: `supabase/ingest/load-canon-gaps.ts` (dry-run default, `--write`, idempotent). Captures were browser-gated (Claude-in-Chrome, owner-present); raw landed in gitignored `data/ingest/_raw/`. **NOTE:** migration 0038 added a FUNCTION `variant_price_summary()` that shares a name with the pre-existing 0021 materialized view of the same name — reconcile in the deals/hero RPC rewire (use one or the other).
 - (also flagged separately, chip task_646da12f) ⬜ Backfill `price_history.condition` from source listings so the rail's "great price" verdict can become condition-aware (only 15 of ~31.8k listed rows have condition today).
+
+## Representative house pricing — broaden coverage (2026-06-30, owner-directed)
+
+*Powers the /data "typical resale price by house" claim. Owner wants it to genuinely
+mean "what a typical bag from this house costs," not "the icons we happen to track."
+Today it skews HIGH for three reasons (verified 2026-06-30): (1) we track bags, not
+accessories (only ~9 of 633 priced styles are SLGs); (2) thin houses are flagship-skewed
+(The Row = 11 variants, 6 of them Margaux; any house under ~20 variants is not
+representative); (3) our prices are 95% Fashionphile + The RealReal, which curate to
+consignment-grade luxury. Fix = broaden coverage per house, NOT lower any threshold.*
+
+**Method (per §0 one-pass; Fashionphile is the clean, FREE per-variant source — do NOT
+bulk-load Vestiaire per-variant, it mis-sizes onto variant 1, see the 2026-06-30 probe above):**
+- ⬜ Per house, list Fashionphile's full brand catalog (Shopify `products.json`), not just
+  the backbone icons: include the mid/entry styles AND small leather goods (wallets, WOCs,
+  card holders, belt bags) that pull the true median DOWN.
+- ⬜ Scaffold the missing styles/variants FIRST (`scaffold-variants.ts` — loader drops
+  zero-variant styles), then `load:prices -- fashionphile --write`, then `summary:refresh`.
+- ⬜ Priority order: the thin houses first (The Row, Goyard, Miu Miu, Off-White, McQueen,
+  Valentino, Jacquemus — all under ~20 variants), then broaden the SLG/accessory gap across
+  the big houses so their medians reflect the full range.
+- ⬜ Acceptance: every house on the /data board has >=20 priced variants spanning its real
+  range (flagship AND accessory), so the median is defensible. Until then, /data should keep
+  the honest "the bags we track" scoping (never claim market-wide typical price).
+
+*NOTE: attributes (colour/hardware/material) are NOT part of this task — they are already
+dense on price_history from Fashionphile (colorway 88%, material 90%, hardware 54% as of
+2026-06-30) and now power the /data "Gold or silver / colors / leathers" sections. Only
+production_year (7%) + condition (13%) remain sparse.*
