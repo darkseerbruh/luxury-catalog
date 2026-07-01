@@ -1,17 +1,19 @@
 "use client";
 
 /**
- * Client providers: wires the (already-initialized) PostHog instance into React
- * so components can use `usePostHog()`, and captures pageviews on App Router
- * navigation. The Router does not auto-fire pageviews on client-side
- * navigation, so we capture them manually here.
+ * Client providers: captures pageviews on App Router navigation. The Router does
+ * not auto-fire pageviews on client-side navigation, so we capture them manually.
+ *
+ * PostHog is loaded lazily (see lib/analytics/posthog.ts), so we do NOT wrap the
+ * tree in <PostHogProvider> or import posthog-js/react here — that would pull the
+ * SDK back into the initial bundle. Pageviews go through the buffered
+ * `capturePageview`, which loads/queues as needed.
  */
 import { Suspense, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { PostHogProvider } from "posthog-js/react";
 
 import { isAnalyticsEnabled } from "@/lib/analytics/config";
-import { posthog } from "@/lib/analytics/posthog";
+import { capturePageview } from "@/lib/analytics/posthog";
 import { ConsentNotice } from "@/components/ConsentNotice";
 
 function PostHogPageView() {
@@ -20,9 +22,7 @@ function PostHogPageView() {
   useEffect(() => {
     if (!isAnalyticsEnabled) return;
     // Read the full URL after navigation completes so query strings are correct.
-    posthog.capture("$pageview", {
-      $current_url: window.location.href,
-    });
+    capturePageview(window.location.href);
   }, [pathname]);
 
   return null;
@@ -32,12 +32,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   if (!isAnalyticsEnabled) return <>{children}</>;
 
   return (
-    <PostHogProvider client={posthog}>
+    <>
       <Suspense fallback={null}>
         <PostHogPageView />
       </Suspense>
       {children}
       <ConsentNotice />
-    </PostHogProvider>
+    </>
   );
 }

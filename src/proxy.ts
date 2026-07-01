@@ -16,6 +16,14 @@ export async function proxy(request: NextRequest) {
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anonKey) return response;
 
+  // Fast path for signed-out visitors (the majority, and every first-impression
+  // load): with no Supabase auth cookie there is no session to refresh, so skip
+  // building the client and the getUser() round trip entirely.
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
+  if (!hasAuthCookie) return response;
+
   const supabase = createServerClient(url, anonKey, {
     cookies: {
       getAll() {

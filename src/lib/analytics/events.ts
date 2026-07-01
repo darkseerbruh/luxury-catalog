@@ -9,7 +9,7 @@
  * Naming convention: object_action, snake_case, past tense.
  */
 import { isAnalyticsEnabled } from "./config";
-import { posthog } from "./posthog";
+import { capture, identify, reset } from "./posthog";
 
 /** Tier-1 value / intent events. These are the candidate monetization signals. */
 export const EVENTS = {
@@ -113,7 +113,7 @@ export function track(
   properties: CatalogEventProperties = {},
 ): void {
   if (typeof window === "undefined" || !isAnalyticsEnabled) return;
-  posthog.capture(event, properties);
+  capture(event, properties);
 }
 
 /**
@@ -125,11 +125,11 @@ export function identifyUser(
   properties?: Record<string, unknown>,
 ): void {
   if (typeof window === "undefined" || !isAnalyticsEnabled) return;
-  posthog.identify(distinctId, properties);
+  identify(distinctId, properties);
 }
 
 /** Clear identity on sign-out. */
 export function resetAnalytics(): void {
   if (typeof window === "undefined" || !isAnalyticsEnabled) return;
-  posthog.reset();
+  reset();
 }
