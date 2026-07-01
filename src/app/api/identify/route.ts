@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "@/lib/supabase";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { getStyleShopData } from "@/lib/article-shop";
 
 export const dynamic = "force-dynamic";
 
@@ -261,5 +262,17 @@ export async function POST(req: Request) {
     }
   }
 
-  return Response.json({ identification, catalogMatch });
+  // Resale estimate for the matched style, so the tool can show "if genuine,
+  // typically resells around $X" (an estimate, never a flat value on the unverified
+  // bag). Only when we have a confident-enough catalog match; gated further on the
+  // client by identification confidence.
+  let resale: { median: number; count: number; currency: string; asOf: string | null } | null = null;
+  if (catalogMatch?.styleId) {
+    const shop = await getStyleShopData(catalogMatch.styleId);
+    if (shop && shop.count > 0) {
+      resale = { median: shop.medianPrice, count: shop.count, currency: shop.currency, asOf: shop.asOf };
+    }
+  }
+
+  return Response.json({ identification, catalogMatch, resale });
 }

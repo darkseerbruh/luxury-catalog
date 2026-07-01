@@ -28,10 +28,23 @@ interface CatalogMatch {
   hardwareColor: string | null;
 }
 
+interface ResaleEstimate {
+  median: number;
+  count: number;
+  currency: string;
+  asOf: string | null;
+}
+
 interface ApiResponse {
   identification?: IdentificationResult;
   catalogMatch?: CatalogMatch | null;
+  resale?: ResaleEstimate | null;
   error?: string;
+}
+
+function formatPrice(amount: number, currency: string) {
+  const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
+  return `${symbol}${Math.round(amount).toLocaleString()}`;
 }
 
 const CONFIDENCE_LABEL: Record<string, string> = {
@@ -142,11 +155,13 @@ export default function IdentifyPage() {
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10">
       <header>
-        <h1 className="font-serif text-3xl text-foreground">Identify a bag</h1>
+        <h1 className="font-serif text-3xl text-foreground">Spot the Fake</h1>
+        <p className="mt-1 text-lg text-gold-soft">Is it real? Let&rsquo;s check the markers.</p>
         <p className="mt-2 text-muted">
-          Point your camera at any designer bag. We&rsquo;ll tell you what it
-          is, what to check before you trust it, and where it sits in the
-          catalog. We flag what we can see and hedge what we can&rsquo;t.
+          Found a bag in the wild? Snap a photo. We&rsquo;ll tell you what it
+          looks like, what it would be worth if genuine, and how to check it&rsquo;s
+          real. We flag what we can see and hedge what we can&rsquo;t. These are
+          markers to check, not a verdict.
         </p>
       </header>
 
@@ -199,7 +214,7 @@ export default function IdentifyPage() {
             disabled={!file || loading}
             className="flex-1 rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {loading ? "Identifying…" : "Identify this bag"}
+            {loading ? "Checking…" : "Spot the fake"}
           </button>
         </div>
       </form>
@@ -470,11 +485,38 @@ export default function IdentifyPage() {
             </div>
           )}
 
-          {/* No catalog match */}
+          {/* What it's worth, IF genuine. Gated on a catalog match + not-low
+              confidence; never a flat value on the unverified bag. */}
+          {match && result?.resale && id.confidence !== "low" && (
+            <div className="rounded-2xl border border-gold/30 bg-gold/5 p-6">
+              <h2 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted">
+                If it&rsquo;s genuine
+              </h2>
+              <p className="font-serif text-2xl text-foreground">
+                {formatPrice(result.resale.median, result.resale.currency)}{" "}
+                <span className="text-base text-muted">typical resale</span>
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                Median of {result.resale.count} listings
+                {result.resale.asOf ? `, as of ${result.resale.asOf}` : ""}. An estimate, not
+                an appraisal, and only if the bag is authentic.
+              </p>
+              {matchUrl && (
+                <Link href={matchUrl} className="mt-3 inline-block text-sm font-medium text-gold hover:text-gold-soft">
+                  Check the markers before you trust it &rarr;
+                </Link>
+              )}
+            </div>
+          )}
+
+          {/* No catalog match — calibrated: absence is ambiguous, so we name both
+              readings (uncatalogued vs a shape the house never made) without a verdict. */}
           {!match && (id.brand || id.style) && (
             <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-5 text-sm text-muted">
-              Not in the catalog yet. We&rsquo;ve noted it — that&rsquo;s how we
-              decide what to research next.{" "}
+              We couldn&rsquo;t match this to a{id.brand ? ` ${id.brand}` : ""} bag on record.
+              That can mean one of two things: a bag we haven&rsquo;t catalogued yet, or a
+              print on a shape the house never made, which is a common fake tell. Run the
+              markers before you trust it.{" "}
               {id.style && (
                 <Link
                   href={`/search?q=${encodeURIComponent(id.style)}`}

@@ -17,7 +17,7 @@ type BrandGroup = { label: string; brands: { brandId: number; name: string }[] }
  * yourself, Verify with a pro. The section landing is /authentication. */
 const AUTH_MENU: NavLink[] = [
   { href: "/authentication", label: "The guides" },
-  { href: "/identify", label: "Identify from a photo" },
+  { href: "/identify", label: "Spot the Fake (photo)" },
   { href: "/authenticate", label: "Get it authenticated" },
 ];
 

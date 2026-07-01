@@ -31,10 +31,10 @@ const LADDER = [
   },
   {
     step: "02",
-    title: "Check it yourself",
-    body: "Identify a bag from a photo, then run it against the markers. A listing-link red-flag check is on the way.",
+    title: "Spot the fake",
+    body: "Found one in the wild? Snap a photo and we tell you what it looks like, what it is worth if genuine, and the markers to check. A listing-link red-flag check is on the way.",
     href: "/identify",
-    cta: "Identify from a photo",
+    cta: "Spot the Fake",
   },
   {
     step: "03",
