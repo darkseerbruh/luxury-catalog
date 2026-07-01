@@ -11,6 +11,21 @@ plain words, **what it looks like**, **what it would be worth if genuine**, and 
 check it is real**. It is the top-of-funnel viral hook (the shareable "I scanned a $6
 thrift bag" moment), and it feeds Authentication rather than pretending to be it.
 
+## Naming (locked 2026-06-30, on search evidence)
+Evidence: `docs/research-drafts/tool-name-search-demand.md` (directional, not absolute; free
+tier has no volume data, so ranked qualitatively on revealed demand + community usage,
+sources dated 2026-06-30). "Spot a fake" is the #1 demand phrase AND verb-honest (help you
+look, not we rule). "Authenticator" pulls the most raw demand but over-promises a verdict.
+"Fake Finder" is near-zero in search, so it is not a traffic play.
+
+- **Tool name (on-site): "Spot the Fake."**
+- **Section (nav): "Authentication"** (accurate topic; captures the "authentication" search).
+- **Page title / H1: "Spot the Fake: {Brand} authentication"** (ranks for both #1 "spot a
+  fake" and #2 "authentication" without a verdict claim in the name).
+- **Tagline (GEO / answer engines): "Is it real? Let's check the markers."** (captures the
+  high-intent sleeper phrase "is my {brand} real").
+- **Social / captions:** the "spot a fake" vernacular. Skip "Fake Finder" for SEO.
+
 ## Placement (decided in conversation)
 - **Not** a rung on the Authentication ladder. The ladder stays **Learn (guides) → Check
   the listing (deterministic red-flag check) → Verify (pro)**, with no AI verdicts.
