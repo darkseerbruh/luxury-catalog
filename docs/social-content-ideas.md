@@ -279,3 +279,36 @@ quiz, never post without a link.
 2. **What renting taught me** (#6–10) — useful + emotional + funnels to the quiz.
 3. **Quality myth-bust** (#2) — once the Lou video is cited and it clears the auth gate.
 Hot takes (#3–5) and stories (#11–14) slot in as the recurring personality layer.
+
+---
+
+## TikTok trending search terms (search-demand goldmine)
+
+*Source: TikTok Creative Center "Saved" keyword list, screen-recorded by owner 2026-07-01.
+419 trending bag search terms, extracted + sorted by popularity. Popularity = TikTok's search
+volume signal (verified across frames); growth ▲% is directional, verify in-app. Full data:*
+
+- **`docs/tiktok-trending-terms.csv`** (all 419, importable to the Command Center sheet)
+- **`assets/social/trending/tiktok-trending-terms-2026-07-01.xlsx`** (formatted: All terms / Fetch-saturation-first / Re-check tabs)
+
+**Workflow:** popularity is only half the read. Saturation (how many creators already make the
+content) is the other half, and it only shows on click-in. So the play is: fetch saturation for
+the top ~45 priority terms (the "Fetch saturation FIRST" tab), then build first where demand is
+high and saturation is low. High volume + crowded = skip or angle hard; high volume + empty = go.
+
+**Immediate wins (high demand, page already live):**
+
+| Trending term(s) | Popularity | Our page |
+|---|---|---|
+| lady dior bags / medium lady dior | 665K ▲131%, 299K | `/articles/does-a-smaller-bag-cost-more` |
+| mini kelly vs birkin / birkin vs kelly | 297K ▲1000%+, 187K | `/articles/birkin-vs-kelly-which-hermes-bag` |
+| chanel flap / chanel classic | 265K, 118K | `/articles/is-the-chanel-classic-flap-worth-it` |
+| coach tote for school / coach trail bag | 657K ▲193%, 555K ▲237% | Coach Tabby + authenticate articles |
+
+**Biggest gap angles worth a page or video (high demand, no page yet):**
+
+- Hermès process cluster: *hermes quota bag* (278K), *why hermes don't sell their bags*, *walking
+  into hermes asking for a birkin* (244K), *paris hermes appointment* (213K). We have the authority.
+- *new chanel vs old chanel* (431K) and *chanel maxi flap bag 2026* (435K): price-history angle we own.
+- Culture/accessible volume plays: *the telfar bag* (4.98M), *balenciaga foil bag* (2.38M ▲1000%+),
+  *miu miu city bag* (4.31M). Reach terms, thinner brand fit, use for top-of-funnel.
