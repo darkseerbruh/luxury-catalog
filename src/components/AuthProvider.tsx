@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { createBrowserSupabase } from "@/lib/supabase/client";
 
 /**
  * App-wide auth state, resolved in the browser so the root layout never has to
@@ -14,6 +13,11 @@ import { createBrowserSupabase } from "@/lib/supabase/client";
  * `ready` is false until the first session read resolves; consumers render the
  * signed-out view until then, so signed-out visitors (the common case) get the
  * correct UI with no flash, and a signed-in visitor's UI settles in a beat later.
+ *
+ * Deliberately fetch-only (no supabase-js import): pulling the browser client in
+ * here would add the whole Supabase SDK (~235KB) to the app-wide First Load JS.
+ * Auth changes always navigate (login/logout redirect), which remounts this and
+ * re-reads the session; a focus refetch covers same-tab changes.
  */
 export type NotificationPreview = { id: number; title: string; href: string; read: boolean };
 
@@ -56,16 +60,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     refresh();
 
-    // Re-read on sign-in / sign-out so the header + badges update without a full
-    // page reload.
-    const supabase = createBrowserSupabase();
-    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+    // Catch auth changes made in another tab (e.g. signed out elsewhere) when the
+    // user returns to this one. The common login/logout path navigates, which
+    // remounts this provider and re-reads the session on its own.
+    function onFocus() {
       refresh();
-    });
+    }
+    window.addEventListener("focus", onFocus);
 
     return () => {
       cancelled = true;
-      sub.subscription.unsubscribe();
+      window.removeEventListener("focus", onFocus);
     };
   }, []);
 
