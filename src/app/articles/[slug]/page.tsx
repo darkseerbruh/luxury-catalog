@@ -14,6 +14,7 @@ import { coachDiagramRegistry } from "./CoachAuthDiagram";
 import { chanelDiagramRegistry } from "./ChanelAuthDiagram";
 import { lvAuthDiagramRegistry } from "./LVAuthDiagram";
 import { gucciMarmontAuthDiagramRegistry } from "./GucciMarmontAuthDiagram";
+import { brandAuthDiagramRegistry } from "./BrandAuthDiagram";
 import { flapChartsRegistry } from "./FlapValueCharts";
 import { flapVenueChartRegistry } from "./FlapVenueChart";
 import { caviarVsLambskinChartsRegistry } from "./CaviarVsLambskinCharts";
@@ -42,6 +43,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...chanelDiagramRegistry,
   ...lvAuthDiagramRegistry,
   ...gucciMarmontAuthDiagramRegistry,
+  ...brandAuthDiagramRegistry,
   ...flapChartsRegistry,
   ...flapVenueChartRegistry,
   ...caviarVsLambskinChartsRegistry,

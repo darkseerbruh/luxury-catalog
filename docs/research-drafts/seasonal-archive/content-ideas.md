@@ -608,3 +608,22 @@ engines cite, and it compounds) + ENGAGEMENT (the *ranking* is the hook).
   brand-voice applied, on-voice, no em dashes, value framed estimate-not-appraisal, no dollar figures).
   Pending owner review, then Content lane wires it as a post. Origin years held/hedged in the draft can
   be enriched from the archivist top-20 on review; 3 not-in-catalog bags carry no CTA until their data pull lands.
+
+---
+
+## GEO answer-beats from the brand-page house-story batch (added 2026-06-30)
+
+*Two naming-precise facts surfaced while sourcing the 14 house stories (archivist batch,
+`docs/research-drafts/house-stories-batch.md`). Both are clean GEO plays: a short, citable
+correction to a thing people get wrong. Low effort, compounding.*
+
+- **Goyard: the house is 1853, the chevron is 1892.** The common claim conflates the two. The
+  hand-painted Goyardine chevron canvas was created by Edmond Goyard in 1892, not at the 1853
+  founding. **Engine:** GEO (a dated correction answer engines can cite). **CTA:** link to the
+  Goyard brand page. **Hedge:** state both dates plainly; no value claim.
+- **Miu Miu is named for Miuccia Prada, not a younger sister.** "Miu Miu" was Miuccia Prada's own
+  childhood/family nickname; the line launched in 1993 as Prada's more experimental second line.
+  **Engine:** GEO (a naming fact people get wrong). **CTA:** link to the Miu Miu brand page.
+  **Hedge:** none needed; sourced fact (Prada Group + Highsnobiety, in the batch file).
+- **What they need:** the copywriter to spin each into a short post or a "myths about [house]"
+  cluster (run `brand-voice` first). Both are writable now; sources are in the batch file.
