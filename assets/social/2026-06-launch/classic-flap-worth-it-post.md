@@ -1,6 +1,6 @@
 # Post — The Classic Flap is overrated (my take)
 
-Status: DRAFTED 2026-06-30 (repurposed from the value angle to the overrated practicality hot-take, per owner). Pillar: hot take / practicality. Persona: Maya + Sofia.
+Status: APPROVED 2026-06-30 (owner; overrated hot-take).
 Destination: https://www.luxurycatalog.com/articles/is-the-chanel-classic-flap-worth-it
 Visual: her on camera with a Flap (founder persona) OR a non-logo "why it fights you" schematic. No chart needed.
 Her take (hedged, "we don't judge"): heavy, double-flap = too much leather, no true crossbody, chain tangles in hair + digs in. Beautiful, holds value, but not a great daily bag. Buy it if you love it, eyes open.
