@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useAuthState } from "@/components/AuthProvider";
 
 type NavLink = {
   href: string;
@@ -36,8 +37,6 @@ const PROFILE_MENU: NavLink[] = [
   { href: "/feed", label: "Feed" },
   { href: "/closet", label: "Closet" },
 ];
-
-type NotificationPreview = { id: number; title: string; href: string; read: boolean };
 
 /** How many brands to show per tier in the Search shortcuts before "All brands". */
 const BRANDS_PER_TIER = 5;
@@ -85,19 +84,16 @@ function SearchIcon({ className = "" }: { className?: string }) {
  * with the same sections.
  */
 export default function HeaderNav({
-  signedIn,
-  unread,
-  notifications = [],
   brandGroups = [],
   covetedReady = false,
 }: {
-  signedIn: boolean;
-  unread: number;
-  notifications?: NotificationPreview[];
   brandGroups?: BrandGroup[];
   /** Show the "Coveted" entry only once there's enough want-signal (content gate). */
   covetedReady?: boolean;
 }) {
+  // Signed-in state, unread badge, and the notifications preview are resolved
+  // client-side (AuthProvider) so the root layout can stay cookieless + static.
+  const { signedIn, unread, notifications } = useAuthState();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getClosetValue } from "@/lib/portfolio";
 import { getMarketPulse } from "@/lib/market-pulse";
+import ClosetValueTile from "@/components/home/ClosetValueTile";
 
 /**
  * "What brings you in?" — the homepage goal-picker. Each tile SHOWS its value
@@ -16,11 +16,6 @@ import { getMarketPulse } from "@/lib/market-pulse";
  * outside this grid now.
  */
 
-function formatPrice(amount: number, currency: string | null): string {
-  const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
-  return `${symbol}${amount.toLocaleString()}`;
-}
-
 function Check({ className = "text-gold" }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" className={`h-4 w-4 flex-shrink-0 ${className}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -35,24 +30,14 @@ function Cross({ className = "text-muted" }: { className?: string }) {
     </svg>
   );
 }
-function Bag({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M4 8h16l-1.2 11.2a1 1 0 0 1-1 .8H6.2a1 1 0 0 1-1-.8L4 8z" />
-      <path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8" />
-    </svg>
-  );
-}
-
 const CTA = "mt-4 text-sm font-medium text-gold transition-colors group-hover:text-gold-soft";
 const TILE = "group flex flex-col rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold";
 
 export default async function PersonaRouter() {
-  // The Collect & invest tile shows a signed-in collector's real estimated resale
-  // total when we have priced bags; the read is resilient (null on any missing
-  // env / column / key), so a thin or credential-less environment falls back to
-  // the illustrative multi-bag visual.
-  const [closetValue, pulse] = await Promise.all([getClosetValue(), getMarketPulse()]);
+  // Cookieless (market pulse only) so the homepage stays statically cacheable.
+  // The Collect & invest tile's per-user resale total is filled in client-side
+  // by <ClosetValueTile />; everyone else sees the illustrative multi-bag visual.
+  const pulse = await getMarketPulse();
   const topHouses = pulse.byHouse.slice(0, 3);
   const houseMax = topHouses[0]?.observations ?? 0;
 
@@ -93,32 +78,10 @@ export default async function PersonaRouter() {
         <Link href="/closet" className={TILE}>
           <h3 className="font-serif text-xl text-foreground">Collect &amp; invest</h3>
           <p className="mt-1 text-sm text-muted">Save the bags you love. Watch what they&rsquo;re worth.</p>
-          {closetValue ? (
-            // Logged-in collector with priced bags: show the real estimated resale
-            // total (never fabricated — only bags with resale history are counted).
-            <div className="mt-4 flex flex-1 flex-col justify-center">
-              <p className="font-serif text-3xl text-gold">
-                {formatPrice(closetValue.total, closetValue.currency)}
-              </p>
-              <p className="mt-1 text-xs text-muted">
-                estimated resale across {closetValue.valued} of {closetValue.count}{" "}
-                {closetValue.count === 1 ? "bag" : "bags"} you own
-              </p>
-            </div>
-          ) : (
-            // Want-led for the aspiring majority: the bags you love, saved. Contained
-            // (no full-width curve) so it never spills past the tile at any width.
-            <div className="mt-4 flex flex-1 items-center justify-center gap-3">
-              <Bag className="h-12 w-12 text-gold/50" />
-              <div className="relative">
-                <Bag className="h-16 w-16 text-gold" />
-                <svg viewBox="0 0 24 24" className="absolute -right-1 -top-1 h-6 w-6 text-gold-soft" fill="currentColor" aria-hidden>
-                  <path d="M12 21s-7-4.6-9.4-8.6C1 10 2.6 6.6 6 6.6c2 0 3.1 1.3 4 2.6 0.9-1.3 2-2.6 4-2.6 3.4 0 5 3.4 3.4 5.8C19 16.4 12 21 12 21z" />
-                </svg>
-              </div>
-              <Bag className="h-12 w-12 text-gold/70" />
-            </div>
-          )}
+          {/* Signed-in collectors see their real estimated resale total; everyone
+              else sees the want-led illustration. Client-side so this tile can
+              live on the static homepage. */}
+          <ClosetValueTile />
           <span className={CTA}>Start your closet &rarr;</span>
         </Link>
 

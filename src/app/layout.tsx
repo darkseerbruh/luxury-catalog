@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
-import { getCurrentUser } from "@/lib/auth";
-import { getUnreadCount, getNotifications } from "@/lib/notifications";
 import { BRAND_TIERS, getBrandsOverview } from "@/lib/queries";
 import { covetedBagsReady } from "@/lib/content-gates";
 import { Providers } from "./providers";
+import { AuthProvider } from "@/components/AuthProvider";
 import TasteFlusher from "./TasteFlusher";
 import HeaderNav from "@/components/HeaderNav";
+import FooterAccountLinks from "@/components/FooterAccountLinks";
 import { FirstAlertNudge } from "@/components/FirstAlertNudge";
 import "./globals.css";
 
@@ -44,18 +44,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getCurrentUser();
-  const unread = user ? await getUnreadCount() : 0;
-  // Recent notifications for the Profile dropdown preview (the glance). Full history
-  // + mark-all-read stay on /notifications, reached via "See all".
-  const recentNotifications = user
-    ? (await getNotifications(5)).map((n) => ({
-        id: n.notificationId,
-        title: n.title,
-        href: n.variantId ? `/bag/${n.variantId}` : "/notifications",
-        read: n.read,
-      }))
-    : [];
+  // Per-user state (signed-in flag, unread badge, notifications preview) is
+  // resolved client-side by AuthProvider, so this layout reads NO cookies and
+  // stays statically shell-able — that's what lets home (and other cookieless
+  // routes) be CDN-served instead of paying a serverless cold start per hit.
 
   // Tier-grouped brands for the "Brands" nav mega-menu. Brand is a destination in
   // exactly this one nav slot; everywhere else it's an on-page filter (no nav bloat).
@@ -77,13 +69,14 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-bg text-foreground font-sans">
         <Providers>
-        <TasteFlusher signedIn={!!user} />
+        <AuthProvider>
+        <TasteFlusher />
         <header className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm print:hidden">
           <div className="relative mx-auto flex max-w-5xl items-center justify-between border-b border-border px-5 py-4">
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               Luxury Catalog
             </Link>
-            <HeaderNav signedIn={!!user} unread={unread} notifications={recentNotifications} brandGroups={brandGroups} covetedReady={covetedReady} />
+            <HeaderNav brandGroups={brandGroups} covetedReady={covetedReady} />
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
@@ -114,23 +107,9 @@ export default async function RootLayout({
               <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
               <Link href="/found" className="hover:text-foreground">Log a find</Link>
             </div>
-            {/* "You" = personal, auth-gated surfaces. Hidden when logged out so
-                signed-out visitors are never sent to a link that just bounces
-                them to /login (mirrors the header, which also hides these). */}
-            {user ? (
-              <div className="flex flex-col gap-2">
-                <p className="text-xs uppercase tracking-wide text-muted/70">You</p>
-                <Link href="/feed" className="hover:text-foreground">Feed</Link>
-                <Link href="/closet" className="hover:text-foreground">Your closet</Link>
-                <Link href="/watchlist" className="hover:text-foreground">Watchlist</Link>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <p className="text-xs uppercase tracking-wide text-muted/70">Account</p>
-                <Link href="/login" className="hover:text-foreground">Log in</Link>
-                <Link href="/signup" className="hover:text-foreground">Create account</Link>
-              </div>
-            )}
+            {/* "You" = personal, auth-gated surfaces (client-resolved so the
+                layout stays cookieless). Signed out: Account links instead. */}
+            <FooterAccountLinks />
           </div>
           <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
             <p className="max-w-xl text-muted/60">
@@ -145,6 +124,7 @@ export default async function RootLayout({
             </nav>
           </div>
         </footer>
+        </AuthProvider>
         </Providers>
         {/* Skimlinks: auto-affiliates outbound merchant links (revenue on
             "where to buy" clicks). ID overridable via env; defaults to our
