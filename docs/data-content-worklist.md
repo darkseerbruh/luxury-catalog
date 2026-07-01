@@ -162,21 +162,32 @@ accessories (only ~9 of 633 priced styles are SLGs); (2) thin houses are flagshi
 representative); (3) our prices are 95% Fashionphile + The RealReal, which curate to
 consignment-grade luxury. Fix = broaden coverage per house, NOT lower any threshold.*
 
-**Method (per §0 one-pass; Fashionphile is the clean, FREE per-variant source — do NOT
-bulk-load Vestiaire per-variant, it mis-sizes onto variant 1, see the 2026-06-30 probe above):**
-- ⬜ Per house, list Fashionphile's full brand catalog (Shopify `products.json`), not just
-  the backbone icons: include the mid/entry styles AND small leather goods (wallets, WOCs,
-  card holders, belt bags) that pull the true median DOWN.
-- ⬜ Scaffold the missing styles/variants FIRST (`scaffold-variants.ts` — loader drops
-  zero-variant styles), then `load:prices -- fashionphile --write`, then `summary:refresh`.
-- ⬜ Priority order: the thin houses first (The Row, Goyard, Miu Miu, Off-White, McQueen,
-  Valentino, Jacquemus — all under ~20 variants), then broaden the SLG/accessory gap across
-  the big houses so their medians reflect the full range.
-- ⬜ Acceptance: every house on the /data board has >=20 priced variants spanning its real
-  range (flagship AND accessory), so the median is defensible. Until then, /data should keep
-  the honest "the bags we track" scoping (never claim market-wide typical price).
+**DIAGNOSIS (verified 2026-06-30): the data EXISTS on the resale market — we just never
+captured it.** Fashionphile's per-brand Shopify collection endpoint returns it free:
+`https://www.fashionphile.com/collections/<brand-slug>/products.json?limit=250&page=N`
+(each product has `vendor`=brand, `product_type` "Bags" vs "Accessories", `title`, and
+`variants[].price`). Live HANDBAG counts vs what we track: The Row **136** (we have ~11) ·
+Goyard **302** (few) · Miu Miu **81** (4). Miu Miu handbags span $275–$2,760, so the full
+set LOWERS + corrects the icon-skewed median — exactly the goal.
 
-*NOTE: attributes (colour/hardware/material) are NOT part of this task — they are already
-dense on price_history from Fashionphile (colorway 88%, material 90%, hardware 54% as of
-2026-06-30) and now power the /data "Gold or silver / colors / leathers" sections. Only
-production_year (7%) + condition (13%) remain sparse.*
+**Scope (owner, 2026-06-30): HANDBAGS ONLY — no accessories/SLGs/wallets this pass.**
+Filter `product_type === "Bags"` and drop wallet/card/coin/charm/key/belt/pouch/cosmetic titles.
+
+**Method (per §0 one-pass; run in the DATA lane worktree, dry-run first; Fashionphile is the
+clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):**
+- ⬜ Fetch each thin brand's `/collections/<slug>/products.json` (paged), keep `product_type
+  "Bags"` only. Slugs verified working: `the-row`, `goyard`, `miu-miu`.
+- ⬜ Route through `load:prices` → unresolved listings land in `discovered_listing`, then
+  `normalize:discovered` + `promote:discovered` to roll recurring MODELS into clean styles.
+  **REVIEW the promoted style names before write** (parsing FP titles blind creates junk
+  styles like "Chanel Chanel Lilac Quilted…"; group Soft Margaux 10/12/15 → one "Soft
+  Margaux" style, etc.). Then `summary:refresh`.
+- ⬜ Thin houses to do (all <~20 variants): The Row, Goyard, Miu Miu, Off-White, Alexander
+  McQueen, Valentino, Jacquemus, Telfar.
+- ⬜ Acceptance: every house on the /data board has >=20 priced HANDBAG variants spanning its
+  real range, so the median is defensible. Until then /data keeps the honest "the bags we
+  track" scoping (never claim market-wide typical price).
+
+*NOTE: attributes (colour/hardware/material) are NOT part of this task — already dense on
+price_history from Fashionphile and now power the /data "Gold or silver / colors / leathers"
+sections. Only production_year (7%) + condition (13%) remain sparse.*
