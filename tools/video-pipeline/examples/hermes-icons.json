@@ -1,0 +1,14 @@
+{
+  "name": "hermes-icons",
+  "zoom": 0.03,
+  "segments": [
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Birkin_40_Bougainvillea/0_clip_IMG_7641_13-21.2.mp4", "start": 2.0, "duration": 2.2, "caption": "The Birkin" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Mini_Kelly_20/0_clip_IMG_7607_7.8-16.mp4", "start": 2.0, "duration": 2.2, "caption": "The Kelly" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Constance/0_clip_IMG_7827_52.8-59.5.mp4", "start": 1.5, "duration": 2.2, "caption": "The Constance" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Lindy/0_clip_IMG_7850_9.2-17.5.mp4", "start": 2.0, "duration": 2.2, "caption": "The Lindy" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Bolide/0_clip_IMG_7855_6.8-15.mp4", "start": 2.0, "duration": 2.2, "caption": "The Bolide" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Evelyne/0_clip_IMG_7821_24.2-28.5.mp4", "start": 1.0, "duration": 2.2, "caption": "The Evelyne" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Roulis/0_clip_IMG_7817_0-4.2.mp4", "start": 0.8, "duration": 2.2, "caption": "The Roulis" },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-products/_clean/_by_bag/Hermes_Picotin/0_clip_IMG_7834_0-2.8.mp4", "start": 0.3, "duration": 2.0, "caption": "The Picotin" }
+  ]
+}
