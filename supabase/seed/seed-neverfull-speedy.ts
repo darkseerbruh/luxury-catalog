@@ -13,6 +13,7 @@
  *   npx tsx supabase/seed/seed-neverfull-speedy.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
@@ -46,32 +47,11 @@ The Neverfull is an open, unstructured tote that buyers treat as a daily workhor
 
 These are realized eBay sold prices and premium-reseller asking prices we captured in June 2026, each with its sample size. Condition is not recorded on every listing, so read each figure as a center of gravity for what the bag trades at, an estimate, not an appraisal of any one bag. Demand can shift, and a popular bag today is not a guaranteed value tomorrow.`;
 
-/**
- * Resolve the topic tag by NAME at runtime so it is correct regardless of row ids
- * (in prod, hardcoded brand_id 1 / style_id 1 are actually Chanel / Classic Flap,
- * not LV / Neverfull, which mis-routed the money-moment CTA). Falls back to null so
- * the CTA degrades gracefully if the lookup misses.
- */
-async function resolveTopic(): Promise<{ brandId: number | null; styleId: number | null }> {
-  const { data: brand } = await db.from("brand").select("brand_id").ilike("name", "Louis Vuitton").maybeSingle();
-  const brandId = brand?.brand_id ?? null;
-  let styleId: number | null = null;
-  if (brandId) {
-    const { data: style } = await db
-      .from("style")
-      .select("style_id")
-      .eq("brand_id", brandId)
-      .ilike("name", "Neverfull")
-      .maybeSingle();
-    styleId = style?.style_id ?? null;
-  }
-  return { brandId, styleId };
-}
-
 async function main() {
   const slug = "louis-vuitton-neverfull-vs-speedy"; // the live article's slug (post_id 10)
-  const { brandId, styleId } = await resolveTopic();
-  console.log(`topic → Louis Vuitton brand_id=${brandId ?? "null"}, Neverfull style_id=${styleId ?? "null"}`);
+  // Topic tag = Louis Vuitton Neverfull, resolved by name (shared helper) so the
+  // money-moment CTA is correct regardless of row ids (brand_id 1 is Chanel, not LV).
+  const { brandId, styleId } = await resolveTopic("Louis Vuitton", "Neverfull");
   const now = new Date().toISOString();
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();
   if (existing) {

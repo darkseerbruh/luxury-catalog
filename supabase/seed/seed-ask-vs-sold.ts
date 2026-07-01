@@ -49,7 +49,12 @@ async function main() {
     author_user_id: AUTHOR, slug,
     title: "The asking-price illusion: what bags list for vs what they sell for",
     excerpt: "Across six bags from six houses, the resale asking price runs 75 to 120% above what the bag actually sells for. Our sold data shows the gap, bag by bag, and the one exception.",
-    body, status: "draft" as const, topic_brand_id: 1, topic_style_id: 1,
+    // Six-house roundup (Coach, LV, Chanel, Dior×2, Gucci) with no single subject
+    // bag, so no shop CTA anchor: leave the topic null rather than misdirect
+    // affiliate clicks at one arbitrary bag (the old literal 1/1 pointed at
+    // Chanel/Classic Flap by luck, not intent). To add a CTA, set these via
+    // resolveTopic("<Brand>", "<Style>") from ./lib/topic.
+    body, status: "draft" as const, topic_brand_id: null as number | null, topic_style_id: null as number | null,
     updated_at: new Date().toISOString(),
   };
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();

@@ -15,6 +15,7 @@
  *   npx tsx supabase/seed/seed-authentication-articles.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
@@ -259,8 +260,11 @@ type SeedPost = {
   title: string;
   excerpt: string;
   body: string;
-  topic_brand_id: number | null;
-  topic_style_id: number | null;
+  // Topic tag by NAME (resolved to ids at seed time via ./lib/topic). Never hardcode
+  // ids: they drift with migrations and would point the CTA at the wrong bag. Arrays
+  // cover spelling/accent variants. `style` is the most-faked model per house.
+  brand: string | string[];
+  style: string | string[] | null;
 };
 
 const POSTS: SeedPost[] = [
@@ -270,8 +274,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "What changed when Chanel swapped its serial sticker for a hidden microchip in 2021, why the authenticity card matters but is not proof, and the CC-lock and quilt tells that catch most fakes.",
     body: chanelBody,
-    topic_brand_id: 1,
-    topic_style_id: 1, // Classic Flap, the most-faked model
+    brand: "Chanel",
+    style: "Classic Flap", // most-faked model
   },
   {
     slug: "hermes-authentication",
@@ -279,8 +283,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "Hermès uses no serial number, so the blind stamp, the craftsman's mark, and the hand saddle-stitch carry the read. The era cutoffs and hardware tells that matter on a Birkin or Kelly, and why no marker is proof.",
     body: hermesBody,
-    topic_brand_id: 4,
-    topic_style_id: 4, // Birkin, most-faked Hermes
+    brand: ["Hermès", "Hermes"],
+    style: "Birkin", // most-faked Hermès
   },
   {
     slug: "dior-authentication",
@@ -288,8 +292,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "How Dior's tags shifted from woven labels to serial stickers to a 2019 microchip, the Oblique-canvas and D.I.O.R.-charm tells on a Lady Dior, and why a clean interior tag is one data point, not a verdict.",
     body: diorBody,
-    topic_brand_id: 203,
-    topic_style_id: 208, // Lady Dior
+    brand: ["Christian Dior", "Dior"],
+    style: "Lady Dior",
   },
   {
     slug: "prada-authentication",
@@ -297,8 +301,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "The triangle plaque is the most-copied element, so the read lives in the details around it: the interior jacquard logo, the angled topstitch, the lining material, and the QA tag. Markers to weigh, not a checklist.",
     body: pradaBody,
-    topic_brand_id: 200,
-    topic_style_id: 202, // Re-Edition 2005 (nylon)
+    brand: "Prada",
+    style: ["Re-Edition 2005", "Re-Edition"], // nylon
   },
   {
     slug: "goyard-authentication",
@@ -306,8 +310,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "Goyard runs no serial lookup and issues no authenticity card, so the chevron weave, the surprising lightness, and the shallow heat stamp carry the read on a Saint Louis. Why a seller's card is a red flag, not a reassurance.",
     body: goyardBody,
-    topic_brand_id: 404,
-    topic_style_id: 559, // Saint Louis tote
+    brand: "Goyard",
+    style: "Saint Louis", // tote
   },
   {
     slug: "saint-laurent-authentication",
@@ -315,8 +319,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "The 2012 rebrand from Yves Saint Laurent to Saint Laurent Paris is the master dating tell, plus the Cassandre hardware, embossed serial, and Loulou quilting that catch most fakes. Why the name has to match the age.",
     body: yslBody,
-    topic_brand_id: 398,
-    topic_style_id: 460, // Loulou
+    brand: ["Saint Laurent", "Yves Saint Laurent", "YSL"],
+    style: "Loulou",
   },
   {
     slug: "bottega-authentication",
@@ -324,8 +328,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "With no monogram, the woven Intrecciato carries the read: genuine strips are held by compression, not thread. The leather hand, the debossed stamp, and the era-by-era serial, and why a missing vintage serial is normal.",
     body: bottegaBody,
-    topic_brand_id: 204,
-    topic_style_id: 211, // Cassette
+    brand: "Bottega Veneta",
+    style: "Cassette",
   },
   {
     slug: "celine-authentication",
@@ -333,8 +337,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "The 2018 rebrand dropped the accent, so CÉLINE versus CELINE dates the era, plus the date code, stamp finish, and Triomphe lettering. The accent dates the bag, it does not prove it.",
     body: celineBody,
-    topic_brand_id: 202,
-    topic_style_id: 206, // Triomphe
+    brand: ["Celine", "Céline"],
+    style: "Triomphe",
   },
   {
     slug: "balenciaga-authentication",
@@ -342,8 +346,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "One of the hardest houses to authenticate, with an exception to nearly every rule. The Lampo zip, notched rivets, bale shape, and tag-wording eras on a City or First, all weigh-points, never a standalone verdict.",
     body: balenciagaBody,
-    topic_brand_id: 405,
-    topic_style_id: 568, // City
+    brand: "Balenciaga",
+    style: "City",
   },
   {
     slug: "fendi-authentication",
@@ -351,8 +355,8 @@ const POSTS: SeedPost[] = [
     excerpt:
       "The FF print is the most-copied part of a Fendi, so the read is in the execution: the logo geometry, the warm Zucca tone, the flat-head clasp screws, and the serial-to-NFC era timeline. Markers to weigh, not the logo.",
     body: fendiBody,
-    topic_brand_id: 201,
-    topic_style_id: 204, // Baguette
+    brand: "Fendi",
+    style: "Baguette",
   },
   {
     slug: "loewe-authentication",
@@ -360,14 +364,16 @@ const POSTS: SeedPost[] = [
     excerpt:
       "Loewe has no public serial lookup, so this leans on craft: the Anagram symmetry, the Nappa leather hand, the Puzzle panel seams, and the debossed Made-in-Spain tab. Weigh-points and craft judgment, never a verdict.",
     body: loeweBody,
-    topic_brand_id: 399,
-    topic_style_id: 504, // Puzzle
+    brand: "Loewe",
+    style: "Puzzle",
   },
 ];
 
 async function main() {
   for (const p of POSTS) {
     const { data: existing } = await db.from("post").select("post_id").eq("slug", p.slug).maybeSingle();
+    // Resolve the topic tag by name at seed time (never hardcode ids).
+    const { brandId, styleId } = await resolveTopic(p.brand, p.style);
     // Content fields only. `status` is set on INSERT (new drafts) but NEVER on
     // UPDATE, so re-running this seed to refresh copy can't silently un-publish a
     // guide the owner already launched.
@@ -377,8 +383,8 @@ async function main() {
       title: p.title,
       excerpt: p.excerpt,
       body: p.body,
-      topic_brand_id: p.topic_brand_id,
-      topic_style_id: p.topic_style_id,
+      topic_brand_id: brandId,
+      topic_style_id: styleId,
       updated_at: new Date().toISOString(),
     };
     if (existing) {

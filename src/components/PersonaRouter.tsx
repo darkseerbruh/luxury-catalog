@@ -82,7 +82,7 @@ export default async function PersonaRouter() {
             <li className="flex items-center gap-2 text-muted"><Cross /> Red flags, called out</li>
           </ul>
           <Link
-            href="/articles?department=authentication"
+            href="/authentication"
             className="mt-4 text-sm font-medium text-gold transition-colors hover:text-gold-soft"
           >
             Read the authentication guides &rarr;

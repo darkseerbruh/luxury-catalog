@@ -5,6 +5,7 @@
  *   npx tsx supabase/seed/seed-search-vs-price.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864";
 
@@ -32,11 +33,16 @@ The Classic Flap is the interesting outlier. It is quietly expensive. Fewer peop
 
 async function main() {
   const slug = "most-searched-vs-most-expensive-bags";
+  // Five-bag roundup; the narrative centerpiece is the Chanel Classic Flap (the
+  // "quietly expensive" outlier), so the shop CTA anchors there. Resolved by name
+  // so it's id-independent (the old literal 1/1 resolved to Chanel/Classic Flap by
+  // luck, not intent). Change the names below to re-point the CTA at another bag.
+  const { brandId, styleId } = await resolveTopic("Chanel", "Classic Flap");
   const row = {
     author_user_id: AUTHOR, slug,
     title: "The most-wanted bags are not the most expensive (mostly)",
     excerpt: "We put Google search interest next to our resale pricing for the five icons. The Kelly and Birkin top both lists, but the Classic Flap is the least searched and still one of the priciest. Here is why demand and price pull apart.",
-    body, status: "draft" as const, topic_brand_id: 1, topic_style_id: 1,
+    body, status: "draft" as const, topic_brand_id: brandId, topic_style_id: styleId,
     updated_at: new Date().toISOString(),
   };
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();

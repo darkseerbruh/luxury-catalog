@@ -12,7 +12,9 @@ import { getCurrentUser } from "./auth";
  * Degrades to [] when env / migrations are absent.
  */
 
-export type FeedEventType = "closet_add" | "review" | "post" | "photo_featured";
+// photo_featured is NOT a feed event: it is about YOU, so it lives in Notifications
+// only (see insertNotificationFor). The feed is what people you follow do.
+export type FeedEventType = "closet_add" | "review" | "post";
 
 export interface FeedEvent {
   id: string;
