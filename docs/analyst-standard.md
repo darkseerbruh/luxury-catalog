@@ -27,11 +27,12 @@ it, never the goal itself. Everything below rolls up to one of the five revenue 
 | 4. Authentication marketplace | `authentication_interest`, `authentication_requested` | Fake-door demand → M9 build signal |
 | 5. Premium tools | `monetization_interest`, watchlist/alert use | Fake-door demand → M9 build signal |
 
-The funnel that feeds the proxies (the pulse already counts these):
+The funnel that feeds the proxies (the pulse counts these; for whether each event actually
+fires, read the pulse `instrumentation_readiness` block, never a static list here):
 
 - **Acquisition** — visitors, source mix, entry pages. Bet: **GEO/AI-referral is the lead channel.**
 - **Discovery** — `search_performed`, `catalog_filtered`, `search_not_found` (product-gap demand).
-- **Depth** — `style_viewed`, `variant_viewed`, `price_history_viewed`, `value_module_viewed`, `auth_section_engaged`.
+- **Depth** — `variant_viewed`, `attribute_object_viewed`, `price_history_viewed`, `value_module_viewed`, `auth_section_engaged`.
 - **Intent** — `item_saved`, `quiz_completed`, `bag_requested`, `newsletter_subscribed`, `recommendation_clicked`.
 - **Value proxy (the money line)** — the five lane events above. This is what the whole tree exists to move.
 
