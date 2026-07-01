@@ -64,9 +64,6 @@ export function FeedItem({ event }: { event: FeedEvent }) {
         </>
       );
       break;
-    case "photo_featured":
-      body = <>{actorNode}&rsquo;s photo of {bagNode} was featured</>;
-      break;
   }
 
   return (

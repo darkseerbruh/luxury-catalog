@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { getCloset } from "@/lib/collections";
+import { getCloset, getWatchlist } from "@/lib/collections";
 import { getVariantImages } from "@/lib/queries";
 import { hasActiveAuthenticators } from "@/lib/authentication";
 import { BagImage } from "@/components/BagImage";
@@ -62,6 +62,10 @@ function buildPortfolio(closet: { status: string; retailPrice: number | null; cu
 export default async function ClosetPage() {
   if (!(await getCurrentUser())) redirect("/login");
   const closet = await getCloset();
+  // Alert state lives on the watchlist (the "want" set). Merge it in so each Want
+  // row can show whether its price alert is on, per the bell, as a data point.
+  const watchlist = await getWatchlist();
+  const alertOn = new Map(watchlist.map((w) => [w.variantId, w.alertEnabled]));
   const images = await getVariantImages(closet.map((c) => c.variantId));
   const authComingSoon = !(await hasActiveAuthenticators());
 
@@ -181,6 +185,14 @@ export default async function ClosetPage() {
                   <span className="text-foreground">Where to sell</span>.
                 </p>
               )}
+              {g.key === "want" && (
+                <p className="mb-3 text-sm text-muted">
+                  The bell shows whether a price alert is on.{" "}
+                  <Link href="/watchlist" className="text-gold transition-colors hover:text-gold-soft">
+                    Manage alerts →
+                  </Link>
+                </p>
+              )}
               <ul className="divide-y divide-border rounded-2xl border border-border bg-surface">
                 {items.map((c) => (
                   <li key={c.variantId}>
@@ -208,15 +220,18 @@ export default async function ClosetPage() {
                         </p>
                         </div>
                       </div>
-                      <div className="shrink-0 text-right">
-                        {formatPrice(c.retailPrice, c.currency) && (
-                          <p className="text-sm text-gold">
-                            {formatPrice(c.retailPrice, c.currency)}
+                      <div className="flex shrink-0 items-center gap-3 text-right">
+                        {c.status === "want" && <Bell on={alertOn.get(c.variantId) ?? false} />}
+                        <div>
+                          {formatPrice(c.retailPrice, c.currency) && (
+                            <p className="text-sm text-gold">
+                              {formatPrice(c.retailPrice, c.currency)}
+                            </p>
+                          )}
+                          <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
+                            {STATUS_LABELS[c.status] ?? c.status}
                           </p>
-                        )}
-                        <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-                          {STATUS_LABELS[c.status] ?? c.status}
-                        </p>
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -227,6 +242,23 @@ export default async function ClosetPage() {
         })
       )}
     </main>
+  );
+}
+
+/** Read-only alert indicator on a Want row: gold filled when a price alert is on,
+ * muted outline when off. Toggle the alert on the bag page (the bell there). */
+function Bell({ on }: { on: boolean }) {
+  return (
+    <span
+      title={on ? "Price alert on" : "No price alert"}
+      aria-label={on ? "Price alert on" : "No price alert"}
+      className={on ? "text-gold" : "text-muted/40"}
+    >
+      <svg width="17" height="17" viewBox="0 0 24 24" fill={on ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+      </svg>
+    </span>
   );
 }
 
