@@ -3,6 +3,21 @@
 
 ---
 
+## TL;DR — Authentication section + nav IA rework (2026-06-30, all on `main`)
+
+**Authentication is now a primary nav section, and the whole primary nav was reshaped.** Shipped, gated green, merged:
+- **14 per-house auth guides LIVE** (`{House} authentication: The markers worth checking`): Coach/LV/Gucci (renamed) + Chanel/Hermès/Dior/Prada/Goyard/Saint Laurent/Bottega/Celine/Balenciaga/Fendi/Loewe. Each tagged to its most-faked style so the post→bag money-moment CTA fires; each carries an original `BrandAuthDiagram`; a "More authentication guides" cross-link rail at each foot. Sourced from `docs/research-drafts/authentication-markers-brief.md` (Entrupy 2026 + reseller-authenticators, 2026-06-30). `/articles` lead spread now uses a designed `CoverPlate` (no placeholder).
+- **New `/authentication` hub** (Learn/Check/Verify ladder + guides-by-house grid). Homepage "Is it real?" tile points there.
+- **Nav A (protected nav, owner-approved this session):** row = **Authentication ▾ · Style Read · Articles ▾ · Profile · Search (rightmost)**. Shop/Brands/Discover dissolved: Deals + brands (by tier, truncated 5 + All brands) live in the **Search hover dropdown**; Identify moved under Authentication; Style Read + Articles promoted. Articles nav label kept; on-page heading is "The Journal".
+- **Unified search:** `/search` returns bags + a "From Articles" section; nav search has **autocomplete** (`/api/search-suggest`, brands/bags/articles).
+- **Closet consolidation:** Have/Want/Had stay stacked sections; Want rows show a read-only **alert bell** (state from watchlist); Watchlist off-nav (alert editor is a Closet sub-surface); `photo_featured` is Notifications-only (feed = what others do, notifications = about you).
+
+**Thrift Find tool (the reframed photo `/identify`) — SPEC ONLY, not built:** `docs/ux/thrift-find-tool-spec.md`. Non-verdict: resemblance+confidence ID, resale estimate gated on "if genuine", silhouette-match red flag, three-tier authenticity voice (consistent / soft flag / hard house-confirmed dealbreaker). **Naming LOCKED (search-evidenced, `docs/research-drafts/tool-name-search-demand.md`):** tool = **"Spot the Fake"**, section = **Authentication**, H1 = "Spot the Fake: {Brand} authentication", GEO tagline = "Is it real? Let's check the markers." Placement: value/discovery funnel INTO Authentication, never a rung that authenticates.
+
+**Open follow-ups (net-new, flagged not built):** (1) build **Spot the Fake** per the spec + pull `/identify` off the Authentication ladder; (2) deterministic **listing red-flag checker** for the "Check" rung (non-verdict, uses our price data + the Red Flags article signals); (3) **"someone followed you"** notification type (does not exist); (4) 301 `/browse` → `/search` (now unlinked from nav). Balenciaga + Celine auth guides carry lower-confidence hedges in-body.
+
+---
+
 ## 🧭 Active-lanes registry — the session router (READ FIRST)
 
 **Lanes are durable; chats are disposable.** This project runs as a handful of parallel
