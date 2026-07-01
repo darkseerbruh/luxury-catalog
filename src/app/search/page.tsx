@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { searchCatalog, getVariantImages } from "@/lib/queries";
 import { hybridSearch } from "@/lib/hybrid-search";
+import { listPublished } from "@/lib/posts";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserProfile } from "@/lib/personalization/user-profile";
 import RequestBagForm from "./RequestBagForm";
@@ -36,6 +38,15 @@ export default async function SearchPage({
       : await searchCatalog(query)
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
+
+  // Unified search: also match published articles by title/excerpt, so a search
+  // surfaces both browsable bags AND our content. One list query, cheap.
+  const ql = query.toLowerCase();
+  const articleHits = query
+    ? (await listPublished())
+        .filter((p) => p.title.toLowerCase().includes(ql) || (p.excerpt ?? "").toLowerCase().includes(ql))
+        .slice(0, 6)
+    : [];
 
   // Representative photo per style (its first variant) for the result cards.
   const images = hasResults
@@ -95,7 +106,7 @@ export default async function SearchPage({
           </div>
         )}
 
-        {query && !hasResults && (
+        {query && !hasResults && articleHits.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <p className="text-foreground">
               Nothing for &ldquo;{query}&rdquo; yet.
@@ -109,6 +120,26 @@ export default async function SearchPage({
         )}
 
         {hasResults && <SearchFilters results={results} images={images} />}
+
+        {articleHits.length > 0 && (
+          <section className="mt-10">
+            <p className="mb-3 text-[11px] uppercase tracking-[0.2em] text-gold">From Articles</p>
+            <div className="grid gap-x-10 sm:grid-cols-2">
+              {articleHits.map((p) => (
+                <Link
+                  key={p.postId}
+                  href={`/articles/${p.slug}`}
+                  className="group flex items-baseline gap-2.5 border-b border-border/60 py-2.5"
+                >
+                  <span className="shrink-0 text-gold">&rarr;</span>
+                  <span className="font-serif text-[15px] leading-snug text-foreground group-hover:text-gold-soft">
+                    {p.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );
