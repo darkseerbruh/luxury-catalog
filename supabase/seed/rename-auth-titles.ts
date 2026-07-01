@@ -19,14 +19,18 @@
  *   npx tsx supabase/seed/rename-auth-titles.ts --confirm  # apply
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
-const RENAMES: Record<string, { title: string; styleId: number }> = {
-  // LV -> Speedy (most-faked LV, 1709 listed rows)
-  "how-to-authenticate-a-louis-vuitton-bag": { title: "Louis Vuitton authentication: The markers worth checking", styleId: 433 },
-  // Coach -> Tabby (the most-checked Coach, 85 listed rows)
-  "how-to-authenticate-a-coach-bag": { title: "Coach authentication: The markers worth checking", styleId: 3 },
+// Target = the house's most-faked model, tagged by NAME so the style is resolved at
+// runtime (never a hardcoded id: ids drift with migrations and would tag the wrong
+// bag). brand candidates cover spelling variants.
+const RENAMES: Record<string, { title: string; brand: string | string[]; style: string | string[] }> = {
+  // LV -> Speedy (most-faked LV)
+  "how-to-authenticate-a-louis-vuitton-bag": { title: "Louis Vuitton authentication: The markers worth checking", brand: "Louis Vuitton", style: "Speedy" },
+  // Coach -> Tabby (the most-checked Coach)
+  "how-to-authenticate-a-coach-bag": { title: "Coach authentication: The markers worth checking", brand: "Coach", style: "Tabby" },
   // Gucci -> Marmont (already tagged; kept for idempotence)
-  "how-to-spot-a-fake-gucci-marmont": { title: "Gucci authentication: The markers worth checking", styleId: 200 },
+  "how-to-spot-a-fake-gucci-marmont": { title: "Gucci authentication: The markers worth checking", brand: "Gucci", style: ["GG Marmont", "Marmont"] },
 };
 
 async function main() {
@@ -43,9 +47,12 @@ async function main() {
     const row = rows.find((r) => r.slug === slug);
     const target = RENAMES[slug];
     if (!row) { console.log(`MISSING  ${slug} (no post; skipped)`); continue; }
+    const { styleId } = await resolveTopic(target.brand, target.style);
     const patch: { title?: string; topic_style_id?: number; updated_at?: string } = {};
     if (row.title !== target.title) patch.title = target.title;
-    if (row.topic_style_id !== target.styleId) patch.topic_style_id = target.styleId;
+    // Only re-tag when the lookup resolved a style AND it differs. A miss (null) must
+    // never overwrite an already-correct id with null.
+    if (styleId != null && row.topic_style_id !== styleId) patch.topic_style_id = styleId;
     if (!patch.title && patch.topic_style_id === undefined) { console.log(`OK       #${row.post_id} ${slug} (already current)`); continue; }
     console.log(`${confirm ? "UPDATE " : "WOULD  "} #${row.post_id} ${slug}`);
     if (patch.title) console.log(`           title -> ${patch.title}`);

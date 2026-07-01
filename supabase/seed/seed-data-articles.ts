@@ -8,6 +8,7 @@
  *   npx tsx supabase/seed/seed-data-articles.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
@@ -69,22 +70,25 @@ const POSTS = [
     title: "What a Coach Tabby actually sells for (and why the Rogue holds more)",
     excerpt: "Resale listings ask around $365 for a Coach Tabby 26. The bags actually change hands near $198. Here is what our sold data shows, and why the Rogue is the Coach that holds its value.",
     body: coachBody,
-    topic_brand_id: 2,
-    topic_style_id: 3,
+    // Titular subject = Coach Tabby (the shop CTA hands off to it).
+    brand: "Coach" as string | string[],
+    style: "Tabby" as string | string[] | null,
   },
   {
     slug: "does-a-smaller-bag-cost-more",
     title: "Does a smaller bag cost more? What our pricing data says",
     excerpt: "A smaller bag should cost less, right? For some of the most wanted designs it costs more. Our pricing data shows which bags flip the rule, and why everyday bags do not.",
     body: sizeBody,
-    topic_brand_id: 203,
-    topic_style_id: null as number | null,
+    // Multi-bag roundup led by the Lady Dior; brand-only tag, no single-bag CTA.
+    brand: ["Christian Dior", "Dior"],
+    style: null,
   },
 ];
 
 async function main() {
   for (const p of POSTS) {
     const { data: existing } = await db.from("post").select("post_id").eq("slug", p.slug).maybeSingle();
+    const { brandId, styleId } = await resolveTopic(p.brand, p.style);
     const row = {
       author_user_id: AUTHOR,
       slug: p.slug,
@@ -92,8 +96,8 @@ async function main() {
       excerpt: p.excerpt,
       body: p.body,
       status: "draft" as const,
-      topic_brand_id: p.topic_brand_id,
-      topic_style_id: p.topic_style_id,
+      topic_brand_id: brandId,
+      topic_style_id: styleId,
       updated_at: new Date().toISOString(),
     };
     if (existing) {

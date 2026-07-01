@@ -40,7 +40,9 @@ async function main() {
     author_user_id: AUTHOR, slug,
     title: "Which accessible-luxury bags actually hold their value",
     excerpt: "We pulled the real sold prices for the bags people thrift and flip. The gap is huge: a Mulberry Bayswater holds around $519, a Michael Kors Jet Set around $70. Here is what holds and what does not.",
-    body, status: "draft" as const, topic_brand_id: 2, topic_style_id: null as number | null,
+    // Multi-brand thrift roundup (Mulberry, Coach, MK, Longchamp, Kate Spade) with no
+    // single subject: no topic anchor (the old literal brand_id 2 was a drifted guess).
+    body, status: "draft" as const, topic_brand_id: null as number | null, topic_style_id: null as number | null,
     updated_at: new Date().toISOString(),
   };
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();

@@ -8,6 +8,7 @@
  *   npx tsx supabase/seed/seed-neverfull-speedy.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
@@ -43,6 +44,9 @@ These are realized eBay sold prices and premium-reseller asking prices we captur
 
 async function main() {
   const slug = "neverfull-vs-speedy";
+  // Topic tag = Louis Vuitton Neverfull, resolved by name so the money-moment CTA
+  // hands off to the right bag regardless of the row ids (brand_id 1 is Chanel, not LV).
+  const { brandId, styleId } = await resolveTopic("Louis Vuitton", "Neverfull");
   const row = {
     author_user_id: AUTHOR,
     slug,
@@ -51,8 +55,8 @@ async function main() {
       "The Speedy is searched more and lists higher. The Neverfull sells for more. We pulled the search data and our pricing data to show which Louis Vuitton tote actually holds up, and what each really costs.",
     body,
     status: "draft" as const,
-    topic_brand_id: 1, // Louis Vuitton
-    topic_style_id: 1, // Neverfull (so the bag CTA renders)
+    topic_brand_id: brandId,
+    topic_style_id: styleId,
     updated_at: new Date().toISOString(),
   };
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();

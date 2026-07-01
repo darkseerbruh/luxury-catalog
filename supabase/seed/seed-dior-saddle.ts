@@ -5,6 +5,7 @@
  *   npx tsx supabase/seed/seed-dior-saddle.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
+import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864";
 
@@ -24,11 +25,13 @@ Our take, not a directive: the Saddle is one of the safer accessible-luxury buys
 
 async function main() {
   const slug = "dior-saddle-resale-price";
+  // Topic tag = Dior Saddle, resolved by name so the CTA is id-independent.
+  const { brandId, styleId } = await resolveTopic(["Christian Dior", "Dior"], "Saddle");
   const row = {
     author_user_id: AUTHOR, slug,
     title: "The Dior Saddle is back. Here is what it costs now",
     excerpt: "Google searches put the Dior Saddle second only to the Speedy among accessible-tier bags right now. Our pricing data shows what it asks, what it sells for, and the gap between the two.",
-    body, status: "draft" as const, topic_brand_id: 203, topic_style_id: 209,
+    body, status: "draft" as const, topic_brand_id: brandId, topic_style_id: styleId,
     updated_at: new Date().toISOString(),
   };
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();
