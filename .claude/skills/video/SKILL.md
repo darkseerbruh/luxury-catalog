@@ -1,0 +1,72 @@
+---
+name: video
+description: Make a short-form vertical video (reel) for Luxury Catalog from Arielle's own footage. Two modes: a talking-head clip with auto-captions, or a headless (faceless) montage of handbag b-roll with scripted captions. Runs the local Remotion + Whisper pipeline in tools/video-pipeline, applies the brand caption style, saves the render, and logs it. Use when she says make a video / reel / short / montage, caption a clip, or turn clips into a post.
+---
+
+# Video: make a captioned vertical reel
+
+This runs the same way every chat so it does not depend on remembering how. The tool
+lives at `tools/video-pipeline/`. Renders are large, so they stay local (never git);
+the durable record is `tools/video-pipeline/reels-log.md`, which you always update.
+
+Work top to bottom. Do not post anything. Delivery is a file for Arielle to approve.
+
+## Step 0 — Orient
+- `cd tools/video-pipeline`.
+- If `node_modules/` is missing: `npm install`. The first render also downloads Whisper
+  and a model (~150 MB) once. Both are one-time.
+
+## Step 1 — Pick the mode
+- **Talking-head**: she filmed herself (usually reading a script). Captions come from
+  transcription. Use `scripts/make.mjs`.
+- **Headless montage** (faceless): handbag b-roll with captions you script. Use
+  `scripts/montage.mjs`. Her clips live in
+  `~/Documents/handbag-products/_clean/_by_bag/<Bag>/` (45 clips, Hermes-heavy).
+
+## Step 2 — Load the brand voice first
+Before writing ANY caption or script, run the `brand-voice` skill. Captions are
+user-facing copy: on-voice, descriptive not vibe-only, no em dashes.
+
+## Step 3a — Talking-head mode
+1. Put the clip(s) in `input/`.
+2. `npm run make` (all clips) or `npm run make <clip.mp4>` (one).
+3. Captions are auto-generated. Fix a wrong word by editing `public/<clip>.json`, then
+   re-run `npm run make <clip>`.
+
+## Step 3b — Headless montage mode
+1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the
+   clear subject. AVOID frames showing a competitor tag (the round "FASHIONPHILE" disc)
+   or a wide table-of-bags "spread" shot.
+2. Write a spec at `examples/<name>.json`:
+   ```json
+   { "name": "<name>", "zoom": 0.03, "segments": [
+     { "clip": "/abs/path/clip.mp4", "start": 2.0, "duration": 2.2, "caption": "The Birkin" }
+   ]}
+   ```
+3. Captions must be TRUTHFUL: bag names come from the folder labels, never invent specs,
+   prices, materials, or years. Frame any value/authenticity language as estimate or
+   markers, never a verdict (see the hedging frames in `docs/preferences.md`).
+4. `node scripts/montage.mjs examples/<name>.json`.
+
+## Step 4 — Verify before showing her
+Extract a few frames from `output/<name>.mp4` (`ffmpeg -ss <t> -i ... frame.png`) and
+check: captions land on the right bag, the vertical crop keeps the subject, no competitor
+branding on screen, no misspelled or wrong caption. Fix and re-render if not.
+
+## Step 5 — Name, store, log
+- Rename the render to `output/<concept>-<YYYY-MM-DD>.mp4`.
+- Append a row to `tools/video-pipeline/reels-log.md`: date, concept, mode, source clips,
+  the caption/script, and status `draft`. Commit the log (not the video file).
+
+## Step 6 — Deliver
+Send the `.mp4` to Arielle for approval (SendUserFile). Say it is silent by design so she
+adds a trending sound in-app. Do NOT post or schedule it yourself.
+
+## Step 7 — Optional handoff (only if she says so)
+On her approval, hand the reel to the social calendar: create a Metricool draft via the
+social pipeline. Posting stays her call.
+
+## Look and feel
+The caption style (cream text, gold on the spoken word, soft shadow, Poppins) lives in
+`tools/video-pipeline/src/brand.ts`. Change it there to restyle every video. Keep it
+luxury: restrained, legible, never the loud neon default.
