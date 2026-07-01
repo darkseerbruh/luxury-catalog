@@ -35,8 +35,9 @@ const ARTICLES_MENU: NavLink[] = [
 const PROFILE_MENU: NavLink[] = [
   { href: "/feed", label: "Feed" },
   { href: "/closet", label: "Closet" },
-  { href: "/notifications", label: "Alerts" },
 ];
+
+type NotificationPreview = { id: number; title: string; href: string; read: boolean };
 
 /** How many brands to show per tier in the Search shortcuts before "All brands". */
 const BRANDS_PER_TIER = 5;
@@ -86,11 +87,13 @@ function SearchIcon({ className = "" }: { className?: string }) {
 export default function HeaderNav({
   signedIn,
   unread,
+  notifications = [],
   brandGroups = [],
   covetedReady = false,
 }: {
   signedIn: boolean;
   unread: number;
+  notifications?: NotificationPreview[];
   brandGroups?: BrandGroup[];
   /** Show the "Coveted" entry only once there's enough want-signal (content gate). */
   covetedReady?: boolean;
@@ -147,7 +150,7 @@ export default function HeaderNav({
 
   // Coveted (most-coveted bags) stays hidden until there's enough want-signal.
   const profileMenu: NavLink[] = [
-    ...PROFILE_MENU.map((l) => (l.href === "/notifications" ? { ...l, badge: unread } : l)),
+    ...PROFILE_MENU,
     ...(covetedReady ? [{ href: "/coveted", label: "Coveted" }] : []),
   ];
 
@@ -217,7 +220,28 @@ export default function HeaderNav({
               )}
             </Link>
             <div className={`${menuPanel} right-0`}>
-              <div className="flex min-w-44 flex-col gap-1 rounded-2xl border border-border bg-bg/95 p-2 shadow-lg backdrop-blur-sm">
+              <div className="flex w-72 flex-col gap-1 rounded-2xl border border-border bg-bg/95 p-2 shadow-lg backdrop-blur-sm">
+                {/* Notifications preview — the glance lives here, not on its own
+                    page. Full history + mark-all-read stay behind "See all". */}
+                <div className="mb-1 flex items-center justify-between px-3 pt-1">
+                  <span className="text-[10px] uppercase tracking-widest text-muted/70">Notifications</span>
+                  <Link href="/notifications" className="text-[11px] text-gold hover:text-gold-soft">See all</Link>
+                </div>
+                {notifications.length === 0 ? (
+                  <p className="px-3 pb-2 text-xs text-muted/70">Nothing new.</p>
+                ) : (
+                  notifications.map((n) => (
+                    <Link
+                      key={n.id}
+                      href={n.href}
+                      className="flex items-start gap-2 rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                    >
+                      <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-gold"}`} aria-hidden />
+                      <span className="line-clamp-2 leading-snug">{n.title}</span>
+                    </Link>
+                  ))
+                )}
+                <div className="my-1 border-t border-border" />
                 {profileMenu.map((l) => (
                   <Link
                     key={l.href}
@@ -225,11 +249,6 @@ export default function HeaderNav({
                     className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
                   >
                     <span>{l.label}</span>
-                    {l.badge != null && l.badge > 0 && (
-                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
-                        {l.badge > 9 ? "9+" : l.badge}
-                      </span>
-                    )}
                   </Link>
                 ))}
               </div>
@@ -414,16 +433,19 @@ export default function HeaderNav({
                     key={l.href}
                     href={l.href}
                     onClick={close}
-                    className="flex items-center justify-between rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                    className="rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
                   >
-                    <span>{l.label}</span>
-                    {l.badge != null && l.badge > 0 && (
-                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
-                        {l.badge > 9 ? "9+" : l.badge}
-                      </span>
-                    )}
+                    {l.label}
                   </Link>
                 ))}
+                <Link href="/notifications" onClick={close} className="flex items-center justify-between rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
+                  <span>Notifications</span>
+                  {unread > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-xs font-medium text-bg">
+                      {unread > 9 ? "9+" : unread}
+                    </span>
+                  )}
+                </Link>
               </>
             ) : (
               <Link href="/login" onClick={close} className="mt-1 rounded-full bg-gold px-4 py-2.5 text-center text-sm font-medium text-bg transition-colors hover:bg-gold-soft">

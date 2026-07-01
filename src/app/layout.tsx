@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Poppins, Playfair_Display } from "next/font/google";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import { getUnreadCount } from "@/lib/notifications";
+import { getUnreadCount, getNotifications } from "@/lib/notifications";
 import { BRAND_TIERS, getBrandsOverview } from "@/lib/queries";
 import { covetedBagsReady } from "@/lib/content-gates";
 import { Providers } from "./providers";
@@ -46,6 +46,16 @@ export default async function RootLayout({
 }>) {
   const user = await getCurrentUser();
   const unread = user ? await getUnreadCount() : 0;
+  // Recent notifications for the Profile dropdown preview (the glance). Full history
+  // + mark-all-read stay on /notifications, reached via "See all".
+  const recentNotifications = user
+    ? (await getNotifications(5)).map((n) => ({
+        id: n.notificationId,
+        title: n.title,
+        href: n.variantId ? `/bag/${n.variantId}` : "/notifications",
+        read: n.read,
+      }))
+    : [];
 
   // Tier-grouped brands for the "Brands" nav mega-menu. Brand is a destination in
   // exactly this one nav slot; everywhere else it's an on-page filter (no nav bloat).
@@ -73,7 +83,7 @@ export default async function RootLayout({
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
               Luxury Catalog
             </Link>
-            <HeaderNav signedIn={!!user} unread={unread} brandGroups={brandGroups} covetedReady={covetedReady} />
+            <HeaderNav signedIn={!!user} unread={unread} notifications={recentNotifications} brandGroups={brandGroups} covetedReady={covetedReady} />
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
