@@ -81,6 +81,8 @@ brands. These are trends in their own right and each deserves a **Category** in 
 | **Thrift / Amazon / TJ Maxx / resale** | ~1.6M | tj maxx luxury finds (293K), amazon goyard, thrifting purses, YSL raffia on amazon, pre-owned, selling/reselling | "Luxury for less" + treasure-hunt dopamine. **Our Coach/thrift wedge.** | Yes but chaotic — room for a trustworthy voice. |
 | **Color-led** | ~6.4M (noisy) | teal chanel, chanel pink, pearly pink goyard, green/red goyard, pink coach/LV/gucci/dior, white jacquemus/prada, Balenciaga yellow | Seasonal-colour dopamine; "this exact colour." | Purely visual — low-effort video format for us. |
 | **Vintage / Y2K / archival** | ~3.8M | vintage Mombasa, Dior Romantique, LV by Marc Jacobs, Tom Ford Gucci 1995, vintage coach y2k, old celine, Prada Fairy | Nostalgia + "found it secondhand" flex. | Yes, but chaotic on names/dates — decode edge. |
+| **Designer era (house lineage)** | ~1.2M core (2.5M incl. archival overlaps) | LV by Marc Jacobs (375K), new vs old Chanel (431K), dior by yves saint laurent (190K), tom ford gucci 1995 (172K), old celine = Phoebe era (213K), Mombasa = Tom Ford YSL (1.11M) | "Wait, that designer used to work *there*?" The creative-director-lineage reveal is pure intrigue + smart-flex. | **Barely — this is a gap.** Chaotic, name-garbled, rarely gets the clean who-designed-what-when timeline. **Big decode/authority edge.** |
+| **Archival / specific season** | ~1.6M | 1990 louis vuitton (262K, +210%), vintage dior (273K), vintage coach collection (239K, +114%), original birkin (235K), old celine (213K), old vintage LV (210K, +279%), y2k coach (190K) | Collector-depth: a *specific* year/collection/original, not generic "vintage." Connoisseur flex + thrift-hunt. | Thinly. Names/years are usually wrong. **Our seasonal-archive is built for exactly this.** |
 | **Status / quiet luxury / hierarchy** | 1.20M | luxury bag hierarchy (295K, breakout), purse as a status symbol, quiet luxury, luxury item to buy | Ranking/tier debates print engagement. | Endless takes, little rigor. |
 | **Authentication (real vs fake)** | 0.40M+ | how to know if a LV is real (180K), real louis vuitton, real coach bag, + "how to authenticate" intent from Google Trends | Fear of getting scammed pre-purchase. | Yes but fear-baity. **Ties to our published auth guides.** |
 
@@ -100,7 +102,16 @@ rest as you sort):
 `Diaper bag` · `School / student` · `Work / commuter` · `Price question` ·
 `Comparison (vs)` · `Hermès game` · `Thrift / resale` · `Color story` ·
 `Vintage / Y2K` · `Status / hierarchy` · `Authentication` · `New release` ·
-`Media tie-in` · `Needs re-scan` (OCR garbage).
+`Media tie-in` · `Needs re-scan` (OCR garbage) · `Designer era` (a creative
+director's tenure at a house — LV-by-Marc-Jacobs, Tom-Ford-Gucci, old-Céline-=-Phoebe) ·
+`Archival / season` (a *specific* vintage year/collection/original, deeper than broad
+`Vintage / Y2K`).
+
+> **Why `Designer era` and `Archival / season` are separate from `Vintage / Y2K`:**
+> `Vintage / Y2K` is the broad 2000s-aesthetic nostalgia trend. `Designer era` is the
+> *lineage-reveal* ("that designer used to be at that house"). `Archival / season` is
+> *collector depth* (a named year/collection). A row can carry two or three at once
+> (Mombasa = Vintage + Designer era + Archival, since it's Tom Ford's YSL).
 
 **Add a `Decode / real name` text column** — the §1 corrections, so the real bag name
 lives next to the messy search term.
@@ -192,6 +203,18 @@ low saturation.
   romantique). Being the account that *names it correctly* earns saves + authority.
 - **Build:** "You're calling it the wrong name" carousel/video series.
 - **Moves:** **engagement (saves/shares) + GEO authority.**
+
+### Bet 6 — Designer-lineage + archival-season "connoisseur" series
+- **Why:** ~1.2M lineage demand + ~1.6M archival demand, and it is **barely answered
+  cleanly** — the names, houses, and years are usually wrong on TikTok. We already own a
+  **30-year seasonal naming archive** (the `archivist` agent) built for exactly this, so
+  this is a rare demand × edge × low-saturation overlap.
+- **Build:** "Every house [designer] designed for" timelines (Marc Jacobs → LV, Tom Ford
+  → Gucci then YSL, YSL → Dior, Phoebe Philo → Céline), and "what [house] called this bag
+  in [year]" archival decoders. Each ends on a bag/attribute/era page.
+- **Moves:** **engagement (saves/shares on the reveal) + GEO authority** — clean, cited
+  lineage/season facts are exactly what AI answers cite, and nobody else is publishing them
+  tidily. Frame designer tenures as **sourced history** (dates), not opinion.
 
 ### Deprioritize for now
 The mega head terms (Telfar, Miu Miu City) — huge but saturated and off our resale/data
