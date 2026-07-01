@@ -2,7 +2,8 @@ import { cache, type ComponentType, type ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBySlug } from "@/lib/posts";
+import { getBySlug, listPublished } from "@/lib/posts";
+import { classifyDepartment } from "@/lib/article-departments";
 import TrackArticleView from "./TrackArticleView";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
@@ -268,6 +269,15 @@ export default async function PostDetailPage({
   const showUpdated = Boolean(updatedDate && updatedDate !== date);
   const name = authorName(post);
 
+  // More guides in the same department. Keeps a high-intent reader (especially on
+  // an authentication guide) moving through the series instead of dead-ending, and
+  // adds internal links for GEO. One list query, deduped against the current post.
+  const dept = classifyDepartment(post);
+  const moreInDept = (await listPublished())
+    .filter((p) => p.slug !== post.slug && classifyDepartment(p) === dept)
+    .slice(0, 6);
+  const deptLabel = dept === "authentication" ? "authentication" : dept === "value" ? "value" : dept === "comparisons" ? "comparison" : "market";
+
   const hasTopic = Boolean(
     (post.topic.brandId && post.topic.brandName) || (post.topic.styleId && post.topic.styleName)
   );
@@ -414,6 +424,26 @@ export default async function PostDetailPage({
                 {post.topic.styleName}
               </Link>
             )}
+          </div>
+        </section>
+      )}
+
+      {moreInDept.length > 0 && (
+        <section className="border-t border-border pt-6">
+          <h2 className="mb-3 font-serif text-lg text-foreground">More {deptLabel} guides</h2>
+          <div className="grid gap-x-10 sm:grid-cols-2">
+            {moreInDept.map((p) => (
+              <Link
+                key={p.postId}
+                href={`/articles/${p.slug}`}
+                className="group flex items-baseline gap-2.5 border-b border-border/60 py-2.5"
+              >
+                <span className="shrink-0 text-gold">&rarr;</span>
+                <span className="font-serif text-[15px] leading-snug text-foreground group-hover:text-gold-soft">
+                  {p.title}
+                </span>
+              </Link>
+            ))}
           </div>
         </section>
       )}
