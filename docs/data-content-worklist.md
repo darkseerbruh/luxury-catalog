@@ -191,3 +191,15 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
 *NOTE: attributes (colour/hardware/material) are NOT part of this task — already dense on
 price_history from Fashionphile and now power the /data "Gold or silver / colors / leathers"
 sections. Only production_year (7%) + condition (13%) remain sparse.*
+
+### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
+- ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").
+  Full-set median **$2,273** vs our current icon-skewed **$4,045** — the representativeness fix is real.
+- ✅ Method validated: canonical per-brand MODEL dictionary (not token-strip, which over-split Miu Miu
+  into 68 fake styles). The Row dict → 106/134 matched → 21 clean styles (Soft Margaux, N/S Park Tote,
+  Marlo, Slouchy Banana, 90's, Peggy, Margaux, Half Moon, Bindle, Allie, Polly, Mail Bag, Alger,
+  Emilie, Hunting Bag, Astra, Everyday, Terrasse, Horizontal Belt, N/S Hook Tote, Park Tote).
+- ⬜ BLOCKER (needs authoritative naming): the long tail (28 more The Row models; and 8 brands total)
+  is archivist-grade per-house model curation. Options: (a) archivist produces clean complete model
+  lists per house, then load; (b) load the confidently-matched styles now (median corrects) + route
+  the tail to discovered_listing. Awaiting owner call + style-name review before any --write.
