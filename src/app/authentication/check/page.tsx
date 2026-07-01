@@ -91,8 +91,8 @@ export default async function ListingCheck({ searchParams }: { searchParams: Pro
     if (median && price && price > 0) {
       const pctBelow = Math.round(((median.median - price) / median.median) * 100);
       const base = `Typical resale for the ${median.label} is about ${formatPrice(median.median, median.currency)} (median of ${median.count} listings${median.asOf ? `, as of ${median.asOf}` : ""}). This listing is ${formatPrice(price, median.currency)}.`;
-      if (pctBelow >= 50) signals.push({ tone: "flag", title: "The price is far below the going rate", body: `${base} That is ${pctBelow}% under. A price this far below the market is the single most common scam signal.` });
-      else if (pctBelow >= 25) signals.push({ tone: "note", title: "The price is below the going rate", body: `${base} That is ${pctBelow}% under. Not damning on its own, but ask why it is cheaper and check everything else.` });
+      if (pctBelow >= 50) signals.push({ tone: "flag", title: "The price is far below the going rate", body: `${base} That is ${pctBelow}% under, which is the single most common scam signal. But a low price can also be honest: heavy wear or damage, an older or less wanted size or colour, or a missing box and receipt. Check the condition photos and ask what is bringing it down, so you can tell a real bargain from bait.` });
+      else if (pctBelow >= 25) signals.push({ tone: "note", title: "The price is below the going rate", body: `${base} That is ${pctBelow}% under. That can be a fair discount for condition, an older size or colour, or a missing box, or it can be bait. Not damning on its own, so ask what is bringing it down and check everything else.` });
       else signals.push({ tone: "ok", title: "The price is roughly in line", body: `${base} That is close to the going rate, so price alone is not a red flag here.` });
     } else if (price && price > 0) {
       signals.push({ tone: "note", title: "We could not price-check this bag", body: "We do not have resale data for this exact model, so we cannot compare the asking price. If it feels far too cheap, treat that as a warning on its own." });
