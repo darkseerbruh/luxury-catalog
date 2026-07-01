@@ -1,37 +1,39 @@
-# Post — Red flags: spotting a fake or scam in a resale listing
+# Post — Where to shop (and where not to) so you don't buy a fake
 
-Status: DRAFTED 2026-06-30. Pillar: authentication / trust. Persona: Jordan + Sofia.
+Status: APPROVED 2026-06-30 (owner; reframed to where-to-shop, hook A primary). Pillar: authentication / trust. Persona: Jordan + Sofia.
 Destination: https://www.luxurycatalog.com/articles/red-flags-spotting-a-fake-or-scam-resale-listing
-Facts from the article: red flags = too-good price; brags about an auth card for a brand that never issues one (LV is the clearest); stock-only photos / dodges close-ups; vague returns; pressure/urgency; off-platform no-auth. Smart moves = buy where auth is built in (eBay/Poshmark check >$500; resellers verify all); ask for stamp/date code, hardware engraving, interior tag, stitching; pro authenticator for costly. Red flags to weigh, not a verdict.
-Visual: "Red flags / Smart moves" two-column card (jewel house style). [to build]
+Visual: "Buy here / Be careful here" two-column card (jewel style; safe = gold, risky = muted). [to build]
+On-strategy: the "buy here" places (Fashionphile, TRR, Rebag, Vestiaire) are our affiliate partners.
+Facts (from the article): eBay & Poshmark authenticate items over $500; dedicated resellers verify everything; private/off-platform sales carry the most risk. Flags to weigh, not a verdict.
 
-## TikTok / Reel
-> Most fake bags give themselves away in the listing, before they ever ship. Here are the flags.
->
-> One: a price too good to be true. If it feels too lucky, it's usually a fake, a scam, or damage the photos are hiding.
->
-> Two, the counterintuitive one: a listing that brags about including an authenticity card. Some brands never issue cards. Louis Vuitton is the clearest. So that card is waving a flag, not handing you a credential.
->
-> Three: only glossy stock-style photos, or a seller who dodges your request for close-ups of the stamp, the hardware engraving, the interior tag, the stitching. A real seller can show you. Watch how they respond.
->
-> Four: pressure. "Someone else is about to buy it." Urgency exists to stop you from checking. A real bag is still real tomorrow.
->
-> Safest move: buy where authentication is built in. eBay and Poshmark check anything over $500, and the dedicated resellers verify everything. For anything costly, send it to a pro.
+## Hooks (rotate) — primary: A
+- A: "You don't need to spot fakes. You need to know where to shop, and where not to."
+- B: "The easiest way to never buy a fake bag: shop where the checking is already done for you."
 
-**Outro:** These are flags to weigh, not a verdict, a clean listing is never proof on its own. Full checklist at the link. Follow for more where handbags meet data, I put it all on LuxuryCatalog.com.
+## TikTok / Reel (one idea: where to buy safely)
+> The easiest way to never buy a fake isn't learning to authenticate. It's shopping where the checking is already done for you.
+>
+> Buy here, it's built in: Fashionphile, The RealReal, Rebag, Vestiaire, they authenticate everything they sell. And on eBay or Poshmark, anything over $500 gets checked by an independent authenticator before it ships.
+>
+> Be careful here: private, off-platform deals, Facebook Marketplace, a random seller's Instagram DMs, and eBay or Poshmark under that $500 line. No built-in check means the risk is all on you.
+>
+> So if you're buying somewhere with no authentication, weigh the discount against what you're giving up, and for anything pricey, send it to a pro. Two tells that work anywhere: a price too good to be true, and a seller rushing you. A real bag is still real tomorrow.
+
+**Outro:** Full guide at the link. Flags to weigh, not a verdict. Follow for real bag data with the gatekeeping cut out, LuxuryCatalog.com.
 
 ## Instagram caption
-> The scam usually shows up before the bag does, right there in the listing.
+> You don't have to be an authenticator. You just have to shop in the right places.
 >
-> Flags to catch: a price too good to be true. A listing bragging about an authenticity card for a brand that never issues one (Louis Vuitton is the clearest example). Only stock-style photos, or a seller who dodges your request for the stamp, the hardware engraving, the interior tag, the stitching. A vague return policy. And pressure, "someone else is about to buy it," which exists to stop you from checking.
+> Buy where authentication is built in: Fashionphile, The RealReal, Rebag, and Vestiaire verify everything they sell, and eBay and Poshmark check anything over $500 before it ships.
 >
-> Smart moves: buy where authentication is built in (eBay and Poshmark check items over $500; dedicated resellers verify everything). Ask for the specific close-ups. Check the markers against a brand guide. For anything costly, send it to a professional with the bag in hand.
+> Be careful with the private, off-platform stuff, Facebook Marketplace, a random Instagram seller, and eBay or Poshmark under $500. No built-in check means the risk is on you, so weigh the discount against what you're giving up and get anything pricey authenticated by a pro.
 >
-> These are red flags to weigh, not a verdict. A clean listing is not proof. Full guide at the link. From a collector and researcher at LuxuryCatalog.com.
+> Two tells that work anywhere: a price too good to be true, and a seller rushing you ("someone else is about to buy it"). Urgency exists to stop you from checking. A real bag is still real tomorrow.
+>
+> Flags to weigh, not a verdict, a clean listing is never proof on its own. Full guide at the link. From a collector and researcher at LuxuryCatalog.com.
 
-`#designerbags #authentication #realorfake #luxuryresale #poshmark #ebay #bagtok #smartshopping`
+`#designerbags #authentication #realorfake #luxuryresale #poshmark #ebay #fashionphile #bagtok`
 
 ## Pinterest pin
-- **Title:** Red flags in a resale listing
-- **Description:** Most fakes and scams give themselves away in the listing. Flags: a price too good to be true, bragging about an authenticity card for a brand that never issues one (like Louis Vuitton), stock-only photos or dodging close-ups, no returns, and pressure to buy now. Smart moves: buy where authentication is built in, ask for the stamp/hardware/tag/stitching shots, and send costly bags to a pro. Flags to weigh, not a verdict. Full checklist at the link.
-- **Visual:** Red flags / Smart moves card.
+- **Title:** Where to buy designer bags without getting scammed
+- **Description:** The easiest way to never buy a fake is to shop where authentication is built in. Buy here: Fashionphile, The RealReal, Rebag, Vestiaire (they verify everything), and eBay or Poshmark on anything over $500 (independently authenticated). Be careful with private, off-platform sales and items under $500, the risk is on you, so get pricey ones authenticated by a pro. Two universal tells: a too-good price and a seller rushing you. Full guide at the link.
