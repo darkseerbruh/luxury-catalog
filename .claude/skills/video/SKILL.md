@@ -62,9 +62,30 @@ branding on screen, no misspelled or wrong caption. Fix and re-render if not.
 Send the `.mp4` to Arielle for approval (SendUserFile). Say it is silent by design so she
 adds a trending sound in-app. Do NOT post or schedule it yourself.
 
-## Step 7 — Optional handoff (only if she says so)
-On her approval, hand the reel to the social calendar: create a Metricool draft via the
-social pipeline. Posting stays her call.
+## Step 7 — Metricool draft handoff (only after she approves the reel)
+Hand an approved reel to the social calendar as a Metricool DRAFT. Never publish or
+schedule it live: draft only, posting stays her call.
+
+1. Get the brand fresh with `getBrandSettings` (do not trust cached values). As of
+   2026-07-01: blogId `6480195` (`luxurycatalog_`), timezone `America/New_York`,
+   connected networks TikTok, Instagram, Pinterest.
+2. Write the caption with the `brand-voice` skill: on-voice, a light CTA, no em dashes.
+   Keep the TikTok title short.
+3. Create the draft with `createScheduledPost`:
+   - `blogId`: `6480195` (or the value from step 1).
+   - `date`: the next slot from `getBestTimeToPostByNetwork`, or a near-future time. It
+     will not fire because it is a draft.
+   - `info.draft`: `true`. `info.autoPublish`: `false`.
+   - `info.providers`: `[{"network":"tiktok"},{"network":"instagram"}]` (Reel format:
+     `instagramData.type` = `REEL`).
+   - `info.text`: the caption. `info.tiktokData.title`: the hook.
+4. Media is the one manual step. `createScheduledPost` `media` accepts PUBLIC URLs only,
+   and the render is a local file. So create the draft with the caption and settings,
+   then tell her to open the Metricool draft and drag in `output/<name>.mp4`. Do NOT
+   invent a URL. (Zero-touch upload is a future upgrade: host the render at a public URL,
+   for example a Supabase Storage bucket, then pass that URL in `media`. That needs a
+   bucket + key set up once, so it is her call to enable.)
+5. Update the reel's row in `reels-log.md` status to `draft in Metricool`.
 
 ## Look and feel
 The caption style (cream text, gold on the spoken word, soft shadow, Poppins) lives in
