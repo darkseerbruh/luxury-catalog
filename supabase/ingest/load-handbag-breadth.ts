@@ -35,17 +35,77 @@ const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPAB
 const TODAY = new Date().toISOString().slice(0, 10);
 const median = (a: number[]) => { const s = [...a].sort((x, y) => x - y); const m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
 
-// Canonical handbag models per house (authoritative; longest/most-specific first).
-// Filled from the archivist's lists. The Row seeded provisionally.
-const CONFIG: { brand: string; slug: string; models: string[] }[] = [
-  {
-    brand: "The Row", slug: "the-row",
-    models: ["Soft Margaux", "Margaux", "N/S Park Tote", "E/W Park Tote", "Park Tote", "N/S Hook Tote", "Hook Tote",
-      "Half Moon", "Bindle", "Terrasse", "Marlo", "Polly", "Peggy", "Allie", "Alger", "90's", "Emilie", "Hunting Bag",
-      "Astra", "Mail Bag", "Slouchy Banana", "Camden", "Logan", "Devon", "Sofia", "Isa", "Idaho", "India", "Marcel",
-      "Ledger", "Everyday", "Portfolio"],
-  },
+// Canonical handbag models per house (archivist-authoritative, 2026-06-30). Matched in
+// CURATED ORDER (specific-first; motif/fallback lines last), accent-insensitive. `name` =
+// clean catalog style; `match` = accent-free lowercase tokens to test against the title.
+type Model = { name: string; match: string[] };
+const CONFIG: { brand: string; slug: string; models: Model[] }[] = [
+  { brand: "The Row", slug: "the-row", models: [
+    { name: "Soft Margaux", match: ["soft margaux"] }, { name: "Margaux", match: ["margaux"] },
+    { name: "Marlo", match: ["marlo"] }, { name: "Slouchy Banana", match: ["slouchy banana", "banana"] },
+    { name: "90's", match: ["90's", "90s"] }, { name: "Half Moon", match: ["half moon"] },
+    { name: "Sofia", match: ["sofia"] }, { name: "Peggy", match: ["peggy"] }, { name: "Bindle", match: ["bindle"] },
+    { name: "Allie", match: ["allie"] }, { name: "Polly", match: ["polly"] }, { name: "India", match: ["india"] },
+    { name: "Idaho", match: ["idaho"] }, { name: "Camden", match: ["camden", "camdem"] },
+    { name: "Terrasse", match: ["terrasse"] }, { name: "Hunting Bag", match: ["hunting"] },
+    { name: "Everyday Tote", match: ["everyday"] }, { name: "Park Tote", match: ["park"] },
+    { name: "Hook Tote", match: ["hook"] }, { name: "Mail Bag", match: ["mail bag"] }, { name: "Alger", match: ["alger"] },
+    { name: "Emilie", match: ["emilie"] }, { name: "Astra", match: ["astra"] }, { name: "Logan", match: ["logan"] },
+    { name: "Devon", match: ["devon"] }, { name: "Isa", match: ["isa "] }, { name: "Marcel", match: ["marcel"] },
+    { name: "Ledger", match: ["ledger"] }, { name: "Duplex", match: ["duplex"] }, { name: "Nu Twin", match: ["nu twin"] },
+    { name: "Portfolio", match: ["portfolio"] },
+  ] },
+  { brand: "Goyard", slug: "goyard", models: [
+    { name: "Saint Louis", match: ["saint louis", "st louis"] }, { name: "Anjou", match: ["anjou"] },
+    { name: "Artois", match: ["artois"] }, { name: "Rouette", match: ["rouette"] }, { name: "Belvedere", match: ["belvedere"] },
+    { name: "Sac Hardy", match: ["hardy"] }, { name: "Boheme", match: ["boheme"] },
+    { name: "Vendôme", match: ["vendome"] }, { name: "Croisière", match: ["croisiere"] },
+    { name: "Bellechasse", match: ["bellechasse"] }, { name: "Fidji", match: ["fidji"] },
+    { name: "Petit Flot", match: ["petit flot", "flot"] }, { name: "Alpin", match: ["alpin"] },
+    { name: "Grenelle", match: ["grenelle"] }, { name: "Cap-Vert", match: ["cap-vert", "cap vert"] },
+    { name: "Plumet", match: ["plumet"] }, { name: "Saigon", match: ["saigon"] }, { name: "Villette", match: ["villette"] },
+    { name: "Marquises", match: ["marquises"] }, { name: "Voltaire", match: ["voltaire"] }, { name: "Belharra", match: ["belharra"] },
+    { name: "Poitiers", match: ["poitiers"] }, { name: "Aligre", match: ["aligre"] }, { name: "Bourget", match: ["bourget"] },
+  ] },
+  { brand: "Miu Miu", slug: "miu-miu", models: [
+    { name: "Arcadie", match: ["arcadie"] }, { name: "Wander", match: ["wander"] },
+    { name: "Aventure", match: ["aventure", "aviator"] }, { name: "Ivy", match: ["ivy"] }, { name: "Beau", match: ["beau"] },
+    { name: "Coffer", match: ["coffer"] }, { name: "Utilitaire", match: ["utilitaire"] }, { name: "Caprice", match: ["caprice"] },
+    { name: "Solitaire", match: ["solitaire"] }, { name: "Confidential", match: ["confidential"] },
+    { name: "Softy", match: ["softy"] }, { name: "Bucket", match: ["bucket"] }, { name: "Matelassé", match: ["matelasse"] },
+  ] },
+  { brand: "Off-White", slug: "off-white", models: [
+    { name: "Binder Clip", match: ["binder"] }, { name: "Jitney", match: ["jitney"] }, { name: "Burrow", match: ["burrow"] },
+    { name: "Camera Bag", match: ["camera"] }, { name: "Box Bag", match: ["box bag"] }, { name: "Flap", match: ["flap"] },
+  ] },
+  { brand: "Alexander McQueen", slug: "alexander-mcqueen", models: [
+    { name: "Jewelled Satchel", match: ["jewelled"] }, { name: "The Story", match: ["the story"] },
+    { name: "The Bow", match: ["the bow"] }, { name: "The Curve", match: ["the curve"] }, { name: "The Grip", match: ["the grip"] },
+    { name: "Knuckle", match: ["knuckle", "four ring", "four-ring"] }, { name: "Skull Box Clutch", match: ["box clutch"] },
+    { name: "De Manta", match: ["de manta", "manta"] }, { name: "Heroine", match: ["heroine"] },
+    { name: "Padlock", match: ["padlock"] }, { name: "Legend", match: ["legend"] }, { name: "Peak", match: ["peak"] },
+    { name: "T Bar", match: ["t bar"] }, { name: "Skull Chain", match: ["skull chain", "skull"] },
+  ] },
+  { brand: "Valentino", slug: "valentino-garavani", models: [
+    { name: "Rockstud Spike", match: ["rockstud spike", "spike"] }, { name: "Roman Stud", match: ["roman stud"] },
+    { name: "Rockstud", match: ["rockstud"] }, { name: "Locò", match: ["loco"] }, { name: "One Stud", match: ["one stud"] },
+    { name: "VSling", match: ["vsling", "v sling"] }, { name: "SuperVee", match: ["supervee", "super vee"] },
+    { name: "Escape", match: ["escape"] }, { name: "Divina", match: ["divina"] }, { name: "VLogo", match: ["vlogo", "v logo"] },
+  ] },
+  { brand: "Jacquemus", slug: "jacquemus", models: [
+    { name: "Le Bambimou", match: ["bambimou"] }, { name: "Le Chiquito", match: ["chiquito"] },
+    { name: "Le Bambino", match: ["bambino"] }, { name: "Le Chouchou", match: ["chouchou"] },
+    { name: "Le Sac Rond", match: ["rond"] }, { name: "La Spiaggia", match: ["spiaggia"] },
+    { name: "Le Bisou", match: ["bisou"] }, { name: "Le Petit Sac", match: ["petit sac"] },
+    { name: "Le Bambidou", match: ["bambidou"] }, { name: "Le Carinu", match: ["carinu"] },
+    { name: "Le Petit Filet", match: ["petit filet"] }, { name: "Le Grand Panier", match: ["grand panier", "panier"] },
+    { name: "Le Turismo", match: ["turismo"] }, { name: "La Ligne", match: ["la ligne"] },
+  ] },
+  { brand: "Telfar", slug: "telfar", models: [
+    { name: "Shopping Bag", match: ["shopping"] }, { name: "Circle Bag", match: ["circle"] }, { name: "Duffle", match: ["duffle"] },
+  ] },
 ];
+const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 const isAccessory = (t: string) => /wallet|card case|coin|charm|key ?(ring|chain|case)|pouch|cosmetic|strap$|bracelet|earring|belt$/i.test(t);
 
@@ -87,13 +147,13 @@ async function main() {
     const all = await fetchCollection(cfg.slug);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bags = all.filter((p) => (p as any).product_type === "Bags" && !isAccessory(p.title));
-    const models = [...cfg.models].sort((a, b) => b.length - a.length); // longest-first
     const groups = new Map<string, ShopifyProduct[]>();
     const unmatched: string[] = [];
     for (const p of bags) {
-      const model = models.find((m) => p.title.toLowerCase().includes(m.toLowerCase()));
-      if (!model) { unmatched.push(p.title); continue; }
-      (groups.get(model) ?? groups.set(model, []).get(model)!).push(p);
+      const nt = norm(p.title);
+      const hit = cfg.models.find((m) => m.match.some((tok) => nt.includes(norm(tok))));
+      if (!hit) { unmatched.push(p.title); continue; }
+      (groups.get(hit.name) ?? groups.set(hit.name, []).get(hit.name)!).push(p);
     }
     console.log(`\n===== ${cfg.brand}: ${bags.length} handbags, ${groups.size} styles, ${unmatched.length} unmatched =====`);
     let brandPrices: number[] = [];

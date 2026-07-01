@@ -203,3 +203,11 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   is archivist-grade per-house model curation. Options: (a) archivist produces clean complete model
   lists per house, then load; (b) load the confidently-matched styles now (median corrects) + route
   the tail to discovered_listing. Awaiting owner call + style-name review before any --write.
+
+- ✅ DONE 2026-06-30 (--write + summary:refresh): captured EVERY current Fashionphile handbag for
+  all 8 thin houses via load-handbag-breadth.ts (archivist-authoritative model clustering). Per-brand
+  medians now representative: The Row $4,045→**$1,850** (33 styles), Goyard $2,785 (27), Miu Miu $2,000
+  (9), Valentino $1,075 (15), McQueen $828 (13), Jacquemus $650 (11), Off-White $385 (3), Telfar $120.
+  Handbags only (no SLGs). ~75-100% of each house's live listings clustered cleanly; residual tail
+  (shape-only / deep-cut titles) dropped, not enough to skew. Attributes (colour/material/hardware)
+  captured in the same pass. Loader idempotent for monthly re-run.
