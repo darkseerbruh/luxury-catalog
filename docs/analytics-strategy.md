@@ -1,9 +1,15 @@
 # Luxury Catalog — Analytics strategy (persona → journey → instrumentation)
 
-*Internal strategy deliverable. Last drafted 2026-06-28. Pairs with `personas.md`
-(the who) and `analytics-setup.md` (the how-to-wire). This doc is the **why**: it
-derives each measurable journey from a persona's desired outcome, checks whether
-the flow that serves it exists, and only then says what to instrument.*
+*Internal strategy deliverable. Drafted 2026-06-28, refreshed 2026-06-30. This doc is
+the **why**: it derives each measurable journey from a persona's desired outcome, checks
+whether the flow that serves it exists, and only then says what to instrument. It owns
+the persona journeys and flow gaps; it does not restate what lives elsewhere. Pairs with:*
+- *`personas.md` — the who.*
+- *`analyst-standard.md` §1 — the metric tree + funnel (single home; do not re-list here).*
+- *`analytics-setup.md` — how the pipe is wired.*
+- *`npm run analytics:pulse` (readiness block) — the **live** firing state of every event.
+  This is the single source of truth for "does event X fire," so this doc names journeys,
+  never a static event-status list that would drift.*
 
 > **Order of operations (non-negotiable).** Personas → desired outcome → the
 > customer journey that delivers it → does that flow exist → fix the flow gaps →
@@ -43,14 +49,14 @@ a foundational data-model gap that makes every journey above anonymous.
 
 ## 3. The flow gaps (ranked, with the metric each moves)
 
-### G1 (foundational) — persona identity is broken at the data source
-`onboarding/page.tsx` stores one old forced-choice `persona`; `profile-actions.ts`
-saves a single enum; there is no Axis-B **motivation** multi-select and no
-behavior-derived **maturity**. `personas.md` §4 already specs the fix (motivations
-`text[]` + inferred `maturity_stage`). **Until this lands, no journey below can be
-segmented by persona**, so the funnels are anonymous.
-*Moves: all persona-segmented engagement + monetization measurement. Precondition
-for everything else.* **Status: building now (this branch).**
+### G1 (foundational) — persona identity at the data source — **SHIPPED**
+The old single forced-choice `persona` is replaced by an Axis-B **motivation**
+multi-select (`motivations text[]`) plus a behavior-derived **maturity** stage, per
+`personas.md` §4. Landed in `0037_persona_model.sql` (additive; the legacy `persona`
+enum is kept and still populated) with `lib/maturity.ts`, the onboarding multi-select,
+and `profile-actions.ts`. Journeys below can now be segmented by persona.
+*Moved: all persona-segmented engagement + monetization measurement. Was the
+precondition for everything else.* **Status: DONE (migration 0037, on `main`).**
 
 ### G2 — no side-by-side bag compare
 Sofia's defining job ("decide which bag") and the Cross-Shopper's whole mode
@@ -71,32 +77,33 @@ in 60 seconds" job needs two stops.
 Derived from each persona's "How we'd recognize her in data" line. **Gated on G1**
 (you need the persona dimension first) and, for the compare signal, on G2.
 
-| Persona journey | Success signal (personas.md §3) | Instrument status |
+| Persona journey | Success signal (personas.md §3) | Signal to watch |
 |---|---|---|
-| Maya: appreciate without buying | quiz complete (no signup) + multiple `want` + deep Story/article reads | `item_saved` fires; `style_viewed` + an `article_viewed` do **not** yet |
-| Sofia: dual-anxiety resolved | auth-view **and** value-view, same session, same bag → buy-click | `value_module_viewed` fires; `auth_section_engaged` is **dead** (defined, never fired) |
-| Diane: stewardship | repeat closet-value views + alerts-as-watch + sold-history adds | closet-value + alert-set events **not defined** |
-| Jordan: flip | auth-guide + comp views on mid-tier → sell-click → sold-history | `outbound_consign_clicked` fires; `auth_section_engaged` dead |
-| Cross-Shopper: convert | market-compare in session → outbound affiliate click | outbound fires; a compare event waits on **G2** existing |
+| Maya: appreciate without buying | quiz complete (no signup) + multiple `want` + deep Story/article reads | `quiz_completed`, `item_saved`, `article_viewed` |
+| Sofia: dual-anxiety resolved | auth-view **and** value-view, same session, same bag → buy-click | `value_module_viewed` + `auth_section_engaged` → `outbound_resale_clicked` |
+| Diane: stewardship | repeat closet-value views + alerts-as-watch + sold-history adds | closet-value + alert-set events (**not defined yet** — real taxonomy gap) |
+| Jordan: flip | auth-guide + comp views on mid-tier → sell-click → sold-history | `auth_section_engaged` → `outbound_consign_clicked` |
+| Cross-Shopper: convert | market-compare in session → outbound affiliate click | `bags_compared` (waits on **G2**) → `outbound_resale_clicked` |
 
-**Dead events to fix when we instrument (defined in `events.ts`, fire nowhere):**
-`style_viewed`, `auth_section_engaged`, `inquiry_submitted`, `monetization_interest`.
-`/shop` filtering does not fire `catalog_filtered` (only `/search` does). The
-object-oriented UX pages (`/leather /silhouette /hardware /era /color`) and article
-reads emit only raw `$pageview`, so they are absent from journey funnels.
+**Which of these fire today is not tracked here — run `npm run analytics:pulse` and read
+the `instrumentation_readiness` block.** It lists every event in `events.ts` and whether it
+has ever fired, so it never drifts. Two standing taxonomy gaps it will not catch, because
+the events are not defined at all: **closet-value / alert-set** events for Diane, and a
+**rental** value event (monetization lane 2). `/shop` filtering also does not emit
+`catalog_filtered` (only `/search` does).
 
 ---
 
 ## 5. Build sequence
 
-1. **G1 — persona/motivation model** (this branch `analytics/persona-model`):
-   migration `0035_persona_model.sql` (motivations `text[]`, `maturity_stage text`),
-   onboarding motivation multi-select, behavior-derived maturity, back-compat
-   `persona` preserved. *Owner applies the migration + merges.*
-2. **G2 — side-by-side bag compare** (decide scope, then build).
+1. **G1 — persona/motivation model — DONE.** Migration `0037_persona_model.sql`
+   (motivations `text[]`, `maturity_stage text`), onboarding motivation multi-select,
+   behavior-derived maturity, back-compat `persona` preserved. On `main`.
+2. **G2 — side-by-side bag compare** (decide scope, then build). *Next.*
 3. **G3 — unify Jordan's mobile auth + comp moment.**
-4. **Instrument last** — wire the §4 success signals + revive the four dead events,
-   now segmentable by persona because G1 exists.
+4. **Instrument last** — wire the §4 success signals + the never-fired value events,
+   now segmentable by persona because G1 exists. Verify each with the pulse
+   readiness block before trusting it.
 
 ---
 
