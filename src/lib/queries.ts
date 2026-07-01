@@ -1,12 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { getSupabase } from "./supabase";
+import { unstable_cache } from "next/cache";
+import { getSupabase, fetchAllRows } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
+import { CACHE_CATALOG } from "./cache";
 
 export interface BrandOverview {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "ultra-luxury";
+  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
   styleCount: number;
   /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
   variantCount: number;
@@ -19,14 +21,22 @@ export interface BrandOverview {
 export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
   "ultra-luxury": 0,
   mid: 1,
-  thrift: 2,
+  premium: 2,
+  thrift: 3,
 };
 
-/** Tier groups for the brand directory, in display order, with section labels. */
+/**
+ * Tier groups for the brand directory, in display order, with section labels.
+ * The standardized 4-tier vocabulary (Ultra-luxury / Luxury / Premium / Contemporary).
+ * Keys: ultra-luxury, mid→"Luxury", premium (added in migration 0039), thrift→"Contemporary"
+ * ("thrift" is never shown, a judgment word). A tier group renders nothing until brands carry
+ * that tier, so this is safe before migration 0039/0040 are applied (Premium just shows empty).
+ */
 export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
   { key: "ultra-luxury", label: "Ultra-luxury" },
-  { key: "mid", label: "Mid-tier" },
-  { key: "thrift", label: "Thrift & contemporary" },
+  { key: "mid", label: "Luxury" },
+  { key: "premium", label: "Premium" },
+  { key: "thrift", label: "Contemporary" },
 ];
 
 export interface HeroCard {
@@ -34,8 +44,16 @@ export interface HeroCard {
   styleName: string;
   brandName: string;
   variantId: number | null;
-  sizeLabel: string | null;
-  priceFrom: number | null;
+  /** One-line "why it's iconic" hook (curated editorial, sourced). */
+  hook: string;
+  /** Recorded resale median for the style (the typical figure, the headline number). */
+  medianResale: number | null;
+  /** Lowest recorded resale price (text only). */
+  lowResale: number | null;
+  /** Highest recorded resale price (the eye-opener, text only). */
+  highResale: number | null;
+  /** How many recorded resale prices the figures are built from. */
+  sampleSize: number;
   currency: string | null;
 }
 
@@ -54,7 +72,7 @@ export interface StyleSearchResult {
 export interface BrandSearchResult {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "ultra-luxury";
+  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
   variantCount: number;
   /** Styles under the brand, each with a representative variant id to link to its bag page. */
   styles: { styleId: number; name: string; variantId: number | null }[];
@@ -114,7 +132,7 @@ function signatureRank(brandName: string, styleName: string): number {
 }
 
 /** Brands with whether they have at least one fully-detailed variant ("live") vs. breadth-only stub styles ("coming soon"). */
-export async function getBrandsOverview(): Promise<BrandOverview[]> {
+async function loadBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
     .from("brand")
     .select("brand_id, name, tier, style(style_id, name, variant(variant_id))");
@@ -165,58 +183,158 @@ export async function getBrandsOverview(): Promise<BrandOverview[]> {
   );
 }
 
-const HERO_STYLES: { brand: string; style: string }[] = [
-  { brand: "Chanel", style: "Classic Flap" },
-  { brand: "Hermès", style: "Birkin" },
-  { brand: "Hermès", style: "Kelly" },
-  { brand: "Coach", style: "Tabby" },
-  { brand: "Coach", style: "Swagger" },
+/**
+ * Brand directory for the homepage + /brands. Cached because the catalog tree
+ * (brand → style → variant) changes only when we ingest data, not per request.
+ */
+export const getBrandsOverview = unstable_cache(
+  loadBrandsOverview,
+  ["brands-overview"],
+  { revalidate: CACHE_CATALOG, tags: ["catalog"] },
+);
+
+/**
+ * "It bags of all time" — a curated, RANKED canon (the blend lens: heritage mythology +
+ * real-world recognition). Order is the ranking shown. Hooks are sourced editorial one-liners;
+ * verify any year before publish. Resale figures are computed live from price_history below.
+ */
+const HERO_STYLES: { brand: string; style: string; hook: string }[] = [
+  { brand: "Hermès", style: "Birkin", hook: "Named for Jane Birkin, 1984" },
+  { brand: "Hermès", style: "Kelly", hook: "Named for Grace Kelly, 1956" },
+  { brand: "Chanel", style: "Classic Flap", hook: "The quilted flap with the CC turn-lock" },
+  { brand: "Louis Vuitton", style: "Speedy", hook: "An LV icon since 1930" },
+  { brand: "Dior", style: "Lady Dior", hook: "Named for Princess Diana, 1995" },
+  { brand: "Louis Vuitton", style: "Neverfull", hook: "The everyday luxury tote, 2007" },
 ];
 
-/** "It bags of all time" carousel — real seeded hero styles only, no invented ratings or review counts. */
-export async function getHeroCarousel(): Promise<HeroCard[]> {
-  const { data, error } = await getSupabase()
-    .from("style")
-    .select(
-      "style_id, name, brand:brand_id(name), variant(variant_id, size_label, retail_price_original, currency)"
-    )
-    .in(
-      "name",
-      HERO_STYLES.map((h) => h.style)
-    );
+/** A row is retail (not resale) if it's an explicit retail_msrp or a legacy null-type row on a retail platform. */
+const HERO_RETAIL_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
 
-  if (error || !data) return [];
+function medianOf(nums: number[]): number {
+  const s = nums.slice().sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
 
-  const cards = data
-    .filter((row) =>
-      HERO_STYLES.some((h) => h.style === row.name && h.brand === embeddedName(row.brand))
-    )
-    .map((row) => {
+/**
+ * "It bags of all time" — the ranked canon, each carrying live resale figures (median /
+ * low / high + sample size) computed from price_history, NOT retail. Order follows
+ * HERO_STYLES (the ranking). Resilient: returns [] on any missing env / column / error.
+ */
+async function loadHeroCarousel(): Promise<HeroCard[]> {
+  try {
+    const { data, error } = await getSupabase()
+      .from("style")
+      .select(
+        "style_id, name, brand:brand_id(name), variant(variant_id, currency)"
+      )
+      .in(
+        "name",
+        HERO_STYLES.map((h) => h.style)
+      );
+
+    if (error || !data) return [];
+
+    // Match each seeded style to its HERO_STYLES entry (by brand + name), collect variant ids.
+    type Matched = {
+      styleId: number;
+      styleName: string;
+      brandName: string;
+      hook: string;
+      variantIds: number[];
+      currency: string | null;
+    };
+    const matched: Matched[] = [];
+    const allVariantIds: number[] = [];
+    for (const row of data) {
+      const brandName = embeddedName(row.brand);
+      const entry = HERO_STYLES.find((h) => h.style === row.name && h.brand === brandName);
+      if (!entry) continue;
       const variants = row.variant ?? [];
-      const priced = variants.filter((v) => v.retail_price_original != null);
-      const cheapest = priced.sort(
-        (a, b) => Number(a.retail_price_original) - Number(b.retail_price_original)
-      )[0];
-      const primary = cheapest ?? variants[0];
-      return {
+      const variantIds = variants.map((v) => v.variant_id);
+      allVariantIds.push(...variantIds);
+      matched.push({
         styleId: row.style_id,
         styleName: row.name,
-        brandName: embeddedName(row.brand),
-        variantId: primary?.variant_id ?? null,
-        sizeLabel: cheapest?.size_label ?? variants[0]?.size_label ?? null,
-        priceFrom: cheapest ? Number(cheapest.retail_price_original) : null,
-        currency: cheapest?.currency ?? null,
+        brandName,
+        hook: entry.hook,
+        variantIds,
+        currency: variants[0]?.currency ?? null,
+      });
+    }
+    if (allVariantIds.length === 0) return [];
+
+    // Every resale price row for these variants, paged past the 1000-row cap; group + compute per style.
+    type HeroPriceRow = { variant_id: number; sale_price: number | string | null; currency: string | null; price_type: string | null; platform: string | null };
+    const priceRows = await fetchAllRows<HeroPriceRow>(() =>
+      getSupabase()
+        .from("price_history")
+        .select("variant_id, sale_price, currency, price_type, platform")
+        .in("variant_id", allVariantIds)
+        .not("sale_price", "is", null),
+    );
+
+    // variant_id -> resale prices (excluding retail), and -> count (for picking the link target).
+    const byVariant = new Map<number, { prices: number[]; currency: string | null }>();
+    for (const r of priceRows) {
+      const price = r.sale_price != null ? Number(r.sale_price) : null;
+      if (price == null || !Number.isFinite(price) || price <= 0) continue;
+      const isRetail =
+        r.price_type === "retail_msrp" ||
+        (r.price_type == null && r.platform != null && HERO_RETAIL_RX.test(r.platform));
+      if (isRetail) continue;
+      let g = byVariant.get(r.variant_id);
+      if (!g) { g = { prices: [], currency: r.currency }; byVariant.set(r.variant_id, g); }
+      g.prices.push(price);
+    }
+
+    const cards: HeroCard[] = matched.map((m) => {
+      const prices: number[] = [];
+      let bestVariant: number | null = null;
+      let bestCount = -1;
+      let currency: string | null = m.currency;
+      for (const vid of m.variantIds) {
+        const g = byVariant.get(vid);
+        const count = g?.prices.length ?? 0;
+        if (count > bestCount) { bestCount = count; bestVariant = vid; }
+        if (g) { prices.push(...g.prices); currency = currency ?? g.currency; }
+      }
+      const hasData = prices.length > 0;
+      return {
+        styleId: m.styleId,
+        styleName: m.styleName,
+        brandName: m.brandName,
+        variantId: bestVariant ?? m.variantIds[0] ?? null,
+        hook: m.hook,
+        medianResale: hasData ? Math.round(medianOf(prices)) : null,
+        lowResale: hasData ? Math.round(Math.min(...prices)) : null,
+        highResale: hasData ? Math.round(Math.max(...prices)) : null,
+        sampleSize: prices.length,
+        currency,
       };
     });
 
-  const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
-  cards.sort(
-    (a, b) =>
-      order.indexOf(`${a.brandName}:${a.styleName}`) -
-      order.indexOf(`${b.brandName}:${b.styleName}`)
-  );
-  return cards;
+    const order = HERO_STYLES.map((h) => `${h.brand}:${h.style}`);
+    cards.sort(
+      (a, b) =>
+        order.indexOf(`${a.brandName}:${a.styleName}`) -
+        order.indexOf(`${b.brandName}:${b.styleName}`)
+    );
+    return cards;
+  } catch {
+    return [];
+  }
 }
+
+/**
+ * "It bags of all time" hero canon. Cached: the styles are a fixed list and
+ * their retail prices move only on ingest, not per request.
+ */
+export const getHeroCarousel = unstable_cache(
+  loadHeroCarousel,
+  ["hero-carousel"],
+  { revalidate: CACHE_CATALOG, tags: ["catalog"] },
+);
 
 export interface VariantDetail {
   variantId: number;
@@ -706,14 +824,36 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
   const ids = Array.from(new Set(variantIds.filter((n) => Number.isFinite(n))));
   if (ids.length === 0) return {};
   try {
-    const { data, error } = await getSupabase()
+    const sb = getSupabase();
+    const { data, error } = await sb
       .from("variant")
       .select("variant_id, image_url")
       .in("variant_id", ids);
-    if (error || !data) return {};
+    if (error) return {};
     const map: Record<number, string> = {};
-    for (const r of data as { variant_id: number; image_url: string | null }[]) {
+    for (const r of (data ?? []) as { variant_id: number; image_url: string | null }[]) {
       if (r.image_url) map[r.variant_id] = r.image_url;
+    }
+
+    // Backfill gaps with community photos so a contributed shot becomes the image
+    // the WHOLE catalog shows (grids, search, recs), not only the bag-page gallery.
+    // Featured wins over plain approved. Resilient: any error leaves the placeholder.
+    const missing = ids.filter((id) => !map[id]);
+    if (missing.length > 0) {
+      const { data: photos } = await sb
+        .from("bag_photo")
+        .select("variant_id, storage_path, status")
+        .in("variant_id", missing)
+        .in("status", ["approved", "featured"]);
+      const best = new Map<number, { path: string; featured: boolean }>();
+      for (const p of (photos ?? []) as { variant_id: number; storage_path: string; status: string }[]) {
+        const featured = p.status === "featured";
+        const cur = best.get(p.variant_id);
+        if (!cur || (featured && !cur.featured)) best.set(p.variant_id, { path: p.storage_path, featured });
+      }
+      for (const [vid, { path }] of best) {
+        map[vid] = sb.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
+      }
     }
     return map;
   } catch {
@@ -1143,7 +1283,7 @@ async function searchBrandsByName(names: string[]): Promise<BrandSearchResult[]>
 }
 
 function mapBrandRows(
-  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
+  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "premium" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
 ): BrandSearchResult[] {
   return rows.map((b) => {
     const styles = b.style ?? [];

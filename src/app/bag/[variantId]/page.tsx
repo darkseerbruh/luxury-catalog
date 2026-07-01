@@ -544,7 +544,7 @@ export default async function BagDetailPage({
       <TrackBagView
         variantId={v.variantId}
         brand={v.brand.name}
-        brandTier={(v.brand.tier as "thrift" | "mid" | "ultra-luxury") || null}
+        brandTier={(v.brand.tier as "thrift" | "mid" | "premium" | "ultra-luxury") || null}
         style={v.style.name}
         silhouette={v.style.silhouette}
         hasPriceHistory={v.priceHistory.length > 0}

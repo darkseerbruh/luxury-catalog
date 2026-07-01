@@ -75,7 +75,7 @@ const POSTS = [
   {
     slug: "does-a-smaller-bag-cost-more",
     title: "Does a smaller bag cost more? What our pricing data says",
-    excerpt: "A smaller bag should cost less. For some of the most wanted designs it costs more. Our pricing data shows which bags flip the rule, and why everyday bags do not.",
+    excerpt: "A smaller bag should cost less, right? For some of the most wanted designs it costs more. Our pricing data shows which bags flip the rule, and why everyday bags do not.",
     body: sizeBody,
     topic_brand_id: 203,
     topic_style_id: null as number | null,

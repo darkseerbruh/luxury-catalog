@@ -11,8 +11,20 @@ import type { BagPhoto } from "@/lib/photos";
 /**
  * User photo gallery + contribution on the bag page. Real, owned, rights-attested
  * reference shots (never AI-generated). Shows a rare-find empty state when a bag
- * has no photo — the recruiting moment the contributor-tier ladder rewards.
+ * has no photo: the recruiting moment the contributor-tier ladder rewards.
+ *
+ * A photo arrives as INFORMATION, not just an image: the uploader picks what it
+ * shows, so the catalog learns the bag, not only how it looks. We compose that
+ * into the existing `caption` field, so no schema change is needed.
  */
+const SHOT_TYPES: { value: string; label: string }[] = [
+  { value: "full", label: "The full bag" },
+  { value: "hardware", label: "Hardware and clasp" },
+  { value: "stamp", label: "Stamp, date code or serial" },
+  { value: "interior", label: "Interior and lining" },
+  { value: "wear", label: "Corners and wear" },
+  { value: "detail", label: "Another telling detail" },
+];
 export default function PhotoContributions({
   variantId,
   brand,
@@ -33,6 +45,11 @@ export default function PhotoContributions({
 
   function action(formData: FormData) {
     setError(null);
+    // Fold "what does this show" + the optional note into the caption the action
+    // already stores, e.g. "Hardware and clasp: gold, date code Z".
+    const shot = SHOT_TYPES.find((s) => s.value === formData.get("shotType"));
+    const note = String(formData.get("note") ?? "").trim();
+    formData.set("caption", [shot?.label, note].filter(Boolean).join(": ").slice(0, 280));
     startTransition(async () => {
       const res = await submitPhoto(formData);
       if (res.ok) {
@@ -90,19 +107,29 @@ export default function PhotoContributions({
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-6 text-center">
             <p className="text-foreground">This bag is a rare find.</p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
-              Have a photo of one in the wild? Add yours — real, owned shots only —
-              and it might become the photo everyone sees here.
+              The Luxury Catalog is built by the people who carry these bags. If you
+              own this one, add a photo and tell us what it shows. Yours could become
+              the photo everyone sees here.
             </p>
           </div>
         )
       )}
 
       {done && (
-        <p className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm text-foreground">
-          {done === "approved"
-            ? "Thanks — your photo is live."
-            : "Thanks — your photo is in the review queue. We'll publish it once it's checked."}
-        </p>
+        <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm text-foreground">
+          <p>
+            {done === "approved"
+              ? "Thank you. Your photo is live."
+              : "Thank you. Your photo is in the review queue, and we publish it once it is checked."}
+          </p>
+          <p className="mt-2 text-muted">
+            You clearly know this one.{" "}
+            <a href="#reviews" className="text-gold underline hover:text-gold-soft">
+              Add a quick review
+            </a>{" "}
+            and tell other collectors what it is like to carry.
+          </p>
+        </div>
       )}
 
       {open && signedIn && (
@@ -119,11 +146,29 @@ export default function PhotoContributions({
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm">
-            <span className="text-muted">Caption (optional)</span>
+            <span className="text-muted">What does this show?</span>
+            <select
+              name="shotType"
+              required
+              defaultValue=""
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground focus:border-gold focus:outline-none"
+            >
+              <option value="" disabled>
+                Choose what it shows
+              </option>
+              {SHOT_TYPES.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="text-muted">Anything worth knowing? (optional)</span>
             <input
-              name="caption"
-              maxLength={280}
-              placeholder="Detail shot — date code, hardware, stamp…"
+              name="note"
+              maxLength={240}
+              placeholder="e.g. date code Z, gold hardware, bought 2019"
               className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-foreground focus:border-gold focus:outline-none"
             />
           </label>

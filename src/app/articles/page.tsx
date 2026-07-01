@@ -67,35 +67,101 @@ function href(params: Partial<SearchParams>): string {
   return qs ? `/articles?${qs}` : "/articles";
 }
 
-/** A launch-ready stand-in for a photo: brand wordmark + an on-brand motif.
- * Market pieces get a tiny ask-vs-sold bar motif; everything else a handbag
- * silhouette. No real-bag imagery (per the never-AI-images rule). */
-function Plate({ label, dept, h = "h-40" }: { label: string; dept: DepartmentId; h?: string }) {
+/** The department motif drawn as a watermark behind the house name. Original
+ * line-art, never a real bag or a redrawn logo (image rule: real-bag photos must
+ * be first-party/licensed; decorative illustration is fine). Authentication = a
+ * loupe over a stitched seam (markers to check); value = a price tag; comparisons
+ * = two silhouettes; market = the ask-vs-sold bars. */
+function DeptMotif({ dept }: { dept: DepartmentId }) {
+  const stroke = "#c9a24c";
+  if (dept === "market") {
+    return (
+      <svg width="200" height="132" viewBox="0 0 280 190" fill="none" aria-hidden>
+        <line x1="20" y1="160" x2="270" y2="160" stroke={stroke} strokeWidth="1.5" />
+        <rect x="46" y="58" width="26" height="102" fill={stroke} opacity="0.35" />
+        <rect x="46" y="116" width="26" height="44" fill={stroke} />
+        <rect x="130" y="44" width="26" height="116" fill={stroke} opacity="0.35" />
+        <rect x="130" y="100" width="26" height="60" fill={stroke} />
+        <rect x="214" y="72" width="26" height="88" fill={stroke} opacity="0.35" />
+        <rect x="214" y="124" width="26" height="36" fill={stroke} />
+      </svg>
+    );
+  }
+  if (dept === "value") {
+    return (
+      <svg width="150" height="150" viewBox="0 0 100 100" fill="none" stroke={stroke} strokeWidth="2" aria-hidden>
+        <path d="M14 40 L54 40 L86 72 L58 100 L26 68 Z" />
+        <circle cx="34" cy="60" r="6" />
+        <path d="M46 16 v18 M40 22 h12 M40 28 h12" strokeWidth="2.4" />
+      </svg>
+    );
+  }
+  if (dept === "comparisons") {
+    return (
+      <svg width="170" height="120" viewBox="0 0 160 110" fill="none" stroke={stroke} strokeWidth="2" aria-hidden>
+        <path d="M18 44 h44 l-5 44 H23 z" opacity="0.45" />
+        <path d="M27 44 c0-13 26-13 26 0" opacity="0.45" />
+        <path d="M92 36 h48 l-6 52 H98 z" />
+        <path d="M102 36 c0-15 28-15 28 0" />
+      </svg>
+    );
+  }
+  // authentication — a jeweller's loupe inspecting a stitched seam
+  return (
+    <svg width="160" height="130" viewBox="0 0 170 140" fill="none" stroke={stroke} strokeWidth="2" aria-hidden>
+      <line x1="18" y1="98" x2="150" y2="98" strokeDasharray="9 8" opacity="0.55" />
+      <line x1="18" y1="110" x2="150" y2="110" strokeDasharray="9 8" opacity="0.35" />
+      <circle cx="92" cy="56" r="30" />
+      <line x1="113" y1="78" x2="138" y2="104" strokeWidth="3" />
+      <path d="M80 56 l8 9 16 -19" strokeWidth="2.6" />
+    </svg>
+  );
+}
+
+/** Editorial cover art for the lead spread. There is no real-bag photography here
+ * by policy (real bags must be first-party or licensed; AI photoreal is barred) —
+ * this is an original, designed "cover plate": the house name set in display type,
+ * the department's honesty frame, and the department motif behind it, on a warm
+ * lattice. House names are TYPE, never a redrawn logo. */
+function CoverPlate({ brand, dept, h = "h-40" }: { brand: string | null; dept: DepartmentId; h?: string }) {
+  const house = brand ?? "The Journal";
+  const frame = getDepartment(dept)?.frame ?? "";
+  const patternId = `lattice-${dept}`;
   return (
     <div
-      className={`relative flex ${h} items-center justify-center overflow-hidden rounded-md border border-border bg-surface-raised`}
+      className={`relative flex ${h} flex-col items-center justify-center overflow-hidden rounded-md border border-border`}
+      style={{ background: "radial-gradient(125% 95% at 50% 0%, #2c2618 0%, #1a1815 55%, #100f0d 100%)" }}
       aria-hidden
     >
-      <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.28em] text-muted/80">
-        {label}
+      <svg className="absolute inset-0 h-full w-full opacity-[0.07]" aria-hidden>
+        <defs>
+          <pattern id={patternId} width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path d="M0 0 H20 M0 0 V20" stroke="#c9a24c" strokeWidth="0.6" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+      </svg>
+
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.16]">
+        <DeptMotif dept={dept} />
+      </div>
+
+      <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.28em] text-gold/70">
+        The Journal
       </span>
-      {dept === "market" ? (
-        <svg width="150" height="92" viewBox="0 0 280 190" fill="none">
-          <line x1="20" y1="160" x2="270" y2="160" stroke="#322c22" />
-          <rect x="46" y="58" width="26" height="102" fill="#3a342a" />
-          <rect x="46" y="116" width="26" height="44" fill="#c9a24c" />
-          <rect x="130" y="44" width="26" height="116" fill="#3a342a" />
-          <rect x="130" y="100" width="26" height="60" fill="#c9a24c" />
-          <rect x="214" y="72" width="26" height="88" fill="#3a342a" />
-          <rect x="214" y="124" width="26" height="36" fill="#c9a24c" />
-        </svg>
-      ) : (
-        <svg width="74" height="74" viewBox="0 0 100 100" fill="none" stroke="#c9a24c" strokeWidth="2.1" opacity="0.5">
-          <path d="M22 42 h56 l-6 38 H28 z" />
-          <path d="M34 42 c0-16 32-16 32 0" />
-          <rect x="44" y="54" width="12" height="9" rx="2" />
-        </svg>
-      )}
+
+      <div className="relative z-10 px-4 text-center">
+        <span className="mx-auto block h-px w-8 bg-gold/50" />
+        <span className="mt-2.5 block font-serif text-xl leading-tight tracking-[0.03em] text-gold-soft sm:text-[1.65rem]">
+          {house}
+        </span>
+        {frame && (
+          <span className="mt-2 block text-[9px] uppercase leading-relaxed tracking-[0.2em] text-muted">
+            {frame}
+          </span>
+        )}
+        <span className="mx-auto mt-2.5 block h-px w-8 bg-gold/50" />
+      </div>
     </div>
   );
 }
@@ -129,7 +195,7 @@ function LeadCard({ p, eyebrow, dept }: { p: PostSummary; eyebrow: string; dept:
       href={`/articles/${p.slug}`}
       className="group grid gap-5 overflow-hidden rounded-lg border border-border bg-surface p-4 transition-colors hover:border-gold sm:grid-cols-[230px_1fr] sm:p-0"
     >
-      <Plate label={p.topic.brandName || "The Journal"} dept={dept} h="h-40 sm:h-full sm:min-h-[170px]" />
+      <CoverPlate brand={p.topic.brandName} dept={dept} h="h-40 sm:h-full sm:min-h-[170px]" />
       <div className="sm:py-5 sm:pr-6">
         <p className="text-[11px] uppercase tracking-[0.22em] text-gold">{eyebrow}</p>
         <h3 className="mt-2 font-serif text-2xl leading-tight text-foreground group-hover:text-gold-soft">

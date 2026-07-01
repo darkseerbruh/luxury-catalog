@@ -295,6 +295,12 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   utilize, leverage (as a verb), at this time.*
 - **Flip throwaways that undercut real information:** don't write *"it's just…
   here"* about knowledge that took expertise to assemble. Give it its due weight.
+- **Naive declaratives we then overturn (locked 2026-06-30).** Never assert a common
+  assumption in our own flat voice as if we hold it, then contradict it (e.g. "A smaller
+  bag should cost less."). Attribute the to-be-overturned premise, then turn it: *"you'd
+  think…," "the rule says…," "…right?," "common sense says…," "it feels like… it's not."*
+  Bald *should / obviously / everyone knows / of course* statements we then reverse tank
+  credibility. Attribute, not assert.
 - **Movie-trailer cadences:** the portentous three-beat ("Know it. Want it. Then
   decide.") reads cheap. Vary the rhythm.
 - **Em dashes (—).** Hard rule: don't use them. They're an AI-slop tell and they
@@ -319,10 +325,13 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
 ## 8. AI-assist guardrails (don't let it read like a robot)
 
 We draft with AI (it's the leverage the whole company runs on) but we **never ship
-obviously-AI copy** — same principle as the no-obviously-AI-*video* rule
-(`docs/handoff.md` constraints). AI-generated tells also get *downweighted by the
-very AI search engines we're optimizing for* (`docs/marketing-plan.md` Decision 4),
-so this is strategy, not just taste.
+obviously-AI copy** — same principle as the **video hard line**: *AI never generates
+footage; AI only edits real footage. Never alter reality (face/voice/appearance/
+scene/object), never AI-touch an authentication frame, never strip an AI label*
+(full ruleset + TikTok disclosure map: `docs/social-content-calendar.md` §8).
+AI-generated tells also get *downweighted by the very AI search engines we're
+optimizing for* (`docs/marketing-plan.md` Decision 4), so this is strategy, not just
+taste.
 
 ### The AI-slop tells to strip every time
 - **Hollow tricolons & "not just X but Y":** "It's not just a bag, it's a

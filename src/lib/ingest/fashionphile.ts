@@ -34,6 +34,7 @@
  */
 
 import type { SaleCondition } from "./types";
+import { extractDescriptionFacts, scrubPii, type DescriptionFacts } from "./description-facts";
 
 // ---------------------------------------------------------------------------
 // Shared vocab — mirrors trr.ts constants (expanded for multi-brand coverage)
@@ -80,17 +81,35 @@ const HARDWARE_RE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass
 // Lighter form — catches "gold-tone" / "gold tone" without trailing "Hardware"
 const HARDWARE_TONE_RE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)[- ](?:Tone|Plated)\b/i;
 
+// Metal in a HARDWARE context (chain/lock/clasp/zipper/stud…) — catches "gold chain",
+// "silver lock", "palladium hardware" where the metal describes hardware, not a colourway.
+// "rose gold" precedes "gold" so the longer match wins. The trailing hardware noun is what
+// keeps a gold/silver *colourway* ("gold caviar leather") from matching.
+const HARDWARE_CONTEXT_RE = /\b(Rose Gold|Gold|Silver|Ruthenium|Palladium|Gunmetal|Brass|Bronze)[- ](?:tone|plated|chain(?:[- ]link)?|lock|clasp|zipper|zip|hardware|stud|studs|buckle|metal|finish|accents?|detailing|chain strap)\b/i;
+
+// Finish-qualified metal — "aged gold", "polished palladium", "brushed silver".
+const HARDWARE_FINISH_RE = /\b(?:aged|polished|brushed|shiny|matte|antique|light)\s+(Rose Gold|Gold|Silver|Ruthenium|Palladium|Gunmetal|Brass|Bronze)\b/i;
+
 // ---------------------------------------------------------------------------
 // Condition mapping
 // ---------------------------------------------------------------------------
 
-/** Fashionphile's display grades (case-insensitive match). */
+/**
+ * Fashionphile's display grades (case-insensitive match). Fashionphile renamed its
+ * middle tiers; the current public ladder (verified live 2026-06-29, best→worst) is:
+ *   New | Excellent | Shows Wear | Worn | Fair
+ * We map it position-for-position onto our 5-tier SaleCondition enum, and keep the
+ * legacy labels (Giftable / Very Good / Good) so older captures still resolve.
+ */
 const CONDITION_MAP: Array<[RegExp, SaleCondition]> = [
-  [/^new$/i,             "new"],
-  [/^giftable$/i,        "new"],   // Fashionphile "Giftable" = like-new / store quality
+  [/^brand\s*new/i,      "new"],
+  [/^new(\s*(without\s*tags|unworn))?$/i, "new"],
+  [/^giftable$/i,        "new"],       // legacy "Giftable" = like-new / store quality
   [/^excellent$/i,       "excellent"],
-  [/^very\s+good$/i,     "very good"],
-  [/^good$/i,            "good"],
+  [/^very\s+good$/i,     "very good"], // legacy tier
+  [/^shows?\s+wear$/i,   "very good"], // current tier directly below Excellent
+  [/^worn$/i,            "good"],      // current tier directly below Shows Wear
+  [/^good$/i,            "good"],      // legacy tier
   [/^fair$/i,            "fair"],
   [/pre.?owned\s+fair/i, "fair"],
 ];
@@ -118,9 +137,17 @@ export interface ShopifyProduct {
   handle?: string | null;
   body_html?: string | null;
   tags?: string[];
+  /** Clean brand string from Shopify (e.g. "Chanel"); more reliable than slug parsing. */
+  vendor?: string | null;
+  /** ISO timestamps from the feed — first-listed / publish / last-change signals. */
+  created_at?: string | null;
+  published_at?: string | null;
+  updated_at?: string | null;
   variants?: Array<{
     price?: string | number | null;
     sku?: string | null;
+    /** Pre-sale / original asking price — discount-depth signal when > price. */
+    compare_at_price?: string | number | null;
   }>;
 }
 
@@ -135,10 +162,22 @@ export interface FashionphileSpec {
   price: number | null;
   currency: string;
   /**
-   * Condition mapped from the grade captured off the search/listing card.
+   * Condition mapped from the grade captured off the listing/product page.
    * Always null if no grade was passed; never inferred from the product JSON alone.
    */
   condition: SaleCondition | null;
+  /** Marketplace region (cross-currency fairness), from the feed's country tag. */
+  region: string | null;
+  /** Date the listing was first published on the site (YYYY-MM-DD), from the feed. */
+  listedAt: string | null;
+  /** Original/pre-sale asking price, when the feed advertises a markdown. */
+  compareAtPrice: number | null;
+  /** Raw per-listing condition write-up (free-text), when captured from the page. */
+  conditionDetail: string | null;
+  /** Structured facts mined from the description (strap/closure/interior/measurements…). */
+  descFacts: DescriptionFacts | null;
+  /** Scrubbed (PII-removed) description text, kept as a private reference only. */
+  sourceDescription: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -188,9 +227,29 @@ function extractMaterial(text: string): string | null {
  * (e.g. "gold", "silver", "rose-gold") or null.
  */
 function extractHardware(text: string): string | null {
-  const m = HARDWARE_RE.exec(text) ?? HARDWARE_TONE_RE.exec(text);
+  // Most-specific-first: explicit "Hardware" > tone/plated > metal-in-context > finish.
+  const m =
+    HARDWARE_RE.exec(text) ??
+    HARDWARE_TONE_RE.exec(text) ??
+    HARDWARE_CONTEXT_RE.exec(text) ??
+    HARDWARE_FINISH_RE.exec(text);
   if (!m) return null;
   return m[1].toLowerCase().replace(/\s+/g, "-");
+}
+
+// Fashionphile tags include a marketplace/country code among unrelated promo tags
+// (verified live 2026-06-29: "US" sits alongside "Year-End Sale" etc.). Match only
+// the known region codes so a promo tag is never mistaken for a region.
+const REGION_TAGS = new Set(["US", "UK", "EU", "CA", "AU", "JP", "HK", "AE"]);
+
+/** Pull a region/country code out of the feed's tags, or null if none present. */
+function extractRegionFromTags(tags?: string[]): string | null {
+  if (!tags) return null;
+  for (const t of tags) {
+    const code = t.trim().toUpperCase();
+    if (REGION_TAGS.has(code)) return code;
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -221,6 +280,7 @@ function extractHardware(text: string): string | null {
 export function parseFashionphileProduct(
   product: ShopifyProduct,
   conditionGrade?: string | null,
+  conditionDetail?: string | null,
 ): FashionphileSpec {
   const spec: FashionphileSpec = {
     color: null,
@@ -233,9 +293,15 @@ export function parseFashionphileProduct(
     price: null,
     currency: "USD",
     condition: null,
+    region: null,
+    listedAt: null,
+    compareAtPrice: null,
+    conditionDetail: null,
+    descFacts: null,
+    sourceDescription: null,
   };
 
-  // --- SKU + price from first variant ---
+  // --- SKU + price + compare-at (was-price) from first variant ---
   const variant = product.variants?.[0];
   if (variant) {
     if (variant.sku) spec.sku = String(variant.sku).trim() || null;
@@ -243,7 +309,22 @@ export function parseFashionphileProduct(
       const p = Number(String(variant.price).replace(/[^0-9.]/g, ""));
       if (Number.isFinite(p) && p > 0) spec.price = p;
     }
+    if (variant.compare_at_price != null) {
+      const c = Number(String(variant.compare_at_price).replace(/[^0-9.]/g, ""));
+      // Only a meaningful markdown counts (Shopify mirrors price into compare_at when none).
+      if (Number.isFinite(c) && c > 0 && spec.price != null && c > spec.price) spec.compareAtPrice = c;
+    }
   }
+
+  // --- Region: the feed tags carry a country code (e.g. "US"). ---
+  spec.region = extractRegionFromTags(product.tags);
+
+  // --- Listed date: first-published / created timestamp from the feed. ---
+  const listedIso = product.published_at ?? product.created_at;
+  if (listedIso && /^\d{4}-\d{2}-\d{2}/.test(listedIso)) spec.listedAt = listedIso.slice(0, 10);
+
+  // --- Condition write-up (free-text), when the caller captured it from the page. ---
+  if (conditionDetail?.trim()) spec.conditionDetail = conditionDetail.trim().slice(0, 1000);
 
   const bodyText = product.body_html ? stripHtml(product.body_html) : "";
   const titleText = product.title ?? "";
@@ -286,6 +367,16 @@ export function parseFashionphileProduct(
 
   // --- Condition from optional captured grade ---
   spec.condition = mapFashionphileCondition(conditionGrade);
+
+  // --- Description facts + private reference text ---
+  // Mine the description for facts the feed fields miss (strap/closure/interior/
+  // measurements…) and keep a PII-scrubbed copy as a private reference, so a colour
+  // or detail the structured fields left null can still be recovered later.
+  const facts = extractDescriptionFacts(bodyText);
+  spec.descFacts = facts;
+  spec.sourceDescription = scrubPii(bodyText);
+  // Backfill colour from the description when the structured scan came back null.
+  if (!spec.color && facts.color) spec.color = facts.color;
 
   return spec;
 }

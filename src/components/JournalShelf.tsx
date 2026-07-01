@@ -34,12 +34,7 @@ export default async function JournalShelf() {
 
   return (
     <section className="border-b border-border px-5 py-12">
-      <div className="flex items-baseline justify-between">
-        <h2 className="font-serif text-2xl text-foreground">From the Journal</h2>
-        <Link href="/articles" className="text-sm text-muted transition-colors hover:text-gold">
-          Read the Journal
-        </Link>
-      </div>
+      <h2 className="font-serif text-2xl text-foreground">From the Journal</h2>
       <p className="mt-1 text-sm text-muted">Sorted by what you came to do.</p>
 
       <div className="mt-7 grid grid-cols-1 gap-x-8 gap-y-8 min-[360px]:grid-cols-2 lg:grid-cols-4">
@@ -66,7 +61,6 @@ export default async function JournalShelf() {
                     </span>
                     <span className="mt-0.5 block text-[11px] tracking-wide text-muted">
                       {byline(p)}
-                      {p.topic.brandName ? ` · ${p.topic.brandName}` : ""}
                     </span>
                   </span>
                 </Link>
@@ -77,6 +71,13 @@ export default async function JournalShelf() {
           );
         })}
       </div>
+
+      <Link
+        href="/articles"
+        className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
+      >
+        Read the Journal
+      </Link>
     </section>
   );
 }

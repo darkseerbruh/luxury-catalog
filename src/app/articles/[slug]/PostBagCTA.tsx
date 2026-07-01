@@ -3,10 +3,12 @@ import { buildResaleLinks, buildConsignmentLinks, buildRentalLinks, applyEbayAff
 
 /**
  * The "money-moment" on an article: turns a topic-tagged post into a commissionable
- * hand-off. Sell/consign is surfaced FIRST (the consignor referral is the dominant
- * revenue lever vs a buyer click), then where to buy. Links are affiliate-attributed
- * via `affiliate.ts` (eBay is live; others flip on when their codes land) and carry
- * rel="sponsored nofollow" + an FTC disclosure. Renders nothing without a topic.
+ * hand-off. BUY (buyer affiliate) leads — it's the revenue backbone since the
+ * consignor lever was ruled out (2026-06-30). Sell/consign is a lighter secondary
+ * fork for readers who already own the bag; rent is the third fork. Links are
+ * affiliate-attributed via `affiliate.ts` (eBay is live; others flip on when their
+ * codes land) and carry rel="sponsored nofollow" + an FTC disclosure. Renders
+ * nothing without a topic.
  */
 const PILL =
   "rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold";
@@ -37,23 +39,9 @@ export function PostBagCTA({
     <section className="rounded-2xl border border-gold/30 bg-gold/[0.03] p-5">
       <h2 className="font-serif text-lg text-foreground">Buying or selling a {label}?</h2>
 
-      {sell.length > 0 && (
-        <div className="mt-4">
-          <p className="text-sm font-medium text-foreground">Sell or consign yours</p>
-          <p className="mt-0.5 text-xs text-muted">It holds its value, so list it where you&apos;ll get the most.</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {sell.map((l) => (
-              <a key={l.key} href={l.url} target="_blank" rel="sponsored nofollow noopener" className={PILL}>
-                {l.name}
-                <span className="text-muted/70"> · {l.mode === "consign" ? "consign" : "instant offer"}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
       <div className="mt-4">
         <p className="text-sm font-medium text-foreground">Shop the resale market</p>
+        <p className="mt-0.5 text-xs text-muted">Pre-filled searches across the major resale platforms, so you can compare prices in one place.</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {buy.map((l) => (
             <a key={l.key} href={l.url} target="_blank" rel="sponsored nofollow noopener" className={PILL}>
@@ -65,6 +53,21 @@ export function PostBagCTA({
           </a>
         </div>
       </div>
+
+      {sell.length > 0 && (
+        <div className="mt-4">
+          <p className="text-sm font-medium text-foreground">Already own one? Sell or consign it</p>
+          <p className="mt-0.5 text-xs text-muted">It holds its value, so list it where you&apos;ll get the most.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {sell.map((l) => (
+              <a key={l.key} href={l.url} target="_blank" rel="sponsored nofollow noopener" className={PILL}>
+                {l.name}
+                <span className="text-muted/70"> · {l.mode === "consign" ? "consign" : "instant offer"}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {rent.length > 0 && (
         <div className="mt-4">

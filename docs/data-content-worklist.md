@@ -34,17 +34,70 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 Fashionphile + Wayback = server fetch; TRR/Vestiaire/Rebag/etc = Firecrawl (bot-block
 defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).*
 
-- 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (134 rows, 2026-06-28: PM med $2,465 n=89, GM med $2,460 n=45, w/ colour+material). ⬜ Anjou, Artois, Belvédère, Saïgon + TRR/Vestiaire (Chrome) + eBay (keys)
-- 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (2026-06-28: med $4,495/$5,325/$6,395/$6,130, n=9/5/10/6). ⬜ Margaux, Half Moon, Bindle, Park Tote + TRR/Vestiaire (Chrome) + eBay (keys)
-- ⬜ **Balenciaga** — Le Cagole, Hourglass, City, Neo Classic (+ Velo, Papier)
-- ⬜ **Chloé** — Marcie, Drew, Faye, Woody Tote, C Bag (+ Aby, Penelope)
-- ⬜ **Givenchy** — Antigona, Pandora, GV3, Cut Out, 4G (+ Voyou)
-- ⬜ **Valentino** — Rockstud Spike, Roman Stud, Locò, One Stud, VLogo Signature (+ Supervee)
-- ⬜ **Alexander McQueen** — The Knuckle, The Jewelled Satchel, The Bow Tote, Skull, Manta
-- ⬜ **Off-White** — Binder Clip, Jitney, Burrow
-- ⬜ **Jacquemus** — Le Chiquito, Le Bambino, Le Bambimou, Le Chouchou (+ Le Grand Bambino)
-- ⬜ **Miu Miu** — Wander, Arcadie, Aventure, Matelassé
-- ⬜ **Burberry** — Lola, Catherine, Pocket, TB Bag, Title (+ Banner, Note) (already had 3 variants)
+> **🔬 Firecrawl probe (2026-06-30, in-session MCP, ~16 credits, Balenciaga City test) — UPDATES §0d:**
+> - **Vestiaire = the cheap rich winner.** ONE search scrape = **5 credits** returns price + **colour +
+>   material** + region per listing (data sits in the page; NO per-listing detail scrape needed). So a
+>   whole-catalog Vestiaire pass ≈ 5 cr × ~56 styles ≈ **~280 credits — fits the FREE 1k tier**, even monthly.
+> - **TheRealReal has HARDENED since 2026-06-28.** Search page still works (5 cr, price + title). But
+>   **product/detail pages are now PerimeterX-captcha-blocked even on the stealth proxy** (403, still
+>   burns 5 cr for nothing). The old ~2.85-cr/listing detail path is currently DEAD. TRR now gives only
+>   price + material-from-title (no colour). Treat TRR as search-only + low priority until PX is solved.
+> - **BLOCKER PROVEN (2026-06-30, $0 local dry-run): Vestiaire cannot be cleanly loaded per-variant.**
+>   Search titles carry NO size (all null); the loader then piles EVERY size-less row onto the style's
+>   first variant (tested: 13 mixed-size Antigona rows all landed on variant 1013 = Antigona **Mini**),
+>   which would corrupt that variant's median. Size only exists on the Vestiaire DETAIL page as raw
+>   DIMENSIONS ("12in x 10in x 6in"), needing fuzzy per-style dimension→label mapping to load cleanly.
+> - **Verdict (my take): do NOT bulk-load Vestiaire per-variant.** Fashionphile already gives these
+>   styles clean per-variant medians; the marginal lift (colour/material spread + region) doesn't beat
+>   the dimension-mapping build + mis-size risk. **Better uses of Vestiaire:** (1) STYLE-LEVEL spread
+>   stats for content (ad-hoc capture, cited in an article, no DB load) — e.g. "Antigona $198-$1,610
+>   across colours on Vestiaire"; (2) single-variant styles only, where size-less rows are unambiguous.
+> - TheRealReal detail stays PX-blocked. Net: the paid Firecrawl pass is NOT worth it right now; the
+>   free Fashionphile per-variant medians stand as the clean dataset.
+
+> **Method (2026-06-30, unattended Fashionphile pass):** `sources/fashionphile-collection.ts <slug>`
+> server-fetches the brand's `products.json` (FREE, no Firecrawl credits) → `fashionphile.ts --raw`
+> maps to TARGETS → `load:prices fashionphile --write` → `summary:refresh`. **Brand guard added to
+> `mapRawRecord`** (matches a target only when the handle's brand == target brand) after a bug where
+> loose substring tokens cross-matched (e.g. Valentino "rockstud-spike" → a Celine target). Sweep
+> stray rows with `clean-fp-contamination.ts [--write]`. TRR/Vestiaire (Firecrawl, spends credits =
+> owner-gated) + eBay sold (browser) remain per-brand ⬜ sub-items.
+
+- 🔄 **Goyard** — ✅ Saint Louis PM/GM Fashionphile (refreshed 2026-06-30: PM med $2,462 n=258, GM med $2,495 n=117). ✅ Remaining styles 2026-06-30 (234 rows w/ Saint Louis refresh): Anjou Mini $2,930/n24 + PM, Artois MM $3,092/n12 + PM $2,945/n18, Belvédère PM $2,785/n19, Saïgon Mini $3,890/n11 + PM, Rouette PM, Bohème $2,995/n23. ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **The Row** — ✅ Soft Margaux 10/12/15/17 Fashionphile (refreshed 2026-06-30: med $4,495/$5,325/$6,445/$6,130, n=25/13/26/16). ✅ Remaining styles 2026-06-30 (59 rows): Margaux $6,455/n3, Half Moon $1,175/n3, Bindle $1,375/n1, Park Tote Medium $1,850/n9 + Large $1,950/n5 + Std $1,850/n7, Terrasse $4,045/n2. ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Balenciaga** — ✅ Fashionphile (2026-06-30, 111 rows): Le Cagole XS $1,072/n20 + Mini $695/n3, Hourglass XS $1,087/n20 + Small $1,150/n21, City(le-city) Small $2,220/n13 + Medium $2,605/n15, Neo Classic Nano $1,175/n6, Velo $1,130/n8, Papier $640/n3. ⬜ TRR/Vestiaire (Firecrawl, credits) + eBay sold (keys)
+- 🔄 **Chloé** — ✅ Fashionphile (2026-06-30, 108 rows): Marcie Mini $650/Small $1,095/Medium $775, Faye Mini $460/Small $375/Medium $550, Woody Tote Medium $635/Large $1,010, Drew $505/n9, Aby Medium $1,017/n2, C Bag Mini $895/n1. Penelope=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Givenchy** — ✅ Fashionphile (2026-06-30, 115 rows): Antigona Mini $1,255/n35 + Small $1,015/n29 + Medium $1,050/n11, Pandora Mini $650/Small $485/Medium $450, 4G Small $830/Medium $1,150, Voyou Nano $750/Medium $800, Cut Out Mini/Small, GV3 $692/n2. ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Valentino** — ✅ Fashionphile (2026-06-30, 40 rows, slug `valentino-garavani`): Rockstud Spike Small $972/Medium $1,207/n8/Large $1,075, Roman Stud Small $1,420/Medium $1,392/Large $1,345, Locò Small $1,650/n7 + Standard $1,230, One Stud $660, VLogo Signature Mini $950, Supervee $1,142. (Vsling has no catalog style row — skipped.) ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Alexander McQueen** — ✅ Fashionphile (2026-06-30, 13 rows; thin feed n=37): The Knuckle $1,225/n4, The Bow Tote $620/n2, Skull $607/n6, Manta $1,800/n1. Jewelled Satchel=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Off-White** — ✅ Fashionphile (2026-06-30, 14 rows; tiny feed n=18): Binder Clip Mini $340/n9, Jitney $595/n5. Burrow=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Jacquemus** — ✅ Fashionphile (2026-06-30, 56 rows): Le Chiquito $495/n26, Le Bambino $650/n9, Le Grand Bambino $737/n16, Le Bambimou $760/n5. Le Chouchou=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Miu Miu** — ✅ Fashionphile (2026-06-30, 42 rows): Wander $2,000/n5, Arcadie $2,422/n6, Aventure $2,845/n11, Matelassé $667/n20 (excl. wander/arcadie/aventure handles). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- 🔄 **Burberry** — ✅ Fashionphile (2026-06-30): Lola (Mini $570/Small $675 — refreshed), + remaining styles 39 rows: Banner Medium $730/n10 + Large $762, Note $1,060/n8, Title $995/n3, TB Bag Small/Medium, Pocket Mini $795. Catherine=no inventory (skipped). ⬜ TRR/Vestiaire (Firecrawl) + eBay sold
+- ✅ **Mulberry** (existing mid-tier) — Fashionphile asking added 2026-06-30 (17 rows): Bayswater Small $1,095/n9 + Mini $1,020, Alexa Medium $555/Mini $945/Small (fills the empty Alexa style). Lily/Amberley/Antony have FP inventory but need NEW style rows (deferred — owner-gated like promote-newstyle).
+
+> **✅ FREE Fashionphile pass COMPLETE (2026-06-30).** All 11 backbone brands + Goyard/The Row
+> remainders + Mulberry captured: **856 rows / 81 new variants** in one autonomous run, 0
+> contamination (brand guard added). Catalog 806→887 variants, 41,523→42,379 price rows. Merged to
+> `main` (FF b7aab74→…). **Remaining per-brand ⬜ are PAID/gated:** TRR + Vestiaire need a Firecrawl
+> credit budget (owner greenlight per §0c), eBay sold needs the browser session. Next free lever =
+> a Redeluxe/Couture USA open-Shopify-feed adapter (registry §0b) for a second free asking surface.
+
+**⬜ NEXT FREE UNIT — Redeluxe + Couture USA Shopify adapter (verified fetchable 2026-06-30):**
+- Feeds (200, no key, no Firecrawl): `https://redeluxe.com/products.json?limit=250&page=N` and
+  `https://www.coutureusa.com/products.json?limit=250&page=N`. Paginate like fashionphile-collection.ts.
+- Shape: Redeluxe `vendor`=brand ("Hermes"/"Dior"/"CHANEL"), `product_type`="Handbag", `tags` carry
+  condition ("excellent"), `title`=full descriptive name. Couture USA `vendor`=brand, structured tags
+  (`CH-brand-<X>`, `Color_<X>`, `Condition <X>`, material words like "Damier Ebene").
+- **SAFETY (do this, don't skip):** `load-prices` resolves brand→style with a FUZZY token-overlap
+  `scoreStyleMatch` (accepts any score>0). A catalog-ABSENT style (e.g. LV "Beaubourg") can mis-land on
+  a curated hero variant via a shared token (e.g. "Neverfull MM" via "mm"), corrupting a public median.
+  So the adapter must either (a) map title→style with a curated per-brand allow-list (like the FP
+  TARGETS), or (b) add a min-score threshold so weak matches route to `discovered_listing` not curated.
+  Do NOT do a raw vendor-feed → curated load without one of those guards.
+- Emit `platform:"Redeluxe"`/`"Couture USA"`, `price_type:"listed"`, `source_url` per listing, condition
+  from tags. Then `load:prices <source> --write` → `summary:refresh` → run `clean-fp-contamination`-style
+  brand check before trusting it.
 
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
@@ -90,3 +143,40 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - ✅ LISTING FRESHNESS (owner: "listings sell every hour, monthly too long"): split medians (aggregate, monthly OK) from live listings (churn hourly). DID: (1) Fashionphile retire job daily→every 3h (headless); (2) ShopThisBag "view" links now rank reliable-live sources (Fashionphile→TRR) first so affiliate clicks avoid stale eBay/Poshmark rows. REAL hourly fix = affiliate product feeds (owner-gated on approvals); browser-gated eBay/Poshmark status can't refresh headless (2026-06-26).
 - ✅ SELF-UPDATING CHARTS: all 6 data-article charts refactored to async server components reading live via getMedians() with per-field baked fallback (n=0/DB down never renders empty): CoachResaleRealityChart, AskVsSoldGapChart (Dior Saddle row stays baked — id 574/575 unresolved), SizePriceCurveChart, MidTierHoldsValueChart, SearchVsPriceChart (asking-only; Birkin/Kelly stay baked as cross-size aggregates; Trends bars static). Dior Saddle post reuses ask-vs-sold-gap. Gates green, pushed (2026-06-26).
 - ✅ Drift check done → docs/article-freshness-report.md: #8/#9/#14 (Neverfull $1245→$1500, Marmont $911→$1095) + #6 (Birkin $18k→$19,995) STALE; Flap/Kelly/Tabby match. #10 can add Speedy sold $566. Owner updates figures before publishing those.
+
+## "It bags of all time" canon gaps (for the ranked-canon article + tier-4; added 2026-06-29)
+*These bags are in the archivist's top-20 canon but NOT in the catalog, so they can't carry a post→bag CTA in the "Why are these the it bags of all time?" article. Capture asking + sold across sources per §0, create the style/variant, load, refresh-summary.*
+- ✅ **Balenciaga City** — DONE 2026-06-29. Created style City (variant 991); loaded 191 rows (eBay sold 76 + Fashionphile 115). Resale median ~$1,495 ($137–$2,965).
+- ✅ **Mulberry Bayswater** — DONE 2026-06-29. Brand/style/variant already existed (variant 932); loaded eBay sold 112 + Fashionphile 15 → 220 total rows. Resale median ~$560 ($118–$1,468).
+- ✅ **Telfar Shopping Bag** — DONE 2026-06-29. Created brand Telfar (tier thrift) + style Shopping Bag (variant 992); loaded 82 rows (eBay sold 45 + Fashionphile 37). Resale median ~$120 ($50–$330); eBay floor ~$81 is the accessible-market read, Fashionphile premium pulls the blend up.
+- Loader: `supabase/ingest/load-canon-gaps.ts` (dry-run default, `--write`, idempotent). Captures were browser-gated (Claude-in-Chrome, owner-present); raw landed in gitignored `data/ingest/_raw/`. **NOTE:** migration 0038 added a FUNCTION `variant_price_summary()` that shares a name with the pre-existing 0021 materialized view of the same name — reconcile in the deals/hero RPC rewire (use one or the other).
+- (also flagged separately, chip task_646da12f) ⬜ Backfill `price_history.condition` from source listings so the rail's "great price" verdict can become condition-aware (only 15 of ~31.8k listed rows have condition today).
+
+## Representative house pricing — broaden coverage (2026-06-30, owner-directed)
+
+*Powers the /data "typical resale price by house" claim. Owner wants it to genuinely
+mean "what a typical bag from this house costs," not "the icons we happen to track."
+Today it skews HIGH for three reasons (verified 2026-06-30): (1) we track bags, not
+accessories (only ~9 of 633 priced styles are SLGs); (2) thin houses are flagship-skewed
+(The Row = 11 variants, 6 of them Margaux; any house under ~20 variants is not
+representative); (3) our prices are 95% Fashionphile + The RealReal, which curate to
+consignment-grade luxury. Fix = broaden coverage per house, NOT lower any threshold.*
+
+**Method (per §0 one-pass; Fashionphile is the clean, FREE per-variant source — do NOT
+bulk-load Vestiaire per-variant, it mis-sizes onto variant 1, see the 2026-06-30 probe above):**
+- ⬜ Per house, list Fashionphile's full brand catalog (Shopify `products.json`), not just
+  the backbone icons: include the mid/entry styles AND small leather goods (wallets, WOCs,
+  card holders, belt bags) that pull the true median DOWN.
+- ⬜ Scaffold the missing styles/variants FIRST (`scaffold-variants.ts` — loader drops
+  zero-variant styles), then `load:prices -- fashionphile --write`, then `summary:refresh`.
+- ⬜ Priority order: the thin houses first (The Row, Goyard, Miu Miu, Off-White, McQueen,
+  Valentino, Jacquemus — all under ~20 variants), then broaden the SLG/accessory gap across
+  the big houses so their medians reflect the full range.
+- ⬜ Acceptance: every house on the /data board has >=20 priced variants spanning its real
+  range (flagship AND accessory), so the median is defensible. Until then, /data should keep
+  the honest "the bags we track" scoping (never claim market-wide typical price).
+
+*NOTE: attributes (colour/hardware/material) are NOT part of this task — they are already
+dense on price_history from Fashionphile (colorway 88%, material 90%, hardware 54% as of
+2026-06-30) and now power the /data "Gold or silver / colors / leathers" sections. Only
+production_year (7%) + condition (13%) remain sparse.*

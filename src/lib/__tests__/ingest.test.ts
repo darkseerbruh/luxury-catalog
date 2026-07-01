@@ -13,8 +13,9 @@ import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 import { parseTrrDescription } from "../ingest/trr";
-import { buildEnrichmentPrompt, parseEnrichmentResponse } from "../ingest/enrich";
+import { buildEnrichmentPrompt, parseEnrichmentResponse, buildDescriptionFactsPrompt, parseDescriptionFactsResponse } from "../ingest/enrich";
 import { buildSpecPrompt, parseSpecResponse } from "../ingest/spec-extract";
+import { mapConditionText, mapTrrItemCondition } from "../ingest/condition";
 
 const valid: PriceObservation = {
   brand: "Chanel",
@@ -285,6 +286,25 @@ describe("condition enrichment parser", () => {
     expect(p).toMatch(/Do NOT guess/i);
     expect(p).toContain("Light corner wear");
   });
+
+  it("description-facts parser validates JSON (incl. fences) + caps strings", () => {
+    const out = parseDescriptionFactsResponse('```json\n{"color":"Black","closure":"turn-lock","measurements":"10\\" x 8\\" x 4\\"","has_date_code":true,"pattern":"  "}\n```');
+    expect(out).toMatchObject({ color: "Black", closure: "turn-lock", has_date_code: true });
+    expect(out!.measurements).toMatch(/10/);
+    expect(out!.pattern).toBeNull(); // whitespace-only -> null
+  });
+
+  it("description-facts parser returns null for non-JSON", () => {
+    expect(parseDescriptionFactsResponse("no idea")).toBeNull();
+    expect(parseDescriptionFactsResponse("")).toBeNull();
+  });
+
+  it("description-facts prompt instructs JSON-only and no inference", () => {
+    const p = buildDescriptionFactsPrompt("Vintage Speedy 30, date code SD0911, measures 12 x 8 x 7 inches.");
+    expect(p).toMatch(/JSON only/i);
+    expect(p).toMatch(/Do NOT guess/i);
+    expect(p).toContain("date code SD0911");
+  });
 });
 
 describe("item-spec parser", () => {
@@ -339,5 +359,52 @@ describe("MSRP dataset", () => {
     const flap2012 = obs.find((o) => o.observed_on.startsWith("2012"));
     expect(flap2005?.sale_price).toBe(1650);
     expect(flap2012?.sale_price).toBe(4400);
+  });
+});
+
+describe("shared condition normalizer", () => {
+  it("grades explicit wear write-ups", () => {
+    expect(mapConditionText("Excellent condition, light corner wear")).toBe("excellent");
+    expect(mapConditionText("Very good condition")).toBe("very good");
+    expect(mapConditionText("Good condition")).toBe("good");
+    expect(mapConditionText("Fair condition, heavy patina")).toBe("fair");
+  });
+
+  it("treats unworn / like-new language as the right tier", () => {
+    expect(mapConditionText("New with tags")).toBe("new");
+    expect(mapConditionText("Brand new, never carried")).toBe("new");
+    expect(mapConditionText("Never worn")).toBe("new");
+    expect(mapConditionText("Unworn")).toBe("new");
+    expect(mapConditionText("Like new")).toBe("excellent");
+    expect(mapConditionText("Pristine")).toBe("excellent");
+  });
+
+  it("never invents a grade for ambiguous text", () => {
+    expect(mapConditionText("Pre-owned")).toBeNull();
+    expect(mapConditionText("Gently used")).toBeNull();
+    expect(mapConditionText("Signs of wear")).toBeNull();
+    expect(mapConditionText("Satisfactory condition")).toBeNull();
+    expect(mapConditionText("")).toBeNull();
+    expect(mapConditionText(null)).toBeNull();
+  });
+
+  it("prefers the more specific grade when several words appear", () => {
+    // "very good" must win over the bare "good" inside it
+    expect(mapConditionText("This bag is in very good condition")).toBe("very good");
+    // "like new" must win over the bare "new"
+    expect(mapConditionText("In like new condition")).toBe("excellent");
+  });
+
+  it("reads schema.org itemCondition URLs", () => {
+    expect(mapConditionText("https://schema.org/NewCondition")).toBe("new");
+    expect(mapConditionText("https://schema.org/UsedCondition")).toBeNull();
+    expect(mapConditionText("http://schema.org/LikeNewCondition")).toBe("excellent");
+  });
+
+  it("maps TRR itemCondition binary honestly (new, else null)", () => {
+    expect(mapTrrItemCondition("https://schema.org/NewCondition")).toBe("new");
+    expect(mapTrrItemCondition("NewCondition")).toBe("new");
+    expect(mapTrrItemCondition("https://schema.org/UsedCondition")).toBeNull();
+    expect(mapTrrItemCondition(null)).toBeNull();
   });
 });

@@ -43,7 +43,7 @@ const TARGETS: Record<string, TrrTarget> = {
 
 /** Pull the JSON-LD `Product` out of a TRR product page's raw HTML. TRR escapes the
  *  ld+json (it sits double-encoded inside the Next.js payload), so we decode twice. */
-export function parseTrrProduct(html: string): { name: string; price: number; currency: string; condition: string | null; desc: string | null } | null {
+export function parseTrrProduct(html: string): { name: string; price: number; currency: string; condition: string | null; conditionDetail: string | null; desc: string | null } | null {
   const m = html.match(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
   if (!m) return null;
   const raw = m[1].trim();
@@ -70,6 +70,7 @@ export function parseTrrProduct(html: string): { name: string; price: number; cu
     price,
     currency: String((offers as Record<string, unknown> | undefined)?.priceCurrency ?? "USD"),
     condition: condRaw.includes("New") ? "new" : condRaw.includes("Used") ? null : null,
+    conditionDetail: condRaw || null,
     desc: typeof p.description === "string" ? p.description : null,
   };
 }
@@ -143,6 +144,7 @@ async function main() {
           season: spec.season,
           inclusions: spec.includes,
           listing_ref: slug,
+          condition_detail: prod.conditionDetail,
         },
         platform: "TheRealReal", price_type: "listed", sale_price: prod.price, currency: prod.currency,
         condition: prod.condition as PriceObservation["condition"],

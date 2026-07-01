@@ -216,6 +216,19 @@ describe("parseFashionphileProduct — hardware extraction", () => {
     const spec = parseFashionphileProduct(minimalProduct);
     expect(spec.hardwareColor).toBeNull();
   });
+
+  it("catches metal in a hardware context without the word 'Hardware'", () => {
+    // Real FP phrasings: "gold chain", "silver lock", "polished palladium".
+    const goldChain = { title: "Caviar Tote", body_html: "<p>crafted of black caviar with a gold chain strap</p>", variants: [{ price: "3000", sku: "x" }] };
+    expect(parseFashionphileProduct(goldChain).hardwareColor).toBe("gold");
+    const palladium = { title: "Birkin", body_html: "<p>features polished palladium hardware accents</p>", variants: [{ price: "9000", sku: "y" }] };
+    expect(parseFashionphileProduct(palladium).hardwareColor).toBe("palladium");
+  });
+
+  it("does NOT read a gold/silver colourway as hardware", () => {
+    const goldBag = { title: "Metallic Gold Calfskin Tote", body_html: "<p>crafted of metallic gold calfskin leather</p>", variants: [{ price: "2000", sku: "z" }] };
+    expect(parseFashionphileProduct(goldBag).hardwareColor).toBeNull();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -303,6 +316,20 @@ describe("mapFashionphileCondition", () => {
     expect(mapFashionphileCondition("Pre-Owned Fair")).toBe("fair");
   });
 
+  // Fashionphile's CURRENT ladder (New | Excellent | Shows Wear | Worn | Fair), mapped
+  // position-for-position onto the SaleCondition enum. Verified live 2026-06-29.
+  it("maps current tier 'Shows Wear' → 'very good'", () => {
+    expect(mapFashionphileCondition("Shows Wear")).toBe("very good");
+  });
+
+  it("maps current tier 'Worn' → 'good'", () => {
+    expect(mapFashionphileCondition("Worn")).toBe("good");
+  });
+
+  it("maps 'Brand New Unworn' → 'new'", () => {
+    expect(mapFashionphileCondition("Brand New Unworn")).toBe("new");
+  });
+
   it("returns null for unrecognised grade", () => {
     expect(mapFashionphileCondition("Pristine")).toBeNull();
   });
@@ -336,6 +363,36 @@ describe("parseFashionphileProduct — condition from grade arg", () => {
   it("unrecognised grade maps to null", () => {
     const spec = parseFashionphileProduct(chanelFlapProduct, "Like New");
     expect(spec.condition).toBeNull();
+  });
+
+  it("condition_detail is captured when passed", () => {
+    const spec = parseFashionphileProduct(chanelFlapProduct, "Excellent", "Light corner wear; faint interior marks.");
+    expect(spec.conditionDetail).toBe("Light corner wear; faint interior marks.");
+  });
+});
+
+describe("parseFashionphileProduct — feed-derived fields (region / listed date / was-price)", () => {
+  it("extracts region from the country tag among unrelated promo tags", () => {
+    const p: ShopifyProduct = { ...chanelFlapProduct, tags: ["Year-End Sale", "Cardi B", "US"] };
+    expect(parseFashionphileProduct(p).region).toBe("US");
+  });
+
+  it("region is null when no known country tag is present", () => {
+    const p: ShopifyProduct = { ...chanelFlapProduct, tags: ["Going Viral", "refresh-tag"] };
+    expect(parseFashionphileProduct(p).region).toBeNull();
+  });
+
+  it("derives listedAt (YYYY-MM-DD) from published_at, falling back to created_at", () => {
+    const p: ShopifyProduct = { ...chanelFlapProduct, published_at: "2025-10-23T13:57:33-07:00" };
+    expect(parseFashionphileProduct(p).listedAt).toBe("2025-10-23");
+  });
+
+  it("captures compareAtPrice only when it is a genuine markdown over price", () => {
+    const marked: ShopifyProduct = { ...chanelFlapProduct, variants: [{ price: "1255.00", compare_at_price: "1320.00", sku: "x" }] };
+    expect(parseFashionphileProduct(marked).compareAtPrice).toBe(1320);
+    // Shopify mirrors price into compare_at when there's no markdown — must be ignored.
+    const flat: ShopifyProduct = { ...chanelFlapProduct, variants: [{ price: "1255.00", compare_at_price: "1255.00", sku: "x" }] };
+    expect(parseFashionphileProduct(flat).compareAtPrice).toBeNull();
   });
 });
 
