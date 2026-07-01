@@ -4,7 +4,12 @@
  * Fashionphile 'listed', sold = eBay completed 'sold'), captured June 2026 with n, plus the
  * Google Trends pull in docs/research-drafts/trends-keyword-pull.md (sets 3 and 5). The chart
  * [diagram: neverfull-speedy-chart] self-updates from prod; prose figures are kept honest by
- * the drift check (docs/article-freshness-report.md). Status stays 'draft' — owner publishes.
+ * the drift check (docs/article-freshness-report.md).
+ *
+ * This article is already LIVE (post_id 10, slug louis-vuitton-neverfull-vs-speedy), so this
+ * seed is idempotent AGAINST that row: on an existing row it patches only the topic tag +
+ * updated_at (never the status or body), so re-running can't unpublish or clobber live content.
+ * A fresh insert (no row yet) goes in as a draft for the owner to publish.
  *   npx tsx supabase/seed/seed-neverfull-speedy.ts
  */
 import { supabaseAdmin as db } from "./lib/client";
@@ -43,29 +48,35 @@ The Neverfull is an open, unstructured tote that buyers treat as a daily workhor
 These are realized eBay sold prices and premium-reseller asking prices we captured in June 2026, each with its sample size. Condition is not recorded on every listing, so read each figure as a center of gravity for what the bag trades at, an estimate, not an appraisal of any one bag. Demand can shift, and a popular bag today is not a guaranteed value tomorrow.`;
 
 async function main() {
-  const slug = "neverfull-vs-speedy";
-  // Topic tag = Louis Vuitton Neverfull, resolved by name so the money-moment CTA
-  // hands off to the right bag regardless of the row ids (brand_id 1 is Chanel, not LV).
+  const slug = "louis-vuitton-neverfull-vs-speedy"; // the live article's slug (post_id 10)
+  // Topic tag = Louis Vuitton Neverfull, resolved by name (shared helper) so the
+  // money-moment CTA is correct regardless of row ids (brand_id 1 is Chanel, not LV).
   const { brandId, styleId } = await resolveTopic("Louis Vuitton", "Neverfull");
-  const row = {
-    author_user_id: AUTHOR,
-    slug,
-    title: "Neverfull vs Speedy: which Louis Vuitton holds value better?",
-    excerpt:
-      "The Speedy is searched more and lists higher. The Neverfull sells for more. We pulled the search data and our pricing data to show which Louis Vuitton tote actually holds up, and what each really costs.",
-    body,
-    status: "draft" as const,
-    topic_brand_id: brandId,
-    topic_style_id: styleId,
-    updated_at: new Date().toISOString(),
-  };
+  const now = new Date().toISOString();
   const { data: existing } = await db.from("post").select("post_id").eq("slug", slug).maybeSingle();
   if (existing) {
-    const { error } = await db.from("post").update(row).eq("post_id", existing.post_id);
-    console.log(error ? `ERR ${error.message}` : `updated #${existing.post_id} ${slug}`);
+    // Live row: patch ONLY the topic tag (the fix) + updated_at. Never touch status or
+    // body, so this can't unpublish or overwrite hand-edited live content.
+    const { error } = await db
+      .from("post")
+      .update({ topic_brand_id: brandId, topic_style_id: styleId, updated_at: now })
+      .eq("post_id", existing.post_id);
+    console.log(error ? `ERR ${error.message}` : `retagged #${existing.post_id} ${slug} → brand ${brandId}/style ${styleId}`);
   } else {
-    const { data, error } = await db.from("post").insert(row).select("post_id").single();
-    console.log(error ? `ERR ${error.message}` : `inserted #${data!.post_id} ${slug}`);
+    // Fresh insert only when the article does not exist yet: full content, as a draft.
+    const { data, error } = await db.from("post").insert({
+      author_user_id: AUTHOR,
+      slug,
+      title: "Neverfull vs Speedy: which Louis Vuitton holds value better?",
+      excerpt:
+        "The Speedy is searched more and lists higher. The Neverfull sells for more. We pulled the search data and our pricing data to show which Louis Vuitton tote actually holds up, and what each really costs.",
+      body,
+      status: "draft" as const,
+      topic_brand_id: brandId,
+      topic_style_id: styleId,
+      updated_at: now,
+    }).select("post_id").single();
+    console.log(error ? `ERR ${error.message}` : `inserted #${data!.post_id} ${slug} (draft)`);
   }
 }
 main().then(() => process.exit(0)).catch((e) => { console.error(e.message || e); process.exit(1); });
