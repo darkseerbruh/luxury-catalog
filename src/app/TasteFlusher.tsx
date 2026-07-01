@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { saveQuizAnswers } from "@/lib/taste-actions";
 import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
+import { useAuthState } from "@/components/AuthProvider";
 
 /**
  * Persists a logged-out visitor's quiz answers the moment they have an account.
@@ -13,7 +14,8 @@ import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
  * "take the quiz -> sign up -> keep your results" loop. No-op when signed out or
  * when there's nothing pending.
  */
-export default function TasteFlusher({ signedIn }: { signedIn: boolean }) {
+export default function TasteFlusher() {
+  const { signedIn } = useAuthState();
   const router = useRouter();
 
   useEffect(() => {

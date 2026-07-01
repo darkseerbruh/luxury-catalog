@@ -1,4 +1,7 @@
 import { createServerSupabase } from "./supabase/server";
+import { getSupabase } from "./supabase";
+import { unstable_cache } from "next/cache";
+import { CACHE_CATALOG } from "./cache";
 import { getCurrentUser } from "./auth";
 
 /**
@@ -168,10 +171,16 @@ const DETAIL_SELECT_FALLBACK = SUMMARY_SELECT_FALLBACK.replace(
   "post_id, slug, body"
 );
 
-/** Published posts, newest first (by published_at). Empty when env/migrations absent. */
-export async function listPublished(limit = 50): Promise<PostSummary[]> {
+/**
+ * Published posts, newest first (by published_at). Empty when env/migrations
+ * absent. Cookieless: published rows and public author profiles are anon-readable
+ * (RLS: "anyone reads published"), so this uses the anon client and is cached —
+ * which lets the pages that list posts (home, /articles) render statically
+ * instead of dynamically.
+ */
+async function loadPublished(limit: number): Promise<PostSummary[]> {
   if (!hasSupabase()) return [];
-  const supabase = await createServerSupabase();
+  const supabase = getSupabase();
 
   const primary = await supabase
     .from("post")
@@ -194,6 +203,17 @@ export async function listPublished(limit = 50): Promise<PostSummary[]> {
   if (!rows) return [];
   await attachAuthors(supabase, rows);
   return rows.map(mapSummary);
+}
+
+const cachedListPublished = unstable_cache(
+  (limit: number) => loadPublished(limit),
+  ["posts-published"],
+  { revalidate: CACHE_CATALOG, tags: ["posts"] },
+);
+
+/** Published posts, newest first (by published_at). Cached + cookieless. */
+export async function listPublished(limit = 50): Promise<PostSummary[]> {
+  return cachedListPublished(limit);
 }
 
 /**

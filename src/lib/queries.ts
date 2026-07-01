@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
 import { getSupabaseAdmin } from "./supabase/admin";
@@ -1148,6 +1147,9 @@ async function parseSearchQuery(query: string): Promise<SearchFilters | null> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return null;
   try {
+    // Lazy-load the SDK so it stays out of the homepage/layout server bundle
+    // (this module is imported by both). Only the search path pays the cost.
+    const { default: Anthropic } = await import("@anthropic-ai/sdk");
     const anthropic = new Anthropic({ apiKey });
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
