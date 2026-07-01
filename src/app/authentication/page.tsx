@@ -38,6 +38,13 @@ const LADDER = [
   },
   {
     step: "03",
+    title: "Check a listing",
+    body: "Buying online? Answer a few things and we flag the common scam signals against our resale data: price, photos, the card tell, and where you are buying.",
+    href: "/authentication/check",
+    cta: "Check a listing",
+  },
+  {
+    step: "04",
     title: "Bring in a pro",
     body: "For a costly buy, or before you sell or insure, hand it to a verified authenticator for a hands-on review.",
     href: "/authenticate",
@@ -66,7 +73,7 @@ export default async function AuthenticationHub() {
       </div>
 
       {/* The ladder */}
-      <div className="mb-10 grid gap-4 sm:grid-cols-3">
+      <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {LADDER.map((r) => (
           <Link
             key={r.step}
