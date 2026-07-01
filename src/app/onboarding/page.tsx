@@ -6,7 +6,7 @@ import { MOTIVATIONS } from "@/lib/maturity";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Welcome · The Luxury Catalog" };
+export const metadata = { title: "Welcome · Luxury Catalog" };
 
 export default async function OnboardingPage({
   searchParams,

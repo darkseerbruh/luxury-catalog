@@ -9,7 +9,7 @@ import AuthInterestButton from "@/components/AuthInterestButton";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "My closet · The Luxury Catalog" };
+export const metadata = { title: "My closet · Luxury Catalog" };
 
 const STATUS_LABELS: Record<string, string> = {
   want: "Want",

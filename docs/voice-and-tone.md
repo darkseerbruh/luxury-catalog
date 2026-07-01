@@ -318,7 +318,50 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   Applies everywhere copy ships: headings, labels, taglines, metadata, error
   strings. (A label like "Brand: Chanel" already complies since the value is a
   proper noun.)
+- **Naive declaratives we don't actually believe (credibility-tanking, locked 2026-06-30).**
+  Never assert a common assumption in our own flat voice as if we hold it ("A smaller bag should
+  cost less."). We are the knowing narrator, so frame a premise we're about to overturn *as the
+  assumption*, not as our belief: "you'd think a smaller bag costs less," "the rule says…," or
+  the wink "…right?" Then turn it. A bald "should" we immediately contradict reads as naive and
+  tanks trust. Same for any "obviously / everyone knows / of course" we then debunk: attribute
+  the belief, don't own it.
 - **AI-slop tells:** see §8.
+
+---
+
+## 7b. Article structure & data rules (locked 2026-06-30, from owner edits)
+
+- **Brand name: "Luxury Catalog," never "The Luxury Catalog."** Sitewide.
+- **Open by questioning the reader's default,** not by announcing the finding ("Does a bigger bag
+  really cost more?" beats "Smaller bags cost more"). Put a crack in the assumption, then turn it.
+- **Social scripts lead with a HOOK and a POINT OF VIEW, never a topic statement (locked 2026-06-30).**
+  "Two bags, both cost a used car, and both have a flaw nobody admits" beats "Birkin or Kelly, price
+  barely decides it." Inject the owner's real opinion (hedged: "in my experience," "my take") and the
+  de-gatekeeping energy. A data summary with no hook reads dry and dies. **Ship 2-3 rotating hook
+  variants per post** so she can A/B test and repost without it going stale.
+- **Never assume the audience knows model names (locked 2026-06-30).** Casual buyers recognize bags
+  by look and brand, not model name (the Coach Tabby is a rare exception, it's TikTok-famous). So
+  pair every model name with the bag itself: shown on screen in video, a silhouette/photo in a pin,
+  or a 3-word descriptor in copy ("the structured leather satchel, the Mulberry Bayswater"). Lead
+  with the names people actually know.
+- **Short-form social (TikTok/IG) = ONE idea, one hook, one sticky takeaway (locked 2026-06-30).**
+  Never a list or a ranking, nobody remembers seven names and prices in 30 seconds. Lists, rankings,
+  and full comparisons are ARTICLE content (and fine on Pinterest, which behaves like search/
+  reference). The short-form post extracts ONE beat (ideally a single surprising comparison) and
+  routes to the article for the full list. Example: "the trendy Coach is worth a third of another
+  Coach from the same brand" beats a 7-bag ranked chart on TikTok.
+- **Sample sizes (n) live in charts and tables, never in body prose.** The chart carries the
+  receipts; the text stays readable.
+- **Multi-point numbers go in scannable bullets,** not a packed sentence.
+- **Surface the governing takeaway early** (right after the first example), and give the single
+  most important line **visual emphasis** (pull quote / callout), not buried in a paragraph.
+- **Hyphenate compound modifiers** (most-wanted, small-size, data-informed).
+- **"Should" is fine for practical instructions** ("what you should do with this data"); **banned
+  for naive premises we debunk and for taste/value verdicts** (those stay "my take / an estimate";
+  see §7 naive-declaratives + §3 hedge).
+- **The data-hedge note is explicit and human:** say what the numbers ARE and ARE NOT (asking not
+  sold, condition varies, an estimate of the market not an appraisal of one bag), a short readable
+  note, not a terse tag.
 
 ---
 

@@ -6,7 +6,7 @@ import { listMyPosts } from "@/lib/posts";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "My articles · The Luxury Catalog",
+  title: "My articles · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

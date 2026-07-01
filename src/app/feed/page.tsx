@@ -6,7 +6,7 @@ import { FeedItem } from "@/components/FeedItem";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Activity · The Luxury Catalog" };
+export const metadata = { title: "Activity · Luxury Catalog" };
 
 export default async function FeedPage() {
   const user = await getCurrentUser();

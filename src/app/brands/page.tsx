@@ -4,7 +4,7 @@ import { BRAND_TIERS, getBrandsOverview } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "All brands · The Luxury Catalog",
+  title: "All brands · Luxury Catalog",
   description:
     "Every designer handbag brand we cover, grouped by tier — production history, authentication markers, and real resale prices for each.",
 };

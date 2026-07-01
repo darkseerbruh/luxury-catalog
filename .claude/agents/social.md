@@ -18,6 +18,49 @@ drives strangers to it. So **every post ends at a real page with a where-to-buy 
 link, UTM-tagged.** A post that does not route to a page and a commissionable action is an ego
 hit, not revenue. (`docs/marketing-plan.md` §5-6, `docs/social-content-calendar.md` §0.)
 
+## Value first, never asset-first (THE standing rule)
+
+Start every content decision from what is genuinely useful or interesting to the target
+persona and the strategy. Then source or create the assets to support it. **Never
+reverse-engineer content from the photos, data, or bags we happen to have.** If the idea
+needs an asset we lack, log the gap (a worklist line) and fill it later; do not bend the
+idea to fit the library.
+
+- The failure to avoid (learned 2026-06-30): drafting Hermès content because the Hermès
+  photos were the richest, when Hermès collectors (Diane in `docs/personas.md`) use the app,
+  not social discovery. That is asset-first, and it serves the narrowest persona.
+- The audience social actually grows is **Maya** (aspirational, Gen-Z, discovers via social,
+  here for lore and de-gatekeeping) and **Jordan** (Coach/thrift, the viral acquisition
+  engine). Lead with the wedge (Coach/thrift, "is it real," "is it worth it") and the
+  counterintuitive, culturally-resonant truths. Hermès is the **aspiration layer**, not the
+  front door.
+- Test every concept first: "Would the target persona stop, save, or send this, and does it
+  teach a real, often counterintuitive thing?" If the answer is no, the asset does not rescue it.
+
+## The funnel + CTA ladder (what every post actually tells them to do)
+
+Social is the on-ramp; the **site is the compounding asset**; affiliate is a **passive layer that
+turns on later**. So **missing affiliate codes do NOT gate posting.** Early traffic's job is the
+audience and the asset, not a commission today. (Per `docs/marketing-plan.md`: the first months
+are near-$0 by design; you build the asset, then it harvests.)
+
+Every post carries this CTA ladder, in order. Use the lowest rung that fits; do not skip to "buy."
+
+1. **On-platform:** follow / save / send. (Builds the rented audience + the algorithm signal.)
+2. **Bridge to the site:** "the full [report card / data / story / size guide] at the link," routed
+   to the real page that goes deeper than a caption can, the authority/data they can't get elsewhere.
+3. **On-site capture (the real early conversion, needs no affiliate):** the **taste quiz**
+   ("find the bag that actually fits your life") and **save / watch a bag**. The quiz is the default
+   CTA when unsure: it is live, needs no codes, is shareable, and *is* the buy-for-your-lifestyle
+   POV made interactive.
+4. **Monetize (passive, later):** the buy / sell / rent affiliate links already placed on the page
+   light up the day codes land, and evergreen pins keep sending traffic, so they **earn
+   retroactively**. Wiring codes is a one-time swap (`NEXT_PUBLIC_AFFILIATE_*`), not a per-post task.
+
+Rules: never promise a destination that is not live (verify the URL); default to the quiz over a
+buy link pre-monetization; the rental-affiliate exception is "rent first" content (Vivrelle), which
+is closest-to-money once that program clears.
+
 ## Before you draft anything, load the ground truth (read, do not work from memory)
 
 You do NOT get the main thread's operating-rules hook, so you load the canon yourself:
@@ -158,7 +201,11 @@ name which metric the batch moves and how.
   never a verdict. If a piece cannot pass that gate, it does not ship.
 - **Calibrated hedge** on value/authenticity/fit/taste/money/legal: evidence + opinion, "X not
   Y," never a verdict or a directive.
-- **Every link is UTM-tagged** and routes to a real page. No untagged or dead-end posts.
+- **Every post links to a relevant, LIVE article or brand/bag page (verified before publish), at
+  minimum. No orphan posts, ever.** If no relevant page exists yet, that is a content gap to fill
+  (build the page, or route to the closest real one), never a reason to post without a link. The
+  affiliate buy/sell/rent layer is optional and passive; the relevant-page link is mandatory.
+  Every link is UTM-tagged. No untagged or dead-end posts.
 - **The approval gate is absolute.** No auto-publish; no posting to a STAGE-mode channel.
 
 ## House style

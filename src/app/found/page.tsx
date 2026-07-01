@@ -4,7 +4,7 @@ import { hasActiveAuthenticators } from "@/lib/authentication";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Log a find · The Luxury Catalog" };
+export const metadata = { title: "Log a find · Luxury Catalog" };
 
 export default async function FoundPage({
   searchParams,

@@ -65,24 +65,24 @@ export async function SizePriceCurveChart() {
   }));
   return (
     <figure style={{ margin: "0.5rem 0 1rem" }}>
-      <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 18, background: "#14120c", color: FG, maxWidth: 600 }}>
+      <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, padding: 22, background: "#14120c", color: FG, maxWidth: 600 }}>
         <div style={{ fontFamily: "var(--font-serif)", fontSize: 18 }}>Does a smaller bag cost more?</div>
         <div style={{ fontSize: 12.5, color: MUTED, marginBottom: 16 }}>
           Asking median by size, June 2026. Each bag is scaled to its own range so the direction shows. Labeled with the number of listings.
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
           {groups.map((g) => {
             const max = Math.max(...g.bars.map((b) => b.v));
             return (
               <div key={g.model}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 14 }}>
                   <span style={{ color: FG }}>{g.model}</span>
                   <span style={{ color: g.inverts ? GOLD : MUTED, fontSize: 11 }}>{g.note}</span>
                 </div>
-                <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 96 }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
                   {g.bars.map((b) => (
                     <div key={b.size} style={{ flex: 1, textAlign: "center" }}>
-                      <div style={{ fontSize: 10.5, color: FG, marginBottom: 3 }}>{money(b.v)}</div>
+                      <div style={{ fontSize: 11, color: FG, marginBottom: 6 }}>{money(b.v)}</div>
                       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", height: 60 }}>
                         <div style={{ width: "70%", height: `${(b.v / max) * 100}%`, background: g.inverts ? GOLD : KELLY, borderRadius: "5px 5px 0 0", minHeight: 4 }} />
                       </div>

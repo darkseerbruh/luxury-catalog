@@ -3,7 +3,7 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Admin · The Luxury Catalog",
+  title: "Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

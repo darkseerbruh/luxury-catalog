@@ -13,17 +13,17 @@ const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and E
 
 const coachBody = `The Coach Tabby is everywhere right now, which makes it the bag people ask about most: is it worth buying preowned, and what should it actually cost? We pulled the real numbers. They are not the numbers on the listing.
 
-Across eBay completed sales over roughly the last year, a **Tabby 26 sold at a median of about $198** (n=177, captured June 2026). On the authenticated resellers, the same bag is **listed for around $365** (TheRealReal and Fashionphile asking, n=43). So the price tag you see when you start shopping is close to double what the bag is actually selling for somewhere else.
+Across eBay completed sales over roughly the last year, a **Tabby 26 sold at a median of about $198**. On the authenticated resellers, the same bag is **listed for around $365** (TheRealReal and Fashionphile asking). So the price tag you see when you start shopping is close to double what the bag is actually selling for somewhere else.
 
 [diagram: coach-resale-reality]
 
 > The gap between asking and selling is the most useful thing a Coach shopper can know. A listing price is a hope. A sold price is a fact. When the two are this far apart, the buyer has room and the seller is usually being optimistic.
 
-The smaller and larger Tabbys tell the same story. The **Tabby 20 sold near $193** (n=25) and the standard **Tabby 26 shoulder bag near $204** (n=73), all clustered around the $200 mark regardless of size. The Tabby is a roughly $200 bag on the resale market, full stop.
+The smaller and larger Tabbys tell the same story. The **Tabby 20 sold near $193** and the standard **Tabby 26 shoulder bag near $204**, all clustered around the $200 mark regardless of size. The Tabby is a roughly $200 bag on the resale market, full stop.
 
 ## The Rogue is a different animal
 
-Put the Rogue next to it and the contrast is sharp. The **Rogue 25 sold at a median near $499** (n=41) and the larger **standard Rogue near $645** (n=88). That is two and a half to three times what a Tabby brings, from the same brand.
+Put the Rogue next to it and the contrast is sharp. The **Rogue 25 sold at a median near $499** and the larger **standard Rogue near $645**. That is two and a half to three times what a Tabby brings, from the same brand.
 
 Why the split? The Rogue is built from glovetanned leather with a structured frame and has stayed a lower-volume, leather-first design. The Tabby is largely a coated-canvas and lighter-leather bag produced in big numbers and tied to a fast trend cycle. Volume and trend pull resale down. Leather and scarcity hold it up.
 
@@ -39,11 +39,11 @@ These are realized eBay sold prices and reseller asking prices we captured in Ju
 
 const sizeBody = `Common sense says a bigger bag costs more. More leather, more bag, more money. For a lot of bags that holds. For some of the most coveted ones, it is backwards, and the smallest version is the most expensive thing on the rack.
 
-Take the **Dior Lady Dior**. Our asking data has the **mini at a median of about $3,925** (n=146) and the **small at $3,890** (n=105), while the **medium sits near $2,475** (n=184) and the **large drops to about $1,750** (n=73). The bag gets cheaper as it gets bigger. The tiny one, the one that barely holds a phone and a card case, commands the top price.
+Take the **Dior Lady Dior**. Our asking data has the **mini at a median of about $3,925** and the **small at $3,890**, while the **medium sits near $2,475** and the **large drops to about $1,750**. The bag gets cheaper as it gets bigger. The tiny one, the one that barely holds a phone and a card case, commands the top price.
 
 [diagram: size-price-curve]
 
-It is not a Dior quirk. The **Hermès Constance** runs the same way: the **18 centimeter is around $11,950** (n=183) against the larger **24 centimeter near $9,995** (n=57). Smaller, pricier. The same small-size premium shows up on the Birkin and Kelly.
+It is not a Dior quirk. The **Hermès Constance** runs the same way: the **18 centimeter is around $11,950** against the larger **24 centimeter near $9,995**. Smaller, pricier. The same small-size premium shows up on the Birkin and Kelly.
 
 ## Why the small ones win
 
@@ -51,7 +51,7 @@ These are desirability-driven bags. People buy a Lady Dior mini or a Constance 1
 
 ## Where the rule flips back
 
-Now look at a bag people actually carry to work. The **Celine Triomphe** prices the normal way: the **mini near $1,089** (n=46), the **small around $1,395** (n=69), the **medium up at $2,295** (n=95), the **teen at about $2,370** (n=46). Bigger costs more, because here size is utility and the larger bag does more.
+Now look at a bag people actually carry to work. The **Celine Triomphe** prices the normal way: the **mini near $1,089**, the **small around $1,395**, the **medium up at $2,295**, the **teen at about $2,370**. Bigger costs more, because here size is utility and the larger bag does more.
 
 That is the rule worth remembering. **When a bag is bought as an accessory, small carries a premium. When it is bought to use, size tracks function and the bigger one costs more.**
 
@@ -75,7 +75,7 @@ const POSTS = [
   {
     slug: "does-a-smaller-bag-cost-more",
     title: "Does a smaller bag cost more? What our pricing data says",
-    excerpt: "A smaller bag should cost less, right? For some of the most wanted designs it costs more. Our pricing data shows which bags flip the rule, and why everyday bags do not.",
+    excerpt: "A smaller bag should cost less... right? For some of the most wanted designs it costs more. Our pricing data shows which bags flip the rule, and why everyday bags do not.",
     body: sizeBody,
     topic_brand_id: 203,
     topic_style_id: null as number | null,

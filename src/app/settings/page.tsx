@@ -10,7 +10,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Settings · The Luxury Catalog",
+  title: "Settings · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 
