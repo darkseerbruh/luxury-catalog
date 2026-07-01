@@ -85,6 +85,17 @@ look, not we rule). "Authenticator" pulls the most raw demand but over-promises 
 6. **Save the find** to a closet (account), and, if genuine, a path to sell (sell-side
    affiliate later).
 
+## Build status (2026-06-30)
+- **Shipped:** the reframe to "Spot the Fake" (H1 + tagline), resemblance + confidence ID,
+  value-if-genuine (median/n/date, gated on a catalog match + not-low confidence + no hard
+  flag), the calibrated no-match copy (uncatalogued vs a shape the house never made), and the
+  **hard, house-confirmed dealbreaker on country of origin** (`HOUSE_ORIGINS` in the identify
+  route + a red dealbreaker card; mass-market houses excluded so Coach is never flagged for
+  China). Value is suppressed whenever the hard flag fires.
+- **Still pending:** the other hard disqualifiers (misspelled / wrong-geometry logo, a true
+  silhouette-does-not-exist check beyond catalog absence). Vision cannot reliably extract logo
+  geometry yet, so we deliberately hold it rather than over-claim. Origin is the reliable one.
+
 ## Data + reuse
 - **Reused (already exists):** the `/identify` vision call; the resale medians (with n +
   observed date); the per-house authentication guides; the closet save.

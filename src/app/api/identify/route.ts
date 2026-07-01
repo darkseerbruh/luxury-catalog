@@ -18,6 +18,7 @@ Analyze this image and identify the bag. Respond with a JSON object ONLY (no mar
   "hardwareType": "turn-lock/clasp/zipper/push-lock/padlock or null",
   "materialType": "material description if identifiable (e.g. Caviar leather, Togo leather, Canvas) or null",
   "visibleAuthMarkers": ["list only authentication markers you can CLEARLY see in this image — date codes, stamps, serial numbers, hardware engravings, stitching patterns, etc. If none visible, use []"],
+  "madeIn": "the country from a visible 'Made in ___' stamp/label, exactly as written (e.g. 'Italy', 'France', 'China'), or null if no origin text is clearly legible",
   "confidence": "high if brand+style clearly identifiable, medium if probable, low if uncertain",
   "notes": "any other relevant observations about condition, authenticity indicators, or features"
 }
@@ -26,7 +27,8 @@ Critical rules:
 - Only report what is clearly visible. Do not guess or invent authentication markers.
 - If you cannot clearly identify the brand, set brand to null.
 - If you cannot clearly identify the style/model, set style to null.
-- visibleAuthMarkers must only contain things you can actually see in the image.`;
+- visibleAuthMarkers must only contain things you can actually see in the image.
+- madeIn must be null unless the origin text is actually legible in the photo. Do not infer it.`;
 
 interface IdentificationResult {
   brand: string | null;
@@ -37,8 +39,50 @@ interface IdentificationResult {
   hardwareType: string | null;
   materialType: string | null;
   visibleAuthMarkers: string[];
+  madeIn: string | null;
   confidence: "high" | "medium" | "low";
   notes: string | null;
+}
+
+/**
+ * Houses where a visible "Made in ___" is a hard authenticity signal, with the
+ * countries a genuine bag is actually produced in. A legible origin OUTSIDE this
+ * set is a house-confirmed dealbreaker (the strongest thing a photo can show).
+ * Sourced from docs/research-drafts/authentication-markers-brief.md (2026-06-30).
+ * Mass-market houses (Coach, Kate Spade, Michael Kors) are deliberately ABSENT:
+ * they produce in China/Vietnam/Philippines, so origin is not a tell for them.
+ */
+const HOUSE_ORIGINS: Record<string, string[]> = {
+  chanel: ["france", "italy"],
+  hermes: ["france"],
+  "louis vuitton": ["france", "spain", "italy", "usa", "united states", "germany"],
+  gucci: ["italy"],
+  dior: ["france", "italy"],
+  "christian dior": ["france", "italy"],
+  prada: ["italy"],
+  fendi: ["italy"],
+  celine: ["italy"],
+  "saint laurent": ["italy"],
+  ysl: ["italy"],
+  "bottega veneta": ["italy"],
+  balenciaga: ["italy"],
+  goyard: ["france"],
+  loewe: ["spain"],
+};
+
+/** A house-confirmed dealbreaker from the origin stamp, or null. Only fires when
+ * the brand is in HOUSE_ORIGINS AND a country is legible AND it is not an allowed
+ * origin. Everything else falls through (no false dealbreakers). */
+function originHardFlag(brand: string | null, madeIn: string | null): { reason: string } | null {
+  if (!brand || !madeIn) return null;
+  const allowed = HOUSE_ORIGINS[brand.trim().toLowerCase()];
+  if (!allowed) return null;
+  const where = madeIn.trim().toLowerCase();
+  if (allowed.some((c) => where.includes(c) || c.includes(where))) return null;
+  const label = allowed[0].charAt(0).toUpperCase() + allowed[0].slice(1);
+  return {
+    reason: `A genuine ${brand} is made in ${label}${allowed.length > 1 ? " (or a few other countries), never" : ", never"} in ${madeIn.trim()}. If that label is what it says, this is a dealbreaker.`,
+  };
 }
 
 interface CatalogMatch {
@@ -266,13 +310,17 @@ export async function POST(req: Request) {
   // typically resells around $X" (an estimate, never a flat value on the unverified
   // bag). Only when we have a confident-enough catalog match; gated further on the
   // client by identification confidence.
+  // Hard, house-confirmed dealbreaker (origin stamp). When present we do NOT attach
+  // a value: a bag that fails a definitive check gets no price.
+  const hardFlag = originHardFlag(identification.brand, identification.madeIn);
+
   let resale: { median: number; count: number; currency: string; asOf: string | null } | null = null;
-  if (catalogMatch?.styleId) {
+  if (!hardFlag && catalogMatch?.styleId) {
     const shop = await getStyleShopData(catalogMatch.styleId);
     if (shop && shop.count > 0) {
       resale = { median: shop.medianPrice, count: shop.count, currency: shop.currency, asOf: shop.asOf };
     }
   }
 
-  return Response.json({ identification, catalogMatch, resale });
+  return Response.json({ identification, catalogMatch, resale, hardFlag });
 }

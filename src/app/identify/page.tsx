@@ -14,6 +14,7 @@ interface IdentificationResult {
   hardwareType: string | null;
   materialType: string | null;
   visibleAuthMarkers: string[];
+  madeIn: string | null;
   confidence: "high" | "medium" | "low";
   notes: string | null;
 }
@@ -39,6 +40,7 @@ interface ApiResponse {
   identification?: IdentificationResult;
   catalogMatch?: CatalogMatch | null;
   resale?: ResaleEstimate | null;
+  hardFlag?: { reason: string } | null;
   error?: string;
 }
 
@@ -259,6 +261,25 @@ export default function IdentifyPage() {
               </Link>
             )}
           </div>
+
+          {/* Hard, house-confirmed dealbreaker (origin stamp). The only place the
+              tool speaks firmly, and still conditioned on the photo being accurate. */}
+          {result?.hardFlag && (
+            <div className="rounded-2xl border border-[#cf7d59]/50 bg-[#cf7d59]/10 p-6">
+              <div className="flex items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cf7d59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <h2 className="font-serif text-lg text-foreground">A dealbreaker, if the photo is right</h2>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-foreground/90">{result.hardFlag.reason}</p>
+              <p className="mt-2 text-sm text-muted">
+                We would walk away. Confirm it in person before you spend a dollar. We are reading a
+                photo, so check the label yourself, but a wrong country of origin is one of the clearest tells there is.
+              </p>
+            </div>
+          )}
 
           {/* Identification card */}
           <div className="rounded-2xl border border-border bg-surface p-6">
