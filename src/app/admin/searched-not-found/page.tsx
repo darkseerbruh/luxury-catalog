@@ -4,7 +4,7 @@ import { getSearchedNotFound } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Searched, not found — Admin · The Luxury Catalog",
+  title: "Searched, not found — Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

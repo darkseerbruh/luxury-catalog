@@ -7,7 +7,7 @@ import PremiumInterest from "@/components/PremiumInterest";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "My watchlist · The Luxury Catalog" };
+export const metadata = { title: "My watchlist · Luxury Catalog" };
 
 function formatPrice(amount: number | null, currency: string | null) {
   if (amount == null) return null;

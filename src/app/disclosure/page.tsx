@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Affiliate Disclosure — The Luxury Catalog",
+  title: "Affiliate Disclosure — Luxury Catalog",
   description:
-    "How The Luxury Catalog earns affiliate and referral commissions, and what that means for the links and prices you see.",
+    "How Luxury Catalog earns affiliate and referral commissions, and what that means for the links and prices you see.",
 };
 
 export default function DisclosurePage() {
@@ -14,7 +14,7 @@ export default function DisclosurePage() {
 
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-muted">
         <p>
-          The Luxury Catalog is a free reference site. To support it, some of the outbound links on
+          Luxury Catalog is a free reference site. To support it, some of the outbound links on
           our pages — for example, the &ldquo;Where to buy&rdquo; search links to resale platforms
           such as Fashionphile, The RealReal, and Vestiaire Collective — are{" "}
           <span className="text-foreground">affiliate links</span>. If you click one and make a

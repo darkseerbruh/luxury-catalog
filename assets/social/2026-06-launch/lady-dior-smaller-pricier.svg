@@ -1,0 +1,38 @@
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lady Dior price by size with growing bag silhouettes">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#311525"/><stop offset="1" stop-color="#180a11"/></linearGradient>
+    <g id="bag">
+      <path d="M28,36 Q28,6 50,6 Q72,6 72,36" fill="none" stroke="#c9a24c" stroke-width="5"/>
+      <path d="M14,36 L86,36 L80,88 Q80,92 76,92 L24,92 Q20,92 20,88 Z" fill="none" stroke="#c9a24c" stroke-width="4"/>
+      <path d="M14,54 L86,54" stroke="#c9a24c" stroke-width="3"/>
+      <rect x="44" y="49" width="12" height="10" rx="2" fill="#c9a24c"/>
+    </g>
+  </defs>
+  <rect x="0" y="0" width="1000" height="1500" fill="url(#bg)"/>
+
+  <text x="500" y="120" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="23" letter-spacing="7">THE SMALL-SIZE PREMIUM</text>
+  <text x="500" y="232" text-anchor="middle" fill="#f3e9ec" font-family="Georgia, serif" font-size="62" font-weight="600">The smaller the bag,</text>
+  <text x="500" y="304" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="62" font-weight="600" font-style="italic">the bigger the price.</text>
+  <text x="500" y="364" text-anchor="middle" fill="#b9a6ad" font-family="Georgia, serif" font-size="27">Lady Dior, median asking by size, June 2026</text>
+
+  <line x1="130" y1="1085" x2="870" y2="1085" stroke="#5a3a46" stroke-width="2"/>
+  <rect x="175" y="565" width="110" height="520" fill="#c9a24c"/>
+  <rect x="365" y="570" width="110" height="515" fill="#c9a24c"/>
+  <rect x="555" y="757" width="110" height="328" fill="#8a6f63"/>
+  <rect x="745" y="853" width="110" height="232" fill="#8a6f63"/>
+  <g font-family="Georgia, serif" font-size="34" fill="#f3e9ec" text-anchor="middle">
+    <text x="230" y="543">$3,925</text><text x="420" y="548">$3,890</text>
+    <text x="610" y="735">$2,475</text><text x="800" y="831">$1,750</text>
+  </g>
+
+  <use href="#bag" transform="translate(209,1150) scale(0.42)"/>
+  <use href="#bag" transform="translate(392,1138) scale(0.55)"/>
+  <use href="#bag" transform="translate(571,1118) scale(0.78)"/>
+  <use href="#bag" transform="translate(750,1098) scale(1.0)"/>
+  <g font-family="Georgia, serif" font-size="29" fill="#b9a6ad" text-anchor="middle">
+    <text x="230" y="1285">Mini</text><text x="420" y="1285">Small</text><text x="610" y="1285">Medium</text><text x="800" y="1285">Large</text>
+  </g>
+
+  <text x="500" y="1372" text-anchor="middle" fill="#cdb8c0" font-family="Georgia, serif" font-size="31" font-style="italic">Same bag. More leather. Less money.</text>
+  <text x="500" y="1428" text-anchor="middle" fill="#9a838c" font-family="Georgia, serif" font-size="22">Asking medians, June 2026. An estimate of the market, not an appraisal. luxurycatalog.com</text>
+</svg>

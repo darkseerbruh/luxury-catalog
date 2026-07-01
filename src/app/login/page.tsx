@@ -5,7 +5,7 @@ import AuthForm from "./AuthForm";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Log in · The Luxury Catalog" };
+export const metadata = { title: "Log in · Luxury Catalog" };
 
 export default async function LoginPage({
   searchParams,

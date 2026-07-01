@@ -11,7 +11,7 @@ import { Avatar } from "@/components/Avatar";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Profile · The Luxury Catalog" };
+export const metadata = { title: "Profile · Luxury Catalog" };
 
 const PERSONA_LABELS: Record<string, string> = {
   collector: "Collector / investor",

@@ -6,7 +6,7 @@ import { BagImage } from "@/components/BagImage";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Most Wanted Bags · The Luxury Catalog",
+  title: "Most Wanted Bags · Luxury Catalog",
   description:
     "The bags collectors want most right now, ranked by how many people have each one on their want list. The board shifts as people add bags they're after.",
 };

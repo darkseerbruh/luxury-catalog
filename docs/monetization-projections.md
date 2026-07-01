@@ -130,7 +130,7 @@ Exit run-rate (M12 × 12): **~$155K gross / ~$110K take-home annualized.**
 | Traffic ramp slips one full quarter | **−~$10–12K** (the biggest single lever — affiliate + rental are traffic-bound) |
 | Effective affiliate rate halves (program cuts) | **−~$9K** — exactly why Decision 3 says diversify across platforms |
 | Rental conversions 2× (base 15→30/mo) | **+~$2.5K** (cheap, reachable upside — networks already in hand) |
-| A real digital seller-lever is found (per-referral back toward $1,250) | **+~$22K** — the upside that re-opens if a *trackable* consignor program is sourced |
+| A real digital seller-lever is found (per-referral back toward $1,250) | **+~$22K, now treated as closed.** TRR rejected the final high-payout pitch (2026-06-30); no trackable high-bounty consignor program is in reach. Kept only as a theoretical ceiling. |
 | Auth marketplace launches M6 instead of M9 | **+~$3–5K** (and warms supply via the tier ladder sooner) |
 | Premium priced $50 + 2× conversion | **+~$3K** (smallest yr-1 lever; a yr-2 compounder) |
 
@@ -148,9 +148,9 @@ Researched 2026-06-24, kept out of the numbers above until pursued — see `docs
 ## Honest caveats
 
 - **These are possibility curves, not forecasts.** No live traffic data exists yet (pre-launch, DB not runtime-tested). Every input is a defensible estimate, not an observation. Recalibrate the moment you have 4–6 weeks of real PostHog data on outbound CTR and per-visitor value — those two numbers collapse most of the uncertainty.
-- **The seller lever is deliberately conservative now — and could swing either way.** $250/referral is a placeholder for niche consignment-affiliate commissions; volumes are guesses. If you find a resale partner offering *trackable, digital* consignor-referral links at a real bounty, this line re-inflates fast (see the sensitivity row). Until then, don't bank on it.
+- **The seller lever is deliberately conservative now — and could swing either way.** $250/referral is a placeholder for niche consignment-affiliate commissions; volumes are guesses. If you find a resale partner offering *trackable, digital* consignor-referral links at a real bounty, this line re-inflates fast (see the sensitivity row). Until then, don't bank on it. **Update 2026-06-30: TRR rejected the final seller-referral pitch, so treat the high-payout reopening as closed, not pending. The ~$250 niche line (e.g. Madison Avenue Couture) is all that remains, and it is not a lever the plan leads on.**
 - **Rental is new and unproven for this audience.** $40/conversion and the volumes are estimates; rental-membership conversion off a catalog `want` signal hasn't been observed. It's reachable cheaply, so it's worth turning on — but treat the line as upside, not a floor.
-- **TRR Real Partners is excluded on purpose, not by oversight.** The 2026-06-24 call established it can't be wired into a digital aggregator. Don't re-add a $1,250 consignor line citing TRR unless their program model changes.
+- **TRR Real Partners is excluded on purpose, not by oversight.** The 2026-06-24 call established it can't be wired into a digital aggregator. Don't re-add a $1,250 consignor line citing TRR unless their program model changes. **Reconfirmed 2026-06-30: TRR rejected the latest pitch; the high-payout seller lever is dead, not deferred.**
 - **Tax is a placeholder.** The 28% set-aside is a rough SE-tax-plus-federal reserve. Talk to an accountant about the LLC's treatment, quarterly estimated payments, and your state before treating take-home as spendable.
 - **GEO is a bet on a 2026 dynamic.** The thesis — AI assistants preferentially cite fact-dense, sourced content — is well-supported but still young. If AI-citation traffic underperforms, the curve looks more like Conservative.
 

@@ -20,7 +20,7 @@ export const AUTHOR_NAME =
 // Site author role shown in bylines + the author card. Single-author assumption
 // for now; move to a per-profile `title` column if guest contributors are added.
 export const AUTHOR_ROLE =
-  process.env.NEXT_PUBLIC_AUTHOR_ROLE || "Founder and Editor of The Luxury Catalog";
+  process.env.NEXT_PUBLIC_AUTHOR_ROLE || "Founder and Editor of Luxury Catalog";
 
 export function cmToIn(cm: number): number {
   return Math.round((cm / 2.54) * 10) / 10;

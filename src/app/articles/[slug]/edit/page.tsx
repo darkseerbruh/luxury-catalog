@@ -8,7 +8,7 @@ import PostForm from "../../PostForm";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Edit article · The Luxury Catalog",
+  title: "Edit article · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

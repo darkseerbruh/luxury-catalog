@@ -6,9 +6,9 @@ import { TrustBadges } from "@/components/TrustBadges";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Leaderboards · The Luxury Catalog",
+  title: "Leaderboards · Luxury Catalog",
   description:
-    "The most-coveted closets and most-active reviewers on The Luxury Catalog. The boards shift as collectors add bags, follow each other, and review.",
+    "The most-coveted closets and most-active reviewers on Luxury Catalog. The boards shift as collectors add bags, follow each other, and review.",
 };
 
 export default async function LeaderboardsPage() {

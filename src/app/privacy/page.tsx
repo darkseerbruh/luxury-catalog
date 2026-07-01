@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — The Luxury Catalog",
+  title: "Privacy Policy — Luxury Catalog",
   description:
-    "What data The Luxury Catalog collects, why, who we share it with, and how you can access or delete it.",
+    "What data Luxury Catalog collects, why, who we share it with, and how you can access or delete it.",
 };
 
 export default function PrivacyPage() {

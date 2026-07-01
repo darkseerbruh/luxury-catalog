@@ -4,7 +4,7 @@ import { getInterestStats } from "@/lib/authentication";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Authentication demand — Admin · The Luxury Catalog",
+  title: "Authentication demand — Admin · Luxury Catalog",
   robots: { index: false, follow: false },
 };
 

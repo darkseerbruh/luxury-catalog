@@ -46,11 +46,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { handle } = await params;
   const profile = await getPublicProfile(handle);
-  if (!profile) return { title: "Profile · The Luxury Catalog" };
+  if (!profile) return { title: "Profile · Luxury Catalog" };
   const name = profile.displayName || `@${profile.handle}`;
   return {
-    title: `${name} · The Luxury Catalog`,
-    description: profile.bio || `${name}'s handbag closet on The Luxury Catalog.`,
+    title: `${name} · Luxury Catalog`,
+    description: profile.bio || `${name}'s handbag closet on Luxury Catalog.`,
   };
 }
 

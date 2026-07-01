@@ -1,0 +1,21 @@
+<svg viewBox="0 0 1000 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Where to buy versus where to be careful">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#311525"/><stop offset="1" stop-color="#180a11"/></linearGradient></defs>
+  <rect x="0" y="0" width="1000" height="1500" fill="url(#bg)"/>
+  <text x="500" y="120" text-anchor="middle" fill="#c9a24c" font-family="Georgia, serif" font-size="23" letter-spacing="6">SO YOU DON'T BUY A FAKE</text>
+  <text x="500" y="216" text-anchor="middle" fill="#f3e9ec" font-family="Georgia, serif" font-size="56" font-weight="600">Where to buy. Where not.</text>
+  <line x1="500" y1="300" x2="500" y2="1160" stroke="#5a3a46" stroke-width="2"/>
+  <text x="270" y="380" text-anchor="middle" fill="#9fd6a0" font-family="Georgia, serif" font-size="38" font-style="italic">Buy here</text>
+  <g font-family="Georgia, serif" font-size="29" fill="#e7dfe2">
+    <text x="90" y="475">Fashionphile</text><text x="90" y="548">The RealReal</text>
+    <text x="90" y="621">Rebag, Vestiaire</text><text x="90" y="694">eBay / Poshmark</text>
+    <text x="90" y="736" fill="#b9a6ad" font-size="23">over $500 (checked)</text>
+  </g>
+  <text x="732" y="380" text-anchor="middle" fill="#e6a06a" font-family="Georgia, serif" font-size="38" font-style="italic">Be careful</text>
+  <g font-family="Georgia, serif" font-size="29" fill="#e7dfe2">
+    <text x="548" y="475">Private, off-platform</text><text x="548" y="548">Facebook Marketplace</text>
+    <text x="548" y="621">Random IG DMs</text><text x="548" y="694">eBay / Poshmark</text>
+    <text x="548" y="736" fill="#b9a6ad" font-size="23">under $500 (on you)</text>
+  </g>
+  <text x="500" y="1270" text-anchor="middle" fill="#cdb8c0" font-family="Georgia, serif" font-size="30" font-style="italic">Safest check: a pro with the bag in hand.</text>
+  <text x="500" y="1410" text-anchor="middle" fill="#9a838c" font-family="Georgia, serif" font-size="22">eBay and Poshmark authenticate over $500. Flags to weigh, not a verdict. luxurycatalog.com</text>
+</svg>

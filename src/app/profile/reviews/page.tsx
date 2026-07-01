@@ -5,7 +5,7 @@ import { getMyReviews } from "@/lib/reviews";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "My reviews · The Luxury Catalog" };
+export const metadata = { title: "My reviews · Luxury Catalog" };
 
 function StarRow({ rating }: { rating: number }) {
   return (

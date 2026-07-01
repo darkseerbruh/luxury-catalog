@@ -5,7 +5,7 @@ import TasteQuizClient from "./TasteQuizClient";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Find your taste · The Luxury Catalog",
+  title: "Find your taste · Luxury Catalog",
   description:
     "A quick taste read. We hand you the words for your own style, then point you at bags worth a look.",
 };

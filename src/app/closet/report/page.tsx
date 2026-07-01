@@ -7,7 +7,7 @@ import PurchasePriceField from "./PurchasePriceField";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Collection report · The Luxury Catalog" };
+export const metadata = { title: "Collection report · Luxury Catalog" };
 
 function symbolFor(currency: string | null): string {
   return currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
