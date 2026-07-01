@@ -79,7 +79,7 @@ export default async function AttributeFacts() {
 
       {materials.length > 0 && (
         <section className="rounded-2xl border border-gold/30 bg-gold/5 p-6">
-          <p className="text-sm uppercase tracking-widest text-gold">What they're actually made of</p>
+          <p className="text-sm uppercase tracking-widest text-gold">What they&rsquo;re actually made of</p>
           <h2 className="mt-1 font-serif text-2xl text-foreground">The leathers</h2>
           <p className="mt-1 text-sm text-muted">
             What these bags are actually made of, from calfskin to caviar.
