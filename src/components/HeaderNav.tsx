@@ -18,6 +18,7 @@ type BrandGroup = { label: string; brands: { brandId: number; name: string }[] }
 const AUTH_MENU: NavLink[] = [
   { href: "/authentication", label: "The guides" },
   { href: "/identify", label: "Spot the Fake (photo)" },
+  { href: "/authentication/check", label: "Check a listing" },
   { href: "/authenticate", label: "Get it authenticated" },
 ];
 
