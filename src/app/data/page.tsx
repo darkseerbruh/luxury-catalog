@@ -28,7 +28,7 @@ export default async function DataPage() {
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-5 py-12">
       <p className="text-sm uppercase tracking-widest text-gold">The data behind every page</p>
-      <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">Luxury data, unlocked</h1>
+      <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">The numbers they keep behind glass</h1>
       <p className="mt-3 max-w-2xl text-muted">
         The luxury world keeps its numbers behind glass: what a bag really resells for,
         which houses hold their value, what the market actually pays. We think that
