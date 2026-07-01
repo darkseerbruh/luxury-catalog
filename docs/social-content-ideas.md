@@ -288,7 +288,8 @@ Hot takes (#3–5) and stories (#11–14) slot in as the recurring personality l
 419 trending bag search terms, extracted + sorted by popularity. Popularity = TikTok's search
 volume signal (verified across frames); growth ▲% is directional, verify in-app. Full data:*
 
-- **`docs/tiktok-trending-terms.csv`** (all 419, importable to the Command Center sheet)
+- **Living table: `/admin/trends`** (the auto-updating home, backed by the `tiktok_trend` table, migration 0041). Sort, filter, and fill the creator/saturation count + content status right on the page. This replaced the Google Sheets plan after the owner's Workspace org blocked every write path (2026-07-01).
+- **`docs/tiktok-trending-terms.csv`** (all 419; the refresh source, loaded by `supabase/seed/seed-tiktok-trends.ts`)
 - **`assets/social/trending/tiktok-trending-terms-2026-07-01.xlsx`** (formatted: All terms / Fetch-saturation-first / Re-check tabs)
 
 **Workflow:** popularity is only half the read. Saturation (how many creators already make the

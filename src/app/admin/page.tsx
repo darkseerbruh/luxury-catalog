@@ -9,6 +9,12 @@ export const metadata = {
 
 const SECTIONS = [
   {
+    href: "/admin/trends",
+    title: "TikTok trends",
+    description:
+      "Trending bag searches from the TikTok Creative Center, sorted by popularity. Fill in the creator/saturation count and build where demand is high but saturation is low.",
+  },
+  {
     href: "/admin/searched-not-found",
     title: "Searched, not found",
     description:
