@@ -3,6 +3,12 @@
 
 ---
 
+## TL;DR — Bag-detail declutter: compact hero + honest selector axes (2026-07-02, on `main`)
+
+**Owner flagged the bag page fold + weird selector labels; both fixed same day.** Hero image (photo or placeholder) capped at 320×240 centered (was full-column ~575px tall) so the value module sits above the fold. Variant data normalized (styles 218/3/200/2): size chips = size code only (PM/MM/GM/BB), colour chips = canonical canvas/colour name (Monogram, Damier Ebene), "varies by season" junk nulled; originals preserved in commit `3e8161c`'s message. **New rule (locked in preferences): every per-variant detail = own DB column + selector dimension** — selector now derives axes from ALL captured fields via `src/lib/variant-dims.ts` (shows an axis only when it varies AND isn't implied 1:1 by an earlier axis; unit-tested). **⚠️ Owner action: run the "Apply database migrations" GitHub Action** to apply `0041_variant_trim_material.sql` (adds `variant.trim_material` + Neverfull backfill); the app degrades gracefully until then (wide select falls back, Trim axis just doesn't appear).
+
+---
+
 ## TL;DR — Catalogue completion run (2026-07-02 evening, on `main`)
 
 **Owner: "do them all, on a loop, until done." Finish line A substantially closed; B method proven.** Same-day totals across both runs: **price_history 57,165 (+14,818 today), styles 761, variants 1,388.**
