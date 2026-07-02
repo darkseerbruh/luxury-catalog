@@ -440,5 +440,65 @@
     "excludeTokens": [
       "mini"
     ]
+  },
+  {
+    "brand": "Hermès",
+    "style": "Médor",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "medor"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Jige",
+    "size_label": "Elan",
+    "requireTokens": [
+      "hermes",
+      "jige"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Vidépoches",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "videpoches"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "HAC à Dos",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "hac-dos"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Mosaïque",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "mosaique"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
   }
 ]

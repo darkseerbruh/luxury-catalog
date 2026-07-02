@@ -350,5 +350,41 @@
     "minPrice": 700,
     "maxPrice": 3000,
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Dior",
+    "style": "JaDior",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "jadior"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Dior",
+    "style": "Journey",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "journey"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Dior",
+    "style": "Dioraddict",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "dioraddict"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   }
 ]

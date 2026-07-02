@@ -1539,5 +1539,269 @@
     "excludeTokens": [
       "bandouliere"
     ]
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "CarryAll",
+    "size_label": "PM",
+    "requireTokens": [
+      "louis-vuitton",
+      "carryall-pm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "CarryAll",
+    "size_label": "MM",
+    "requireTokens": [
+      "louis-vuitton",
+      "carryall-mm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "CarryAll",
+    "size_label": "Dark",
+    "requireTokens": [
+      "louis-vuitton",
+      "carryall-dark"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Neverfull",
+    "size_label": "Neverfull GM (Monogram)",
+    "requireTokens": [
+      "louis-vuitton",
+      "neverfull-gm"
+    ],
+    "minPrice": 500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Neverfull",
+    "size_label": "BB",
+    "requireTokens": [
+      "louis-vuitton",
+      "neverfull-bb"
+    ],
+    "minPrice": 800,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Double Zip Pochette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "zip-pochette"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Pochette Twin",
+    "size_label": "PM",
+    "requireTokens": [
+      "louis-vuitton",
+      "pochette-twin-pm"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Pochette Twin",
+    "size_label": "GM",
+    "requireTokens": [
+      "louis-vuitton",
+      "pochette-twin-gm"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Pochette Florentine",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "pochette-florentine"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Kirigami Pochette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "kirigami"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Trousse Make-Up Pochette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "trousse-make"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Pochette Saint Louis",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "pochette-saint-louis"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Cité",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "-cite-"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Cannes",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "cannes"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Venice",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "venice"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Christopher Backpack",
+    "size_label": "PM",
+    "requireTokens": [
+      "louis-vuitton",
+      "christopher"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Siena",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "siena"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Wapity",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "wapity"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Saleya",
+    "size_label": "PM",
+    "requireTokens": [
+      "louis-vuitton",
+      "saleya"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Petit Bucket",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "petit-bucket"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Lodge",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "lodge"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
+  },
+  {
+    "brand": "Louis Vuitton",
+    "style": "Daily Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "louis-vuitton",
+      "daily-pouch"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/louis-vuitton/products.json"
   }
 ]

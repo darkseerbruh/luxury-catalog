@@ -178,5 +178,53 @@
     "minPrice": 1500,
     "maxPrice": 5500,
     "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Padded Cassette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "padded-cassette"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Chain Cassette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "chain-cassette"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Campana",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "campana"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Cabat",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "cabat"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
   }
 ]

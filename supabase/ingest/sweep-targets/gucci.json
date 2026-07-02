@@ -499,5 +499,117 @@
     "minPrice": 400,
     "maxPrice": 2000,
     "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Sylvie",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "sylvie"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "Luce",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "luce"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Queen Margaret",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "queen-margaret"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Soho Chain Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "soho-chain-backpack"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Bree Messenger",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "bree"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Rajah",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "rajah"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Zumi",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "zumi"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Broadway Clutch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "broadway"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Moon Side",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "moon-side"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
   }
 ]

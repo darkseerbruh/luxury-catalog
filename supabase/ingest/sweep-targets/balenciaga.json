@@ -200,5 +200,29 @@
     "minPrice": 500,
     "maxPrice": 2000,
     "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "First",
+    "size_label": "Standard",
+    "requireTokens": [
+      "balenciaga",
+      "hardware-first"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "City",
+    "size_label": "S",
+    "requireTokens": [
+      "balenciaga",
+      "-s-city"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
   }
 ]

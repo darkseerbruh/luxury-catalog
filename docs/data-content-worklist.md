@@ -28,7 +28,7 @@ Queue (priority order; tick with counts + date):
 - ✅ RESULT (2026-07-02): 14,093 price rows added today (price_history now 56,440; styles 697). Final load 14,087 mapped / 0 unresolved. Coverage of live FP listings vs catalog styles: LV 60.0% → 80.5% (rest = out-of-scope SLGs/silk), Chanel 96.3%. Speedy Soft contamination cleaned (93 pre-sweep rows deleted from classic Speedy buckets; excludes added to hardcoded targets).
 ## CATALOGUE COMPLETION RUN (owner: "do them all, on a loop, until done" 2026-07-02) — 🔄 IN PROGRESS
 *Finish line A (resale-complete) then a B (current-line) prototype. Units, tick as done:*
-- ⬜ U1 Tail clusters <10 listings, all swept brands (source: local raw dump, no refetch)
+- ✅ U1 DONE 2026-07-02: +69 tail targets across 9 brands (+947 rows, cumulative 15,158 mapped, 0 unresolved). Catches: LV CarryAll was never targeted (44 live listings), Neverfull GM label workaround, SL Jamie, Gucci Sylvie, Balenciaga First.
 - ⬜ U2 Coach + Kate Spade + Longchamp + Michael Kors via firecrawl-ebay (FP has zero inventory)
 - ⬜ U3 Vestiaire second source for thin brands, single-variant styles only (2026-06-30 verdict)
 - ⬜ U4 Coverage re-measure all swept brands; declare A status

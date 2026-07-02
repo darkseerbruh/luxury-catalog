@@ -329,5 +329,125 @@
     "minPrice": 250,
     "maxPrice": 1500,
     "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Bill Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "bill-pouch"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Envelope Clutch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "envelope-clutch"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Jamie",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "jamie"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Cassandra Top Handle",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "cassandra"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Uptown Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "uptown"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Gaby Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "gaby"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Voltaire",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "voltaire"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "June Box",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "june-box"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Manhattan",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "manhattan"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
+  },
+  {
+    "brand": "Saint Laurent",
+    "style": "Fermoir",
+    "size_label": "Standard",
+    "requireTokens": [
+      "saint-laurent",
+      "fermoir"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/saint-laurent/products.json"
   }
 ]

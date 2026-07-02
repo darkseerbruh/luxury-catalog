@@ -254,5 +254,53 @@
     "minPrice": 400,
     "maxPrice": 1800,
     "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Trapeze",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "trapeze"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Trio",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "trio"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Folco",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "folco"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe Shoulder",
+    "size_label": "Chain",
+    "requireTokens": [
+      "celine",
+      "triomphe-chain-shoulder"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
   }
 ]
