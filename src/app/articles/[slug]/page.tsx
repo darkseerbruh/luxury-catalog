@@ -23,6 +23,7 @@ import { leatherDiagramRegistry } from "./LeatherComparisonDiagram";
 import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
 import { birkinKellyChartRegistry } from "./BirkinKellyChart";
 import { neverfullSizeChartRegistry } from "./NeverfullSizeChart";
+import { chanelFlapSizeChartRegistry } from "./ChanelFlapSizeChart";
 import { iconicPricesChartRegistry } from "./IconicPricesChart";
 import { neverfullSpeedyChartRegistry } from "./NeverfullSpeedyChart";
 import { rentVsBuyDiagramRegistry } from "./RentVsBuyDiagram";
@@ -53,6 +54,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...whereToSellDiagramRegistry,
   ...birkinKellyChartRegistry,
   ...neverfullSizeChartRegistry,
+  ...chanelFlapSizeChartRegistry,
   ...iconicPricesChartRegistry,
   ...neverfullSpeedyChartRegistry,
   ...rentVsBuyDiagramRegistry,

@@ -40,7 +40,7 @@ Why it took off:
 
 ## The maxi flap moment
 
-The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. Blazy, who previously ran Bottega Veneta, showed it for spring 2026, and creators report a Paris launch in early March with a worldwide release around March 13. We are treating those dates as reported until we can pin them down. Per TikTok, it has been carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie, and people frame it as the end of the micro-bag era.
+The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. Blazy, who previously ran Bottega Veneta, showed it for spring 2026, and the collection hit Paris boutiques in early March 2026 with New York following mid-March; W Magazine covered shoppers lining up at the SoHo store for it (March 2026). US retail on the Maxi Flap is $9,300 (PurseBop, 2026). It has been carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie of Blackpink, and people frame it as the end of the micro-bag era.
 
 What the resale side shows so far:
 
@@ -48,9 +48,11 @@ What the resale side shows so far:
 
 ## Types of Chanel bags
 
-The taxonomy people are actually searching for. Every one of these is a distinct line, not a size of the same bag. Asking medians below are from listings we tracked in late June 2026.
+The lines people actually search for, each a distinct line, not a size of the same bag. Asking medians below are from listings we tracked in late June 2026. And an honest note on scope: we track more than a hundred Chanel styles in the catalog; these are the ones filling feeds, not the whole house.
 
-- **Classic Flap.** The quilted flap with the leather-woven chain and CC turn-lock. Sizes run mini (square and rectangular), small, medium (the default people mean), jumbo, and maxi. Medium asks around **$7,156** (n=1,018); small $7,595 (n=111); jumbo $6,620 (n=86).
+- **Classic Flap.** The quilted flap with the leather-woven chain and CC turn-lock. Sizes run mini (square and rectangular), small, medium (the default people mean), jumbo, and maxi, and the price twist is that bigger does not mean pricier:
+
+[diagram: chanel-flap-sizes]
 - **Mini Classic.** Not a separate line, the smallest Classic Flap sizes. The rectangular mini is the one all over TikTok; the square mini is shorter and boxier. The rectangular mini read is thin, around $4,240 from four listings, so treat it as a sketch.
 - **2.55.** The original, launched February 1955, which is where the name comes from. The tells versus a Classic Flap: a rectangular Mademoiselle turn-lock instead of the CC clasp, and a chain with no leather woven through. Asks around **$4,175** (n=494).
 - **Boy.** The boxier, harder-edged flap from 2011, named for Arthur "Boy" Capel, Gabrielle Chanel's great love. Chunkier chain, masculine hardware plate. Asks around **$3,915** (n=2,122).
@@ -195,6 +197,13 @@ async function main() {
       updated_at: new Date().toISOString(),
     };
     if (existing) {
+      // GUARD (2026-07-02 lesson): the owner edits live articles ON SITE, and a
+      // seed re-run overwrote her edits once. The DB body is canon after first
+      // publish. Re-runs update body ONLY with an explicit --force-body.
+      if (!process.argv.includes("--force-body")) {
+        delete (content as Record<string, unknown>).body;
+        console.log("(body left untouched — DB is canon; pass --force-body to overwrite)");
+      }
       const { error } = await db.from("post").update(content).eq("post_id", existing.post_id);
       console.log(error ? `UPDATE ${p.slug} ERR ${error.message}` : `updated #${existing.post_id} ${p.slug} (status preserved)`);
     } else {
