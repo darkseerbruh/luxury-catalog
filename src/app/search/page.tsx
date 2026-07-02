@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { searchCatalog, getVariantImages } from "@/lib/queries";
 import { hybridSearch } from "@/lib/hybrid-search";
-import { findPriorityStyles, pinStylesFirst } from "@/lib/search-priority";
+import { findPriorityStyles, pinStylesFirst, priorityChipLabels } from "@/lib/search-priority";
 import { listPublished, getBySlug } from "@/lib/posts";
 import { matchSocialKey } from "@/lib/social-search-keys";
 import { getCurrentUser } from "@/lib/auth";
@@ -46,9 +46,13 @@ export default async function SearchPage({
       : await searchCatalog(query)
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
 
+  const pinnedStyles = await priorityPromise;
   const results = {
     ...ranked,
-    styles: pinStylesFirst(await priorityPromise, ranked.styles),
+    styles: pinStylesFirst(pinnedStyles, ranked.styles),
+    // A fired pin IS the interpretation — the NL-parse chips misread exactly
+    // these queries (line vs size), so they'd contradict the pinned top result.
+    interpreted: pinnedStyles.length > 0 ? priorityChipLabels(pinnedStyles) : ranked.interpreted,
   };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
 

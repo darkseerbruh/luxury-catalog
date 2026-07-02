@@ -84,6 +84,19 @@ export function rankPriorityStyles(query: string, rows: StyleNameRow[], cap = 3)
     .map((m) => m.row.styleId);
 }
 
+/** Chip labels explaining a fired pin ("Louis Vuitton Alma", "Chanel 25").
+ * Shown in place of the NL-parse chips, which misread exactly these queries —
+ * a "Classic Flap 25" chip over a pinned Chanel 25 line contradicts the page. */
+export function priorityChipLabels(pinned: StyleSearchResult[]): string[] {
+  const labels = pinned.map((s) =>
+    // Line names often already carry the brand ("Chanel 25") — don't double it.
+    s.brandName && !normalizeStyleName(s.styleName).startsWith(normalizeStyleName(s.brandName))
+      ? `${s.brandName} ${s.styleName}`
+      : s.styleName,
+  );
+  return [...new Set(labels)];
+}
+
 /** Prepend pinned styles to ranked results, deduping the ranked list. */
 export function pinStylesFirst(
   pinned: StyleSearchResult[],

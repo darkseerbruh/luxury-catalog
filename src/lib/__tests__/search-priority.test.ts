@@ -4,6 +4,7 @@ import {
   priorityMatchTier,
   rankPriorityStyles,
   pinStylesFirst,
+  priorityChipLabels,
   type StyleNameRow,
 } from "../search-priority";
 import type { StyleSearchResult } from "../queries";
@@ -82,6 +83,30 @@ describe("rankPriorityStyles", () => {
 
   it("returns nothing for queries that pin no style", () => {
     expect(rankPriorityStyles("structured black crossbody", CATALOG)).toEqual([]);
+  });
+});
+
+describe("priorityChipLabels", () => {
+  const mk = (styleName: string, brandName: string): StyleSearchResult => ({
+    styleId: 1,
+    styleName,
+    brandName,
+    variants: [],
+  });
+
+  it("prefixes the brand when the style name doesn't carry it", () => {
+    expect(priorityChipLabels([mk("Alma", "Louis Vuitton")])).toEqual(["Louis Vuitton Alma"]);
+    expect(priorityChipLabels([mk("16 (Sixteen)", "Celine")])).toEqual(["Celine 16 (Sixteen)"]);
+  });
+
+  it("doesn't double the brand when the line name already carries it", () => {
+    expect(priorityChipLabels([mk("Chanel 25", "Chanel")])).toEqual(["Chanel 25"]);
+  });
+
+  it("dedupes repeated labels", () => {
+    expect(priorityChipLabels([mk("Chanel 25", "Chanel"), mk("Chanel 25", "Chanel")])).toEqual([
+      "Chanel 25",
+    ]);
   });
 });
 
