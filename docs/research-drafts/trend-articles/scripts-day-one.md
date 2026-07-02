@@ -74,7 +74,7 @@ When TikTok searches "lv pochette," the bag people mostly mean is the Louis Vuit
 
 ### 2. Boulogne PM (~27s, ~80 words)
 
-The Boulogne PM is quietly one of LV's best everyday shapes. A rounded monogram shoulder bag, known for a braided strap detail, and it zips fully shut, which anyone who's ridden a subway with a flap bag will appreciate. It sits close to the body and doesn't announce itself across a room. One honest note: Strap and hardware details have varied, so check the exact listing. Preloved read: [DATA: Boulogne PM asking/sold median + n + date], my estimate from comps. I'm Arielle. I track what these actually sell for at Luxury Catalog. Would you carry a bag this quiet? Tell me in the comments.
+The Louis Vuitton Boulogne PM is my pick for the most overlooked everyday shape in the lineup. A rounded monogram shoulder bag, known for a braided strap detail, and it zips fully shut, which anyone who's ridden a subway with a flap bag will appreciate. It sits close to the body and doesn't announce itself across a room. One honest note: Strap and hardware details have varied, so check the exact listing. Preloved read: [DATA: Boulogne PM asking/sold median + n + date], my estimate from comps. I'm Arielle. I track what these actually sell for at Luxury Catalog. Would you carry a bag this quiet? Tell me in the comments.
 
 ### 3. Cosmetic pouch (~30s, ~90 words)
 
