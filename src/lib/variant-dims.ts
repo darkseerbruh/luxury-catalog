@@ -71,9 +71,23 @@ export function impliedBy(
 export function visibleDims(
   variants: StyleVariantOption[],
 ): { dim: Dim; values: string[] }[] {
-  const varying = DIMS.map((dim) => ({ dim, values: distinct(variants, dim) })).filter(
-    (d) => d.values.length >= 2,
-  );
+  const varying = DIMS.map((dim) => {
+    let values = distinct(variants, dim);
+    // "Standard" is the ingest catch-all for size-not-stated captures
+    // (promote-safe.ts et al), NOT a house size — never offer it as a pick
+    // beside real sizes. Its variant keeps its /bag/[id] page and price rows.
+    if (dim.key === "size" && values.length > 1) {
+      values = values.filter((v) => v !== "Standard");
+    }
+    // Numeric sizes (Birkin 25/30/35/40, Reissue 224-227) read in ascending
+    // order, ahead of named ones (Kelly 25/28/32/35 then Mini); fully named
+    // sets keep catalogue order (PM/MM/GM), which no sort could infer.
+    if (dim.key === "size" && values.some((v) => /^\d+(\.\d+)?$/.test(v))) {
+      const nums = values.filter((v) => /^\d+(\.\d+)?$/.test(v)).sort((a, b) => Number(a) - Number(b));
+      values = [...nums, ...values.filter((v) => !/^\d+(\.\d+)?$/.test(v))];
+    }
+    return { dim, values };
+  }).filter((d) => d.values.length >= 2);
   const out: typeof varying = [];
   for (const d of varying) {
     if (!out.some((s) => impliedBy(variants, s.dim, d.dim))) out.push(d);

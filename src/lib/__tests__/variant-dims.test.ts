@@ -89,6 +89,32 @@ describe("visibleDims", () => {
   it("hides everything for single-value dimensions", () => {
     expect(visibleDims([v(1, { sizeLabel: "MM" }), v(2, { sizeLabel: "MM" })])).toEqual([]);
   });
+
+  it("sorts purely numeric sizes ascending, keeps named sizes in catalogue order", () => {
+    const birkin = [
+      v(1, { sizeLabel: "30" }),
+      v(2, { sizeLabel: "35" }),
+      v(3, { sizeLabel: "25" }),
+      v(4, { sizeLabel: "40" }),
+    ];
+    expect(visibleDims(birkin)[0].values).toEqual(["25", "30", "35", "40"]);
+    // Named sizes are not alphabetized (PM before MM is correct for LV).
+    expect(visibleDims(neverfull)[0].values).toEqual(["PM", "MM", "GM", "BB"]);
+  });
+
+  it("never offers the ingest catch-all 'Standard' beside real sizes", () => {
+    const kelly = [
+      v(1, { sizeLabel: "28" }),
+      v(2, { sizeLabel: "25" }),
+      v(3, { sizeLabel: "Standard" }),
+    ];
+    expect(visibleDims(kelly)[0].values).toEqual(["25", "28"]);
+    // Mixed numeric + named: numerics ascending, named after.
+    const kellyWithMini = [...kelly, v(4, { sizeLabel: "Mini" })];
+    expect(visibleDims(kellyWithMini)[0].values).toEqual(["25", "28", "Mini"]);
+    // A style captured only as Standard has nothing to pick: no size axis.
+    expect(visibleDims([v(1, { sizeLabel: "Standard" }), v(2, { sizeLabel: "Standard" })])).toEqual([]);
+  });
 });
 
 describe("resolveTarget", () => {
