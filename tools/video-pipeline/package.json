@@ -10,6 +10,7 @@
     "lint": "tsc"
   },
   "dependencies": {
+    "@imgly/background-removal-node": "^1.4.5",
     "@remotion/animation-utils": "^4.0.0",
     "@remotion/captions": "^4.0.0",
     "@remotion/cli": "^4.0.0",

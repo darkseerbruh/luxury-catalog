@@ -38,17 +38,25 @@ To pop a bag image into frame when she says a phrase, add `input/<clip>.cues.jso
 and put the image in `input/`:
 ```json
 [{ "say": "this hermes birkin", "img": "birkin.jpg", "hold": 2.8,
-   "xPct": 66, "yPct": 48, "widthPct": 46, "tilt": -4 }]
+   "widthPct": 34, "tilt": -4, "follow": true, "cutout": true,
+   "xPct": 64, "yPct": 50 }]
 ```
 The pipeline finds the phrase in the transcript and pops the image in there (spring
 in, hold, fade), timed to her words. `say` matches on normalized words, so ignore
-case, punctuation, and accents. `xPct`/`yPct` are the image center; set them to where
-her gesture lands (look at a frame to place it). Re-run `npm run make <clip>` after
-editing cues; transcription is cached so only the render repeats.
+case, punctuation, and accents. Re-run `npm run make <clip>` after editing cues;
+transcription is cached so only the render repeats.
 
-Note: the image is a rounded photo card. A true cutout floating in her hand needs a
-transparent PNG (background removal) and, to follow a moving hand, hand tracking. Both
-are separate builds, not in this step. Offer them, do not fake them.
+- `cutout` (default true): removes the image background so the bag floats as a shape,
+  not a photo card. Best results come from a CLEAN single-bag still (no hands, plain
+  background). Set `false` to keep it as a rounded photo card.
+- `follow` (default false): the bag follows her hand. On first use it builds the Swift
+  hand tracker (`native/handtrack.swift` -> `bin/handtrack`) via `swiftc`. Needs a
+  visible hand in the shot. If no confident hand is found in the cue window, it falls
+  back to the fixed `xPct`/`yPct`.
+- `xPct`/`yPct` are the image center (used only when not following). Look at a frame to
+  place it where her gesture lands.
+- The clip is normalized to vertical 1080x1920 first, so best results come from footage
+  she filmed vertically (which is native for TikTok anyway).
 
 ## Step 3b — Headless montage mode
 1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the

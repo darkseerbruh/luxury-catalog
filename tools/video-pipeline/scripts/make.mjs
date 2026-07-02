@@ -16,8 +16,40 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { INPUT_DIR, OUTPUT_DIR, PUBLIC_DIR, TEMP_DIR } from "../config.mjs";
+import {
+  HEIGHT,
+  INPUT_DIR,
+  OUTPUT_DIR,
+  PUBLIC_DIR,
+  TEMP_DIR,
+  WIDTH,
+} from "../config.mjs";
+import { cutout } from "./cutout.mjs";
 import { transcribeVideo } from "./transcribe.mjs";
+
+const HANDTRACK_BIN = path.join(process.cwd(), "bin", "handtrack");
+const HANDTRACK_SRC = path.join(process.cwd(), "native", "handtrack.swift");
+
+// Build the Swift hand tracker on first use (like Whisper: source in git, binary local).
+const ensureHandtrack = () => {
+  if (existsSync(HANDTRACK_BIN)) return;
+  if (!existsSync(path.join(process.cwd(), "bin"))) mkdirSync("bin");
+  console.log("  building hand tracker (one time)...");
+  execFileSync("swiftc", ["-O", HANDTRACK_SRC, "-o", HANDTRACK_BIN], {
+    stdio: ["ignore", "ignore", "inherit"],
+  });
+};
+
+// Run the tracker on a vertical clip -> [{t, xPct, yPct}] in output coordinates.
+const trackCache = new Map();
+const getHandTrack = (videoPath) => {
+  if (trackCache.has(videoPath)) return trackCache.get(videoPath);
+  ensureHandtrack();
+  const out = execFileSync(HANDTRACK_BIN, [videoPath], { encoding: "utf8" });
+  const track = JSON.parse(out);
+  trackCache.set(videoPath, track);
+  return track;
+};
 
 const VIDEO_RE = /\.(mp4|mov|mkv|webm)$/i;
 const ENTRY = "src/index.ts";
@@ -58,7 +90,7 @@ const norm = (s) =>
 // phrase is spoken. We find the phrase in the transcript and time the image to it.
 //   [{ "say": "this hermes birkin", "img": "birkin.jpg", "hold": 2.5,
 //      "xPct": 64, "yPct": 52, "widthPct": 40, "tilt": -4, "delay": 0 }]
-const resolveCues = (base) => {
+const resolveCues = async (base, publicVideo) => {
   const cuePath = path.join(INPUT_DIR, `${base}.cues.json`);
   if (!existsSync(cuePath)) return [];
   const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
@@ -93,21 +125,47 @@ const resolveCues = (base) => {
       console.log(`  cue: phrase not found in speech -> "${cue.say}"`);
       continue;
     }
+
+    // Image: cut out the background (default) so the bag floats, unless opted out.
     const srcImg = path.isAbsolute(cue.img) ? cue.img : path.join(INPUT_DIR, cue.img);
-    if (existsSync(srcImg)) {
-      copyFileSync(srcImg, path.join(PUBLIC_DIR, path.basename(cue.img)));
+    let imgName;
+    if (cue.cutout === false) {
+      imgName = path.basename(cue.img);
+      if (existsSync(srcImg)) copyFileSync(srcImg, path.join(PUBLIC_DIR, imgName));
+    } else {
+      console.log(`  cutout: ${path.basename(cue.img)}...`);
+      const cutPath = await cutout(srcImg);
+      imgName = path.basename(cutPath);
+      copyFileSync(cutPath, path.join(PUBLIC_DIR, imgName));
     }
+
     const startSec = words[hit].startMs / 1000 + (cue.delay ?? 0);
-    overlays.push({
-      img: path.basename(cue.img),
+    const toSec = startSec + (cue.hold ?? 2.5);
+    const overlay = {
+      img: imgName,
       fromSec: startSec,
-      toSec: startSec + (cue.hold ?? 2.5),
+      toSec,
       xPct: cue.xPct,
       yPct: cue.yPct,
       widthPct: cue.widthPct,
       tilt: cue.tilt,
-    });
-    console.log(`  cue: "${cue.say}" -> ${startSec.toFixed(2)}s (${path.basename(cue.img)})`);
+      cutout: cue.cutout !== false,
+    };
+
+    // Follow the hand: attach the tracked palm path over the cue window.
+    if (cue.follow) {
+      console.log("  follow: tracking hand...");
+      const track = getHandTrack(publicVideo).filter(
+        (p) => p.t >= startSec - 0.3 && p.t <= toSec + 0.3,
+      );
+      if (track.length) overlay.track = track;
+      else console.log("  follow: no confident hand in that window, using fixed position");
+    }
+
+    overlays.push(overlay);
+    console.log(
+      `  cue: "${cue.say}" -> ${startSec.toFixed(2)}s (${imgName})${cue.follow ? " [follow]" : ""}`,
+    );
   }
   return overlays;
 };
@@ -120,8 +178,22 @@ const processClip = async (fileName) => {
 
   console.log(`\n== ${fileName} ==`);
 
-  // 1. Stage the clip where Remotion serves static files from.
-  copyFileSync(inputPath, publicVideo);
+  // 1. Normalize to vertical 1080x1920 so captions, overlays, and hand tracking all
+  //    share the same output coordinate space, and stage it for Remotion to serve.
+  execFileSync(
+    "ffmpeg",
+    [
+      "-v", "error",
+      "-i", inputPath,
+      "-vf",
+      `scale=${WIDTH}:${HEIGHT}:force_original_aspect_ratio=increase,crop=${WIDTH}:${HEIGHT},setsar=1`,
+      "-c:v", "libx264",
+      "-pix_fmt", "yuv420p",
+      "-c:a", "aac",
+      publicVideo, "-y",
+    ],
+    { stdio: ["ignore", "ignore", "inherit"] },
+  );
 
   // 2. Transcribe -> public/<base>.json (skip if already done).
   const jsonPath = path.join(PUBLIC_DIR, `${base}.json`);
@@ -133,7 +205,7 @@ const processClip = async (fileName) => {
   }
 
   // 3. Overlays: static (input/<base>.overlays.json) + speech-cued (<base>.cues.json).
-  const overlays = [...loadOverlays(base), ...resolveCues(base)];
+  const overlays = [...loadOverlays(base), ...(await resolveCues(base, publicVideo))];
 
   // 4. Render.
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);

@@ -28,6 +28,10 @@ const overlaySchema = z.object({
   yPct: z.number().optional(), // center y, 0-100 (default 52)
   widthPct: z.number().optional(), // width as % of canvas (default 40)
   tilt: z.number().optional(), // rotation in degrees (default -4)
+  cutout: z.boolean().optional(), // style as a shape (drop shadow) vs a photo card
+  track: z
+    .array(z.object({ t: z.number(), xPct: z.number(), yPct: z.number() }))
+    .optional(), // hand path to follow
 });
 
 export const captionedVideoSchema = z.object({
@@ -117,6 +121,9 @@ export const CaptionedVideo: React.FC<Props> = ({ src, zoom, overlays }) => {
             <Overlay
               img={o.img}
               durationInFrames={dur}
+              fromSec={o.fromSec}
+              track={o.track}
+              cutout={o.cutout}
               xPct={o.xPct}
               yPct={o.yPct}
               widthPct={o.widthPct}
