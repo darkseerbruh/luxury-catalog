@@ -8,6 +8,11 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## LV gap-series capture + day-one articles (2026-07-02) — DONE
+- ✅ 5 new LV styles created + scaffolded (Liv Pochette #685, Montsouris #686, Slouchy #687, Cosmetic Pouch #688, Lineup #689; Boulogne #550 got NM/GM/30/35 variants). TARGETS added to sources/fashionphile.ts (tokens anchored; collabs/straps/vibe excluded).
+- ✅ Fashionphile collection pass: 117 rows loaded (products.json path, free), summary refreshed. Notable reads: Montsouris PM $1,995 (n=11) vs vintage MM $995 (n=12); Slouchy is MM-led (n=10, $2,410); Neverfull PM = MM at $1,450 in monogram (n=153/491); Lineup too thin (n=2).
+- ✅ PUBLISHED #33 chanel-in-2026-explained (topic: Chanel 25 #520) + #34 lv-bags-nobody-talks-about (topic: Alma #434) via seed-trend-articles.ts, owner said "publish" 2026-07-02. Every [DATA] slot filled from prod with n+date; [VERIFY] facts checked (chanel.com 1910/Boy, LV heritage Alma 1934) or kept hedged (Blazy maxi-flap dates stay "creators report").
+
 ## Hero p2p SOLD capture (eBay completed sales → load-sold.ts → refresh-summary)
 - ✅ Coach Tabby 20/26/Std + Rogue all sizes — 421 rows (2026-06-26)
 - ✅ Chanel Classic Flap Medium v199 — 78 rows, median $3,846 (2026-06-26)

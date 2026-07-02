@@ -94,6 +94,29 @@ const TARGETS: FashionphileTarget[] = [
   })),
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "MM", requireTokens: ["neverfull-mm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Louis Vuitton", style: "Neverfull", size_label: "PM", requireTokens: ["neverfull-pm"], minPrice: 500, maxPrice: 8000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  // LV gap-series models (2026-07-02, "The LV bags the algorithm forgot" article).
+  // Tokens anchored per the live collection probe: bare "liv" false-matches
+  // "oliver-briefcase", bare "gm" matches inside "monogram", and "montsouris-vibe"
+  // is a separate lambskin line kept out of the PM bucket.
+  { brand: "Louis Vuitton", style: "Liv Pochette", size_label: "Standard", requireTokens: ["liv-pochette"], minPrice: 500, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Boulogne", size_label: "NM", requireTokens: ["boulogne-nm"], excludeTokens: ["strap"], minPrice: 800, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Boulogne", size_label: "GM", requireTokens: ["boulogne-gm"], excludeTokens: ["strap"], minPrice: 800, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Boulogne", size_label: "30", requireTokens: ["boulogne-30"], minPrice: 200, maxPrice: 3000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Boulogne", size_label: "35", requireTokens: ["boulogne-35"], minPrice: 200, maxPrice: 3000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Montsouris", size_label: "PM", requireTokens: ["montsouris-pm"], excludeTokens: ["vibe"], minPrice: 500, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Montsouris", size_label: "BB", requireTokens: ["montsouris-bb"], excludeTokens: ["vibe"], minPrice: 500, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Montsouris", size_label: "MM", requireTokens: ["montsouris-mm"], minPrice: 200, maxPrice: 3000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Montsouris", size_label: "GM", requireTokens: ["montsouris-gm"], minPrice: 200, maxPrice: 3000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Montsouris", size_label: "NM", requireTokens: ["montsouris-nm"], minPrice: 200, maxPrice: 4000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Slouchy", size_label: "PM", requireTokens: ["slouchy-pm"], minPrice: 800, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Slouchy", size_label: "MM", requireTokens: ["slouchy-mm"], minPrice: 800, maxPrice: 6000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  // Cosmetic Pouch: the classic monogram/damier pouch TikTok converts with a chain.
+  // Collabs (lv-x-tm), the Giant-monogram line, and the Epi lipstick case are
+  // separate animals and would skew the "fraction of a mini bag" math.
+  { brand: "Louis Vuitton", style: "Cosmetic Pouch", size_label: "PM", requireTokens: ["cosmetic-pouch"], excludeTokens: ["-gm", "lv-x-tm", "giant", "lipstick"], minPrice: 200, maxPrice: 2500, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Cosmetic Pouch", size_label: "GM", requireTokens: ["cosmetic-pouch-gm"], excludeTokens: ["lv-x-tm", "giant"], minPrice: 200, maxPrice: 2500, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Lineup", size_label: "BB", requireTokens: ["lineup-bb"], minPrice: 800, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
+  { brand: "Louis Vuitton", style: "Lineup", size_label: "MM", requireTokens: ["lineup-mm"], minPrice: 800, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Small", requireTokens: ["gg-marmont", "small"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
   { brand: "Gucci", style: "GG Marmont", size_label: "Medium", requireTokens: ["gg-marmont", "medium"], minPrice: 400, maxPrice: 5000, searchUrl: "https://www.fashionphile.com/collections/gucci/products.json" },
   // Goyard Saint Louis (backbone Tier-1). Fashionphile handle: goyard-goyardine-saint-louis-<pm|gm>-<colour>-.
