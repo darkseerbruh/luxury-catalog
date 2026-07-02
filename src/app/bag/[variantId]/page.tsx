@@ -610,12 +610,14 @@ export default async function BagDetailPage({
       </header>
 
       {/* Hero visual — sourced photo when available, else a branded placeholder
-          so the page reads as complete (never an AI-faked or unlicensed photo). */}
+          so the page reads as complete (never an AI-faked or unlicensed photo).
+          Kept compact (capped width, not full-bleed) so the value summary and
+          variant selector stay above the fold. */}
       <BagImage
         imageUrl={images[v.variantId]}
         brand={v.brand.name}
         alt={`${v.brand.name} ${v.style.name}`}
-        className="aspect-[4/3] w-full rounded-2xl border border-border"
+        className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
       />
 
       {/* Amazon-style variant selector — placed at the very top, right under the
