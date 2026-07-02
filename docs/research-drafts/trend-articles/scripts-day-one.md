@@ -15,6 +15,17 @@ follows it, and the script is recordable as-is. Word counts target roughly
 Voice pass done against docs/voice-and-tone.md (no em dashes, no hype superlatives,
 slop sweep, value = estimate not appraisal, takes = our take not a directive).
 First-person "we/our" is the founder speaking the brand voice on camera.
+
+SPOKEN-STYLE RULES (learned from the owner's edit pass, 2026-07-02):
+1. Numbers spoken in full with units ("fourteen hundred and ninety-five dollars", never "fourteen ninety-five").
+2. Address the viewer directly; open with a question where natural ("Do you keep searching...?").
+3. Complete sentences with contractions; no clipped fragments ("It's heavier, though").
+4. Soften absolutes ("Maybe the boring answer, but honest").
+5. Say the site name aloud once per series ("on the site at Luxury Catalog dot com").
+6. CTA = full specific invitation ("let me know which one in the comments"), never "Comments."
+7. Hedge economy: ONE hedge per script; do not stack "estimate not appraisal" onto "dated comps".
+8. Finish every metaphor; prefer plain idioms over writerly ones.
+
 -->
 
 # Day-one scripts: Chanel in 2026 + the LV gap series
@@ -27,7 +38,7 @@ First-person "we/our" is the founder speaking the brand voice on camera.
 
 Alt opens if the default hook feels slow: "Chanel comment sections are a mess right now, so let's clean it up." or "Three Chanel questions keep going viral. One video, all three."
 
-Chanel renamed half its lineup after numbers, and the comment sections are a mess of people correcting each other. The clean version. The Chanel 25 is the new everyday line, introduced in 2025: Softer and lighter than a Classic Flap, built to be carried daily, not babied. It's behind nearly three million TikTok searches a month, per TikTok's Creative Center this July. The other headline is the maxi flap, the oversized piece from Matthieu Blazy's first Chanel collection, which creators report launched in March. And the names. Since 2022, Chanel names new lines after the year they arrive. The 22, the 25. Birth years, not sizes. Chanel itself is just a surname, Gabrielle's; no hidden meaning. Every bag decoded, with the preloved numbers, in the full read. I'm Arielle, and this is Luxury Catalog. We track more than twenty thousand real asking and sold prices across the major resale sites, so what you hear is tracked, not guessed.
+Chanel renamed half its lineup after numbers, and the comment sections are a mess of people correcting each other. Here's the clean version. The Chanel 25 is the new everyday line, introduced in 2025: Softer and lighter than a Classic Flap, built to be carried daily, not babied. It's behind nearly three million TikTok searches a month, per TikTok's Creative Center this July. The other headline is the maxi flap, the oversized piece from Matthieu Blazy's first Chanel collection, which creators report launched in March. And then there are the names. Since 2022, Chanel names new lines after the year they arrive. The 22, the 25. Those are birth years, not sizes. Chanel itself is just a surname, Gabrielle's; no hidden meaning. I'm Arielle, and this is Luxury Catalog. We track more than twenty thousand real asking and sold prices across the major resale sites, so what you hear is tracked, not guessed. Every bag is decoded, with the preloved numbers, on the site at Luxury Catalog dot com.
 
 ### 2. The Blazy Decode (~40s, ~105 words)
 
@@ -35,11 +46,11 @@ That maxi flap all over your feed is a debut-collection story. Matthieu Blazy, t
 
 ### 3. The Taxonomy (~45s, ~130 words)
 
-Every Chanel bag type, one pass. The Classic Flap: Quilted, chain woven with leather, CC turn-lock. Sizes run mini, in square and rectangular, then small, medium, which is the default people mean, jumbo, and maxi. The 2.55 is the original, named for its debut in February 1955; the tells are a rectangular Mademoiselle lock and a chain with no leather through it. The Boy is the boxier flap with the chunkier chain. WOC means wallet on chain, the price entry point to the flap family. The 22 is the soft slouchy one from 2022. The 25 is the 2025 everyday line. Totes are the open-top side, currently led by the Deauville. One rule ties it together: Since 2022, the numbers are birth years, not sizes. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. Full taxonomy on the site.
+Every Chanel bag type, one pass. The Classic Flap is the quilted one, with the chain woven through leather and the CC turn-lock. Sizes run mini, in square and rectangular, then small, then medium, which is the default people mean, then jumbo and maxi. The 2.55 is the original, named for its debut in February 1955; the tells are a rectangular Mademoiselle lock and a chain with no leather through it. The Boy is the boxier flap with the chunkier chain. WOC means wallet on chain, and it's the price entry point to the flap family. The 22 is the soft slouchy one from 2022. The 25 is the 2025 everyday line. Totes are the open-top side, currently led by the Deauville. One rule ties it all together: Since 2022, the numbers are birth years, not sizes. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. The full taxonomy is on the site.
 
 ### 4. The Debate (~25s, ~75 words)
 
-Is the Chanel 25 a future classic like the Flap, or headed the way of the Boy? Honestly, too early to call, and anyone handing you a verdict is guessing. What we watch instead is preloved supply and asking prices over the next year, because new lines start thin and the data fills in. Our take, not a rule: Buy it because you'd carry it, not for its resale fate. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. Longer version on the site.
+Is the Chanel 25 a future classic like the Flap, or is it headed the way of the Boy? Honestly, it's too early to call, and anyone handing you a verdict is guessing. What we watch instead is preloved supply and asking prices over the next year, because new lines start thin and the data fills in. Our take, not a rule: Buy it because you'd carry it, not for its resale fate. If you've already picked a side, tell me which one in the comments. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. The longer version is on the site.
 
 ### 5. The Reply stub (3 alternate one-line openers for reply-to-comment videos)
 
@@ -55,7 +66,7 @@ Is the Chanel 25 a future classic like the Flap, or headed the way of the Boy? H
 
 Alt opens if the default hook feels slow: "TikTok has a Louis Vuitton blind spot, and it's nine bags wide." or "Six-figure searches. Almost nobody making the videos. Let's talk about it."
 
-There is a strange gap on TikTok right now. Nine Louis Vuitton bags each pull five and six figure monthly searches, and every single one has fewer than 200 creators covering it. That's straight from TikTok Creative Center, pulled this July. Huge demand, almost no videos, and that combination usually means the market knows something the algorithm hasn't caught up to yet. So we're doing all nine: What each bag actually is, who it suits, and what the preloved market shows, with every price an estimate from dated comps, never an appraisal. Our take, and it is a take: These are the bags to shop before the videos arrive, not after. I'm Arielle, and this is Luxury Catalog. We track more than twenty thousand real asking and sold prices across the major resale sites, so what you hear is tracked, not guessed. The whole list is live on the site.
+There is a strange gap on TikTok right now. Nine Louis Vuitton bags each pull five and six figure monthly searches, and every single one has fewer than 200 creators covering it. That's straight from TikTok Creative Center, pulled this July. Huge demand, almost no videos, and that combination usually means the market knows something the algorithm hasn't caught up to yet. So we're doing all nine: What each bag actually is, who it suits, and what the preloved market shows, with every price an estimate from dated comps, never an appraisal. Our take, and it is a take: These are the bags to shop before the videos arrive, not after. I'm Arielle, and this is Luxury Catalog. We track more than twenty thousand real asking and sold prices across the major resale sites, so what you hear is tracked, not guessed. The whole list is live on the site at Luxury Catalog dot com.
 
 ### 1. Liv Pochette (~28s, ~85 words)
 
@@ -91,4 +102,4 @@ The Slouchy PM is exactly what the name promises: A soft, unstructured monogram 
 
 ### 9. CarryAll (~27s, ~80 words)
 
-The CarryAll is the curved-top monogram tote that zips closed, which the Neverfull famously does not. It's the do-everything bag in the current lineup: Work, weekend, the gym you keep meaning to go to. Suits the one-bag person who wants the whole day in it and zipped. One note, sizes and closure details vary by version, so confirm the exact one in your listing. Preloved read: The PM asks around three thousand sixty-five preloved, from a thin twenty listings we tracked in early July, so hold that number loosely. Our estimate from dated comps, not an appraisal. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. Full rundown on the site.
+The CarryAll is the curved-top monogram tote that zips closed, which the Neverfull famously does not. It's the do-everything bag in the current lineup: Work, weekend, the gym you keep meaning to go to. Suits the one-bag person who wants the whole day in it and zipped. One note, sizes and closure details vary by version, so confirm the exact one in your listing. Preloved read: The PM asks around three thousand and sixty-five dollars preloved, from a thin twenty listings we tracked in early July, so hold that number loosely. I'm Arielle. Luxury Catalog tracks real resale prices, dated and counted. The full rundown is on the site.

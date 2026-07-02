@@ -49,3 +49,9 @@ asking and sold prices across the major resale sites, so what you hear is tracke
 guessed." Short version (all other takes): "I'm Arielle. Luxury Catalog tracks real resale
 prices, dated and counted." The 20k claim is grounded (24,088 asking + 1,665 sold rows as
 of 2026-06-26); re-verify the number if it is ever raised.
+
+## SPOKEN-STYLE RULES (owner's edit pass, 2026-07-02; apply to ALL future scripts)
+Numbers in full with units; address the viewer (question openers); complete sentences with
+contractions; soften absolutes; spoken site name once per series; CTA as a full specific
+invitation; ONE hedge per script; finish metaphors; plain idioms. Detailed list in
+scripts-day-one.md header.
