@@ -67,6 +67,23 @@ content-kit-buildout.md (which now point here).*
     voice-and-tone.md §8; sweep every script against it before the teleprompter.
 12. **One hedge per script maximum**, spoken naturally ("creators report", "their claim,
     not mine"). Don't stack "estimate not appraisal" onto "dated comps".
+12b. **Owner edit pass 2 (2026-07-02), all binding:**
+    - Hooks are a benefit, never a gotcha: "a number you'll want to hear about", not
+      "a number nobody talks about". Surprise = "you might be surprised to learn".
+    - No internal jargon in speech: "my comps", never "dated comps"; "the full info /
+      the full article", never "the read". Dates and ns live in captions.
+    - Ownership voice: "on my site", "I added... on my site", "Link's in my bio" (both
+      bio-tag forms allowed: "Link in bio." / "Link's in my bio.").
+    - Attribute brand claims twice as hard in speech: "Goyard's own line about
+      durability is... so they say".
+    - A payoff may be the decision QUESTION the viewer should ask themselves ("Does
+      this bag have to keep being your bag after diapers?"), never a conditional rule.
+    - Say the full domain ("Luxury Catalog dot com") at the credibility or closing
+      site mention, not bare "Luxury Catalog".
+    - Advice must be a MOVE, not homework: never end on "look up the price". Give the
+      negotiation play (offer button, start near the sold number, walk away, supply =
+      leverage) or the buying angle (condition arbitrage). "My take" framing, never a
+      guarantee.
 13. **No em dashes** (voice-and-tone.md; the tagline is the only exception, and it never
     appears in scripts).
 
