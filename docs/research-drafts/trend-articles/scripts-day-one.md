@@ -16,7 +16,7 @@ Voice pass done against docs/voice-and-tone.md (no em dashes, no hype superlativ
 slop sweep, value = estimate not appraisal, takes = our take not a directive).
 First-person "we/our" is the founder speaking the brand voice on camera.
 
-SPOKEN-STYLE RULES (learned from the owner's edit pass, 2026-07-02):
+SPOKEN-STYLE RULES: superseded by docs/script-requirements.md (the canonical list). Original notes kept below:
 1. Numbers spoken in full with units ("fourteen hundred and ninety-five dollars", never "fourteen ninety-five").
 2. Address the viewer directly; open with a question where natural ("Do you keep searching...?").
 3. Complete sentences with contractions; no clipped fragments ("It's heavier, though").
@@ -70,35 +70,35 @@ There's a strange gap on TikTok right now. Nine Louis Vuitton bags each pull fiv
 
 ### 1. Liv Pochette (~28s, ~85 words)
 
-When TikTok searches "lv pochette," the bag people mostly mean is the Liv Pochette, one of LV's newer named models. It sits in the pochette family next to the Accessoires, the little 90s monogram pouch on a strap that fits a phone, a cardholder, and lip balm, plus the Metis and the Eva. Suits anyone who wants the smallest entry into monogram; the honest caveat is that small is the whole job. Preloved read: [DATA: Liv Pochette comps if available, else Pochette Accessoires asking/sold median + n + date], my estimate, not an appraisal. Full family comparison on the site.
+When TikTok searches "lv pochette," the bag people mostly mean is the Louis Vuitton Liv Pochette, one of the newer named models. It sits in the pochette family next to the Accessoires, the little 90s monogram pouch on a strap that fits a phone, a cardholder, and lip balm, plus the Metis and the Eva. Suits anyone who wants the smallest entry into monogram; the honest caveat is that small is the whole job. Preloved read: [DATA: Liv Pochette comps if available, else Pochette Accessoires asking/sold median + n + date], my estimate, not an appraisal. I'm Arielle, and I track prices like that one at Luxury Catalog. The full family comparison is on the site. Search Liv Pochette.
 
 ### 2. Boulogne PM (~27s, ~80 words)
 
-The Boulogne PM is quietly one of LV's best everyday shapes. A rounded monogram shoulder bag, known for a braided strap detail, and it zips fully shut, which anyone who's ridden a subway with a flap bag will appreciate. It sits close to the body and doesn't announce itself across a room. One honest note: Strap and hardware details have varied, so check the exact listing. Preloved read: [DATA: Boulogne PM asking/sold median + n + date], my estimate from comps. More on the site.
+The Boulogne PM is quietly one of LV's best everyday shapes. A rounded monogram shoulder bag, known for a braided strap detail, and it zips fully shut, which anyone who's ridden a subway with a flap bag will appreciate. It sits close to the body and doesn't announce itself across a room. One honest note: Strap and hardware details have varied, so check the exact listing. Preloved read: [DATA: Boulogne PM asking/sold median + n + date], my estimate from comps. I'm Arielle. I track what these actually sell for at Luxury Catalog. Would you carry a bag this quiet? Tell me in the comments.
 
 ### 3. Cosmetic pouch (~30s, ~90 words)
 
-The LV cosmetic pouch is sold as a makeup bag, and TikTok made it famous for the conversion: Add an aftermarket chain and it becomes a mini bag for a fraction of a mini bag's price. Two honest things first. It was never built to be worn, so the trim takes strap stress it wasn't designed for. And a modification can affect resale. Know both tradeoffs and want it anyway? I don't judge. Preloved read: [DATA: cosmetic pouch asking median + n + date, vs the smallest purpose-built LV mini]. Full math on the site.
+The LV cosmetic pouch is sold as a makeup bag, and TikTok made it famous for the conversion: Add an aftermarket chain and it becomes a mini bag for a fraction of a mini bag's price. Two honest things first. It was never built to be worn, so the trim takes strap stress it wasn't designed for. And a modification can affect resale. Know both tradeoffs and want it anyway? I don't judge. Preloved read: [DATA: cosmetic pouch asking median + n + date, vs the smallest purpose-built LV mini]. I'm Arielle, and running the math past the hype is what I do at Luxury Catalog. The full math is on the site. Search Cosmetic Pouch.
 
 ### 4. Lineup BB and MM (~27s, ~80 words)
 
-The Louis Vuitton Lineup is the current everyday monogram line people keep cross-shopping against the Speedy 20, and the headline is simple: The MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you. The caveat is newness; preloved comps are still building. Preloved read: [DATA: Lineup BB/MM asking median + n + date; if too thin, say "too new for a fair read yet"]. Full comparison on the site.
+The Louis Vuitton Lineup is the current everyday monogram line people keep cross-shopping against the Speedy 20, and the headline is simple: The MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you. The caveat is newness; preloved comps are still building. Preloved read: [DATA: Lineup BB/MM asking median + n + date; if too thin, say "too new for a fair read yet"]. I'm Arielle. I track both bags' prices at Luxury Catalog. Speedy 20 or Lineup, which side are you on? Tell me in the comments.
 
 ### 5. Montsouris (~28s, ~85 words)
 
-The Louis Vuitton Montsouris is the monogram drawstring backpack from the 90s, reissued in modern sizes, plus a new Cargo version in denim. Hands-free, holds a water bottle and a light layer, which is why the TikTok on it is all commuters and moms. The quiet money angle: Vintage originals still circulate for less than the reissue. The caveat comes with it; inspect condition on a decades-old bag. Preloved read: [DATA: Montsouris asking/sold median, vintage vs reissue split, + n + date], estimates from dated comps. Full story on the site.
+The Louis Vuitton Montsouris is the monogram drawstring backpack from the 90s, reissued in modern sizes, plus a new Cargo version in denim. Hands-free, holds a water bottle and a light layer, which is why the TikTok on it is all commuters and moms. The quiet money angle: Vintage originals still circulate for less than the reissue. The caveat comes with it; inspect condition on a decades-old bag. Preloved read: [DATA: Montsouris asking/sold median, vintage vs reissue split, + n + date], my estimates from dated comps. I'm Arielle, and reads like the vintage-versus-reissue gap are exactly why I built Luxury Catalog. The full story is on the site. Search Montsouris.
 
 ### 6. Neverfull PM (~27s, ~80 words)
 
-Everyone covers the Louis Vuitton Neverfull MM. Nobody covers the PM, the smallest one, and it's the version petite frames actually want, the Neverfull look without carrying a duffel. It's a genuinely compact tote, and that's also the honest caveat: Everyday cargo yes, laptop no. Worth checking whether the PM is still in current production; preloved is where it reliably lives. Preloved read: [DATA: Neverfull PM vs MM asking medians + n + date; the size spread is the finding]. Full sizing breakdown on the site.
+Everyone covers the Louis Vuitton Neverfull MM. Nobody covers the PM, the smallest one, and it's the version petite frames actually want, the Neverfull look without carrying a duffel. It's a genuinely compact tote, and that's also the honest caveat: Everyday cargo yes, laptop no. Worth checking whether the PM is still in current production; preloved is where it reliably lives. Preloved read: [DATA: Neverfull PM vs MM asking medians + n + date; the size spread is the finding]. I'm Arielle. I track the sizes separately at Luxury Catalog, because the spread is the story. Are you team PM or team MM? Tell me in the comments.
 
 ### 7. Alma PM (~30s, ~90 words)
 
-The Louis Vuitton Alma PM is the structured dome bag, with design roots that reportedly go back to the house's 1930s, and the most underrated classic on this list. It stands up on its own, holds its shape forever, and in Epi, the ridged leather, it shrugs off rain and skips the pale vachetta problem entirely. That's also the caveat: Classic monogram versions come with the vachetta Epi avoids. Our take, vintage Epi Almas are one of the quiet value plays in LV. Preloved read: [DATA: Alma PM asking/sold median, monogram vs Epi split, + n + date]. Full case on the site.
+The Louis Vuitton Alma PM is the structured dome bag, with design roots that reportedly go back to the house's 1930s, and the most underrated classic on this list. If you hate bags that slump into a puddle, this is the one that won't. And in Epi, the ridged leather, rain stops being a worry and there's no pale vachetta to baby. That's also the caveat: Classic monogram versions come with the vachetta Epi avoids. My take, and it's mine, not the market's: vintage Epi Almas are one of the quiet value plays in LV. Preloved read: [DATA: Alma PM asking/sold median, monogram vs Epi split, + n + date]. I'm Arielle. I track these prices at Luxury Catalog, dated and counted. The full case is on the site. Search Alma.
 
 ### 8. Slouchy (~26s, ~80 words)
 
-The Louis Vuitton Slouchy PM is exactly what the name promises: A soft, unstructured monogram hobo that collapses against your side instead of holding a shape. If you love the Chanel 22 but live in the LV universe, this is your lane, and it's the cure for stiff corners digging into your hip. The caveat is that it's a newer line, so details are still being confirmed and preloved supply may run thin. Preloved read: [DATA: Slouchy PM asking median + n + date; note if supply is thin]. More on the site.
+The Louis Vuitton Slouchy PM is exactly what the name promises: A soft, unstructured monogram hobo that collapses against your side instead of holding a shape. If you love the Chanel 22 but live in the LV universe, this is your lane, and it's the cure for stiff corners digging into your hip. The caveat is that it's a newer line, so details are still being confirmed and preloved supply may run thin. Preloved read: [DATA: Slouchy PM asking median + n + date; note if supply is thin]. I'm Arielle, and thin-supply reads like this one are exactly what I track at Luxury Catalog. More on the site. Search Slouchy.
 
 ### 9. CarryAll (~27s, ~80 words)
 

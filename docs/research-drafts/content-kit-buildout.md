@@ -89,3 +89,7 @@ brochure). Instead: (1) start from the viewer's worry, (2) attribute the brand's
 the brand's ("Goyard's own line is... their claim, not mine"), (3) deliver the
 nobody-tells-you truth from the buyer's side. She doesn't work for these houses; the
 script can never sound like she does.
+
+## ⚠️ SCRIPT RULES MOVED (2026-07-02)
+All script rules above are consolidated and superseded by docs/script-requirements.md,
+including the pre-record checklist. That file is canonical; copywriter briefs read it.
