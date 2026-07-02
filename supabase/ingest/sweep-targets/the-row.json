@@ -1,0 +1,213 @@
+[
+  {
+    "brand": "The Row",
+    "style": "Park Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "the-row",
+      "park-tote",
+      "small"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Park Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "the-row",
+      "park-tote",
+      "medium"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Park Tote",
+    "size_label": "Large",
+    "requireTokens": [
+      "the-row",
+      "park-tote",
+      "large"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Park Tote",
+    "size_label": "Three",
+    "requireTokens": [
+      "the-row",
+      "park-tote-three"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Park Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "park-tote"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json",
+    "excludeTokens": [
+      "small",
+      "medium",
+      "large",
+      "three"
+    ]
+  },
+  {
+    "brand": "The Row",
+    "style": "90s Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "90s-bag"
+    ],
+    "minPrice": 700,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Slouchy Banana",
+    "size_label": "Small",
+    "requireTokens": [
+      "the-row",
+      "slouchy-banana",
+      "small"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Slouchy Banana",
+    "size_label": "Large",
+    "requireTokens": [
+      "the-row",
+      "slouchy-banana",
+      "large"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Slouchy Banana",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "slouchy-banana"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json",
+    "excludeTokens": [
+      "small",
+      "large"
+    ]
+  },
+  {
+    "brand": "The Row",
+    "style": "Peggy",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "peggy"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Marlo",
+    "size_label": "12",
+    "requireTokens": [
+      "the-row",
+      "marlo-12"
+    ],
+    "minPrice": 2500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Marlo",
+    "size_label": "17",
+    "requireTokens": [
+      "the-row",
+      "marlo-17"
+    ],
+    "minPrice": 2500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Margaux Shoulder",
+    "size_label": "12",
+    "requireTokens": [
+      "the-row",
+      "margaux-shoulder-12"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 9000,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Half Moon",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "half-moon"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Hook Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "the-row",
+      "hook-tote",
+      "medium"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json"
+  },
+  {
+    "brand": "The Row",
+    "style": "Hook Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "the-row",
+      "hook-tote"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/the-row/products.json",
+    "excludeTokens": [
+      "medium"
+    ]
+  }
+]

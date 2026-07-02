@@ -1,0 +1,444 @@
+[
+  {
+    "brand": "Hermès",
+    "style": "Birkin",
+    "size_label": "40",
+    "requireTokens": [
+      "hermes",
+      "birkin-40"
+    ],
+    "minPrice": 8000,
+    "maxPrice": 120000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json",
+    "excludeTokens": [
+      "shadow",
+      "cargo"
+    ]
+  },
+  {
+    "brand": "Hermès",
+    "style": "Kelly",
+    "size_label": "20",
+    "requireTokens": [
+      "hermes",
+      "mini-kelly-sellier-20"
+    ],
+    "minPrice": 8000,
+    "maxPrice": 45000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Evelyne",
+    "size_label": "TPM",
+    "requireTokens": [
+      "hermes",
+      "evelyne-tpm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Evelyne",
+    "size_label": "PM",
+    "requireTokens": [
+      "hermes",
+      "evelyne",
+      "-pm-"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Evelyne",
+    "size_label": "GM",
+    "requireTokens": [
+      "hermes",
+      "evelyne",
+      "-gm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Picotin",
+    "size_label": "18 (PM)",
+    "requireTokens": [
+      "hermes",
+      "picotin-lock-18"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Picotin",
+    "size_label": "22 (MM)",
+    "requireTokens": [
+      "hermes",
+      "picotin-lock-22"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Constance",
+    "size_label": "18",
+    "requireTokens": [
+      "hermes",
+      "constance-18"
+    ],
+    "minPrice": 5000,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json",
+    "excludeTokens": [
+      "wallet",
+      "slim",
+      "compact"
+    ]
+  },
+  {
+    "brand": "Hermès",
+    "style": "Constance",
+    "size_label": "24",
+    "requireTokens": [
+      "hermes",
+      "constance-24"
+    ],
+    "minPrice": 5000,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json",
+    "excludeTokens": [
+      "wallet",
+      "slim",
+      "compact"
+    ]
+  },
+  {
+    "brand": "Hermès",
+    "style": "Constance",
+    "size_label": "Elan",
+    "requireTokens": [
+      "hermes",
+      "constance-1-elan"
+    ],
+    "minPrice": 5000,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Lindy",
+    "size_label": "20 (Mini)",
+    "requireTokens": [
+      "hermes",
+      "mini-lindy-20"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Lindy",
+    "size_label": "26",
+    "requireTokens": [
+      "hermes",
+      "lindy-26"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Lindy",
+    "size_label": "30",
+    "requireTokens": [
+      "hermes",
+      "lindy-30"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Herbag",
+    "size_label": "20",
+    "requireTokens": [
+      "hermes",
+      "herbag",
+      "-20-"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Herbag",
+    "size_label": "31",
+    "requireTokens": [
+      "hermes",
+      "herbag",
+      "-31"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Herbag",
+    "size_label": "39",
+    "requireTokens": [
+      "hermes",
+      "herbag",
+      "-39"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Jypsière",
+    "size_label": "Mini",
+    "requireTokens": [
+      "hermes",
+      "mini-jypsiere"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Jypsière",
+    "size_label": "28",
+    "requireTokens": [
+      "hermes",
+      "jypsiere-28"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Jypsière",
+    "size_label": "31",
+    "requireTokens": [
+      "hermes",
+      "jypsiere-31"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Garden Party",
+    "size_label": "30",
+    "requireTokens": [
+      "hermes",
+      "garden-party-30"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Garden Party",
+    "size_label": "36",
+    "requireTokens": [
+      "hermes",
+      "garden-party-36"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Neo Garden",
+    "size_label": "23",
+    "requireTokens": [
+      "hermes",
+      "neo-garden-23"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Neo Garden",
+    "size_label": "29",
+    "requireTokens": [
+      "hermes",
+      "neo-garden-29"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Bolide",
+    "size_label": "27",
+    "requireTokens": [
+      "hermes",
+      "bolide-27"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Bolide",
+    "size_label": "31",
+    "requireTokens": [
+      "hermes",
+      "bolide-31"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "24/24",
+    "size_label": "21",
+    "requireTokens": [
+      "hermes",
+      "2424-21"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "24/24",
+    "size_label": "29",
+    "requireTokens": [
+      "hermes",
+      "2424-29"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "In The Loop",
+    "size_label": "18",
+    "requireTokens": [
+      "hermes",
+      "in-the-loop-18"
+    ],
+    "minPrice": 2500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "In The Loop",
+    "size_label": "23",
+    "requireTokens": [
+      "hermes",
+      "in-the-loop-23"
+    ],
+    "minPrice": 2500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Della Cavalleria",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "della-cavalleria"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Geta",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "geta"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Bride-à-Brac",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "bride-a-brac"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Herline",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "herline"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Aline",
+    "size_label": "Mini",
+    "requireTokens": [
+      "hermes",
+      "mini-aline"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json"
+  },
+  {
+    "brand": "Hermès",
+    "style": "Aline",
+    "size_label": "Standard",
+    "requireTokens": [
+      "hermes",
+      "aline"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/hermes/products.json",
+    "excludeTokens": [
+      "mini"
+    ]
+  }
+]

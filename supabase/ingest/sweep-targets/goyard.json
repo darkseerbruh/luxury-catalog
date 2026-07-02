@@ -1,0 +1,322 @@
+[
+  {
+    "brand": "Goyard",
+    "style": "Artois",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "artois-pm"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Artois",
+    "size_label": "MM",
+    "requireTokens": [
+      "goyard",
+      "artois-mm"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Anjou",
+    "size_label": "Mini",
+    "requireTokens": [
+      "goyard",
+      "anjou",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Anjou",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "anjou-pm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Anjou",
+    "size_label": "GM",
+    "requireTokens": [
+      "goyard",
+      "anjou-gm"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Bohème Hobo",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "boheme-hobo"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Belvedère",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "belvedere",
+      "-pm"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Belvedère",
+    "size_label": "MM",
+    "requireTokens": [
+      "goyard",
+      "belvedere",
+      "-mm"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Saïgon",
+    "size_label": "Mini",
+    "requireTokens": [
+      "goyard",
+      "saigon",
+      "mini"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Saïgon",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "saigon",
+      "-pm"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Saïgon",
+    "size_label": "GM",
+    "requireTokens": [
+      "goyard",
+      "saigon-gm"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Senat Pochette",
+    "size_label": "MM",
+    "requireTokens": [
+      "goyard",
+      "senat",
+      "-mm"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Senat Pochette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "senat"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json",
+    "excludeTokens": [
+      "-mm"
+    ]
+  },
+  {
+    "brand": "Goyard",
+    "style": "Alpin Backpack",
+    "size_label": "Mini",
+    "requireTokens": [
+      "goyard",
+      "alpin",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Alpin Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "alpin"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json",
+    "excludeTokens": [
+      "mini"
+    ]
+  },
+  {
+    "brand": "Goyard",
+    "style": "Hirondelle",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "hirondelle"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Vendôme",
+    "size_label": "Mini",
+    "requireTokens": [
+      "goyard",
+      "vendome",
+      "mini"
+    ],
+    "minPrice": 1800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json",
+    "excludeTokens": [
+      "toiletry"
+    ]
+  },
+  {
+    "brand": "Goyard",
+    "style": "Vendôme",
+    "size_label": "MM",
+    "requireTokens": [
+      "goyard",
+      "sac-vendome"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json",
+    "excludeTokens": [
+      "toiletry"
+    ]
+  },
+  {
+    "brand": "Goyard",
+    "style": "Vendôme Toiletry Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "vendome-toiletry"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Jouvence Toiletry Pouch",
+    "size_label": "MM",
+    "requireTokens": [
+      "goyard",
+      "jouvence"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Petit Flot",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "petit-flot"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Muse Vanity Case",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "muse-vanity"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Rouette",
+    "size_label": "PM",
+    "requireTokens": [
+      "goyard",
+      "rouette"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Marquises Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "marquises"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  },
+  {
+    "brand": "Goyard",
+    "style": "Voltaire Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "goyard",
+      "voltaire"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/goyard/products.json"
+  }
+]
