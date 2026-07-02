@@ -19,52 +19,9 @@ import { QuickSaveHeart } from "@/components/QuickSaveHeart";
  * page content in place from a JSON payload (no navigation). Renders nothing for
  * single-variant styles.
  */
-type Dim = { key: string; label: string; get: (v: StyleVariantOption) => string | null };
-
-const DIMS: Dim[] = [
-  { key: "size", label: "Size", get: (v) => v.sizeLabel },
-  { key: "color", label: "Colour", get: (v) => v.exteriorColorway },
-  { key: "hardware", label: "Hardware", get: (v) => v.hardwareColor },
-];
-
-/** Distinct, order-preserving values for a dimension. */
-function distinct(variants: StyleVariantOption[], dim: Dim): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const v of variants) {
-    const val = dim.get(v);
-    if (val && !seen.has(val)) {
-      seen.add(val);
-      out.push(val);
-    }
-  }
-  return out;
-}
-
-/**
- * Best variant to land on when the user picks `value` for `dim`: keep as many of
- * the *other* current dimensions as possible. Returns null if nothing matches.
- */
-function resolveTarget(
-  variants: StyleVariantOption[],
-  current: StyleVariantOption,
-  dim: Dim,
-  value: string,
-): number | null {
-  const others = DIMS.filter((d) => d.key !== dim.key);
-  let best: StyleVariantOption | null = null;
-  let bestScore = -1;
-  for (const v of variants) {
-    if (dim.get(v) !== value) continue;
-    let score = 0;
-    for (const d of others) if (d.get(v) != null && d.get(v) === d.get(current)) score++;
-    if (score > bestScore) {
-      bestScore = score;
-      best = v;
-    }
-  }
-  return best?.variantId ?? null;
-}
+// Dimension logic (which details become chip rows, target resolution) lives in
+// src/lib/variant-dims.ts so it's unit-testable; this file is just the UI.
+import { resolveTarget, visibleDims } from "@/lib/variant-dims";
 
 export default function VariantSelector({
   styleName,
@@ -82,10 +39,9 @@ export default function VariantSelector({
   const router = useRouter();
   const current = variants.find((v) => v.variantId === currentVariantId) ?? variants[0];
 
-  // Dimensions that actually vary (≥2 distinct values) are the ones worth showing.
-  const dims = DIMS.map((dim) => ({ dim, values: distinct(variants, dim) })).filter(
-    (d) => d.values.length >= 2,
-  );
+  // Dimensions that actually vary (≥2 distinct values) are the ones worth
+  // showing — minus any fully implied by a dimension already shown.
+  const dims = visibleDims(variants);
 
   // Prefetch the one-dimension-away neighbours so the common swaps feel instant.
   useEffect(() => {

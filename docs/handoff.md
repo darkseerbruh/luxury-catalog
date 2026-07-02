@@ -3,6 +3,12 @@
 
 ---
 
+## TL;DR — Bag-detail declutter: compact hero + honest selector axes (2026-07-02, on `main`)
+
+**Owner flagged the bag page fold + weird selector labels; both fixed same day.** Hero image (photo or placeholder) capped at 320×240 centered (was full-column ~575px tall) so the value module sits above the fold. Variant data normalized (styles 218/3/200/2): size chips = size code only (PM/MM/GM/BB), colour chips = canonical canvas/colour name (Monogram, Damier Ebene), "varies by season" junk nulled; originals preserved in commit `3e8161c`'s message. **New rule (locked in preferences): every per-variant detail = own DB column + selector dimension** — selector now derives axes from ALL captured fields via `src/lib/variant-dims.ts` (shows an axis only when it varies AND isn't implied 1:1 by an earlier axis; unit-tested). **⚠️ Owner action: run the "Apply database migrations" GitHub Action** to apply `0041_variant_trim_material.sql` (adds `variant.trim_material` + Neverfull backfill); the app degrades gracefully until then (wide select falls back, Trim axis just doesn't appear).
+
+---
+
 ## TL;DR — CATALOGUE: full sweep + completion run (2026-07-02, all on `main`)
 
 **Owner greenlit "do them all"; finish line A (resale-complete) substantially closed in one day.** End state: **price_history 57,165 (+14,818 today) · 761 styles · 1,388 variants · 28 brands.**
@@ -18,6 +24,7 @@
 1. **Record kit 1 + kit 2.** Articles live, search keys pin (`chanel 2026` / `lv nine`), scripts teleprompter-ready in Notion. Nothing on the data side blocks recording.
 2. **Diaper kit reconcile (flagged by the pipeline session):** your Take 1 still ends "Link in bio" (conflicts with your own routing lock), no Search Key assigned, article still draft.
 3. **Miu Miu City kit:** still ON HOLD pending your demand-number re-confirmation.
+4. **Run the "Apply database migrations" GitHub Action** (blank input) to apply `0041_variant_trim_material.sql` — activates the Trim selector axis + Neverfull trim backfill. Site degrades gracefully until you do.
 
 ## Open items carried from archived recaps (still live)
 

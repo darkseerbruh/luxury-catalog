@@ -790,26 +790,53 @@ export interface StyleVariantOption {
   sizeCategory: string | null;
   exteriorColorway: string | null;
   hardwareColor: string | null;
+  exteriorMaterial: string | null;
+  trimMaterial: string | null;
+  hardwareType: string | null;
+  strapType: string | null;
+  strapAttachmentType: string | null;
+  interiorColor: string | null;
+  interiorMaterial: string | null;
+  stitchingColor: string | null;
+  constructionMethod: string | null;
+  rigidity: string | null;
 }
 
 /**
  * Sibling variants of a style — powers the Amazon-style variant selector on the
- * bag page (pick a colourway / size / hardware), while each variant keeps its own
- * indexable /bag/[id] URL for GEO.
+ * bag page, while each variant keeps its own indexable /bag/[id] URL for GEO.
+ * Owner rule: EVERY captured per-variant detail is a candidate selector
+ * dimension, so the full spec set rides along; the selector decides what shows.
+ * RESILIENT: trim_material arrives with migration 0041 — until it's applied the
+ * wide select errors, so retry without it rather than breaking the page.
  */
 export async function getStyleVariants(styleId: number): Promise<StyleVariantOption[]> {
-  const { data, error } = await getSupabase()
-    .from("variant")
-    .select("variant_id, size_label, size_category, exterior_colorway, hardware_color")
-    .eq("style_id", styleId)
-    .order("variant_id");
+  const base =
+    "variant_id, size_label, size_category, exterior_colorway, hardware_color, " +
+    "hardware_type, strap_type, strap_attachment_type, interior_color, " +
+    "stitching_color, construction_method, rigidity, " +
+    "exterior_material:exterior_material_id(name), interior_material:interior_material_id(name)";
+  const query = (cols: string) =>
+    getSupabase().from("variant").select(cols).eq("style_id", styleId).order("variant_id");
+  let { data, error } = await query(`${base}, trim_material`);
+  if (error) ({ data, error } = await query(base)); // pre-0041: trim_material column absent
   if (error || !data) return [];
-  return data.map((v) => ({
-    variantId: v.variant_id,
-    sizeLabel: v.size_label,
-    sizeCategory: v.size_category,
-    exteriorColorway: v.exterior_colorway,
-    hardwareColor: v.hardware_color,
+  return (data as unknown as Record<string, unknown>[]).map((v) => ({
+    variantId: v.variant_id as number,
+    sizeLabel: (v.size_label as string | null) ?? null,
+    sizeCategory: (v.size_category as string | null) ?? null,
+    exteriorColorway: (v.exterior_colorway as string | null) ?? null,
+    hardwareColor: (v.hardware_color as string | null) ?? null,
+    exteriorMaterial: (v.exterior_material as { name: string } | null)?.name ?? null,
+    trimMaterial: (v.trim_material as string | null) ?? null,
+    hardwareType: (v.hardware_type as string | null) ?? null,
+    strapType: (v.strap_type as string | null) ?? null,
+    strapAttachmentType: (v.strap_attachment_type as string | null) ?? null,
+    interiorColor: (v.interior_color as string | null) ?? null,
+    interiorMaterial: (v.interior_material as { name: string } | null)?.name ?? null,
+    stitchingColor: (v.stitching_color as string | null) ?? null,
+    constructionMethod: (v.construction_method as string | null) ?? null,
+    rigidity: (v.rigidity as string | null) ?? null,
   }));
 }
 
