@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Content Pipeline is live: one table, idea → stages, evidence linked (2026-07-02, Notion + `main`)
+
+**The Calendar/Kits/Terms confusion is collapsed (owner decision).** One Notion table, **Content Pipeline** (renamed from Content Kits, same DB), one row per IDEA moving 💡 Spark → 📊 Data-tied → 🎯 Scored → ✅ Greenlit → ✍️ Produced → 📅 Staged → 🔴 Live (+ ⛔ Hold). Views: 🚦 Pipeline board + 📅 Posting calendar; Trending Terms (append-only evidence, never pruned) links via the dual **Terms (evidence) ↔ Ideas** relation, with a **🧲 Unclaimed evidence** view = data-first backfill queue.
+- **40 rows live:** 15 kit ideas (3 ✍️ Produced with full post packages: Diaper 5 takes, Chanel 4+reply, LV pillar+8 episodes; 11 ✅ Greenlit; Miu Miu ⛔ Hold pending her number re-check) + **25 old Social Content Calendar rows migrated** (enumerated from the repo CSV `docs/social-calendar.csv`, dodging plan-gated Notion queries). Old Calendar DB left untouched — **owner walkthrough before archiving it**.
+- **Script canon:** `docs/script-requirements.md` (17 requirements + pre-record checklist; req 6 credibility-at-the-data-moment, req 16 lean kit pages, req 17 post packages = script+caption+tags). Day-one scripts reconciled with the routing lane: **20 recordable teleprompter scripts** now close on the registry keys (`chanel 2026` / `lv nine`), repo + Notion in sync.
+- **Site-search spot-check (2026-07-02):** Neverfull/Liv Pochette/Montsouris/CarryAll/Cosmetic Pouch/Slouchy/Saint Louis/Louis Vuitton all return the right pages; "Chanel 25" misreads as Classic Flap 25 and "Alma" returns only the Mini — both moot for CTAs now that keys route, but worth a search-synonym fix later.
+- **Diaper kit gaps (owner):** no Search Key assigned + article still DRAFT (`/posts/luxury-diaper-bags-honestly-ranked`), and her own Take 1 still ends "Link in bio" — conflicts with her routing decision; hers to reconcile before recording. Also open: Alma PM comps (Ep 7 repo-only), day-zero recording date (then stage the diaper cadence in Metricool, rolling 1-2 posts ahead), Miu Miu re-confirmation.
+- **Metricool best-times (TikTok, pulled 07-02):** Wed/Thu are strongest; peak windows 10am, 12pm, and 6pm (audience-activity values ~1.4k vs ~500 baseline). Mon/Tue same shape, slightly lower; weekends weakest.
+
+---
+
 ## TL;DR — Social → site routing: search-key CTAs + /social bio hub (2026-07-02, on `main`)
 
 **"Link in bio" is retired (owner decision, locked in preferences.md).** Routing standard: `docs/social-routing.md`.
