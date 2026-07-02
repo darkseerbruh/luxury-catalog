@@ -36,3 +36,8 @@ dates) + takes with hooks + linked article. Constraint: no bags in hand ([[no-ba
 2. Build all pending kits in Notion (mark "Idea" if article pending, "Kit ready" if article exists).
 3. On agent completion: verify drafts (em-dash check, placeholder check), commit, flip kit statuses.
 4. Done when: 15 kits live, 12 articles in repo, this file updated.
+
+## HOLD (2026-07-02)
+- Miu Miu City kit + draft ON HOLD by owner until she re-confirms the 4.31M/148 numbers in
+  Creative Center (extreme-outlier ratio; possible metric glitch or tag mismatch). Do not
+  fill its [DATA]/[VERIFY] or schedule it. Recording-day pick 3 becomes the LV series.
