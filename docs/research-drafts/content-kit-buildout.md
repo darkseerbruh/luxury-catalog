@@ -1,3 +1,11 @@
+# Content-kit buildout — ✅ COMPLETE 2026-07-02
+
+All 15 kits live in the Notion Content Kits DB (all "Kit ready"). All 13 article drafts in
+docs/research-drafts/trend-articles/ (12 pillars + the price-truth hub spec), gate-checked
+(zero em dashes, no invented numbers, [DATA]/[VERIFY] slots for everything unproven).
+Remaining before publish, per draft frontmatter: the [DATA] fill pass from prod + [VERIFY]
+resolution + owner review. Original plan below for reference.
+
 # Content-kit buildout (run until done)
 
 *Started 2026-07-02. Goal: the Notion Content Kits DB is the final destination for every
