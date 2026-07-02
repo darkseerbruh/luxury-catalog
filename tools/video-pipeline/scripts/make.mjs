@@ -170,6 +170,44 @@ const resolveCues = async (base, publicVideo) => {
   return overlays;
 };
 
+// Rank tracker: input/<base>.ranks.json lists the chip labels and the phrase that
+// reveals each rank; we resolve the phrases to times from the transcript.
+//   { "labels": ["4","3","2","1"],
+//     "fillAt": ["fourth place","third place","second place","the neverful"],
+//     "yPct": 12 }
+const resolveRanks = (base) => {
+  const p = path.join(INPUT_DIR, `${base}.ranks.json`);
+  if (!existsSync(p)) return undefined;
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return undefined;
+  const cfg = JSON.parse(readFileSync(p, "utf8"));
+  const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  const words = caps
+    .map((c) => ({ w: norm(c.text), t: c.startMs / 1000 }))
+    .filter((x) => x.w);
+  const find = (phrase) => {
+    const ph = norm(phrase).split(" ").filter(Boolean);
+    for (let i = 0; i + ph.length <= words.length; i++) {
+      let ok = true;
+      for (let j = 0; j < ph.length; j++) {
+        if (words[i + j].w !== ph[j]) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) return words[i].t;
+    }
+    return null;
+  };
+  const fillTimes = cfg.fillAt.map((f) => {
+    const t = find(f);
+    if (t === null) console.log(`  rank: phrase not found -> "${f}"`);
+    return t ?? 0;
+  });
+  console.log(`  ranks: ${cfg.labels.join(" ")} at ${fillTimes.map((t) => t.toFixed(1)).join(", ")}s`);
+  return { labels: cfg.labels, fillTimes, yPct: cfg.yPct };
+};
+
 const processClip = async (fileName) => {
   const base = fileName.replace(VIDEO_RE, "");
   const inputPath = path.join(INPUT_DIR, fileName);
@@ -208,8 +246,12 @@ const processClip = async (fileName) => {
   const overlays = [...loadOverlays(base), ...(await resolveCues(base, publicVideo))];
 
   // 4. Render.
+  const rankTracker = resolveRanks(base);
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);
-  writeFileSync(propsPath, JSON.stringify({ src: fileName, overlays }));
+  writeFileSync(
+    propsPath,
+    JSON.stringify({ src: fileName, overlays, ...(rankTracker ? { rankTracker } : {}) }),
+  );
   console.log("  rendering...");
   execFileSync(
     "npx",
