@@ -56,7 +56,7 @@ Every Chanel bag type, one pass. The Classic Flap is the quilted one, with the c
 
 ### 4. The Debate (~25s, ~75 words)
 
-Is the Chanel 25 a future classic like the Flap, or is it headed the way of the Boy? Honestly, it's too early to call, and anyone handing you a verdict is guessing. What I watch instead is preloved supply and asking prices in my Luxury Catalog data over the next year, because new lines start thin and the numbers fill in. My take, not a rule: Buy it because you'd carry it, not for its resale fate. I'm Arielle, and the longer read is on the site, search chanel 2026. If you've already picked a side, tell me which one in the comments.
+Is the Chanel 25 a future classic like the Flap, or is it headed the way of the Boy? It's too early to call, and anyone handing you a verdict is guessing. What I watch instead is preloved supply and asking prices in my Luxury Catalog data over the next year, because new lines start thin and the numbers fill in. My take, not a rule: Buy it because you'd carry it, not for its resale fate. I'm Arielle, and the longer read is on the site, search chanel 2026. If you've already picked a side, tell me which one in the comments.
 
 ### 5. The Reply stub (3 alternate one-line openers for reply-to-comment videos)
 

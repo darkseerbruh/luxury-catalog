@@ -47,6 +47,9 @@ content-kit-buildout.md (which now point here).*
 11. **Complete sentences; no clipped fragments** ("It's heavier, though"). Soften
     absolutes ("Maybe the boring answer, but honest"). Finish every metaphor. Plain idioms
     over writerly ones. Less drama ("a significant gap", not "that's not a typo").
+    **No AI rhetorical tics** (owner call 2026-07-02): "And honestly?", "Honestly," as an
+    opener, "Let's be real". Cut the tic, keep the claim. Full blacklist:
+    voice-and-tone.md §8; sweep every script against it before the teleprompter.
 12. **One hedge per script maximum**, spoken naturally ("creators report", "their claim,
     not mine"). Don't stack "estimate not appraisal" onto "dated comps".
 13. **No em dashes** (voice-and-tone.md; the tagline is the only exception, and it never
@@ -84,4 +87,4 @@ content-kit-buildout.md (which now point here).*
 - [ ] Credibility beat present and script-specific
 - [ ] Ends on a comments question or site call + search term
 - [ ] Contractions, full spoken numbers, no fragments
-- [ ] Max one hedge; no em dashes; no [DATA]/[VERIFY] remaining
+- [ ] Max one hedge; no em dashes; no AI tics (voice-and-tone.md §8 blacklist); no [DATA]/[VERIFY] remaining

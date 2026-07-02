@@ -400,6 +400,10 @@ taste.
 - **Signposting framings:** "The honest answer is," "Here's what the numbers say," "Here's
   the thing," "Put another way," "Let's break it down," "the whole story," "in plain
   numbers," "the bottom line," "let's face it," "look no further." Just say the thing.
+- **Rhetorical tics (added 2026-07-02, owner call):** "And honestly?", "Honestly," as a
+  sentence opener, "Let's be real," "Real talk." Cut the tic and keep the claim ("And
+  honestly? Smart." → "Smart move."). The working adjective survives ("the honest caveat,"
+  "honestly ranked") — it's the throat-clearing opener that reads AI, not the word.
 - **The tell is the cluster.** One slips by; three in a paragraph screams AI. Strip them
   all. (Researched against editor write-ups of common ChatGPT tells; pairs with §7's em-dash
   ban and the hype-adjective rule.)
