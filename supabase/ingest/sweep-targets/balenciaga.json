@@ -1,0 +1,204 @@
+[
+  {
+    "brand": "Balenciaga",
+    "style": "City",
+    "size_label": "Nano",
+    "requireTokens": [
+      "balenciaga",
+      "nano-city"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "City",
+    "size_label": "Mini",
+    "requireTokens": [
+      "balenciaga",
+      "mini-city"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Le City",
+    "size_label": "Small",
+    "requireTokens": [
+      "balenciaga",
+      "small-le-city"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Le City",
+    "size_label": "Medium",
+    "requireTokens": [
+      "balenciaga",
+      "medium-le-city"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "City",
+    "size_label": "Standard",
+    "requireTokens": [
+      "balenciaga",
+      "hardware-city"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json",
+    "excludeTokens": [
+      "nano",
+      "mini",
+      "le-city"
+    ]
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Hourglass",
+    "size_label": "XS",
+    "requireTokens": [
+      "balenciaga",
+      "hourglass-top-handle",
+      "xs"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Hourglass",
+    "size_label": "Small",
+    "requireTokens": [
+      "balenciaga",
+      "small-hourglass-top-handle"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Hourglass",
+    "size_label": "Medium",
+    "requireTokens": [
+      "balenciaga",
+      "medium-hourglass-top-handle"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Hourglass Chain",
+    "size_label": "Standard",
+    "requireTokens": [
+      "balenciaga",
+      "hourglass-chain"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Rodeo",
+    "size_label": "Nano",
+    "requireTokens": [
+      "balenciaga",
+      "nano-rodeo"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Rodeo",
+    "size_label": "Standard",
+    "requireTokens": [
+      "balenciaga",
+      "rodeo"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json",
+    "excludeTokens": [
+      "nano",
+      "sling"
+    ]
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Rodeo Sling Pochette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "balenciaga",
+      "rodeo-sling"
+    ],
+    "minPrice": 800,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Bel Air Carry All",
+    "size_label": "Medium",
+    "requireTokens": [
+      "balenciaga",
+      "bel-air-carry-all"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Bel Air Shoulder",
+    "size_label": "Small",
+    "requireTokens": [
+      "balenciaga",
+      "bel-air-shoulder"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Bel Air Clutch on Strap",
+    "size_label": "Small",
+    "requireTokens": [
+      "balenciaga",
+      "bel-air-clutch"
+    ],
+    "minPrice": 900,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  },
+  {
+    "brand": "Balenciaga",
+    "style": "Crush Chain",
+    "size_label": "XS",
+    "requireTokens": [
+      "balenciaga",
+      "crush-chain"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/balenciaga/products.json"
+  }
+]

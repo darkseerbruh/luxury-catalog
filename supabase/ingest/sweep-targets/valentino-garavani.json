@@ -1,0 +1,138 @@
+[
+  {
+    "brand": "Valentino",
+    "style": "Loco",
+    "size_label": "Small",
+    "requireTokens": [
+      "valentino",
+      "loco"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+    "excludeTokens": [
+      "wallet"
+    ]
+  },
+  {
+    "brand": "Valentino",
+    "style": "Rockstud Spike",
+    "size_label": "Small",
+    "requireTokens": [
+      "valentino",
+      "rockstud-spike"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Valentino",
+    "style": "Rockstud Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "valentino",
+      "rockstud",
+      "tote"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  },
+  {
+    "brand": "Valentino",
+    "style": "Rockstud Flip Lock Messenger",
+    "size_label": "Small",
+    "requireTokens": [
+      "valentino",
+      "rockstud-flip-lock"
+    ],
+    "minPrice": 200,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  },
+  {
+    "brand": "Valentino",
+    "style": "VLogo Crossbody",
+    "size_label": "Mini",
+    "requireTokens": [
+      "valentino",
+      "vlogo",
+      "crossbody"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  },
+  {
+    "brand": "Valentino",
+    "style": "VSling",
+    "size_label": "Small",
+    "requireTokens": [
+      "valentino",
+      "vsling"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+    "excludeTokens": [
+      "wallet"
+    ]
+  },
+  {
+    "brand": "Valentino",
+    "style": "Roman Stud",
+    "size_label": "Large",
+    "requireTokens": [
+      "valentino",
+      "roman-stud"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Valentino",
+    "style": "Candystud",
+    "size_label": "Standard",
+    "requireTokens": [
+      "valentino",
+      "candystud"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  },
+  {
+    "brand": "Valentino",
+    "style": "9to5",
+    "size_label": "Standard",
+    "requireTokens": [
+      "valentino",
+      "9to5"
+    ],
+    "minPrice": 700,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  },
+  {
+    "brand": "Valentino",
+    "style": "VLogo Moon",
+    "size_label": "Mini",
+    "requireTokens": [
+      "valentino",
+      "moon-bag"
+    ],
+    "minPrice": 700,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/valentino-garavani/products.json"
+  }
+]

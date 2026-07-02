@@ -1,0 +1,243 @@
+[
+  {
+    "brand": "Fendi",
+    "style": "Baguette",
+    "size_label": "Mini",
+    "requireTokens": [
+      "fendi",
+      "mini-baguette"
+    ],
+    "minPrice": 400,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "strap-you",
+      "wallet",
+      "card",
+      "charm"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Baguette",
+    "size_label": "Midi",
+    "requireTokens": [
+      "fendi",
+      "midi-chain-baguette"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "strap-you",
+      "wallet",
+      "card",
+      "charm"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Baguette",
+    "size_label": "Large",
+    "requireTokens": [
+      "fendi",
+      "large-baguette"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "strap-you",
+      "wallet",
+      "card",
+      "charm"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Baguette",
+    "size_label": "Mama",
+    "requireTokens": [
+      "fendi",
+      "mama-baguette"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "strap-you",
+      "wallet",
+      "card",
+      "charm"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Baguette",
+    "size_label": "Standard",
+    "requireTokens": [
+      "fendi",
+      "baguette"
+    ],
+    "minPrice": 400,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "strap-you",
+      "wallet",
+      "card",
+      "charm",
+      "mini",
+      "midi",
+      "large",
+      "mama"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Peekaboo",
+    "size_label": "Mini",
+    "requireTokens": [
+      "fendi",
+      "mini-peekaboo"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Peekaboo",
+    "size_label": "Petite",
+    "requireTokens": [
+      "fendi",
+      "petite-peekaboo"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Peekaboo",
+    "size_label": "Medium",
+    "requireTokens": [
+      "fendi",
+      "medium-peekaboo"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Spy",
+    "size_label": "Standard",
+    "requireTokens": [
+      "fendi",
+      "spy"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json",
+    "excludeTokens": [
+      "spray"
+    ]
+  },
+  {
+    "brand": "Fendi",
+    "style": "Mon Trésor",
+    "size_label": "Mini",
+    "requireTokens": [
+      "fendi",
+      "mon-tresor"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Fendi First",
+    "size_label": "Small",
+    "requireTokens": [
+      "fendi",
+      "fendi-first"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Fendigraphy",
+    "size_label": "Small",
+    "requireTokens": [
+      "fendi",
+      "fendigraphy"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Sunshine Shopper",
+    "size_label": "Medium",
+    "requireTokens": [
+      "fendi",
+      "sunshine-shopper"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Mia Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "fendi",
+      "mia-tote"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Zucca Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "fendi",
+      "zucca-shoulder"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Runaway Shopper",
+    "size_label": "Small",
+    "requireTokens": [
+      "fendi",
+      "runaway-shopper"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  },
+  {
+    "brand": "Fendi",
+    "style": "Fendi Basket",
+    "size_label": "Small",
+    "requireTokens": [
+      "fendi",
+      "fendi-basket"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/fendi/products.json"
+  }
+]

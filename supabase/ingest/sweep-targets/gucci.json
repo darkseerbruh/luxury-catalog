@@ -1,0 +1,503 @@
+[
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-gg-marmont-shoulder"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "super"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont",
+    "size_label": "Super Mini",
+    "requireTokens": [
+      "gucci",
+      "super-mini-gg-marmont"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont Chain",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-gg-marmont-chain"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont Chain",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-gg-marmont-chain"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont Chain",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "medium-gg-marmont-chain"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont Top Handle",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "gg-marmont-top-handle"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Marmont Bucket",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "gg-marmont",
+      "bucket"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Dionysus",
+    "size_label": "Super Mini",
+    "requireTokens": [
+      "gucci",
+      "super-mini-dionysus"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Dionysus",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-dionysus"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "super"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "Dionysus",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-dionysus"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Dionysus",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "medium-dionysus"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Soho Disco",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "soho-disco"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Soho Chain Shoulder",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-soho-chain"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Soho Chain Shoulder",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "medium-soho-chain"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Soho Flap Crossbody",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "soho-flap-crossbody"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Jackie 1961",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-jackie-1961"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Jackie 1961",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-jackie-1961"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Jackie 1961",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "jackie-1961"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "mini",
+      "small"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Shoulder",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-ophidia"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "round",
+      "dome",
+      "half-moon"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Shoulder",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-ophidia-dome"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Crossbody",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "ophidia",
+      "crossbody"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "ophidia-tote"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Shopping Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "ophidia-shopping-tote"
+    ],
+    "minPrice": 500,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Half Moon Hobo",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "ophidia-half-moon"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Round Shoulder",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "ophidia-round"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Ophidia Vanity Case",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "ophidia-vanity"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Horsebit 1955",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-horsebit-1955"
+    ],
+    "minPrice": 700,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Horsebit 1955",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "horsebit-1955-soft-small"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Horsebit 1955",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "horsebit-1955"
+    ],
+    "minPrice": 700,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json",
+    "excludeTokens": [
+      "mini",
+      "soft-small"
+    ]
+  },
+  {
+    "brand": "Gucci",
+    "style": "Maxi Horsebit Chain",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "maxi-horsebit-chain"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Blondie",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "mini-blondie"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Blondie",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "small-blondie"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Blondie",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "medium-blondie"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Neo Vintage Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "neo-vintage-shoulder"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Neo Vintage Messenger",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "neo-vintage-flap-messenger"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Interlocking G Shoulder",
+    "size_label": "Small",
+    "requireTokens": [
+      "gucci",
+      "interlocking-g-shoulder"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "GG Milano Top Handle",
+    "size_label": "Mini",
+    "requireTokens": [
+      "gucci",
+      "gg-milano"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Softbit",
+    "size_label": "Standard",
+    "requireTokens": [
+      "gucci",
+      "softbit"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Abbey Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "abbey-tote"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  },
+  {
+    "brand": "Gucci",
+    "style": "Padlock Shoulder",
+    "size_label": "Medium",
+    "requireTokens": [
+      "gucci",
+      "padlock-shoulder"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/gucci/products.json"
+  }
+]

@@ -1,0 +1,250 @@
+[
+  {
+    "brand": "Prada",
+    "style": "Re-Edition 2005",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "re-edition-2005"
+    ],
+    "minPrice": 400,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Prada",
+    "style": "Re-Edition 2000",
+    "size_label": "Mini",
+    "requireTokens": [
+      "prada",
+      "re-edition-2000"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Prada",
+    "style": "Galleria",
+    "size_label": "Medium",
+    "requireTokens": [
+      "prada",
+      "medium-galleria"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Galleria",
+    "size_label": "Large",
+    "requireTokens": [
+      "prada",
+      "large-galleria"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Galleria",
+    "size_label": "Small",
+    "requireTokens": [
+      "prada",
+      "small-galleria"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Cleo",
+    "size_label": "Large",
+    "requireTokens": [
+      "prada",
+      "large-cleo"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Cleo",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "cleo"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json",
+    "excludeTokens": [
+      "large",
+      "wallet"
+    ]
+  },
+  {
+    "brand": "Prada",
+    "style": "Vela Backpack",
+    "size_label": "Large",
+    "requireTokens": [
+      "prada",
+      "vela-large-backpack"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Vela Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "vela",
+      "backpack"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json",
+    "excludeTokens": [
+      "large"
+    ]
+  },
+  {
+    "brand": "Prada",
+    "style": "Arqué",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "arque"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Double Bag",
+    "size_label": "Medium",
+    "requireTokens": [
+      "prada",
+      "double-bag"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Aimée",
+    "size_label": "Large",
+    "requireTokens": [
+      "prada",
+      "aimee"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Darling",
+    "size_label": "Medium",
+    "requireTokens": [
+      "prada",
+      "darling"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Dynamique Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "prada",
+      "dynamique"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Bucket Crossbody",
+    "size_label": "Mini",
+    "requireTokens": [
+      "prada",
+      "bucket-crossbody"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Triangle Padded Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "triangle-padded"
+    ],
+    "minPrice": 800,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Crochet Logo Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "crochet-logo"
+    ],
+    "minPrice": 800,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  },
+  {
+    "brand": "Prada",
+    "style": "Daino Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "prada",
+      "vitello-daino",
+      "tote"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json",
+    "excludeTokens": [
+      "dynamique"
+    ]
+  },
+  {
+    "brand": "Prada",
+    "style": "Padded Flap Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "prada",
+      "padded-flap-shoulder"
+    ],
+    "minPrice": 900,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/prada/products.json"
+  }
+]
