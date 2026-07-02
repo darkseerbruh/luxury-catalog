@@ -76,7 +76,7 @@ If you remember one thing: since 2022 Chanel names new lines after the year they
 
 Chanel is a surname. The house is named for its founder, Gabrielle Chanel, nicknamed "Coco," who opened in Paris in the early 1900s and built the house on rue Cambon. [VERIFY: founding year and first-shop detail before publish]
 
-The interlocked CC logo is her initials. No hidden meaning, no acronym, and honestly the real story is better: a woman's own name, still on the door a century later.
+The interlocked CC logo is her initials. No hidden meaning, no acronym. The real story is better: a woman's own name, still on the door a century later.
 
 ## What this does to resale
 

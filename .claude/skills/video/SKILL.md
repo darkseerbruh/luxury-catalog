@@ -30,8 +30,31 @@ user-facing copy: on-voice, descriptive not vibe-only, no em dashes.
 ## Step 3a — Talking-head mode
 1. Put the clip(s) in `input/`.
 2. `npm run make` (all clips) or `npm run make <clip.mp4>` (one).
-3. Captions are auto-generated. Fix a wrong word by editing `public/<clip>.json`, then
-   re-run `npm run make <clip>`.
+3. Captions are auto-generated. Fix a wrong word (often a brand name) by editing
+   `public/<clip>.json`, then re-run `npm run make <clip>`.
+
+### Better audio: phone video + computer mic
+If she films video on her phone but records audio on a computer mic (better sound),
+combine them first. Both recordings just need to overlap in time; no clap needed.
+```bash
+npm run sync phone.mov mic.wav        # auto-aligns via the phone's scratch audio
+npm run make phone.synced.mp4         # (or split first if multi-take)
+```
+`sync` cross-correlates the phone's own audio with the computer audio to find the
+offset, then muxes the phone video with the clean audio in sync. Output is
+`input/<name>.synced.mp4`. The match score is printed; if it is low (below ~0.5), the
+two recordings may not overlap enough, so re-record with both running together.
+
+### One recording, several takes
+If she filmed multiple takes in a single video with a pause between each, split it first:
+```bash
+npm run split session.mp4          # cuts on the silent pauses
+npm run make                       # renders every take
+```
+`split` cuts on silences (default: pauses of 1.2s+ below -30dB) into
+`input/<name>_take01.mp4`, `_take02.mp4`, ... Takes under 1s are dropped. If it finds too
+few, lower the pause threshold: `npm run split session.mp4 -30 0.8`. The one filming rule
+is to leave a beat of silence between takes; takes that run together cannot be detected.
 
 ### Speech-cued images (talking-head)
 To pop a bag image into frame when she says a phrase, add `input/<clip>.cues.json`
