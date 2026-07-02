@@ -1,5 +1,6 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
+import { variantShortLabel } from "./variant-label";
 
 /**
  * "My Four Grails" reads, built on the 0011 schema. Every query degrades to an
@@ -31,7 +32,7 @@ type VariantStyleJoin = {
 function variantToGrail(position: number, v: VariantStyleJoin): Grail {
   const s = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
   const brand = s ? (Array.isArray(s.brand) ? s.brand[0] : s.brand) : null;
-  const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(v.size_label, v.exterior_colorway);
   return {
     position,
     variantId: v.variant_id,

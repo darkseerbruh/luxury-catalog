@@ -20,6 +20,7 @@
 import { getSupabase } from "./supabase";
 import { PLATFORMS } from "./platforms";
 import { colorFamily, materialFamily } from "./listings-taxonomy";
+import { displaySizeLabel } from "./variant-label";
 import {
   rateListing,
   isConfidentBasis,
@@ -210,7 +211,7 @@ function mapRow(r: RawRow): PriceRow | null {
     styleId: style?.style_id ?? 0,
     styleName: style?.name ?? "",
     brandName: style ? embeddedName(style.brand) : "",
-    sizeLabel: variant?.size_label ?? null,
+    sizeLabel: displaySizeLabel(variant?.size_label),
     price,
     currency: r.currency,
     platform: r.platform,
@@ -338,7 +339,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
         variantId,
         brandName: embeddedName(style.brand),
         styleName: style.name,
-        sizeLabel: (v as { size_label: string | null }).size_label ?? null,
+        sizeLabel: displaySizeLabel((v as { size_label: string | null }).size_label),
         colorway: (v as { exterior_colorway: string | null }).exterior_colorway ?? null,
         material: embeddedName((v as unknown as RawVariant).exterior_material) || null,
         offers: [],
@@ -347,7 +348,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
 
     const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
     const target = rows.find((r) => r.variantId === variantId);
-    const sizeLabel = target?.sizeLabel ?? (v as { size_label: string | null }).size_label ?? null;
+    const sizeLabel = target?.sizeLabel ?? displaySizeLabel((v as { size_label: string | null }).size_label);
 
     // Comps: resale rows of the same style + size (size controlled here, spec by the core).
     const comps = rows

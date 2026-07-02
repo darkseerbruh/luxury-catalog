@@ -10,6 +10,7 @@
 
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getUserProfile } from "./user-profile";
+import { variantShortLabel } from "@/lib/variant-label";
 import { rankVariants, type ScoredVariant } from "./ranker";
 import { generateWhyStrings } from "./taste-synthesis";
 import type { Recommendation } from "@/lib/recommendations-core";
@@ -140,7 +141,7 @@ function storedRowToRec(row: {
   const style = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
   const rawBrand = style ? (style as { brand: unknown }).brand : null;
   const brand = rawBrand ? (Array.isArray(rawBrand) ? (rawBrand as {name:string}[])[0] : rawBrand as {name:string}) : null;
-  const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(v.size_label, v.exterior_colorway);
 
   return {
     variantId: row.variant_id,

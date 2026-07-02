@@ -1,6 +1,7 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import type { WantSpec } from "./want-spec";
+import { variantShortLabel } from "./variant-label";
 
 /** A saved bag (closet or watchlist) resolved for list display. */
 export interface SavedBag {
@@ -50,7 +51,7 @@ function brandFrom(style: VariantJoin["style"]): { brandName: string; styleName:
 
 function baseSaved(v: VariantJoin): SavedBag {
   const { brandName, styleName } = brandFrom(v.style);
-  const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(v.size_label, v.exterior_colorway);
   return {
     variantId: v.variant_id,
     brandName,

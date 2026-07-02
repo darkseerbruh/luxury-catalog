@@ -12,6 +12,7 @@
  */
 import { getSupabase } from "./supabase";
 import { PLATFORMS } from "./platforms";
+import { displaySizeLabel } from "./variant-label";
 
 export interface ShopOffer {
   price: number;
@@ -51,7 +52,7 @@ export async function getStyleShopData(styleId: number | null): Promise<StyleSho
       .select("variant_id, size_label")
       .eq("style_id", styleId);
     if (vErr || !vars || vars.length === 0) return null;
-    const sizeOf = new Map<number, string | null>(vars.map((v: { variant_id: number; size_label: string | null }) => [v.variant_id, v.size_label]));
+    const sizeOf = new Map<number, string | null>(vars.map((v: { variant_id: number; size_label: string | null }) => [v.variant_id, displaySizeLabel(v.size_label)]));
     const variantIds = vars.map((v: { variant_id: number }) => v.variant_id);
 
     const { data, error } = await db

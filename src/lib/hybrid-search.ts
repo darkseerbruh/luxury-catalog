@@ -13,6 +13,7 @@ import { getSupabase } from "@/lib/supabase";
 import { embedQuery } from "@/lib/voyage";
 import type { PersonalizationProfile } from "@/lib/personalization/types";
 import type { StyleSearchResult } from "@/lib/queries";
+import { displaySizeLabel } from "@/lib/variant-label";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -295,7 +296,7 @@ export async function hybridSearch(
     brandName: s.brandName,
     variants: s.variants.map((v) => ({
       variantId: v.variant_id,
-      sizeLabel: v.size_label,
+      sizeLabel: displaySizeLabel(v.size_label),
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
     })),

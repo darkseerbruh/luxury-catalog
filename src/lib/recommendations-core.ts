@@ -1,5 +1,6 @@
 import { foldVariantIntoVector } from "./taste-core";
 import { type TasteVector, type TasteDimension } from "./taste";
+import { variantShortLabel } from "./variant-label";
 
 /**
  * Pure (no-DB) core of the recommendation engine: candidate scoring, "why"
@@ -126,7 +127,7 @@ export function rowToRec(s: Scored, whyPrefix = "Because you like"): Recommendat
   const row = s.row;
   const style = (Array.isArray(row.style) ? row.style[0] : row.style) ?? null;
   const brand = style ? (Array.isArray(style.brand) ? style.brand[0] : style.brand) : null;
-  const label = [row.size_label, row.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(row.size_label, row.exterior_colorway);
   return {
     variantId: row.variant_id,
     brandName: brand?.name ?? "",

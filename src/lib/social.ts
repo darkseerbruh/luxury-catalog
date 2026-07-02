@@ -1,6 +1,7 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import type { SocialLinks } from "./auth";
+import { variantShortLabel } from "./variant-label";
 
 /**
  * Social layer reads built on the 0006/0007 schema. Every query degrades to
@@ -47,7 +48,7 @@ type VariantStyleJoin = {
 function variantToBag(v: VariantStyleJoin): PublicClosetBag {
   const s = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
   const brand = s ? (Array.isArray(s.brand) ? s.brand[0] : s.brand) : null;
-  const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(v.size_label, v.exterior_colorway);
   return {
     variantId: v.variant_id,
     brandName: brand?.name ?? "",

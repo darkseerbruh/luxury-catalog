@@ -22,6 +22,8 @@ export interface MsrpRecord {
   brand: string;
   style: string;
   size_label: string;
+  /** Pins the record to one colourway when size alone is ambiguous (e.g. Neverfull MM). */
+  exterior_colorway?: string;
   /** Platform label stored on the row, e.g. "Chanel (retail)". */
   platform: string;
   history: MsrpYear[];
@@ -52,13 +54,13 @@ const CHANEL_CLASSIC_FLAP_MEDIUM: MsrpRecord = {
  * Sotheby's price-increase articles, PurseBop guides and BagUSeek's 2026 guide.
  * Hermès paused increases ~2016–2019 then resumed; series are intentionally
  * sparse (only firmly-cited, size-attributed points) per "accuracy over
- * completeness". size_label matches the catalog hero variants exactly so they
- * resolve cleanly.
+ * completeness". size_label matches the catalog variants exactly
+ * (bare size codes per the 2026-07-02 chip canon) so they resolve cleanly.
  */
 const HERMES_BIRKIN_35: MsrpRecord = {
   brand: "Hermès",
   style: "Birkin",
-  size_label: "Birkin 35",
+  size_label: "35",
   platform: "Hermès (retail)",
   history: [
     { year: 2015, price: 10900, currency: "USD", source_url: "https://www.sothebys.com/en/articles/hermes-raises-the-birkin-bag-price-what-you-need-to-know" },
@@ -70,7 +72,7 @@ const HERMES_BIRKIN_35: MsrpRecord = {
 const HERMES_BIRKIN_30: MsrpRecord = {
   brand: "Hermès",
   style: "Birkin",
-  size_label: "Birkin 30",
+  size_label: "30",
   platform: "Hermès (retail)",
   history: [
     { year: 2025, price: 13900, currency: "USD", source_url: "https://priveporter.com/blogs/blog/prive-porter-s-guide-to-the-2026-u-s-hermes-price-increase-real-numbers-real-impact" },
@@ -81,7 +83,7 @@ const HERMES_BIRKIN_30: MsrpRecord = {
 const HERMES_KELLY_28: MsrpRecord = {
   brand: "Hermès",
   style: "Kelly",
-  size_label: "Kelly 28",
+  size_label: "28",
   platform: "Hermès (retail)",
   history: [
     { year: 2023, price: 10200, currency: "USD", source_url: "https://www.sothebys.com/en/articles/hermes-raises-kelly-bag-prices-what-you-need-to-know", note: "pre-Feb-2024" },
@@ -98,7 +100,8 @@ const HERMES_KELLY_28: MsrpRecord = {
 const LV_NEVERFULL_MM: MsrpRecord = {
   brand: "Louis Vuitton",
   style: "Neverfull",
-  size_label: "Neverfull MM Monogram",
+  size_label: "MM",
+  exterior_colorway: "Monogram",
   platform: "Louis Vuitton (retail)",
   history: [
     { year: 2007, price: 645, currency: "USD", source_url: "https://lvbagaholic.com/blogs/lv_bagaholic/louis-vuitton-neverfull-pm-mm-gm" },
@@ -116,7 +119,7 @@ const LV_NEVERFULL_MM: MsrpRecord = {
 const GUCCI_GG_MARMONT_SMALL: MsrpRecord = {
   brand: "Gucci",
   style: "GG Marmont",
-  size_label: "GG Marmont Small",
+  size_label: "Small",
   platform: "Gucci (retail)",
   history: [
     { year: 2023, price: 2100, currency: "USD", source_url: "https://www.bragmybag.com/gucci-gg-marmont-bag/" },
@@ -138,7 +141,10 @@ export function msrpObservations(record: MsrpRecord): PriceObservation[] {
   return record.history.map((h) => ({
     brand: record.brand,
     style: record.style,
-    attrs: { size_label: record.size_label },
+    attrs: {
+      size_label: record.size_label,
+      ...(record.exterior_colorway ? { exterior_colorway: record.exterior_colorway } : {}),
+    },
     platform: record.platform,
     price_type: "retail_msrp" as const,
     sale_price: h.price,

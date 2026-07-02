@@ -1,6 +1,7 @@
 import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import { getVerifiedOwnerIds } from "./social";
+import { variantShortLabel } from "./variant-label";
 
 export interface MyReview {
   reviewId: number;
@@ -43,7 +44,7 @@ export async function getMyReviews(): Promise<MyReview[]> {
     if (!v) return [];
     const s = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
     const brand = s ? (Array.isArray(s.brand) ? s.brand[0] : s.brand) : null;
-    const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+    const label = variantShortLabel(v.size_label, v.exterior_colorway);
     return [
       {
         reviewId: r.review_id,

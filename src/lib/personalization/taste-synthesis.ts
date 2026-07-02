@@ -14,6 +14,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { PersonalizationProfile } from "./types";
 import type { ScoredVariant } from "./ranker";
+import { displaySizeLabel } from "@/lib/variant-label";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -76,7 +77,7 @@ function variantSummaryText(v: ScoredVariant): string {
     brand && `brand: ${brand}`,
     (style as { name?: string } | null)?.name && `style: ${(style as { name: string }).name}`,
     (style as { silhouette?: string | null } | null)?.silhouette && `silhouette: ${(style as { silhouette: string }).silhouette}`,
-    v.row.size_label && `size: ${v.row.size_label}`,
+    displaySizeLabel(v.row.size_label) && `size: ${displaySizeLabel(v.row.size_label)}`,
     v.row.exterior_colorway && `color: ${v.row.exterior_colorway}`,
     v.row.hardware_color && `hardware: ${v.row.hardware_color}`,
     material && `material: ${material}`,

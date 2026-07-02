@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getSupabase } from "@/lib/supabase";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { getStyleShopData } from "@/lib/article-shop";
+import { displaySizeLabel } from "@/lib/variant-label";
 
 export const dynamic = "force-dynamic";
 
@@ -168,7 +169,7 @@ async function findCatalogMatch(
         styleName: best.name,
         brandName: embeddedName(best.brand),
         variantId: matched?.variant_id ?? null,
-        sizeLabel: matched?.size_label ?? null,
+        sizeLabel: displaySizeLabel(matched?.size_label),
         exteriorColorway: matched?.exterior_colorway ?? null,
         hardwareColor: matched?.hardware_color ?? null,
       };

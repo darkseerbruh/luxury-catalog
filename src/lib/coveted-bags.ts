@@ -1,4 +1,5 @@
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { displaySizeLabel, variantShortLabel } from "@/lib/variant-label";
 
 /**
  * "Most Wanted Bags" leaderboard data — a GLOBAL ranking of individual bag
@@ -51,12 +52,11 @@ function resolveVariant(v: VariantStyleJoin): {
 } {
   const s = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
   const brand = s ? (Array.isArray(s.brand) ? s.brand[0] : s.brand) : null;
-  const label =
-    [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+  const label = variantShortLabel(v.size_label, v.exterior_colorway);
   return {
     brandName: brand?.name ?? "",
     styleName: s?.name ?? "",
-    sizeLabel: v.size_label ?? null,
+    sizeLabel: displaySizeLabel(v.size_label),
     label,
   };
 }

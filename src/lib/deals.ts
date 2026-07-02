@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
 import { CACHE_MARKET } from "./cache";
+import { displaySizeLabel } from "./variant-label";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -180,7 +181,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
           listed: [],
           brandName: style ? embeddedName(style.brand) : "",
           styleName: style?.name ?? "",
-          sizeLabel: variant?.size_label ?? null,
+          sizeLabel: displaySizeLabel(variant?.size_label),
           currency: row.currency,
         };
         groups.set(row.variant_id, g);

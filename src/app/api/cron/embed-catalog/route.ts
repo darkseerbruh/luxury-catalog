@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { embedDocuments, variantToEmbedText } from "@/lib/voyage";
+import { displaySizeLabel } from "@/lib/variant-label";
 
 const BATCH = 200; // variants per DB read page
 
@@ -71,7 +72,7 @@ export async function GET(req: NextRequest) {
         styleName: (style as { name?: string } | null)?.name ?? null,
         silhouette: (style as { silhouette?: string | null } | null)?.silhouette ?? null,
         sizeCategory: row.size_category as string | null,
-        sizeLabel: row.size_label as string | null,
+        sizeLabel: displaySizeLabel(row.size_label as string | null),
         exteriorColorway: row.exterior_colorway as string | null,
         hardwareColor: row.hardware_color as string | null,
         materialType: material,

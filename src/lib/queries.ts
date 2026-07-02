@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
+import { displaySizeLabel, variantShortLabel } from "./variant-label";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
 import { CACHE_CATALOG } from "./cache";
@@ -582,7 +583,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
 
   return {
     variantId: data.variant_id,
-    sizeLabel: data.size_label,
+    sizeLabel: displaySizeLabel(data.size_label),
     sizeCategory: data.size_category,
     constructionMethod: data.construction_method,
     rigidity: data.rigidity,
@@ -823,7 +824,7 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
   if (error || !data) return [];
   return (data as unknown as Record<string, unknown>[]).map((v) => ({
     variantId: v.variant_id as number,
-    sizeLabel: (v.size_label as string | null) ?? null,
+    sizeLabel: displaySizeLabel((v.size_label as string | null) ?? null),
     sizeCategory: (v.size_category as string | null) ?? null,
     exteriorColorway: (v.exterior_colorway as string | null) ?? null,
     hardwareColor: (v.hardware_color as string | null) ?? null,
@@ -996,7 +997,7 @@ export async function getBrandDetail(brandId: number): Promise<BrandDetail | nul
     discontinued: s.discontinued,
     variants: (s.variant ?? []).map((v) => ({
       variantId: v.variant_id,
-      sizeLabel: v.size_label,
+      sizeLabel: displaySizeLabel(v.size_label),
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
       material:
@@ -1056,7 +1057,7 @@ export async function getVariantsByCarry(carrySlug: string): Promise<BrowseVaria
     ].filter(Boolean).join(" · ");
     return [{
       variantId: v.variant_id,
-      sizeLabel: v.size_label,
+      sizeLabel: displaySizeLabel(v.size_label),
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
       styleName: style.name,
@@ -1094,7 +1095,7 @@ export async function getVariantsByFits(itemSlug: string): Promise<BrowseVariant
     ].filter(Boolean).join(" · ");
     return [{
       variantId: v.variant_id,
-      sizeLabel: v.size_label,
+      sizeLabel: displaySizeLabel(v.size_label),
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
       styleName: style.name,
@@ -1291,7 +1292,7 @@ async function searchVariantsByFilters(f: SearchFilters): Promise<StyleSearchRes
     }
     entry.variants.push({
       variantId: raw.variant_id,
-      sizeLabel: raw.size_label,
+      sizeLabel: displaySizeLabel(raw.size_label),
       exteriorColorway: raw.exterior_colorway,
       hardwareColor: raw.hardware_color,
     });
@@ -1351,7 +1352,7 @@ async function legacySearch(q: string): Promise<SearchResults> {
     brandName: embeddedName(s.brand),
     variants: (s.variant ?? []).map((v) => ({
       variantId: v.variant_id,
-      sizeLabel: v.size_label,
+      sizeLabel: displaySizeLabel(v.size_label),
       exteriorColorway: v.exterior_colorway,
       hardwareColor: v.hardware_color,
     })),
@@ -1509,7 +1510,7 @@ export async function getUserFeedback(limit = 200): Promise<UserFeedbackEntry[]>
       style: { name: string; brand: { name: string } | { name: string }[] | null } | { name: string; brand: { name: string } | { name: string }[] | null }[] | null;
     }[]) {
       const style = (Array.isArray(v.style) ? v.style[0] : v.style) ?? null;
-      const label = [v.size_label, v.exterior_colorway].filter(Boolean).join(" · ") || "Variant";
+      const label = variantShortLabel(v.size_label, v.exterior_colorway);
       variantsById.set(v.variant_id, {
         variantId: v.variant_id,
         brandName: style ? embeddedName(style.brand) : "",
@@ -1647,7 +1648,7 @@ function mapAttrBags(rows: AttrVariantRow[]): AttributeBag[] {
         variantId: r.variant_id,
         styleName: style.name,
         brandName: embeddedName(style.brand),
-        sizeLabel: r.size_label,
+        sizeLabel: displaySizeLabel(r.size_label),
         exteriorColorway: r.exterior_colorway,
       },
     ];

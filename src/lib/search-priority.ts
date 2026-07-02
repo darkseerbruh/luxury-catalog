@@ -19,6 +19,7 @@ import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "@/lib/supabase";
 import { CACHE_CATALOG } from "@/lib/cache";
 import type { StyleSearchResult } from "@/lib/queries";
+import { displaySizeLabel } from "@/lib/variant-label";
 
 // ── Pure matching (unit-tested) ───────────────────────────────────────────────
 
@@ -168,7 +169,7 @@ export async function findPriorityStyles(query: string): Promise<StyleSearchResu
           hardware_color: string | null;
         }[]).map((v) => ({
           variantId: v.variant_id,
-          sizeLabel: v.size_label,
+          sizeLabel: displaySizeLabel(v.size_label),
           exteriorColorway: v.exterior_colorway,
           hardwareColor: v.hardware_color,
         })),
