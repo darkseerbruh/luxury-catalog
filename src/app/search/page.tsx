@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { searchCatalog, getVariantImages } from "@/lib/queries";
 import { hybridSearch } from "@/lib/hybrid-search";
+import { findPriorityStyles, pinStylesFirst, priorityChipLabels } from "@/lib/search-priority";
 import { listPublished, getBySlug } from "@/lib/posts";
 import { matchSocialKey } from "@/lib/social-search-keys";
 import { getCurrentUser } from "@/lib/auth";
@@ -24,7 +25,13 @@ export default async function SearchPage({
   const user = query ? await getCurrentUser() : null;
   const profile = user ? await getUserProfile(user.id) : null;
 
-  const results = query
+  // Priority pin: a query that exactly names a catalogued style (or a brand +
+  // line number like "chanel 25") resolves to that style FIRST, ahead of the
+  // ranked legs — both misread these shapes (line-vs-size, family-vs-variant).
+  // Resolved in parallel with the search itself.
+  const priorityPromise = query ? findPriorityStyles(query) : Promise.resolve([]);
+
+  const ranked = query
     ? process.env.VOYAGE_API_KEY
       ? await hybridSearch(query, profile).then(async (hybridStyles) => {
           // Hybrid search only returns styles — run the existing brand search in parallel.
@@ -38,6 +45,15 @@ export default async function SearchPage({
         })
       : await searchCatalog(query)
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
+
+  const pinnedStyles = await priorityPromise;
+  const results = {
+    ...ranked,
+    styles: pinStylesFirst(pinnedStyles, ranked.styles),
+    // A fired pin IS the interpretation — the NL-parse chips misread exactly
+    // these queries (line vs size), so they'd contradict the pinned top result.
+    interpreted: pinnedStyles.length > 0 ? priorityChipLabels(pinnedStyles) : ranked.interpreted,
+  };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
 
   // Video CTA routing: an exact match on a spoken search key ("search chanel
