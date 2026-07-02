@@ -10,18 +10,25 @@ import { track, EVENTS } from "@/lib/analytics/events";
 export default function SearchTracker({
   query,
   resultCount,
+  socialKey,
 }: {
   query: string;
   resultCount: number;
+  /** Set when the query exactly matched a video CTA key (social-search-keys). */
+  socialKey?: string;
 }) {
   useEffect(() => {
     if (!query) return;
-    track(EVENTS.searchPerformed, { query, result_count: resultCount });
-    if (resultCount === 0) {
+    track(EVENTS.searchPerformed, {
+      query,
+      result_count: resultCount,
+      ...(socialKey ? { social_key: socialKey } : {}),
+    });
+    if (resultCount === 0 && !socialKey) {
       track(EVENTS.searchNotFound, { query });
     }
     // Re-fire when the query or result count changes.
-  }, [query, resultCount]);
+  }, [query, resultCount, socialKey]);
 
   return null;
 }

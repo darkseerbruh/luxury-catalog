@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { searchCatalog, getVariantImages } from "@/lib/queries";
 import { hybridSearch } from "@/lib/hybrid-search";
-import { listPublished } from "@/lib/posts";
+import { listPublished, getBySlug } from "@/lib/posts";
+import { matchSocialKey } from "@/lib/social-search-keys";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserProfile } from "@/lib/personalization/user-profile";
 import RequestBagForm from "./RequestBagForm";
@@ -39,12 +40,21 @@ export default async function SearchPage({
     : { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
   const hasResults = results.brands.length > 0 || results.styles.length > 0;
 
+  // Video CTA routing: an exact match on a spoken search key ("search chanel
+  // 2026 on luxurycatalog.com") pins that article above everything else, so the
+  // CTA lands deterministically. Unpublished target degrades to normal search.
+  const socialHit = query ? matchSocialKey(query) : null;
+  const pinnedPost = socialHit ? await getBySlug(socialHit.slug) : null;
+  // getBySlug returns an author's own drafts; the pin is public-only.
+  const pinned = pinnedPost?.status === "published" ? pinnedPost : null;
+
   // Unified search: also match published articles by title/excerpt, so a search
   // surfaces both browsable bags AND our content. One list query, cheap.
   const ql = query.toLowerCase();
   const articleHits = query
     ? (await listPublished())
         .filter((p) => p.title.toLowerCase().includes(ql) || (p.excerpt ?? "").toLowerCase().includes(ql))
+        .filter((p) => p.slug !== pinned?.slug)
         .slice(0, 6)
     : [];
 
@@ -64,6 +74,7 @@ export default async function SearchPage({
         <SearchTracker
           query={query}
           resultCount={results.brands.length + results.styles.length}
+          socialKey={pinned ? socialHit?.key : undefined}
         />
       )}
       <form method="GET" className="mx-auto flex w-full max-w-md items-center gap-2">
@@ -106,7 +117,31 @@ export default async function SearchPage({
           </div>
         )}
 
-        {query && !hasResults && articleHits.length === 0 && (
+        {pinned && (
+          <section className="mb-8">
+            <p className="mb-3 text-[11px] uppercase tracking-[0.2em] text-gold">
+              From our videos
+            </p>
+            <Link
+              href={`/articles/${pinned.slug}`}
+              className="group block rounded-lg border border-gold/50 bg-surface p-5 transition-colors hover:border-gold"
+            >
+              <h2 className="font-serif text-xl leading-tight text-foreground group-hover:text-gold-soft">
+                {pinned.title}
+              </h2>
+              {pinned.excerpt && (
+                <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted">
+                  {pinned.excerpt}
+                </p>
+              )}
+              <p className="mt-3 text-xs text-gold">
+                The full read &rarr;
+              </p>
+            </Link>
+          </section>
+        )}
+
+        {query && !hasResults && articleHits.length === 0 && !pinned && (
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
             <p className="text-foreground">
               Nothing for &ldquo;{query}&rdquo; yet.
