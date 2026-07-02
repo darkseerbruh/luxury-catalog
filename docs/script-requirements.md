@@ -25,6 +25,12 @@ Origin: the Take-3 lesson. The numbers were real and verified, but "don't pay th
 sticker, look up the sold price" wasn't worth a video until it became a negotiation
 play. Data earns the video only when it's attached to a move.
 
+COROLLARY (Chanel Take-1 lesson, 2026-07-02): when honest scoping guts a hook (the
+year-naming spine collapsed under its own caveats: "reinvigorated penchant... then a
+gap..."), don't prop the hook up with qualifiers. Recenter the take on the purpose the
+data carries at full strength; for us that's usually the prices nobody else has. The
+weak spine can survive as one light beat inside the stronger video.
+
 ## Voice and stance
 1. **I, never we.** She is one person, not an org. "I track more than twenty thousand real
    prices." Written on-site copy may use brand voice; scripts are I/my.

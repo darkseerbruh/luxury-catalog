@@ -40,11 +40,11 @@ SPOKEN-STYLE RULES: superseded by docs/script-requirements.md (the canonical lis
 
 ## KIT 1: Chanel in 2026
 
-### 1. The Explainer (~50s, ~135 words)
+### 1. The starter map, priced (~70s, ~190 words)
 
-Alt opens if the default hook feels slow: "Chanel comment sections are a mess right now, so let's clean it up." or "Three Chanel questions keep going viral. One video, all three."
+Alt opens if the default hook feels slow: "Five Chanel bags and five real prices, and your feed finally makes sense." or "Everyone explains Chanel's bags. Nobody prices them. Let's do both."
 
-If you're new to Chanel and the comment sections look like a mess of numbers, here's the clean version to help you out. First, the classics: the Chanel Classic Flap, the Boy, the 2.55. These have been around for a while. What's new is how new lines get named. Starting with the Chanel 19 in 2019, the house names its new soft everyday lines for the year they're born: the 19, the 22, and now the 25. Not every new bag gets a year, Chanel still christens plenty the old way, but every number in that family is a birth year. Birth years, not sizes, and sizes are Hermès' number game: a Birkin 25 means twenty-five centimeters, a Chanel 25 means born in 2025. And the trick is older than it looks, because the 2.55 was always a date: February 1955, when the original launched. And Chanel itself is just a surname, Gabrielle Chanel's, who founded the house. By the way, every claim in this video checks against the twenty thousand real prices I track at Luxury Catalog dot com. I'm Arielle, and every bag is decoded on my site. Just search chanel 2026 on the site, and it comes up first. Link in bio.
+New to Chanel and want to actually understand your feed? Here's the twenty twenty-six starter map, with real preloved prices. The bag you keep seeing is the Chanel 25: the new soft everyday line, born in 2025, and the number is a birth year, not a size. It asks around eighty-one hundred dollars preloved. The forever bag is the Chanel Classic Flap, the quilted one with the chain through leather. The medium asks around seventy-one hundred, and that price holds with over a thousand listed at once. That's why people call it THE classic. Its grandmother is the 2.55 from February 1955, around forty-two hundred. The recent siblings are year-named too: the Chanel 19, puffy, around forty-five hundred, and the Chanel 22, slouchy, around forty-eight hundred. And the cheapest real ticket in is the Chanel WOC, wallet on chain, around thirty-three hundred. One icon, one original, three newcomers, one entry door. Now your feed makes sense. Every number is a preloved asking median from the twenty thousand plus real prices I track at Luxury Catalog dot com. I'm Arielle, and every one of these is decoded on my site. Just search chanel 2026 on the site, and it comes up first. Link in bio.
 
 ### 2. The Blazy Decode (~40s, ~105 words)
 
