@@ -26,6 +26,16 @@ Queue (priority order; tick with counts + date):
 - ✅ Mid tier DONE 2026-07-02: SL 23 targets (Loulou/Niki/Kate/Le 5 à 7/Triquilt) · Celine 21 (Luggage/Triomphe/Box/Ava/16/Camille) · Dior 24 (Lady Dior sized/Saddle/Book Tote/Bobby/Caro) · Bottega 15 (Jodie/Andiamo/Hop/Pouch) · Loewe 17 (Puzzle family/Basket/Flamenco/Squeeze) · Chloé 14 (Paddington!/Marcie/Faye/Woody) · McQueen 3 · Mulberry 4 · Jacquemus 8 · Off-White 2
 - ✅ Burberry 10 targets · ✅ Telfar 3 (Shopping Bag S/M/L) · ❌ Kate Spade/Longchamp/Michael Kors: zero FP inventory (browser-gated path)
 - ✅ RESULT (2026-07-02): 14,093 price rows added today (price_history now 56,440; styles 697). Final load 14,087 mapped / 0 unresolved. Coverage of live FP listings vs catalog styles: LV 60.0% → 80.5% (rest = out-of-scope SLGs/silk), Chanel 96.3%. Speedy Soft contamination cleaned (93 pre-sweep rows deleted from classic Speedy buckets; excludes added to hardcoded targets).
+## CATALOGUE COMPLETION RUN (owner: "do them all, on a loop, until done" 2026-07-02) — 🔄 IN PROGRESS
+*Finish line A (resale-complete) then a B (current-line) prototype. Units, tick as done:*
+- ⬜ U1 Tail clusters <10 listings, all swept brands (source: local raw dump, no refetch)
+- ⬜ U2 Coach + Kate Spade + Longchamp + Michael Kors via firecrawl-ebay (FP has zero inventory)
+- ⬜ U3 Vestiaire second source for thin brands, single-variant styles only (2026-06-30 verdict)
+- ⬜ U4 Coverage re-measure all swept brands; declare A status
+- ⬜ U5 B prototype: one official brand-site crawl, diff vs catalog, record runbook
+- ⬜ U6 Wrap: docs + green gate + merge main
+
+
 - ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope decision (wallets/key/card deferred, Cosmetic Pouch lesson says demand exists); tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
