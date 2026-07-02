@@ -16,8 +16,18 @@ Suggested topic tags (for the CTA block): Goyard Saint Louis, LV Neverfull, LV O
 
 VERIFICATION UPDATE (browser check of live TikTok content, 2026-07-02): goyard-diaper-bag
 content matches the draft (St Louis as the mom bag, "the bag the internet loves to hate,"
-first-time-mom what's-in-my-bag). TikTok's related searches also name the Goyard MINA as
-the purpose-made baby tote; [VERIFY] the Mina and give it a line in the Goyard section.
+first-time-mom what's-in-my-bag).
+
+DATA + FACTS PASS DONE 2026-07-02:
+- Comps filled from prod price_history (asking medians with n; observed 2026-06-23 to
+  2026-07-01; Neverfull MM also has realized eBay sold data, n=87).
+- Goyardine coating confirmed via Maison Goyard (resin-coated linen/cotton, waterproof by
+  design); the care concern is the natural leather trim, not the canvas.
+- "Goyard Mina" could NOT be verified as a real model (web check 2026-07-02); removed.
+- Gucci DOES sell an official GG Supreme baby changing bag (padded mat; Farfetch/retailers,
+  checked 2026-07-02); Gucci section corrected accordingly.
+- Still open before publish: current Neverfull trim options ([VERIFY] retained), catalog
+  dimensions (we do not store them; those placeholders removed rather than guessed).
 -->
 
 # Luxury diaper bags, honestly ranked
@@ -32,44 +42,44 @@ Nobody hands you a bag with those answers attached, so here they are. Ranked, wi
 
 > **Quick verdict: The status pick, and lighter than it looks. Buy it knowing the care question is real.**
 
-The Saint Louis is the bag driving the "goyard diaper bag" search: an open-top canvas tote in the house's chevron-print Goyardine, famously light on the shoulder even loaded. The GM size swallows bottles, a changing mat, and a wubby with room left over. [DATA: Saint Louis PM vs GM dimensions from catalog]
+The Saint Louis is the bag driving the "goyard diaper bag" search: an open-top canvas tote in the house's chevron-print Goyardine, famously light on the shoulder even loaded. The GM is the bigger of the two everyday sizes and swallows bottles, a changing mat, and a wubby with room left over.
 
 The honest part TikTok keeps asking about:
 
-- **The care question.** The trim and handles are natural, untreated leather that marks and darkens with handling, and owners debate how the canvas itself handles spills compared to LV's coated canvas. [VERIFY: Goyardine coating/sealing + trim leather treatment before publish]
+- **The care question, answered.** The Goyardine canvas itself is resin-coated linen and cotton, waterproof by design per Maison Goyard. The part that ages is the trim and handles: Natural leather that marks and darkens with handling. Spills wipe off the body; hand cream and rain live on in the handles.
 - **No zip, minimal structure.** It slouches open. Great for one-handed grabs, less great for a bag that tips over in the stroller basket.
-- **Resale:** Our estimate from dated comps, [DATA: Saint Louis GM sold/asking median + n + date from prod]. Historically the strongest name recognition of this list, which matters when you sell.
+- **What the market asks:** Our read from dated comps, preloved asking medians of about $2,455 for the PM (n=110) and $2,495 for the GM (n=45), observed late June to July 1, 2026. Asking, not realized, so treat it as the ceiling, not the check. Strongest name recognition on this list, which matters when you sell.
 
 ## 2. Louis Vuitton Neverfull
 
 > **Quick verdict: The practical default. Coated canvas that shrugs off spills, with one weak point to know about.**
 
-The Neverfull is the workhorse behind the "louis vuitton diaper bag" search. The Monogram coated canvas wipes clean with a damp cloth, the side laces cinch it shut-ish, and the MM comfortably takes bottles, a mat, and a snack bag. [DATA: Neverfull MM dimensions from catalog]
+The Neverfull is the workhorse behind the "louis vuitton diaper bag" search. The Monogram coated canvas wipes clean with a damp cloth, the side laces cinch it shut-ish, and the MM comfortably takes bottles, a mat, and a snack bag.
 
 Know this before daycare: The handles and trim on the classic Monogram version are vachetta, the pale natural leather that water-spots and darkens. Hand sanitizer and rain are its enemies, not the baby. [VERIFY: whether current production Neverfull colorways offer treated/coated trim]
 
-- **Resale:** [DATA: Neverfull MM sold/asking median + n + date]. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy.
+- **The number nobody says out loud:** Preloved Monogram MMs ask a median of about $1,495 (n=344), but the realized eBay sales we track landed at a median of about $770 (n=87, observed through late June 2026). Both are our estimates from dated comps, not appraisals. The gap is the negotiating room. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy; just anchor on the sold number, not the sticker.
 
 ## 3. Louis Vuitton OnTheGo
 
 > **Quick verdict: The bigger, more structured sibling. Better as a bag that stands up and stays organized.**
 
-The OnTheGo GM is roomier and more architectural than the Neverfull, with double handles so it works on the shoulder or in hand. In Monogram Empreinte, the embossed leather version, there is no vachetta to baby, which quietly solves the Neverfull's weak point. [VERIFY: current OnTheGo sizes and which run canvas vs Empreinte]
+The OnTheGo GM is roomier and more architectural than the Neverfull, with double handles so it works on the shoulder or in hand. In Monogram Empreinte, the embossed leather version, there is no vachetta to baby, which quietly solves the Neverfull's weak point. Our catalog tracks it in four sizes: PM, MM, GM and East-West. [VERIFY: which sizes currently run canvas vs Empreinte]
 
-The tradeoff is weight. Empreinte leather is heavier than canvas before you add a single bottle. [DATA: OnTheGo GM weight if catalogued]
+The tradeoff is weight. Empreinte leather is heavier than canvas before you add a single bottle.
 
-- **Resale:** [DATA: OnTheGo sold/asking median + n + date], our estimate from dated comps.
+- **A quiet market quirk:** In our dated comps the biggest size asks the least. GM median about $2,350 (n=199), MM about $2,521 (n=202), PM about $2,695 (n=115), observed late June 2026. Estimates from asking prices, not appraisals, and good news if the GM is the size the diaper years actually need.
 
 ## 4. The Gucci route
 
 > **Quick verdict: Not a product line. A regular Gucci tote doing diaper duty, and that's the point.**
 
-"Gucci baby bag" on TikTok mostly does not mean a Gucci-made diaper bag. It means moms carrying an Ophidia tote or a large GG canvas tote as the diaper bag, which is a genuinely smart move: the GG Supreme canvas is coated, so it wipes clean, and a large Ophidia holds real cargo. [VERIFY: whether Gucci currently sells a dedicated changing bag, so we can say it precisely]
+"Gucci baby bag" on TikTok mostly does not mean a Gucci-made diaper bag, even though one exists: Gucci does sell an official GG Supreme baby changing bag with a padded mat (confirmed at retailers, July 2026). What the videos actually show is moms carrying an Ophidia tote or a large GG canvas tote as the diaper bag, which is a genuinely smart move: The GG Supreme canvas is coated, so it wipes clean, and a Medium or Large Ophidia holds real cargo.
 
-Why people do it instead of buying the "real" luxury diaper bag:
+Why people do it instead of buying the dedicated changing bag:
 
 - The tote outlives the diaper years. No changing-pad pockets to feel silly about later.
-- Preloved Ophidia totes tend to run well under the LV and Goyard picks above. [DATA: large Ophidia tote asking median + n + date vs Neverfull MM]
+- Preloved Ophidia totes run under the Goyard and LV asking prices above: Medium at a median of about $1,250 (n=155) in our dated comps, observed late June 2026. The Large asks about $1,883 but on a thin n=16, so read that one loosely. Estimates from asking prices, not appraisals.
 
 ## When a real diaper bag wins
 
@@ -83,7 +93,7 @@ The luxury tote wins when the bag needs to keep being your bag at pickup, at bru
 
 ## What they're worth when the diaper years end
 
-Every figure here is an estimate from dated resale comps, graded within condition tier, not an appraisal. The short version: [DATA: 1-line comparison of Saint Louis vs Neverfull vs OnTheGo vs Ophidia value retention from prod, with n + as-of date].
+Every figure here is an estimate from dated resale comps, not an appraisal. The short version, from our comps observed late June to July 1, 2026: The Saint Louis holds the highest preloved asking prices of this list (about $2,455 to $2,495 across sizes), the OnTheGo sits in the mid $2,000s with the odd twist that bigger asks less, the Neverfull MM asks about $1,495 but actually sells closer to $770 in the realized sales we track, and the Ophidia Medium is the value entry at about $1,250. Asking prices are ceilings; the Neverfull is the only one here where we hold realized sold data, and the gap it shows is worth remembering when you read the others.
 
 Condition drives the number. A tote that spent two years as a diaper bag usually grades a tier or two below closet-kept, so read the comps for your bag's actual condition, not the pristine one in the listing photos.
 
