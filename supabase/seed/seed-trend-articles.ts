@@ -20,7 +20,13 @@ import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
-const chanelBody = `Chanel renamed half its lineup after numbers, TikTok is searching "chanel 25" nearly three million times a month, and the comment sections are a mess of people correcting each other. This is the clean version: what is actually new, what everything is called, and what the names mean.
+const chanelBody = `New to Chanel and lost in the numbers? This is for you. First thing: Chanel didn't rename anything. The classics kept their names. What changed is how new lines get named, and TikTok is searching "chanel 25" nearly three million times a month while the comment sections correct each other. This is the clean version: what stayed, what's new, and what the names mean.
+
+## The names, before and after
+
+- **Unchanged, the named classics:** the Classic Flap, the 2.55, the Boy, the WOC, the Gabrielle, the Coco Handle. Nothing here was renamed.
+- **The new system, since 2019:** each new line is named for its birth year. The 19 (2019), the 22 (2022), the 25 (2025). Birth years, not sizes.
+- **Older than it looks:** the 2.55 has always been a date. February 1955, the month the original launched.
 
 ## The Chanel 25, in plain terms
 
@@ -49,11 +55,11 @@ The taxonomy people are actually searching for. Every one of these is a distinct
 - **2.55.** The original, launched February 1955, which is where the name comes from. The tells versus a Classic Flap: a rectangular Mademoiselle turn-lock instead of the CC clasp, and a chain with no leather woven through. Asks around **$4,175** (n=494).
 - **Boy.** The boxier, harder-edged flap from 2011, named for Arthur "Boy" Capel, Gabrielle Chanel's great love. Chunkier chain, masculine hardware plate. Asks around **$3,915** (n=2,122).
 - **WOC.** Wallet on chain: a flat quilted wallet on a long chain, the price entry to the flap family. Asks around **$3,285** (n=877).
-- **Chanel 22.** The soft, slouchy hobo launched in 2022, the line that started the number-names era. Asks around **$4,840** (n=87).
+- **Chanel 19.** The puffy, big-quilted flap from 2019, designed under Karl Lagerfeld and Virginie Viard, and the first line named for its birth year. Asks around **$4,495** (n=872, July 2, 2026).\n- **Chanel 22.** The soft, slouchy hobo launched in 2022. Asks around **$4,840** (n=87).
 - **Chanel 25.** The 2025 everyday line covered above.
 - **Totes.** The open-top side of the house, led today by the Deauville, which asks around **$3,320** (n=313). The old-guard GST is discontinued and lives preloved-only.
 
-> If you remember one thing: since 2022 Chanel names new lines after the year they arrive. The 22, the 25. Birth years, not sizes.
+> If you remember one thing: since the 19 in 2019, Chanel names each new line for the year it's born. The 19, the 22, the 25. Birth years, not sizes, and the old names aren't going anywhere.
 
 ## What "Chanel" actually means
 
