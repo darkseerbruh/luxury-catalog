@@ -51,10 +51,13 @@ content-kit-buildout.md (which now point here).*
     claims are spoken as hedges ("reported") or cut.
 15. **No bags in hand.** Talking-head, green-screen, or data-on-screen only; a script may
     never ask her to show, open, or handle a bag.
-16. **Single source of truth:** record-ready scripts live in the kit page's 🎬 TELEPROMPTER
-    section (spoken words only). Draft/annotated scripts live in the repo
-    (docs/research-drafts/trend-articles/). Never maintain two live copies of the same
-    script; superseded blocks get marked "OLD, do not record".
+16. **Single source of truth + lean kit pages:** a kit page contains exactly TWO things:
+    one compact plan block (metric, article path, demand numbers, cadence, a pointer to
+    this doc) and the 🎬 TELEPROMPTER section (spoken words only). No old drafts, no
+    annotated versions, no sign-off blocks, no take outlines on the page. Draft/annotated
+    scripts (including [DATA]-slotted episodes) live ONLY in the repo
+    (docs/research-drafts/trend-articles/) and move to the page's TELEPROMPTER when they
+    become fill-free. Never maintain two live copies of the same script.
 
 ## The pre-record checklist (run on every script)
 - [ ] Intent named in sentence one
