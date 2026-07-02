@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Catalogue completion run (2026-07-02 evening, on `main`)
+
+**Owner: "do them all, on a loop, until done." Finish line A substantially closed; B method proven.** Same-day totals across both runs: **price_history 57,165 (+14,818 today), styles 761, variants 1,388.**
+- **Tails:** +69 targets closed real gaps (LV CarryAll was never targeted, 44 live listings; SL Jamie; Gucci Sylvie; Balenciaga First; Neverfull GM label workaround), +947 rows.
+- **FP-zero brands:** Coach 311 rows (Tabby/Pillow/Willow/Brooklyn/Rogue/Swinger) + Knott/Le Pliage/Hamilton via Firecrawl-MCP eBay search pages (9 credits; local FIRECRAWL_API_KEY doesn't exist, the MCP route does not need it). eBay targets committed for keyed re-runs.
+- **Vestiaire second source:** 99 rows on thin-brand single-variant styles with colour/material/region parsed from slugs, incl. **8 SOLD Peggy rows (first realized The Row data)**.
+- **B prototype (current-line):** loewe.com crawls clean via Firecrawl (1 cr/page, line name in URL path). Found + created 8 current-line styles resale doesn't carry yet (Scarf Bag, Amazona 180, Cala, Bilbao Bucket, Braid Basket, Punch Hole Hobo, Hammock Flip). Runbook + rollout notes in the worklist.
+- **Open (worklist):** SLG scope decision; Vestiaire remainder (5 models); eBay item-specifics enrichment (metered); B rollout to other houses; archive-complete (C) stays the archivist's standing pull.
+
+---
+
 ## TL;DR — FULL-CATALOG model sweep (2026-07-02, on `main`)
 
 **Owner greenlit closing the icon-scope gap; done same day, all tiers.** ~24 brands mined from Fashionphile's live collection JSON (free path), ~470 sweep targets in `supabase/ingest/sweep-targets/*.json` (new committed layer appended to TARGETS at load time), styles now 697, **+14,093 price rows today (price_history 56,440)**, final load 0 unresolved. Coverage of live FP listings: **LV 60.0% → 80.5%**, Chanel 96.3% (gap = out-of-scope SLGs). Tooling for reruns: `sweep-mine.ts` → curate spec → `scaffold-from-spec.ts` → `--raw` → `load:prices` → `summary:refresh` (worklist has the runbook + follow-ups). Coach/Kate Spade/Longchamp/Michael Kors have zero FP inventory and stay browser-gated. Speedy Soft/Murakami contamination cleaned + excluded.
