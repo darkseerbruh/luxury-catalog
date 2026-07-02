@@ -2009,6 +2009,22 @@ const TARGETS: FashionphileTarget[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// SWEEP TARGETS (2026-07-02 full-catalog sweep, docs/data-collection-handoff.md §0):
+// per-brand curated model specs live in supabase/ingest/sweep-targets/*.json and
+// are appended to TARGETS at load time. Same shape as a hardcoded target; curated
+// per brand by mining the live collection (sweep-mine.ts), so tokens stay anchored
+// and net-new models never collide with the hand-managed icon targets above.
+// scaffold-from-spec.ts creates the matching styles/variants from the same files.
+// ---------------------------------------------------------------------------
+const SWEEP_DIR = path.resolve(__dirname, "../sweep-targets");
+if (fs.existsSync(SWEEP_DIR)) {
+  for (const f of fs.readdirSync(SWEEP_DIR).filter((n) => n.endsWith(".json")).sort()) {
+    const arr = JSON.parse(fs.readFileSync(path.join(SWEEP_DIR, f), "utf8")) as FashionphileTarget[];
+    TARGETS.push(...arr);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // MODE A — browser raw-dump (high confidence, per listing)
 // ---------------------------------------------------------------------------
 

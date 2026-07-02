@@ -8,6 +8,25 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — 🔄 IN PROGRESS
+*Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
+asking rows, closing the icon-scope gap (measured 2026-07-02: only 60.0% of FP's 6,250+ live
+LV listings matched a catalog style). Bags + carried pouches in scope; SLGs (wallets/key/card)
+deferred. Method per brand (all free, products.json): `sweep-mine.ts <slug> "<Brand>"` (mines
+model clusters + merges full dump) → curate `supabase/ingest/sweep-targets/<slug>.json` →
+`scaffold-from-spec.ts <slug> --write` → `fashionphile.ts --raw` → `load:prices fashionphile
+--write` → `summary:refresh` → commit. Net-new styles ONLY — never reshape hand-managed icon
+size buckets (2026-06-30 collision lesson).*
+
+Queue (priority order; tick with counts + date):
+- ⬜ Louis Vuitton (slug louis-vuitton)
+- ⬜ Chanel (chanel) · ⬜ Hermès (hermes) · ⬜ Goyard (goyard) · ⬜ The Row (the-row)
+- ⬜ Gucci (gucci) · ⬜ Prada (prada) · ⬜ Fendi (fendi) · ⬜ Balenciaga (balenciaga) · ⬜ Miu Miu (miu-miu) · ⬜ Valentino (valentino-garavani) · ⬜ Givenchy (givenchy)
+- ⬜ Coach (coach) — bumped: the viral thrift wedge
+- ⬜ Saint Laurent (saint-laurent) · ⬜ Celine (celine) · ⬜ Dior (christian-dior) · ⬜ Bottega Veneta (bottega-veneta) · ⬜ Loewe (loewe) · ⬜ Chloé (chloe) · ⬜ Alexander McQueen (alexander-mcqueen) · ⬜ Mulberry (mulberry) · ⬜ Jacquemus (jacquemus) · ⬜ Off-White (off-white)
+- ⬜ Burberry (burberry) · ⬜ Kate Spade (kate-spade) · ⬜ Longchamp (longchamp) · ⬜ Michael Kors (michael-kors) · ⬜ Telfar (telfar)
+- ⬜ Re-measure coverage per swept brand; record before/after here
+
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
 - ✅ 5 new LV styles created + scaffolded (Liv Pochette #685, Montsouris #686, Slouchy #687, Cosmetic Pouch #688, Lineup #689; Boulogne #550 got NM/GM/30/35 variants). TARGETS added to sources/fashionphile.ts (tokens anchored; collabs/straps/vibe excluded).
 - ✅ Fashionphile collection pass: 117 rows loaded (products.json path, free), summary refreshed. Notable reads: Montsouris PM $1,995 (n=11) vs vintage MM $995 (n=12); Slouchy is MM-led (n=10, $2,410); Neverfull PM = MM at $1,450 in monogram (n=153/491); Lineup too thin (n=2).
