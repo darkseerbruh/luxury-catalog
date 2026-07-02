@@ -25,7 +25,8 @@ const chanelBody = `New to Chanel and lost in the numbers? This is for you. Firs
 ## The names, before and after
 
 - **Unchanged, the named classics:** the Classic Flap, the 2.55, the Boy, the WOC, the Gabrielle, the Coco Handle. Nothing here was renamed.
-- **The new system, since 2019:** each new line is named for its birth year. The 19 (2019), the 22 (2022), the 25 (2025). Birth years, not sizes.
+- **The new habit, since 2019:** the soft everyday lines take their birth year. The 19 (2019), the 22 (2022), the 25 (2025). Not every new bag: Chanel still names plenty the old way (the Blazy-era Souplissimo and Kelly Shopper arrived in 2026 as names, not numbers).
+- **Birth years, not sizes:** a Hermès Birkin 25 means 25 centimeters; a Chanel 25 means born in 2025. Different houses, different number games. And the Chanel 31 is neither: that one is the address, 31 rue Cambon in Paris.
 - **Older than it looks:** the 2.55 has always been a date. February 1955, the month the original launched.
 
 ## The Chanel 25, in plain terms
@@ -61,7 +62,7 @@ The lines people actually search for, each a distinct line, not a size of the sa
 - **Chanel 25.** The 2025 everyday line covered above.
 - **Totes.** The open-top side of the house, led today by the Deauville, which asks around **$3,320** (n=313). The old-guard GST is discontinued and lives preloved-only.
 
-> If you remember one thing: since the 19 in 2019, Chanel names each new line for the year it's born. The 19, the 22, the 25. Birth years, not sizes, and the old names aren't going anywhere.
+> If you remember one thing: since the 19 in 2019, Chanel names its new everyday lines for the year they're born. The 19, the 22, the 25. Birth years, not sizes, and the old names aren't going anywhere.
 
 ## What "Chanel" actually means
 

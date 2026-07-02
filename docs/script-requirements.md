@@ -124,7 +124,11 @@ play. Data earns the video only when it's attached to a move.
     annotated versions, no sign-off blocks, no take outlines on the page. Draft/annotated
     scripts (including [DATA]-slotted episodes) live ONLY in the repo
     (docs/research-drafts/trend-articles/) and move to the page's TELEPROMPTER when they
-    become fill-free. Never maintain two live copies of the same script.
+    become fill-free. Never maintain two live copies of the same script. SYNC DIRECTION
+    (2026-07-02, learned the hard way): the owner edits ON the Notion page, so the page is
+    canon; mirror her text back to the repo after every owner pass, and never push repo
+    text over her page without diffing first. Inline stage directions in parens
+    ("(tea)", "(c on both sides like Chanel audio clip)") are hers and stay.
 
 17. **Every take ships as a POST PACKAGE**: script + caption + tag set, together. The
     caption is strategy, not garnish: it carries the target search phrase in plain text
