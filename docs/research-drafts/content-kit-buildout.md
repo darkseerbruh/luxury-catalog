@@ -73,3 +73,10 @@ scripts-day-one.md header.
   X, in the size Y" where the name is jargon.
 - "By the way, I'm Arielle" is the approved casual bridge into the credibility beat.
 - Less drama in data reveals: "That's a significant gap" over "That's not a typo."
+
+## PAYOFF RULE (owner edit pass 3, 2026-07-02)
+The payoff of a short video is ONE plain takeaway in one or two sentences. No symmetrical
+if/if constructions (buyer case + seller case = two videos, not one payoff). No finance
+jargon ("anchor on"). Test: could the viewer repeat the advice to a friend in one breath?
+Example fix: "So here's the move: don't pay the sticker. Offer closer to what these bags
+actually sell for, because now you know what that is."
