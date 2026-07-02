@@ -8,7 +8,7 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
-## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — 🔄 IN PROGRESS
+## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
 asking rows, closing the icon-scope gap (measured 2026-07-02: only 60.0% of FP's 6,250+ live
 LV listings matched a catalog style). Bags + carried pouches in scope; SLGs (wallets/key/card)
@@ -22,10 +22,11 @@ Queue (priority order; tick with counts + date):
 - ✅ Louis Vuitton DONE 2026-07-02: 121 sweep targets / ~60 models (clusters >=10 listings), 134 styles+variants created, 3,800 FP rows loaded 0 unresolved. Speedy Soft + LV x TM excluded from classic Speedy buckets (hardcoded excludes updated). Flags: Neverfull GM skipped (hand-managed size labels, data lane to reconcile); tail clusters <10 listings not targeted.
 - ✅ Chanel DONE 2026-07-02 (80 targets: flap-family sizes disambiguated w/ shared exclude set, Blazy lines Souplissimo/Kelly Shopper added, vanity+clutch families; 57 styles/variants created; cumulative 6,990 FP rows loaded 0 unresolved) · ✅ Hermès (35 targets: Birkin 40 + Mini Kelly 20 gaps closed, Evelyne/Picotin/Constance/Lindy/Herbag/Jypsiere/Bolide/24-24 + pouches) · ✅ Goyard (25 targets: Artois/Anjou/Boheme/Belvedere/Saigon sized + Senat/Alpin/Vendome/новые) · ✅ The Row (16 targets: Park/90s/Banana/Peggy/Marlo/Half Moon) — ultra-luxury DONE 2026-07-02, cumulative 8,712 FP rows 0 unresolved
 - ✅ Premium tier DONE 2026-07-02: Gucci 40 targets (Marmont/Dionysus/Soho/Jackie/Ophidia/Horsebit/Blondie + Neo Vintage/Milano/Softbit) · Prada 19 (Re-Editions/Galleria/Cleo + Arqué/Aimée/Darling) · Fendi 17 (Baguette family/Peekaboo/Spy/Mon Trésor/First/Fendigraphy) · Balenciaga 16 (City+Le City/Hourglass/Rodeo/Bel Air) · Miu Miu 8 (Wander/Ivy/Aventure/Arcadie; FP thin at 212 products) · Valentino 10 · Givenchy 15 (Antigona sized/Pandora/Voyou). Cumulative 11,305 FP rows, 0 unresolved.
-- ⬜ Coach (coach) — bumped: the viral thrift wedge
-- ⬜ Saint Laurent (saint-laurent) · ⬜ Celine (celine) · ⬜ Dior (christian-dior) · ⬜ Bottega Veneta (bottega-veneta) · ⬜ Loewe (loewe) · ⬜ Chloé (chloe) · ⬜ Alexander McQueen (alexander-mcqueen) · ⬜ Mulberry (mulberry) · ⬜ Jacquemus (jacquemus) · ⬜ Off-White (off-white)
-- ⬜ Burberry (burberry) · ⬜ Kate Spade (kate-spade) · ⬜ Longchamp (longchamp) · ⬜ Michael Kors (michael-kors) · ⬜ Telfar (telfar)
-- ⬜ Re-measure coverage per swept brand; record before/after here
+- ❌ Coach: ZERO Fashionphile inventory (premium-only consignor). Coach + Kate Spade + Longchamp + Michael Kors stay on the eBay/Poshmark browser-gated path (monthly re-capture task).
+- ✅ Mid tier DONE 2026-07-02: SL 23 targets (Loulou/Niki/Kate/Le 5 à 7/Triquilt) · Celine 21 (Luggage/Triomphe/Box/Ava/16/Camille) · Dior 24 (Lady Dior sized/Saddle/Book Tote/Bobby/Caro) · Bottega 15 (Jodie/Andiamo/Hop/Pouch) · Loewe 17 (Puzzle family/Basket/Flamenco/Squeeze) · Chloé 14 (Paddington!/Marcie/Faye/Woody) · McQueen 3 · Mulberry 4 · Jacquemus 8 · Off-White 2
+- ✅ Burberry 10 targets · ✅ Telfar 3 (Shopping Bag S/M/L) · ❌ Kate Spade/Longchamp/Michael Kors: zero FP inventory (browser-gated path)
+- ✅ RESULT (2026-07-02): 14,093 price rows added today (price_history now 56,440; styles 697). Final load 14,087 mapped / 0 unresolved. Coverage of live FP listings vs catalog styles: LV 60.0% → 80.5% (rest = out-of-scope SLGs/silk), Chanel 96.3%. Speedy Soft contamination cleaned (93 pre-sweep rows deleted from classic Speedy buckets; excludes added to hardcoded targets).
+- ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope decision (wallets/key/card deferred, Cosmetic Pouch lesson says demand exists); tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
 - ✅ 5 new LV styles created + scaffolded (Liv Pochette #685, Montsouris #686, Slouchy #687, Cosmetic Pouch #688, Lineup #689; Boulogne #550 got NM/GM/30/35 variants). TARGETS added to sources/fashionphile.ts (tokens anchored; collabs/straps/vibe excluded).

@@ -3,6 +3,12 @@
 
 ---
 
+## TL;DR — FULL-CATALOG model sweep (2026-07-02, on `main`)
+
+**Owner greenlit closing the icon-scope gap; done same day, all tiers.** ~24 brands mined from Fashionphile's live collection JSON (free path), ~470 sweep targets in `supabase/ingest/sweep-targets/*.json` (new committed layer appended to TARGETS at load time), styles now 697, **+14,093 price rows today (price_history 56,440)**, final load 0 unresolved. Coverage of live FP listings: **LV 60.0% → 80.5%**, Chanel 96.3% (gap = out-of-scope SLGs). Tooling for reruns: `sweep-mine.ts` → curate spec → `scaffold-from-spec.ts` → `--raw` → `load:prices` → `summary:refresh` (worklist has the runbook + follow-ups). Coach/Kate Spade/Longchamp/Michael Kors have zero FP inventory and stay browser-gated. Speedy Soft/Murakami contamination cleaned + excluded.
+
+---
+
 ## TL;DR — Social → site routing: search-key CTAs + /social bio hub (2026-07-02, on `main`)
 
 **"Link in bio" is retired (owner decision, locked in preferences.md).** Routing standard: `docs/social-routing.md`.
