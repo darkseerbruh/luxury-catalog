@@ -131,6 +131,14 @@ for a persistent title on a dark scrim:
 Write it on-voice via `brand-voice`: descriptive and a little fun, says what the video is,
 no em dashes. `title` is shown uppercase.
 
+Add a timed CTA line under the headline (e.g. the site) with `cta` + `ctaAt` (the phrase
+that reveals it, resolved from the transcript):
+```json
+{ "title": "...", "subtitle": "...", "cta": "luxurycatalog.com", "ctaAt": "luxurycatalog" }
+```
+The rank list auto-appears (all numbers at once) at the first revealed item, then names
+populate as each is reached.
+
 ## Step 3b — Headless montage mode
 1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the
    clear subject. AVOID frames showing a competitor tag (the round "FASHIONPHILE" disc)

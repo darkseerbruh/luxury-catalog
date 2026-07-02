@@ -56,6 +56,8 @@ const rankListSchema = z.object({
 const headlineSchema = z.object({
   title: z.string(),
   subtitle: z.string().optional(),
+  cta: z.string().optional(),
+  ctaSec: z.number().optional(),
   yPct: z.number().optional(),
 });
 
@@ -212,6 +214,8 @@ export const CaptionedVideo: React.FC<Props> = ({
         <Headline
           title={headline.title}
           subtitle={headline.subtitle}
+          cta={headline.cta}
+          ctaSec={headline.ctaSec}
           yPct={headline.yPct}
         />
       ) : null}

@@ -1,5 +1,11 @@
 import React from "react";
-import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { BRAND } from "../brand";
 import { CAPTION_FONT_FAMILY } from "../load-font";
 
@@ -18,6 +24,14 @@ export const RankList: React.FC<{
   // list fills upward toward number one at the top.
   const ordered = buildFromBottom ? [...rows].reverse() : rows;
 
+  // The whole number column appears at the first reveal (all 1-4 on screen at once),
+  // then names populate as each is reached, to build anticipation.
+  const startFrame = Math.min(...rows.map((r) => r.revealSec)) * fps;
+  const appear = interpolate(frame, [startFrame, startFrame + 8], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   return (
     <AbsoluteFill>
       <div
@@ -25,6 +39,7 @@ export const RankList: React.FC<{
           position: "absolute",
           left: `${leftPct}%`,
           top: `${topPct}%`,
+          opacity: appear,
           display: "flex",
           flexDirection: "column",
           gap: 18,

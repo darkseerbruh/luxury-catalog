@@ -323,7 +323,24 @@ const resolveList = (base) => {
 //   { "title": "LUXURY DIAPER BAGS, RANKED", "subtitle": "the 4 moms actually carry" }
 const resolveHeadline = (base) => {
   const p = path.join(INPUT_DIR, `${base}.headline.json`);
-  return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : undefined;
+  if (!existsSync(p)) return undefined;
+  const cfg = JSON.parse(readFileSync(p, "utf8"));
+  // Optional cta line under the headline, timed to when she says `ctaAt`.
+  if (cfg.ctaAt) {
+    const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+    if (existsSync(capsPath)) {
+      const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+      const firstWord = norm(cfg.ctaAt).split(" ")[0];
+      const hit = caps.find((c) => norm(c.text).includes(firstWord));
+      if (hit) {
+        cfg.ctaSec = hit.startMs / 1000;
+        console.log(`  headline cta: "${cfg.cta}" at ${cfg.ctaSec.toFixed(1)}s`);
+      } else {
+        console.log(`  headline cta: phrase not found -> "${cfg.ctaAt}"`);
+      }
+    }
+  }
+  return cfg;
 };
 
 const processClip = async (fileName) => {
