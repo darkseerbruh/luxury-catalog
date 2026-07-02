@@ -41,3 +41,11 @@ dates) + takes with hooks + linked article. Constraint: no bags in hand ([[no-ba
 - Miu Miu City kit + draft ON HOLD by owner until she re-confirms the 4.31M/148 numbers in
   Creative Center (extreme-outlier ratio; possible metric glitch or tag mismatch). Do not
   fill its [DATA]/[VERIFY] or schedule it. Recording-day pick 3 becomes the LV series.
+
+## SCRIPT SIGN-OFF STANDARD (owner rule, 2026-07-02)
+Every script ends with the identity + data-source sign-off. Full version (first video of a
+series): "I'm Arielle, and this is Luxury Catalog. We track more than twenty thousand real
+asking and sold prices across the major resale sites, so what you hear is tracked, not
+guessed." Short version (all other takes): "I'm Arielle. Luxury Catalog tracks real resale
+prices, dated and counted." The 20k claim is grounded (24,088 asking + 1,665 sold rows as
+of 2026-06-26); re-verify the number if it is ever raised.
