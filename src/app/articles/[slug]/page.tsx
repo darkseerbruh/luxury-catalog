@@ -24,6 +24,7 @@ import { whereToSellDiagramRegistry } from "./WhereToSellDiagram";
 import { birkinKellyChartRegistry } from "./BirkinKellyChart";
 import { neverfullSizeChartRegistry } from "./NeverfullSizeChart";
 import { chanelFlapSizeChartRegistry } from "./ChanelFlapSizeChart";
+import { diaperRankChartRegistry } from "./DiaperRankChart";
 import { iconicPricesChartRegistry } from "./IconicPricesChart";
 import { neverfullSpeedyChartRegistry } from "./NeverfullSpeedyChart";
 import { rentVsBuyDiagramRegistry } from "./RentVsBuyDiagram";
@@ -55,6 +56,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...birkinKellyChartRegistry,
   ...neverfullSizeChartRegistry,
   ...chanelFlapSizeChartRegistry,
+  ...diaperRankChartRegistry,
   ...iconicPricesChartRegistry,
   ...neverfullSpeedyChartRegistry,
   ...rentVsBuyDiagramRegistry,

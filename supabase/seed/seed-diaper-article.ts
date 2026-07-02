@@ -44,7 +44,7 @@ The Neverfull is the workhorse behind the "louis vuitton diaper bag" search. The
 
 Know this before daycare: The handles and trim on the classic Monogram version are vachetta, the pale natural leather that water-spots and darkens. Hand sanitizer and rain are its enemies, not the baby. Trim varies by colorway and season, so check the exact listing you're buying.
 
-- **The number nobody says out loud:** Preloved Monogram MMs ask a median of about **$1,565** (n=913, July 2, 2026), but the realized eBay sales we track landed at a median of about **$770** (n=87, observed through late June 2026). Both are our estimates from dated comps, not appraisals. The gap is the negotiating room. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy; just anchor on the sold number, not the sticker.
+- **The number worth hearing before you buy:** Preloved Monogram MMs ask a median of about **$1,565** (n=913, July 2, 2026), but the realized eBay sales we track landed at a median of about **$770** (n=87, observed through late June 2026). Both are our estimates from dated comps, not appraisals. The gap is the negotiating room. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy; just anchor on the sold number, not the sticker.
 
 ## 3. Louis Vuitton OnTheGo
 
@@ -78,6 +78,8 @@ Fashion is subjective and we don't judge, so this is our take, not a rule. A pur
 The luxury tote wins when the bag needs to keep being your bag at pickup, at brunch, and after the kid starts school. Both are valid. Buy the one that removes stress, not the one that adds it.
 
 ## What they're worth when the diaper years end
+
+[diagram: diaper-rank]
 
 Every figure here is an estimate from dated resale comps, not an appraisal. The short version, from our comps observed late June through July 2, 2026: The Saint Louis holds the highest preloved asking prices of this list (about $2,465 to $2,495 across sizes), the OnTheGo sits in the mid $2,000s with the odd twist that bigger asks less, the Neverfull MM asks about $1,565 but actually sells closer to $770 in the realized sales we track, and the Ophidia Medium is the value entry at about $1,250. Asking prices are ceilings; the Neverfull is the only one here where we hold realized sold data, and the gap it shows is worth remembering when you read the others.
 

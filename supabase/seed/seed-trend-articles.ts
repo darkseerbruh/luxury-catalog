@@ -124,7 +124,7 @@ The curved-top monogram tote that zips closed, which the Neverfull famously does
 
 The round-topped little monogram pouch sold as a makeup bag, famous on TikTok for the conversion: add an aftermarket chain and it becomes a mini bag for a fraction of a mini bag's price. Two honest notes: it was never built to be worn, so the leather trim takes strap stress it was not designed for, and a modification can affect resale. Know both tradeoffs and want it anyway? We don't judge.
 
-- **The math, from our comps:** the classic pouch asks around **$495** (n=27) and the larger GM around $805 (n=20, July 2026), against roughly **$2,195** for the Speedy Nano, the closest purpose-built monogram mini (n=72, June 2026). That is the fraction everyone is talking about.
+- **The math, from our comps:** the classic pouch asks around **$495** (n=27) and the larger GM around $805 (n=20, July 2026), against roughly **$2,195** for the Speedy Nano, the closest purpose-built monogram mini (n=72, June 2026). That is the fraction the conversion videos are built on.
 
 ## Lineup BB and MM
 
@@ -134,7 +134,7 @@ The current everyday monogram line people keep cross-shopping against the Speedy
 
 ## Neverfull PM
 
-The smallest Neverfull, and the one nobody covers because everyone defaults to the MM. The PM is a genuinely compact tote: everyday cargo yes, laptop no. Suits petite frames the MM overwhelms. Worth checking current production status before you hunt boutiques; preloved is where it reliably lives.
+The smallest Neverfull, and the one hardly anyone covers because most people default to the MM. The PM is a genuinely compact tote: everyday cargo yes, laptop no. Suits petite frames the MM overwhelms. Worth checking current production status before you hunt boutiques; preloved is where it reliably lives.
 
 - **The finding:** in monogram canvas the PM and the MM ask the same median, about **$1,450** each (PM n=153, MM n=491, June 2026). Preloved does not discount the small one, so buy the size that fits your frame, not the one that looks like a deal.
 
