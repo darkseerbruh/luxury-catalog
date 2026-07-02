@@ -462,8 +462,10 @@ const TARGETS: FashionphileTarget[] = [
     brand: "Louis Vuitton",
     style: "Speedy",
     size_label: size,
+    // "soft" keeps the Blazy-era Speedy Soft line (own sweep style) out of the
+    // classic buckets; "lv-x-tm" keeps the Murakami-reissue collab out.
     requireTokens: ["speedy", `-${size}-`],
-    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key", "soft", "lv-x-tm"],
     minPrice: 300,
     maxPrice: 16000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
@@ -471,7 +473,7 @@ const TARGETS: FashionphileTarget[] = [
   {
     brand: "Louis Vuitton", style: "Speedy", size_label: "Nano",
     requireTokens: ["speedy", "nano"],
-    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key", "soft", "lv-x-tm"],
     minPrice: 300, maxPrice: 16000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
   },

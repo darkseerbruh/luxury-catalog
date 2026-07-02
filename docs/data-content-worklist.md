@@ -19,7 +19,7 @@ model clusters + merges full dump) → curate `supabase/ingest/sweep-targets/<sl
 size buckets (2026-06-30 collision lesson).*
 
 Queue (priority order; tick with counts + date):
-- ⬜ Louis Vuitton (slug louis-vuitton)
+- ✅ Louis Vuitton DONE 2026-07-02: 121 sweep targets / ~60 models (clusters >=10 listings), 134 styles+variants created, 3,800 FP rows loaded 0 unresolved. Speedy Soft + LV x TM excluded from classic Speedy buckets (hardcoded excludes updated). Flags: Neverfull GM skipped (hand-managed size labels, data lane to reconcile); tail clusters <10 listings not targeted.
 - ⬜ Chanel (chanel) · ⬜ Hermès (hermes) · ⬜ Goyard (goyard) · ⬜ The Row (the-row)
 - ⬜ Gucci (gucci) · ⬜ Prada (prada) · ⬜ Fendi (fendi) · ⬜ Balenciaga (balenciaga) · ⬜ Miu Miu (miu-miu) · ⬜ Valentino (valentino-garavani) · ⬜ Givenchy (givenchy)
 - ⬜ Coach (coach) — bumped: the viral thrift wedge
