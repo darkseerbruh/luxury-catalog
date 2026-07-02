@@ -23,10 +23,14 @@ content-kit-buildout.md (which now point here).*
    diaper bags, not with the bag.
 5. **One plain payoff, sayable in one breath.** No symmetrical if/if constructions (buyer
    case + seller case = two videos). No finance jargon ("anchor on").
-6. **Credibility beat in the BODY of every script**: who Arielle is, what Luxury Catalog
-   is, why that makes the numbers trustworthy, phrased to fit that script (not stamped
-   on). "By the way, I'm Arielle" is the approved bridge. The twenty-thousand-prices claim
-   stays verified (24,088 asking + 1,665 sold as of 2026-06-26; re-check before raising).
+6. **Credibility integrated at the data moment, never appended.** The identity/site
+   mention attaches as a CLAUSE where the first number or checked claim appears ("the
+   sales I actually track at Luxury Catalog", "I did what I built Luxury Catalog to do,
+   and checked"). "I'm Arielle" rides the ending's site call or question, one short
+   sentence max. No standalone "By the way, I'm Arielle..." paragraphs; a bolted-on
+   sign-off is a defect. The twenty-thousand-prices claim stays verified (24,088 asking +
+   1,665 sold as of 2026-06-26; re-check before raising) and appears at most once per
+   video, ideally only in a series opener.
 7. **Every script ends one of two ways:** a specific question for the comments, OR a site
    call carrying the search term ("at Luxury Catalog dot com. Search Neverfull."). Say the
    site name aloud at least once per series.
