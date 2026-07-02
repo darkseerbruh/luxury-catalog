@@ -63,6 +63,16 @@ content-kit-buildout.md (which now point here).*
     (docs/research-drafts/trend-articles/) and move to the page's TELEPROMPTER when they
     become fill-free. Never maintain two live copies of the same script.
 
+17. **Every take ships as a POST PACKAGE**: script + caption + tag set, together. The
+    caption is strategy, not garnish: it carries the target search phrase in plain text
+    (TikTok search indexes captions), the date + n for any number spoken in the video, and
+    the site pointer with the search term. Tags: 4-6, composed of the target term as a
+    tag + the bag/brand tags + community tags we have OBSERVED in verification sweeps
+    (#bagtok #pursetok #momtok etc.). Never invent a tag, never use a verified trap tag.
+    Captions follow the same voice rules as scripts (I-voice, contractions, no em dashes).
+    Kit pages hold these in a 📋 CAPTIONS + TAGS section; Metricool scheduling copies from
+    there.
+
 ## The pre-record checklist (run on every script)
 - [ ] Intent named in sentence one
 - [ ] I-voice throughout; zero we/our
