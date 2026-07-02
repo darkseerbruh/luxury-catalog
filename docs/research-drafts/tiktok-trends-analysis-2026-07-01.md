@@ -119,6 +119,17 @@ lives next to the messy search term.
 *(Both are machine columns; they don't touch your Creators / Status edits. I have seeded
 these on the priority rows below; the full mapping is §1–§2.)*
 
+**Column cleanup done in Notion (2026-07-01):**
+- **`Priority` renamed → `Demand score`.** It was the pipeline's popularity×growth number
+  (Telfar = 4980), not a hand-set priority. Renamed so it stops reading like a to-do rank.
+  (I had briefly overwritten ~33 rows with a 0-100 score; those are restored to their
+  pipeline value, so the column is uniform again.)
+- **`Decode / real name` renamed → `Context / decode`** and now carries a 1-2 sentence
+  *what the trend is actually about* on every actionable row (not just the bag name), so a
+  tag can't be misread before a video is made.
+- **New `Pull next` select (`A - pull first` / `B - test giant`)** = the §4 saturation-pull
+  list, living in the table. A saved view **"🔍 Saturation pull list"** filters to it.
+
 ---
 
 ## 4. PRIORITIZED creator-saturation pull list (the click to make next)
@@ -127,6 +138,9 @@ You pull **Creators / saturation** per term by hand. Do it in this order — I'v
 for the **sweet spot** (high demand + *likely* low supply), not raw popularity. The logic:
 **specific + emerging + answerable-by-us** tends to have fewer dedicated creators than
 broad head terms everyone posts. Pull top-down; stop when the ratio stops being juicy.
+
+> **This list is now live in Notion** as the **`Pull next`** flag on each row and the saved
+> view **"🔍 Saturation pull list."** Tier A = `A - pull first`, Tier B = `B - test giant`.
 
 ### Tier A — pull first (probable sweet spot: mid-tail, emerging, we can answer)
 1. **coach tote bag for school** — 657K, +193%, seasonal-now, Coach wedge.
