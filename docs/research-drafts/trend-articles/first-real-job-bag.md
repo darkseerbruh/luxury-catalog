@@ -36,6 +36,49 @@ Suggested topic tags (for the CTA block): Goyard Artois, Dior Book Tote, Longcha
 Pliage, Polene Cyme [VERIFY: which Polene tote the ranked videos actually feature],
 DeMellier [VERIFY: model, likely the New York or Vancouver tote], Saint Laurent
 [VERIFY: which SL tote the ranked-collection videos mean before tagging]
+
+============ METHODOLOGY APPENDIX (internal; owner asked for the rubric) ============
+
+NEEDS FRAMEWORK, from live reads of "luxury work tote bag" (07-02), "luxury work bags"
+(07-02), "first designer handbag" (07-02). Labels: [OBS] observed, [SRC] sourced,
+[DATA] our comps, [VERIFY] unproven.
+
+W1 Laptop fit, non-negotiable: verbatim "before you ask they all fit a laptop which is
+   basically my non negotiable"; "holds laptop + looks professional + lasts years". [OBS]
+W2 Professional, quiet look; JUNIOR LOGO CAUTION: "stay a little bit lowkey esp when
+   youree first starting out on the job" (quiet-luxury under-$400 content). Early-career
+   shoppers are explicitly steered AWAY from loud logos. [OBS]
+W3 Real price tiers: mid-luxury wishlists (Polene/DeMellier/Longchamp) beside Goyard/YSL
+   in the SAME creators' rankings; related search "under $500". [OBS]
+W4 Lasts years / durability. [OBS]
+W5 Structure + zip security: the Artois praised precisely for the zip; stands upright. [OBS]
+
+SCORING MATRIX (our take; S/M/W):
+                      W1 laptop        W2 quiet-pro      W3 tier             W4 lasts          W5 structure
+Longchamp Le Pliage   S[OBS]           S no logo         entry[OBS]          M fabric[VERIFY]  W soft; zip S
+Polene                S[OBS]           S[OBS]            mid[OBS]            [VERIFY]          S structured[OBS]
+DeMellier             S[OBS]           S[OBS]            mid[OBS]            [VERIFY]          S[OBS]
+Saint Laurent tote    S[OBS]           M logo-light      designer[DATA gap]  [VERIFY]          M
+Dior Book Tote        S[OBS]           W loud print[OBS] designer[DATA gap]  M[OBS]            W no zip, no org [OBS]
+Goyard Artois PM      S[OBS verbatim]  S[OBS]            grail[DATA: pull    M canvas S[SRC],  S ZIP, the stated
+                                                          Artois comps]       trim W[SRC]       reason [OBS]
+
+INCLUSION CRITERIA:
+1. Every included bag was OBSERVED in the work-bag tags (browser-checked 07-02), never assumed.
+2. The lineup spans the verified price reality (under-$500 related search through grail).
+3. Designer-tier picks need our comps; the Artois pull is flagged as the open [DATA] gap.
+
+EXCLUDED (and why, honestly):
+- Bottega Andiamo: observed and loved (large-Andiamo bag tour); excluded ONLY because we
+  hold no Andiamo comps yet. Strong add-candidate for v2.
+- Chanel Maxi Flap as work bag: observed ("fits my laptop") but it is the Chanel-2026
+  pillar's star; cross-link, don't duplicate.
+- Oleada / Cala Jade / OSOI / Manu Atelier: observed indie labels with no resale-comps
+  story (our edge); exclusion is a scope choice, not ignorance.
+- Ferragamo / Tod's: single observations this pass, thin evidence.
+- Goyard Anjou: observed; Artois chosen because its zip+laptop evidence is explicit.
+  Anjou noted as the reversible alternative.
+======================================================================================
 -->
 
 # Your first real-job bag: The honest guide to a luxury work tote

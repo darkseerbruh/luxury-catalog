@@ -97,6 +97,55 @@ Every figure here is an estimate from dated resale comps, not an appraisal. The 
 
 Condition drives the number. A tote that spent two years as a diaper bag usually grades a tier or two below closet-kept, so read the comps for your bag's actual condition, not the pristine one in the listing photos.
 
+<!--
+============ METHODOLOGY APPENDIX (internal; owner asked for the rubric) ============
+
+NEEDS FRAMEWORK: what luxury-diaper-bag shoppers actually ask for.
+Source: live reads of the four cluster tags (2026-07-01 and 07-02), captions + TikTok
+related searches. Evidence labels: [OBS] observed in posts, [SRC] external source,
+[DATA] our prod comps, [VERIFY] still unproven.
+
+N1 Dual-life: "a bag I can use FOREVER," "wear as an everyday bag too," "closet staple,"
+   no changing-pad pockets to outgrow. THE top stated justification. [OBS]
+N2 Capacity: bottles + mat + toddler cargo; what-fits is the dominant format. [OBS]
+N3 Carry mode: hands-free debate (backpack vs tote vs converts-to-crossbody: the YSL Niki
+   post, the stroller-walk viral). Open-top vs zip matters in a stroller basket. [OBS]
+N4 Wipeable + survives daycare: coated-canvas talk, care threads, trim anxiety. [OBS]+[SRC]
+N5 Chic / identity: "I refuse to not have a chic mom bag"; push-present emotion. [OBS]
+N6 Justified spend + resale exit: "diapers are expensive, so I'm buying a bag I keep
+   forever"; our ask/sold data answers the exit. [OBS]+[DATA]
+
+SCORING MATRIX (our take from the evidence, not verdicts; S=strong M=mixed W=weak):
+                     N1 dual  N2 cap  N3 carry       N4 wipe          N5 chic  N6 exit
+Goyard St Louis      S[OBS]   S[OBS]  W open, no zip S body[SRC]      S[OBS]   ask $2,455-2,495 [DATA]
+                                       [OBS]          W trim[SRC]
+LV Neverfull MM      S[OBS]   S[OBS]  M cinch, no    S canvas[OBS]    S[OBS]   ask $1,495 / SOLD $770 [DATA]
+                                       zip [OBS]      W vachetta[VERIFY trims]
+LV OnTheGo GM        S[OBS]   S[OBS]  M structured   S Empreinte no   S[OBS]   ask $2,350 GM [DATA]
+                                       stands up      vachetta[VERIFY sizes]           (bigger asks less)
+                                       [VERIFY]       M weight
+Gucci Ophidia M/L    S[OBS]   M[OBS]  M shoulder     S GG Supreme     M[OBS]   ask $1,250 M [DATA]
+                                       tote           coated[VERIFY]
+
+INCLUSION CRITERIA (why these four):
+1. Each bag anchors one of the cluster's verified search phrases (browser-checked): the
+   searches themselves name these bags.
+2. Our comps coverage exists (n=45 to 344 per bag) so the resale answer is data, not vibes.
+3. Scope = the luxury-tote-as-diaper-bag intent the searches show; purpose-built diaper
+   bags live in the counterpoint section by design.
+
+EXCLUDED (and why, honestly):
+- Seen in the parent tag but no dedicated search phrase in our 419-term list AND thin/no
+  comps: YSL Niki (converts crossbody, strong candidate), The Row, Prada, Jacquemus Grand
+  Turismo, LV Speedy Soft 30. These are FOLLOW-UP candidates, not rejections on merit.
+- LV CarryAll: verified 'mama bag' content 07-02; qualifies on intent, needs a comps pull
+  before adding. ADD-CANDIDATE for v2.
+- Dagne Dover / lululemon / MK (related searches): out of scope, not luxury-resale bags.
+- 'Dior diaper bag' related search observed; no Dior bag included because no comps depth
+  on a diaper-suited Dior tote yet. Revisit after the attribute-capture pass.
+======================================================================================
+-->
+
 ## Where to buy one preloved
 
 Buying preloved is the smart-money move here twice over: You pay under retail going in, and you already know the resale exit because you just shopped it. Check the live listings and current asking prices for each of these bags through the links below this article. Prices there update as the market moves.
