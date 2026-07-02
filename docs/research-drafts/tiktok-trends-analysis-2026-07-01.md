@@ -175,9 +175,21 @@ the low-competition wedge.)
 
 ---
 
-## 4b. First saturation data in — the sweet spots (owner pull, 2026-07-01)
+## 4b. Saturation data in — the sweet spots (owner pull, 2026-07-01)
 
-Owner pulled creator counts for 46 mid-tail terms. New live column **`Searches / creator`**
+**UPDATE (same day, rounds 2-3):** owner pulled creator counts for **~285 terms** — the
+table is now essentially fully supplied. Final top sweet spots (searches per creator):
+miu miu city bag (29,122!) · chanel maxi flap 2026 (3,508) · teal chanel (2,773) ·
+chanel 25bag (2,765 — huge even with 1,020 creators) · goyard pink limited edition (2,750) ·
+christian dior tote bags (2,473) · bring it on louis vuitton (2,426) · vintage Mombasa (2,284) ·
+gucci baby bag (2,213) · LV pochette (2,198) · gucci boat bag (2,152) · balenciaga purse (2,095) ·
+gate coach bag (1,985) · using a birkin (1,971) · celine bag price (1,953).
+**Most saturated (avoid):** reselling LV (3,860 creators) · monogram LV (6,860) · coach trail
+(2,880) · buying a birkin (1,220) · 2026 designer handbag · handbags luxury · purse brands ·
+selling luxury bags. Head terms and generic roundups are crowded; specific models, colours,
+and question-phrases are open.
+
+Original round-1 note: owner pulled creator counts for 46 mid-tail terms. New live column **`Searches / creator`**
 (= Pop # ÷ Creators) auto-ranks demand-per-creator. High = lots of searches, few videos.
 **These are our openings.** (Both numbers are TikTok Creative Center metrics, one 2026-07-01
 pull; read as a demand-vs-supply signal, not a guarantee a post ranks.)
