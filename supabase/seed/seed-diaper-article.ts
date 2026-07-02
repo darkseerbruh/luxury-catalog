@@ -44,7 +44,7 @@ The Neverfull is the workhorse behind the "louis vuitton diaper bag" search. The
 
 Know this before daycare: The handles and trim on the classic Monogram version are vachetta, the pale natural leather that water-spots and darkens. Hand sanitizer and rain are its enemies, not the baby. Trim varies by colorway and season, so check the exact listing you're buying.
 
-- **The number worth hearing before you buy:** Preloved Monogram MMs ask a median of about **$1,565** (n=913, July 2, 2026), but the realized eBay sales we track landed at a median of about **$770** (n=87, observed through late June 2026). Both are our estimates from dated comps, not appraisals. The gap is the negotiating room. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy; just anchor on the sold number, not the sticker.
+- **The number worth hearing before you buy:** Preloved Neverfull MMs ask a median of about **$1,565** across all versions (n=913, July 2, 2026), but the realized eBay sales we track landed at a median of about **$770** (n=87, observed through late June 2026). Both are our estimates from dated comps, not appraisals. The gap is the negotiating room. The Neverfull is one of the most liquid bags on the secondary market, so exiting after the toddler years is easy; just anchor on the sold number, not the sticker.
 
 ## 3. Louis Vuitton OnTheGo
 

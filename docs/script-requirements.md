@@ -86,6 +86,15 @@ video.
     leverage) or the buying angle (condition arbitrage). A payoff may also be the
     decision QUESTION the viewer should ask themselves.
 
+2.6 **Advice names its scene** (owner catch, 2026-07-02: "check the exact listing. What
+    exact listing?"). Every instruction says where and when the viewer is doing it
+    ("if you're eyeing one preloved, compare the bag in front of you to examples from
+    its same era"). Never reference an object the script hasn't put in the viewer's
+    hands.
+2.7 **No trade-speak or news-speak in speech**: "cross-shopping" becomes "comparing
+    before they pick one"; "the headline is simple" becomes "the biggest difference is
+    simple". If a phrase belongs in a retail deck or a newsroom, translate it.
+
 ## 3. Structure (scripts)
 
 3.1 **The hook names the search intent in sentence one**, especially when the intent

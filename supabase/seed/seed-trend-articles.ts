@@ -116,7 +116,7 @@ Exactly what the name says: a soft, unstructured monogram hobo that collapses ag
 
 ## CarryAll
 
-The curved-top monogram tote that zips closed, which the Neverfull famously does not. It is the do-everything bag in the current lineup: work, weekend, the gym you keep meaning to go to. Sizes and closure details vary by version, so confirm the exact one in your listing.
+The curved-top monogram tote that zips closed, which the Neverfull famously does not. It is the do-everything bag in the current lineup: work, weekend, the gym you keep meaning to go to. Sizes and closure details vary by version, so double-check which version a seller's bag is before you compare prices.
 
 - **Preloved read:** the PM asks around **$3,065** from a thin twenty listings (July 2026), so hold that number loosely.
 
@@ -128,7 +128,7 @@ The round-topped little monogram pouch sold as a makeup bag, famous on TikTok fo
 
 ## Lineup BB and MM
 
-The current everyday monogram line people keep cross-shopping against the Speedy 20, and the headline is simple: the MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you.
+The newest everyday monogram line, which shoppers keep comparing against the Speedy 20 before picking one. The biggest difference is simple: the MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you.
 
 - **Preloved read:** too new for a fair read. The two listings we tracked asked $2,195 and $2,295 (July 2026); for scale, the Speedy 20 asks around $2,335 (n=339, June 2026).
 
