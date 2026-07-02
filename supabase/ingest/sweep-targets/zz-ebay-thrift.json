@@ -1,0 +1,167 @@
+[
+  {
+    "brand": "Coach",
+    "style": "Tabby Shoulder Bag",
+    "size_label": "26",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Tabby Shoulder Bag",
+    "size_label": "20",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Pillow Tabby",
+    "size_label": "26",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Pillow Tabby",
+    "size_label": "18",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Willow Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Brooklyn",
+    "size_label": "28",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Brooklyn",
+    "size_label": "39",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Rogue",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Coach",
+    "style": "Swinger",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Kate Spade",
+    "style": "Knott",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Longchamp",
+    "style": "Le Pliage",
+    "size_label": "Small",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Longchamp",
+    "style": "Le Pliage",
+    "size_label": "Medium",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Longchamp",
+    "style": "Le Pliage",
+    "size_label": "Large",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Michael Kors",
+    "style": "Hamilton",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  },
+  {
+    "brand": "Longchamp",
+    "style": "Le Pliage",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-ebay-scaffold-only-never-matches"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.ebay.com"
+  }
+]
