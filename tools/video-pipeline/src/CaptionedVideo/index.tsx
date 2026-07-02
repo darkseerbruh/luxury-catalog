@@ -16,8 +16,10 @@ import {
 } from "remotion";
 import { z } from "zod";
 import { BRAND } from "../brand";
+import { Headline } from "./Headline";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
+import { RankList } from "./RankList";
 import { RankTracker } from "./RankTracker";
 import SubtitlePage from "./SubtitlePage";
 
@@ -42,11 +44,27 @@ const rankTrackerSchema = z.object({
   yPct: z.number().optional(),
 });
 
+const rankListSchema = z.object({
+  rows: z.array(
+    z.object({ num: z.string(), name: z.string(), revealSec: z.number() }),
+  ),
+  leftPct: z.number().optional(),
+  topPct: z.number().optional(),
+});
+
+const headlineSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  yPct: z.number().optional(),
+});
+
 export const captionedVideoSchema = z.object({
   src: z.string(), // basename of a video file in public/
   zoom: z.number().default(BRAND.zoomIntensity),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
+  rankList: rankListSchema.optional(),
+  headline: headlineSchema.optional(),
 });
 
 type Props = z.infer<typeof captionedVideoSchema>;
@@ -71,6 +89,8 @@ export const CaptionedVideo: React.FC<Props> = ({
   zoom,
   overlays,
   rankTracker,
+  rankList,
+  headline,
 }) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const { delayRender, continueRender } = useDelayRender();
@@ -175,6 +195,22 @@ export const CaptionedVideo: React.FC<Props> = ({
           labels={rankTracker.labels}
           fillTimes={rankTracker.fillTimes}
           yPct={rankTracker.yPct}
+        />
+      ) : null}
+
+      {rankList ? (
+        <RankList
+          rows={rankList.rows}
+          leftPct={rankList.leftPct}
+          topPct={rankList.topPct}
+        />
+      ) : null}
+
+      {headline ? (
+        <Headline
+          title={headline.title}
+          subtitle={headline.subtitle}
+          yPct={headline.yPct}
         />
       ) : null}
 

@@ -108,6 +108,26 @@ Each label is a chip; it lights up gold when its `fillAt` phrase is spoken (reso
 from the transcript). Order the labels to match her reveal order. For a plain progress
 counter instead of a rank countdown, use `["1","2","3","4"]`.
 
+### Building rank list (numbers down the side, names stay)
+For a countdown where each name should REMAIN on screen as she moves on, use
+`input/<clip>.list.json` (numbers down one side, each name reveals and persists):
+```json
+{ "leftPct": 5, "topPct": 33, "rows": [
+  { "num": "4", "name": "Gucci Ophidia", "at": "fourth place" },
+  { "num": "3", "name": "LV OnTheGo", "at": "third place" } ] }
+```
+Order rows in reveal order (top to bottom). Use this INSTEAD of the chip tracker for
+a list look; keep the cued bag pics on the right so the pic is the current bag and the
+list is the running tally.
+
+### Headline (title pinned at top)
+Add `input/<clip>.headline.json` for a persistent title on a dark scrim:
+```json
+{ "title": "Luxury Diaper Bags, Ranked", "subtitle": "the 4 moms actually carry" }
+```
+Write it on-voice via `brand-voice`: descriptive and a little fun, says what the video is,
+no em dashes. `title` is shown uppercase.
+
 ## Step 3b — Headless montage mode
 1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the
    clear subject. AVOID frames showing a competitor tag (the round "FASHIONPHILE" disc)

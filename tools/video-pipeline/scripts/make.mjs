@@ -280,6 +280,50 @@ const resolveRanks = (base) => {
   return { labels: cfg.labels, fillTimes, yPct: cfg.yPct };
 };
 
+// Building rank list: input/<base>.list.json lists rows (num + name) and the phrase
+// that reveals each; times come from the transcript. Each name stays once revealed.
+//   { "leftPct": 5, "topPct": 30, "rows": [
+//     { "num": "4", "name": "Gucci Ophidia", "at": "fourth place" }, ... ] }
+const resolveList = (base) => {
+  const p = path.join(INPUT_DIR, `${base}.list.json`);
+  if (!existsSync(p)) return undefined;
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return undefined;
+  const cfg = JSON.parse(readFileSync(p, "utf8"));
+  const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  const words = caps
+    .map((c) => ({ w: norm(c.text), t: c.startMs / 1000 }))
+    .filter((x) => x.w);
+  const find = (phrase) => {
+    const ph = norm(phrase).split(" ").filter(Boolean);
+    for (let i = 0; i + ph.length <= words.length; i++) {
+      let ok = true;
+      for (let j = 0; j < ph.length; j++) {
+        if (words[i + j].w !== ph[j]) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) return words[i].t;
+    }
+    return null;
+  };
+  const rows = cfg.rows.map((r) => {
+    const t = find(r.at);
+    if (t === null) console.log(`  list: phrase not found -> "${r.at}"`);
+    return { num: r.num, name: r.name, revealSec: t ?? 0 };
+  });
+  console.log(`  list: ${rows.map((r) => `${r.num} ${r.name}@${r.revealSec.toFixed(1)}`).join(" | ")}`);
+  return { rows, leftPct: cfg.leftPct, topPct: cfg.topPct };
+};
+
+// Static headline pinned at the top: input/<base>.headline.json
+//   { "title": "LUXURY DIAPER BAGS, RANKED", "subtitle": "the 4 moms actually carry" }
+const resolveHeadline = (base) => {
+  const p = path.join(INPUT_DIR, `${base}.headline.json`);
+  return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : undefined;
+};
+
 const processClip = async (fileName) => {
   const base = fileName.replace(VIDEO_RE, "");
   const inputPath = path.join(INPUT_DIR, fileName);
@@ -323,10 +367,18 @@ const processClip = async (fileName) => {
 
   // 4. Render.
   const rankTracker = resolveRanks(base);
+  const rankList = resolveList(base);
+  const headline = resolveHeadline(base);
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);
   writeFileSync(
     propsPath,
-    JSON.stringify({ src: fileName, overlays, ...(rankTracker ? { rankTracker } : {}) }),
+    JSON.stringify({
+      src: fileName,
+      overlays,
+      ...(rankTracker ? { rankTracker } : {}),
+      ...(rankList ? { rankList } : {}),
+      ...(headline ? { headline } : {}),
+    }),
   );
   console.log("  rendering...");
   execFileSync(
