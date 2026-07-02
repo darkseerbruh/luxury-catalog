@@ -18,6 +18,16 @@ Suggested topic tags (for the CTA block): Chanel 25, Chanel Classic Flap, Chanel
 FACT-CHECK NOTE for the data pass: all release years and lineup claims below (Chanel 25 launch
 timing and sizes, 2026 maxi flap details, current Classic Flap size lineup, Boy/22 years) must
 be verified against primary sources before publish. Placeholders and [VERIFY] markers included.
+
+VERIFICATION UPDATE (browser check of live TikTok content, 2026-07-02):
+- Maxi flap decoded: the Matthieu Blazy debut-era Chanel Maxi Flap, from his FIRST collection
+  (SS26; creators report a Paris launch early March 2026, worldwide ~March 13; keep the
+  [VERIFY] on exact dates, but the Blazy-debut framing is solid). Celebrity carry per TikTok:
+  Dua Lipa, Hailey Bieber, Kendall, Jennie; Harry Styles in Metiers d'art pieces. Framed as
+  the end of the micro-bag era. Blazy is ex-Bottega, so one designer-lineage line belongs
+  in the piece.
+- Chanel 25 confirmed: colour-collecting, small-vs-mini-vs-micro comparisons, and the live
+  debate "future classic like the Flap, or phase-out like the Boy?" matches the draft.
 -->
 
 # Chanel in 2026, explained

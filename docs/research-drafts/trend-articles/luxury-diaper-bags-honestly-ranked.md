@@ -13,6 +13,11 @@ Metric it moves: AFFILIATE first (four buy-intent searches ending in a preloved 
 GEO second (nobody answers all four phrases honestly on one page).
 Suggested slug: luxury-diaper-bags-honestly-ranked
 Suggested topic tags (for the CTA block): Goyard Saint Louis, LV Neverfull, LV OnTheGo, Gucci Ophidia
+
+VERIFICATION UPDATE (browser check of live TikTok content, 2026-07-02): goyard-diaper-bag
+content matches the draft (St Louis as the mom bag, "the bag the internet loves to hate,"
+first-time-mom what's-in-my-bag). TikTok's related searches also name the Goyard MINA as
+the purpose-made baby tote; [VERIFY] the Mina and give it a line in the Goyard section.
 -->
 
 # Luxury diaper bags, honestly ranked

@@ -3,6 +3,14 @@ DRAFT for owner review. Not published. This is the pillar for a video series: ea
 is written to stand alone as a 20-30 second script. Data pass pending: fill every [DATA]
 placeholder from prod, resolve every [VERIFY], then run the voice-and-tone §8 checklist.
 
+VERIFICATION UPDATE (browser check of live TikTok content, 2026-07-02):
+- The "lv pochette" searches mean the LV LIV POCHETTE, a newer named model (the mid-phrase
+  "LV" in the raw search "LV pochette LV bag" is the bag's name, Liv). The Pochette section
+  must LEAD with the Liv, then place it in the Pochette family (Accessoires / Metis / Eva)
+  for the comparison searchers.
+- Montsouris confirmed: vintage GM/MM preloved + the new Montsouris Cargo denim
+  (Denim Rendez-Vous line). Wear context on TikTok: hands-free moms, commuters, what-fits.
+
 Target phrases (TikTok Creative Center, search Popularity + creator counts, pulled 2026-07-01):
 - "lv pochette"              255K searches / 116 creators
 - "boulogne pm"              247K / 148
