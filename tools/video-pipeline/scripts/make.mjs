@@ -107,22 +107,24 @@ const applyCorrections = (base) => {
   let caps = JSON.parse(readFileSync(capsPath, "utf8"));
   let changed = false;
   for (const [phrase, replacement] of entries) {
-    const pw = phrase.split(" ");
-    for (let i = 0; i + pw.length <= caps.length; i++) {
-      let match = true;
-      for (let j = 0; j < pw.length; j++) {
-        if (norm(caps[i + j].text) !== pw[j]) {
-          match = false;
+    const keyWords = phrase.split(" ").length;
+    for (let i = 0; i < caps.length; i++) {
+      // A key can span 1..keyWords tokens (a single token may itself normalize to
+      // several words, e.g. "on-pronged" -> "on pronged").
+      let span = -1;
+      for (let w = 1; w <= keyWords && i + w <= caps.length; w++) {
+        const joined = caps.slice(i, i + w).map((t) => norm(t.text)).join(" ");
+        if (joined === phrase) {
+          span = w;
           break;
         }
       }
-      if (!match) continue;
-      // Already correct? skip (keeps it idempotent across re-runs).
-      const current = caps.slice(i, i + pw.length).map((t) => t.text.trim()).join(" ");
-      if (current === replacement) continue;
+      if (span < 0) continue;
+      const current = caps.slice(i, i + span).map((t) => t.text.trim()).join(" ");
+      if (current === replacement) continue; // already correct; idempotent
       const lead = caps[i].text.startsWith(" ") ? " " : "";
       const from = caps[i].startMs;
-      const to = caps[i + pw.length - 1].endMs;
+      const to = caps[i + span - 1].endMs;
       const words = replacement.split(/\s+/);
       const per = (to - from) / words.length;
       const toks = words.map((w, k) => ({
@@ -132,7 +134,7 @@ const applyCorrections = (base) => {
         timestampMs: Math.round(from + (k + 0.5) * per),
         confidence: 1,
       }));
-      caps.splice(i, pw.length, ...toks);
+      caps.splice(i, span, ...toks);
       i += toks.length - 1;
       changed = true;
     }
@@ -314,7 +316,7 @@ const resolveList = (base) => {
     return { num: r.num, name: r.name, revealSec: t ?? 0 };
   });
   console.log(`  list: ${rows.map((r) => `${r.num} ${r.name}@${r.revealSec.toFixed(1)}`).join(" | ")}`);
-  return { rows, leftPct: cfg.leftPct, topPct: cfg.topPct };
+  return { rows, leftPct: cfg.leftPct, topPct: cfg.topPct, buildFromBottom: cfg.buildFromBottom };
 };
 
 // Static headline pinned at the top: input/<base>.headline.json

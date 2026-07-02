@@ -50,6 +50,7 @@ const rankListSchema = z.object({
   ),
   leftPct: z.number().optional(),
   topPct: z.number().optional(),
+  buildFromBottom: z.boolean().optional(),
 });
 
 const headlineSchema = z.object({
@@ -203,6 +204,7 @@ export const CaptionedVideo: React.FC<Props> = ({
           rows={rankList.rows}
           leftPct={rankList.leftPct}
           topPct={rankList.topPct}
+          buildFromBottom={rankList.buildFromBottom}
         />
       ) : null}
 

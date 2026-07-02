@@ -9,9 +9,14 @@ export const RankList: React.FC<{
   readonly rows: { num: string; name: string; revealSec: number }[];
   readonly leftPct?: number;
   readonly topPct?: number;
-}> = ({ rows, leftPct = 5, topPct = 30 }) => {
+  readonly buildFromBottom?: boolean;
+}> = ({ rows, leftPct = 5, topPct = 30, buildFromBottom = false }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+
+  // buildFromBottom: show rows so the first-revealed sits at the bottom and the
+  // list fills upward toward number one at the top.
+  const ordered = buildFromBottom ? [...rows].reverse() : rows;
 
   return (
     <AbsoluteFill>
@@ -25,7 +30,7 @@ export const RankList: React.FC<{
           gap: 18,
         }}
       >
-        {rows.map((r, i) => {
+        {ordered.map((r, i) => {
           const p = spring({
             frame: frame - Math.round(r.revealSec * fps),
             fps,

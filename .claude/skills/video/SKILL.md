@@ -116,12 +116,15 @@ For a countdown where each name should REMAIN on screen as she moves on, use
   { "num": "4", "name": "Gucci Ophidia", "at": "fourth place" },
   { "num": "3", "name": "LV OnTheGo", "at": "third place" } ] }
 ```
-Order rows in reveal order (top to bottom). Use this INSTEAD of the chip tracker for
-a list look; keep the cued bag pics on the right so the pic is the current bag and the
-list is the running tally.
+Order rows in reveal order. Add `"buildFromBottom": true` for a countdown so the
+first-revealed sits at the bottom and the list fills UP toward number one at the top
+(the owner's preference for ranked countdowns). Use this INSTEAD of the chip tracker;
+keep the cued bag pics on the right so the pic is the current bag and the list is the
+running tally.
 
-### Headline (title pinned at top)
-Add `input/<clip>.headline.json` for a persistent title on a dark scrim:
+### Headline (title pinned at top) — STANDARD, add to every video
+Owner confirmed she wants a headline on every video. Add `input/<clip>.headline.json`
+for a persistent title on a dark scrim:
 ```json
 { "title": "Luxury Diaper Bags, Ranked", "subtitle": "the 4 moms actually carry" }
 ```
