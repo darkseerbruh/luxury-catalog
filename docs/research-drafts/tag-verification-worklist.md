@@ -7,14 +7,6 @@ tag to DONE with a one-line verdict, commit this file. Repeat until QUEUED is em
 Verdict codes: CLEAN (build-safe), MIXED (usable with care), TRAP (do not build).*
 
 ## QUEUED (priority order: ratio × draft-membership)
-- [ ] vintage Mombasa bag (2,284)
-- [ ] goyard artois pm (2,225)
-- [ ] balenciaga purse (2,095)
-- [ ] YSL jamie bag (1,788)
-- [ ] large LV vanity bag (1,624)
-- [ ] goyard bag colors (1,551)
-- [ ] Celine Phantom + celine phantom bag (1,538)
-- [ ] birkin 25 bag mini (1,429)
 - [ ] louis vuitton cosmetic purse (1,426; LV-pillar member)
 - [ ] boulogne pm louis vuitton (1,669; LV-pillar member)
 - [ ] slouchy pm louis vuitton (1,267; LV-pillar member)
@@ -22,7 +14,6 @@ Verdict codes: CLEAN (build-safe), MIXED (usable with care), TRAP (do not build)
 - [ ] neverfull pm louis vuitton (LV-pillar member)
 - [ ] alma pm louis vuitton bag (LV-pillar member)
 - [ ] gucci prada louis (857)
-- [ ] gucci pouch (894)
 - [ ] fendigraphy mini bag (845)
 - [ ] gucci large tote bag (842)
 - [ ] valentino garavani bag (830)
@@ -35,6 +26,15 @@ Verdict codes: CLEAN (build-safe), MIXED (usable with care), TRAP (do not build)
 - [ ] chanel meaning (Chanel-pillar member)
 
 ## DONE (verdict · date)
+- [x] vintage Mombasa bag · CLEAN, Tom Ford YSL Mombasa collector surge (intro year needs verify: SS02 vs 03) · 07-02
+- [x] goyard artois pm · CLEAN, zip-top laptop tote, work-bag grail confirmed · 07-02
+- [x] balenciaga purse · CLEAN-BROAD, Y2K City revival anchor · 07-02
+- [x] YSL jamie bag · CLEAN, SL Jamie family · 07-02
+- [x] large LV vanity bag · CLEAN, = LV Nice vanity line (also resolves nice nano/mini rows) · 07-02
+- [x] goyard bag colors · CLEAN+TIMELY, 2026 four seasonal LE colours (Mar 2026 drop) · 07-02
+- [x] Celine Phantom + celine phantom bag · CLEAN, Rider-revival + Philo nostalgia (designer era) · 07-02
+- [x] birkin 25 bag mini · CLEAN, B25 as 'mini Birkin', quota stories · 07-02
+- [x] gucci pouch · CLEAN multi-model, GG pouch family, name the model per post · 07-02
 - [x] gucci baby bag · CLEAN, tote-as-diaper-bag · 07-01
 - [x] birkin mini micro model · TRAP, "models" pollution · 07-01
 - [x] gucci boat bag · CLEAN, vintage Boat Pochette · 07-01
