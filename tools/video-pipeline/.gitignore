@@ -1,0 +1,12 @@
+node_modules/
+whisper.cpp/
+bin/
+temp/
+public/
+input/*
+output/*
+!input/.gitkeep
+!output/.gitkeep
+*.wav
+*.log
+.DS_Store
