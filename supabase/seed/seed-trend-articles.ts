@@ -41,11 +41,12 @@ Why it took off:
 
 ## The maxi flap moment
 
-The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. Blazy, who previously ran Bottega Veneta, showed it for spring 2026, and the collection hit Paris boutiques in early March 2026 with New York following mid-March; W Magazine covered shoppers lining up at the SoHo store for it (March 2026). US retail on the Maxi Flap is $9,300 (PurseBop, 2026). It has been carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie of Blackpink, and people frame it as the end of the micro-bag era.
+The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. One thing to get straight, because the name invites confusion: the new Maxi Flap is its own bag, not a new size of the Classic Flap. It borrows the Classic's codes in a more relaxed, contemporary build (PurseBop, March 2026), and collectors already call it the Souplissimo. The Classic Flap has had a maxi size for years; different bag.
 
-What the resale side shows so far:
-
-- Maxi-size Classic Flaps ask a median around **$5,825**, under the medium's $7,156, but that read comes from just nine maxi listings against a thousand mediums (June 2026), so hold it loosely. Our estimate from dated comps, not an appraisal.
+- **The launch:** Paris boutiques early March 2026, New York mid-March; W Magazine covered shoppers lining up at the SoHo store for it. Carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie of Blackpink; people frame it as the end of the micro-bag era.
+- **Retail:** $8,500 to $9,300 depending on version (chanel.com; PurseBop, 2026).
+- **The resale twist:** it is already asking above retail preloved. Median around **$13,500**, ranging $9,500 to $15,995 (n=42, July 2, 2026). That is what selling out looks like in comps. Our estimate from listings, not an appraisal.
+- **The budget route to the oversized look:** vintage maxi-size Classic Flaps ask around $5,825, from just nine listings (June 2026), so hold that one loosely.
 
 ## Types of Chanel bags
 
