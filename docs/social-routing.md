@@ -24,6 +24,11 @@ bio-link path).
 
 - Lowercase, 1 to 3 words, letters/digits/spaces only. It must survive being
   spoken aloud and typed back from memory ("chanel 2026", "lv nine").
+- Default to the article's NATURAL topic words ("luxury diaper bags") so the CTA
+  sounds like speech, not a code; invent a key only on collision (owner pattern,
+  2026-07-02). Spoken formula: "Just search <key> on the site to read more." A
+  trailing "Link in bio." tag is allowed as a SECONDARY pointer (the bio lands on
+  /social); never bio-only.
 - One key per article. A whole video series pointing at one article shares one
   key.
 - Unique forever; keys are never reused for a different article.

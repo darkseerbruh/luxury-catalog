@@ -28,11 +28,22 @@ content-kit-buildout.md (which now point here).*
    sales I actually track at Luxury Catalog", "I did what I built Luxury Catalog to do,
    and checked"). "I'm Arielle" rides the ending's site call or question, one short
    sentence max. No standalone "By the way, I'm Arielle..." paragraphs; a bolted-on
-   sign-off is a defect. The twenty-thousand-prices claim stays verified (24,088 asking +
+   IDENTITY sign-off is a defect. A closing receipts line WITHOUT the name is allowed and
+   good in list/countdown takes where numbers came fast ("By the way, every number you
+   just heard comes from the twenty thousand plus real prices I track at Luxury Catalog
+   dot com" — owner's Take-1 edit, 2026-07-02). "I'm Arielle" appears AT MOST ONCE PER
+   SERIES, in the opener; episode scripts carry credibility through the track-clause and
+   site mention alone. The twenty-thousand-prices claim stays verified (24,088 asking +
    1,665 sold as of 2026-06-26; re-check before raising) and appears at most once per
    video, ideally only in a series opener.
 7. **Every script ends one of two ways:** a specific question for the comments, OR a site
-   call carrying the kit's SEARCH KEY ("at Luxury Catalog dot com. Search chanel 2026.").
+   call carrying the kit's SEARCH KEY in the owner's formula: "Just search <key> on the
+   site to read more. Link in bio." (owner's Take-1 edit 2026-07-02; the trailing "Link in
+   bio." is allowed again as a SECONDARY tag because the bio link now lands on /social,
+   which lists every video article — it must never be the only or primary CTA, and it
+   never appears on question endings). New kits default their key to the article's natural
+   topic words ("luxury diaper bags"), inventing a key only when the natural phrase
+   collides.
    The key comes from the routing registry (docs/social-routing.md +
    src/lib/social-search-keys.ts; one key per article, a series shares its article's key),
    never an ad-hoc bag term. Question-ending scripts still speak the key in the preceding
@@ -58,6 +69,11 @@ content-kit-buildout.md (which now point here).*
     not mine"). Don't stack "estimate not appraisal" onto "dated comps".
 13. **No em dashes** (voice-and-tone.md; the tagline is the only exception, and it never
     appears in scripts).
+
+18. **Ranked/countdown takes** (owner's Take-1 edit, 2026-07-02): count down ("In fourth
+    place... And number one"), give each item one concrete upside and ONE honest downside
+    in complete sentences, speak a price for ONE anchor item only (the caption carries the
+    rest with date + n), and close with the receipts line + site call, no self-intro.
 
 ## Facts and logistics
 14. **Only verified, dated numbers are spoken.** Unfilled figures stay as [DATA: spec]
