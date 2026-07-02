@@ -175,6 +175,37 @@ the low-competition wedge.)
 
 ---
 
+## 4b. First saturation data in — the sweet spots (owner pull, 2026-07-01)
+
+Owner pulled creator counts for 46 mid-tail terms. New live column **`Searches / creator`**
+(= Pop # ÷ Creators) auto-ranks demand-per-creator. High = lots of searches, few videos.
+**These are our openings.** (Both numbers are TikTok Creative Center metrics, one 2026-07-01
+pull; read as a demand-vs-supply signal, not a guarantee a post ranks.)
+
+**Top sweet spots (build-first candidates):**
+
+| Term | Pop | Creators | Searches/creator |
+|---|---|---|---|
+| birkin mini micro model | 293K | 124 | 2,363 |
+| gucci baby bag | 239K | 108 | 2,213 |
+| gucci boat bag | 241K | 112 | 2,152 |
+| white prada bag | 267K | 152 | 1,757 |
+| mini dionysus gucci bag | 266K | 180 | 1,478 |
+| givenchy micro antigona bag | 214K | 152 | 1,408 |
+| mcqueen backpack | 294K | 229 | 1,284 |
+| gucci gg marmont bag | 164K | 132 | 1,242 |
+| tom ford gucci 1995 | 172K | 144 | 1,194 |
+
+**Most saturated (skip / low priority):** fendi crossbody bag (202), gucci marmont (231),
+bottega jodie (246), city bag balenciaga (284), Fendi peekaboo (293). Lots of creators per
+search, so hard to break in.
+
+**Read:** the wide-open lanes are **specific Gucci silhouettes** (baby/boat/Dionysus mini/GG
+Marmont), **micro/nano novelties** (Birkin micro, Givenchy micro Antigona), **colour cuts**
+(white Prada), and **designer-era** (Tom Ford Gucci 1995). Note two are Coach-adjacent
+accessible plays (McQueen backpack). Moves **engagement + traffic** (low competition = our
+video can actually surface).
+
 ## 5. Social strategy — what to develop, why, and the metric it moves
 
 Filtered through: **website is the compounding asset; social is the on-ramp; every post
