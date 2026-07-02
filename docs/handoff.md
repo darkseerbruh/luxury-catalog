@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Social → site routing: search-key CTAs + /social bio hub (2026-07-02, on `main`)
+
+**"Link in bio" is retired (owner decision, locked in preferences.md).** Routing standard: `docs/social-routing.md`.
+- **Spoken search key per article** ("luxurycatalog dot com, search *chanel 2026*"): registry `src/lib/social-search-keys.ts` (unit-tested unique/speakable); an exact key match **pins the article at the top of `/search`** ("From our videos" card, published-only); `search_performed` now carries `social_key` for attribution. Verified in preview (pin renders above bag results; normalization forgives caps/punctuation).
+- **`/social` = the permanent bio-link hub** (static/ISR, cookieless): registry order, each card shows its key, unpublished slugs auto-skip. Point every profile's bio link here, with UTM.
+- **Day-one scripts swept:** all 14 "on the site" CTAs in `docs/research-drafts/trend-articles/scripts-day-one.md` now close on the key (kit 1 = `chanel 2026`, kit 2 = `lv nine`, one key for the whole LV series). Notion Content Kits DB gained a **Search Key** field (day-one kits filled).
+- **QA gate before posting a video** (in social-routing.md): article published under the registry slug → `/search?q=<key>` pins it → spoken CTA matches exactly. Keys live in Notion + the registry, kept in sync.
+- Also: root tsconfig now excludes `tools/video-pipeline` (own project; broke `tsc` in clean checkouts).
+
+---
+
 ## TL;DR — Authentication section + nav IA rework (2026-06-30, all on `main`)
 
 **Authentication is now a primary nav section, and the whole primary nav was reshaped.** Shipped, gated green, merged:
