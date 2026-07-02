@@ -55,3 +55,12 @@ Numbers in full with units; address the viewer (question openers); complete sent
 contractions; soften absolutes; spoken site name once per series; CTA as a full specific
 invitation; ONE hedge per script; finish metaphors; plain idioms. Detailed list in
 scripts-day-one.md header.
+
+## SCRIPT VOICE UPDATE (owner rule, 2026-07-02, supersedes conflicting lines above)
+- I/MY, never we/our, in spoken scripts: she is one person, not an org ("I track more than
+  twenty thousand real prices"). Written on-site copy may stay brand-voice; SCRIPTS are I.
+- Contractions ALWAYS: isn't/it's/can't/don't, never "is not"/"cannot"/"it is".
+- Every script's BODY carries the credibility beat (who Arielle is, what Luxury Catalog is,
+  why that makes the numbers trustworthy), phrased to fit that script, not stamped on.
+- Every script ENDS one of two ways: a specific question for the comments, OR a site call
+  with the search term ("at Luxury Catalog dot com. Search Neverfull.").
