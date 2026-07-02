@@ -5,7 +5,6 @@ import {
   AbsoluteFill,
   CalculateMetadataFunction,
   cancelRender,
-  Img,
   interpolate,
   OffthreadVideo,
   Sequence,
@@ -18,15 +17,17 @@ import {
 import { z } from "zod";
 import { BRAND } from "../brand";
 import { NoCaptionFile } from "./NoCaptionFile";
+import { Overlay } from "./Overlay";
 import SubtitlePage from "./SubtitlePage";
 
 const overlaySchema = z.object({
   img: z.string(), // filename in public/
   fromSec: z.number(),
   toSec: z.number(),
-  xPct: z.number().optional(), // center x, 0-100 (default 50)
-  yPct: z.number().optional(), // center y, 0-100 (default 32)
-  widthPct: z.number().optional(), // width as % of canvas (default 46)
+  xPct: z.number().optional(), // center x, 0-100 (default 64)
+  yPct: z.number().optional(), // center y, 0-100 (default 52)
+  widthPct: z.number().optional(), // width as % of canvas (default 40)
+  tilt: z.number().optional(), // rotation in degrees (default -4)
 });
 
 export const captionedVideoSchema = z.object({
@@ -108,33 +109,22 @@ export const CaptionedVideo: React.FC<Props> = ({ src, zoom, overlays }) => {
         <OffthreadVideo style={{ objectFit: "cover" }} src={staticFile(src)} />
       </AbsoluteFill>
 
-      {overlays.map((o, i) => (
-        <Sequence
-          key={`ov-${i}`}
-          from={Math.round(o.fromSec * fps)}
-          durationInFrames={Math.max(1, Math.round((o.toSec - o.fromSec) * fps))}
-        >
-          <AbsoluteFill
-            style={{
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Img
-              src={staticFile(o.img)}
-              style={{
-                position: "absolute",
-                width: `${o.widthPct ?? 46}%`,
-                left: `${o.xPct ?? 50}%`,
-                top: `${o.yPct ?? 32}%`,
-                transform: "translate(-50%, -50%)",
-                borderRadius: 18,
-                boxShadow: "0 24px 60px rgba(0,0,0,0.45)",
-              }}
+      {overlays.map((o, i) => {
+        const from = Math.round(o.fromSec * fps);
+        const dur = Math.max(1, Math.round((o.toSec - o.fromSec) * fps));
+        return (
+          <Sequence key={`ov-${i}`} from={from} durationInFrames={dur}>
+            <Overlay
+              img={o.img}
+              durationInFrames={dur}
+              xPct={o.xPct}
+              yPct={o.yPct}
+              widthPct={o.widthPct}
+              tilt={o.tilt}
             />
-          </AbsoluteFill>
-        </Sequence>
-      ))}
+          </Sequence>
+        );
+      })}
 
       {pages.map((page, index) => {
         const nextPage = pages[index + 1] ?? null;

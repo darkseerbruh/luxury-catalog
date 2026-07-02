@@ -33,6 +33,23 @@ user-facing copy: on-voice, descriptive not vibe-only, no em dashes.
 3. Captions are auto-generated. Fix a wrong word by editing `public/<clip>.json`, then
    re-run `npm run make <clip>`.
 
+### Speech-cued images (talking-head)
+To pop a bag image into frame when she says a phrase, add `input/<clip>.cues.json`
+and put the image in `input/`:
+```json
+[{ "say": "this hermes birkin", "img": "birkin.jpg", "hold": 2.8,
+   "xPct": 66, "yPct": 48, "widthPct": 46, "tilt": -4 }]
+```
+The pipeline finds the phrase in the transcript and pops the image in there (spring
+in, hold, fade), timed to her words. `say` matches on normalized words, so ignore
+case, punctuation, and accents. `xPct`/`yPct` are the image center; set them to where
+her gesture lands (look at a frame to place it). Re-run `npm run make <clip>` after
+editing cues; transcription is cached so only the render repeats.
+
+Note: the image is a rounded photo card. A true cutout floating in her hand needs a
+transparent PNG (background removal) and, to follow a moving hand, hand tracking. Both
+are separate builds, not in this step. Offer them, do not fake them.
+
 ## Step 3b — Headless montage mode
 1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the
    clear subject. AVOID frames showing a competitor tag (the round "FASHIONPHILE" disc)
