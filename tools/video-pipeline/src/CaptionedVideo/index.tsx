@@ -18,6 +18,7 @@ import { z } from "zod";
 import { BRAND } from "../brand";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
+import { RankTracker } from "./RankTracker";
 import SubtitlePage from "./SubtitlePage";
 
 const overlaySchema = z.object({
@@ -34,10 +35,17 @@ const overlaySchema = z.object({
     .optional(), // hand path to follow
 });
 
+const rankTrackerSchema = z.object({
+  labels: z.array(z.string()),
+  fillTimes: z.array(z.number()), // seconds, one per label
+  yPct: z.number().optional(),
+});
+
 export const captionedVideoSchema = z.object({
   src: z.string(), // basename of a video file in public/
   zoom: z.number().default(BRAND.zoomIntensity),
   overlays: z.array(overlaySchema).default([]),
+  rankTracker: rankTrackerSchema.optional(),
 });
 
 type Props = z.infer<typeof captionedVideoSchema>;
@@ -57,7 +65,12 @@ export const calculateCaptionedVideoMetadata: CalculateMetadataFunction<
 // 400 for one or two words at a time.
 const SWITCH_CAPTIONS_EVERY_MS = 1200;
 
-export const CaptionedVideo: React.FC<Props> = ({ src, zoom, overlays }) => {
+export const CaptionedVideo: React.FC<Props> = ({
+  src,
+  zoom,
+  overlays,
+  rankTracker,
+}) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const { delayRender, continueRender } = useDelayRender();
   const [handle] = useState(() => delayRender());
@@ -154,6 +167,14 @@ export const CaptionedVideo: React.FC<Props> = ({ src, zoom, overlays }) => {
           </Sequence>
         );
       })}
+
+      {rankTracker ? (
+        <RankTracker
+          labels={rankTracker.labels}
+          fillTimes={rankTracker.fillTimes}
+          yPct={rankTracker.yPct}
+        />
+      ) : null}
 
       {subtitles.length === 0 ? <NoCaptionFile /> : null}
     </AbsoluteFill>

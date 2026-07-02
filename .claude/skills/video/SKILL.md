@@ -81,6 +81,18 @@ transcription is cached so only the render repeats.
 - The clip is normalized to vertical 1080x1920 first, so best results come from footage
   she filmed vertically (which is native for TikTok anyway).
 
+### Ranking tracker (fills in as she counts down)
+For a top-N ranking video, add `input/<clip>.ranks.json` to show chips that fill as
+each place is revealed:
+```json
+{ "labels": ["4","3","2","1"],
+  "fillAt": ["fourth place","third place","second place","the neverful"],
+  "yPct": 11 }
+```
+Each label is a chip; it lights up gold when its `fillAt` phrase is spoken (resolved
+from the transcript). Order the labels to match her reveal order. For a plain progress
+counter instead of a rank countdown, use `["1","2","3","4"]`.
+
 ## Step 3b — Headless montage mode
 1. Choose clips from `_by_bag/`. Prefer a TIGHT hero shot where the named bag is the
    clear subject. AVOID frames showing a competitor tag (the round "FASHIONPHILE" disc)

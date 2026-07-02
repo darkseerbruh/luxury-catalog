@@ -42,8 +42,12 @@ content-kit-buildout.md (which now point here).*
 8. **Contractions always**: isn't, can't, don't, it's. Never "is not" / "cannot" / "it is".
 9. **Numbers spoken in full with units**: "fourteen hundred and ninety-five dollars",
    never "fourteen ninety-five".
-10. **Spell bags out plainly on first mention** when the name is jargon: full brand +
-    "the bag called Neverfull, in the size MM".
+10. **A bag model always carries its full house name, every mention** (owner rule
+    2026-07-02): "the Louis Vuitton Neverfull", never bare "the Neverfull", and never an
+    abbreviation ("LV") in spoken copy. A list may share one brand ("the Louis Vuitton
+    Pochette Accessoires, the Metis, and the Eva"); a size reference right after a full
+    naming ("the PM") is fine. First jargon mention still gets the plain spell-out
+    ("the bag called Neverfull, in the size MM").
 11. **Complete sentences; no clipped fragments** ("It's heavier, though"). Soften
     absolutes ("Maybe the boring answer, but honest"). Finish every metaphor. Plain idioms
     over writerly ones. Less drama ("a significant gap", not "that's not a typo").
@@ -87,4 +91,5 @@ content-kit-buildout.md (which now point here).*
 - [ ] Credibility beat present and script-specific
 - [ ] Ends on a comments question or site call + search term
 - [ ] Contractions, full spoken numbers, no fragments
+- [ ] Every model mention carries the full house name (no bare models, no "LV")
 - [ ] Max one hedge; no em dashes; no AI tics (voice-and-tone.md §8 blacklist); no [DATA]/[VERIFY] remaining
