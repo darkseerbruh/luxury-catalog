@@ -49,3 +49,47 @@ asking and sold prices across the major resale sites, so what you hear is tracke
 guessed." Short version (all other takes): "I'm Arielle. Luxury Catalog tracks real resale
 prices, dated and counted." The 20k claim is grounded (24,088 asking + 1,665 sold rows as
 of 2026-06-26); re-verify the number if it is ever raised.
+
+## SPOKEN-STYLE RULES (owner's edit pass, 2026-07-02; apply to ALL future scripts)
+Numbers in full with units; address the viewer (question openers); complete sentences with
+contractions; soften absolutes; spoken site name once per series; CTA as a full specific
+invitation; ONE hedge per script; finish metaphors; plain idioms. Detailed list in
+scripts-day-one.md header.
+
+## SCRIPT VOICE UPDATE (owner rule, 2026-07-02, supersedes conflicting lines above)
+- I/MY, never we/our, in spoken scripts: she is one person, not an org ("I track more than
+  twenty thousand real prices"). Written on-site copy may stay brand-voice; SCRIPTS are I.
+- Contractions ALWAYS: isn't/it's/can't/don't, never "is not"/"cannot"/"it is".
+- Every script's BODY carries the credibility beat (who Arielle is, what Luxury Catalog is,
+  why that makes the numbers trustworthy), phrased to fit that script, not stamped on.
+- Every script ENDS one of two ways: a specific question for the comments, OR a site call
+  with the search term ("at Luxury Catalog dot com. Search Neverfull.").
+
+## HOOK + NAMING RULES (owner edit pass 2, 2026-07-02)
+- The hook names the SEARCH INTENT / target viewer in the FIRST sentence, especially when
+  it differs from the bag ("Moms, if you're eyeing a Neverfull as your diaper bag...").
+  A take targeting "louis vuitton diaper bag" leads with moms + diaper, not with the bag.
+- Spell the bag out plainly for non-experts on first mention: full brand + "the bag called
+  X, in the size Y" where the name is jargon.
+- "By the way, I'm Arielle" is the approved casual bridge into the credibility beat.
+- Less drama in data reveals: "That's a significant gap" over "That's not a typo."
+
+## PAYOFF RULE (owner edit pass 3, 2026-07-02)
+The payoff of a short video is ONE plain takeaway in one or two sentences. No symmetrical
+if/if constructions (buyer case + seller case = two videos, not one payoff). No finance
+jargon ("anchor on"). Test: could the viewer repeat the advice to a friend in one breath?
+Example fix: "So here's the move: don't pay the sticker. Offer closer to what these bags
+actually sell for, because now you know what that is."
+
+## FRIEND-NOT-BRAND RULE (owner edit pass 4, 2026-07-02)
+Scripts speak as "the friend you call" (voice-and-tone.md Principle 3 + the Anele model:
+"the real thing nobody tells you, said like a friend, backed like an expert"). NEVER recite
+a product's virtues in her own words ("waterproof by design, spills wipe off" = brand
+brochure). Instead: (1) start from the viewer's worry, (2) attribute the brand's claim AS
+the brand's ("Goyard's own line is... their claim, not mine"), (3) deliver the
+nobody-tells-you truth from the buyer's side. She doesn't work for these houses; the
+script can never sound like she does.
+
+## ⚠️ SCRIPT RULES MOVED (2026-07-02)
+All script rules above are consolidated and superseded by docs/script-requirements.md,
+including the pre-record checklist. That file is canonical; copywriter briefs read it.
