@@ -131,7 +131,7 @@ for a persistent title on a dark scrim:
 Write it on-voice via `brand-voice`: descriptive and a little fun, says what the video is,
 no em dashes. `title` is shown uppercase.
 
-Add a timed CTA line under the headline (e.g. the site) with `cta` + `ctaAt` (the phrase
+Add a timed CTA as its own big box (e.g. the site), separate from the headline scrim, with `cta` + `ctaAt` (the phrase
 that reveals it, resolved from the transcript):
 ```json
 { "title": "...", "subtitle": "...", "cta": "luxurycatalog.com", "ctaAt": "luxurycatalog" }

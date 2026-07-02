@@ -16,6 +16,7 @@ import {
 } from "remotion";
 import { z } from "zod";
 import { BRAND } from "../brand";
+import { CtaBox } from "./CtaBox";
 import { Headline } from "./Headline";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
@@ -58,6 +59,7 @@ const headlineSchema = z.object({
   subtitle: z.string().optional(),
   cta: z.string().optional(),
   ctaSec: z.number().optional(),
+  ctaYPct: z.number().optional(),
   yPct: z.number().optional(),
 });
 
@@ -214,9 +216,15 @@ export const CaptionedVideo: React.FC<Props> = ({
         <Headline
           title={headline.title}
           subtitle={headline.subtitle}
-          cta={headline.cta}
-          ctaSec={headline.ctaSec}
           yPct={headline.yPct}
+        />
+      ) : null}
+
+      {headline?.cta && headline?.ctaSec !== undefined ? (
+        <CtaBox
+          text={headline.cta}
+          atSec={headline.ctaSec}
+          yPct={headline.ctaYPct}
         />
       ) : null}
 
