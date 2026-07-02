@@ -1,6 +1,6 @@
 [
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "Micro",
     "requireTokens": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "Mini",
     "requireTokens": [
@@ -40,7 +40,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "Small",
     "requireTokens": [
@@ -60,7 +60,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "Medium",
     "requireTokens": [
@@ -80,7 +80,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "Large",
     "requireTokens": [
@@ -100,7 +100,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady Dior",
     "size_label": "My ABCDior",
     "requireTokens": [
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady D-Joy",
     "size_label": "Small",
     "requireTokens": [
@@ -132,7 +132,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Lady D-Lite",
     "size_label": "Medium",
     "requireTokens": [
@@ -144,7 +144,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Saddle",
     "size_label": "Standard",
     "requireTokens": [
@@ -160,7 +160,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Saddle",
     "size_label": "Mini",
     "requireTokens": [
@@ -175,7 +175,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Saddle",
     "size_label": "Men's",
     "requireTokens": [
@@ -187,7 +187,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Saddle Pochette",
     "size_label": "Mini",
     "requireTokens": [
@@ -199,7 +199,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Saddle Chain Pouch",
     "size_label": "Nano",
     "requireTokens": [
@@ -211,7 +211,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Book Tote",
     "size_label": "Mini",
     "requireTokens": [
@@ -224,7 +224,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Book Tote",
     "size_label": "Small",
     "requireTokens": [
@@ -237,7 +237,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Book Tote",
     "size_label": "Medium",
     "requireTokens": [
@@ -250,7 +250,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Book Tote",
     "size_label": "Large",
     "requireTokens": [
@@ -263,7 +263,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Bobby",
     "size_label": "Medium",
     "requireTokens": [
@@ -275,7 +275,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Diorama",
     "size_label": "Medium",
     "requireTokens": [
@@ -287,7 +287,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Caro",
     "size_label": "Small",
     "requireTokens": [
@@ -299,7 +299,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Caro",
     "size_label": "Medium",
     "requireTokens": [
@@ -311,7 +311,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Caro Pouch",
     "size_label": "Standard",
     "requireTokens": [
@@ -324,7 +324,7 @@
     "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "30 Montaigne",
     "size_label": "Standard",
     "requireTokens": [
@@ -340,7 +340,7 @@
     ]
   },
   {
-    "brand": "Christian Dior",
+    "brand": "Dior",
     "style": "Rider Backpack",
     "size_label": "Standard",
     "requireTokens": [
