@@ -30,8 +30,18 @@ user-facing copy: on-voice, descriptive not vibe-only, no em dashes.
 ## Step 3a — Talking-head mode
 1. Put the clip(s) in `input/`.
 2. `npm run make` (all clips) or `npm run make <clip.mp4>` (one).
-3. Captions are auto-generated. Fix a wrong word (often a brand name) by editing
-   `public/<clip>.json`, then re-run `npm run make <clip>`.
+3. Captions are auto-generated, then auto-corrected for proper names (see below).
+
+### Getting names right (super important)
+Transcription mangles brand and French names. Two guards, in order of trust:
+1. **Auto-lexicon**: `luxury-lexicon.json` fixes known mishears every run (Goyard,
+   Saint Louis, Neverfull, OnTheGo, Hermès, Épi, Empreinte, her name, etc.). Add new
+   ones there.
+2. **Her script is truth**: for anything the lexicon cannot catch (a specific material,
+   a price, an unusual name), get her actual script and add a per-clip
+   `input/<clip>.corrections.json` (`{"heard phrase":"Correct Words"}`), or fix the word
+   in `public/<clip>.json`. NEVER guess a French or proper term from the audio; ask her.
+Always eyeball the finished captions for names before calling it done.
 
 ### Better audio: phone video + computer mic
 If she films video on her phone but records audio on a computer mic (better sound),
@@ -69,6 +79,11 @@ in, hold, fade), timed to her words. `say` matches on normalized words, so ignor
 case, punctuation, and accents. Re-run `npm run make <clip>` after editing cues;
 transcription is cached so only the render repeats.
 
+- `label` (optional): a name shown under the image (e.g. "Goyard Saint Louis").
+- hold: by default the image stays up until the next cue (the whole time she talks
+  about it). An explicit `"hold": <seconds>` pins a fixed duration instead.
+- Keep bags OFF her face: place them upper-right (around `xPct` 80, `yPct` 24) unless
+  following a hand.
 - `cutout` (default true): removes the image background so the bag floats as a shape,
   not a photo card. Best results come from a CLEAN single-bag still (no hands, plain
   background). Set `false` to keep it as a rounded photo card.

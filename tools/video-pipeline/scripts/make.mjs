@@ -86,6 +86,63 @@ const norm = (s) =>
     .replace(/\s+/g, " ")
     .trim();
 
+// Fix proper names in the captions so they never depend on the transcriber. Applies
+// the global luxury-lexicon.json plus an optional per-clip <base>.corrections.json.
+// Matched case/accent-insensitively across word tokens; timing is preserved.
+const LEXICON_PATH = path.join(process.cwd(), "luxury-lexicon.json");
+const applyCorrections = (base) => {
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return;
+  const lex = existsSync(LEXICON_PATH) ? JSON.parse(readFileSync(LEXICON_PATH, "utf8")) : {};
+  const perClipPath = path.join(INPUT_DIR, `${base}.corrections.json`);
+  const perClip = existsSync(perClipPath) ? JSON.parse(readFileSync(perClipPath, "utf8")) : {};
+  const map = {};
+  for (const [k, v] of Object.entries({ ...lex, ...perClip })) {
+    if (!k.startsWith("_")) map[norm(k)] = v;
+  }
+  // Longer phrases first so multi-word names win over their fragments.
+  const entries = Object.entries(map).sort(
+    (a, b) => b[0].split(" ").length - a[0].split(" ").length,
+  );
+  let caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  let changed = false;
+  for (const [phrase, replacement] of entries) {
+    const pw = phrase.split(" ");
+    for (let i = 0; i + pw.length <= caps.length; i++) {
+      let match = true;
+      for (let j = 0; j < pw.length; j++) {
+        if (norm(caps[i + j].text) !== pw[j]) {
+          match = false;
+          break;
+        }
+      }
+      if (!match) continue;
+      // Already correct? skip (keeps it idempotent across re-runs).
+      const current = caps.slice(i, i + pw.length).map((t) => t.text.trim()).join(" ");
+      if (current === replacement) continue;
+      const lead = caps[i].text.startsWith(" ") ? " " : "";
+      const from = caps[i].startMs;
+      const to = caps[i + pw.length - 1].endMs;
+      const words = replacement.split(/\s+/);
+      const per = (to - from) / words.length;
+      const toks = words.map((w, k) => ({
+        text: (k === 0 ? lead : " ") + w,
+        startMs: Math.round(from + k * per),
+        endMs: Math.round(from + (k + 1) * per),
+        timestampMs: Math.round(from + (k + 0.5) * per),
+        confidence: 1,
+      }));
+      caps.splice(i, pw.length, ...toks);
+      i += toks.length - 1;
+      changed = true;
+    }
+  }
+  if (changed) {
+    writeFileSync(capsPath, JSON.stringify(caps, null, 2));
+    console.log("  captions: applied name corrections");
+  }
+};
+
 // Speech-cued overlays: input/<base>.cues.json says which image to pop in when a
 // phrase is spoken. We find the phrase in the transcript and time the image to it.
 //   [{ "say": "this hermes birkin", "img": "birkin.jpg", "hold": 2.5,
@@ -140,11 +197,14 @@ const resolveCues = async (base, publicVideo) => {
     }
 
     const startSec = words[hit].startMs / 1000 + (cue.delay ?? 0);
-    const toSec = startSec + (cue.hold ?? 2.5);
     const overlay = {
       img: imgName,
+      label: cue.label,
       fromSec: startSec,
-      toSec,
+      // Default: hold until the next cue (the whole time she talks about it).
+      // An explicit "hold" pins a fixed duration instead.
+      toSec: startSec + (cue.hold ?? 6),
+      _auto: cue.hold === undefined,
       xPct: cue.xPct,
       yPct: cue.yPct,
       widthPct: cue.widthPct,
@@ -166,6 +226,18 @@ const resolveCues = async (base, publicVideo) => {
     console.log(
       `  cue: "${cue.say}" -> ${startSec.toFixed(2)}s (${imgName})${cue.follow ? " [follow]" : ""}`,
     );
+  }
+
+  // Auto-hold each bag until the next one appears; the last one holds ~8s.
+  overlays.sort((a, b) => a.fromSec - b.fromSec);
+  for (let i = 0; i < overlays.length; i++) {
+    if (overlays[i]._auto) {
+      overlays[i].toSec =
+        i < overlays.length - 1
+          ? Math.max(overlays[i].fromSec + 1.5, overlays[i + 1].fromSec - 0.25)
+          : overlays[i].fromSec + 8;
+    }
+    delete overlays[i]._auto;
   }
   return overlays;
 };
@@ -241,6 +313,10 @@ const processClip = async (fileName) => {
     console.log("  captions: transcribing with Whisper...");
     await transcribeVideo(publicVideo);
   }
+
+  // 2b. Fix proper names in the captions (brands, French terms) before anything
+  //     reads them, so cues/ranks and the on-screen text all use correct spelling.
+  applyCorrections(base);
 
   // 3. Overlays: static (input/<base>.overlays.json) + speech-cued (<base>.cues.json).
   const overlays = [...loadOverlays(base), ...(await resolveCues(base, publicVideo))];

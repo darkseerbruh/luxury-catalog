@@ -8,6 +8,8 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { BRAND } from "../brand";
+import { CAPTION_FONT_FAMILY } from "../load-font";
 
 type TrackPoint = { t: number; xPct: number; yPct: number };
 
@@ -27,11 +29,12 @@ const sampleTrack = (track: TrackPoint[], t: number): { xPct: number; yPct: numb
   return last;
 };
 
-// A product image that pops into frame (spring scale + rise), holds, then fades.
-// If a hand `track` is given it follows the hand; otherwise it sits at xPct/yPct.
+// A product image (with an optional name label under it) that pops into frame,
+// holds for the whole sequence, then fades. Follows a hand `track` if given.
 export const Overlay: React.FC<{
   readonly img: string;
   readonly durationInFrames: number;
+  readonly label?: string;
   readonly fromSec?: number;
   readonly track?: TrackPoint[];
   readonly xPct?: number;
@@ -42,43 +45,41 @@ export const Overlay: React.FC<{
 }> = ({
   img,
   durationInFrames,
+  label,
   fromSec = 0,
   track,
-  xPct = 64,
-  yPct = 52,
-  widthPct = 40,
+  xPct = 80,
+  yPct = 24,
+  widthPct = 24,
   tilt = -4,
   cutout = false,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const enter = spring({
-    frame,
-    fps,
-    config: { damping: 14, mass: 0.6 },
-    durationInFrames: 12,
+  const enter = spring({ frame, fps, config: { damping: 14, mass: 0.6 }, durationInFrames: 12 });
+  const exit = interpolate(frame, [durationInFrames - 8, durationInFrames], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
   });
-  const exit = interpolate(
-    frame,
-    [durationInFrames - 8, durationInFrames],
-    [1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-  );
-
   const scale = interpolate(enter, [0, 1], [0.7, 1]);
   const rise = interpolate(enter, [0, 1], [26, 0]);
   const opacity = Math.min(enter, exit);
 
   const pos =
-    track && track.length > 0
-      ? sampleTrack(track, fromSec + frame / fps)
-      : { xPct, yPct };
+    track && track.length > 0 ? sampleTrack(track, fromSec + frame / fps) : { xPct, yPct };
+
+  const imgStyle: React.CSSProperties = cutout
+    ? { filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.55))" }
+    : {
+        borderRadius: 18,
+        boxShadow: "0 24px 50px rgba(0,0,0,0.5)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      };
 
   return (
     <AbsoluteFill>
-      <Img
-        src={staticFile(img)}
+      <div
         style={{
           position: "absolute",
           left: `${pos.xPct}%`,
@@ -86,16 +87,33 @@ export const Overlay: React.FC<{
           width: `${widthPct}%`,
           transform: `translate(-50%, calc(-50% + ${rise}px)) scale(${scale}) rotate(${tilt}deg)`,
           opacity,
-          // Cutout: shadow follows the bag's shape. Card: rounded photo with a border.
-          ...(cutout
-            ? { filter: "drop-shadow(0 22px 34px rgba(0,0,0,0.5))" }
-            : {
-                borderRadius: 20,
-                boxShadow: "0 30px 70px rgba(0,0,0,0.5)",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 10,
         }}
-      />
+      >
+        <Img src={staticFile(img)} style={{ width: "100%", ...imgStyle }} />
+        {label ? (
+          <div
+            style={{
+              fontFamily: CAPTION_FONT_FAMILY,
+              fontWeight: 600,
+              fontSize: 30,
+              lineHeight: 1.1,
+              textAlign: "center",
+              color: BRAND.captionColor,
+              background: "rgba(14,13,12,0.72)",
+              border: `1px solid rgba(201,162,76,0.55)`,
+              borderRadius: 12,
+              padding: "8px 14px",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {label}
+          </div>
+        ) : null}
+      </div>
     </AbsoluteFill>
   );
 };

@@ -23,6 +23,7 @@ import SubtitlePage from "./SubtitlePage";
 
 const overlaySchema = z.object({
   img: z.string(), // filename in public/
+  label: z.string().optional(), // name shown under the image
   fromSec: z.number(),
   toSec: z.number(),
   xPct: z.number().optional(), // center x, 0-100 (default 64)
@@ -133,6 +134,7 @@ export const CaptionedVideo: React.FC<Props> = ({
           <Sequence key={`ov-${i}`} from={from} durationInFrames={dur}>
             <Overlay
               img={o.img}
+              label={o.label}
               durationInFrames={dur}
               fromSec={o.fromSec}
               track={o.track}
