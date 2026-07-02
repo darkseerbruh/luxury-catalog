@@ -5,6 +5,26 @@
 list before it reaches a kit's TELEPROMPTER section. Supersedes the scattered notes in
 content-kit-buildout.md (which now point here).*
 
+## 0. The worth-it bar — a take must earn its script (owner rule, 2026-07-02)
+
+Before ANY take is drafted, name its payload in one sentence: the thing the viewer can
+DO, decide, or stop believing after watching. No passing sentence, no script option.
+The sentence passes only if all three hold:
+
+1. **It's news to the target viewer.** Not a restatement of the hook, not what the
+   comments we've read already say to each other.
+2. **It's usable without leaving the couch.** A move ("offer near the sold number, walk
+   if they won't come close"), a decision question ("does the bag have to stay your bag
+   after diapers?"), or a corrected assumption ("the gucci baby bag was never made for
+   babies"). "Go look it up" / "check my site" is a CTA, never a payload.
+3. **She'd send it to a friend who asked.** If the honest reaction to the payload
+   sentence is "obviously" or "so what," the idea goes back to the pipeline (📊
+   Data-tied), not to the teleprompter.
+
+Origin: the Take-3 lesson. The numbers were real and verified, but "don't pay the
+sticker, look up the sold price" wasn't worth a video until it became a negotiation
+play. Data earns the video only when it's attached to a move.
+
 ## Voice and stance
 1. **I, never we.** She is one person, not an org. "I track more than twenty thousand real
    prices." Written on-site copy may use brand voice; scripts are I/my.
@@ -117,6 +137,7 @@ content-kit-buildout.md (which now point here).*
     there.
 
 ## The pre-record checklist (run on every script)
+- [ ] Worth-it bar: payload named in one sentence, and it's a usable move / decision / correction, not homework or the hook restated
 - [ ] Intent named in sentence one
 - [ ] I-voice throughout; zero we/our
 - [ ] No brand-brochure lines; claims attributed
