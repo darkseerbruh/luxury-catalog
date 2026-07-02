@@ -20,7 +20,7 @@ size buckets (2026-06-30 collision lesson).*
 
 Queue (priority order; tick with counts + date):
 - ✅ Louis Vuitton DONE 2026-07-02: 121 sweep targets / ~60 models (clusters >=10 listings), 134 styles+variants created, 3,800 FP rows loaded 0 unresolved. Speedy Soft + LV x TM excluded from classic Speedy buckets (hardcoded excludes updated). Flags: Neverfull GM skipped (hand-managed size labels, data lane to reconcile); tail clusters <10 listings not targeted.
-- ⬜ Chanel (chanel) · ⬜ Hermès (hermes) · ⬜ Goyard (goyard) · ⬜ The Row (the-row)
+- ✅ Chanel DONE 2026-07-02 (80 targets: flap-family sizes disambiguated w/ shared exclude set, Blazy lines Souplissimo/Kelly Shopper added, vanity+clutch families; 57 styles/variants created; cumulative 6,990 FP rows loaded 0 unresolved) · ⬜ Hermès (hermes) · ⬜ Goyard (goyard) · ⬜ The Row (the-row)
 - ⬜ Gucci (gucci) · ⬜ Prada (prada) · ⬜ Fendi (fendi) · ⬜ Balenciaga (balenciaga) · ⬜ Miu Miu (miu-miu) · ⬜ Valentino (valentino-garavani) · ⬜ Givenchy (givenchy)
 - ⬜ Coach (coach) — bumped: the viral thrift wedge
 - ⬜ Saint Laurent (saint-laurent) · ⬜ Celine (celine) · ⬜ Dior (christian-dior) · ⬜ Bottega Veneta (bottega-veneta) · ⬜ Loewe (loewe) · ⬜ Chloé (chloe) · ⬜ Alexander McQueen (alexander-mcqueen) · ⬜ Mulberry (mulberry) · ⬜ Jacquemus (jacquemus) · ⬜ Off-White (off-white)

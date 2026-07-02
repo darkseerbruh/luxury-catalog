@@ -1,0 +1,1377 @@
+[
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Mini (Rectangular)",
+    "requireTokens": [
+      "chanel",
+      "mini-rectangular-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Mini (Square)",
+    "requireTokens": [
+      "chanel",
+      "mini-square-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "small",
+      "double-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Jumbo",
+    "requireTokens": [
+      "chanel",
+      "jumbo",
+      "-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel",
+      "single"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Jumbo (Single)",
+    "requireTokens": [
+      "chanel",
+      "jumbo",
+      "single-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "Maxi",
+    "requireTokens": [
+      "chanel",
+      "maxi",
+      "-flap"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 25000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Classic Flap",
+    "size_label": "East-West",
+    "requireTokens": [
+      "chanel",
+      "east-west-flap"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "boy",
+      "reissue",
+      "chanel-19",
+      "chanel-22",
+      "chanel-25",
+      "souplissimo",
+      "kelly",
+      "coco-handle",
+      "trendy",
+      "business-affinity",
+      "xxl",
+      "funky",
+      "top-handle",
+      "pearl-crush",
+      "shoulder-flap",
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "travel"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Boy",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "mini-boy-flap"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "cosmetic"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Boy",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "small-boy-flap"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "cosmetic"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Boy",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "medium-boy-flap"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "cosmetic"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Boy",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "large-boy-flap"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "clutch",
+      "cosmetic"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "2.55 Reissue",
+    "size_label": "224",
+    "requireTokens": [
+      "chanel",
+      "reissue-224"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "accordion",
+      "camera",
+      "wallet",
+      "woc"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "2.55 Reissue",
+    "size_label": "225",
+    "requireTokens": [
+      "chanel",
+      "reissue-225"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "accordion",
+      "camera",
+      "wallet",
+      "woc"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "2.55 Reissue",
+    "size_label": "226",
+    "requireTokens": [
+      "chanel",
+      "reissue-226"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "accordion",
+      "camera",
+      "wallet",
+      "woc"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "2.55 Reissue",
+    "size_label": "227",
+    "requireTokens": [
+      "chanel",
+      "reissue-227"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "accordion",
+      "camera",
+      "wallet",
+      "woc"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "2.55 Reissue",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "255-reissue",
+      "mini"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "accordion",
+      "camera",
+      "wallet",
+      "woc",
+      "224",
+      "225",
+      "226",
+      "227"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 19",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "chanel-19",
+      "small"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 19",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "chanel-19",
+      "medium"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 19",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "chanel-19",
+      "large"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 19",
+    "size_label": "Maxi",
+    "requireTokens": [
+      "chanel",
+      "chanel-19",
+      "maxi"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 22",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "chanel-22",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 22",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "chanel-22",
+      "small"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 22",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "chanel-22",
+      "medium"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 22",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "chanel-22",
+      "large"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 22",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "chanel-22"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "mini",
+      "small",
+      "medium",
+      "large",
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 25",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "chanel-25",
+      "mini"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "backpack",
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 25",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "chanel-25",
+      "small"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "backpack",
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 25",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "chanel-25",
+      "medium"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "backpack",
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 25",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "chanel-25",
+      "large"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "backpack",
+      "wallet",
+      "card",
+      "pouch"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 25",
+    "size_label": "Backpack",
+    "requireTokens": [
+      "chanel",
+      "chanel-25-backpack"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 15000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Coco Handle",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "coco-handle-flap",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "extra-mini"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Coco Handle",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "coco-handle-flap",
+      "small"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "extra-mini"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Coco Handle",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "coco-handle-flap",
+      "medium"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "extra-mini"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Coco Handle",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "coco-handle-flap",
+      "large"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "extra-mini"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Gabrielle",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "gabrielle-hobo",
+      "small"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Gabrielle",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "gabrielle-hobo",
+      "medium"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Gabrielle",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "gabrielle-hobo",
+      "large"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Gabrielle Backpack",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "gabrielle-backpack",
+      "small"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Gabrielle Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "gabrielle-backpack"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "small"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Grand Shopping Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "grand-shopping-tote"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Medallion Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "medallion-tote"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Deauville",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "deauville-tote",
+      "mini"
+    ],
+    "minPrice": 500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Deauville",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "deauville-tote",
+      "small"
+    ],
+    "minPrice": 500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Deauville",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "deauville-tote",
+      "medium"
+    ],
+    "minPrice": 500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Deauville",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "deauville-tote",
+      "large"
+    ],
+    "minPrice": 500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Cerf Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "cerf"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 31 Shopping Bag",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "large-31-shopping-bag"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Chanel 31 Shopping Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "31-shopping-bag"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "large"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Urban Essentials Shopping Bag",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "urban-essentials",
+      "small"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 16000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Urban Essentials Shopping Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "urban-essentials"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 16000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "small"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Coco Base Shopping Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "coco-base"
+    ],
+    "minPrice": 3000,
+    "maxPrice": 14000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Kelly Shopper",
+    "size_label": "Nano",
+    "requireTokens": [
+      "chanel",
+      "nano-kelly-shopper"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Kelly Shopper",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "kelly-shopper"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 10000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "nano"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Souplissimo Maxi Flap",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "small-souplissimo"
+    ],
+    "minPrice": 5000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Souplissimo Maxi Flap",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "souplissimo"
+    ],
+    "minPrice": 5000,
+    "maxPrice": 20000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "small"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC Filigree Vanity Case",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "cc-filigree-vanity-case",
+      "mini"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC Filigree Vanity Case",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "cc-filigree-vanity-case",
+      "small"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC Filigree Vanity Case",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "cc-filigree-vanity-case",
+      "medium"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC Filigree Vanity Case",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "cc-filigree-vanity-case",
+      "large"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Top Handle Vanity Case",
+    "size_label": "Slim",
+    "requireTokens": [
+      "chanel",
+      "top-handle-slim-vanity"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Top Handle Vanity Case",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "top-handle-vanity-case"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "slim"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Pearl Crush Vanity Case",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "pearl-crush-vanity-case"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Vanity Case",
+    "size_label": "With Chain",
+    "requireTokens": [
+      "chanel",
+      "vanity-case-with-chain"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "top-handle",
+      "pearl-crush",
+      "filigree"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Cosmetic Case",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "cosmetic-case"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC In Love Heart Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "cc-in-love-heart-bag"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "CC In Love Heart Clutch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "cc-in-love-heart-clutch"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Round Clutch with Chain",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "round-clutch-with-chain"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Barrel Clutch with Chain",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "barrel-clutch-with-chain"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Clutch with Chain",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "clutch-with-chain"
+    ],
+    "minPrice": 800,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "heart",
+      "round",
+      "barrel",
+      "pearl"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Trendy CC",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "trendy-cc",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 9000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Trendy CC",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "trendy-cc",
+      "small"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 9000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Trendy CC",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "trendy-cc",
+      "medium"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 9000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "woc",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Business Affinity",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chanel",
+      "business-affinity",
+      "mini"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Business Affinity",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "business-affinity",
+      "small"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Business Affinity",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chanel",
+      "business-affinity",
+      "medium"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Business Affinity",
+    "size_label": "Large",
+    "requireTokens": [
+      "chanel",
+      "business-affinity",
+      "large"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 7000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Urban Spirit",
+    "size_label": "Small",
+    "requireTokens": [
+      "chanel",
+      "urban-spirit-backpack",
+      "small"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "Urban Spirit",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "urban-spirit-backpack"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json",
+    "excludeTokens": [
+      "small"
+    ]
+  },
+  {
+    "brand": "Chanel",
+    "style": "Camera Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "camera-case"
+    ],
+    "minPrice": 800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  },
+  {
+    "brand": "Chanel",
+    "style": "XXL Travel Flap",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chanel",
+      "xxl-travel-flap"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 14000,
+    "searchUrl": "https://www.fashionphile.com/collections/chanel/products.json"
+  }
+]
