@@ -60,8 +60,10 @@ Polene                S[OBS]           S[OBS]            mid[OBS]            [VE
 DeMellier             S[OBS]           S[OBS]            mid[OBS]            [VERIFY]          S[OBS]
 Saint Laurent tote    S[OBS]           M logo-light      designer[DATA gap]  [VERIFY]          M
 Dior Book Tote        S[OBS]           W loud print[OBS] designer[DATA gap]  M[OBS]            W no zip, no org [OBS]
-Goyard Artois PM      S[OBS verbatim]  S[OBS]            grail[DATA: pull    M canvas S[SRC],  S ZIP, the stated
-                                                          Artois comps]       trim W[SRC]       reason [OBS]
+Goyard Artois PM      S[OBS verbatim]  S[OBS]            grail: asks ~$2,945 M canvas S[SRC],  S ZIP, the stated
+                                                          (n=18, thin; MM     trim W[SRC]       reason [OBS]
+                                                          ~$3,048 n=12,
+                                                          2026-07-02)[DATA]
 
 INCLUSION CRITERIA:
 1. Every included bag was OBSERVED in the work-bag tags (browser-checked 07-02), never assumed.

@@ -138,8 +138,8 @@ EXCLUDED (and why, honestly):
 - Seen in the parent tag but no dedicated search phrase in our 419-term list AND thin/no
   comps: YSL Niki (converts crossbody, strong candidate), The Row, Prada, Jacquemus Grand
   Turismo, LV Speedy Soft 30. These are FOLLOW-UP candidates, not rejections on merit.
-- LV CarryAll: verified 'mama bag' content 07-02; qualifies on intent, needs a comps pull
-  before adding. ADD-CANDIDATE for v2.
+- LV CarryAll: verified 'mama bag' content 07-02; comps pulled 07-02: PM asks ~$3,065
+  (n=20, thin). Qualifies on intent + has a first number. ADD-CANDIDATE for v2.
 - Dagne Dover / lululemon / MK (related searches): out of scope, not luxury-resale bags.
 - 'Dior diaper bag' related search observed; no Dior bag included because no comps depth
   on a diaper-suited Dior tote yet. Revisit after the attribute-capture pass.
