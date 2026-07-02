@@ -64,3 +64,12 @@ scripts-day-one.md header.
   why that makes the numbers trustworthy), phrased to fit that script, not stamped on.
 - Every script ENDS one of two ways: a specific question for the comments, OR a site call
   with the search term ("at Luxury Catalog dot com. Search Neverfull.").
+
+## HOOK + NAMING RULES (owner edit pass 2, 2026-07-02)
+- The hook names the SEARCH INTENT / target viewer in the FIRST sentence, especially when
+  it differs from the bag ("Moms, if you're eyeing a Neverfull as your diaper bag...").
+  A take targeting "louis vuitton diaper bag" leads with moms + diaper, not with the bag.
+- Spell the bag out plainly for non-experts on first mention: full brand + "the bag called
+  X, in the size Y" where the name is jargon.
+- "By the way, I'm Arielle" is the approved casual bridge into the credibility beat.
+- Less drama in data reveals: "That's a significant gap" over "That's not a typo."
