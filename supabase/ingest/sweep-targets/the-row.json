@@ -209,5 +209,16 @@
     "excludeTokens": [
       "medium"
     ]
+  },
+  {
+    "brand": "The Row",
+    "style": "90s Bag",
+    "size_label": "Mini",
+    "requireTokens": [
+      "zz-never-fp"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://x"
   }
 ]

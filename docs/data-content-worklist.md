@@ -30,7 +30,7 @@ Queue (priority order; tick with counts + date):
 *Finish line A (resale-complete) then a B (current-line) prototype. Units, tick as done:*
 - ✅ U1 DONE 2026-07-02: +69 tail targets across 9 brands (+947 rows, cumulative 15,158 mapped, 0 unresolved). Catches: LV CarryAll was never targeted (44 live listings), Neverfull GM label workaround, SL Jamie, Gucci Sylvie, Balenciaga First.
 - ✅ U2 DONE 2026-07-02: 502 eBay live-listing rows (Coach 311 across Tabby/Pillow/Willow/Brooklyn/Rogue/Swinger + Knott 59 + Le Pliage 67 + Hamilton 65), 0 unresolved. Method: Firecrawl MCP search-page scrapes (9 credits total, no per-item pass; local FIRECRAWL_API_KEY absent, CLI path needs it, MCP does not). eBay targets added to firecrawl-ebay.ts for future keyed runs. Search-level = title/price/url only; item-specifics enrichment = the metered follow-up.
-- ⬜ U3 Vestiaire second source for thin brands, single-variant styles only (2026-06-30 verdict)
+- ✅ U3 DONE 2026-07-02: 99 Vestiaire rows via Firecrawl MCP search pages (7 credits): Miu Miu Ivy 15 + Arcadie 15, Prada Arqué 15 + Aimée 15, Fendi Spy 15, The Row 90s 15 (Mini split!) + Peggy 9 incl 8 SOLD rows (Vestiaire shows sold listings = first realized The Row data). Colorway/material/region parsed from slugs onto every row. Remainder for a later 1-credit-each pass: Darling, Fendigraphy, First, Loco, Bow.
 - ⬜ U4 Coverage re-measure all swept brands; declare A status
 - ⬜ U5 B prototype: one official brand-site crawl, diff vs catalog, record runbook
 - ⬜ U6 Wrap: docs + green gate + merge main
