@@ -5,6 +5,7 @@
   "description": "Claude-run video pipeline: raw phone clips in, captioned + zoomed vertical videos out. Local, free, on-brand.",
   "scripts": {
     "studio": "remotion studio",
+    "split": "node scripts/split.mjs",
     "make": "node scripts/make.mjs",
     "transcribe": "node scripts/transcribe.mjs",
     "lint": "tsc"
