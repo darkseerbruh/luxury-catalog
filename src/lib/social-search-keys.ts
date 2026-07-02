@@ -28,6 +28,16 @@ export interface SocialKeyEntry {
 
 export const SOCIAL_KEYS: SocialKeyEntry[] = [
   {
+    key: "coach bags",
+    slug: "coach-honest-wedge",
+    series: "The Coach wedge kit",
+  },
+  {
+    key: "goyard bags",
+    slug: "goyard-whole-house-guide",
+    series: "The Goyard house kit",
+  },
+  {
     key: "luxury diaper bags",
     slug: "luxury-diaper-bags-honestly-ranked",
     series: "The diaper-bag kit",
