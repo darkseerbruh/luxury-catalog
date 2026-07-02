@@ -8,6 +8,36 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
+*Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
+asking rows, closing the icon-scope gap (measured 2026-07-02: only 60.0% of FP's 6,250+ live
+LV listings matched a catalog style). Bags + carried pouches in scope; SLGs (wallets/key/card)
+deferred. Method per brand (all free, products.json): `sweep-mine.ts <slug> "<Brand>"` (mines
+model clusters + merges full dump) → curate `supabase/ingest/sweep-targets/<slug>.json` →
+`scaffold-from-spec.ts <slug> --write` → `fashionphile.ts --raw` → `load:prices fashionphile
+--write` → `summary:refresh` → commit. Net-new styles ONLY — never reshape hand-managed icon
+size buckets (2026-06-30 collision lesson).*
+
+Queue (priority order; tick with counts + date):
+- ✅ Louis Vuitton DONE 2026-07-02: 121 sweep targets / ~60 models (clusters >=10 listings), 134 styles+variants created, 3,800 FP rows loaded 0 unresolved. Speedy Soft + LV x TM excluded from classic Speedy buckets (hardcoded excludes updated). Flags: Neverfull GM skipped (hand-managed size labels, data lane to reconcile); tail clusters <10 listings not targeted.
+- ✅ Chanel DONE 2026-07-02 (80 targets: flap-family sizes disambiguated w/ shared exclude set, Blazy lines Souplissimo/Kelly Shopper added, vanity+clutch families; 57 styles/variants created; cumulative 6,990 FP rows loaded 0 unresolved) · ✅ Hermès (35 targets: Birkin 40 + Mini Kelly 20 gaps closed, Evelyne/Picotin/Constance/Lindy/Herbag/Jypsiere/Bolide/24-24 + pouches) · ✅ Goyard (25 targets: Artois/Anjou/Boheme/Belvedere/Saigon sized + Senat/Alpin/Vendome/новые) · ✅ The Row (16 targets: Park/90s/Banana/Peggy/Marlo/Half Moon) — ultra-luxury DONE 2026-07-02, cumulative 8,712 FP rows 0 unresolved
+- ✅ Premium tier DONE 2026-07-02: Gucci 40 targets (Marmont/Dionysus/Soho/Jackie/Ophidia/Horsebit/Blondie + Neo Vintage/Milano/Softbit) · Prada 19 (Re-Editions/Galleria/Cleo + Arqué/Aimée/Darling) · Fendi 17 (Baguette family/Peekaboo/Spy/Mon Trésor/First/Fendigraphy) · Balenciaga 16 (City+Le City/Hourglass/Rodeo/Bel Air) · Miu Miu 8 (Wander/Ivy/Aventure/Arcadie; FP thin at 212 products) · Valentino 10 · Givenchy 15 (Antigona sized/Pandora/Voyou). Cumulative 11,305 FP rows, 0 unresolved.
+- ❌ Coach: ZERO Fashionphile inventory (premium-only consignor). Coach + Kate Spade + Longchamp + Michael Kors stay on the eBay/Poshmark browser-gated path (monthly re-capture task).
+- ✅ Mid tier DONE 2026-07-02: SL 23 targets (Loulou/Niki/Kate/Le 5 à 7/Triquilt) · Celine 21 (Luggage/Triomphe/Box/Ava/16/Camille) · Dior 24 (Lady Dior sized/Saddle/Book Tote/Bobby/Caro) · Bottega 15 (Jodie/Andiamo/Hop/Pouch) · Loewe 17 (Puzzle family/Basket/Flamenco/Squeeze) · Chloé 14 (Paddington!/Marcie/Faye/Woody) · McQueen 3 · Mulberry 4 · Jacquemus 8 · Off-White 2
+- ✅ Burberry 10 targets · ✅ Telfar 3 (Shopping Bag S/M/L) · ❌ Kate Spade/Longchamp/Michael Kors: zero FP inventory (browser-gated path)
+- ✅ RESULT (2026-07-02): 14,093 price rows added today (price_history now 56,440; styles 697). Final load 14,087 mapped / 0 unresolved. Coverage of live FP listings vs catalog styles: LV 60.0% → 80.5% (rest = out-of-scope SLGs/silk), Chanel 96.3%. Speedy Soft contamination cleaned (93 pre-sweep rows deleted from classic Speedy buckets; excludes added to hardcoded targets).
+## CATALOGUE COMPLETION RUN (owner: "do them all, on a loop, until done" 2026-07-02) — 🔄 IN PROGRESS
+*Finish line A (resale-complete) then a B (current-line) prototype. Units, tick as done:*
+- ✅ U1 DONE 2026-07-02: +69 tail targets across 9 brands (+947 rows, cumulative 15,158 mapped, 0 unresolved). Catches: LV CarryAll was never targeted (44 live listings), Neverfull GM label workaround, SL Jamie, Gucci Sylvie, Balenciaga First.
+- ✅ U2 DONE 2026-07-02: 502 eBay live-listing rows (Coach 311 across Tabby/Pillow/Willow/Brooklyn/Rogue/Swinger + Knott 59 + Le Pliage 67 + Hamilton 65), 0 unresolved. Method: Firecrawl MCP search-page scrapes (9 credits total, no per-item pass; local FIRECRAWL_API_KEY absent, CLI path needs it, MCP does not). eBay targets added to firecrawl-ebay.ts for future keyed runs. Search-level = title/price/url only; item-specifics enrichment = the metered follow-up.
+- ✅ U3 DONE 2026-07-02: 99 Vestiaire rows via Firecrawl MCP search pages (7 credits): Miu Miu Ivy 15 + Arcadie 15, Prada Arqué 15 + Aimée 15, Fendi Spy 15, The Row 90s 15 (Mini split!) + Peggy 9 incl 8 SOLD rows (Vestiaire shows sold listings = first realized The Row data). Colorway/material/region parsed from slugs onto every row. Remainder for a later 1-credit-each pass: Darling, Fendigraphy, First, Loco, Bow.
+- ✅ U4 DONE 2026-07-02: price_history 57,165 (+14,818 today), styles 761, variants 1,388. FINISH LINE A: ~substantially closed for the 24 FP-carried brands (LV 80.5% / Chanel 96.3% of live listings, bags-only scope); Coach + 3 thrift brands now have eBay live-ask coverage; thin premium brands have a Vestiaire second source. Remaining A items: SLG expansion (decided: later, owner-gated), Vestiaire remainder (Darling/Fendigraphy/First/Loco/Bow), eBay item-specifics enrichment (metered).
+- ✅ U5 DONE 2026-07-02: Loewe brand-site prototype PROVEN (Firecrawl, 1 credit, no bot-block on loewe.com). Runbook: scrape /women/bags with links format; line names = URL path segment (/bags/puzzle/), model+size+material in product slug; diff path segments vs catalog style names; ~34 pages for full Loewe (~34 credits). FOUND + created 8 current-line styles resale doesn't surface yet: Scarf Bag/Backpack, Amazona 180, Cala, Bilbao Bucket, Braid Basket, Punch Hole Hobo, Hammock Flip (16 variants, zz-loewe-current-line.json). B rollout per big house = a later session; big-house sites (LV/Chanel/Gucci) likely harder than Loewe, test before assuming.
+- ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
+
+
+- ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope DECIDED 2026-07-02: yes eventually, NOT now (owner). Revisit on her green light; tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
+
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
 - ✅ 5 new LV styles created + scaffolded (Liv Pochette #685, Montsouris #686, Slouchy #687, Cosmetic Pouch #688, Lineup #689; Boulogne #550 got NM/GM/30/35 variants). TARGETS added to sources/fashionphile.ts (tokens anchored; collabs/straps/vibe excluded).
 - ✅ Fashionphile collection pass: 117 rows loaded (products.json path, free), summary refreshed. Notable reads: Montsouris PM $1,995 (n=11) vs vintage MM $995 (n=12); Slouchy is MM-led (n=10, $2,410); Neverfull PM = MM at $1,450 in monogram (n=153/491); Lineup too thin (n=2).

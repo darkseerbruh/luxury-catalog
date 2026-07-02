@@ -1,0 +1,197 @@
+[
+  {
+    "brand": "Givenchy",
+    "style": "Antigona",
+    "size_label": "Mini",
+    "requireTokens": [
+      "givenchy",
+      "mini-antigona"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json",
+    "excludeTokens": [
+      "lock"
+    ]
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Antigona",
+    "size_label": "Small",
+    "requireTokens": [
+      "givenchy",
+      "small-antigona"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json",
+    "excludeTokens": [
+      "soft",
+      "lock"
+    ]
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Antigona",
+    "size_label": "Medium",
+    "requireTokens": [
+      "givenchy",
+      "medium-antigona"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json",
+    "excludeTokens": [
+      "soft",
+      "lock"
+    ]
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Soft Antigona",
+    "size_label": "Small",
+    "requireTokens": [
+      "givenchy",
+      "soft-antigona"
+    ],
+    "minPrice": 600,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Antigona Lock",
+    "size_label": "Mini",
+    "requireTokens": [
+      "givenchy",
+      "lock-antigona"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Pandora",
+    "size_label": "Mini",
+    "requireTokens": [
+      "givenchy",
+      "mini-pandora"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Pandora",
+    "size_label": "Medium",
+    "requireTokens": [
+      "givenchy",
+      "medium-pandora"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Pandora",
+    "size_label": "Large",
+    "requireTokens": [
+      "givenchy",
+      "large-pandora"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Voyou",
+    "size_label": "Nano",
+    "requireTokens": [
+      "givenchy",
+      "nano-voyou"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Voyou",
+    "size_label": "Medium",
+    "requireTokens": [
+      "givenchy",
+      "medium-voyou"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Voyou Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "givenchy",
+      "voyou",
+      "tote"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "G Tote",
+    "size_label": "Mini",
+    "requireTokens": [
+      "givenchy",
+      "mini-g-tote"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "G Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "givenchy",
+      "g-tote"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json",
+    "excludeTokens": [
+      "mini"
+    ]
+  },
+  {
+    "brand": "Givenchy",
+    "style": "4G Chain Shoulder",
+    "size_label": "Small",
+    "requireTokens": [
+      "givenchy",
+      "4g-chain-shoulder"
+    ],
+    "minPrice": 350,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  },
+  {
+    "brand": "Givenchy",
+    "style": "Horizon Satchel",
+    "size_label": "Mini",
+    "requireTokens": [
+      "givenchy",
+      "horizon"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/givenchy/products.json"
+  }
+]

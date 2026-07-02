@@ -1,0 +1,122 @@
+[
+  {
+    "brand": "Burberry",
+    "style": "Sonny Bum Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "burberry",
+      "sonny"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Lola Camera Bag",
+    "size_label": "Mini",
+    "requireTokens": [
+      "burberry",
+      "mini-lola"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Lola Camera Bag",
+    "size_label": "Small",
+    "requireTokens": [
+      "burberry",
+      "small-lola"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Title Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "burberry",
+      "title-bag"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Banner Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "burberry",
+      "banner-tote"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Note Crossbody",
+    "size_label": "Medium",
+    "requireTokens": [
+      "burberry",
+      "note-crossbody"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Nickie Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "burberry",
+      "nickie-tote"
+    ],
+    "minPrice": 150,
+    "maxPrice": 800,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Freya Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "burberry",
+      "freya-tote"
+    ],
+    "minPrice": 400,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Knight Bag",
+    "size_label": "Standard",
+    "requireTokens": [
+      "burberry",
+      "knight"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  },
+  {
+    "brand": "Burberry",
+    "style": "Vintage Check Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "burberry",
+      "check-shoulder-bag"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/burberry/products.json"
+  }
+]

@@ -3,16 +3,39 @@
 
 ---
 
+## TL;DR — CATALOGUE: full sweep + completion run (2026-07-02, all on `main`)
+
+**Owner greenlit "do them all"; finish line A (resale-complete) substantially closed in one day.** End state: **price_history 57,165 (+14,818 today) · 761 styles · 1,388 variants · 28 brands.**
+- **Method (repeatable):** per-brand `sweep-mine.ts` → curate `supabase/ingest/sweep-targets/<slug>.json` → `scaffold-from-spec.ts --write` → `fashionphile.ts --raw` → `load:prices --write` → `summary:refresh`. ~470 curated targets committed; monthly re-capture refreshes them all automatically.
+- **Coverage (measured 2026-07-02, live FP listings vs catalog):** LV 60.0% → **80.5%**, Chanel **96.3%** (gap = out-of-scope SLGs). Gaps closed along the way: LV CarryAll (never targeted, 44 live listings), Birkin 40 + Mini Kelly 20, SL Jamie, Gucci Sylvie, Balenciaga First; Speedy Soft/Murakami contamination cleaned (93 rows) + excluded.
+- **FP-zero brands:** Coach 311 eBay live-ask rows (Tabby/Pillow/Willow/Brooklyn/Rogue/Swinger) + Kate Spade/Longchamp/Michael Kors first-ever data, via Firecrawl-MCP search pages (9 credits; local FIRECRAWL_API_KEY doesn't exist, MCP route needs none). eBay targets committed in firecrawl-ebay.ts.
+- **Vestiaire second source:** 99 rows on thin-brand single-variant styles (colour/material/region from slugs), incl. **8 SOLD Peggy rows = first realized The Row data**.
+- **Current-line (B) prototype PROVEN on loewe.com** (1 cr/page, line name in URL path): found + created 8 current lines resale doesn't carry (Scarf Bag, Amazona 180, Cala, Bilbao Bucket, Braid Basket, Punch Hole Hobo, Hammock Flip). Rollout runbook in the worklist.
+- **Open (worklist):** SLG expansion (owner: LATER, not now); Vestiaire remainder (Darling/Fendigraphy/First/Loco/Bow); eBay item-specifics enrichment (metered); B rollout per house; C (30-yr archive) = archivist standing pull.
+
+## YOUR TURN — the only human items (2026-07-02)
+
+1. **Record kit 1 + kit 2.** Articles live, search keys pin (`chanel 2026` / `lv nine`), scripts teleprompter-ready in Notion. Nothing on the data side blocks recording.
+2. **Diaper kit reconcile (flagged by the pipeline session):** your Take 1 still ends "Link in bio" (conflicts with your own routing lock), no Search Key assigned, article still draft.
+3. **Miu Miu City kit:** still ON HOLD pending your demand-number re-confirmation.
+
+## Open items carried from archived recaps (still live)
+
+- **"Someone followed you" notification type** does not exist yet (flagged 2026-06-30).
+- **/browse decision (owner):** it is a carry-type/fits taxonomy with real GEO sub-pages, NOT a dumb grid; do not blind-301. Keep-vs-retire still undecided.
+- **Spot the Fake pending:** logo-geometry/misspelling dealbreakers + silhouette-existence check (vision not reliable yet); clean `/spot-the-fake` URL (still `/identify`).
+
 ## TL;DR — Content Pipeline is live: one table, idea → stages, evidence linked (2026-07-02, Notion + `main`)
 
 **The Calendar/Kits/Terms confusion is collapsed (owner decision).** One Notion table, **Content Pipeline** (renamed from Content Kits, same DB), one row per IDEA moving 💡 Spark → 📊 Data-tied → 🎯 Scored → ✅ Greenlit → ✍️ Produced → 📅 Staged → 🔴 Live (+ ⛔ Hold). Views: 🚦 Pipeline board + 📅 Posting calendar; Trending Terms (append-only evidence, never pruned) links via the dual **Terms (evidence) ↔ Ideas** relation, with a **🧲 Unclaimed evidence** view = data-first backfill queue.
 - **40 rows live:** 15 kit ideas (3 ✍️ Produced with full post packages: Diaper 5 takes, Chanel 4+reply, LV pillar+8 episodes; 11 ✅ Greenlit; Miu Miu ⛔ Hold pending her number re-check) + **25 old Social Content Calendar rows migrated** (enumerated from the repo CSV `docs/social-calendar.csv`, dodging plan-gated Notion queries). Old Calendar DB left untouched — **owner walkthrough before archiving it**.
 - **Script canon:** `docs/script-requirements.md` (17 requirements + pre-record checklist; req 6 credibility-at-the-data-moment, req 16 lean kit pages, req 17 post packages = script+caption+tags). Day-one scripts reconciled with the routing lane: **20 recordable teleprompter scripts** now close on the registry keys (`chanel 2026` / `lv nine`), repo + Notion in sync.
-- **Site-search spot-check (2026-07-02):** Neverfull/Liv Pochette/Montsouris/CarryAll/Cosmetic Pouch/Slouchy/Saint Louis/Louis Vuitton all return the right pages; "Chanel 25" misreads as Classic Flap 25 and "Alma" returns only the Mini — both moot for CTAs now that keys route, but worth a search-synonym fix later.
+- **Site-search spot-check (2026-07-02):** Neverfull/Liv Pochette/Montsouris/CarryAll/Cosmetic Pouch/Slouchy/Saint Louis/Louis Vuitton all return the right pages. The two misreads it found are **FIXED (2026-07-02, on `main`)**: `src/lib/search-priority.ts` pins a style whose name the query exactly matches (case/punctuation/diacritic-insensitive) to the top of `/search`, and a brand+number query prefers that brand's LINE over a size read (brand-gated, so "chanel 25" never pins Birkin/Speedy 25). Resolves from the style table itself — no synonym list to maintain; new numeric lines work the day they're seeded. Verified in preview: "chanel 25" → Chanel 25 line first; "alma" → Alma family card (Nano→GM sweep) above the variant styles. Unit-tested (`search-priority.test.ts`); video-CTA key routing untouched.
 - **Diaper kit gaps (owner):** no Search Key assigned + article still DRAFT (`/posts/luxury-diaper-bags-honestly-ranked`), and her own Take 1 still ends "Link in bio" — conflicts with her routing decision; hers to reconcile before recording. Also open: Alma PM comps (Ep 7 repo-only), day-zero recording date (then stage the diaper cadence in Metricool, rolling 1-2 posts ahead), Miu Miu re-confirmation.
 - **Metricool best-times (TikTok, pulled 07-02):** Wed/Thu are strongest; peak windows 10am, 12pm, and 6pm (audience-activity values ~1.4k vs ~500 baseline). Mon/Tue same shape, slightly lower; weekends weakest.
 
 ---
+
 
 ## TL;DR — Social → site routing: search-key CTAs + /social bio hub (2026-07-02, on `main`)
 
@@ -26,34 +49,6 @@
 
 ---
 
-## TL;DR — Authentication section + nav IA rework (2026-06-30, all on `main`)
-
-**Authentication is now a primary nav section, and the whole primary nav was reshaped.** Shipped, gated green, merged:
-- **14 per-house auth guides LIVE** (`{House} authentication: The markers worth checking`): Coach/LV/Gucci (renamed) + Chanel/Hermès/Dior/Prada/Goyard/Saint Laurent/Bottega/Celine/Balenciaga/Fendi/Loewe. Each tagged to its most-faked style so the post→bag money-moment CTA fires; each carries an original `BrandAuthDiagram`; a "More authentication guides" cross-link rail at each foot. Sourced from `docs/research-drafts/authentication-markers-brief.md` (Entrupy 2026 + reseller-authenticators, 2026-06-30). `/articles` lead spread now uses a designed `CoverPlate` (no placeholder).
-- **New `/authentication` hub** (Learn/Check/Verify ladder + guides-by-house grid). Homepage "Is it real?" tile points there.
-- **Nav A (protected nav, owner-approved this session):** row = **Authentication ▾ · Style Read · Articles ▾ · Profile · Search (rightmost)**. Shop/Brands/Discover dissolved: Deals + brands (by tier, truncated 5 + All brands) live in the **Search hover dropdown**; Identify moved under Authentication; Style Read + Articles promoted. Articles nav label kept; on-page heading is "The Journal".
-- **Unified search:** `/search` returns bags + a "From Articles" section; nav search has **autocomplete** (`/api/search-suggest`, brands/bags/articles).
-- **Closet consolidation:** Have/Want/Had stay stacked sections; Want rows show a read-only **alert bell** (state from watchlist); Watchlist off-nav (alert editor is a Closet sub-surface); `photo_featured` is Notifications-only (feed = what others do, notifications = about you).
-
-**Thrift Find tool (the reframed photo `/identify`) — SPEC ONLY, not built:** `docs/ux/thrift-find-tool-spec.md`. Non-verdict: resemblance+confidence ID, resale estimate gated on "if genuine", silhouette-match red flag, three-tier authenticity voice (consistent / soft flag / hard house-confirmed dealbreaker). **Naming LOCKED (search-evidenced, `docs/research-drafts/tool-name-search-demand.md`):** tool = **"Spot the Fake"**, section = **Authentication**, H1 = "Spot the Fake: {Brand} authentication", GEO tagline = "Is it real? Let's check the markers." Placement: value/discovery funnel INTO Authentication, never a rung that authenticates.
-
-**Spot the Fake — BUILT (2026-06-30).** `/identify` reframed to "Spot the Fake" (tagline "Is it real? Let's check the markers"): resemblance+confidence ID, value-if-genuine (median/n/date via `getStyleShopData`, gated on match + not-low confidence + no hard flag), calibrated no-match copy, and the **hard country-of-origin dealbreaker** (`HOUSE_ORIGINS` in `src/app/api/identify/route.ts`; Coach/mass-market excluded; value suppressed on a hard flag). Naming/spec: `docs/ux/thrift-find-tool-spec.md`. **Pending on this tool:** logo-geometry/misspelling dealbreakers + a true silhouette-existence check (vision can't reliably read logo geometry yet, held rather than over-claim); a clean `/spot-the-fake` URL (currently still `/identify`).
-
-**Listing red-flag checker — BUILT (2026-06-30):** `/authentication/check` (server component, deterministic, no AI/scraping). Guided form (brand/style/price/platform + card/photos/pressure one-taps) → readout of the Red Flags signals, with a **price sanity check against our resale median** (style resolved by exact-or-shortest name match, `getStyleShopData`). Three tones (flag/note/ok), "N things to scrutinize" header, routes to guides + pro, "red flags to weigh, not a verdict." Wired into the Authentication hub ladder (now Learn / Spot the Fake / Check a listing / Verify) + nav.
-
-**Open follow-ups (net-new, flagged not built):** (1) **"someone followed you"** notification type (does not exist); (2) `/browse` decision — it is NOT a dumb grid, it is a carry-type/fits **taxonomy** (`/browse/carry/[type]`, `/browse/fits/[item]`, from `browse-taxonomy.ts`, still linked in footer + homepage + sitemap) and those sub-pages are real GEO surfaces. Do NOT blind-301 it. Owner to decide: keep the taxonomy (just off primary nav, already done) or retire the sub-pages too; (4) the Spot-the-Fake pending items above. Balenciaga + Celine auth guides carry lower-confidence hedges in-body.
-
----
-
-## TL;DR — /data page + homepage speed + handbag-breadth capture (2026-06-30, all on `main`)
-
-- **Homepage load speed fixed.** Cached the near-static homepage queries (`src/lib/cache.ts`; brands/hero/deals/leaderboards/gates) and made `fetchAllRows` page in PARALLEL (was sequential = ~9s on every uncached load). Warm loads ~9s → ~0.23s.
-- **New `/data` page = "the data behind every page"** (reached from a homepage PersonaRouter tile; the "What brings you in?" heading was removed). Mission copy up top ("The numbers they keep behind glass"), stat cards, a **Typical resale price by house** chart + a **Where our data runs deepest** depth chart (serious zone), then a warm-tinted **"Just for fun"** zone (Named after icons, Bag math, Gold or silver, Colors, Leathers). 2-col tile grid. Data via `getMarketPulse` / `getFunFacts` / `getAttributeStats` (all cached). Attribute data (colour/material/hardware) lives on `price_history`, NOT the sparse variant columns.
-- **Representative per-house pricing (handbag-breadth capture).** Captured every current Fashionphile handbag for the 8 thin houses via archivist-authoritative model clustering: The Row $1,895 (was $4,045), Goyard $2,785, Miu Miu $2,000, Valentino $1,075, McQueen $845, Jacquemus $650, Off-White $385, Telfar $120. Loader `supabase/ingest/load-handbag-breadth.ts` (guarded, idempotent). **Big houses (Hermès/Chanel/LV) left icon-scoped** (owner's call; chart honestly labeled "the bags we track, our read, not an appraisal").
-- **⚠️ Collision + reconciliation (lesson).** My capture ran in parallel with the active data-lane per-size pass and clobbered iconic size variants (dumped all sizes onto one). Reconciled: re-ran the per-size pipeline, deleted the mixed rows on managed size variants, reloaded clean, verified (Soft Margaux ascends 10<12<15<17). **`load-handbag-breadth.ts` now GUARDED to only ADD new styles.** Rule: before running any capture, check `docs/data-content-worklist.md` for an active parallel capture on the same brands.
-- **Value-retention board** fixed (RPC over ALL price data + n>=20 floor + dedupe-by-style); lives in the review-gated CommunityLeaderboards.
-
----
 
 ## 🧭 Active-lanes registry — the session router (READ FIRST)
 
@@ -95,30 +90,6 @@ populate it (canon: [analyst-standard.md](analyst-standard.md)).
 
 ---
 
-## TL;DR — social media agent + 9-post launch batch (2026-06-30)
-
-Built the `social` agent + connected Metricool (brand `luxurycatalog_`, blogId 6480195; IG+Pinterest+TikTok linked; plan Free→Starter). Reviewed and **approved 9 launch posts** in the owner's voice (each sourced, one idea, 2-3 rotating hooks, a jewel-style chart or type-card): small-bag / Birkin-vs-Kelly / Coach-Tabby / thrift-Coach / **Chanel-vs-Hermès** / rent-first / investment / where-to-shop / Flap-overrated. Wired the first-party still library (`scripts/handbag-stills`). **Hardened the social voice rules** (hook+POV+one-idea, model-name recognition, brand rename to "Luxury Catalog" **sitewide**, no naive "should", value-first, every-post-links-to-a-live-page, n out of prose) in `docs/voice-and-tone.md` §7b + preferences. Command Center = a Google Sheet + `docs/social-calendar.csv`. Also: **monetization docs updated** (high-payout TRR consignor lever confirmed dead 2026-06-30). All on `main` (`feat/social-agent` merged). Details + your-turn items: the **Social / content** lane row above. Spun-off tasks: dedicated Chanel-vs-Hermès article, CTA buy-first reorder, article naive-"should" audit.
-
-## TL;DR — homepage overhaul finished + brand 4-tier + auth-guide sprint (2026-06-29, later session)
-
-Large UX session, all on `main` (`5454b82..ee49337`), gates green throughout (tsc / eslint src / next build / 488 tests). Builds on the rail+canon TL;DR below.
-- **Homepage reordered + unstacked:** hero → what brings you in → quiz → it bags → from the Journal → priced well today → brands → your closet → sign up. The rail + It-bags ⅓-sidebar pairing was **cut**; every module is full-width, stacked. Section "see all / all brands / read the Journal" links → **full-width buttons at the bottom** of their module. It-bags grid = 2-col mobile / 3-col desktop.
-- **PersonaRouter tiles reworked** (grounded in `docs/personas.md` — lead with the largest/aspirer base's value): Collect & invest is **want-led** ("Save the bags you love", contained heart+bags visual, overflow fixed); What's it worth = the **price-story demo**; "Is it real?" → magnifier icon + single "Read the authentication guides" link (scan-a-bag cut → backlog; "point you to a human" line cut until a human-auth partner exists); the "find the bag" tile was removed (it duplicated the style-read quiz).
-- **Style-read quiz:** the "your bags" headline (assumes ownership) was cut; now a live **V1/V2 headline A/B** (`src/lib/experiments/quiz-headline.ts` + `StyleReadCallout.tsx`, metric `quiz_started`).
-- **Brand tiers → four: Ultra-luxury / Luxury / Premium / Contemporary** (sourced: LePrix hierarchy + Rebag 2025 Clair Report). Gucci mistag thrift→Premium corrected (live DB + seed). **Premium needs migrations `0039` (add enum value) + `0040` (re-tier 7 houses) — OWNER applies; code ships degrading gracefully (empty Premium group until applied).**
-- **Auth-guide sprint:** Chanel guide drafted + its schematic **diagram component built & registered** (`ChanelAuthDiagram`, `[diagram: chanel-authentication]`, trade-dress kept abstract); Gucci / Hermès / Dior guides drafted (Coach style, markers-not-verdicts, Hermès hedges hardest). Slate priority (sourced demand): Chanel → Gucci → Hermès → Dior → Goyard → Prada → YSL. Also drafted: the it-bags-canon article + "How we sort the houses" tiering article. **All 6 drafts in `docs/research-drafts/**` are PENDING OWNER REVIEW — source URLs must be confirmed before publish; publishing is owner-gated; per-article diagram components get built at wiring.**
-- **Data:** loaded **Balenciaga City / Mulberry Bayswater / Telfar Shopping Bag** (eBay sold + Fashionphile, multi-source) to close the canon's bag-page CTA gaps; created Telfar brand + 2 styles. Found + fixed the **PostgREST 1000-row cap** (every read silently truncated to 1000; `fetchAllRows` pager in `supabase.ts`). Migration **`0038` `variant_price_summary()`** + spec to retire the per-render full-table scan (OWNER applies, then rewire `getDeals`/`getHeroCarousel` to the RPC — note name clash with the 0021 matview).
-- **OWNER ACTION LIST:** apply migrations **`0038`, `0039`, `0040`**; **review + publish** the 6 article drafts (confirm sources first); after `0038` applies, rewire deals/hero to the RPC; provide a quiz *image*-test direction when one lands (image variants were parked, none clicked).
-
-## TL;DR — homepage redesign: "Priced well today" rail + "It bags of all time" canon (2026-06-29)
-
-UX-lane design session, all landed on `main` (`5454b82..5b48d05`, 8 commits, gates green: tsc/eslint src/next build/482 tests). Developed in worktree `…/luxury-catalog-priced-well` (branch `ux/priced-well-rail`), fast-forwarded to `main`.
-
-- **"Priced well today" rail** (replaces the old Best-deals image carousel): a ⅓-width sidebar beside It bags, image-free, glanceable. Each row = bag name → **big price + "great price"/"good price"** verdict (gated n≥5) → a labeled range bar (**"this listing"** dot vs **"median $X"** tick) → a **"View on <platform>"** outbound button firing `outbound_resale_clicked` (affiliate-attributed via `affiliateListingUrl`). Verdict is a read on **price, not condition** (condition recorded on ~0% of listings — subhead says so). `deals.ts` exposes low/median/high/sampleSize/verdict; **guard drops listings >70% under median** (accessory/mis-grouped noise, e.g. a "$370 Hermès Kelly"). Code: `BestDeals.tsx`, `DealBuyButton.tsx`, `deals.ts`.
-- **"It bags of all time"** rebuilt as a **ranked top-6, image-free, price-led canon** (archivist-validated, **blend lens** = heritage + recognition): Birkin · Kelly · Classic Flap · Speedy · Lady Dior · Neverfull (dropped Coach Tabby/Swagger). Each cell = big gold numeral + house + bag + **typical resale (median) big** + low/high text + sourced hook. `getHeroCarousel` now returns live resale stats per style. Paired with the rail in one two-column section (stacks on mobile).
-- **Bug found + fixed (affected both + any whole-table read): PostgREST caps every response at 1000 rows regardless of `.limit()`.** Both reads were silently computing on a 1000-row slice of ~33.5k. Added `fetchAllRows()` pager (`src/lib/supabase.ts`); true counts jumped (e.g. Birkin resale n 995→1404). **Follow-up spec to retire the per-render full-table scan: [docs/ux/deals-hero-aggregate-spec.md](ux/deals-hero-aggregate-spec.md)** (owner-gated migration: a `variant_price_summary()` SQL function).
-- **Queued (on the slate/worklist):** the **"Why are these the it bags of all time?"** article (archivist top-20 backbone, [content-ideas.md](research-drafts/seasonal-archive/content-ideas.md)) + **3 catalog data-pull gaps** (Balenciaga City, Mulberry Bayswater, Telfar Shopping Bag) in [data-content-worklist.md](data-content-worklist.md), plus a `condition` backfill (chip) so the verdict can become condition-aware.
-- **Your turn (owner-gated):** apply the `variant_price_summary()` migration when you want the perf fix; the article draft + the 3 data pulls are Content/Data-lane jobs.
 
 ## 📚 Archived session recaps → `docs/handoff-archive.md`
 
@@ -129,6 +100,7 @@ The consolidated checklist further below predates these. The archived recaps fla
 - **Migrations flagged pending in recaps:** `0007` (taste/social), `0017` (auth-requests), `0018` (personalization P1), `0019` (personalization P2, + PostHog `personalized_home` flag), `0022`+`0023` (item-spec columns), `0027` (clear variant 199 image), `0030` (`listing_status` live-vs-sold), **`0032` (`brand_follow` — activates brand Follow; UX lane, 2026-06-27, on the session branch, apply after merge)**. Also: repo secrets `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` for the GitHub Actions.
 - **Non-migration:** capture `condition_detail` (browser) + run the `enrich-specs --write` pass; the Phase-2 `promote-discovered` model-name normalizer; TRR/Vestiaire bulk-capture transport (see `docs/market-sweep-worklist.md`). *(Secret rotation DONE 2026-06-26 — see TL;DR.)*
 - **Launch-gated (also in `docs/desktop-todo.md`):** ~~key rotation (A6)~~ **DONE 2026-06-26**, `/identify` make-real-or-fake-door (H6), DMCA agent before promoting UGC (G2).
+
 
 ## ⚙️ Human-gated setup checklist (nothing DB-backed works until these are done)
 
@@ -168,6 +140,7 @@ The consolidated checklist further below predates these. The archived recaps fla
 
 ---
 
+
 ## What's built (this session)
 
 ### Auth & accounts (`@supabase/ssr`, Next 16 Proxy)
@@ -197,10 +170,12 @@ The consolidated checklist further below predates these. The archived recaps fla
 
 ---
 
+
 ## Lineage fork (resolved)
 Two parallel apps existed: **Lineage A** (this branch — full catalog app) and **Lineage B** (`luxury-catalog-analytics-plan-kiq8al` — a PostHog-instrumented prototype with a tier/silhouette filter home and Polène/Telfar/Longchamp seed). The user was running B locally and noticed "no search" — B never had it. **Decision: A is canonical; B's analytics were ported into A.** B can be archived; its alternate home/`/bags/[id]` pages were intentionally not brought over.
 
 ---
+
 
 ## Images — strategy decided
 Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
@@ -211,6 +186,7 @@ Full cited research in **`docs/image-strategy-research.md`**. Conclusions:
 - **Buying photos**: commission your own (you own them); stock (Getty/iStock/etc., mostly *editorial* license for branded bags); free CC/Unsplash/Wikimedia for hero items. **Trap:** buying scraped image datasets — the seller usually can't license rights it never held.
 
 ---
+
 
 ## ✅ BUILT: photo contributions + contributor tiers (2026-06-22)
 *Now implemented — see the photo-contributions TL;DR at the top. Migration `0016` + Storage bucket +
@@ -242,6 +218,7 @@ service-role key are human-gated (checklist item below). The original spec is ke
 
 ---
 
+
 ## Open backlog (after photo contributions)
 - **Category expansion beyond handbags — PARKED, post-launch (decided 2026-06-25).** Not before launch (would dilute the topical-authority signal the GEO/affiliate engine rides on; no rebrand needed since "Luxury Catalog" is already category-agnostic). When gated open (handbag depth proven), first expansion = **signed/branded jewelry**; watches are a year-2+ B2B-data play only; shoes skip. Only pre-launch action worth taking now: keep the core schema category-agnostic + launch copy as "focus, not fence." Full analysis + sources: `docs/category-expansion-research.md`; locked decision in `docs/preferences.md`.
 - **Verification evidence beyond photos — multi-source listing capture *(idea, 2026-06-22; NOT now)*.** Let users submit, alongside owned photos, **links/URLs to live listings** as verification evidence: The RealReal, Vestiaire, eBay, **Facebook Marketplace**, and **private FB groups**. Public marketplaces = paste a URL (auto-parse where possible); **private groups have no public URL → give clear screenshot instructions** (what to capture so it's usable). Plus a **guided "right photos" flow**: one photo is never enough — walk the user through the specific shots that actually enable authentication (date code/stamp, hardware engravings, zipper pulls, heat stamp, interior tag, glazing, etc.), **modeled on the evidence requirements professional authenticators / authentication companies use** (e.g. Entrupy, Real Authentication, brand-specific checklists). Ties into the **Authentication Marketplace** + the photo-contributions system (a richer "submission" object: photos + listing links + structured shot checklist). Owner flagged as a future build, not a right-now to-do.
@@ -261,12 +238,14 @@ service-role key are human-gated (checklist item below). The original spec is ke
 
 ---
 
+
 ## DNS go-live (outstanding)
 `luxurycatalog.com` registered at **Squarespace Domains**, points nowhere. Needs dashboard access (not doable from cloud).
 1. **Vercel** → project → Domains → add `luxurycatalog.com` + `www`; note the A IP + CNAME shown.
 2. **Squarespace** (domains.squarespace.com → DNS): delete existing `@` A + `www` CNAME; add A `@` → `76.76.21.21` *(verify vs Vercel)* and CNAME `www` → `cname.vercel-dns.com.`
 3. Wait 15–60 min for "Valid Configuration" in Vercel.
 4. Email forwarding: test `hello@luxurycatalog.com`; re-add MX `fwd1.squarespace.com.` (10) / `fwd2.squarespace.com.` (20) if wiped.
+
 
 ## Accounts & credentials
 | Service | For | Where |
@@ -284,12 +263,14 @@ service-role key are human-gated (checklist item below). The original spec is ke
 
 ---
 
+
 ## Non-negotiable constraints (product brief)
 - **Never invent** authentication markers, date codes, serial formats, hardware details — leave `null` + `confidence_level: low` if unverifiable.
 - **No invented imagery** — realistic photos must be *sourced* (licensed/UGC/first-party), never AI-generated for real bags. (Updates the old "no photos in v1" line: photos are now in scope via the sourced paths above.) *(PR #2: embedded YouTube reviews are the interim visual layer — embedding sidesteps the copyright issue entirely.)*
 - **Catalog is always free** — paywall only on search *capability*, never content.
 - **Coach must be in the catalog** — the viral thrift acquisition engine.
 - **Mobile-first** — every page works at 375px.
+
 
 ## Key files
 | Area | Files |

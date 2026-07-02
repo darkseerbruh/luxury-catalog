@@ -70,6 +70,46 @@ const TARGETS: Record<string, EbayTarget> = {
     sizes: ["25", "28", "32"], urlIncludes: [],
     urlExcludes: [...COMMON_EXCLUDES, "pochette", "depeche", "inspired", "dupe"], minPrice: 6000, maxPrice: 80000,
   },
+  // Thrift-tier brands (2026-07-02 completion run): Fashionphile carries ZERO
+  // inventory for these, so eBay live listings are the primary price surface.
+  // Counterfeit noise guarded by minPrice floors + exclude tokens; rows land as
+  // 'listed' asks with source_url, same as every other observation.
+  "coach-tabby": {
+    brand: "Coach", style: "Tabby Shoulder Bag", query: "coach tabby shoulder bag 26",
+    sizes: ["26", "20"], urlIncludes: [], urlExcludes: [...COMMON_EXCLUDES, "pillow"], minPrice: 100, maxPrice: 600,
+  },
+  "coach-pillow-tabby": {
+    brand: "Coach", style: "Pillow Tabby", query: "coach pillow tabby",
+    sizes: ["26", "18"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 100, maxPrice: 600,
+  },
+  "coach-willow": {
+    brand: "Coach", style: "Willow Tote", query: "coach willow tote",
+    sizes: ["Standard"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 80, maxPrice: 500,
+  },
+  "coach-brooklyn": {
+    brand: "Coach", style: "Brooklyn", query: "coach brooklyn shoulder bag",
+    sizes: ["28", "39"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 100, maxPrice: 600,
+  },
+  "coach-rogue": {
+    brand: "Coach", style: "Rogue", query: "coach rogue bag",
+    sizes: ["Standard"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 150, maxPrice: 900,
+  },
+  "coach-swinger": {
+    brand: "Coach", style: "Swinger", query: "coach swinger vintage",
+    sizes: ["Standard"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 50, maxPrice: 400,
+  },
+  "kate-spade-knott": {
+    brand: "Kate Spade", style: "Knott", query: "kate spade knott satchel",
+    sizes: ["Standard"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 60, maxPrice: 400,
+  },
+  "longchamp-le-pliage": {
+    brand: "Longchamp", style: "Le Pliage", query: "longchamp le pliage tote",
+    sizes: ["Small", "Medium", "Large"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 40, maxPrice: 300,
+  },
+  "michael-kors-hamilton": {
+    brand: "Michael Kors", style: "Hamilton", query: "michael kors hamilton satchel",
+    sizes: ["Standard"], urlIncludes: [], urlExcludes: COMMON_EXCLUDES, minPrice: 40, maxPrice: 300,
+  },
 };
 
 const ITEM_RE = /https:\/\/www\.ebay\.com\/itm\/(\d+)/;

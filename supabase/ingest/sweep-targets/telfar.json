@@ -1,0 +1,38 @@
+[
+  {
+    "brand": "Telfar",
+    "style": "Shopping Bag",
+    "size_label": "Small",
+    "requireTokens": [
+      "telfar",
+      "small-shopping-bag"
+    ],
+    "minPrice": 60,
+    "maxPrice": 500,
+    "searchUrl": "https://www.fashionphile.com/collections/telfar/products.json"
+  },
+  {
+    "brand": "Telfar",
+    "style": "Shopping Bag",
+    "size_label": "Medium",
+    "requireTokens": [
+      "telfar",
+      "medium-shopping-bag"
+    ],
+    "minPrice": 60,
+    "maxPrice": 500,
+    "searchUrl": "https://www.fashionphile.com/collections/telfar/products.json"
+  },
+  {
+    "brand": "Telfar",
+    "style": "Shopping Bag",
+    "size_label": "Large",
+    "requireTokens": [
+      "telfar",
+      "large-shopping-bag"
+    ],
+    "minPrice": 60,
+    "maxPrice": 500,
+    "searchUrl": "https://www.fashionphile.com/collections/telfar/products.json"
+  }
+]

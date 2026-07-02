@@ -1,0 +1,98 @@
+[
+  {
+    "brand": "Miu Miu",
+    "style": "Wander",
+    "size_label": "Mini",
+    "requireTokens": [
+      "miu-miu",
+      "mini-wander"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Wander",
+    "size_label": "Small",
+    "requireTokens": [
+      "miu-miu",
+      "small-wander"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Ivy",
+    "size_label": "Standard",
+    "requireTokens": [
+      "miu-miu",
+      "ivy"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Aventure",
+    "size_label": "Regular",
+    "requireTokens": [
+      "miu-miu",
+      "regular-aventure"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Aventure",
+    "size_label": "Medium",
+    "requireTokens": [
+      "miu-miu",
+      "medium-aventure"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Arcadie",
+    "size_label": "Large",
+    "requireTokens": [
+      "miu-miu",
+      "arcadie"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Bow Bag",
+    "size_label": "Medium",
+    "requireTokens": [
+      "miu-miu",
+      "bow-bag"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  },
+  {
+    "brand": "Miu Miu",
+    "style": "Beau",
+    "size_label": "Large",
+    "requireTokens": [
+      "miu-miu",
+      "beau-top-handle"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/miu-miu/products.json"
+  }
+]

@@ -1,0 +1,178 @@
+[
+  {
+    "brand": "Loewe",
+    "style": "Scarf Bag",
+    "size_label": "Mini",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Scarf Bag",
+    "size_label": "Medium",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Scarf Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Amazona",
+    "size_label": "Mini",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Amazona",
+    "size_label": "Small",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Amazona",
+    "size_label": "Medium",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Amazona",
+    "size_label": "Large",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Cala",
+    "size_label": "Mini",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Bilbao Bucket",
+    "size_label": "Medium",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Bilbao Bucket",
+    "size_label": "Large",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Braid Basket",
+    "size_label": "Small",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Braid Basket",
+    "size_label": "Medium",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Braid Basket",
+    "size_label": "Large",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Punch Hole Hobo",
+    "size_label": "Mini",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Punch Hole Hobo",
+    "size_label": "Small",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Hammock Flip",
+    "size_label": "Standard",
+    "requireTokens": [
+      "zz-current-line-scaffold-only"
+    ],
+    "minPrice": 1,
+    "maxPrice": 2,
+    "searchUrl": "https://www.loewe.com"
+  }
+]

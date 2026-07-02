@@ -462,8 +462,10 @@ const TARGETS: FashionphileTarget[] = [
     brand: "Louis Vuitton",
     style: "Speedy",
     size_label: size,
+    // "soft" keeps the Blazy-era Speedy Soft line (own sweep style) out of the
+    // classic buckets; "lv-x-tm" keeps the Murakami-reissue collab out.
     requireTokens: ["speedy", `-${size}-`],
-    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key", "soft", "lv-x-tm"],
     minPrice: 300,
     maxPrice: 16000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
@@ -471,7 +473,7 @@ const TARGETS: FashionphileTarget[] = [
   {
     brand: "Louis Vuitton", style: "Speedy", size_label: "Nano",
     requireTokens: ["speedy", "nano"],
-    excludeTokens: ["charm", "wallet", "card", "pouch", "key"],
+    excludeTokens: ["charm", "wallet", "card", "pouch", "key", "soft", "lv-x-tm"],
     minPrice: 300, maxPrice: 16000,
     searchUrl: "https://www.fashionphile.com/collections/louis-vuitton/products.json",
   },
@@ -2007,6 +2009,22 @@ const TARGETS: FashionphileTarget[] = [
     searchUrl: "https://www.fashionphile.com/collections/mulberry/products.json",
   })),
 ];
+
+// ---------------------------------------------------------------------------
+// SWEEP TARGETS (2026-07-02 full-catalog sweep, docs/data-collection-handoff.md §0):
+// per-brand curated model specs live in supabase/ingest/sweep-targets/*.json and
+// are appended to TARGETS at load time. Same shape as a hardcoded target; curated
+// per brand by mining the live collection (sweep-mine.ts), so tokens stay anchored
+// and net-new models never collide with the hand-managed icon targets above.
+// scaffold-from-spec.ts creates the matching styles/variants from the same files.
+// ---------------------------------------------------------------------------
+const SWEEP_DIR = path.resolve(__dirname, "../sweep-targets");
+if (fs.existsSync(SWEEP_DIR)) {
+  for (const f of fs.readdirSync(SWEEP_DIR).filter((n) => n.endsWith(".json")).sort()) {
+    const arr = JSON.parse(fs.readFileSync(path.join(SWEEP_DIR, f), "utf8")) as FashionphileTarget[];
+    TARGETS.push(...arr);
+  }
+}
 
 // ---------------------------------------------------------------------------
 // MODE A — browser raw-dump (high confidence, per listing)

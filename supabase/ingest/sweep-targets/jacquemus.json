@@ -1,0 +1,107 @@
+[
+  {
+    "brand": "Jacquemus",
+    "style": "Le Bambino",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-bambino"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json",
+    "excludeTokens": [
+      "grand",
+      "long"
+    ]
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Grand Bambino",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-grand-bambino"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Chiquito",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-chiquito"
+    ],
+    "minPrice": 100,
+    "maxPrice": 800,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json",
+    "excludeTokens": [
+      "grand",
+      "moyen",
+      "noeud"
+    ]
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Chiquito Moyen",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-chiquito-moyen"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Chiquito Noeud",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-chiquito-noeud"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Grand Chiquito",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-grand-chiquito"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Bambimou",
+    "size_label": "Petit",
+    "requireTokens": [
+      "jacquemus",
+      "bambimou"
+    ],
+    "minPrice": 350,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Bisou",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-bisou"
+    ],
+    "minPrice": 150,
+    "maxPrice": 800,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  }
+]

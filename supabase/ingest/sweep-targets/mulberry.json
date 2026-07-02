@@ -1,0 +1,59 @@
+[
+  {
+    "brand": "Mulberry",
+    "style": "Bayswater",
+    "size_label": "Small",
+    "requireTokens": [
+      "mulberry",
+      "small",
+      "bayswater"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/mulberry/products.json",
+    "excludeTokens": [
+      "zipped"
+    ]
+  },
+  {
+    "brand": "Mulberry",
+    "style": "Bayswater",
+    "size_label": "Standard",
+    "requireTokens": [
+      "mulberry",
+      "bayswater"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/mulberry/products.json",
+    "excludeTokens": [
+      "small",
+      "mini",
+      "zipped"
+    ]
+  },
+  {
+    "brand": "Mulberry",
+    "style": "Zipped Bayswater",
+    "size_label": "Mini",
+    "requireTokens": [
+      "mulberry",
+      "zipped-bayswater"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/mulberry/products.json"
+  },
+  {
+    "brand": "Mulberry",
+    "style": "Lana",
+    "size_label": "Small",
+    "requireTokens": [
+      "mulberry",
+      "lana"
+    ],
+    "minPrice": 400,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/mulberry/products.json"
+  }
+]
