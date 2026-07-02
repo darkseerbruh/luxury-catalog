@@ -80,3 +80,12 @@ if/if constructions (buyer case + seller case = two videos, not one payoff). No 
 jargon ("anchor on"). Test: could the viewer repeat the advice to a friend in one breath?
 Example fix: "So here's the move: don't pay the sticker. Offer closer to what these bags
 actually sell for, because now you know what that is."
+
+## FRIEND-NOT-BRAND RULE (owner edit pass 4, 2026-07-02)
+Scripts speak as "the friend you call" (voice-and-tone.md Principle 3 + the Anele model:
+"the real thing nobody tells you, said like a friend, backed like an expert"). NEVER recite
+a product's virtues in her own words ("waterproof by design, spills wipe off" = brand
+brochure). Instead: (1) start from the viewer's worry, (2) attribute the brand's claim AS
+the brand's ("Goyard's own line is... their claim, not mine"), (3) deliver the
+nobody-tells-you truth from the buyer's side. She doesn't work for these houses; the
+script can never sound like she does.
