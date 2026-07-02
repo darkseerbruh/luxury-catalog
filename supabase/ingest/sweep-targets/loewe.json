@@ -1,0 +1,212 @@
+[
+  {
+    "brand": "Loewe",
+    "style": "Puzzle",
+    "size_label": "Mini",
+    "requireTokens": [
+      "loewe",
+      "mini-puzzle-bag"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "small-puzzle-bag"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle",
+    "size_label": "Medium",
+    "requireTokens": [
+      "loewe",
+      "medium-puzzle-bag"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle Edge",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "puzzle-edge"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle Fold Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "loewe",
+      "puzzle-fold-tote"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json",
+    "excludeTokens": [
+      "xl"
+    ]
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle Fold Tote",
+    "size_label": "XL",
+    "requireTokens": [
+      "loewe",
+      "xl-puzzle-fold-tote"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Puzzle Bumbag",
+    "size_label": "Mini",
+    "requireTokens": [
+      "loewe",
+      "puzzle-bumbag"
+    ],
+    "minPrice": 800,
+    "maxPrice": 2800,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Basket Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "basket-tote"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json",
+    "excludeTokens": [
+      "square"
+    ]
+  },
+  {
+    "brand": "Loewe",
+    "style": "Square Basket Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "square-basket"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Hammock",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "hammock"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Flamenco",
+    "size_label": "Mini",
+    "requireTokens": [
+      "loewe",
+      "flamenco"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Gate",
+    "size_label": "Mini",
+    "requireTokens": [
+      "loewe",
+      "gate-crossbody"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Squeeze",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "squeeze-bag"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Pebble Bucket",
+    "size_label": "Medium",
+    "requireTokens": [
+      "loewe",
+      "pebble-bucket"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Madrid",
+    "size_label": "Small",
+    "requireTokens": [
+      "loewe",
+      "madrid-bag"
+    ],
+    "minPrice": 2000,
+    "maxPrice": 6500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Paseo",
+    "size_label": "Standard",
+    "requireTokens": [
+      "loewe",
+      "paseo"
+    ],
+    "minPrice": 700,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  },
+  {
+    "brand": "Loewe",
+    "style": "Cubi",
+    "size_label": "Medium",
+    "requireTokens": [
+      "loewe",
+      "cubi"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/loewe/products.json"
+  }
+]

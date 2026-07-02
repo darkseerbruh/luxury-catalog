@@ -1,0 +1,182 @@
+[
+  {
+    "brand": "Bottega Veneta",
+    "style": "Jodie",
+    "size_label": "Mini",
+    "requireTokens": [
+      "bottega-veneta",
+      "mini-jodie"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Jodie",
+    "size_label": "Small",
+    "requireTokens": [
+      "bottega-veneta",
+      "small-jodie"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Jodie",
+    "size_label": "Teen",
+    "requireTokens": [
+      "bottega-veneta",
+      "teen-jodie"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Andiamo",
+    "size_label": "Small",
+    "requireTokens": [
+      "bottega-veneta",
+      "small-andiamo"
+    ],
+    "minPrice": 1800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Andiamo",
+    "size_label": "Medium",
+    "requireTokens": [
+      "bottega-veneta",
+      "medium-andiamo"
+    ],
+    "minPrice": 1800,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Long Andiamo Clutch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "long-andiamo"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Hop",
+    "size_label": "Mini",
+    "requireTokens": [
+      "bottega-veneta",
+      "mini-hop"
+    ],
+    "minPrice": 900,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Hop",
+    "size_label": "Small",
+    "requireTokens": [
+      "bottega-veneta",
+      "small-hop"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Hop",
+    "size_label": "Large",
+    "requireTokens": [
+      "bottega-veneta",
+      "large-hop"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "The Pouch",
+    "size_label": "Mini",
+    "requireTokens": [
+      "bottega-veneta",
+      "the-mini-pouch"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "The Pouch",
+    "size_label": "Oversized",
+    "requireTokens": [
+      "bottega-veneta",
+      "the-pouch-oversized"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "The Pouch Chain",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "the-pouch-chain"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Loop Camera Bag",
+    "size_label": "Mini",
+    "requireTokens": [
+      "bottega-veneta",
+      "loop-camera"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Bang Bang Vanity Case",
+    "size_label": "Standard",
+    "requireTokens": [
+      "bottega-veneta",
+      "bang-bang"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  },
+  {
+    "brand": "Bottega Veneta",
+    "style": "Ciao Ciao",
+    "size_label": "Small",
+    "requireTokens": [
+      "bottega-veneta",
+      "ciao-ciao"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 5500,
+    "searchUrl": "https://www.fashionphile.com/collections/bottega-veneta/products.json"
+  }
+]

@@ -1,0 +1,258 @@
+[
+  {
+    "brand": "Celine",
+    "style": "Luggage",
+    "size_label": "Nano",
+    "requireTokens": [
+      "celine",
+      "nano-luggage"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Luggage",
+    "size_label": "Micro",
+    "requireTokens": [
+      "celine",
+      "micro-luggage"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Luggage",
+    "size_label": "Mini",
+    "requireTokens": [
+      "celine",
+      "mini-luggage"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Phantom Luggage",
+    "size_label": "Medium",
+    "requireTokens": [
+      "celine",
+      "phantom-luggage"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe",
+    "size_label": "Mini",
+    "requireTokens": [
+      "celine",
+      "mini-triomphe"
+    ],
+    "minPrice": 700,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe",
+    "size_label": "Teen",
+    "requireTokens": [
+      "celine",
+      "teen-triomphe"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe Shoulder",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "triomphe-shoulder"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Classic Box",
+    "size_label": "Medium",
+    "requireTokens": [
+      "celine",
+      "classic-box"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Ava",
+    "size_label": "Mini",
+    "requireTokens": [
+      "celine",
+      "mini-ava"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Ava",
+    "size_label": "Strap",
+    "requireTokens": [
+      "celine",
+      "strap-ava"
+    ],
+    "minPrice": 900,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Ava",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "ava-shoulder-bag"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json",
+    "excludeTokens": [
+      "mini",
+      "strap"
+    ]
+  },
+  {
+    "brand": "Celine",
+    "style": "Sangle Bucket",
+    "size_label": "Small",
+    "requireTokens": [
+      "celine",
+      "sangle-bucket"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Celine 16",
+    "size_label": "Small",
+    "requireTokens": [
+      "celine",
+      "16-top-handle"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Camille 16",
+    "size_label": "Medium",
+    "requireTokens": [
+      "celine",
+      "camille-16"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Vertical Cabas",
+    "size_label": "Mini",
+    "requireTokens": [
+      "celine",
+      "vertical-cabas"
+    ],
+    "minPrice": 350,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Horizontal Cabas",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "horizontal-cabas"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe Boston",
+    "size_label": "Standard",
+    "requireTokens": [
+      "celine",
+      "boston"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Besace",
+    "size_label": "Mini",
+    "requireTokens": [
+      "celine",
+      "besace"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Héloïse",
+    "size_label": "Small",
+    "requireTokens": [
+      "celine",
+      "heloise"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Big Bag",
+    "size_label": "Small",
+    "requireTokens": [
+      "celine",
+      "big-bag"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  },
+  {
+    "brand": "Celine",
+    "style": "Triomphe Oval",
+    "size_label": "Small",
+    "requireTokens": [
+      "celine",
+      "oval-crossbody"
+    ],
+    "minPrice": 400,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/celine/products.json"
+  }
+]

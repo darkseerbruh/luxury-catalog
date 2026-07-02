@@ -1,0 +1,173 @@
+[
+  {
+    "brand": "Chloé",
+    "style": "Paddington",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "paddington-satchel"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Paddington Tote",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chloe",
+      "paddington-tote"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Marcie",
+    "size_label": "Small",
+    "requireTokens": [
+      "chloe",
+      "small-marcie"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Marcie",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "medium-marcie"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Marcie Saddle",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "marcie-saddle"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Marcie Round Crossbody",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "marcie-round"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Faye",
+    "size_label": "Small",
+    "requireTokens": [
+      "chloe",
+      "small-faye"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Faye",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "medium-faye"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json",
+    "excludeTokens": [
+      "backpack"
+    ]
+  },
+  {
+    "brand": "Chloé",
+    "style": "Faye Backpack",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "faye-backpack"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Woody Tote",
+    "size_label": "Mini",
+    "requireTokens": [
+      "chloe",
+      "mini-woody"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Woody Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "chloe",
+      "medium-woody"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Tess",
+    "size_label": "Large",
+    "requireTokens": [
+      "chloe",
+      "tess-bag"
+    ],
+    "minPrice": 400,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Spin Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "chloe",
+      "spin-tote"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  },
+  {
+    "brand": "Chloé",
+    "style": "Silverado",
+    "size_label": "Standard",
+    "requireTokens": [
+      "chloe",
+      "silverado"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/chloe/products.json"
+  }
+]

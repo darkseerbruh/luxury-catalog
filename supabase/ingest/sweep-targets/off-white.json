@@ -1,0 +1,26 @@
+[
+  {
+    "brand": "Off-White",
+    "style": "Binder Clip",
+    "size_label": "Mini",
+    "requireTokens": [
+      "off-white",
+      "binder-clip"
+    ],
+    "minPrice": 150,
+    "maxPrice": 900,
+    "searchUrl": "https://www.fashionphile.com/collections/off-white/products.json"
+  },
+  {
+    "brand": "Off-White",
+    "style": "Jitney",
+    "size_label": "Standard",
+    "requireTokens": [
+      "off-white",
+      "jitney"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/off-white/products.json"
+  }
+]

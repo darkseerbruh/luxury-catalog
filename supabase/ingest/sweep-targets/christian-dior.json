@@ -1,0 +1,354 @@
+[
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "Micro",
+    "requireTokens": [
+      "christian-dior",
+      "micro-lady-dior"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "Mini",
+    "requireTokens": [
+      "christian-dior",
+      "mini-lady-dior"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "Small",
+    "requireTokens": [
+      "christian-dior",
+      "small-lady-dior"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "medium-lady-dior"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "Large",
+    "requireTokens": [
+      "christian-dior",
+      "large-lady-dior"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 12000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady Dior",
+    "size_label": "My ABCDior",
+    "requireTokens": [
+      "christian-dior",
+      "my-abcdior-lady-dior"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 8000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "convertible-clutch",
+      "wallet",
+      "card",
+      "phone",
+      "chain-pouch",
+      "strap-only"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady D-Joy",
+    "size_label": "Small",
+    "requireTokens": [
+      "christian-dior",
+      "lady-d-joy"
+    ],
+    "minPrice": 1500,
+    "maxPrice": 6000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Lady D-Lite",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "lady-d-lite"
+    ],
+    "minPrice": 1000,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Saddle",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "saddle-bag"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "mens",
+      "mini"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Saddle",
+    "size_label": "Mini",
+    "requireTokens": [
+      "christian-dior",
+      "mini-saddle-bag"
+    ],
+    "minPrice": 1200,
+    "maxPrice": 5000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "mens"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Saddle",
+    "size_label": "Men's",
+    "requireTokens": [
+      "christian-dior",
+      "mens-saddle-bag"
+    ],
+    "minPrice": 800,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Saddle Pochette",
+    "size_label": "Mini",
+    "requireTokens": [
+      "christian-dior",
+      "saddle-pochette"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Saddle Chain Pouch",
+    "size_label": "Nano",
+    "requireTokens": [
+      "christian-dior",
+      "saddle-chain-pouch"
+    ],
+    "minPrice": 600,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Book Tote",
+    "size_label": "Mini",
+    "requireTokens": [
+      "christian-dior",
+      "mini",
+      "book-tote"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Book Tote",
+    "size_label": "Small",
+    "requireTokens": [
+      "christian-dior",
+      "small",
+      "book-tote"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Book Tote",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "medium",
+      "book-tote"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Book Tote",
+    "size_label": "Large",
+    "requireTokens": [
+      "christian-dior",
+      "large",
+      "book-tote"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Bobby",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "bobby"
+    ],
+    "minPrice": 800,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Diorama",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "diorama"
+    ],
+    "minPrice": 400,
+    "maxPrice": 2500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Caro",
+    "size_label": "Small",
+    "requireTokens": [
+      "christian-dior",
+      "small-caro"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Caro",
+    "size_label": "Medium",
+    "requireTokens": [
+      "christian-dior",
+      "medium-caro"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Caro Pouch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "caro",
+      "pouch"
+    ],
+    "minPrice": 500,
+    "maxPrice": 2000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "30 Montaigne",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "30-montaigne"
+    ],
+    "minPrice": 900,
+    "maxPrice": 4500,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json",
+    "excludeTokens": [
+      "wallet",
+      "card"
+    ]
+  },
+  {
+    "brand": "Christian Dior",
+    "style": "Rider Backpack",
+    "size_label": "Standard",
+    "requireTokens": [
+      "christian-dior",
+      "rider-backpack"
+    ],
+    "minPrice": 700,
+    "maxPrice": 3000,
+    "searchUrl": "https://www.fashionphile.com/collections/christian-dior/products.json"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "brand": "Alexander McQueen",
+    "style": "Knuckle Clutch",
+    "size_label": "Standard",
+    "requireTokens": [
+      "alexander-mcqueen",
+      "knuckle"
+    ],
+    "minPrice": 300,
+    "maxPrice": 2200,
+    "searchUrl": "https://www.fashionphile.com/collections/alexander-mcqueen/products.json"
+  },
+  {
+    "brand": "Alexander McQueen",
+    "style": "Skull Padlock Tote",
+    "size_label": "Large",
+    "requireTokens": [
+      "alexander-mcqueen",
+      "skull-padlock"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/alexander-mcqueen/products.json"
+  },
+  {
+    "brand": "Alexander McQueen",
+    "style": "The Peak",
+    "size_label": "Mini",
+    "requireTokens": [
+      "alexander-mcqueen",
+      "the-peak"
+    ],
+    "minPrice": 400,
+    "maxPrice": 1500,
+    "searchUrl": "https://www.fashionphile.com/collections/alexander-mcqueen/products.json"
+  }
+]
