@@ -28,6 +28,11 @@ VERIFICATION UPDATE (browser check of live TikTok content, 2026-07-02):
   in the piece.
 - Chanel 25 confirmed: colour-collecting, small-vs-mini-vs-micro comparisons, and the live
   debate "future classic like the Flap, or phase-out like the Boy?" matches the draft.
+- "types of chanel bags" confirmed (2026-07-02): pyramid/hierarchy + first-Chanel content;
+  the taxonomy section is squarely on target.
+- "chanel meaning" DEMOTED (2026-07-02): the search is mostly Frank Ocean / Tyla song-lyric
+  intent, not brand intent. Keep the name-origin bit to one passing line; do not treat it
+  as a target phrase.
 -->
 
 # Chanel in 2026, explained

@@ -6,24 +6,7 @@ search for each (captions + related searches via Chrome), write the verified
 tag to DONE with a one-line verdict, commit this file. Repeat until QUEUED is empty.
 Verdict codes: CLEAN (build-safe), MIXED (usable with care), TRAP (do not build).*
 
-## QUEUED (priority order: ratio × draft-membership)
-- [ ] louis vuitton cosmetic purse (1,426; LV-pillar member)
-- [ ] boulogne pm louis vuitton (1,669; LV-pillar member)
-- [ ] slouchy pm louis vuitton (1,267; LV-pillar member)
-- [ ] LV carryall bag (LV-pillar member)
-- [ ] neverfull pm louis vuitton (LV-pillar member)
-- [ ] alma pm louis vuitton bag (LV-pillar member)
-- [ ] gucci prada louis (857)
-- [ ] fendigraphy mini bag (845)
-- [ ] gucci large tote bag (842)
-- [ ] valentino garavani bag (830)
-- [ ] white jacquemus bag (807)
-- [ ] giant gucci bag (768)
-- [ ] gucci and balenciaga (761)
-- [ ] kayla prada bag (669)
-- [ ] prada darling bag (658)
-- [ ] types of chanel bags (Chanel-pillar member)
-- [ ] chanel meaning (Chanel-pillar member)
+## QUEUED — EMPTY. Loop completed 2026-07-02.
 
 ## DONE (verdict · date)
 - [x] vintage Mombasa bag · CLEAN, Tom Ford YSL Mombasa collector surge (intro year needs verify: SS02 vs 03) · 07-02
@@ -35,6 +18,23 @@ Verdict codes: CLEAN (build-safe), MIXED (usable with care), TRAP (do not build)
 - [x] Celine Phantom + celine phantom bag · CLEAN, Rider-revival + Philo nostalgia (designer era) · 07-02
 - [x] birkin 25 bag mini · CLEAN, B25 as 'mini Birkin', quota stories · 07-02
 - [x] gucci pouch · CLEAN multi-model, GG pouch family, name the model per post · 07-02
+- [x] louis vuitton cosmetic purse · CLEAN, Cosmetic Pouch family + pouch-to-bag hack · 07-02
+- [x] boulogne pm louis vuitton · CLEAN w/ replica-adjacent sellers; first-LV rec content · 07-02
+- [x] slouchy pm louis vuitton · MIXED, real Slouchy line + visible dupe content · 07-02
+- [x] LV carryall bag · CLEAN, CarryAll work+mama bag, vs All In BB · 07-02
+- [x] neverfull pm louis vuitton · CLEAN, fun-size + counterfeit-awareness thread · 07-02
+- [x] alma pm louis vuitton bag · CLEAN, history + preloved + auth walkthroughs · 07-02
+- [x] gucci prada louis + louis gucci prada · TRAP, the 'Fendi 2' song · 07-02
+- [x] fendigraphy mini bag · CLEAN, Fendigraphy hobo sizes · 07-02
+- [x] gucci large tote bag · CLEAN, Giglio-led big-tote trend · 07-02
+- [x] valentino garavani bag · CLEAN-BROAD, Panthea push + multi-model · 07-02
+- [x] white jacquemus bag · CLEAN, white Bambino/Raphia colour story · 07-02
+- [x] giant gucci bag · CLEAN, = the new Gucci Giglio large tote (Demna era) · 07-02
+- [x] gucci and balenciaga · MIXED, Hacker Project archival + Demna commentary, dupe pollution · 07-02
+- [x] kayla prada bag · TRAP, single spam account SEO artifact · 07-02
+- [x] prada darling bag · CLEAN, Prada Darling suede · 07-02
+- [x] types of chanel bags · CLEAN, taxonomy/pyramid demand confirmed · 07-02
+- [x] chanel meaning · MOSTLY-TRAP, Frank Ocean/Tyla song intent; demoted in draft · 07-02
 - [x] gucci baby bag · CLEAN, tote-as-diaper-bag · 07-01
 - [x] birkin mini micro model · TRAP, "models" pollution · 07-01
 - [x] gucci boat bag · CLEAN, vintage Boat Pochette · 07-01
