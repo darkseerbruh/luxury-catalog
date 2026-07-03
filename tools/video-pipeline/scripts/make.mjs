@@ -497,17 +497,50 @@ const firstAudioOnsetSec = (video) => {
   return 0;
 };
 
+// Locate a spoken phrase in the staged clip and return where it starts, by transcribing
+// once and matching normalized word tokens. Timeline-independent, so it survives pipeline
+// changes (unlike a hardcoded headSec). Used to open a reel on a scripted line, skipping
+// an ad-libbed false start she does not want.
+const phraseOnsetSec = async (base, publicVideo, phrase) => {
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  await transcribeVideo(publicVideo); // writes capsPath
+  const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  const want = norm(phrase).split(" ").filter(Boolean);
+  for (let i = 0; i + want.length <= caps.length; i++) {
+    let hit = true;
+    for (let k = 0; k < want.length; k++) {
+      if (norm(caps[i + k].text) !== want[k]) { hit = false; break; }
+    }
+    if (hit) {
+      const at = caps[i].startMs / 1000;
+      // this transcript is of the UNTRIMMED clip; drop it so the post-trim flow re-transcribes clean
+      execFileSync("rm", ["-f", capsPath]);
+      return at;
+    }
+  }
+  execFileSync("rm", ["-f", capsPath]);
+  console.log(`  startPhrase "${phrase}" not found; falling back to speech onset`);
+  return null;
+};
+
 // Trim the silent lead (and any pre-speech video) off the staged clip so Whisper never
 // hallucinates on it and the reel opens on her first word. Overwrites publicVideo.
-const trimLeadingSilence = (base, publicVideo) => {
+// Honors input/<base>.trim.json: {"startPhrase":"..."} (open on that line, skipping an
+// ad-lib; timeline-independent, preferred) or {"headSec":N} (raw seconds, fragile).
+const trimLeadingSilence = async (base, publicVideo) => {
   const overridePath = path.join(INPUT_DIR, `${base}.trim.json`);
   const override = existsSync(overridePath)
     ? JSON.parse(readFileSync(overridePath, "utf8"))
     : {};
-  const onset =
-    typeof override.headSec === "number"
-      ? override.headSec
-      : Math.max(0, firstAudioOnsetSec(publicVideo) - 0.12); // keep a hair of pre-roll
+  let onset;
+  if (typeof override.startPhrase === "string") {
+    const at = await phraseOnsetSec(base, publicVideo, override.startPhrase);
+    onset = at != null ? Math.max(0, at - 0.12) : Math.max(0, firstAudioOnsetSec(publicVideo) - 0.12);
+  } else if (typeof override.headSec === "number") {
+    onset = override.headSec;
+  } else {
+    onset = Math.max(0, firstAudioOnsetSec(publicVideo) - 0.12); // keep a hair of pre-roll
+  }
   if (onset < 0.25) return; // negligible lead
   const tmp = path.join(TEMP_DIR, `${base}.lead.mp4`);
   if (!existsSync(TEMP_DIR)) mkdirSync(TEMP_DIR, { recursive: true });
@@ -562,7 +595,7 @@ const processClip = async (fileName) => {
   //     are correct from word one and the video opens on her first word.
   //     Honors an optional input/<base>.trim.json {"headSec":N} to force the point
   //     (e.g. to drop an ad-libbed false start before the scripted open).
-  trimLeadingSilence(base, publicVideo);
+  await trimLeadingSilence(base, publicVideo);
 
   // 2. Transcribe -> public/<base>.json (skip if already done).
   const jsonPath = path.join(PUBLIC_DIR, `${base}.json`);

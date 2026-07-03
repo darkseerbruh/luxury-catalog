@@ -180,12 +180,13 @@ branding on screen, no misspelled or wrong caption. Fix and re-render if not.
 
 **Talking-head open + audio (owner rules 2026-07-03, canon `docs/script-requirements.md`
 18-20):**
-- **Opens on her first word, never dead air.** Extract the very first frame (`-ss 0.0`):
-  her mouth should be engaged and the first caption already up. Whisper pads the leading
-  silence into the first token, so the auto-trim can miss it. If the open is dead air, set
-  `input/<base>.trim.json` `{"headSec": <seconds>}` (the point ~0.1s before her first word)
-  and re-run `npm run make <clip>`, or front-trim the finished mp4
-  (`ffmpeg -ss <headSec> -i in.mp4 -c:v libx264 -crf 18 -c:a aac out.mp4`).
+- **Opens on her first word, never dead air.** The pipeline auto-trims the silent lead
+  before transcription, so this is usually handled. If she ad-libs a false start she wants
+  cut (e.g. "a tale of two futures" before the scripted line), open on the real line with
+  `input/<base>.trim.json` `{"startPhrase": "is the chanel 25"}` (matched on the transcript,
+  timeline-independent, PREFERRED) and re-run `npm run make <clip>`. `{"headSec": N}` also
+  works but is fragile (a raw second that drifts if the pipeline changes). `npm run verify`
+  confirms the open.
 - **Keep her voice audio.** A talking-head reel ships WITH her spoken track (a lip-synced
   scratch she overlays the trending sound against). Confirm the file has an audio stream
   (`ffprobe -select_streams a`). Never call a talking-head reel "silent by design" (that is
