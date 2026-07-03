@@ -93,6 +93,13 @@ content-kit-buildout.md (which now point here).*
     ("silent by design" is montage-only).
 20. **Audio stays synced to her mouth** (within ~1 frame / 40ms). Confirm the sync-mux
     offset before render; the phone's own audio is the ground truth for her lips.
+21. **Captions must match the spoken audio, verified not assumed (bug fixed 2026-07-03).**
+    `npm run sync` left the clean audio delayed as a container offset, so the render
+    played it seconds late while Whisper timed captions to audio-at-zero: every caption
+    ran ahead of her voice. The pipeline now bakes the offset into real samples
+    (`aresample=async=1:first_pts=0`) and trims the silent lead BEFORE transcription so
+    Whisper never hallucinates on it. Spot-check a mid-clip second: the burned caption
+    must equal what she is saying in the audio there.
 
 ## The pre-record checklist (run on every script)
 - [ ] Intent named in sentence one

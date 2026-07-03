@@ -457,6 +457,58 @@ const detectDollars = (base) => {
   return out;
 };
 
+// Find where real audio begins (end of the leading digital-silence pad the sync step
+// prepends), by scanning the decoded PCM for the first sustained above-threshold block.
+const firstAudioOnsetSec = (video) => {
+  const SR = 16000;
+  const raw = execFileSync(
+    "ffmpeg",
+    ["-v", "error", "-i", video, "-ac", "1", "-ar", String(SR), "-f", "s16le", "-"],
+    { maxBuffer: 1 << 30 },
+  );
+  const pcm = new Int16Array(raw.buffer, raw.byteOffset, Math.floor(raw.length / 2));
+  const N = Math.floor(SR * 0.02); // 20ms frames
+  const THR = 220; // ~0.7% of full scale; above room tone, below speech
+  const nf = Math.floor(pcm.length / N);
+  for (let i = 0; i < nf; i++) {
+    let ok = true;
+    for (let k = 0; k < 4 && i + k < nf; k++) {
+      let mx = 0;
+      for (let j = 0; j < N; j++) mx = Math.max(mx, Math.abs(pcm[(i + k) * N + j]));
+      if (mx < THR) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) return (i * N) / SR;
+  }
+  return 0;
+};
+
+// Trim the silent lead (and any pre-speech video) off the staged clip so Whisper never
+// hallucinates on it and the reel opens on her first word. Overwrites publicVideo.
+const trimLeadingSilence = (base, publicVideo) => {
+  const overridePath = path.join(INPUT_DIR, `${base}.trim.json`);
+  const override = existsSync(overridePath)
+    ? JSON.parse(readFileSync(overridePath, "utf8"))
+    : {};
+  const onset =
+    typeof override.headSec === "number"
+      ? override.headSec
+      : Math.max(0, firstAudioOnsetSec(publicVideo) - 0.12); // keep a hair of pre-roll
+  if (onset < 0.25) return; // negligible lead
+  const tmp = path.join(TEMP_DIR, `${base}.lead.mp4`);
+  if (!existsSync(TEMP_DIR)) mkdirSync(TEMP_DIR, { recursive: true });
+  execFileSync(
+    "ffmpeg",
+    ["-v", "error", "-ss", onset.toFixed(3), "-i", publicVideo,
+     "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", tmp, "-y"],
+    { stdio: ["ignore", "ignore", "inherit"] },
+  );
+  copyFileSync(tmp, publicVideo);
+  console.log(`  lead trim: cut ${onset.toFixed(2)}s of dead air before first word`);
+};
+
 const processClip = async (fileName) => {
   const base = fileName.replace(VIDEO_RE, "");
   const inputPath = path.join(INPUT_DIR, fileName);
@@ -467,6 +519,13 @@ const processClip = async (fileName) => {
 
   // 1. Normalize to vertical 1080x1920 so captions, overlays, and hand tracking all
   //    share the same output coordinate space, and stage it for Remotion to serve.
+  //    CRITICAL (bug fixed 2026-07-03): `npm run sync` leaves the clean audio delayed
+  //    as a CONTAINER offset (audio stream start_time > 0), not real samples. Remotion
+  //    honors that offset (plays leading silence), but the ffmpeg wav extraction used
+  //    for Whisper ignores it (hears audio from 0). That mismatch timed every caption
+  //    AHEAD of the voice by the sync delay. `aresample=async=1:first_pts=0` bakes the
+  //    offset into real leading-silence samples (start_time -> 0) so transcription and
+  //    render see the SAME audio and the captions line up with her voice.
   execFileSync(
     "ffmpeg",
     [
@@ -474,6 +533,7 @@ const processClip = async (fileName) => {
       "-i", inputPath,
       "-vf",
       `scale=${WIDTH}:${HEIGHT}:force_original_aspect_ratio=increase,crop=${WIDTH}:${HEIGHT},setsar=1`,
+      "-af", "aresample=async=1:first_pts=0",
       "-c:v", "libx264",
       "-pix_fmt", "yuv420p",
       "-c:a", "aac",
@@ -481,6 +541,16 @@ const processClip = async (fileName) => {
     ],
     { stdio: ["ignore", "ignore", "inherit"] },
   );
+
+  // 1b. Trim the leading dead air BEFORE transcription (owner rule 2026-07-03:
+  //     "start when I start talking"). `npm run sync` prepends silence to align the
+  //     clean audio; if Whisper sees that silent lead it HALLUCINATES the first few
+  //     words onto it (mistiming the head), and the reel opens on dead air. Trimming
+  //     the silent lead first means Whisper only ever hears real speech, so captions
+  //     are correct from word one and the video opens on her first word.
+  //     Honors an optional input/<base>.trim.json {"headSec":N} to force the point
+  //     (e.g. to drop an ad-libbed false start before the scripted open).
+  trimLeadingSilence(base, publicVideo);
 
   // 2. Transcribe -> public/<base>.json (skip if already done).
   const jsonPath = path.join(PUBLIC_DIR, `${base}.json`);
