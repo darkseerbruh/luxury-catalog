@@ -457,8 +457,11 @@ const detectDollars = (base) => {
   return out;
 };
 
-// Find where real audio begins (end of the leading digital-silence pad the sync step
-// prepends), by scanning the decoded PCM for the first sustained above-threshold block.
+// Find where her SPEECH begins, skipping both the leading digital-silence pad the sync
+// step prepends AND the room tone before she talks. The threshold must clear room tone
+// (raw peak ~3000-5000) and land on real speech (~10000+); too low and it stops on room
+// tone, leaving a silent-looking head that Whisper then hallucinates words onto. We set
+// it relative to the clip's own speech level so soft and loud recordings both work.
 const firstAudioOnsetSec = (video) => {
   const SR = 16000;
   const raw = execFileSync(
@@ -468,14 +471,22 @@ const firstAudioOnsetSec = (video) => {
   );
   const pcm = new Int16Array(raw.buffer, raw.byteOffset, Math.floor(raw.length / 2));
   const N = Math.floor(SR * 0.02); // 20ms frames
-  const THR = 220; // ~0.7% of full scale; above room tone, below speech
   const nf = Math.floor(pcm.length / N);
+  // per-frame peak amplitude
+  const peaks = new Float32Array(nf);
+  for (let i = 0; i < nf; i++) {
+    let mx = 0;
+    for (let j = 0; j < N; j++) mx = Math.max(mx, Math.abs(pcm[i * N + j]));
+    peaks[i] = mx;
+  }
+  // speech level = 85th percentile of non-trivial frames; threshold sits well above room tone.
+  const loud = [...peaks].filter((p) => p > 1500).sort((a, b) => a - b);
+  const speech = loud.length ? loud[Math.floor(loud.length * 0.85)] : 12000;
+  const THR = Math.max(7000, speech * 0.4); // clears room tone, catches the first real word
   for (let i = 0; i < nf; i++) {
     let ok = true;
-    for (let k = 0; k < 4 && i + k < nf; k++) {
-      let mx = 0;
-      for (let j = 0; j < N; j++) mx = Math.max(mx, Math.abs(pcm[(i + k) * N + j]));
-      if (mx < THR) {
+    for (let k = 0; k < 5 && i + k < nf; k++) {
+      if (peaks[i + k] < THR) {
         ok = false;
         break;
       }
