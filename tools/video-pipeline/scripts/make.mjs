@@ -7,6 +7,7 @@
 //   [{ "img": "bag.png", "fromSec": 1.5, "toSec": 4, "xPct": 50, "yPct": 30, "widthPct": 46 }]
 // Put bag.png next to the clip in input/.
 import { execFileSync } from "node:child_process";
+import os from "node:os";
 import {
   copyFileSync,
   existsSync,
@@ -600,27 +601,32 @@ const processClip = async (fileName) => {
       ...(headline ? { headline } : {}),
     }),
   );
-  console.log("  rendering...");
-  execFileSync(
-    "npx",
-    [
-      "remotion",
-      "render",
-      ENTRY,
-      COMPOSITION,
-      outPath,
-      `--props=${propsPath}`,
-      "--timeout=180000", // survive heavy load (e.g. parallel renders on this machine)
-      "--log=error",
-    ],
-    { stdio: "inherit" },
-  );
+  // Draft mode renders at half resolution on all cores for fast iteration (~4x faster);
+  // the final approval render runs at full quality. Pass --draft on the command line.
+  const cores = Math.max(2, os.cpus().length);
+  const renderArgs = [
+    "remotion",
+    "render",
+    ENTRY,
+    COMPOSITION,
+    outPath,
+    `--props=${propsPath}`,
+    "--timeout=180000", // survive heavy load (e.g. parallel renders on this machine)
+    "--log=error",
+    `--concurrency=${DRAFT ? cores : Math.ceil(cores / 2)}`,
+  ];
+  if (DRAFT) renderArgs.push("--scale=0.5", "--jpeg-quality=70");
+  console.log(`  rendering${DRAFT ? " (draft: half-res, fast)" : ""}...`);
+  execFileSync("npx", renderArgs, { stdio: "inherit" });
   console.log(`  done -> ${path.relative(process.cwd(), outPath)}`);
 };
 
+// Global flags: --draft renders at half res on all cores for fast iteration.
+const DRAFT = process.argv.includes("--draft");
+
 const main = async () => {
   ensureDirs();
-  const only = process.argv[2];
+  const only = process.argv.slice(2).find((a) => !a.startsWith("--"));
   const clips = only
     ? [only]
     : readdirSync(INPUT_DIR).filter((f) => VIDEO_RE.test(f));

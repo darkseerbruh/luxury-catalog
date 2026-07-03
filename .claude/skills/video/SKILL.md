@@ -154,8 +154,27 @@ populate as each is reached.
    markers, never a verdict (see the hedging frames in `docs/preferences.md`).
 4. `node scripts/montage.mjs examples/<name>.json`.
 
+## Speed rules (READ THIS — renders are the expensive step)
+A full 1080x1920 render is minutes per clip, so the goal is ONE correct render, not five.
+- **Iterate in draft.** `npm run draft <clip>` renders at half resolution on all cores
+  (~4x faster) for checking captions/timing/overlays. Do the final full-quality pass with
+  `npm run make <clip>` only once it looks right.
+- **Never re-render for a head-trim.** Trimming dead air or an ad-lib off the FRONT is an
+  ffmpeg cut on the finished mp4 (seconds), not a re-render:
+  `ffmpeg -ss <sec> -i output/<name>.mp4 -c:v libx264 -crf 18 -c:a aac out.mp4`. Only
+  caption/overlay/headline CHANGES need a re-render. (For reproducibility, also record the
+  point in `input/<base>.trim.json` so the pipeline reproduces it.)
+- **One render at a time on this machine.** Parallel renders (e.g. another chat) contend
+  for CPU and slow every one of them down.
+
 ## Step 4 — Verify before showing her
-Extract a few frames from `output/<name>.mp4` (`ffmpeg -ss <t> -i ... frame.png`) and
+**Run `npm run verify <base>` first** (e.g. `npm run verify chanel1.synced`). In seconds,
+with no watching, it checks the three things that have cost re-render cycles: audio is
+present, the reel opens on her first word (no dead-air/room-tone head), and the burned
+captions match the audio at three sample points (the sync-delay bug). Fix any FAIL before
+looking further.
+
+Then extract a few frames from `output/<name>.mp4` (`ffmpeg -ss <t> -i ... frame.png`) and
 check: captions land on the right bag, the vertical crop keeps the subject, no competitor
 branding on screen, no misspelled or wrong caption. Fix and re-render if not.
 
