@@ -8,9 +8,14 @@
  */
 import type { VariantDetail } from "./queries";
 
+// Canonical public host. NEXT_PUBLIC_SITE_URL overrides; the fallback is the
+// live custom domain with the www host — Vercel's canonical per desktop-todo
+// ("Vercel canonical = www"; the apex 308s to www). Never advertise the apex
+// or the *.vercel.app host here: URLs on a non-canonical host redirect, and
+// Search Console reports every one it finds as "Page with redirect".
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://luxury-catalog-omega.vercel.app";
+  "https://www.luxurycatalog.com";
 
 // E-E-A-T named author. Set NEXT_PUBLIC_AUTHOR_NAME to a real person's name to
 // strengthen the authorship signal further (the plan recommends a named human).

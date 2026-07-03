@@ -15,7 +15,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 ## ✅ Done in the 2026-06-20 session
 - **Migrations 0002–0007 applied** to Supabase (via `supabase db push` on laptop; `0001` repaired-as-applied). Includes the new `0007_taste_and_social_links`.
 - **Catalog seeded** — `seed-hero-styles` (7 styles) + `seed-breadth` (120+56 styles / 218+ variants). `.env.local` created locally.
-- **Vercel env vars set** — `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL` (=`https://luxury-catalog-omega.vercel.app` for now), `NEXT_PUBLIC_AUTHOR_NAME`, `CRON_SECRET`. *(All saved "Sensitive" — cosmetic only; can't read back in dashboard.)*
+- **Vercel env vars set** — `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_URL` (=`https://luxury-catalog-omega.vercel.app` at the time; **superseded by B5** — now `https://www.luxurycatalog.com`), `NEXT_PUBLIC_AUTHOR_NAME`, `CRON_SECRET`. *(All saved "Sensitive" — cosmetic only; can't read back in dashboard.)*
 - **DNS configured** — domain moved off uniregistry parking to **Squarespace nameservers**; custom records added: `A @ → 216.198.79.1`, `CNAME www → da85d5fe69f1eefe.vercel-dns-017.com`. Vercel canonical = **www**. *Propagating; waiting on "Valid Configuration."*
 - **Auth configured** — Site URL + redirect URLs set; **email confirmation disabled** for now (free tier can't edit templates; re-enable with Resend before launch).
 - **App runs locally** against the live seeded DB on the feature branch.
@@ -64,6 +64,7 @@ Legend: ⛔ blocking · 🔧 infra · 📣 growth · ⚖️ legal/biz · 🧠 de
 
 - [x] 📣 **D1. Sitemap submitted to Google + Bing** (2026-06-22) — GSC Domain property (DNS TXT verified) + `https://www.luxurycatalog.com/sitemap.xml` submitted; Bing imported from GSC + sitemap submitted. Indexing is the slow part (~8–16 wks) — check GSC→Pages / Bing→Site Explorer in a couple weeks.
 - [x] 📣 **D2. Curate video resources** — BUILT: `supabase/seed/research/creators.json` (real channels + real video IDs verified from web search) + `supabase/seed/seed-creators.ts` (idempotent). **Operator action:** run `npx tsx supabase/seed/seed-creators.ts` (needs service-role key; 0004 applied + hero styles seeded first) to populate the bag-page "Video reviews."
+- [ ] 📣 **D3. GSC "Page with redirect" (email 2026-07-03) — 2-min dashboard check.** Diagnosed + code-fixed 2026-07-03: `/deals` was listed in the sitemap but always redirects to `/shop` (removed from sitemap); the rest is expected canonicalization (old `/posts/*`+`/closets` URLs 308 to their new homes; apex + vercel.app hosts 308 to www) — those SHOULD stay redirects, do not "fix" them. **Your check:** GSC → Indexing → Pages → "Page with redirect" → confirm the listed URLs are only `/deals`, `/posts/*`, `/closets`, apex/http variants. Anything else (random product pages, redirect loops) → flag it in a chat.
 
 ---
 
