@@ -159,14 +159,31 @@ Extract a few frames from `output/<name>.mp4` (`ffmpeg -ss <t> -i ... frame.png`
 check: captions land on the right bag, the vertical crop keeps the subject, no competitor
 branding on screen, no misspelled or wrong caption. Fix and re-render if not.
 
+**Talking-head open + audio (owner rules 2026-07-03, canon `docs/script-requirements.md`
+18-20):**
+- **Opens on her first word, never dead air.** Extract the very first frame (`-ss 0.0`):
+  her mouth should be engaged and the first caption already up. Whisper pads the leading
+  silence into the first token, so the auto-trim can miss it. If the open is dead air, set
+  `input/<base>.trim.json` `{"headSec": <seconds>}` (the point ~0.1s before her first word)
+  and re-run `npm run make <clip>`, or front-trim the finished mp4
+  (`ffmpeg -ss <headSec> -i in.mp4 -c:v libx264 -crf 18 -c:a aac out.mp4`).
+- **Keep her voice audio.** A talking-head reel ships WITH her spoken track (a lip-synced
+  scratch she overlays the trending sound against). Confirm the file has an audio stream
+  (`ffprobe -select_streams a`). Never call a talking-head reel "silent by design" (that is
+  montage-only).
+- **Audio synced to her mouth** (within ~1 frame). The `sync` mux prints a match score; the
+  phone's own audio is the ground truth for her lips.
+
 ## Step 5 — Name, store, log
 - Rename the render to `output/<concept>-<YYYY-MM-DD>.mp4`.
 - Append a row to `tools/video-pipeline/reels-log.md`: date, concept, mode, source clips,
   the caption/script, and status `draft`. Commit the log (not the video file).
 
 ## Step 6 — Deliver
-Send the `.mp4` to Arielle for approval (SendUserFile). Say it is silent by design so she
-adds a trending sound in-app. Do NOT post or schedule it yourself.
+Send the `.mp4` to Arielle for approval (SendUserFile). Do NOT post or schedule it yourself.
+- **Talking-head:** ships WITH her voice (a lip-synced scratch track). Tell her she can
+  overlay a trending sound in-app over it. Never label it silent.
+- **Headless montage:** silent by design; tell her to add a trending sound in-app.
 
 ## Step 7 — Metricool draft handoff (only after she approves the reel)
 Hand an approved reel to the social calendar as a Metricool DRAFT. Never publish or

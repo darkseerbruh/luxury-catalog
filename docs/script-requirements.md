@@ -83,6 +83,17 @@ content-kit-buildout.md (which now point here).*
     Kit pages hold these in a 📋 CAPTIONS + TAGS section; Metricool scheduling copies from
     there.
 
+## Editing & render output (talking-head reels, owner rules 2026-07-03)
+18. **Open on her first word.** Trim the leading dead air; the reel never opens on her
+    sitting silent. (Whisper pads the silence into the first token, so the auto-trim can
+    miss it. Pipeline honors `input/<base>.trim.json {"headSec":N}`; verify the opening
+    frame.)
+19. **Keep her spoken audio in the delivered file.** It is a lip-synced scratch track she
+    lines the trending sound up against. Never deliver a talking-head reel silent
+    ("silent by design" is montage-only).
+20. **Audio stays synced to her mouth** (within ~1 frame / 40ms). Confirm the sync-mux
+    offset before render; the phone's own audio is the ground truth for her lips.
+
 ## The pre-record checklist (run on every script)
 - [ ] Intent named in sentence one
 - [ ] I-voice throughout; zero we/our

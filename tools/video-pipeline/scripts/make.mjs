@@ -343,12 +343,33 @@ const resolveHeadline = (base) => {
   return cfg;
 };
 
+// Remove non-speech tokens Whisper emits over dead air/ambience ("[BLANK_AUDIO]",
+// "(birds chirping)", "[MUSIC]"...). They are not captions and they break dead-air
+// trimming by making the caption window span the whole clip.
+const cleanCaptions = (base) => {
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return;
+  const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  const cleaned = caps.filter((c) => {
+    const t = c.text.trim();
+    return t && !/^[\[\(].*[\]\)]$/.test(t) && !/^[♪♫]+$/.test(t);
+  });
+  if (cleaned.length !== caps.length) {
+    writeFileSync(capsPath, JSON.stringify(cleaned, null, 2));
+    console.log(`  captions: dropped ${caps.length - cleaned.length} non-speech token(s)`);
+  }
+};
+
 // Trim dead air at the head and tail using the caption word boundaries (silence
 // detection is unreliable here because the audio has ambient/music). Trims the video
 // and shifts caption times so everything downstream stays aligned.
 const trimDeadAir = (base, publicVideo) => {
   const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
   if (!existsSync(capsPath)) return;
+  // The staged video is re-normalized fresh (untrimmed) every run, so trim from the
+  // ORIGINAL (pre-trim) transcript: back it up on first trim, restore it after.
+  const origPath = path.join(PUBLIC_DIR, `${base}.pretrim.json`);
+  if (existsSync(origPath)) copyFileSync(origPath, capsPath);
   let caps = JSON.parse(readFileSync(capsPath, "utf8"));
   if (!caps.length) return;
   const vDur = Number(
@@ -358,9 +379,35 @@ const trimDeadAir = (base, publicVideo) => {
       { encoding: "utf8" },
     ).trim(),
   );
-  const start = Math.max(0, caps[0].startMs / 1000 - 0.25);
-  const end = Math.min(vDur, caps[caps.length - 1].endMs / 1000 + 0.4);
-  if (start < 0.3 && vDur - end < 0.3) return; // negligible dead air
+  // REQUIREMENT (owner, 2026-07-03): the reel must OPEN on her first word, never on
+  // dead air, and keep the (lip-synced) scratch audio. Whisper often mistimes the
+  // FIRST token, padding the leading silence into it (start ~0.05s, low confidence),
+  // which made the old start-of-first-word trim a no-op. Two guards, in order:
+  //   1. Explicit per-clip override input/<base>.trim.json {"headSec":N,"tailSec":M}
+  //      wins outright (use when auto-detection is uncertain; deterministic on re-run).
+  //   2. Otherwise, if the first token looks silence-padded (low confidence AND a long
+  //      span for one token), anchor the head on the reliable SECOND word instead.
+  const overridePath = path.join(INPUT_DIR, `${base}.trim.json`);
+  const override = existsSync(overridePath)
+    ? JSON.parse(readFileSync(overridePath, "utf8"))
+    : {};
+  let headSec = caps[0].startMs / 1000 - 0.25;
+  const firstPadded =
+    (caps[0].confidence ?? 1) < 0.8 &&
+    caps.length > 1 &&
+    caps[0].endMs - caps[0].startMs > 350;
+  if (firstPadded) {
+    // keep ~0.35s of pre-roll before the second (reliable) word so the real first
+    // word is never clipped, but drop the padded silence in front of it.
+    headSec = Math.max(headSec, caps[1].startMs / 1000 - 0.35);
+  }
+  if (typeof override.headSec === "number") headSec = override.headSec;
+  const start = Math.max(0, headSec);
+  const tailSec =
+    typeof override.tailSec === "number" ? override.tailSec : 0.4;
+  const end = Math.min(vDur, caps[caps.length - 1].endMs / 1000 + tailSec);
+  if (start < 0.15 && vDur - end < 0.3) return; // negligible dead air
+  copyFileSync(capsPath, origPath); // keep the pre-trim transcript for re-runs
   if (!existsSync(TEMP_DIR)) mkdirSync(TEMP_DIR, { recursive: true });
   const tmp = path.join(TEMP_DIR, `${base}.trim.mp4`);
   execFileSync(
@@ -448,7 +495,8 @@ const processClip = async (fileName) => {
   //     reads them, so cues/ranks and the on-screen text all use correct spelling.
   applyCorrections(base);
 
-  // 2c. Trim dead air at head/tail and shift caption times to match.
+  // 2c. Drop non-speech tokens, then trim dead air at head/tail (shifting captions).
+  cleanCaptions(base);
   trimDeadAir(base, publicVideo);
 
   // 3. Overlays: static (input/<base>.overlays.json) + speech-cued (<base>.cues.json).
@@ -481,6 +529,7 @@ const processClip = async (fileName) => {
       COMPOSITION,
       outPath,
       `--props=${propsPath}`,
+      "--timeout=180000", // survive heavy load (e.g. parallel renders on this machine)
       "--log=error",
     ],
     { stdio: "inherit" },
