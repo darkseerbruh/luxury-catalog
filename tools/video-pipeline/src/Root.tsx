@@ -21,6 +21,7 @@ export const RemotionRoot: React.FC = () => {
         src: "sample.mp4",
         zoom: BRAND.zoomIntensity,
         overlays: [],
+        callouts: [],
       }}
     />
   );

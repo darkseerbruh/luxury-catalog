@@ -22,6 +22,7 @@ import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
 import { RankList } from "./RankList";
 import { RankTracker } from "./RankTracker";
+import { StatCallout } from "./StatCallout";
 import SubtitlePage from "./SubtitlePage";
 
 const overlaySchema = z.object({
@@ -70,6 +71,17 @@ export const captionedVideoSchema = z.object({
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
   headline: headlineSchema.optional(),
+  callouts: z
+    .array(
+      z.object({
+        text: z.string(),
+        atSec: z.number(),
+        hold: z.number().optional(),
+        xPct: z.number().optional(),
+        yPct: z.number().optional(),
+      }),
+    )
+    .default([]),
 });
 
 type Props = z.infer<typeof captionedVideoSchema>;
@@ -96,6 +108,7 @@ export const CaptionedVideo: React.FC<Props> = ({
   rankTracker,
   rankList,
   headline,
+  callouts,
 }) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const { delayRender, continueRender } = useDelayRender();
@@ -227,6 +240,10 @@ export const CaptionedVideo: React.FC<Props> = ({
           yPct={headline.ctaYPct}
         />
       ) : null}
+
+      {callouts.map((c, i) => (
+        <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
+      ))}
 
       {subtitles.length === 0 ? <NoCaptionFile /> : null}
     </AbsoluteFill>

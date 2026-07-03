@@ -343,6 +343,73 @@ const resolveHeadline = (base) => {
   return cfg;
 };
 
+// Trim dead air at the head and tail using the caption word boundaries (silence
+// detection is unreliable here because the audio has ambient/music). Trims the video
+// and shifts caption times so everything downstream stays aligned.
+const trimDeadAir = (base, publicVideo) => {
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return;
+  let caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  if (!caps.length) return;
+  const vDur = Number(
+    execFileSync(
+      "ffprobe",
+      ["-v", "error", "-show_entries", "format=duration", "-of", "default=nk=1:nw=1", publicVideo],
+      { encoding: "utf8" },
+    ).trim(),
+  );
+  const start = Math.max(0, caps[0].startMs / 1000 - 0.25);
+  const end = Math.min(vDur, caps[caps.length - 1].endMs / 1000 + 0.4);
+  if (start < 0.3 && vDur - end < 0.3) return; // negligible dead air
+  if (!existsSync(TEMP_DIR)) mkdirSync(TEMP_DIR, { recursive: true });
+  const tmp = path.join(TEMP_DIR, `${base}.trim.mp4`);
+  execFileSync(
+    "ffmpeg",
+    ["-v", "error", "-ss", start.toFixed(3), "-to", end.toFixed(3), "-i", publicVideo,
+     "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", tmp, "-y"],
+    { stdio: ["ignore", "ignore", "inherit"] },
+  );
+  copyFileSync(tmp, publicVideo);
+  const sh = Math.round(start * 1000);
+  const newDur = Math.round((end - start) * 1000);
+  caps = caps
+    .map((c) => ({
+      text: c.text,
+      startMs: c.startMs - sh,
+      endMs: c.endMs - sh,
+      timestampMs: (c.timestampMs ?? (c.startMs + c.endMs) / 2) - sh,
+      confidence: c.confidence ?? 1,
+    }))
+    .filter((c) => c.endMs > 0 && c.startMs < newDur)
+    .map((c) => ({ ...c, startMs: Math.max(0, c.startMs), endMs: Math.min(newDur, c.endMs) }));
+  writeFileSync(capsPath, JSON.stringify(caps, null, 2));
+  console.log(`  trim: cut ${start.toFixed(1)}s head + ${(vDur - end).toFixed(1)}s tail`);
+};
+
+// Auto-detect dollar amounts in the captions so they can pop on screen when spoken.
+const detectDollars = (base) => {
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  if (!existsSync(capsPath)) return [];
+  const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+  const out = [];
+  for (let i = 0; i < caps.length; i++) {
+    if (!/\$/.test(caps[i].text)) continue;
+    let text = caps[i].text.trim();
+    let j = i + 1;
+    while (j < caps.length && /^[\d.,]+$/.test(caps[j].text.trim())) {
+      text += caps[j].text.replace(/\s/g, "");
+      j++;
+    }
+    const clean = text.replace(/[^$\d.,]/g, "");
+    if (/\$\d/.test(clean)) out.push({ text: clean, atSec: caps[i].startMs / 1000 });
+    i = j - 1;
+  }
+  if (out.length) {
+    console.log(`  callouts: ${out.map((o) => `${o.text}@${o.atSec.toFixed(1)}`).join(", ")}`);
+  }
+  return out;
+};
+
 const processClip = async (fileName) => {
   const base = fileName.replace(VIDEO_RE, "");
   const inputPath = path.join(INPUT_DIR, fileName);
@@ -381,6 +448,9 @@ const processClip = async (fileName) => {
   //     reads them, so cues/ranks and the on-screen text all use correct spelling.
   applyCorrections(base);
 
+  // 2c. Trim dead air at head/tail and shift caption times to match.
+  trimDeadAir(base, publicVideo);
+
   // 3. Overlays: static (input/<base>.overlays.json) + speech-cued (<base>.cues.json).
   const overlays = [...loadOverlays(base), ...(await resolveCues(base, publicVideo))];
 
@@ -388,12 +458,14 @@ const processClip = async (fileName) => {
   const rankTracker = resolveRanks(base);
   const rankList = resolveList(base);
   const headline = resolveHeadline(base);
+  const callouts = detectDollars(base);
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);
   writeFileSync(
     propsPath,
     JSON.stringify({
       src: fileName,
       overlays,
+      callouts,
       ...(rankTracker ? { rankTracker } : {}),
       ...(rankList ? { rankList } : {}),
       ...(headline ? { headline } : {}),
