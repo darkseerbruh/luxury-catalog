@@ -1,11 +1,23 @@
 /**
- * Social search keys — the router between short-form video CTAs and articles.
+ * Social search keys — the router between short-form video CTAs and articles,
+ * and the data behind the per-platform bio-hub grids.
  *
  * Video CTAs say "search <key> on luxurycatalog.com" instead of "link in bio":
  * TikTok captions aren't clickable, and a link-in-bio page stops working once
  * articles ship weekly. This registry makes the spoken CTA deterministic — an
- * exact key match pins its article to the top of /search, and /social (the
- * permanent bio-link hub) lists the same entries newest-first.
+ * exact key match pins its article to the top of /search — AND drives the grid
+ * on /social/tiktok and /social/instagram.
+ *
+ * PER-PLATFORM MODEL (owner call 2026-07-03: TikTok is the active channel and
+ * will diverge from Instagram). Each entry can place itself differently per
+ * platform: its own order, its own cover, or absent entirely.
+ *  - `platforms` omitted  -> the post is on BOTH grids, in registry order.
+ *  - `platforms: { tiktok: {...} }` -> ONLY on TikTok (Instagram skips it).
+ *  - per-platform `order` floats a post up its grid (lower = shown first);
+ *    entries without an explicit order follow in registry order.
+ *  - per-platform `cover` overrides the shared `cover` for that grid.
+ * The spoken-key search pin (matchSocialKey) stays platform-agnostic: a key
+ * pins its article on /search no matter which app the viewer came from.
  *
  * Rules for a key (enforced by social-search-keys.test.ts):
  * - lowercase; 1-3 words; letters, digits and spaces only — it has to survive
@@ -13,21 +25,30 @@
  * - unique across the registry;
  * - assigned when the content kit is drafted, and verified against /search
  *   before the video is recorded (see docs/social-routing.md).
- *
- * Newest posting first — /social renders in this order.
  */
+
+export type Platform = "tiktok" | "instagram";
+
+export interface PlatformPlacement {
+  /** Sort position on this platform's grid; lower = shown first (newest).
+   * Omit to keep registry order after any explicitly-ordered entries. */
+  order?: number;
+  /** Cover frame for THIS platform's tile (owner-recorded footage only),
+   * served from /public/social-covers/. Overrides the shared `cover`. */
+  cover?: string;
+}
 
 export interface SocialKeyEntry {
   /** The spoken key, exactly as said in the video. */
   key: string;
   /** Target article: /articles/<slug>. Must match the published slug. */
   slug: string;
-  /** Optional series label shown on /social, e.g. "10-video LV series". */
+  /** Optional series label, e.g. "10-video LV series". */
   series?: string;
-  /** Optional tile image for the /social grid: the video's own cover frame
-   * (owner-recorded footage only, per the image rule), served from
-   * /public/social-covers/. Absent = the designed fallback tile renders. */
+  /** Shared cover frame (both grids) unless a platform overrides it. */
   cover?: string;
+  /** Per-platform placement. Omit for "on both grids, registry order". */
+  platforms?: Partial<Record<Platform, PlatformPlacement>>;
 }
 
 export const SOCIAL_KEYS: SocialKeyEntry[] = [
@@ -57,6 +78,57 @@ export const SOCIAL_KEYS: SocialKeyEntry[] = [
   },
 ];
 
+/** A registry entry resolved for one grid: the effective cover picked, series
+ * kept, platform machinery stripped. */
+export interface ResolvedTile {
+  key: string;
+  slug: string;
+  series?: string;
+  cover?: string;
+}
+
+/**
+ * Pure resolver (unit-tested): the tiles for one platform's grid from a given
+ * entry list, in that platform's order. Pass no platform for the generic
+ * fallback (every entry, registry order, shared cover). An entry is on a
+ * platform's grid when it has no `platforms` block (shared) or when that
+ * platform appears in its block. Explicitly-ordered entries sort first
+ * (ascending), the rest follow registry order.
+ */
+export function resolveTiles(
+  entries: SocialKeyEntry[],
+  platform?: Platform,
+): ResolvedTile[] {
+  const withIndex = entries.map((entry, index) => ({ entry, index }));
+
+  const included = platform
+    ? withIndex.filter(
+        ({ entry }) => !entry.platforms || platform in entry.platforms,
+      )
+    : withIndex;
+
+  const sorted = [...included].sort((a, b) => {
+    const ao = platform ? a.entry.platforms?.[platform]?.order : undefined;
+    const bo = platform ? b.entry.platforms?.[platform]?.order : undefined;
+    if (ao != null && bo != null) return ao - bo || a.index - b.index;
+    if (ao != null) return -1;
+    if (bo != null) return 1;
+    return a.index - b.index;
+  });
+
+  return sorted.map(({ entry }) => ({
+    key: entry.key,
+    slug: entry.slug,
+    series: entry.series,
+    cover: (platform && entry.platforms?.[platform]?.cover) || entry.cover,
+  }));
+}
+
+/** The tiles for one platform's grid from the live registry. */
+export function keysForPlatform(platform?: Platform): ResolvedTile[] {
+  return resolveTiles(SOCIAL_KEYS, platform);
+}
+
 /** Lowercase, strip punctuation, collapse whitespace — what a viewer's typed
  * version of a spoken key normalizes to. */
 export function normalizeSearchKey(q: string): string {
@@ -67,7 +139,8 @@ export function normalizeSearchKey(q: string): string {
     .trim();
 }
 
-/** Exact match of a search query against the registry, or null. */
+/** Exact match of a search query against the registry, or null. Platform-
+ * agnostic: a spoken key pins its article regardless of source app. */
 export function matchSocialKey(query: string): SocialKeyEntry | null {
   const q = normalizeSearchKey(query);
   if (!q) return null;

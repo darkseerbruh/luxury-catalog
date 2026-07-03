@@ -1,23 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
 import { listPublished, type PostSummary } from "@/lib/posts";
-import { SOCIAL_KEYS } from "@/lib/social-search-keys";
+import { keysForPlatform, type Platform } from "@/lib/social-search-keys";
 
 /**
- * The shared bio-hub grid (likeshop/NYT pattern): a 3-column mirror of the
- * profile the visitor just left, one square tile per video article in posting
- * order, each wearing its spoken search key. `platform` labels the page and,
- * once posting diverges per platform, will drive per-platform order/covers
- * (registry entries grow platform fields then; today both mirrors are equal).
+ * The bio-hub grid (likeshop/NYT pattern): a 3-column mirror of the profile the
+ * visitor just left, one square tile per video article in that platform's own
+ * posting order, each wearing its spoken search key. TikTok and Instagram pull
+ * their own ordered/scoped tile set from the registry (keysForPlatform); no
+ * platform = the generic /social fallback showing every entry.
  */
-export async function SocialGrid({ platform }: { platform?: "tiktok" | "instagram" }) {
+export async function SocialGrid({ platform }: { platform?: Platform }) {
   const published = await listPublished();
   const bySlug = new Map(published.map((p) => [p.slug, p]));
 
-  const entries = SOCIAL_KEYS.map((e) => ({
-    ...e,
-    post: bySlug.get(e.slug),
-  })).filter((e): e is typeof e & { post: PostSummary } => Boolean(e.post));
+  const entries = keysForPlatform(platform)
+    .map((e) => ({ ...e, post: bySlug.get(e.slug) }))
+    .filter((e): e is typeof e & { post: PostSummary } => Boolean(e.post));
 
   const fromLabel = platform === "tiktok" ? "our TikTok" : platform === "instagram" ? "our Instagram" : "our videos";
 
