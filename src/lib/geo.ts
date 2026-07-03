@@ -198,7 +198,25 @@ interface JsonLd {
   [key: string]: unknown;
 }
 
-export function productJsonLd(v: VariantDetail, url: string): JsonLd {
+/**
+ * Real observed market data for the Product `offers` block. Google marks a
+ * Product without `offers`/`review`/`aggregateRating` as a CRITICAL product-
+ * snippets error (GSC email 2026-06-23) — no rich results until one exists.
+ * Callers must build this ONLY from captured listing rows (the same comps the
+ * page renders); when there are no listings the block is omitted, never faked.
+ */
+export interface ObservedOffers {
+  lowPrice: number;
+  highPrice: number;
+  offerCount: number;
+  priceCurrency: string;
+}
+
+export function productJsonLd(
+  v: VariantDetail,
+  url: string,
+  extras?: { offers?: ObservedOffers | null; image?: string | null },
+): JsonLd {
   const props: JsonLd[] = [];
   const add = (name: string, value: string | number | null | undefined) => {
     if (value != null && value !== "") props.push({ "@type": "PropertyValue", name, value: `${value}` });
@@ -224,6 +242,18 @@ export function productJsonLd(v: VariantDetail, url: string): JsonLd {
     category: "Designer handbag",
     description: buildLeadAnswer(v),
     url,
+    ...(extras?.image ? { image: extras.image } : {}),
+    ...(extras?.offers
+      ? {
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: extras.offers.priceCurrency,
+            lowPrice: extras.offers.lowPrice,
+            highPrice: extras.offers.highPrice,
+            offerCount: extras.offers.offerCount,
+          },
+        }
+      : {}),
     ...(props.length ? { additionalProperty: props } : {}),
   };
 }
