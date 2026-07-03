@@ -17,8 +17,13 @@ Owner decision 2026-07-02.*
    search key. PER-POST STEP once a video is live: export its cover frame
    (owner-recorded footage only) to `public/social-covers/<key>.jpg` and set
    `cover` on the registry entry; until then the designed fallback tile
-   (title + key) renders. Bio URL carries UTM:
-   `/social?utm_source=tiktok&utm_medium=bio`.
+   (title + key) renders. PER-PLATFORM MIRRORS (owner call
+   2026-07-03, the likeshop pattern is per-platform): TikTok bio ->
+   `/social/tiktok?utm_source=tiktok&utm_medium=bio`; Instagram bio ->
+   `/social/instagram?utm_source=instagram&utm_medium=bio`. Both render the same
+   registry today; when posting diverges per platform, entries grow platform
+   fields (order/covers) and each mirror follows its own profile. Plain
+   `/social` stays as the generic fallback forever.
 3. **IG comment-keyword DM automation (later).** Paid tool, outward-facing
    signup; revisit when IG engagement justifies it. Not built.
 
