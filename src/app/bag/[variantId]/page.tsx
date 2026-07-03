@@ -259,11 +259,8 @@ export default async function BagDetailPage({
         .filter((s) => /^https?:\/\//.test(s))
     )
   );
-  const jsonLd = [
-    productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`),
-    faqJsonLd(faq),
-    breadcrumbJsonLd(v),
-  ].filter(Boolean);
+  // (Product JSON-LD is assembled below, after the resale comps — its `offers`
+  // block is built from the same listed rows the page renders.)
 
   // Demand signal (privacy-safe counts of wants + watchers) — powers the timing
   // read; renders only when there's real signal.
@@ -326,6 +323,40 @@ export default async function BagDetailPage({
       condition: h.condition,
       url: h.sourceUrl,
     }));
+
+  // Product JSON-LD. Google requires `offers`, `review`, or `aggregateRating`
+  // on Product markup (critical product-snippets error without one, GSC
+  // 2026-06-23). Ours is an AggregateOffer over the CURRENT asking listings
+  // only ("listed" rows — the same comps rendered on-page); sold rows are
+  // history, not offers. No listings or no currency → the block is omitted
+  // rather than invented, and that page simply stays snippet-ineligible.
+  const listedCurrency =
+    recordedSales.find((h) => h.priceType === "listed" && h.currency)?.currency ?? null;
+  const observedOffers =
+    listedComps.length > 0 && listedCurrency
+      ? {
+          lowPrice: Math.min(...listedComps.map((c) => c.price)),
+          highPrice: Math.max(...listedComps.map((c) => c.price)),
+          offerCount: listedComps.length,
+          priceCurrency: listedCurrency,
+        }
+      : null;
+  const heroImage = images[v.variantId] ?? null;
+  const jsonLdImage = heroImage
+    ? /^https?:\/\//.test(heroImage)
+      ? heroImage
+      : heroImage.startsWith("/")
+        ? `${SITE_URL}${heroImage}`
+        : null
+    : null;
+  const jsonLd = [
+    productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`, {
+      offers: observedOffers,
+      image: jsonLdImage,
+    }),
+    faqJsonLd(faq),
+    breadcrumbJsonLd(v),
+  ].filter(Boolean);
   const salesByDate = recordedSales
     .slice()
     .sort((a, b) => (a.observedOn ?? a.dateRecorded).localeCompare(b.observedOn ?? b.dateRecorded));
