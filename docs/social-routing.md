@@ -11,8 +11,14 @@ Owner decision 2026-07-02.*
    "luxurycatalog dot com, search *key*". An exact key match pins the article
    to the top of `/search` (registry: `src/lib/social-search-keys.ts`).
 2. **Permanent bio hub (fallback).** The bio link on every profile points at
-   `/social` and never changes. It lists video articles newest-first, each card
-   showing its search key, driven by the same registry.
+   `/social` and never changes. It is GRID-FIRST (the likeshop/NYT pattern,
+   owner call 2026-07-03): a 3-column mirror of the profile the visitor just
+   left, one square tile per video article in posting order, each wearing its
+   search key. PER-POST STEP once a video is live: export its cover frame
+   (owner-recorded footage only) to `public/social-covers/<key>.jpg` and set
+   `cover` on the registry entry; until then the designed fallback tile
+   (title + key) renders. Bio URL carries UTM:
+   `/social?utm_source=tiktok&utm_medium=bio`.
 3. **IG comment-keyword DM automation (later).** Paid tool, outward-facing
    signup; revisit when IG engagement justifies it. Not built.
 

@@ -24,6 +24,10 @@ export interface SocialKeyEntry {
   slug: string;
   /** Optional series label shown on /social, e.g. "10-video LV series". */
   series?: string;
+  /** Optional tile image for the /social grid: the video's own cover frame
+   * (owner-recorded footage only, per the image rule), served from
+   * /public/social-covers/. Absent = the designed fallback tile renders. */
+  cover?: string;
 }
 
 export const SOCIAL_KEYS: SocialKeyEntry[] = [
