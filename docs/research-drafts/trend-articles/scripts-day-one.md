@@ -38,7 +38,7 @@ SPOKEN-STYLE RULES: superseded by docs/script-requirements.md (the canonical lis
 
 ---
 
-## 📋 CAPTIONS + TAGS — Kit 1 reels (recorded 2026-07-03, ready to post)
+## 📋 CAPTIONS + TAGS: Kit 1 reels (recorded 2026-07-03, ready to post)
 
 Post packages for the three rendered Chanel reels (`output/chanel-*-2026-07-03.mp4`).
 On-voice per `docs/voice-and-tone.md` (I-voice founder, no em dashes, value hedged, the
