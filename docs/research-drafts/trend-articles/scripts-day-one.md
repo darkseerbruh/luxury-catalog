@@ -38,6 +38,31 @@ SPOKEN-STYLE RULES: superseded by docs/script-requirements.md (the canonical lis
 
 ---
 
+## 📋 CAPTIONS + TAGS — Kit 1 reels (recorded 2026-07-03, ready to post)
+
+Post packages for the three rendered Chanel reels (`output/chanel-*-2026-07-03.mp4`).
+On-voice per `docs/voice-and-tone.md` (I-voice founder, no em dashes, value hedged, the
+spoken search key `chanel 2026` in plain text so it pins the article at `/search`).
+Paste into a Metricool draft with the file; format = Reel (TikTok + Instagram).
+
+**1. Starter map** (`chanel-starter-map`) · TikTok title: *Chanel in 2026, finally decoded*
+> New to Chanel and your feed's a mess? Here's the 2026 starter map with real pre-loved prices. One icon (the Classic Flap), one original (the 2.55), three newcomers named for their birth year (the 19, the 22, the 25), and one entry door (the WOC). Every number is a pre-loved asking median from the prices I track. Search chanel 2026 on luxurycatalog.com and it comes up first. Which Chanel keeps showing up in your feed?
+> #chanel #chaneltok #bagtok #pursetok #preloved #chanel25
+
+**2. Taxonomy** (`chanel-taxonomy`) · TikTok title: *Every Chanel type, in one video*
+> Every Chanel bag type in one pass. The Classic Flap (quilted, chain through leather), the 2.55 (the original, Mademoiselle lock), the Boy, the WOC, and the year-named lines: the 19, the 22, the 25. One trap to dodge: the 31 isn't a year, it's the address, 31 Rue Cambon. The rule since 2019: the everyday lines take their birth year, not a size. Search chanel 2026 on luxurycatalog.com for what each actually resells for. Which one did you not know the name of?
+> #chanel #chaneltok #bagtok #pursetok #chanelclassicflap #handbags
+
+**3. The debate** (`chanel-25-debate`) · TikTok title: *Chanel 25: future classic or future Boy?*
+> Is the Chanel 25 a future classic like the Classic Flap, or does it go the way of the Boy (the hot Chanel of the 2010s, now all over resale for less)? My comps show what each future looks like, and it's too early to call. Anyone handing you a verdict today is guessing. My take, not a rule: buy it if you'll carry it, not for resale. Search chanel 2026 on luxurycatalog.com. Already decided? Tell me your take.
+> #chanel #chanel25 #chaneltok #bagtok #pursetok #resale
+
+*Metricool auto-drafting is blocked until the render is at a public URL (the API needs
+media as a public link; local files can't attach). Create manually, or enable a public
+video host to make it zero-touch.*
+
+---
+
 ## KIT 1: Chanel in 2026
 
 ### 1. The Explainer (~50s, ~135 words)
