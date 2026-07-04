@@ -42,6 +42,7 @@ export const Overlay: React.FC<{
   readonly widthPct?: number;
   readonly tilt?: number;
   readonly cutout?: boolean;
+  readonly card?: boolean;
 }> = ({
   img,
   durationInFrames,
@@ -53,6 +54,7 @@ export const Overlay: React.FC<{
   widthPct = 24,
   tilt = -4,
   cutout = false,
+  card = false,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -69,13 +71,23 @@ export const Overlay: React.FC<{
   const pos =
     track && track.length > 0 ? sampleTrack(track, fromSec + frame / fps) : { xPct, yPct };
 
-  const imgStyle: React.CSSProperties = cutout
-    ? { filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.55))" }
-    : {
-        borderRadius: 18,
-        boxShadow: "0 24px 50px rgba(0,0,0,0.5)",
-        border: "1px solid rgba(255,255,255,0.08)",
-      };
+  // Card (cutout:false): the product image sits on a dark, gold-edged panel so it
+  // reads as an overlay and pops against ANY background (e.g. her real bag wall).
+  // Cutout (true): the bag floats as a shape with a drop shadow.
+  const cardStyle: React.CSSProperties = card
+    ? {
+        background: "rgba(20,19,18,0.94)",
+        border: "2px solid #c9a24c",
+        borderRadius: 20,
+        padding: 14,
+        boxShadow: "0 24px 55px rgba(0,0,0,0.6)",
+      }
+    : {};
+  const imgStyle: React.CSSProperties = card
+    ? { display: "block", filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.4))" }
+    : cutout
+      ? { filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.55))" }
+      : { borderRadius: 12, display: "block", boxShadow: "0 24px 50px rgba(0,0,0,0.5)" };
 
   return (
     <AbsoluteFill>
@@ -91,6 +103,7 @@ export const Overlay: React.FC<{
           flexDirection: "column",
           alignItems: "center",
           gap: 10,
+          ...cardStyle,
         }}
       >
         <Img src={staticFile(img)} style={{ width: "100%", ...imgStyle }} />

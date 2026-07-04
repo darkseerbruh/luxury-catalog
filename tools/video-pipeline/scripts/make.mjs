@@ -186,10 +186,13 @@ const resolveCues = async (base, publicVideo) => {
       continue;
     }
 
-    // Image: cut out the background (default) so the bag floats, unless opted out.
+    // Image: cut out the background (default) so the bag fills the frame. `card` also
+    // uses the cutout (tight bag) but renders it on a dark gold-edged panel so it pops
+    // against a busy background (her real bag wall). Only cue.cutout===false (and not a
+    // card) keeps the raw photo.
     const srcImg = path.isAbsolute(cue.img) ? cue.img : path.join(INPUT_DIR, cue.img);
     let imgName;
-    if (cue.cutout === false) {
+    if (cue.cutout === false && cue.card !== true) {
       imgName = path.basename(cue.img);
       if (existsSync(srcImg)) copyFileSync(srcImg, path.join(PUBLIC_DIR, imgName));
     } else {
@@ -213,6 +216,7 @@ const resolveCues = async (base, publicVideo) => {
       widthPct: cue.widthPct,
       tilt: cue.tilt,
       cutout: cue.cutout !== false,
+      card: cue.card === true,
     };
 
     // Follow the hand: attach the tracked palm path over the cue window.

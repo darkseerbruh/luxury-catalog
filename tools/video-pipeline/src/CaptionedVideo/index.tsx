@@ -35,6 +35,7 @@ const overlaySchema = z.object({
   widthPct: z.number().optional(), // width as % of canvas (default 40)
   tilt: z.number().optional(), // rotation in degrees (default -4)
   cutout: z.boolean().optional(), // style as a shape (drop shadow) vs a photo card
+  card: z.boolean().optional(), // cutout bag on a dark gold-edged panel (pops off a busy bg)
   track: z
     .array(z.object({ t: z.number(), xPct: z.number(), yPct: z.number() }))
     .optional(), // hand path to follow
@@ -177,6 +178,7 @@ export const CaptionedVideo: React.FC<Props> = ({
               fromSec={o.fromSec}
               track={o.track}
               cutout={o.cutout}
+              card={o.card}
               xPct={o.xPct}
               yPct={o.yPct}
               widthPct={o.widthPct}
