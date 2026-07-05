@@ -25,7 +25,15 @@ export interface ShopCurrent {
   material: string;
   hardware: string;
   condition: string;
+  /** "" | "yes" | "unknown" — the protective-feet filter (0044). */
+  feet: string;
 }
+
+/** Human labels for the raw protective-feet facet values. */
+const FEET_LABELS: Record<string, string> = {
+  yes: "Has protective feet",
+  unknown: "Feet not yet documented",
+};
 
 /** A flat facet select (brand / hardware / condition); renders nothing when empty. */
 function FacetSelect({
@@ -54,6 +62,47 @@ function FacetSelect({
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {o.value} ({o.count})
+          </option>
+        ))}
+      </select>
+    </>
+  );
+}
+
+/**
+ * A flat facet select whose option text is remapped through `labels` (raw facet
+ * value → shown text). Used for the protective-feet facet, where the DB values
+ * are "yes"/"unknown" but shoppers should see plain language. Renders nothing when
+ * empty — so the whole control disappears pre-migration or with no documented data.
+ */
+function LabeledFacetSelect({
+  id,
+  label,
+  allLabel,
+  value,
+  options,
+  labels,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  allLabel: string;
+  value: string;
+  options: Facet[];
+  labels: Record<string, string>;
+  onChange: (value: string) => void;
+}) {
+  if (options.length === 0) return null;
+  return (
+    <>
+      <label className="sr-only" htmlFor={id}>
+        {label}
+      </label>
+      <select id={id} className={selectClass} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{allLabel}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {labels[o.value] ?? o.value} ({o.count})
           </option>
         ))}
       </select>
@@ -215,6 +264,15 @@ export default function ShopControls({ facets, current }: { facets: ShopFacets; 
         value={current.condition}
         options={facets.conditions}
         onChange={(v) => update({ condition: v })}
+      />
+      <LabeledFacetSelect
+        id="shop-feet"
+        label="Protective feet"
+        allLabel="Protective feet"
+        value={current.feet}
+        options={facets.protectiveFeet}
+        labels={FEET_LABELS}
+        onChange={(v) => update({ feet: v })}
       />
 
       <div className="flex items-center gap-1.5">

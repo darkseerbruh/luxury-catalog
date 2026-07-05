@@ -42,6 +42,7 @@ export default async function ShopPage({
     material?: string;
     hardware?: string;
     condition?: string;
+    feet?: string;
   }>;
 }) {
   const {
@@ -54,7 +55,9 @@ export default async function ShopPage({
     material = "",
     hardware = "",
     condition = "",
+    feet = "",
   } = await searchParams;
+  const protectiveFeet = feet === "yes" || feet === "unknown" ? feet : undefined;
   const sortValue = (VALID_SORTS as string[]).includes(sort) ? (sort as ShopSort) : "best-deal";
   const minPrice = min && Number.isFinite(Number(min)) ? Number(min) : undefined;
   const maxPrice = max && Number.isFinite(Number(max)) ? Number(max) : undefined;
@@ -69,6 +72,7 @@ export default async function ShopPage({
     material: material || undefined,
     hardware: hardware || undefined,
     condition: condition || undefined,
+    protectiveFeet,
   });
 
   const images = await getVariantImages(result.products.map((p) => p.variantId));
@@ -89,7 +93,7 @@ export default async function ShopPage({
 
       <ShopControls
         facets={result.facets}
-        current={{ brand, sort: sortValue, deals: deals === "1", min, max, color, material, hardware, condition }}
+        current={{ brand, sort: sortValue, deals: deals === "1", min, max, color, material, hardware, condition, feet }}
       />
 
       {result.products.length === 0 ? (

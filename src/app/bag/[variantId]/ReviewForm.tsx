@@ -52,6 +52,8 @@ export default function ReviewForm({
   const [body, setBody] = useState(existing?.body ?? "");
   const [worthIt, setWorthIt] = useState<boolean | null>(existing?.worthIt ?? null);
   const [occasion, setOccasion] = useState(existing?.occasion ?? "");
+  // Optional owner-reported bag fact — helps the catalog crowd-fill protective feet.
+  const [protectiveFeet, setProtectiveFeet] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -96,6 +98,7 @@ export default function ReviewForm({
         body,
         worthIt,
         occasion,
+        reportsProtectiveFeet: protectiveFeet,
       });
       if (res.ok) {
         track(EVENTS.reviewSubmitted, { variant_id: variantId, rating });
@@ -159,6 +162,7 @@ export default function ReviewForm({
         setBody("");
         setWorthIt(null);
         setOccasion("");
+        setProtectiveFeet(null);
         setOpen(false);
       } else setError(res.error ?? "Something went wrong.");
     });
@@ -214,6 +218,22 @@ export default function ReviewForm({
             {o.chip}
           </button>
         ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted">Protective feet?</span>
+        {([["Yes", true], ["No", false]] as const).map(([label, val]) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => setProtectiveFeet(protectiveFeet === val ? null : val)}
+            className={`rounded-full border px-3 py-1 transition-colors ${
+              protectiveFeet === val ? "border-gold text-gold" : "border-border text-muted hover:border-gold/50"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+        <span className="text-xs text-muted/70">Do the base corners sit on little metal feet?</span>
       </div>
 
       {error && <p className="text-sm text-red-400">{error}</p>}
