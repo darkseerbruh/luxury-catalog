@@ -182,6 +182,36 @@ written in the brand voice. These are the columns of the calendar.
 
 ---
 
+## 3.5 Content tiers (asset bank + cadence, added 2026-07-05)
+
+Pillars are WHAT we talk about. Tiers are HOW MUCH we invest per post and how often.
+Every post is one pillar times one tier. Three tiers keep cadence high without burning
+out on hero pieces.
+
+| Tier | Asset | Its job | Metric it moves | Face | Effort / cadence |
+|---|---|---|---|---|---|
+| **Hero** | Data slideshows (real price/resale data, charts, campaign cutouts) | Teach a counterintuitive truth | Saves + site traffic | Faceless | High, 1-2 a week |
+| **Signature** | Founder-to-camera brand/persona posts + her real bags styled | Credibility + warmth, a real founder and real bags behind the data | Follows + saves, feeds the quiz | Mixed | Low-med, 2-3 a week |
+| **Keep-warm** | Phone B-roll backdrop + a value text hook | Hold cadence, catch the occasional viral hook | Reach (consistency), marginal per post | Optional | Very low, near-daily |
+
+Rules:
+- **Mix ~1 face post per 2 faceless** (owner call 2026-07-05). Face content = intentional
+  NEW founder-to-camera (brand / "who we are" / persona value posts especially), warm and
+  on-voice. The old first-party library face shots stay OUT (she vetted them). Hero data
+  slideshows stay faceless; the founder face lives mostly in the Signature/brand posts.
+- **Value-first every tier:** the hook carries a real, useful point. Never post an asset
+  just because we have it (no pretty B-roll with no reason).
+- **Bag-to-background contrast is an always rule:** the bag must pop, never dark on
+  near-black.
+- **Asset bank:** real owned bags = `~/Documents/handbag-products` (social-cleared, zero
+  copyright risk); brand campaign cutouts = `~/Documents/handbag-campaign-images`
+  (social-cleared); phone B-roll + you-with-bags = owner uploads. Slideshow hook
+  templates = `docs/social-slideshow-hooks.md`.
+- **Repurpose across tiers:** one hero insight spins into a Signature post (you holding
+  the bag it is about) and a Keep-warm text-over-B-roll. One idea, three posts.
+
+---
+
 ## 4. Email playbook (detail)
 
 > **Blocked on the opt-in dependency in §2.2** — content-ready, build-pending.
