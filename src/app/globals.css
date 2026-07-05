@@ -28,3 +28,20 @@ body {
   background: var(--color-bg);
   color: var(--color-foreground);
 }
+
+/* Homepage style-read example deck: three real reads crossfade on a 12s loop
+   (each card sets its own animation-delay). Reduced-motion visitors get the
+   first card only, no motion. */
+@keyframes read-cycle {
+  0%, 27% { opacity: 1; }
+  33%, 94% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.read-cycle-card {
+  animation: read-cycle 12s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .read-cycle-card {
+    animation: none;
+  }
+}

@@ -62,3 +62,35 @@ estimate-not-appraisal).
   the viral entry point; the other three sit in a 3-up grid below.
 - Mobile-first: single column at 375px, 3-up from `sm`.
 - All cards are `next/link` — no client JS, works server-rendered.
+
+## Style-read module visual — the example deck (owner pick 2026-07-05)
+
+The quiz callout was words-only; the owner asked for a visual. Three directions
+were mocked (inline first question / example result card / taste-map mosaic);
+she picked the **example result card**, with the condition that it read as
+**one of many possible outcomes**.
+
+**Shipped (StyleReadCallout.tsx):** a fanned card deck beside the copy. Three
+example reads crossfade on a 12s CSS-only loop (no JS, static-page safe,
+`prefers-reduced-motion` shows one card, no motion). Multiplicity is carried
+three ways: the fanned stack, the rotation, and the frame copy ("A few of the
+reads we hand out" / "Yours is built from your answers, in your words.").
+
+**Honesty rule:** every read shown is a VERBATIM `tasteIdentity()` output on a
+plausible answer set, never a hand-written sample. Regenerate after vocabulary
+changes with:
+
+```ts
+import { tasteIdentity } from "@/lib/taste-identity";
+tasteIdentity({ vibe: { structured: "love", sporty: "not" }, logo: "quiet",
+  hardware: { gold: "love" }, finishes: { "smooth-leather": "love" } });
+// repeat for a glam+loud and an edgy+gunmetal set; copy outputs verbatim.
+```
+
+**Alternates considered (swappable later):**
+- **Inline first question** — the real "What do you carry a bag for?" chips in
+  the module, ending in Continue. Strong "tiles SHOW value" fit; revisit if the
+  deck underperforms on quiz_started.
+- **Taste-map mosaic** — Love/fine/no marks filling a vibe grid. Ties to the
+  Taste Map concept; needs a non-fabricated progress treatment (content-gating
+  rule: never assert fake progress).
