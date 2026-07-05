@@ -330,33 +330,9 @@ export default function SearchFilters({
         </div>
       )}
 
-      {visible.brands.map((brand) => (
-        <div key={brand.brandId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
-          <div className="flex items-baseline justify-between">
-            <h2 className="font-serif text-xl text-foreground">{brand.name}</h2>
-            <span className="text-sm text-muted">
-              {brand.variantCount} {brand.variantCount === 1 ? "result" : "results"}
-            </span>
-          </div>
-          <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-            {brand.tier.replace("-", " ")}
-          </p>
-          {brand.styles.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {brand.styles.map((s) => (
-                <Link
-                  key={s.styleId}
-                  href={s.variantId ? `/bag/${s.variantId}` : `/search?q=${encodeURIComponent(s.name)}`}
-                  className="rounded-full border border-border px-3 py-1 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                >
-                  {s.name}
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-
+      {/* Styles render FIRST: when a query matched a specific style, the big
+          all-styles brand card was burying the exact bag she typed (owner UX
+          review 2026-07-05). Brand groups follow as the broader context. */}
       {visible.styles.map((style) => (
         <div key={style.styleId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
           <div className="flex items-start justify-between gap-3">
@@ -395,6 +371,32 @@ export default function SearchFilters({
                 </li>
               ))}
             </ul>
+          )}
+        </div>
+      ))}
+      {visible.brands.map((brand) => (
+        <div key={brand.brandId} className="mb-6 rounded-2xl border border-border bg-surface p-6">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-serif text-xl text-foreground">{brand.name}</h2>
+            <span className="text-sm text-muted">
+              {brand.variantCount} {brand.variantCount === 1 ? "result" : "results"}
+            </span>
+          </div>
+          <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
+            {brand.tier.replace("-", " ")}
+          </p>
+          {brand.styles.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {brand.styles.map((s) => (
+                <Link
+                  key={s.styleId}
+                  href={s.variantId ? `/bag/${s.variantId}` : `/search?q=${encodeURIComponent(s.name)}`}
+                  className="rounded-full border border-border px-3 py-1 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                >
+                  {s.name}
+                </Link>
+              ))}
+            </div>
           )}
         </div>
       ))}
