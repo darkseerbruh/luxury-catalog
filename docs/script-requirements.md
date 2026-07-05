@@ -175,6 +175,34 @@ video.
 6.6 **Scope notes are receipts**: "we track more than a hundred Chanel styles; these are
     the ones filling feeds."
 
+## 7. Editing & render output (talking-head reels)
+
+The render-pipeline rules for a talking-head reel. Enforced by `npm run verify <base>`
+before the reel is shown or staged. Full pipeline how-to lives in the `video` skill.
+
+7.1 **Open on her first word.** Trim the leading dead air; the reel never opens on her
+    sitting silent. Whisper pads the silence into the first token, so the auto-trim can
+    miss it: open on the real line with `input/<base>.trim.json {"startPhrase":"..."}`
+    (matched on the transcript, timeline-independent, preferred) or `{"headSec":N}`, then
+    verify the opening frame.
+7.2 **Keep her spoken audio in the delivered file.** It's a lip-synced scratch track she
+    lines the trending sound up against. Never deliver a talking-head reel silent
+    ("silent by design" is montage-only).
+7.3 **Audio stays synced to her mouth** (within ~1 frame / 40ms). The phone's own audio is
+    the ground truth for her lips; confirm the sync-mux match score before render.
+7.4 **Captions match the spoken audio, verified not assumed.** The sync step can leave the
+    clean audio delayed as a container offset, running captions ahead of her voice; the
+    pipeline bakes the offset into real samples (`aresample=async=1:first_pts=0`) and trims
+    the silent lead BEFORE transcription. Spot-check three points with `npm run verify`;
+    never assume.
+7.5 **A bag on screen carries its NAME near it.** Every cued bag card shows the bag's name
+    (the cue's `label`). Exception: if a rank list already names each bag on screen, the
+    pipeline suppresses the card label so it isn't doubled.
+7.6 **The spoken price sits near the bag.** A dollar amount pops just under the card that's
+    on screen when she says it; the card must still be up at the price, so let cards
+    auto-hold until the next bag (no short fixed `hold` when the price comes later in the
+    sentence).
+
 ## The pre-record / pre-publish checklist
 
 - [ ] Worth-it bar: payload named in one sentence; a usable move / decision / correction
@@ -190,3 +218,5 @@ video.
       tics, max one hedge, no em dashes, no internal jargon
 - [ ] Size run/lineup/ranking has its visual (script cue + article diagram)
 - [ ] No [DATA]/[VERIFY] remaining; post package complete (caption carries date + n)
+- [ ] Talking-head render (if a reel): opens on first word, keeps synced audio, captions
+      verified, bag name + price on screen — `npm run verify` green

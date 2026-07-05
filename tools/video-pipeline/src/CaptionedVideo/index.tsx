@@ -16,13 +16,18 @@ import {
 } from "remotion";
 import { z } from "zod";
 import { BRAND } from "../brand";
+import { CtaBox } from "./CtaBox";
+import { Headline } from "./Headline";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
+import { RankList } from "./RankList";
 import { RankTracker } from "./RankTracker";
+import { StatCallout } from "./StatCallout";
 import SubtitlePage from "./SubtitlePage";
 
 const overlaySchema = z.object({
   img: z.string(), // filename in public/
+  label: z.string().optional(), // name shown under the image
   fromSec: z.number(),
   toSec: z.number(),
   xPct: z.number().optional(), // center x, 0-100 (default 64)
@@ -30,6 +35,7 @@ const overlaySchema = z.object({
   widthPct: z.number().optional(), // width as % of canvas (default 40)
   tilt: z.number().optional(), // rotation in degrees (default -4)
   cutout: z.boolean().optional(), // style as a shape (drop shadow) vs a photo card
+  card: z.boolean().optional(), // cutout bag on a dark gold-edged panel (pops off a busy bg)
   track: z
     .array(z.object({ t: z.number(), xPct: z.number(), yPct: z.number() }))
     .optional(), // hand path to follow
@@ -41,11 +47,42 @@ const rankTrackerSchema = z.object({
   yPct: z.number().optional(),
 });
 
+const rankListSchema = z.object({
+  rows: z.array(
+    z.object({ num: z.string(), name: z.string(), revealSec: z.number() }),
+  ),
+  leftPct: z.number().optional(),
+  topPct: z.number().optional(),
+  buildFromBottom: z.boolean().optional(),
+});
+
+const headlineSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  cta: z.string().optional(),
+  ctaSec: z.number().optional(),
+  ctaYPct: z.number().optional(),
+  yPct: z.number().optional(),
+});
+
 export const captionedVideoSchema = z.object({
   src: z.string(), // basename of a video file in public/
   zoom: z.number().default(BRAND.zoomIntensity),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
+  rankList: rankListSchema.optional(),
+  headline: headlineSchema.optional(),
+  callouts: z
+    .array(
+      z.object({
+        text: z.string(),
+        atSec: z.number(),
+        hold: z.number().optional(),
+        xPct: z.number().optional(),
+        yPct: z.number().optional(),
+      }),
+    )
+    .default([]),
 });
 
 type Props = z.infer<typeof captionedVideoSchema>;
@@ -70,6 +107,9 @@ export const CaptionedVideo: React.FC<Props> = ({
   zoom,
   overlays,
   rankTracker,
+  rankList,
+  headline,
+  callouts,
 }) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const { delayRender, continueRender } = useDelayRender();
@@ -133,10 +173,12 @@ export const CaptionedVideo: React.FC<Props> = ({
           <Sequence key={`ov-${i}`} from={from} durationInFrames={dur}>
             <Overlay
               img={o.img}
+              label={o.label}
               durationInFrames={dur}
               fromSec={o.fromSec}
               track={o.track}
               cutout={o.cutout}
+              card={o.card}
               xPct={o.xPct}
               yPct={o.yPct}
               widthPct={o.widthPct}
@@ -175,6 +217,35 @@ export const CaptionedVideo: React.FC<Props> = ({
           yPct={rankTracker.yPct}
         />
       ) : null}
+
+      {rankList ? (
+        <RankList
+          rows={rankList.rows}
+          leftPct={rankList.leftPct}
+          topPct={rankList.topPct}
+          buildFromBottom={rankList.buildFromBottom}
+        />
+      ) : null}
+
+      {headline ? (
+        <Headline
+          title={headline.title}
+          subtitle={headline.subtitle}
+          yPct={headline.yPct}
+        />
+      ) : null}
+
+      {headline?.cta && headline?.ctaSec !== undefined ? (
+        <CtaBox
+          text={headline.cta}
+          atSec={headline.ctaSec}
+          yPct={headline.ctaYPct}
+        />
+      ) : null}
+
+      {callouts.map((c, i) => (
+        <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
+      ))}
 
       {subtitles.length === 0 ? <NoCaptionFile /> : null}
     </AbsoluteFill>

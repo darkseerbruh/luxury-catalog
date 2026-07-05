@@ -8,6 +8,8 @@
     "sync": "node scripts/sync.mjs",
     "split": "node scripts/split.mjs",
     "make": "node scripts/make.mjs",
+    "draft": "node scripts/make.mjs --draft",
+    "verify": "node scripts/verify.mjs",
     "transcribe": "node scripts/transcribe.mjs",
     "lint": "tsc"
   },

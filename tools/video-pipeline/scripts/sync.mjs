@@ -27,7 +27,7 @@ for (const f of [phone, audio]) {
 const SR = 8000; // work at 8kHz mono
 const ENV_RATE = 250; // envelope samples per second
 const BLOCK = SR / ENV_RATE; // samples per envelope point
-const MAX_LAG_SEC = 20;
+const MAX_LAG_SEC = Number(process.env.SYNC_MAXLAG ?? 20);
 
 // Decode a file to a mono 8kHz amplitude envelope.
 const envelope = (file) => {
@@ -96,22 +96,45 @@ console.log(
 const base = (outArg || path.basename(phone).replace(/\.[^.]+$/, "")).replace(/\.[^.]+$/, "");
 const out = path.join(INPUT_DIR, `${base}.synced.mp4`);
 
-// shift >= 0 -> delay the computer audio; shift < 0 -> skip into it.
-const audioInput = shift >= 0
-  ? ["-itsoffset", shift.toFixed(3), "-i", audio]
-  : ["-ss", (-shift).toFixed(3), "-i", audio];
+// Preserve the FULL clean audio: place it at the offset, pad it to the timeline, and
+// extend the video (freeze the last frame) if the audio runs past the video end, so
+// no words / captions are ever cut off the tail.
+const dur = (f) =>
+  Number(
+    execFileSync(
+      "ffprobe",
+      ["-v", "error", "-show_entries", "format=duration", "-of", "default=nk=1:nw=1", f],
+      { encoding: "utf8" },
+    ).trim(),
+  );
+const vDur = dur(phone);
+const aDur = dur(audio);
+const audioEnd = shift >= 0 ? shift + aDur : aDur + shift; // where the clean audio ends on the video timeline
+const target = Math.max(vDur, audioEnd);
+const extra = Math.max(0, target - vDur);
+
+const vfilter =
+  extra > 0.02
+    ? `[0:v]tpad=stop_mode=clone:stop_duration=${extra.toFixed(3)},setpts=PTS-STARTPTS[v]`
+    : `[0:v]setpts=PTS-STARTPTS[v]`;
+const afilter =
+  shift >= 0
+    ? `[1:a]adelay=${Math.round(shift * 1000)}:all=1,apad[a]`
+    : `[1:a]atrim=start=${(-shift).toFixed(3)},asetpts=PTS-STARTPTS,apad[a]`;
 
 execFileSync(
   "ffmpeg",
   [
     "-v", "error",
     "-i", phone,
-    ...audioInput,
-    "-map", "0:v",
-    "-map", "1:a",
-    "-c:v", "copy",
+    "-i", audio,
+    "-filter_complex", `${vfilter};${afilter}`,
+    "-map", "[v]",
+    "-map", "[a]",
+    "-t", target.toFixed(3),
+    "-c:v", "libx264",
+    "-pix_fmt", "yuv420p",
     "-c:a", "aac",
-    "-shortest",
     out, "-y",
   ],
   { stdio: ["ignore", "ignore", "inherit"] },
