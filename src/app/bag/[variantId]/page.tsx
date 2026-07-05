@@ -289,6 +289,14 @@ export default async function BagDetailPage({
   const isRetailRow = (h: (typeof v.priceHistory)[number]) =>
     h.priceType === "retail_msrp" ||
     (h.priceType == null && h.platform != null && RETAIL_PLATFORM_RX.test(h.platform));
+  // Honest range scope: a size-only catalogue variant (no colourway pinned)
+  // blends colours/leathers in one range and the pill must say so.
+  const valueScopeLabel = v.exteriorColorway
+    ? "This exact variant"
+    : v.sizeLabel && v.sizeLabel !== "Standard"
+      ? `All ${v.sizeLabel} colours and leathers`
+      : "All catalogued specs of this style";
+
   const recordedSales = v.priceHistory.filter(
     (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
       h.salePrice != null && !isRetailRow(h),
@@ -725,6 +733,16 @@ export default async function BagDetailPage({
           demandLevel={demand.level}
           demandLabel={demand.label}
           retailTrendPct={retailChange}
+          scopeLabel={valueScopeLabel}
+          mixNote={(() => {
+            const sold = recordedSales.filter((h) => h.priceType === "sold").length;
+            const ask = recordedSales.length - sold;
+            return sold > 0 && ask > 0
+              ? `built from ${ask.toLocaleString()} asking + ${sold.toLocaleString()} sold prices`
+              : sold > 0
+                ? "all sold prices"
+                : null;
+          })()}
           byCondition={byCondition}
           era={era}
           byEra={byEra}
@@ -1062,6 +1080,17 @@ export default async function BagDetailPage({
                   <span className="text-foreground">
                     {formatPrice(h.salePrice, h.currency)}
                   </span>
+                  {/* Realized vs aspirational: a sold price is the truth, an
+                      asking price is a wish. Label which one each row is. */}
+                  {h.priceType === "sold" ? (
+                    <span className="rounded-full border border-gold/40 px-2 py-0.5 text-[10px] uppercase tracking-wide text-gold/90">
+                      sold
+                    </span>
+                  ) : h.priceType === "listed" ? (
+                    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted/70">
+                      asking
+                    </span>
+                  ) : null}
                   {h.condition && <span className="text-muted">{h.condition}</span>}
                   {h.provenanceCompleteness && (
                     <span className="text-muted">{h.provenanceCompleteness}</span>

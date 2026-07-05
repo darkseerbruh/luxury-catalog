@@ -55,6 +55,15 @@ export interface ValueModuleProps {
   trendPct: number | null;
   /** Latest date any shown price was true at source. */
   asOf: string | null;
+  /**
+   * Honest scope of the range. "This exact variant" only when the variant is
+   * actually spec-pinned; a size-only catalogue variant blends colours and
+   * leathers and must say so (spec-blind blending under an exact label was
+   * the collector persona's fastest trust-killer).
+   */
+  scopeLabel?: string;
+  /** e.g. "built from 320 asking + 106 sold prices" — labels the ask/sold mix. */
+  mixNote?: string | null;
   /** M1 timing inputs — demand (from wants/watchers) + retail-hike catalyst. */
   demandLevel?: "quiet" | "warm" | "hot";
   demandLabel?: string | null;
@@ -158,6 +167,8 @@ export default function ValueModule({
   era,
   byEra,
   eraCurrency,
+  scopeLabel = "This exact variant",
+  mixNote = null,
 }: ValueModuleProps) {
   const ladder = !!byCondition && byCondition.length >= 2;
   // Era lens shows when ≥2 decade bands are populated with real data.
@@ -305,7 +316,7 @@ export default function ValueModule({
             </span>
           ) : null}
           <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
-            This exact variant · {count} recorded {count === 1 ? "price" : "prices"}
+            {scopeLabel} · {count} recorded {count === 1 ? "price" : "prices"}
             {count < 4 ? " · limited data" : ""}
           </span>
         </div>
@@ -359,7 +370,7 @@ export default function ValueModule({
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <p className="text-xs text-muted/60">
-          Estimated from recorded resale prices · not an appraisal.
+          Estimated from recorded resale prices{mixNote ? ` (${mixNote})` : ""} · not an appraisal.
           {asOf ? ` As of ${asOf.slice(0, 10)}.` : ""}
         </p>
         <a href={NUDGE[framing].href} className="text-xs text-gold hover:underline">
