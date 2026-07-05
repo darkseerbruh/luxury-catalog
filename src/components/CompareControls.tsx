@@ -173,7 +173,7 @@ export function CompareTray({ raisedOnMobile = false }: { raisedOnMobile?: boole
                 <Link
                   href={`/compare?ids=${ids}`}
                   onClick={() =>
-                    track(EVENTS.bagsCompared, { count: entries.length, variant_ids: ids })
+                    track(EVENTS.bagsCompared, { count: entries.length, variant_ids: ids, source: "tray" })
                   }
                   className="rounded-full bg-gold px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
                 >
