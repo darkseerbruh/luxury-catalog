@@ -308,9 +308,16 @@ export default function HeaderNav({
           {!searchOpen && (
             <div className={`${menuPanel} right-0`}>
               <div className="w-[32rem] max-w-[90vw] rounded-2xl border border-border bg-bg/95 p-4 shadow-lg backdrop-blur-sm">
-                <Link href="/deals" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
-                  <span>Deals</span>
-                  <span className="text-[11px] uppercase tracking-widest text-gold">Best prices</span>
+                {/* The shopping journey's door is mode-neutral (owner approved
+                    2026-07-05): /shop with the deal filter as its toggle, so the
+                    filter no longer IS the entrance. */}
+                <Link href="/shop" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
+                  <span>Shop the market</span>
+                  <span className="text-[11px] uppercase tracking-widest text-gold">Compare live prices</span>
+                </Link>
+                <Link href="/deals" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
+                  <span>Deals only</span>
+                  <span className="text-[11px] uppercase tracking-widest text-gold/80">Best prices</span>
                 </Link>
                 {brandGroups.length > 0 && (
                   <>
@@ -408,8 +415,11 @@ export default function HeaderNav({
 
             {/* Shop shortcuts */}
             <p className="mt-2 px-3 pt-1 text-xs uppercase tracking-wide text-muted/70">Shop</p>
+            <Link href="/shop" onClick={close} className="rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
+              Shop the market
+            </Link>
             <Link href="/deals" onClick={close} className="rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
-              Deals
+              Deals only
             </Link>
             {brandGroups.length > 0 && (
               <Link href="/brands" onClick={close} className="rounded-xl px-3 py-2.5 pl-6 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
