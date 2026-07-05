@@ -52,6 +52,7 @@ export const dynamic = "force-dynamic";
 
 // Dedupe the (heavy) detail fetch across generateMetadata + the page render.
 const getVariant = cache(getVariantDetail);
+const getVariants = cache(getStyleVariants);
 
 export async function generateMetadata({
   params,
@@ -66,7 +67,17 @@ export async function generateMetadata({
 
   const title = `${fullTitle(v)} — production, authentication, and value`;
   const description = metaDescription(v);
-  const url = `${SITE_URL}/bag/${v.variantId}`;
+
+  // A "Standard" bucket variant (the ingest home for size-not-stated price
+  // data) is a near-duplicate of the style when real sizes exist — point its
+  // canonical at the first-catalogued sized sibling instead of competing with
+  // it. Such pages are also left out of the sitemap (getSitemapTargets).
+  const siblings = await getVariants(v.style.styleId);
+  const sized = siblings.filter((s) => s.sizeLabel && s.sizeLabel !== "Standard");
+  const isBucket =
+    sized.length > 0 &&
+    siblings.find((s) => s.variantId === v.variantId)?.sizeLabel === "Standard";
+  const url = `${SITE_URL}/bag/${isBucket ? sized[0].variantId : v.variantId}`;
 
   return {
     title,
@@ -222,7 +233,7 @@ export default async function BagDetailPage({
   const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts] =
     await Promise.all([
       getResourcesForStyle(v.style.styleId, v.variantId),
-      getStyleVariants(v.style.styleId),
+      getVariants(v.style.styleId),
       getVariantImages([v.variantId]),
       getApprovedPhotos(v.variantId),
       hasActiveAuthenticators(),

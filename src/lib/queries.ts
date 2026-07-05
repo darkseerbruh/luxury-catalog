@@ -824,7 +824,10 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
   if (error || !data) return [];
   return (data as unknown as Record<string, unknown>[]).map((v) => ({
     variantId: v.variant_id as number,
-    sizeLabel: displaySizeLabel((v.size_label as string | null) ?? null),
+    // Raw on purpose (no displaySizeLabel): callers need to recognize the
+    // "Standard" bucket (canonical/sitemap logic); the selector's visibleDims
+    // filters it from chips itself, and nothing renders this field directly.
+    sizeLabel: (v.size_label as string | null) ?? null,
     sizeCategory: (v.size_category as string | null) ?? null,
     exteriorColorway: (v.exterior_colorway as string | null) ?? null,
     hardwareColor: (v.hardware_color as string | null) ?? null,
@@ -1886,17 +1889,31 @@ export async function getEraObject(slug: string): Promise<GroupingObject | null>
 
 // ============ Sitemap targets (programmatic SEO/GEO) ============
 
-/** All indexable entity IDs for sitemap.xml — bag variants + brands. */
+/**
+ * All indexable entity IDs for sitemap.xml — bag variants + brands.
+ * Paged via fetchAllRows (a bare .limit() silently caps at PostgREST's 1000-row
+ * ceiling, which was truncating the catalog). "Standard" bucket variants with
+ * sized siblings are excluded: they hold size-not-stated price data, not a
+ * product a crawler should index beside the real sizes (they also canonicalize
+ * to a sized sibling in generateMetadata).
+ */
 export async function getSitemapTargets(): Promise<{
   variantIds: number[];
   brandIds: number[];
 }> {
   const [variants, brands] = await Promise.all([
-    getSupabase().from("variant").select("variant_id").limit(50000),
-    getSupabase().from("brand").select("brand_id").limit(5000),
+    fetchAllRows<{ variant_id: number; style_id: number; size_label: string | null }>(() =>
+      getSupabase().from("variant").select("variant_id, style_id, size_label").order("variant_id"),
+    ),
+    getSupabase().from("brand").select("brand_id").limit(1000),
   ]);
+  const sizedStyles = new Set(
+    variants.filter((v) => v.size_label && v.size_label !== "Standard").map((v) => v.style_id),
+  );
   return {
-    variantIds: (variants.data ?? []).map((r) => r.variant_id as number),
+    variantIds: variants
+      .filter((v) => !(v.size_label === "Standard" && sizedStyles.has(v.style_id)))
+      .map((v) => v.variant_id),
     brandIds: (brands.data ?? []).map((r) => r.brand_id as number),
   };
 }
