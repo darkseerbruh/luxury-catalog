@@ -67,11 +67,11 @@ function ComingSoon({ variantId, signedIn }: { variantId: number; signedIn: bool
 
       {state === "registered" ? (
         <p className="mt-4 rounded-xl border border-gold/30 bg-surface px-4 py-3 text-sm text-foreground">
-          ✓ You&rsquo;re on the list — we&rsquo;ll email you the moment it&rsquo;s live.
+          ✓ You&rsquo;re on the list. We&rsquo;ll email you the moment it&rsquo;s live.
         </p>
       ) : state === "needsLogin" ? (
         <p className="mt-4 rounded-xl border border-gold/30 bg-surface px-4 py-3 text-sm text-foreground">
-          Noted — thanks!{" "}
+          Noted, thanks!{" "}
           <Link href="/login" className="text-gold hover:underline">Log in</Link> so we can
           actually reach you when it opens.
         </p>
@@ -114,7 +114,7 @@ function LiveRequest({ variantId, signedIn }: { variantId: number; signedIn: boo
       <p className="font-serif text-lg text-foreground">Want a pro to check it?</p>
       <p className="mt-1 text-sm text-muted">
         Request a hands-on review from one of our verified authenticators. We&rsquo;ll match
-        you and they&rsquo;ll take it from there — pricing and the actual service are arranged
+        you and they&rsquo;ll take it from there. Pricing and the actual service are arranged
         directly with the authenticator.
       </p>
 
@@ -149,7 +149,7 @@ function LiveRequest({ variantId, signedIn }: { variantId: number; signedIn: boo
                 />
               </label>
               <label className="flex flex-col gap-1.5 text-sm">
-                <span className="text-muted">Contact email (optional — defaults to your account email)</span>
+                <span className="text-muted">Contact email (optional, defaults to your account email)</span>
                 <input
                   name="contactEmail"
                   type="email"

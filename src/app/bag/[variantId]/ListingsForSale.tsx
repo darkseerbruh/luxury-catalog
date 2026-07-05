@@ -60,6 +60,54 @@ export default async function ListingsForSale({ variantId }: { variantId: number
   const data = await getListingsForVariant(variantId);
   if (!data || data.offers.length === 0) return null;
 
+  const renderOffer = (offer: Offer, i: number) => {
+    const fresh = freshness(offer.observedOn);
+    const sub = [offer.platformLabel, fresh].filter(Boolean).join(" · ");
+    const href = offer.sourceUrl ? affiliateListingUrl(offer.sourceUrl, offer.platform) : null;
+    const basisText = basis(offer, data.sizeLabel);
+    return (
+      <li key={i} className="rounded-2xl border border-border bg-surface px-4 py-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap gap-1.5">
+              {specChips(offer).map((c) => (
+                <span key={c} className="rounded-md bg-bg/40 px-2 py-0.5 text-xs text-muted">
+                  {c}
+                </span>
+              ))}
+            </div>
+            {sub && <p className="mt-1.5 text-xs text-muted">{sub}</p>}
+          </div>
+          <div className="shrink-0 text-right">
+            <p className="font-serif text-lg text-foreground">
+              {formatPrice(offer.price, offer.currency)}
+            </p>
+            {offer.rating && isConfidentBasis(offer.rating.fairValue) && (
+              <DealBadge band={offer.rating.band} pctUnder={offer.rating.pctUnder} className="mt-1" />
+            )}
+          </div>
+        </div>
+        <div className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3">
+          <span
+            className={`text-xs ${offer.rating?.fairValue.broadened ? "text-amber-400" : "text-muted"}`}
+          >
+            {basisText}
+          </span>
+          {href && (
+            <a
+              href={href}
+              target="_blank"
+              rel="sponsored nofollow noopener"
+              className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
+            >
+              View on {offer.platformLabel}
+            </a>
+          )}
+        </div>
+      </li>
+    );
+  };
+
   return (
     <section id="for-sale" className="scroll-mt-4 border-t border-border pt-8">
       <div className="mb-1 flex items-baseline justify-between gap-3">
@@ -74,65 +122,18 @@ export default async function ListingsForSale({ variantId }: { variantId: number
         Prices change and sell.
       </p>
 
-      <ul className="flex flex-col gap-3">
-        {data.offers.map((offer, i) => {
-          const fresh = freshness(offer.observedOn);
-          const sub = [offer.platformLabel, fresh].filter(Boolean).join(" · ");
-          const href = offer.sourceUrl ? affiliateListingUrl(offer.sourceUrl, offer.platform) : null;
-          const basisText = basis(data.offers[i], data.sizeLabel);
-          return (
-            <li
-              key={i}
-              className="rounded-2xl border border-border bg-surface px-4 py-4"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap gap-1.5">
-                    {specChips(offer).map((c) => (
-                      <span
-                        key={c}
-                        className="rounded-md bg-bg/40 px-2 py-0.5 text-xs text-muted"
-                      >
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                  {sub && <p className="mt-1.5 text-xs text-muted">{sub}</p>}
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-serif text-lg text-foreground">
-                    {formatPrice(offer.price, offer.currency)}
-                  </p>
-                  {offer.rating && isConfidentBasis(offer.rating.fairValue) && (
-                    <DealBadge
-                      band={offer.rating.band}
-                      pctUnder={offer.rating.pctUnder}
-                      className="mt-1"
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3">
-                <span
-                  className={`text-xs ${offer.rating?.fairValue.broadened ? "text-amber-400" : "text-muted"}`}
-                >
-                  {basisText}
-                </span>
-                {href && (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="sponsored nofollow noopener"
-                    className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
-                  >
-                    View on {offer.platformLabel}
-                  </a>
-                )}
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Cap what's expanded — a hot bag can carry 100+ live listings, and rendering
+          them all made this one section tens of screens tall. The best-rated
+          listings sit on top; the rest stay reachable behind a zero-JS expander. */}
+      <ul className="flex flex-col gap-3">{data.offers.slice(0, 8).map(renderOffer)}</ul>
+      {data.offers.length > 8 && (
+        <details className="mt-3">
+          <summary className="cursor-pointer text-sm text-gold transition-colors hover:text-gold-soft">
+            Show all {data.offers.length} listings
+          </summary>
+          <ul className="mt-3 flex flex-col gap-3">{data.offers.slice(8).map(renderOffer)}</ul>
+        </details>
+      )}
 
       <p className="mt-4 max-w-prose text-xs text-muted/70">
         Fair value is the median of recorded resale prices for that spec, broadened and

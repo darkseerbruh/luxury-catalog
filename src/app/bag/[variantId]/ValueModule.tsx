@@ -3,6 +3,12 @@
 import { useEffect } from "react";
 import CompScale, { type Comp, type CompRow } from "./CompScale";
 import { track, EVENTS } from "@/lib/analytics/events";
+import { PLATFORMS } from "@/lib/platforms";
+
+/** Display name for a stored platform key ("ebay" → "eBay"); falls back to the raw value. */
+function platformLabel(platform: string): string {
+  return PLATFORMS[platform.toLowerCase()]?.label ?? platform;
+}
 
 /**
  * ValueModule — the adaptive "what it's worth" element at the top of the bag
@@ -78,10 +84,10 @@ export interface ValueModuleProps {
 function eraNote(era: { productionYears: string | null; discontinued: boolean; vintage: boolean }): string | null {
   const years = era.productionYears ? ` (${era.productionYears})` : "";
   if (era.vintage) {
-    return `Vintage production${years} — no longer made, so condition and a complete set tend to matter more to value.`;
+    return `Vintage production${years}: no longer made, so condition and a complete set tend to matter more to value.`;
   }
   if (era.discontinued) {
-    return `Discontinued${years} — no longer in production, so resale is the only way to buy it.`;
+    return `Discontinued${years}: no longer in production, so resale is the only way to buy it.`;
   }
   return null;
 }
@@ -103,16 +109,16 @@ function timingNote(
   const quiet = demandLevel === "quiet";
 
   if (framing === "buyer") {
-    if (hot && climbing) return "Demand is strong and prices have been climbing — waiting hasn't paid off lately.";
-    if (quiet && softening) return "Demand is light and prices are soft — little pressure to move fast.";
+    if (hot && climbing) return "Demand is strong and prices have been climbing. Waiting hasn't paid off lately.";
+    if (quiet && softening) return "Demand is light and prices are soft, so there's little pressure to move fast.";
     if (climbing) return "Prices have been trending up over the tracked window.";
     if (softening) return "Prices have been easing over the tracked window.";
     return null;
   }
   // owner / collector — the sell/hold read.
-  if (hot && climbing) return "Demand is strong and prices are rising — a seller's window.";
+  if (hot && climbing) return "Demand is strong and prices are rising: a seller's window.";
   if (quiet && softening) return "Demand is light and prices are soft right now.";
-  if (climbing) return "Prices have trended up — it's been holding or gaining.";
+  if (climbing) return "Prices have trended up. It's been holding or gaining.";
   if (softening) return "Prices have eased over the tracked window.";
   return null;
 }
@@ -242,7 +248,7 @@ export default function ValueModule({
       <>
         Best listed right now:{" "}
         <span className="text-gold">{fmt(best, currency)}</span>
-        {bestComp?.platform ? ` on ${bestComp.platform}` : ""} —{" "}
+        {bestComp?.platform ? ` on ${platformLabel(bestComp.platform)}` : ""},{" "}
         {position === "deal" ? (
           <span className="text-green-400">near the floor of the typical range</span>
         ) : position === "rich" ? (
@@ -268,7 +274,7 @@ export default function ValueModule({
   // never advice or "investment" framing — matches the catalog honesty rails.
   const eraLensCount = eraLens ? byEra!.reduce((s, r) => s + r.count, 0) : 0;
   const eraLensCaption = eraLens
-    ? `Resale by production era — ${eraLensCount} ${eraLensCount === 1 ? "listing" : "listings"}, estimated from recorded prices.`
+    ? `Resale by production era: ${eraLensCount} ${eraLensCount === 1 ? "listing" : "listings"}, estimated from recorded prices.`
     : null;
 
   return (

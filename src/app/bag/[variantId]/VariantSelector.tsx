@@ -58,8 +58,19 @@ export default function VariantSelector({
 
   return (
     <section className="rounded-2xl border border-border bg-surface/50 px-5 py-4">
-      <h2 className="font-serif text-lg text-foreground">Choose your {styleName}</h2>
-      <p className="mt-0.5 text-xs text-muted">Tap to switch, or tap the heart to save any of them.</p>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="font-serif text-lg text-foreground">Choose your {styleName}</h2>
+        {/* ONE save affordance for the whole selector (the current variant) — a heart
+            beside every chip read as noise and made the chips harder to scan. */}
+        <QuickSaveHeart
+          variantId={currentVariantId}
+          initialSaved={saved.has(currentVariantId)}
+          source="variant-selector"
+        />
+      </div>
+      <p className="mt-0.5 text-xs text-muted">
+        Tap to switch. The heart saves the combination you&rsquo;re viewing.
+      </p>
       <div className="mt-3 flex flex-col gap-4">
         {dims.map(({ dim, values }) => {
           const currentVal = dim.get(current);
@@ -83,31 +94,24 @@ export default function VariantSelector({
                       </span>
                     );
                   }
-                  return (
-                    <span key={value} className="inline-flex items-center gap-1">
-                      {active ? (
-                        <span
-                          aria-current="true"
-                          className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
-                        >
-                          {value}
-                        </span>
-                      ) : (
-                        <Link
-                          href={`/bag/${target}`}
-                          prefetch
-                          scroll={false}
-                          className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-                        >
-                          {value}
-                        </Link>
-                      )}
-                      <QuickSaveHeart
-                        variantId={target}
-                        initialSaved={saved.has(target)}
-                        source="variant-selector"
-                      />
+                  return active ? (
+                    <span
+                      key={value}
+                      aria-current="true"
+                      className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
+                    >
+                      {value}
                     </span>
+                  ) : (
+                    <Link
+                      key={value}
+                      href={`/bag/${target}`}
+                      prefetch
+                      scroll={false}
+                      className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                    >
+                      {value}
+                    </Link>
                   );
                 })}
               </div>
