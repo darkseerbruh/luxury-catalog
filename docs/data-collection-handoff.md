@@ -396,6 +396,22 @@ new-retail apparel, not resale, so Rebag is the one relevant CJ fit. Once progra
 outbound links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps
 matches the locked monetization strategy.
 
+**Application status update (2026-07-05, verified in each dashboard):**
+*(Gmail cross-check, same day: the owner's 06-29 "I was rejected by TRR" matches NO email — the only
+rejection email is Skimlinks 06-25; Fashionphile's decline shows in the Impact dashboard only. So no
+TRR rejection ever happened; the buyer-side lane below is intact.)*
+- ✅ **eBay Partner Network — ACTIVE.** Campaign `5339158071` (already the site default in `src/lib/affiliate.ts`), so eBay outbound links monetize on deploy. No further action.
+- 🟡 **The RealReal (Impact acct 7429371):** owner accepted the brand invite 07-05; awaiting activation. Watch for the confirmation email. Payout 1–7% online sale, 15-day window.
+- ❌ **Fashionphile (Impact) — DECLINED 07-02.** Same Impact account as TRR (not a second account). Reach Fashionphile via ShopMy/LTK sub-affiliate rails instead (they carry it), or reapply direct once launch traffic is real.
+- ❌ **Skimlinks — DECLINED 06-25** ("site not suitable"). Hard 90-day lockout → earliest reapply ~2026-09-25. This removes the Vestiaire + Rent-the-Runway catch-all until then; re-source those after relaunch.
+- 🟡 **CJ (publisher 7997608):** Rebag + The Luxury Closet both pending manual review. The promotional property is well-configured (type = Product Comparison/Reviews/Discovery + ~30 on-target tags); the current CJ UI has **no free-text pitch field**, so nothing to rewrite. Do NOT upload traffic proof to the Documents area until post-launch (pre-launch numbers would hurt).
+- 🟡 **Awin (publisher 2945769):** Vivrelle, myGemma (5% / 30-day / $2,756 AOV), BriteCo ($10 per lead / 45-day / $5 for shopping sites) all pending. Nudged each advertiser's team via in-platform email 07-05.
+- 🟡 **Redeluxe (GoAffPro, partners.redeluxe.com):** applied 06-30; owner is logged in (email verified) but the account still shows "under verification" 5 days on, past their own 24–48h estimate. **Email nudge sent 07-05 to Shop@redeluxe.com** (their real support; phone +1 469-686-5463) asking them to confirm the email + approve. The `no-reply@goaffpro.com` verify email is NOT a contact route. Commission % + cookie window stay login-gated until they approve → TBD. Frame as a secondary/niche partner (small inventory), not a priority line.
+- ⚠️ **ShopMy — NOT yet applied. Gate on publishing social content first.** ShopMy carries Fashionphile + TRR + Rebag and takes small creators, but judges on public, engaged socials. As of 07-05 the socials are empty (IG @luxurycatalog_ = 0 posts, TikTok = 0 videos / 0 likes), so applying now risks a rejection that then needs a member referral to overturn. Publish a handful of the staged launch posts first, then apply.
+- ⏸️ **Amazon Associates — DEFERRED to ~2–4 weeks pre-launch (owner decision 2026-07-05).** Reason: Amazon closes the account if you don't get **3 qualifying sales within 180 days of applying** (Apr-2026 policy: customer must purchase AND receive inside the window), so starting the clock pre-launch (traffic mostly owner) would burn it. At apply-time (owner-only: needs tax + bank details): build the exact disclosure string "As an Amazon Associate, I earn from qualifying purchases" + Amazon tag support in `src/lib/affiliate.ts` (mirror the eBay handling). **Guardrail:** link only Amazon-fulfilled / Amazon Luxury Stores / contemporary brands + care-accessories (`have` state), never third-party marketplace "designer" listings. Fits the midtier-bag + care lane, not the luxury core.
+
+Fashionphile decline note (2026-07-02 email, Workspace inbox): reason field = "No specific reason given" (discretionary). Program IDs 2871653 / 13930 are Fashionphile's Impact program, not a second account. Note: affiliate mail lands at **arielle@luxurycatalog.com** (Workspace), which is separate from the connected **ariellecoambes@gmail.com** — connect the Workspace inbox to search it directly.
+
 **⚠️ TRR Real Partners — closed for this model (call with the program lead, 2026-06-24).** The
 consignor-referral "Real Partners" program is **high-touch and relationship-based**, with **no
 trackable codes or links** for consignor referrals (their words: "we can't be blasting out codes… it

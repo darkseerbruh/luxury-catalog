@@ -52,6 +52,22 @@ const LADDER = [
   },
 ];
 
+/** Short card label: every guide title follows "<subject> authentication: …", so the
+ * subject is the only part that varies — strip the shared formula and show just it.
+ * The title is the source of truth (NOT the topic tag: house guides are topic-tagged
+ * with a flagship style for CTA routing, so brand+style would over-narrow the label).
+ * Falls back to the brand tag, then the full title — never renders blank. */
+function guideLabel(p: { title: string; topic: { brandName: string | null } }): string {
+  const subject = p.title.replace(/\s*authentication\b.*$/i, "").trim();
+  if (subject && subject !== p.title.trim()) return subject;
+  return p.topic.brandName ?? p.title;
+}
+
+/** A guide belongs in the by-house grid when a short subject label is derivable. */
+function isHouseGuide(p: { title: string; topic: { brandName: string | null } }): boolean {
+  return guideLabel(p) !== p.title;
+}
+
 export default async function AuthenticationHub() {
   const posts = await listPublished();
   const guides = posts
@@ -99,25 +115,51 @@ export default async function AuthenticationHub() {
         {guides.length === 0 ? (
           <p className="mt-6 text-muted">The guides are being written, check back soon.</p>
         ) : (
-          <div className="mt-4 grid gap-x-10 sm:grid-cols-2">
-            {guides.map((p) => (
-              <Link
-                key={p.postId}
-                href={`/articles/${p.slug}`}
-                className="group flex items-baseline gap-3 border-b border-border/60 py-2.5"
-              >
-                <span className="shrink-0 text-gold">&rarr;</span>
-                <span>
+          /* Every house guide's title follows the same "X authentication: the markers
+           * worth checking" formula, so listing full titles reads as one sentence
+           * repeated 17 times. The card shows only what distinguishes each guide (its
+           * house); the full title stays on the card for assistive tech. Guides whose
+           * title doesn't fit the formula (e.g. the resale red-flags explainer) aren't
+           * "by house" — they list separately below with their full titles. */
+          <>
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {guides.filter(isHouseGuide).map((p) => (
+                <Link
+                  key={p.postId}
+                  href={`/articles/${p.slug}`}
+                  aria-label={p.title}
+                  title={p.title}
+                  className="group flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-4 py-3.5 transition-colors hover:border-gold"
+                >
                   <span className="font-serif text-[15px] leading-snug text-foreground group-hover:text-gold-soft">
-                    {p.title}
+                    {guideLabel(p)}
                   </span>
-                  {p.topic.brandName && (
-                    <span className="mt-0.5 block text-[11px] tracking-wide text-muted">{p.topic.brandName}</span>
-                  )}
-                </span>
-              </Link>
-            ))}
-          </div>
+                  <span aria-hidden className="shrink-0 text-gold opacity-0 transition-opacity group-hover:opacity-100">
+                    &rarr;
+                  </span>
+                </Link>
+              ))}
+            </div>
+            {guides.some((p) => !isHouseGuide(p)) && (
+              <div className="mt-6">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Beyond the houses</p>
+                <div className="mt-2 grid gap-x-10 sm:grid-cols-2">
+                  {guides.filter((p) => !isHouseGuide(p)).map((p) => (
+                    <Link
+                      key={p.postId}
+                      href={`/articles/${p.slug}`}
+                      className="group flex items-baseline gap-3 border-b border-border/60 py-2.5"
+                    >
+                      <span className="shrink-0 text-gold">&rarr;</span>
+                      <span className="font-serif text-[15px] leading-snug text-foreground group-hover:text-gold-soft">
+                        {p.title}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </section>
     </main>
