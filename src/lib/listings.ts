@@ -95,6 +95,8 @@ export interface ShopFilters {
   material?: string;
   hardware?: string;
   condition?: string;
+  /** Style-level. "yes" = documented protective feet; "unknown" = not yet documented. */
+  protectiveFeet?: "yes" | "unknown";
 }
 
 /** A filter option with how many bags carry a matching live listing. */
@@ -118,6 +120,13 @@ export interface ShopFacets {
   materials: GroupedFacet[];
   hardware: Facet[];
   conditions: Facet[];
+  /**
+   * "Protective feet" options (value "yes" | "unknown"), each with a product count.
+   * Empty when the style.has_protective_feet column isn't there yet (pre-migration
+   * 0044) OR when no listed bag carries a documented answer — the control then
+   * renders nothing, so the feature degrades gracefully.
+   */
+  protectiveFeet: Facet[];
 }
 
 export interface ShopResult {
@@ -150,6 +159,8 @@ interface PriceRow {
   listingRef: string | null;
   /** Live-vs-sold state (migration 0030): 'available' | 'sold' | null (legacy). */
   listingStatus: string | null;
+  /** Style-level protective-feet flag (migration 0044). Undefined when unread. */
+  hasProtectiveFeet?: boolean | null;
   spec: ItemSpec;
 }
 
@@ -175,20 +186,34 @@ type RawRow = {
     | null;
 };
 
+type RawStyle = {
+  style_id: number;
+  name: string;
+  has_protective_feet?: boolean | null;
+  brand: { name: string } | { name: string }[] | null;
+};
+
 type RawVariant = {
   size_label: string | null;
   exterior_colorway: string | null;
   hardware_color: string | null;
   exterior_material: { name: string } | { name: string }[] | null;
-  style:
-    | { style_id: number; name: string; brand: { name: string } | { name: string }[] | null }
-    | { style_id: number; name: string; brand: { name: string } | { name: string }[] | null }[]
-    | null;
+  style: RawStyle | RawStyle[] | null;
 };
 
-const SELECT =
+// The nested style select, with and without the 0044 `has_protective_feet`
+// column. We prefer WITH; if the column isn't migrated yet PostgREST errors the
+// whole query, so getShopProducts retries WITHOUT and just omits the feet facet.
+const STYLE_SELECT_WITH_FEET =
+  "style:style_id(style_id, name, has_protective_feet, brand:brand_id(name))";
+const STYLE_SELECT_NO_FEET = "style:style_id(style_id, name, brand:brand_id(name))";
+const VARIANT_SELECT = (styleSelect: string) =>
+  `variant:variant_id(size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), ${styleSelect})`;
+const buildSelect = (styleSelect: string) =>
   "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, " +
-  "variant:variant_id(size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), style:style_id(style_id, name, brand:brand_id(name)))";
+  VARIANT_SELECT(styleSelect);
+
+const SELECT = buildSelect(STYLE_SELECT_WITH_FEET);
 
 function one<T>(rel: T | T[] | null | undefined): T | null {
   return (Array.isArray(rel) ? rel[0] : rel) ?? null;
@@ -221,6 +246,7 @@ function mapRow(r: RawRow): PriceRow | null {
     dateRecorded: r.date_recorded,
     listingRef: r.listing_ref ?? null,
     listingStatus: r.listing_status ?? null,
+    hasProtectiveFeet: style ? style.has_protective_feet ?? null : null,
     condition: r.condition,
     spec: {
       // Prefer the per-listing spec (migration 0022); fall back to the variant's own.
@@ -318,7 +344,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
     const { data: v, error: vErr } = await getSupabase()
       .from("variant")
       .select(
-        "variant_id, size_label, exterior_colorway, exterior_material:exterior_material_id(name), style:style_id(style_id, name, brand:brand_id(name))",
+        `variant_id, size_label, exterior_colorway, exterior_material:exterior_material_id(name), ${STYLE_SELECT_NO_FEET}`,
       )
       .eq("variant_id", variantId)
       .single();
@@ -327,9 +353,11 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
     if (!style) return null;
 
     // All price rows for the style, so comps can span colors of the same size.
+    // No-feet select: this rail rates offers, it doesn't need the feet flag, and
+    // staying off the 0044 column keeps the bag page working pre-migration.
     const { data, error } = await getSupabase()
       .from("price_history")
-      .select(SELECT)
+      .select(buildSelect(STYLE_SELECT_NO_FEET))
       .eq("variant.style_id", style.style_id)
       .not("sale_price", "is", null)
       .limit(10000);
@@ -381,6 +409,8 @@ interface ProductGroup {
   listed: PriceRow[];
   comps: SpecComp[];
   colors: Set<string>;
+  /** Style-level protective-feet flag (0044): true / false / null (unknown). */
+  hasProtectiveFeet: boolean | null;
 }
 
 /**
@@ -389,16 +419,30 @@ interface ProductGroup {
  * server-side from one resilient read. Always returns an (possibly empty) result.
  */
 export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Promise<ShopResult> {
-  const emptyFacets: ShopFacets = { brands: [], colors: [], materials: [], hardware: [], conditions: [] };
+  const emptyFacets: ShopFacets = { brands: [], colors: [], materials: [], hardware: [], conditions: [], protectiveFeet: [] };
   const EMPTY: ShopResult = { products: [], brands: [], facets: emptyFacets, totalListings: 0, totalProducts: 0 };
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return EMPTY;
 
   try {
-    const { data, error } = await getSupabase()
+    // Prefer the select WITH the 0044 has_protective_feet column. If it's not
+    // migrated yet, PostgREST errors ("column does not exist") — retry WITHOUT
+    // it and drop the feet facet, so the rest of Shop keeps working (degrade
+    // gracefully, per the locked rule).
+    let feetAvailable = true;
+    let res = await getSupabase()
       .from("price_history")
       .select(SELECT)
       .not("sale_price", "is", null)
       .limit(50000);
+    if (res.error) {
+      feetAvailable = false;
+      res = await getSupabase()
+        .from("price_history")
+        .select(buildSelect(STYLE_SELECT_NO_FEET))
+        .not("sale_price", "is", null)
+        .limit(50000);
+    }
+    const { data, error } = res;
     if (error || !data) return EMPTY;
 
     const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
@@ -418,6 +462,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
           listed: [],
           comps: [],
           colors: new Set(),
+          hasProtectiveFeet: r.hasProtectiveFeet ?? null,
         };
         groups.set(key, g);
       }
@@ -439,6 +484,12 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       hardware: new Map<string, Facet>(),
       conditions: new Map<string, Facet>(),
     };
+    // Protective-feet product counts: one bucket for documented "yes", one for
+    // "unknown" (null or column absent). "No" bags aren't offered as a facet —
+    // shoppers filter FOR feet, not against them — but count toward "unknown"? No:
+    // a documented "false" is a real answer, so it's neither "yes" nor "unknown".
+    let feetYes = 0;
+    let feetUnknown = 0;
     // Family-level product counts (for the inclusive "All Brown" / "All Leather" option).
     const colorFamCount = new Map<string, number>();
     const materialFamCount = new Map<string, number>();
@@ -489,6 +540,17 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       // Count the product once per distinct FAMILY it spans (for the "All Brown" option).
       bumpFam(colorFamCount, new Set([...colorVals].map(colorFamily).filter((f): f is string => !!f)));
       bumpFam(materialFamCount, new Set([...materialVals].map(materialFamily).filter((f): f is string => !!f)));
+      // Protective feet (style-level): one product → yes, false, or unknown.
+      if (feetAvailable) {
+        if (g.hasProtectiveFeet === true) feetYes += 1;
+        else if (g.hasProtectiveFeet == null) feetUnknown += 1;
+      }
+
+      // Apply the active protective-feet filter (style-level). "yes" keeps only
+      // documented-feet bags; "unknown" keeps only those we haven't documented yet
+      // (null). Facets above already counted this product, so the counts stay honest.
+      if (filters.protectiveFeet === "yes" && g.hasProtectiveFeet !== true) continue;
+      if (filters.protectiveFeet === "unknown" && g.hasProtectiveFeet != null) continue;
 
       // The listings that survive the active per-listing spec filters.
       const matching = g.listed.filter(matchesSpec);
@@ -551,12 +613,20 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
         );
     };
 
+    // Feet facet: only surface options that actually have products behind them, so
+    // the control hides itself when the column is absent OR nothing is documented.
+    const protectiveFeetFacet: Facet[] = [];
+    if (feetAvailable && feetYes > 0) protectiveFeetFacet.push({ value: "yes", count: feetYes });
+    if (feetAvailable && feetUnknown > 0)
+      protectiveFeetFacet.push({ value: "unknown", count: feetUnknown });
+
     const facets: ShopFacets = {
       brands: sortFacet(facetAcc.brands, 50),
       colors: groupByFamily(facetAcc.colors, colorFamCount, colorFamily, 20),
       materials: groupByFamily(facetAcc.materials, materialFamCount, materialFamily, 20),
       hardware: sortFacet(facetAcc.hardware, 16),
       conditions: sortFacet(facetAcc.conditions, 12),
+      protectiveFeet: protectiveFeetFacet,
     };
 
     // Product-level filters (brand/price/deals) on top of the listing-level spec filters.
