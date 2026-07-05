@@ -7,6 +7,17 @@ walking a live render of `main` (commit `0e80fba`) plus the code for signed-in s
 serious findings were independently re-verified (live curl or file:line) before this doc was written.
 Findings marked ✅ are re-verified; the rest carry the reviewer's file:line citation.*
 
+## Status — BUILT 2026-07-05 (same day, owner: "do all your recs")
+
+Every P0/P1/P2 recommendation below is implemented on `ops/ux-persona-review-0705`
+except two consciously routed elsewhere: mid-tier deals coverage is data-gated
+(queued in `docs/data-content-worklist.md` as U-DEALS-MIDTIER — the like-for-like
+honesty guard needs colour/material specs the eBay rows don't carry yet), and the
+"Shop the market" nav door is a proposal only (primary nav is owner-gated).
+Owner decisions taken during the build: rent links ship pre-approval
+(preferences.md, reversal 2026-07-05); migration 0043 (closet value snapshots)
+awaits her db-migrate Action, everything degrades gracefully until then.
+
 ## Verdict in one paragraph
 
 Every canonical journey EXISTS end to end, and several surfaces are genuinely excellent (the value
