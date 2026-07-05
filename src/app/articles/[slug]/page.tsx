@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBySlug, listPublished } from "@/lib/posts";
 import { classifyDepartment } from "@/lib/article-departments";
+import { getBrandsOverview } from "@/lib/queries";
 import TrackArticleView from "./TrackArticleView";
 import { getCurrentUser } from "@/lib/auth";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
@@ -403,6 +404,14 @@ export default async function PostDetailPage({
           a scroll to the bottom. Mobile = bottom bar, desktop = bottom-right card. */}
       {shopData && <ShopThisBag variant="floating" data={shopData} />}
 
+      {/* Price-your-find: an auth guide teaches markers for the whole house,
+          but its shop block priced only the topic bag — a reader holding a
+          Rogue got the Tabby's floor. Link the house's deepest styles so the
+          "worth it" half of the thrift moment closes here too. */}
+      {dept === "authentication" && post.topic?.brandName && (
+        <PriceYourFind brandName={post.topic.brandName} />
+      )}
+
       {/* Money-moment: topic-tagged posts hand off to commissionable buy/sell links */}
       {hasTopic && (post.topic.brandName || post.topic.styleName) && (
         <PostBagCTA brandName={post.topic.brandName} styleName={post.topic.styleName} slug={post.slug} />
@@ -465,5 +474,44 @@ export default async function PostDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
     </main>
+  );
+}
+
+
+/**
+ * "Price your find" — the house's deepest-catalogued styles as one-tap price
+ * checks, for readers who arrive from an authentication guide holding a
+ * different model than the guide's topic bag. RESILIENT: renders nothing when
+ * the brand isn't in the overview.
+ */
+async function PriceYourFind({ brandName }: { brandName: string }) {
+  const overview = await getBrandsOverview().catch(() => []);
+  const brand = overview.find((b) => b.name.toLowerCase() === brandName.toLowerCase());
+  if (!brand || brand.topStyles.length === 0) return null;
+  return (
+    <section className="rounded-2xl border border-border bg-surface p-5">
+      <h2 className="font-serif text-lg text-foreground">Holding one? Price your find</h2>
+      <p className="mt-1 text-sm text-muted">
+        The markers above apply across {brand.name}. Jump to your model for its recorded
+        price range:
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {brand.topStyles.map((s) => (
+          <Link
+            key={s.styleId}
+            href={s.variantId ? `/bag/${s.variantId}#price` : `/search?q=${encodeURIComponent(`${brand.name} ${s.name}`)}`}
+            className="rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+          >
+            {s.name}
+          </Link>
+        ))}
+        <Link
+          href={`/search?q=${encodeURIComponent(brand.name)}`}
+          className="rounded-full border border-gold/40 px-3 py-1.5 text-sm text-gold transition-colors hover:bg-gold/10"
+        >
+          Something else? Search {brand.name} →
+        </Link>
+      </div>
+    </section>
   );
 }
