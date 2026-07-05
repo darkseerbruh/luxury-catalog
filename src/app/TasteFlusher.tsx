@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { saveQuizAnswers } from "@/lib/taste-actions";
+import { saveTasteResult, type TasteQuizAnswers } from "@/lib/taste-result-actions";
 import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
 import { useAuthState } from "@/components/AuthProvider";
 
@@ -28,7 +28,7 @@ export default function TasteFlusher() {
     }
     if (!raw) return;
 
-    let answers: Record<string, string>;
+    let answers: TasteQuizAnswers;
     try {
       answers = JSON.parse(raw);
     } catch {
@@ -40,7 +40,7 @@ export default function TasteFlusher() {
 
     let cancelled = false;
     (async () => {
-      const res = await saveQuizAnswers(answers);
+      const res = await saveTasteResult(answers);
       if (res.ok && !cancelled) {
         try {
           localStorage.removeItem(PENDING_QUIZ_KEY);

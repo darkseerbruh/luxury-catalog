@@ -7,6 +7,7 @@ import { covetedBagsReady } from "@/lib/content-gates";
 import { Providers } from "./providers";
 import { AuthProvider } from "@/components/AuthProvider";
 import TasteFlusher from "./TasteFlusher";
+import PendingSaveFlusher from "@/components/PendingSaveFlusher";
 import HeaderNav from "@/components/HeaderNav";
 import FooterAccountLinks from "@/components/FooterAccountLinks";
 import { FirstAlertNudge } from "@/components/FirstAlertNudge";
@@ -71,6 +72,7 @@ export default async function RootLayout({
         <Providers>
         <AuthProvider>
         <TasteFlusher />
+        <PendingSaveFlusher />
         <header className="sticky top-0 z-10 bg-bg/95 backdrop-blur-sm print:hidden">
           <div className="relative mx-auto flex max-w-5xl items-center justify-between border-b border-border px-5 py-4">
             <Link href="/" className="shrink-0 font-serif text-xl tracking-wide text-foreground">
