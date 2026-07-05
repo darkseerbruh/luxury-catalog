@@ -42,7 +42,7 @@ export default function DisclosurePage() {
         </p>
         <p className="text-muted/70">
           This disclosure is provided in the spirit of the U.S. Federal Trade Commission&rsquo;s
-          Endorsement Guides. Questions? Reach us at hello@luxurycatalog.com.
+          Endorsement Guides. Questions? Reach us at arielle@luxurycatalog.com.
         </p>
       </div>
     </main>
