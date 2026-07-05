@@ -21,6 +21,11 @@ on:
         description: "Optional: space-separated migration numbers that are ALREADY in the DB but not recorded (e.g. '0018 0019 0020'). Marks them done before pushing. Leave blank normally."
         required: false
         default: ""
+      include_all:
+        description: "Optional: check this if a migration is blocked as 'out of order' (a lower-numbered file was added after higher ones already applied). Applies it with --include-all. Leave off normally."
+        type: boolean
+        required: false
+        default: false
   # push:
   #   branches: [main]
   #   paths: ["supabase/migrations/**"]
@@ -57,7 +62,17 @@ jobs:
         run: supabase migration repair --status applied $REPAIR_VERSIONS
 
       - name: Show what will be applied (dry run)
-        run: supabase db push --dry-run
+        env:
+          INCLUDE_ALL: ${{ github.event.inputs.include_all }}
+        run: |
+          FLAG=""
+          [ "$INCLUDE_ALL" = "true" ] && FLAG="--include-all"
+          supabase db push --dry-run $FLAG
 
       - name: Apply pending migrations
-        run: supabase db push
+        env:
+          INCLUDE_ALL: ${{ github.event.inputs.include_all }}
+        run: |
+          FLAG=""
+          [ "$INCLUDE_ALL" = "true" ] && FLAG="--include-all"
+          supabase db push $FLAG
