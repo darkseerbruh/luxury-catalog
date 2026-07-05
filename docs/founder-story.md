@@ -34,6 +34,37 @@ Feature-reality notes at the bottom so pivots stay honest.
 - The mission: **democratize this data** for the everyday people who want to invest in
   fashion. "Data important to them, to us."
 
+## Her takes / opinions (from the 2026-07-01 social-agent chat, her words)
+Present these as HER opinion / "my take," never as measured fact (calibrated hedge).
+
+- **Big thesis: luxury houses miss modern usage.** Bags don't fit modern life, carrying
+  a Kindle / iPad / MacBook Air for people who work on the go (digital nomads, side
+  hustles, art on an iPad, opening a laptop at a coffee shop). Not enough crossbody
+  straps, not enough back pockets to stash a phone. **Chanel 19** got it right (crossbody,
+  flexible, a little edgy); the **Chanel 22** was a "trash bag," she hated it (knows
+  others love it). This thesis is the *why* behind the practical-detail focus and connects
+  directly to the bag-feet origin.
+- **Overrated (her take):** the **Chanel Classic Flap**, especially the double flap, too
+  much leather, heavy, no crossbody, not practical. "If it's for you, it's for you. No
+  hate, but it's not for me." (She loves it, which is the bummer.)
+- **Sleeping on:** the **Hermes 24/24**, practical, crossbody, flap that closes, great
+  leather, a loved house, deserves more attention.
+- **Myths she'd quietly correct at dinner (de-gatekeeping):** logos do NOT have to match
+  across panels to be authentic (lore, not true); "perfect stitching or it's fake" is
+  false, quality has actually declined (per Je Suis Lou on Chanel Classic Flaps; known
+  among collectors, no hard dataset). The "cm trick" is not a secret, it's obvious.
+- **Quiet logo, not NO logo:** quiet luxury has something to it, but why pay thousands for
+  an unbranded bag when equal quality costs far less? The brand matters. Favor a subtle
+  read, not a nonexistent one.
+- **The $300k showroom moment:** held a ~$300k bag at the Fashion Files showroom and
+  "shook the entire time." Learned she could never carry a bag that expensive, but it
+  trained her eye (spotting exotic leathers, not just the obvious Birkins). Seeing people
+  casually carry exotic Birkins in LA/San Diego felt visceral, another world.
+- **Renting via Vivrelle** helped her hone what she actually needs in a bag (ties to the
+  taste quiz).
+- **"Drip Too Hard" tie-in** (Lil Baby & Gunna, "the biggest Chanel bag in the store"):
+  funny because the LITTLE bags are the most expensive, a ready-made size-price hook.
+
 ## Feature-reality (keep pivots honest, checked 2026-07-05)
 - **"With feet" filter: NOT built yet.** Only appears as an auth marker + in the Kelly's
   description. If the page leans on feet, frame it as the ethos (capture the details that
