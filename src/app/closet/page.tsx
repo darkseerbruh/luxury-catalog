@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset, getWatchlist } from "@/lib/collections";
+import { getResaleMedians, type VariantResaleEstimate } from "@/lib/portfolio";
 import { getVariantImages } from "@/lib/queries";
 import { hasActiveAuthenticators } from "@/lib/authentication";
 import { BagImage } from "@/components/BagImage";
@@ -34,23 +35,41 @@ function formatPrice(amount: number | null, currency: string | null) {
  * symbol is honest; items with no catalogued price are excluded from the totals
  * (but still counted) rather than treated as zero.
  */
-function buildPortfolio(closet: { status: string; retailPrice: number | null; currency: string | null }[]) {
+function buildPortfolio(
+  closet: { status: string; variantId: number; retailPrice: number | null; currency: string | null }[],
+  medians: Map<number, VariantResaleEstimate>,
+) {
+  // Per-bag value = the recorded resale median (the market's answer) with the
+  // catalogued retail as a LABELED fallback — the homepage tile, this header,
+  // and the report all read the same engine now (they used to disagree).
   function summarize(status: string) {
     const items = closet.filter((c) => c.status === status);
-    const priced = items.filter((c) => c.retailPrice != null);
-    const total = priced.reduce((sum, c) => sum + (c.retailPrice ?? 0), 0);
-    // Dominant currency among priced items, for an honest symbol.
-    const currencyCounts = new Map<string, number>();
-    for (const c of priced) {
-      const cur = c.currency ?? "USD";
-      currencyCounts.set(cur, (currencyCounts.get(cur) ?? 0) + 1);
+    const totals = new Map<string, number>(); // per-currency, never blended
+    let resaleValued = 0;
+    let retailValued = 0;
+    for (const c of items) {
+      const est = medians.get(c.variantId);
+      if (est) {
+        const cur = est.currency ?? "USD";
+        totals.set(cur, (totals.get(cur) ?? 0) + est.median);
+        resaleValued += 1;
+      } else if (c.retailPrice != null) {
+        const cur = c.currency ?? "USD";
+        totals.set(cur, (totals.get(cur) ?? 0) + c.retailPrice);
+        retailValued += 1;
+      }
     }
-    let currency: string | null = null;
-    let best = -1;
-    for (const [cur, n] of currencyCounts) {
-      if (n > best) { best = n; currency = cur; }
-    }
-    return { count: items.length, pricedCount: priced.length, total, currency };
+    // Dominant currency leads the display; the rest are shown alongside.
+    const ordered = [...totals.entries()].sort((a, b) => b[1] - a[1]);
+    return {
+      count: items.length,
+      resaleValued,
+      retailValued,
+      pricedCount: resaleValued + retailValued,
+      totals: ordered.map(([cur, amount]) => ({ currency: cur, amount: Math.round(amount) })),
+      total: ordered[0]?.[1] != null ? Math.round(ordered[0][1]) : null,
+      currency: ordered[0]?.[0] ?? null,
+    };
   }
   return {
     have: summarize("have"),
@@ -69,7 +88,8 @@ export default async function ClosetPage() {
   const images = await getVariantImages(closet.map((c) => c.variantId));
   const authComingSoon = !(await hasActiveAuthenticators());
 
-  const portfolio = buildPortfolio(closet);
+  const medians = await getResaleMedians(closet.map((c) => c.variantId));
+  const portfolio = buildPortfolio(closet, medians);
 
   const groups: { key: string; label: string }[] = [
     { key: "have", label: "Have" },
@@ -83,7 +103,7 @@ export default async function ClosetPage() {
         <p className="text-sm uppercase tracking-widest text-muted">Your closet</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground">Saved bags</h1>
         <p className="mt-2 text-muted">
-          The ones you want, the ones you have, the ones you used to — all in one place.
+          The ones you want, the ones you have, the ones you used to. All in one place.
         </p>
       </header>
 
@@ -96,17 +116,24 @@ export default async function ClosetPage() {
             Your collection
           </p>
           <p className="mt-1 font-serif text-2xl text-foreground">
-            {formatPrice(portfolio.have.total, portfolio.have.currency) ?? "—"}{" "}
+            {portfolio.have.totals.length > 0
+              ? portfolio.have.totals
+                  .map((t) => formatPrice(t.amount, t.currency))
+                  .join(" + ")
+              : "—"}{" "}
             <span className="text-muted">
               across {portfolio.have.count} {portfolio.have.count === 1 ? "bag" : "bags"} you have
             </span>
           </p>
-          {portfolio.have.pricedCount < portfolio.have.count && (
-            <p className="mt-1 text-xs text-muted/70">
-              Estimated from catalogued retail prices · {portfolio.have.count - portfolio.have.pricedCount} item
-              {portfolio.have.count - portfolio.have.pricedCount === 1 ? "" : "s"} without a price not counted
-            </p>
-          )}
+          <p className="mt-1 text-xs text-muted/70">
+            Resale-median estimate, not an appraisal
+            {portfolio.have.retailValued > 0
+              ? ` · ${portfolio.have.retailValued} at catalogued retail (no resale history yet)`
+              : ""}
+            {portfolio.have.pricedCount < portfolio.have.count
+              ? ` · ${portfolio.have.count - portfolio.have.pricedCount} without a price not counted`
+              : ""}
+          </p>
 
           <div className="mt-4 grid grid-cols-3 gap-3 text-center">
             <Stat
@@ -118,7 +145,7 @@ export default async function ClosetPage() {
               label="Want"
               count={portfolio.want.count}
               sub={
-                portfolio.want.total > 0
+                portfolio.want.total != null && portfolio.want.total > 0
                   ? `${formatPrice(portfolio.want.total, portfolio.want.currency)} wishlist`
                   : null
               }
