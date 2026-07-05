@@ -396,6 +396,16 @@ new-retail apparel, not resale, so Rebag is the one relevant CJ fit. Once progra
 outbound links for tracking links on bag/deal pages. Direct-where-it-works + Skimlinks-to-fill-gaps
 matches the locked monetization strategy.
 
+**Application status update (2026-07-05, verified in each dashboard):**
+- ✅ **eBay Partner Network — ACTIVE.** Campaign `5339158071` (already the site default in `src/lib/affiliate.ts`), so eBay outbound links monetize on deploy. No further action.
+- 🟡 **The RealReal (Impact acct 7429371):** owner accepted the brand invite 07-05; awaiting activation. Watch for the confirmation email. Payout 1–7% online sale, 15-day window.
+- ❌ **Fashionphile (Impact) — DECLINED 07-02.** Same Impact account as TRR (not a second account). Reach Fashionphile via ShopMy/LTK sub-affiliate rails instead (they carry it), or reapply direct once launch traffic is real.
+- ❌ **Skimlinks — DECLINED 06-25** ("site not suitable"). Hard 90-day lockout → earliest reapply ~2026-09-25. This removes the Vestiaire + Rent-the-Runway catch-all until then; re-source those after relaunch.
+- 🟡 **CJ (publisher 7997608):** Rebag + The Luxury Closet both pending manual review. The promotional property is well-configured (type = Product Comparison/Reviews/Discovery + ~30 on-target tags); the current CJ UI has **no free-text pitch field**, so nothing to rewrite. Do NOT upload traffic proof to the Documents area until post-launch (pre-launch numbers would hurt).
+- 🟡 **Awin (publisher 2945769):** Vivrelle, myGemma (5% / 30-day / $2,756 AOV), BriteCo ($10 per lead / 45-day / $5 for shopping sites) all pending. Nudged each advertiser's team via in-platform email 07-05.
+- 🟡 **Redeluxe (GoAffPro, partners.redeluxe.com):** applied; account in 24–48h verification as of 07-05. Commission % + cookie window are login-gated → TBD once verified. Frame as a secondary/niche partner (small inventory), not a priority line.
+- ⚠️ **ShopMy — NOT yet applied. Gate on publishing social content first.** ShopMy carries Fashionphile + TRR + Rebag and takes small creators, but judges on public, engaged socials. As of 07-05 the socials are empty (IG @luxurycatalog_ = 0 posts, TikTok = 0 videos / 0 likes), so applying now risks a rejection that then needs a member referral to overturn. Publish a handful of the staged launch posts first, then apply.
+
 **⚠️ TRR Real Partners — closed for this model (call with the program lead, 2026-06-24).** The
 consignor-referral "Real Partners" program is **high-touch and relationship-based**, with **no
 trackable codes or links** for consignor referrals (their words: "we can't be blasting out codes… it
