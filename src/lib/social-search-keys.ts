@@ -76,6 +76,15 @@ export const SOCIAL_KEYS: SocialKeyEntry[] = [
     key: "chanel 2026",
     slug: "chanel-in-2026-explained",
   },
+  {
+    // Founder story / About page. A key so founder-persona posts can close on
+    // "search the founder on luxurycatalog.com" and route here. The /about page
+    // isn't an article, so the /search pin no-ops until a matching article slug
+    // exists — the entry is safe either way (getBySlug returns null for an
+    // unknown slug) and keeps the founder key reserved + unique.
+    key: "the founder",
+    slug: "about",
+  },
 ];
 
 /** A registry entry resolved for one grid: the effective cover picked, series
