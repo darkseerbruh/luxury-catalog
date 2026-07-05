@@ -51,7 +51,10 @@ jobs:
 
       - name: Grade condition on NULL-condition rows (DB-native, resumable)
         if: env.WRITE == 'true'
-        run: npx tsx supabase/ingest/grade-condition-fashionphile.ts --limit="$GRADE_LIMIT" --write
+        # --max-minutes bounds this step UNDER the job timeout (grading ~0.9 rows/s, so a
+        # 4000-row limit alone runs ~70 min): it exits cleanly at the budget so the
+        # backfill + summary steps below always run. Was being job-timeout-cancelled daily.
+        run: npx tsx supabase/ingest/grade-condition-fashionphile.ts --limit="$GRADE_LIMIT" --max-minutes=40 --write
 
       - name: Backfill region / hardware / listed-date / was-price / description facts
         if: env.WRITE == 'true'

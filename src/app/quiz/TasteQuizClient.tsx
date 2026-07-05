@@ -5,6 +5,7 @@ import Link from "next/link";
 import { QUIZ_FLOW, MARKS, type QuizQuestion } from "@/lib/taste-quiz";
 import { tasteIdentity, type Mark, type TasteAnswers, type Vibe, type Logo } from "@/lib/taste-identity";
 import { saveTasteResult, getStyleReadBoards, type StyleReadBoard } from "@/lib/taste-result-actions";
+import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
 import { BagImage } from "@/components/BagImage";
 import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 
@@ -158,9 +159,48 @@ export default function TasteQuizClient({
       hardware: a.hardware,
       houses: a.houses,
     };
-    if (signedIn) void saveTasteResult(quiz);
+    if (signedIn) {
+      void saveTasteResult(quiz);
+    } else {
+      // Stash the answers so TasteFlusher persists them the moment an account
+      // exists — the signup box promises "matched bags saved for you", and
+      // without this the result evaporated on the way to /signup.
+      try {
+        localStorage.setItem(PENDING_QUIZ_KEY, JSON.stringify(quiz));
+      } catch {
+        // Private mode: the result just won't survive signup.
+      }
+    }
     void getStyleReadBoards(quiz).then(setBoards);
   }, [signedIn, onResult, a]);
+
+  // Coming back (e.g. right after signup, before the flusher's refresh lands):
+  // restore a pending result instead of restarting the quiz from scratch.
+  useEffect(() => {
+    if (doneRef.current || step !== 0) return;
+    let raw: string | null = null;
+    try {
+      raw = localStorage.getItem(PENDING_QUIZ_KEY);
+    } catch {
+      return;
+    }
+    if (!raw) return;
+    // Scheduled (not synchronous in the effect body) so hydration completes
+    // with the server markup before the restored result swaps in.
+    const t = setTimeout(() => {
+      try {
+        const saved = JSON.parse(raw) as Answers;
+        if (saved && Array.isArray(saved.occasions)) {
+          setA({ ...EMPTY, ...saved });
+          setStep(flow.length);
+        }
+      } catch {
+        // Unparseable stash: ignore, the quiz starts fresh.
+      }
+    }, 0);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -318,7 +358,7 @@ export default function TasteQuizClient({
                   </ul>
                 </div>
                 <Link
-                  href="/signup"
+                  href="/signup?next=/quiz"
                   className="rounded-full bg-gold px-6 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
                 >
                   Create account

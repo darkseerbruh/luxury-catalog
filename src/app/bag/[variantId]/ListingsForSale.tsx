@@ -2,6 +2,8 @@ import { getListingsForVariant, type Offer } from "@/lib/listings";
 import { affiliateListingUrl } from "@/lib/affiliate";
 import { isConfidentBasis } from "@/lib/listings-core";
 import { DealBadge } from "@/components/DealBadge";
+import { ListingOutboundLink } from "@/components/ListingOutboundLink";
+import { estimateLandedCost } from "@/lib/platforms";
 
 function formatPrice(amount: number, currency: string | null): string {
   const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
@@ -82,6 +84,16 @@ export default async function ListingsForSale({ variantId }: { variantId: number
             <p className="font-serif text-lg text-foreground">
               {formatPrice(offer.price, offer.currency)}
             </p>
+            {/* Sticker isn't what you pay: show the landed estimate when the
+                platform's typical fees/shipping add anything (platforms.ts). */}
+            {(() => {
+              const landed = offer.platform ? estimateLandedCost(offer.price, offer.platform) : null;
+              return landed && landed.total > offer.price ? (
+                <p className="mt-0.5 text-xs text-muted">
+                  ≈ {formatPrice(landed.total, offer.currency)} with typical fees + shipping
+                </p>
+              ) : null;
+            })()}
             {offer.rating && isConfidentBasis(offer.rating.fairValue) && (
               <DealBadge band={offer.rating.band} pctUnder={offer.rating.pctUnder} className="mt-1" />
             )}
@@ -94,14 +106,17 @@ export default async function ListingsForSale({ variantId }: { variantId: number
             {basisText}
           </span>
           {href && (
-            <a
+            <ListingOutboundLink
               href={href}
-              target="_blank"
-              rel="sponsored nofollow noopener"
+              variantId={variantId}
+              platform={offer.platform}
+              price={offer.price}
+              dealBand={offer.rating?.band ?? null}
+              source="listings"
               className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
             >
               View on {offer.platformLabel}
-            </a>
+            </ListingOutboundLink>
           )}
         </div>
       </li>
@@ -137,8 +152,9 @@ export default async function ListingsForSale({ variantId }: { variantId: number
 
       <p className="mt-4 max-w-prose text-xs text-muted/70">
         Fair value is the median of recorded resale prices for that spec, broadened and
-        labeled when a spec is thin. An estimate, not an appraisal. Affiliate links may
-        earn us a commission.
+        labeled when a spec is thin. Landed estimates add each platform&apos;s typical
+        buyer fees and shipping, before sales tax. An estimate, not an appraisal.
+        Affiliate links may earn us a commission.
       </p>
     </section>
   );

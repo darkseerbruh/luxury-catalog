@@ -16,6 +16,21 @@ describe("matchBagStory", () => {
     expect(matchBagStory("")).toBeNull();
   });
 
+  it("brand-gates matching: another house's fragment never borrows the story", () => {
+    // The bug this guards: LV "Daily Pouch" picked up Bottega's Pouch story.
+    expect(matchBagStory("Daily Pouch", "Louis Vuitton")).toBeNull();
+    expect(matchBagStory("Pouch", "Bottega Veneta")?.people[0].name).toMatch(/Daniel Lee/);
+    // Diacritic-insensitive brand comparison (DB may carry either form).
+    expect(matchBagStory("Birkin 30", "Hermes")?.match).toContain("birkin");
+    expect(matchBagStory("Birkin 30", "Hermès")?.match).toContain("birkin");
+    // No brand passed keeps the legacy name-only behavior.
+    expect(matchBagStory("Pouch")?.brand).toBe("Bottega Veneta");
+  });
+
+  it("every story declares a brand", () => {
+    for (const s of BAG_STORIES) expect(s.brand.trim().length).toBeGreaterThan(0);
+  });
+
   it("has a unique story_key (first match fragment) per story — no DB upsert collisions", () => {
     const keys = BAG_STORIES.map((s) => s.match[0]);
     expect(new Set(keys).size).toBe(keys.length);

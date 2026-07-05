@@ -2,8 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getProfile } from "@/lib/auth";
 import { getCloset, getPurchaseInfo } from "@/lib/collections";
+import { getResaleMedians } from "@/lib/portfolio";
 import ReportActions from "./ReportActions";
 import PurchasePriceField from "./PurchasePriceField";
+import TrackView from "@/components/TrackView";
 
 export const dynamic = "force-dynamic";
 
@@ -33,34 +35,57 @@ export default async function CollectionReportPage() {
   ]);
 
   const owned = closet.filter((c) => c.status === "have");
-  const priced = owned.filter((c) => c.retailPrice != null);
+  // ONE value engine (lib/portfolio.ts): recorded resale median per bag, with
+  // catalogued retail as a LABELED fallback. This report used to sum retail,
+  // which made a Birkin read low, most brands read high, and gain/loss
+  // meaningless (a "gain" could show on a bag reselling at a loss).
+  const medians = await getResaleMedians(owned.map((c) => c.variantId));
 
-  // Dominant currency among priced items, for an honest total symbol.
-  const currencyCounts = new Map<string, number>();
-  for (const c of priced) currencyCounts.set(c.currency ?? "USD", (currencyCounts.get(c.currency ?? "USD") ?? 0) + 1);
-  let currency: string | null = null;
-  let best = -1;
-  for (const [cur, n] of currencyCounts) if (n > best) { best = n; currency = cur; }
-
-  const total = priced.reduce((sum, c) => sum + (c.retailPrice ?? 0), 0);
   const asOf = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const ownerName = profile?.displayName || (profile?.handle ? `@${profile.handle}` : "Your");
 
-  // Cost basis (what you paid) → gain/loss, where entered (migration 0014).
+  // Cost basis (what you paid) → gain/loss where entered (migration 0014).
+  // Gain compares against the RESALE estimate only — never retail (a retail
+  // "gain" isn't money anyone can realize).
   const rows = owned.map((c) => {
+    const est = medians.get(c.variantId) ?? null;
+    const value = est?.median ?? c.retailPrice;
+    const valueBasis: "resale" | "retail" | null =
+      est != null ? "resale" : c.retailPrice != null ? "retail" : null;
+    const valueCurrency = est?.currency ?? c.currency;
     const paid = purchases[c.variantId]?.price ?? null;
-    const gain = c.retailPrice != null && paid != null ? c.retailPrice - paid : null;
+    const gain = est != null && paid != null ? est.median - paid : null;
     return {
       variantId: c.variantId,
       brand: c.brandName,
       style: c.styleName,
       variant: c.label ?? "",
-      value: c.retailPrice,
-      currency: c.currency,
+      value,
+      valueBasis,
+      currency: valueCurrency,
       paid,
       gain,
     };
   });
+  const priced = rows.filter((r) => r.value != null);
+  const retailValued = rows.filter((r) => r.valueBasis === "retail").length;
+
+  // Per-currency totals: a €9,000 bag must never add 9,000 to a $ figure.
+  const totalsByCurrency = new Map<string, number>();
+  for (const r of priced) {
+    const cur = r.currency ?? "USD";
+    totalsByCurrency.set(cur, (totalsByCurrency.get(cur) ?? 0) + (r.value ?? 0));
+  }
+  const orderedTotals = [...totalsByCurrency.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([cur, amount]) => ({ currency: cur, amount: Math.round(amount) }));
+  const currency = orderedTotals[0]?.currency ?? null;
+  const total = orderedTotals[0]?.amount ?? 0;
+  const totalDisplay =
+    orderedTotals.length > 0
+      ? orderedTotals.map((t) => fmt(t.amount, t.currency)).join(" + ")
+      : "—";
+
   const paidCount = rows.filter((r) => r.paid != null).length;
   const totalPaid = rows.reduce((s, r) => s + (r.paid ?? 0), 0);
   const totalGain = rows.reduce((s, r) => s + (r.gain ?? 0), 0);
@@ -68,6 +93,10 @@ export default async function CollectionReportPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-12">
+      <TrackView
+        event="report_viewed"
+        props={{ rows: rows.length, has_cost_basis: hasCostBasis }}
+      />
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm uppercase tracking-widest text-muted">Collection report</p>
@@ -99,11 +128,14 @@ export default async function CollectionReportPage() {
         <>
           <section className="rounded-2xl border border-border bg-surface p-5">
             <p className="text-sm uppercase tracking-widest text-muted">Total estimated value</p>
-            <p className="mt-1 font-serif text-3xl text-foreground">{fmt(total, currency)}</p>
+            <p className="mt-1 font-serif text-3xl text-foreground">{totalDisplay}</p>
             <p className="mt-1 text-sm text-muted">
               Across {owned.length} owned {owned.length === 1 ? "bag" : "bags"}
+              {retailValued > 0
+                ? ` · ${retailValued} at catalogued retail (no resale history yet)`
+                : ""}
               {priced.length < owned.length
-                ? ` · ${owned.length - priced.length} without a catalogued price not counted`
+                ? ` · ${owned.length - priced.length} without a price not counted`
                 : ""}
               .
             </p>
@@ -144,7 +176,12 @@ export default async function CollectionReportPage() {
                     <td className="py-2 pr-3 text-muted">{r.brand}</td>
                     <td className="py-2 pr-3 text-foreground">{r.style}</td>
                     <td className="py-2 pr-3 text-muted">{r.variant}</td>
-                    <td className="py-2 pl-3 text-right text-foreground">{fmt(r.value, r.currency)}</td>
+                    <td className="py-2 pl-3 text-right text-foreground">
+                      {fmt(r.value, r.currency)}
+                      {r.valueBasis === "retail" && (
+                        <span className="ml-1 text-[10px] uppercase tracking-wide text-muted/60">retail</span>
+                      )}
+                    </td>
                     <td className="py-2 pl-3 text-right">
                       <PurchasePriceField
                         variantId={r.variantId}
@@ -186,11 +223,14 @@ export default async function CollectionReportPage() {
           <section className="rounded-xl border border-border bg-surface/50 px-5 py-4 text-xs leading-relaxed text-muted">
             <p className="font-medium text-muted">About these values</p>
             <p className="mt-1">
-              Estimated values are the bag&rsquo;s catalogued <em>original retail price</em>, provided as
-              a record-keeping estimate — not a formal appraisal. Actual resale/replacement value varies
-              by condition, year, market, and provenance. For insurance or tax filings, obtain a
-              professional appraisal. <span className="text-muted/70">Enter what you paid in the Paid
-              column to track unrealised gain/loss for capital-gains planning — it&rsquo;s private to you.</span>
+              Estimated values are the <em>median of recorded resale prices</em> for each bag (the
+              catalogued original retail, marked <span className="uppercase">retail</span>, where no
+              resale history exists yet). A record-keeping estimate, not a formal appraisal. Actual
+              resale/replacement value varies by condition, year, market, and provenance. For insurance
+              or tax filings, obtain a professional appraisal. <span className="text-muted/70">Enter
+              what you paid in the Paid column to track unrealised gain/loss for capital-gains
+              planning. It&rsquo;s private to you, and gain/loss is only computed against a resale
+              estimate, never retail.</span>
             </p>
             <p className="mt-2 text-muted/70">
               Note: If you sell at a profit, handbags are generally taxed as <em>collectibles</em> (a

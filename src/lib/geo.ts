@@ -7,6 +7,7 @@
  * authentication facts (the plan's "authentication accuracy = brand risk" rule).
  */
 import type { VariantDetail } from "./queries";
+import { translateProvenance } from "./provenance";
 
 // Canonical public host. NEXT_PUBLIC_SITE_URL overrides; the fallback is the
 // live custom domain with the www host — Vercel's canonical per desktop-todo
@@ -116,7 +117,7 @@ export function buildLeadAnswer(v: VariantDetail): string {
       .split(/(?<=[.!?])\s/)
       .map((s) => s.trim())
       .find((s) => AUTH_FACT_RX.test(s));
-    if (first) sentences.push(`Authentication: ${first}${/[.!?]$/.test(first) ? "" : "."}`);
+    if (first) sentences.push(`Authentication: ${translateProvenance(first)}${/[.!?]$/.test(first) ? "" : "."}`);
   }
 
   return sentences.join(" ");
@@ -177,7 +178,10 @@ export function buildFaq(v: VariantDetail): Faq[] {
   if (auth) {
     faqs.push({
       question: `How do you authenticate a ${title}?`,
-      answer: auth.length > 320 ? auth.slice(0, 317).trimEnd() + "…" : auth,
+      answer: (() => {
+        const t = translateProvenance(auth);
+        return t.length > 320 ? t.slice(0, 317).trimEnd() + "…" : t;
+      })(),
     });
   }
 
@@ -185,7 +189,7 @@ export function buildFaq(v: VariantDetail): Faq[] {
   if (tag) {
     faqs.push({
       question: `What ${tag.tagType} format does the ${title} use?`,
-      answer: [tag.format, tag.howToRead].filter(Boolean).join(" ").slice(0, 320),
+      answer: translateProvenance([tag.format, tag.howToRead].filter(Boolean).join(" ")).slice(0, 320),
     });
   }
 

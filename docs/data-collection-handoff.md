@@ -397,6 +397,9 @@ outbound links for tracking links on bag/deal pages. Direct-where-it-works + Ski
 matches the locked monetization strategy.
 
 **Application status update (2026-07-05, verified in each dashboard):**
+*(Gmail cross-check, same day: the owner's 06-29 "I was rejected by TRR" matches NO email — the only
+rejection email is Skimlinks 06-25; Fashionphile's decline shows in the Impact dashboard only. So no
+TRR rejection ever happened; the buyer-side lane below is intact.)*
 - ✅ **eBay Partner Network — ACTIVE.** Campaign `5339158071` (already the site default in `src/lib/affiliate.ts`), so eBay outbound links monetize on deploy. No further action.
 - 🟡 **The RealReal (Impact acct 7429371):** owner accepted the brand invite 07-05; awaiting activation. Watch for the confirmation email. Payout 1–7% online sale, 15-day window.
 - ❌ **Fashionphile (Impact) — DECLINED 07-02.** Same Impact account as TRR (not a second account). Reach Fashionphile via ShopMy/LTK sub-affiliate rails instead (they carry it), or reapply direct once launch traffic is real.

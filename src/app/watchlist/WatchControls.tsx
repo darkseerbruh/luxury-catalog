@@ -1,5 +1,7 @@
 "use client";
 
+import { track, EVENTS } from "@/lib/analytics/events";
+
 import { useState, useTransition } from "react";
 import { updateWatch, removeFromWatchlist } from "@/lib/collection-actions";
 
@@ -40,6 +42,7 @@ export default function WatchControls({
     setError(null);
     startTransition(async () => {
       const res = await updateWatch({ variantId, alertMode: "pct_below_median", alertPct: next });
+      if (res.ok) track(EVENTS.alertUpdated, { variant_id: variantId, mode: "pct_below_median", pct: next });
       if (res.ok) flash();
       else setError(res.error ?? "Something went wrong.");
     });
@@ -50,6 +53,7 @@ export default function WatchControls({
     const parsed = target.trim() === "" ? null : Number(target);
     startTransition(async () => {
       const res = await updateWatch({ variantId, alertMode: "absolute", targetPrice: parsed });
+      if (res.ok) track(EVENTS.alertUpdated, { variant_id: variantId, mode: "absolute", target: parsed });
       if (res.ok) flash();
       else setError(res.error ?? "Something went wrong.");
     });
@@ -61,6 +65,7 @@ export default function WatchControls({
     setAlert(next);
     startTransition(async () => {
       const res = await updateWatch({ variantId, alertEnabled: next });
+      if (res.ok) track(EVENTS.alertUpdated, { variant_id: variantId, enabled: next });
       if (!res.ok) {
         setAlert(!next);
         setError(res.error ?? "Something went wrong.");

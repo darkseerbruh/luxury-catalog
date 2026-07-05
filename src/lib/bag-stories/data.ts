@@ -11,6 +11,7 @@ import type { BagStory } from "./types";
  */
 export const BAG_STORIES: BagStory[] = [
   {
+    brand: "Hermès",
     match: ["birkin"],
     tagline: "It began as a doodle on an airplane sick bag, and became the most expensive handbag ever sold.",
     people: [
@@ -78,6 +79,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Chanel",
     match: ["classic flap", "2.55", "timeless classic"],
     tagline: "Coco Chanel named it after its own birthday, and gave women back their hands.",
     people: [
@@ -145,6 +147,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Hermès",
     match: ["kelly"],
     tagline:
       "A 1930s bag for carrying saddles became the first It bag the day a princess used it to hide a pregnancy.",
@@ -189,6 +192,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Hermès",
     match: ["constance"],
     tagline: "Named for a baby born the very day it left the workshop, and closed with a single bold H.",
     people: [
@@ -232,6 +236,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Louis Vuitton",
     match: ["neverfull"],
     tagline: "Built in 2007 to beat Goyard's tote, it became Louis Vuitton's best seller and turns fully inside out.",
     people: [
@@ -277,6 +282,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Louis Vuitton",
     match: ["speedy"],
     tagline: "A 1930s travel bag, shrunk to Audrey Hepburn's specifications.",
     people: [
@@ -319,6 +325,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Louis Vuitton",
     match: ["capucines"],
     tagline: "Named for the Paris street where Louis Vuitton opened his very first store in 1854.",
     people: [
@@ -361,6 +368,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Dior",
     match: ["lady dior"],
     tagline: "A gift to Princess Diana that she carried so often it took her name.",
     people: [
@@ -410,6 +418,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Dior",
     match: ["saddle"],
     tagline:
       "John Galliano's equestrian bag became the first It bag of the 2000s, faded, then came roaring back.",
@@ -454,6 +463,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Gucci",
     match: ["marmont"],
     tagline: "Alessandro Michele scaled up a 1970s belt buckle and made one of the decade's most-searched bags.",
     people: [
@@ -494,6 +504,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Gucci",
     match: ["dionysus"],
     tagline: "Named for a Greek god who, the myth says, rode a tiger across a river.",
     people: [
@@ -535,6 +546,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Gucci",
     match: ["jackie"],
     tagline: "First called the G1244, until Jackie Kennedy bought six and was rarely photographed without one.",
     people: [
@@ -581,6 +593,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Gucci",
     match: ["bamboo"],
     tagline: "Born from postwar scarcity, its handle is still bent over an open flame in Florence.",
     people: [
@@ -622,6 +635,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Celine",
     match: ["triomphe"],
     tagline: "A logo Céline Vipiana spotted on the Arc de Triomphe in 1971, revived as a clasp by Hedi Slimane in 2018.",
     people: [
@@ -667,6 +681,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Saint Laurent",
     match: ["loulou"],
     tagline: "Named for the muse who shaped Yves Saint Laurent, with quilting that traces a Y.",
     people: [
@@ -710,6 +725,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Fendi",
     match: ["baguette"],
     tagline: "The little bag tucked under the arm like a loaf of bread, and arguably the first It bag.",
     people: [
@@ -755,6 +771,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Fendi",
     match: ["peekaboo"],
     tagline: "A bag designed to be left open, so the luxury inside peeks out.",
     people: [
@@ -795,6 +812,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Chanel",
     match: ["boy"],
     tagline: "Karl Lagerfeld named Chanel's edgiest bag after the great love of Coco's life.",
     people: [
@@ -840,6 +858,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Mulberry",
     match: ["bayswater"],
     tagline: "A West London neighborhood gave its name to Mulberry's most British bag.",
     people: [
@@ -887,6 +906,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Bottega Veneta",
     match: ["jodie"],
     tagline: "Named for a 1990s photo of Jodie Foster using a Bottega hobo to hide from the cameras.",
     people: [
@@ -930,6 +950,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Loewe",
     match: ["puzzle"],
     tagline: "Jonathan Anderson's first bag for Loewe, cut flat from geometric panels and folded into a cube.",
     people: [
@@ -972,6 +993,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Coach",
     match: ["tabby"],
     tagline: "Coach began with a baseball glove, and the Tabby revives a 1970s shoulder bag.",
     people: [
@@ -1010,6 +1032,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Telfar",
     match: ["telfar", "shopping bag"],
     tagline: "The Bushwick Birkin, modeled on a department-store shopping bag, made for everyone.",
     people: [
@@ -1051,6 +1074,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Louis Vuitton",
     match: ["alma"],
     tagline: "A 1934 Art Deco design that only took the name Alma, after a Paris bridge, decades later.",
     people: [
@@ -1091,6 +1115,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Celine",
     match: ["luggage"],
     tagline: "Phoebe Philo's first It bag, with a winged shape and a zip that reads like a face.",
     people: [
@@ -1133,6 +1158,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Dior",
     match: ["30 montaigne"],
     tagline: "Named for the Paris address where Christian Dior built his house and showed the New Look.",
     people: [
@@ -1179,6 +1205,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Chloé",
     match: ["paddington"],
     tagline: "The noughties It bag whose giant padlock helped invent statement hardware.",
     people: [
@@ -1221,6 +1248,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Gucci",
     match: ["horsebit"],
     tagline: "Built around the bridle hardware Gucci borrowed from the stable in the 1950s.",
     people: [
@@ -1256,6 +1284,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Saint Laurent",
     match: ["sac de jour"],
     tagline: "The bag of the day, built by Hedi Slimane as Saint Laurent's everyday classic.",
     people: [
@@ -1298,6 +1327,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Bottega Veneta",
     match: ["pouch"],
     tagline: "Daniel Lee's oversized clutch became the fastest-selling bag in Bottega's history.",
     people: [
@@ -1336,6 +1366,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Louis Vuitton",
     match: ["petite malle"],
     tagline: "A wearable miniature of the 19th-century Louis Vuitton steamer trunk.",
     people: [
@@ -1378,6 +1409,7 @@ export const BAG_STORIES: BagStory[] = [
     ],
   },
   {
+    brand: "Prada",
     match: ["galleria"],
     tagline: "Named for the Milan arcade where Mario Prada opened his first store in 1913.",
     people: [
