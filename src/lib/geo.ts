@@ -8,9 +8,14 @@
  */
 import type { VariantDetail } from "./queries";
 
+// Canonical public host. NEXT_PUBLIC_SITE_URL overrides; the fallback is the
+// live custom domain with the www host — Vercel's canonical per desktop-todo
+// ("Vercel canonical = www"; the apex 308s to www). Never advertise the apex
+// or the *.vercel.app host here: URLs on a non-canonical host redirect, and
+// Search Console reports every one it finds as "Page with redirect".
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://luxury-catalog-omega.vercel.app";
+  "https://www.luxurycatalog.com";
 
 // E-E-A-T named author. Set NEXT_PUBLIC_AUTHOR_NAME to a real person's name to
 // strengthen the authorship signal further (the plan recommends a named human).
@@ -193,7 +198,25 @@ interface JsonLd {
   [key: string]: unknown;
 }
 
-export function productJsonLd(v: VariantDetail, url: string): JsonLd {
+/**
+ * Real observed market data for the Product `offers` block. Google marks a
+ * Product without `offers`/`review`/`aggregateRating` as a CRITICAL product-
+ * snippets error (GSC email 2026-06-23) — no rich results until one exists.
+ * Callers must build this ONLY from captured listing rows (the same comps the
+ * page renders); when there are no listings the block is omitted, never faked.
+ */
+export interface ObservedOffers {
+  lowPrice: number;
+  highPrice: number;
+  offerCount: number;
+  priceCurrency: string;
+}
+
+export function productJsonLd(
+  v: VariantDetail,
+  url: string,
+  extras?: { offers?: ObservedOffers | null; image?: string | null },
+): JsonLd {
   const props: JsonLd[] = [];
   const add = (name: string, value: string | number | null | undefined) => {
     if (value != null && value !== "") props.push({ "@type": "PropertyValue", name, value: `${value}` });
@@ -219,6 +242,18 @@ export function productJsonLd(v: VariantDetail, url: string): JsonLd {
     category: "Designer handbag",
     description: buildLeadAnswer(v),
     url,
+    ...(extras?.image ? { image: extras.image } : {}),
+    ...(extras?.offers
+      ? {
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: extras.offers.priceCurrency,
+            lowPrice: extras.offers.lowPrice,
+            highPrice: extras.offers.highPrice,
+            offerCount: extras.offers.offerCount,
+          },
+        }
+      : {}),
     ...(props.length ? { additionalProperty: props } : {}),
   };
 }

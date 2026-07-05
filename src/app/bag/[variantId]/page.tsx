@@ -30,6 +30,7 @@ import TrackBagView from "./TrackBagView";
 import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
+import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
@@ -270,11 +271,8 @@ export default async function BagDetailPage({
         .filter((s) => /^https?:\/\//.test(s))
     )
   );
-  const jsonLd = [
-    productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`),
-    faqJsonLd(faq),
-    breadcrumbJsonLd(v),
-  ].filter(Boolean);
+  // (Product JSON-LD is assembled below, after the resale comps — its `offers`
+  // block is built from the same listed rows the page renders.)
 
   // Demand signal (privacy-safe counts of wants + watchers) — powers the timing
   // read; renders only when there's real signal.
@@ -337,6 +335,44 @@ export default async function BagDetailPage({
       condition: h.condition,
       url: h.sourceUrl,
     }));
+
+  // Product JSON-LD. Google requires `offers`, `review`, or `aggregateRating`
+  // on Product markup (critical product-snippets error without one, GSC
+  // 2026-06-23). Ours is an AggregateOffer over the CURRENT asking listings
+  // only ("listed" rows — the same comps rendered on-page); sold rows are
+  // history, not offers. No listings or no currency → we drop the WHOLE Product
+  // node (not just its offers): a Product without offers/review/aggregateRating
+  // is invalid to Google and is what tripped the critical error, so an omitted
+  // node beats a bare one. FAQ + breadcrumb still render for those pages.
+  const listedCurrency =
+    recordedSales.find((h) => h.priceType === "listed" && h.currency)?.currency ?? null;
+  const observedOffers =
+    listedComps.length > 0 && listedCurrency
+      ? {
+          lowPrice: Math.min(...listedComps.map((c) => c.price)),
+          highPrice: Math.max(...listedComps.map((c) => c.price)),
+          offerCount: listedComps.length,
+          priceCurrency: listedCurrency,
+        }
+      : null;
+  const heroImage = images[v.variantId] ?? null;
+  const jsonLdImage = heroImage
+    ? /^https?:\/\//.test(heroImage)
+      ? heroImage
+      : heroImage.startsWith("/")
+        ? `${SITE_URL}${heroImage}`
+        : null
+    : null;
+  const jsonLd = [
+    observedOffers
+      ? productJsonLd(v, `${SITE_URL}/bag/${v.variantId}`, {
+          offers: observedOffers,
+          image: jsonLdImage,
+        })
+      : null,
+    faqJsonLd(faq),
+    breadcrumbJsonLd(v),
+  ].filter(Boolean);
   const salesByDate = recordedSales
     .slice()
     .sort((a, b) => (a.observedOn ?? a.dateRecorded).localeCompare(b.observedOn ?? b.dateRecorded));
@@ -1253,8 +1289,10 @@ export default async function BagDetailPage({
           </Section>
         )}
 
-      {/* Live listings for this exact variant, rated against fair value (links out). */}
-      <ListingsForSale variantId={v.variantId} />
+      {/* Live listings for this exact variant, rated against fair value (links out). When
+          there's no observed listing data we drop the Product JSON-LD above, so we show a
+          note here instead — same signal, so page and markup always agree. */}
+      {observedOffers ? <ListingsForSale variantId={v.variantId} /> : <EmptyListingsNote />}
 
       {/* Where to buy (affiliate resale search links — fallback when no live listings) */}
       <WhereToBuy variantId={v.variantId} brand={v.brand.name} style={v.style.name} />

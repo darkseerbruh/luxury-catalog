@@ -36,6 +36,7 @@ Queue (priority order; tick with counts + date):
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
 
 
+- ⬜ CONTENT FOLLOW-UP: refresh stale chart components against current comps (NeverfullSizeChart still shows June 26 numbers $1,245/$1,185 vs current $1,565 sample; decide per-component whether to refresh or date-label). Rule 6.3 retrofits for older articles as touched.
 - ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope DECIDED 2026-07-02: yes eventually, NOT now (owner). Revisit on her green light; tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE

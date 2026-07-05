@@ -52,8 +52,9 @@ function specChips(offer: Offer): string[] {
 /**
  * "For sale right now" — the bag-page rail of live listings for this exact variant, each
  * rated against the fair value for its spec and linking out to the seller. Renders
- * nothing when there are no live listings (the WhereToBuy search links below stay as the
- * fallback). Async server component; fully resilient via getListingsForVariant.
+ * nothing when there are no live listings; the page shows the EmptyListingsNote in this
+ * slot instead (gated on the same no-offers signal that omits the Product JSON-LD, so the
+ * note can never contradict an AggregateOffer). Async server component; fully resilient.
  */
 export default async function ListingsForSale({ variantId }: { variantId: number }) {
   const data = await getListingsForVariant(variantId);

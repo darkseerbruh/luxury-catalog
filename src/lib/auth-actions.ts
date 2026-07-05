@@ -26,7 +26,7 @@ async function getOrigin(): Promise<string> {
   }
   return (
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://luxury-catalog-omega.vercel.app"
+    "https://www.luxurycatalog.com"
   );
 }
 

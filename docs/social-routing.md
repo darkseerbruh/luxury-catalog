@@ -11,8 +11,29 @@ Owner decision 2026-07-02.*
    "luxurycatalog dot com, search *key*". An exact key match pins the article
    to the top of `/search` (registry: `src/lib/social-search-keys.ts`).
 2. **Permanent bio hub (fallback).** The bio link on every profile points at
-   `/social` and never changes. It lists video articles newest-first, each card
-   showing its search key, driven by the same registry.
+   `/social` and never changes. It is GRID-FIRST (the likeshop/NYT pattern,
+   owner call 2026-07-03): a 3-column mirror of the profile the visitor just
+   left, one square tile per video article in posting order, each wearing its
+   search key. PER-POST STEP once a video is live: export its cover frame
+   (owner-recorded footage only) to `public/social-covers/<key>.jpg` and set
+   `cover` on the registry entry; until then the designed fallback tile
+   (title + key) renders. PER-PLATFORM MIRRORS
+   (owner call 2026-07-03: TikTok is the active channel and WILL diverge from
+   Instagram). TikTok bio -> `/social/tiktok?utm_source=tiktok&utm_medium=bio`;
+   Instagram bio -> `/social/instagram?utm_source=instagram&utm_medium=bio`;
+   plain `/social` is the generic fallback forever. Each mirror pulls its OWN
+   ordered/scoped tile set from the registry via `keysForPlatform(platform)`.
+
+   HOW TO DIVERGE (edit `src/lib/social-search-keys.ts`, no schema change):
+   - default (no `platforms` block) = post is on BOTH grids, in registry order.
+   - `platforms: { tiktok: {} }` = TikTok only (Instagram skips it), e.g. a take
+     you only cut for TikTok.
+   - `platforms: { tiktok: { order: 0 }, instagram: {} }` = on both, floated to
+     the top of TikTok, left in place on Instagram.
+   - `platforms: { tiktok: { cover: "/social-covers/x.jpg" } }` = a TikTok-
+     specific cover frame (per-platform vertical crops differ).
+   Covers live in `public/social-covers/`; a per-platform `cover` overrides the
+   shared one. The spoken-key search pin is platform-agnostic and unaffected.
 3. **IG comment-keyword DM automation (later).** Paid tool, outward-facing
    signup; revisit when IG engagement justifies it. Not built.
 

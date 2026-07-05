@@ -20,7 +20,14 @@ import { resolveTopic } from "./lib/topic";
 
 const AUTHOR = "692fc426-735a-43a0-935c-796fc92cd864"; // Arielle, Founder and Editor
 
-const chanelBody = `Chanel renamed half its lineup after numbers, TikTok is searching "chanel 25" nearly three million times a month, and the comment sections are a mess of people correcting each other. This is the clean version: what is actually new, what everything is called, and what the names mean.
+const chanelBody = `New to Chanel and lost in the numbers? This is for you. First thing: Chanel didn't rename anything. The classics kept their names. What changed is how new lines get named, and TikTok is searching "chanel 25" nearly three million times a month while the comment sections correct each other. This is the clean version: what stayed, what's new, and what the names mean.
+
+## The names, before and after
+
+- **Unchanged, the named classics:** the Classic Flap, the 2.55, the Boy, the WOC, the Gabrielle, the Coco Handle. Nothing here was renamed.
+- **The new habit, since 2019:** the soft everyday lines take their birth year. The 19 (2019), the 22 (2022), the 25 (2025). Not every new bag: Chanel still names plenty the old way (the Blazy-era Souplissimo and Kelly Shopper arrived in 2026 as names, not numbers).
+- **Birth years, not sizes:** a Hermès Birkin 25 means 25 centimeters; a Chanel 25 means born in 2025. Different houses, different number games. And the Chanel 31 is neither: that one is the address, 31 rue Cambon in Paris.
+- **Older than it looks:** the 2.55 has always been a date. February 1955, the month the original launched.
 
 ## The Chanel 25, in plain terms
 
@@ -34,26 +41,29 @@ Why it took off:
 
 ## The maxi flap moment
 
-The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. Blazy, who previously ran Bottega Veneta, showed it for spring 2026, and creators report a Paris launch in early March with a worldwide release around March 13. We are treating those dates as reported until we can pin them down. Per TikTok, it has been carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie, and people frame it as the end of the micro-bag era.
+The other new-season search is the oversized flap from Matthieu Blazy's first Chanel collection. One thing to get straight, because the name invites confusion: the new Maxi Flap is its own bag, not a new size of the Classic Flap. It borrows the Classic's codes in a more relaxed, contemporary build (PurseBop, March 2026), and collectors already call it the Souplissimo. The Classic Flap has had a maxi size for years; different bag.
 
-What the resale side shows so far:
-
-- Maxi-size Classic Flaps ask a median around **$5,825**, under the medium's $7,156, but that read comes from just nine maxi listings against a thousand mediums (June 2026), so hold it loosely. Our estimate from dated comps, not an appraisal.
+- **The launch:** Paris boutiques early March 2026, New York mid-March; W Magazine covered shoppers lining up at the SoHo store for it. Carried by Dua Lipa, Hailey Bieber, Kendall Jenner, and Jennie of Blackpink; people frame it as the end of the micro-bag era.
+- **Retail:** $8,500 to $9,300 depending on version (chanel.com; PurseBop, 2026).
+- **The resale twist:** it is already asking above retail preloved. Median around **$13,500**, ranging $9,500 to $15,995 (n=42, July 2, 2026). That is what selling out looks like in comps. Our estimate from listings, not an appraisal.
+- **The budget route to the oversized look:** vintage maxi-size Classic Flaps ask around $5,825, from just nine listings (June 2026), so hold that one loosely.
 
 ## Types of Chanel bags
 
-The taxonomy people are actually searching for. Every one of these is a distinct line, not a size of the same bag. Asking medians below are from listings we tracked in late June 2026.
+The lines people actually search for, each a distinct line, not a size of the same bag. Asking medians below are from listings we tracked in late June 2026. And an honest note on scope: we track more than a hundred Chanel styles in the catalog; these are the ones filling feeds, not the whole house.
 
-- **Classic Flap.** The quilted flap with the leather-woven chain and CC turn-lock. Sizes run mini (square and rectangular), small, medium (the default people mean), jumbo, and maxi. Medium asks around **$7,156** (n=1,018); small $7,595 (n=111); jumbo $6,620 (n=86).
+- **Classic Flap.** The quilted flap with the leather-woven chain and CC turn-lock. Sizes run mini (square and rectangular), small, medium (the default people mean), jumbo, and maxi, and the price twist is that bigger does not mean pricier:
+
+[diagram: chanel-flap-sizes]
 - **Mini Classic.** Not a separate line, the smallest Classic Flap sizes. The rectangular mini is the one all over TikTok; the square mini is shorter and boxier. The rectangular mini read is thin, around $4,240 from four listings, so treat it as a sketch.
 - **2.55.** The original, launched February 1955, which is where the name comes from. The tells versus a Classic Flap: a rectangular Mademoiselle turn-lock instead of the CC clasp, and a chain with no leather woven through. Asks around **$4,175** (n=494).
 - **Boy.** The boxier, harder-edged flap from 2011, named for Arthur "Boy" Capel, Gabrielle Chanel's great love. Chunkier chain, masculine hardware plate. Asks around **$3,915** (n=2,122).
 - **WOC.** Wallet on chain: a flat quilted wallet on a long chain, the price entry to the flap family. Asks around **$3,285** (n=877).
-- **Chanel 22.** The soft, slouchy hobo launched in 2022, the line that started the number-names era. Asks around **$4,840** (n=87).
+- **Chanel 19.** The puffy, big-quilted flap from 2019, designed under Karl Lagerfeld and Virginie Viard, and the first line named for its birth year. Asks around **$4,495** (n=872, July 2, 2026).\n- **Chanel 22.** The soft, slouchy hobo launched in 2022. Asks around **$4,840** (n=87).
 - **Chanel 25.** The 2025 everyday line covered above.
 - **Totes.** The open-top side of the house, led today by the Deauville, which asks around **$3,320** (n=313). The old-guard GST is discontinued and lives preloved-only.
 
-> If you remember one thing: since 2022 Chanel names new lines after the year they arrive. The 22, the 25. Birth years, not sizes.
+> If you remember one thing: since the 19 in 2019, Chanel names its new everyday lines for the year they're born. The 19, the 22, the 25. Birth years, not sizes, and the old names aren't going anywhere.
 
 ## What "Chanel" actually means
 
@@ -106,7 +116,7 @@ Exactly what the name says: a soft, unstructured monogram hobo that collapses ag
 
 ## CarryAll
 
-The curved-top monogram tote that zips closed, which the Neverfull famously does not. It is the do-everything bag in the current lineup: work, weekend, the gym you keep meaning to go to. Sizes and closure details vary by version, so confirm the exact one in your listing.
+The curved-top monogram tote that zips closed, which the Neverfull famously does not. It is the do-everything bag in the current lineup: work, weekend, the gym you keep meaning to go to. Sizes and closure details vary by version, so double-check which version a seller's bag is before you compare prices.
 
 - **Preloved read:** the PM asks around **$3,065** from a thin twenty listings (July 2026), so hold that number loosely.
 
@@ -114,17 +124,17 @@ The curved-top monogram tote that zips closed, which the Neverfull famously does
 
 The round-topped little monogram pouch sold as a makeup bag, famous on TikTok for the conversion: add an aftermarket chain and it becomes a mini bag for a fraction of a mini bag's price. Two honest notes: it was never built to be worn, so the leather trim takes strap stress it was not designed for, and a modification can affect resale. Know both tradeoffs and want it anyway? We don't judge.
 
-- **The math, from our comps:** the classic pouch asks around **$495** (n=27) and the larger GM around $805 (n=20, July 2026), against roughly **$2,195** for the Speedy Nano, the closest purpose-built monogram mini (n=72, June 2026). That is the fraction everyone is talking about.
+- **The math, from our comps:** the classic pouch asks around **$495** (n=27) and the larger GM around $805 (n=20, July 2026), against roughly **$2,195** for the Speedy Nano, the closest purpose-built monogram mini (n=72, June 2026). That is the fraction the conversion videos are built on.
 
 ## Lineup BB and MM
 
-The current everyday monogram line people keep cross-shopping against the Speedy 20, and the headline is simple: the MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you.
+The newest everyday monogram line, which shoppers keep comparing against the Speedy 20 before picking one. The biggest difference is simple: the MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Speedy's hand-carry shape never worked for you.
 
 - **Preloved read:** too new for a fair read. The two listings we tracked asked $2,195 and $2,295 (July 2026); for scale, the Speedy 20 asks around $2,335 (n=339, June 2026).
 
 ## Neverfull PM
 
-The smallest Neverfull, and the one nobody covers because everyone defaults to the MM. The PM is a genuinely compact tote: everyday cargo yes, laptop no. Suits petite frames the MM overwhelms. Worth checking current production status before you hunt boutiques; preloved is where it reliably lives.
+The smallest Neverfull, and the one hardly anyone covers because most people default to the MM. The PM is a genuinely compact tote: everyday cargo yes, laptop no. Suits petite frames the MM overwhelms. Worth checking current production status before you hunt boutiques; preloved is where it reliably lives.
 
 - **The finding:** in monogram canvas the PM and the MM ask the same median, about **$1,450** each (PM n=153, MM n=491, June 2026). Preloved does not discount the small one, so buy the size that fits your frame, not the one that looks like a deal.
 
@@ -189,6 +199,13 @@ async function main() {
       updated_at: new Date().toISOString(),
     };
     if (existing) {
+      // GUARD (2026-07-02 lesson): the owner edits live articles ON SITE, and a
+      // seed re-run overwrote her edits once. The DB body is canon after first
+      // publish. Re-runs update body ONLY with an explicit --force-body.
+      if (!process.argv.includes("--force-body")) {
+        delete (content as Record<string, unknown>).body;
+        console.log("(body left untouched — DB is canon; pass --force-body to overwrite)");
+      }
       const { error } = await db.from("post").update(content).eq("post_id", existing.post_id);
       console.log(error ? `UPDATE ${p.slug} ERR ${error.message}` : `updated #${existing.post_id} ${p.slug} (status preserved)`);
     } else {
