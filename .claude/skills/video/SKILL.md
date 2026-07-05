@@ -209,35 +209,72 @@ branding on screen, no misspelled or wrong caption. Fix and re-render if not.
   the caption/script, and status `draft`. Commit the log (not the video file).
 
 ## Step 6 — Deliver
-Send the `.mp4` to Arielle for approval (SendUserFile). Do NOT post or schedule it yourself.
+Get the finished `.mp4` in front of Arielle for approval. Do NOT post or schedule it
+yourself; delivery is for her to approve.
+- Try `SendUserFile` if available. It is NOT always enabled ("not enabled in this context"
+  on resumed/background sessions). If it errors, just give her the clickable local path(s)
+  under `output/`; the files are on her own machine.
 - **Talking-head:** ships WITH her voice (a lip-synced scratch track). Tell her she can
   overlay a trending sound in-app over it. Never label it silent.
 - **Headless montage:** silent by design; tell her to add a trending sound in-app.
 
 ## Step 7 — Metricool draft handoff (only after she approves the reel)
 Hand an approved reel to the social calendar as a Metricool DRAFT. Never publish or
-schedule it live: draft only, posting stays her call.
+schedule it live: draft only, posting stays her call. This whole flow is proven end to
+end (2026-07-05, the 3 Chanel reels).
 
-1. Get the brand fresh with `getBrandSettings` (do not trust cached values). As of
-   2026-07-01: blogId `6480195` (`luxurycatalog_`), timezone `America/New_York`,
-   connected networks TikTok, Instagram, Pinterest.
-2. Write the caption with the `brand-voice` skill: on-voice, a light CTA, no em dashes.
-   Keep the TikTok title short.
-3. Create the draft with `createScheduledPost`:
-   - `blogId`: `6480195` (or the value from step 1).
-   - `date`: the next slot from `getBestTimeToPostByNetwork`, or a near-future time. It
-     will not fire because it is a draft.
-   - `info.draft`: `true`. `info.autoPublish`: `false`.
-   - `info.providers`: `[{"network":"tiktok"},{"network":"instagram"}]` (Reel format:
-     `instagramData.type` = `REEL`).
-   - `info.text`: the caption. `info.tiktokData.title`: the hook.
-4. Media is the one manual step. `createScheduledPost` `media` accepts PUBLIC URLs only,
-   and the render is a local file. So create the draft with the caption and settings,
-   then tell her to open the Metricool draft and drag in `output/<name>.mp4`. Do NOT
-   invent a URL. (Zero-touch upload is a future upgrade: host the render at a public URL,
-   for example a Supabase Storage bucket, then pass that URL in `media`. That needs a
-   bucket + key set up once, so it is her call to enable.)
-5. Update the reel's row in `reels-log.md` status to `draft in Metricool`.
+**Preflight — connector + brand (do not trust cached values):**
+1. Metricool auth can lapse. If a call errors with an auth/authorization message, the
+   Metricool connector needs a RECONNECT, which only she can do in an interactive session
+   (claude.ai -> Settings -> Connectors -> Metricool -> Reconnect). Tell her that and stop;
+   you cannot run the OAuth here.
+2. Get the brand fresh with `getBrandSettings`. As of 2026-07-05: blogId `6480195`
+   (`luxurycatalog_`), timezone `America/New_York`, connected networks TikTok, Instagram,
+   Pinterest.
+
+**Media host — the solved part (Metricool `media` needs a PUBLIC URL, the render is local):**
+Metricool auto-ingests a public URL and rehosts the file on its own CDN
+(`static.metricool.com/...`). The zero-setup public host is a temporary GitHub release on
+the (public) `darkseerbruh/luxury-catalog` repo, driven with the already-authed `gh` CLI.
+No token, no account, nothing for her to set up.
+```bash
+# 1. upload the approved reel(s) as release assets
+gh release create reels-<tag> --repo darkseerbruh/luxury-catalog \
+  --title "<...> (Metricool media host)" --notes "temp host; delete after drafts saved" \
+  output/<name>.mp4
+# 2. get the public download URL
+gh release view reels-<tag> --repo darkseerbruh/luxury-catalog \
+  --json assets --jq '.assets[].url'
+```
+The URL is `https://github.com/darkseerbruh/luxury-catalog/releases/download/<tag>/<name>.mp4`.
+(Metricool also ingests a linked Google Drive/Dropbox URL if she has that source linked in
+her Metricool account; the GitHub release is simpler because you can drive it yourself.)
+
+**Create the draft** with `createScheduledPost`:
+- `blogId`: `6480195` (or the value from preflight).
+- `date`: a near-future placeholder (e.g. 3 days out, 6pm ET). It will NOT fire because
+  it is a draft. Tell her it is a placeholder to reset when she reviews.
+- `info.draft`: `true`. `info.autoPublish`: `false`. Both. This is what keeps it a draft.
+- `info.providers`: `[{"network":"instagram"},{"network":"tiktok"}]`; `instagramData.type`
+  = `REEL`.
+- `info.media`: `["<the GitHub release URL>"]`.
+- `info.text`: the caption (append the 4-6 hashtags). `info.tiktokData.title`: the hook.
+- `info.tiktokData.privacyOption`: `SELF_ONLY` as a safety default; tell her to flip it to
+  public in the draft when she is ready.
+- Confirm the response shows `draft:true` and `media` rehosted to `static.metricool.com`.
+
+**Cleanup + report:**
+- Once every draft shows the `static.metricool.com` media, Metricool has its own copy, so
+  DELETE the temp release to close the brand-image public exposure:
+  `gh release delete reels-<tag> --repo darkseerbruh/luxury-catalog --cleanup-tag --yes`.
+- Re-read with `getScheduledPosts` to confirm the drafts persisted.
+- Give her the per-post planner links (`plannerUrl` in each create response) to review.
+- Update the reel's row / add a note in `reels-log.md`: staged as Metricool draft with the
+  post ids. Commit.
+
+The caption/tag package (caption carrying the search key in plain text, TikTok title,
+4-6 observed tags) is written per the POST PACKAGE rule in `docs/script-requirements.md`
+(§17) and lives in the kit's `📋 CAPTIONS + TAGS` section.
 
 ## Look and feel
 The caption style (cream text, gold on the spoken word, soft shadow, Poppins) lives in
