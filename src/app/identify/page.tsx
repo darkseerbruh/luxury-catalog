@@ -31,6 +31,7 @@ interface CatalogMatch {
 
 interface ResaleEstimate {
   median: number;
+  low?: number | null;
   count: number;
   currency: string;
   asOf: string | null;
@@ -115,7 +116,7 @@ export default function IdentifyPage() {
     match?.variantId
       ? `/bag/${match.variantId}`
       : match?.brandName
-        ? `/search?q=${encodeURIComponent(match.brandName)}`
+        ? `/search?q=${encodeURIComponent([match.brandName, match.styleName].filter(Boolean).join(" "))}`
         : null;
 
   // Best brand/style strings for resale/consign deep-links and the share card.
@@ -219,6 +220,15 @@ export default function IdentifyPage() {
             {loading ? "Checking…" : "Spot the fake"}
           </button>
         </div>
+        {/* The photo path has real failure modes (rate limit, bad thrift-store
+            light, low confidence). Always offer the no-photo route so the
+            in-hand moment never dead-ends. */}
+        <p className="text-center text-sm text-muted">
+          No photo, or in a hurry?{" "}
+          <Link href="/authentication" className="text-gold hover:underline">
+            Check the markers by house →
+          </Link>
+        </p>
       </form>
 
       {/* Thrift-find logging CTA */}
@@ -514,8 +524,19 @@ export default function IdentifyPage() {
                 If it&rsquo;s genuine
               </h2>
               <p className="font-serif text-2xl text-foreground">
-                {formatPrice(result.resale.median, result.resale.currency)}{" "}
-                <span className="text-base text-muted">typical resale</span>
+                {result.resale.low != null && result.resale.low < result.resale.median ? (
+                  <>
+                    from {formatPrice(result.resale.low, result.resale.currency)}{" "}
+                    <span className="text-base text-muted">
+                      live · typically {formatPrice(result.resale.median, result.resale.currency)}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {formatPrice(result.resale.median, result.resale.currency)}{" "}
+                    <span className="text-base text-muted">typical resale</span>
+                  </>
+                )}
               </p>
               <p className="mt-1 text-xs text-muted">
                 Median of {result.resale.count} listings
@@ -568,7 +589,7 @@ export default function IdentifyPage() {
               <Link href="/authenticate" className="transition-colors hover:text-gold-soft">
                 Get it checked by a pro &rarr;
               </Link>
-              <Link href="/articles" className="transition-colors hover:text-gold-soft">
+              <Link href="/authentication" className="transition-colors hover:text-gold-soft">
                 Read the authentication guides &rarr;
               </Link>
             </div>

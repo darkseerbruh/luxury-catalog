@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
-import { listByBrand, listByStyle } from "@/lib/posts";
+import { listByBrand, listByStyle, getBrandAuthGuideSlug } from "@/lib/posts";
 import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
@@ -550,6 +550,10 @@ export default async function BagDetailPage({
   // hero icons, plus a self-updating market fact derived from the resale rows
   // above (no new data source; renders only when we've seeded a story).
   const bagStory = await getBagStory(v.style.name, v.brand.name);
+
+  // Published per-house authentication guide, for the digest + escalation
+  // links (null when the house has no live guide; links degrade to the hub).
+  const authGuideSlug = await getBrandAuthGuideSlug(v.brand.name);
   const storyMarketFact: StoryMarketFact | null =
     bagStory && fairMarket
       ? {
@@ -773,6 +777,42 @@ export default async function BagDetailPage({
         label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
       />
 
+      {/* Authentication at a glance — the value read and the "is it real" read
+          belong on the same screen (the two anxieties are answered together or
+          the buyer bounces). A 3-marker digest; the full checklist is below. */}
+      {authChecks.length > 0 && (
+        <div className="rounded-2xl border border-border bg-surface/50 px-5 py-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-serif text-lg text-foreground">Is it real? Start here</h2>
+            <a href="#authentication" className="text-sm text-gold transition-colors hover:text-gold-soft">
+              Full checklist →
+            </a>
+          </div>
+          <ul className="mt-2 flex flex-col gap-1.5 text-sm text-muted">
+            {authChecks.slice(0, 3).map((c) => (
+              <li key={c.label} className="flex gap-2">
+                <span aria-hidden className="text-gold">✓</span>
+                <span>
+                  <span className="text-foreground">{c.label}:</span>{" "}
+                  {c.detail.length > 110 ? `${c.detail.slice(0, 110).replace(/\s+\S*$/, "")}…` : c.detail}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted/70">
+            Markers to check, not a verdict.
+            {authGuideSlug && (
+              <>
+                {" "}
+                <Link href={`/articles/${authGuideSlug}`} className="text-gold hover:underline">
+                  The {v.brand.name} guide →
+                </Link>
+              </>
+            )}
+          </p>
+        </div>
+      )}
+
       {/* Broaden a want across colourways, when the style actually has colour variation. */}
       {(() => {
         const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
@@ -917,10 +957,10 @@ export default async function BagDetailPage({
                 We do not guarantee authenticity; verify high-stakes details in person.
               </p>
               <Link
-                href="/articles"
+                href={authGuideSlug ? `/articles/${authGuideSlug}` : "/authentication"}
                 className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
               >
-                Read our authentication guides &rarr;
+                {authGuideSlug ? `Read the ${v.brand.name} authentication guide` : "Read our authentication guides"} &rarr;
               </Link>
             </div>
           </Section>
@@ -1332,8 +1372,20 @@ export default async function BagDetailPage({
           <Section title="Research depth">
             <div className="rounded-xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">
               We haven&rsquo;t researched the authentication details for this
-              variant yet. Search by style to find other bags — what people look
-              for tells us what to dig into next.
+              variant yet.{" "}
+              {authGuideSlug ? (
+                <>
+                  The house-level markers still apply:{" "}
+                  <Link href={`/articles/${authGuideSlug}`} className="text-gold hover:underline">
+                    check the {v.brand.name} guide →
+                  </Link>
+                </>
+              ) : (
+                <>
+                  Search by style to find other bags. What people look for tells
+                  us what to dig into next.
+                </>
+              )}
             </div>
           </Section>
         )}
