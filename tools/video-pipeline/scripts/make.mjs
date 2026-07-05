@@ -439,7 +439,10 @@ const trimDeadAir = (base, publicVideo) => {
 };
 
 // Auto-detect dollar amounts in the captions so they can pop on screen when spoken.
-const detectDollars = (base) => {
+// If a bag card is on screen when the price is said, pin the price just under that card
+// so the number reads with its bag (owner rule 2026-07-04). Otherwise use the default
+// spot. `overlays` are the resolved cue cards (fromSec/toSec/xPct/yPct).
+const detectDollars = (base, overlays = []) => {
   const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
   if (!existsSync(capsPath)) return [];
   const caps = JSON.parse(readFileSync(capsPath, "utf8"));
@@ -453,7 +456,15 @@ const detectDollars = (base) => {
       j++;
     }
     const clean = text.replace(/[^$\d.,]/g, "");
-    if (/\$\d/.test(clean)) out.push({ text: clean, atSec: caps[i].startMs / 1000 });
+    if (/\$\d/.test(clean)) {
+      const atSec = caps[i].startMs / 1000;
+      // find a card visible when the price is spoken; sit the price just below it
+      const card = overlays.find((o) => atSec >= o.fromSec - 0.4 && atSec <= o.toSec + 0.8);
+      const pos = card
+        ? { xPct: Math.max(16, card.xPct ?? 13), yPct: Math.min(60, (card.yPct ?? 26) + 21) }
+        : {};
+      out.push({ text: clean, atSec, ...pos });
+    }
     i = j - 1;
   }
   if (out.length) {
@@ -625,7 +636,17 @@ const processClip = async (fileName) => {
   const rankTracker = resolveRanks(base);
   const rankList = resolveList(base);
   const headline = resolveHeadline(base);
-  const callouts = detectDollars(base);
+  // Name near the image: a card carries the bag's name as a label UNLESS a rank list
+  // already names each bag on screen (owner rule 2026-07-04, no double labels). Warn if
+  // a card has no name and nothing else names it.
+  if (rankList || rankTracker) {
+    for (const o of overlays) delete o.label;
+  } else {
+    for (const o of overlays) {
+      if (!o.label) console.log(`  note: card ${o.img} has no name label (add "label" to its cue)`);
+    }
+  }
+  const callouts = detectDollars(base, overlays);
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);
   writeFileSync(
     propsPath,

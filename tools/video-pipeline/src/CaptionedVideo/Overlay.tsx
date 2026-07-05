@@ -111,16 +111,22 @@ export const Overlay: React.FC<{
           <div
             style={{
               fontFamily: CAPTION_FONT_FAMILY,
-              fontWeight: 600,
+              fontWeight: 700,
               fontSize: 30,
               lineHeight: 1.1,
               textAlign: "center",
-              color: BRAND.captionColor,
-              background: "rgba(14,13,12,0.72)",
-              border: `1px solid rgba(201,162,76,0.55)`,
-              borderRadius: 12,
-              padding: "8px 14px",
+              color: "#e3c785",
               whiteSpace: "nowrap",
+              // On a card the panel already frames it, so the name is plain gold text.
+              // Floating (non-card) needs its own scrim to stay legible over video.
+              ...(card
+                ? { textShadow: BRAND.captionShadow }
+                : {
+                    background: "rgba(14,13,12,0.72)",
+                    border: "1px solid rgba(201,162,76,0.55)",
+                    borderRadius: 12,
+                    padding: "8px 14px",
+                  }),
             }}
           >
             {label}
