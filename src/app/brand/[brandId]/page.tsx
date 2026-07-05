@@ -15,7 +15,7 @@ function symbolFor(currency: string | null): string {
 }
 function fmt(amount: number | null, currency: string | null): string | null {
   if (amount == null) return null;
-  return `${symbolFor(currency)}${amount.toLocaleString()}`;
+  return `${symbolFor(currency)}${Math.round(amount).toLocaleString()}`;
 }
 
 type BrandStyle = Awaited<ReturnType<typeof getBrandDetail>> extends infer B
@@ -45,6 +45,7 @@ function topN(values: (string | null)[], n: number): { value: string; count: num
   }
   return Array.from(counts.entries())
     .map(([value, count]) => ({ value, count }))
+    .filter((e) => e.count >= 2)
     .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
     .slice(0, n);
 }
@@ -128,7 +129,7 @@ export default async function BrandPage({
     .slice(0, 6);
 
   // At-a-glance, all derived from the catalogued variants (real, never invented).
-  const prices = allVariants.map((v) => v.retailPrice).filter((n): n is number => n != null);
+  const prices = allVariants.map((v) => v.retailPrice).filter((n): n is number => n != null && n > 0);
   const priceCurrency = allVariants.find((v) => v.retailPrice != null)?.currency ?? null;
   const ladder = prices.length > 0 ? { min: Math.min(...prices), max: Math.max(...prices) } : null;
   const topColors = topN(allVariants.map((v) => v.exteriorColorway), 6);
@@ -310,22 +311,30 @@ export default async function BrandPage({
           The most common attributes across {allVariants.length} catalogued variants.
         </p>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <p className="text-xs uppercase tracking-wide text-muted/70">Colours</p>
-            <Chips items={topColors} />
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-muted/70">Materials</p>
-            <Chips items={topMaterials} />
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-muted/70">Hardware</p>
-            <Chips items={topHardware} />
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-muted/70">Silhouettes</p>
-            <Chips items={topSilhouettes} />
-          </div>
+          {topColors.length > 0 && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-muted/70">Colours</p>
+              <Chips items={topColors} />
+            </div>
+          )}
+          {topMaterials.length > 0 && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-muted/70">Materials</p>
+              <Chips items={topMaterials} />
+            </div>
+          )}
+          {topHardware.length > 0 && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-muted/70">Hardware</p>
+              <Chips items={topHardware} />
+            </div>
+          )}
+          {topSilhouettes.length > 0 && (
+            <div>
+              <p className="text-xs uppercase tracking-wide text-muted/70">Silhouettes</p>
+              <Chips items={topSilhouettes} />
+            </div>
+          )}
         </div>
       </section>
 

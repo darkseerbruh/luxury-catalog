@@ -515,6 +515,23 @@ export default async function BagDetailPage({
       .replace(/\s{2,}/g, " ")
       .trim();
 
+  // Trade-jargon glossary (owner rule: define jargon the first time it
+  // appears, in plain words). Only terms that actually occur in this bag's
+  // checklist render, as one quiet line above it.
+  const JARGON_GLOSSARY: { term: string; rx: RegExp; def: string }[] = [
+    { term: "Vachetta", rx: /vachetta/i, def: "the pale untreated cowhide that darkens with age" },
+    { term: "Patina", rx: /patina/i, def: "the honey tone untreated leather develops over time" },
+    { term: "Heat stamp", rx: /heat[ -]?stamp/i, def: "the brand mark pressed into the leather" },
+    { term: "Date code", rx: /date[ -]?code/i, def: "the small letters-and-numbers production tag (not a serial number)" },
+    { term: "Blind stamp", rx: /blind[ -]?stamp/i, def: "a small embossed mark recording year and workshop" },
+    { term: "Creed patch", rx: /creed/i, def: "the leather tag sewn inside the bag" },
+    { term: "Sellier", rx: /sellier/i, def: "built with the stitching outside, for crisp structured edges" },
+    { term: "Retourné", rx: /retourn/i, def: "stitched inside out, for a softer rounded look" },
+    { term: "Turn-lock", rx: /turn[ -]?lock/i, def: "the twisting metal closure" },
+    { term: "Caviar", rx: /caviar/i, def: "pebbled, textured calfskin" },
+    { term: "Hardware", rx: /hardware/i, def: "the metal parts: zips, clasps, chains, feet" },
+  ];
+
   const authChecks: { label: string; detail: string }[] = [];
   if (v.authenticationMarkers) {
     authChecks.push({
@@ -949,6 +966,22 @@ export default async function BagDetailPage({
               you know what to look for; they don&rsquo;t replace an in-hand
               inspection by a qualified authenticator.
             </p>
+            {(() => {
+              const allText = authChecks.map((c) => `${c.label} ${c.detail}`).join(" ");
+              const present = JARGON_GLOSSARY.filter((g) => g.rx.test(allText));
+              if (present.length === 0) return null;
+              return (
+                <p className="mb-4 rounded-xl border border-border/60 bg-surface/50 px-4 py-3 text-xs leading-relaxed text-muted">
+                  <span className="text-foreground">The words, in plain terms:</span>{" "}
+                  {present.map((g, i) => (
+                    <span key={g.term}>
+                      {i > 0 && " · "}
+                      <span className="text-gold-soft">{g.term}</span>: {g.def}
+                    </span>
+                  ))}
+                </p>
+              );
+            })()}
             <ol className="flex flex-col gap-3">
               {authChecks.map((c, i) => (
                 <li

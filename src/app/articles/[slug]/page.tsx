@@ -391,10 +391,12 @@ export default async function PostDetailPage({
       )}
 
       <article>
-        <Body
-          body={post.body}
-          injectAfterFirstDiagram={shopData ? <ShopThisBag variant="inline" data={shopData} /> : undefined}
-        />
+        {/* The early inline shop block (after the first diagram) interrupted the
+            read one paragraph in and cost read-through for no extra affiliate
+            coverage: the floating bar keeps the buy path visible throughout and
+            the end-of-article CTA catches finished readers (owner UX review
+            2026-07-05). */}
+        <Body body={post.body} />
       </article>
 
       {/* Dismissible floating shop bar: keeps the buy/sell path visible without forcing
