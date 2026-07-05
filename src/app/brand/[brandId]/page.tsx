@@ -91,7 +91,7 @@ export default async function BrandPage({
   // variants — dedupe by the story itself, then rank the icons by catalogue depth.
   const iconSeen = new Set<string>();
   const iconStyles = liveStyles
-    .map((style) => ({ style, story: matchBagStory(style.name) }))
+    .map((style) => ({ style, story: matchBagStory(style.name, brand.name) }))
     .filter((x): x is { style: BrandStyle; story: NonNullable<typeof x.story> } => x.story != null)
     .sort(
       (a, b) =>

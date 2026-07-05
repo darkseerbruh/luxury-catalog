@@ -527,7 +527,7 @@ export default async function BagDetailPage({
   // "The Story" editorial module — cited origin/design/culture tidbits for the
   // hero icons, plus a self-updating market fact derived from the resale rows
   // above (no new data source; renders only when we've seeded a story).
-  const bagStory = await getBagStory(v.style.name);
+  const bagStory = await getBagStory(v.style.name, v.brand.name);
   const storyMarketFact: StoryMarketFact | null =
     bagStory && fairMarket
       ? {

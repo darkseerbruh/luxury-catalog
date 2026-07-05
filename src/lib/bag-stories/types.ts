@@ -49,6 +49,11 @@ export interface StoryVideo {
 
 export interface BagStory {
   /**
+   * The house the story belongs to. Matching is brand-gated so a name fragment
+   * ("pouch") can never put one house's lore on another house's page.
+   */
+  brand: string;
+  /**
    * Lowercased style-name fragments this story applies to. Matched against the
    * variant's style name (case-insensitive `includes`) so the same numeric
    * style id is not required across environments.
