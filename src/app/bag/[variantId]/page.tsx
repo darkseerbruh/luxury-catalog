@@ -46,6 +46,7 @@ import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
+import { translateProvenance } from "@/lib/provenance";
 import { BagImage } from "@/components/BagImage";
 import CompareControls from "@/components/CompareControls";
 
@@ -131,7 +132,9 @@ function SpecRow({ label, value }: { label: string; value: string | null | undef
   return (
     <div className="flex gap-3 py-2 text-sm">
       <span className="w-36 shrink-0 text-muted">{label}</span>
-      <span className="text-foreground">{value}</span>
+      {/* Researched fields can carry editor provenance flags; translate at the
+          shared renderer so no section leaks "Snippet-sourced" to a reader. */}
+      <span className="text-foreground">{translateProvenance(value)}</span>
     </div>
   );
 }
@@ -500,21 +503,6 @@ export default async function BagDetailPage({
       : null;
 
   // "How to authenticate" checklist — enumerated from existing data only.
-  // Research-provenance flags are internal editor language. A reader at her
-  // most anxious moment shouldn't parse "Snippet-sourced; needs verification."
-  // Translate to a plain-language hedge (never silently strip it: the softness
-  // must survive, per the calibrated-hedge rule).
-  const readerHedge = "(widely repeated detail; confirm on the bag in hand)";
-  const hedgeRx = /\(widely repeated detail; confirm on the bag in hand\)/;
-  const translateProvenance = (text: string): string =>
-    text
-      .replace(/Snippet-sourced;?\s*needs (browser\/physical |physical )?verification\.?/gi, readerHedge)
-      .replace(/Snippet-sourced\.?/gi, readerHedge)
-      .replace(/\bneeds verification\.?/gi, readerHedge)
-      .replace(new RegExp(`${hedgeRx.source}(\\s*${hedgeRx.source})+`, "g"), readerHedge)
-      .replace(/\s{2,}/g, " ")
-      .trim();
-
   // Trade-jargon glossary (owner rule: define jargon the first time it
   // appears, in plain words). Only terms that actually occur in this bag's
   // checklist render, as one quiet line above it.
@@ -1084,14 +1072,14 @@ export default async function BagDetailPage({
                         .join(" × ")}
                     />
                   )}
-                  <SpecRow label="Date code format" value={r.dateCodeFormat} />
-                  <SpecRow label="Stamp placement" value={r.stampPlacement} />
-                  <SpecRow label="Stamp font" value={r.stampFontNotes} />
+                  <SpecRow label="Date code format" value={r.dateCodeFormat && translateProvenance(r.dateCodeFormat)} />
+                  <SpecRow label="Stamp placement" value={r.stampPlacement && translateProvenance(r.stampPlacement)} />
+                  <SpecRow label="Stamp font" value={r.stampFontNotes && translateProvenance(r.stampFontNotes)} />
                 </div>
                 {r.knownAuthenticationMarkers && (
                   <p className="mt-3 text-sm leading-relaxed text-foreground">
                     <span className="mr-2 font-medium text-muted">Authentication:</span>
-                    {r.knownAuthenticationMarkers}
+                    {translateProvenance(r.knownAuthenticationMarkers)}
                   </p>
                 )}
               </div>
@@ -1242,7 +1230,7 @@ export default async function BagDetailPage({
                 {t.authenticationNotes && (
                   <p className="mt-3 text-sm leading-relaxed text-foreground">
                     <span className="mr-2 font-medium text-muted">Notes:</span>
-                    {t.authenticationNotes}
+                    {translateProvenance(t.authenticationNotes)}
                   </p>
                 )}
               </div>
@@ -1346,7 +1334,7 @@ export default async function BagDetailPage({
                 <span className="text-muted">
                   {f.fits === "yes" ? "fits" : f.fits === "tight" ? "tight fit" : "doesn't fit"}
                 </span>
-                {f.notes && <span className="ml-auto text-muted">{f.notes}</span>}
+                {f.notes && <span className="ml-auto text-muted">{translateProvenance(f.notes)}</span>}
                 {f.verified && (
                   <span className="ml-auto shrink-0 rounded-full bg-gold/10 px-2 py-0.5 text-xs text-gold">
                     verified
