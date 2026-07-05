@@ -193,8 +193,17 @@ export default function ValueModule({
   const { low, median, high, currency, count } = range;
   const best = listed.length ? Math.min(...listed.map((c) => c.price)) : null;
   const bestComp = best != null ? listed.find((c) => c.price === best) ?? null : null;
+  // Position the best listing against the MEDIAN, not the range ends. The old
+  // low*1.04..high*0.96 "mid" band covered nearly the whole range, so a
+  // near-floor price read "around the middle" (misleading in plain language).
   const position =
-    best == null ? null : best <= low * 1.04 ? "deal" : best >= high * 0.96 ? "rich" : "mid";
+    best == null
+      ? null
+      : best <= median * 0.75
+        ? "deal"
+        : best >= median * 1.25
+          ? "rich"
+          : "mid";
   const retention =
     retailOriginal && retailOriginal > 0 ? Math.round((median / retailOriginal) * 100) : null;
 
@@ -247,16 +256,20 @@ export default function ValueModule({
     verdict = best != null ? (
       <>
         Best listed right now:{" "}
-        <span className="text-gold">{fmt(best, currency)}</span>
+        {/* Deep-link the price to the live listings so it's a checkable claim,
+            not a bare number (the persona rule: never a price without evidence). */}
+        <a href="#for-sale" className="text-gold underline decoration-gold/40 underline-offset-2 hover:decoration-gold">
+          {fmt(best, currency)}
+        </a>
         {bestComp?.platform ? ` on ${platformLabel(bestComp.platform)}` : ""},{" "}
         {position === "deal" ? (
-          <span className="text-green-400">near the floor of the typical range</span>
+          <span className="text-green-400">well below the typical price</span>
         ) : position === "rich" ? (
-          <span className="text-muted">above the typical range</span>
+          <span className="text-muted">above the typical price</span>
         ) : (
-          <span className="text-muted">around the middle of the typical range</span>
+          <span className="text-muted">around the typical price</span>
         )}
-        .
+        {" "}(median <span className="text-foreground">{fmt(median, currency)}</span>).
       </>
     ) : (
       <>
