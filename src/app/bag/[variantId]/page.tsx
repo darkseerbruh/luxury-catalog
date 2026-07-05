@@ -737,11 +737,17 @@ export default async function BagDetailPage({
           mixNote={(() => {
             const sold = recordedSales.filter((h) => h.priceType === "sold").length;
             const ask = recordedSales.length - sold;
-            return sold > 0 && ask > 0
-              ? `built from ${ask.toLocaleString()} asking + ${sold.toLocaleString()} sold prices`
-              : sold > 0
-                ? "all sold prices"
-                : null;
+            const parts: string[] = [];
+            if (sold > 0 && ask > 0) {
+              parts.push(`built from ${ask.toLocaleString()} asking + ${sold.toLocaleString()} sold prices`);
+            } else if (sold > 0) {
+              parts.push("all sold prices");
+            }
+            const unknownCondition = recordedSales.filter((h) => !h.condition).length;
+            if (unknownCondition > 0 && byCondition.length >= 2) {
+              parts.push(`${unknownCondition.toLocaleString()} with condition unrecorded`);
+            }
+            return parts.length > 0 ? parts.join(" · ") : null;
           })()}
           byCondition={byCondition}
           era={era}
