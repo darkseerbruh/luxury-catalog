@@ -48,18 +48,21 @@ export function BagImage({
 
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-surface-raised to-surface ${className}`}
+      className={`@container relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-surface-raised to-surface ${className}`}
     >
       <HandbagGlyph className="h-1/2 w-1/2 text-gold/25" />
+      {/* The invite chip and wordmark only fit on roomy tiles (bag-page hero,
+          large cards). On small grid thumbnails they crammed and clipped, so
+          they're container-query-gated to the tile's own rendered width. */}
       {invite && (
-        <span className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full border border-gold/30 bg-bg/70 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-gold-soft/90">
+        <span className="pointer-events-none absolute left-1/2 top-2 hidden -translate-x-1/2 whitespace-nowrap rounded-full border border-gold/30 bg-bg/70 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-gold-soft/90 @[9rem]:inline-block">
           + Add a photo
         </span>
       )}
       {brand && (
         <span
           aria-hidden
-          className="absolute bottom-2 left-0 right-0 truncate px-3 text-center font-serif text-xs uppercase tracking-widest text-muted/70"
+          className="absolute bottom-2 left-0 right-0 hidden truncate px-3 text-center font-serif text-xs uppercase tracking-widest text-muted/70 @[7rem]:block"
         >
           {brand}
         </span>

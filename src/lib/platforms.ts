@@ -41,7 +41,7 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
   vestiaire: {
     key: "vestiaire", label: "Vestiaire Collective", authenticates: "optional",
     authNote: "Physical authentication available (sometimes included on high-value)",
-    returns: "Limited — final sale unless not as described",
+    returns: "Limited: final sale unless not as described",
     buyerPremiumPct: 0, buyerProtectionPct: 0.1, typicalShippingUsd: 15,
   },
   ebay: {

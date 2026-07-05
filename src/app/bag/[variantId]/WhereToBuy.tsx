@@ -28,7 +28,7 @@ export default function WhereToBuy({
         are set by each reseller.
       </p>
       <p className="mb-4 text-xs text-muted/70">
-        Affiliate links — we may earn a commission if you buy, at no extra cost to you.{" "}
+        Affiliate links: we may earn a commission if you buy, at no extra cost to you.{" "}
         <a href="/disclosure" className="underline hover:text-foreground">Learn more</a>.
       </p>
       <div className="flex flex-col gap-3">

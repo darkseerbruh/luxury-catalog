@@ -101,13 +101,21 @@ export function buildLeadAnswer(v: VariantDetail): string {
     if (parts.length) sentences.push(`It measures ${parts.join(", ")}.`);
   }
 
-  // Authentication clue — short, first marker only.
+  // Authentication clue — short, first marker only. Some seeded marker text
+  // leads with popularity or dimension notes; labelling those "Authentication:"
+  // misstates a fact, so only surface a sentence that reads as an actual
+  // authentication marker and omit the clue when none does.
+  const AUTH_FACT_RX =
+    /stamp|serial|date code|stitch|hardware|font|heat|zipper|rfid|chip|engrav|hologram|authent|logo|emboss|lining|plate|patch|thread|vachetta|glazing|turn-?lock|closure|clasp|leather|canvas|calfskin|lambskin|caviar|grain|quilt|matelass|construction|seam|edge/i;
   const auth =
     v.authenticationMarkers ||
     v.productionRecords.find((r) => r.knownAuthenticationMarkers)?.knownAuthenticationMarkers ||
     null;
   if (auth) {
-    const first = auth.split(/(?<=[.!?])\s/)[0].trim();
+    const first = auth
+      .split(/(?<=[.!?])\s/)
+      .map((s) => s.trim())
+      .find((s) => AUTH_FACT_RX.test(s));
     if (first) sentences.push(`Authentication: ${first}${/[.!?]$/.test(first) ? "" : "."}`);
   }
 

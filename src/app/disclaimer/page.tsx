@@ -50,7 +50,7 @@ export default function DisclaimerPage() {
           </p>
         </section>
 
-        <p className="text-muted/70">Questions? Reach us at hello@luxurycatalog.com.</p>
+        <p className="text-muted/70">Questions? Reach us at arielle@luxurycatalog.com.</p>
       </div>
     </main>
   );

@@ -300,14 +300,20 @@ async function loadHeroCarousel(): Promise<HeroCard[]> {
         if (g) { prices.push(...g.prices); currency = currency ?? g.currency; }
       }
       const hasData = prices.length > 0;
+      // Same sanity guard as the deals module (deals.ts): a price 70%+ below the
+      // median is almost always an accessory or mis-grouped row, not the bag —
+      // without it a stray $280 row reads as "Kelly low $280" on the homepage.
+      const median = hasData ? medianOf(prices) : null;
+      const plausible =
+        median != null ? prices.filter((p) => p >= median * 0.3) : prices;
       return {
         styleId: m.styleId,
         styleName: m.styleName,
         brandName: m.brandName,
         variantId: bestVariant ?? m.variantIds[0] ?? null,
         hook: m.hook,
-        medianResale: hasData ? Math.round(medianOf(prices)) : null,
-        lowResale: hasData ? Math.round(Math.min(...prices)) : null,
+        medianResale: median != null ? Math.round(median) : null,
+        lowResale: plausible.length > 0 ? Math.round(Math.min(...plausible)) : null,
         highResale: hasData ? Math.round(Math.max(...prices)) : null,
         sampleSize: prices.length,
         currency,

@@ -64,7 +64,7 @@ export default function WhereToSell({
           <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
             <p className="font-serif text-lg text-foreground">Sell fast for cash</p>
             <p className="mt-1 text-sm text-muted">
-              Instant buyout quote — less than top dollar, but paid right away.
+              Instant buyout quote: less than top dollar, but paid right away.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">{buyout.map(linkButton)}</div>
           </div>
@@ -74,7 +74,7 @@ export default function WhereToSell({
             <p className="font-serif text-lg text-foreground">Consign for more</p>
             <p className="mt-1 text-sm text-muted">
               Listed for you and paid on sale, after the platform&rsquo;s
-              commission — usually nets more than a buyout.
+              commission. Usually nets more than a buyout.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">{consign.map(linkButton)}</div>
           </div>

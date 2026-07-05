@@ -34,8 +34,8 @@ export default async function MyReviewsPage() {
         <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center">
           <p className="text-foreground">You haven&rsquo;t written any reviews yet.</p>
           <p className="mx-auto mt-2 max-w-sm text-muted">
-            Tried a bag at a store, borrowed one, or rented it? Share how it wears —
-            you don&rsquo;t need to own it.
+            Tried a bag at a store, borrowed one, or rented it? Share how it wears.
+            You don&rsquo;t need to own it.
           </p>
           <Link
             href="/search"
