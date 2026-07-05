@@ -118,6 +118,8 @@ export default async function RootLayout({
               earn a commission, at no extra cost to you.
             </p>
             <nav className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link href="/about" className="hover:text-foreground">About</Link>
+              <Link href="/contact" className="hover:text-foreground">Contact</Link>
               <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
               <Link href="/disclosure" className="hover:text-foreground">Affiliate disclosure</Link>
               <Link href="/disclaimer" className="hover:text-foreground">Disclaimer</Link>
