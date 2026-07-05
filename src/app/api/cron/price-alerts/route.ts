@@ -34,7 +34,23 @@ type PriceRow = {
   date_recorded: string;
   currency: string | null;
   price_type?: string | null;
+  platform?: string | null;
 };
+
+/** Platforms whose null-typed rows are actually boutique/MSRP records. */
+const RETAIL_PLATFORM_RX = /retail|boutique|msrp/i;
+
+/**
+ * Same retail heuristic as lib/portfolio.ts. The canonical stored value is
+ * "retail_msrp" (a `!== "retail"` check here once let MSRP rows inflate every
+ * alert median).
+ */
+function isRetailPrice(p: PriceRow): boolean {
+  return (
+    p.price_type === "retail_msrp" ||
+    (p.price_type == null && p.platform != null && RETAIL_PLATFORM_RX.test(p.platform))
+  );
+}
 
 type WatchRow = {
   watch_id: number;
@@ -89,8 +105,13 @@ type Trigger = { price: number; currency: string | null; body: string };
 
 /** Evaluate a row's rule against its price history; null = no fresh qualifying drop. */
 function evaluate(row: WatchRow, prices: PriceRow[], cutoff: string | null): Trigger | null {
+  // A qualifying drop must be something she can act on: fresh since the last
+  // notification, never a retail/MSRP row, and never an already-sold record.
   const fresh = (p: PriceRow): boolean =>
-    p.sale_price != null && (!cutoff || p.date_recorded > cutoff.slice(0, 10));
+    p.sale_price != null &&
+    !isRetailPrice(p) &&
+    p.price_type !== "sold" &&
+    (!cutoff || p.date_recorded > cutoff.slice(0, 10));
 
   const mode = row.alert_mode === "pct_below_median" ? "pct_below_median" : "absolute";
 
@@ -99,7 +120,7 @@ function evaluate(row: WatchRow, prices: PriceRow[], cutoff: string | null): Tri
     if (pct == null || pct <= 0) return null;
     // Median over non-retail resale rows; a single sky-high listing won't distort it.
     const comps = prices
-      .filter((p) => p.sale_price != null && p.price_type !== "retail")
+      .filter((p) => p.sale_price != null && !isRetailPrice(p))
       .map((p) => Number(p.sale_price));
     if (comps.length < MIN_MEDIAN_SAMPLE) return null;
     const med = median(comps);
@@ -143,9 +164,9 @@ export async function GET(request: NextRequest) {
 
   const admin = getSupabaseAdmin();
   const fullJoin =
-    "watch_id, user_id, variant_id, target_price, alert_mode, alert_pct, currency, last_notified_at, variant:variant_id(style_id, style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency, price_type))";
+    "watch_id, user_id, variant_id, target_price, alert_mode, alert_pct, currency, last_notified_at, variant:variant_id(style_id, style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency, price_type, platform))";
   const legacyJoin =
-    "watch_id, user_id, variant_id, target_price, currency, last_notified_at, variant:variant_id(style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency))";
+    "watch_id, user_id, variant_id, target_price, currency, last_notified_at, variant:variant_id(style:style_id(name, brand:brand_id(name)), price_history(sale_price, date_recorded, currency, price_type, platform))";
 
   // Try the 0033-aware read (all alert-enabled rows). Fall back to legacy
   // absolute-only behavior if the new columns aren't there yet.
@@ -204,7 +225,7 @@ export async function GET(request: NextRequest) {
       // Spec alert ("any green"): match across the style's variants.
       const { data: sibs } = await admin
         .from("variant")
-        .select("variant_id, exterior_colorway, price_history(sale_price, date_recorded, currency, price_type)")
+        .select("variant_id, exterior_colorway, price_history(sale_price, date_recorded, currency, price_type, platform)")
         .eq("style_id", variant.style_id);
       const candidates: SpecCandidate[] = ((sibs ?? []) as {
         variant_id: number;
