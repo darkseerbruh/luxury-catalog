@@ -3,6 +3,10 @@
 
 ---
 
+## TL;DR — Owner UX-vision review: bag-page declutter + quiz example deck (2026-07-05, on `main`)
+
+**Owner asked for a full site review against her documented vision; the drift was concentrated on the bag page, all fixed + merged same day** (merges `8a64828` + `cb8fd5d`). (1) **Bag page was ~48,000px tall:** price-history rendered all 426 rows and For-sale all 105 listings; both now cap (12 / 8) with zero-JS `<details>` expanders, all rows still served for GEO. (2) **Variant selector:** the per-chip save hearts (the confusion she flagged) collapsed to ONE heart on the "Choose your X" header saving the viewed combination. (3) **Voice gate:** 20+ em dashes swept from bag-page copy/titles/footer; "on ebay" → "on eBay" via `PLATFORMS`. (4) **BagImage placeholder** chip/wordmark now container-query-gated (roomy tiles only; the "+ Add a photo" recruiting invite is unchanged where it fits). (5) **It-bags low** now uses the deals-style 70%-under-median guard (a stray $280 row printed as "Kelly low $280"). (6) **geo.ts "Authentication:" lead** must contain auth vocabulary (seeds led with popularity fluff). **Data fixes on prod** (old values in commit `1cbb918`): 7 production_record rows nulled (dimensions duplicated 1:1 in structured columns), Neverfull 217/218/219 marker leads de-fluffed, variants 203/214 em dashes replaced. (7) **Quiz module visual (owner pick):** the words-only callout gained the **example-read deck** (see the new locked preference; canon in `docs/ux/home-use-case-value-props.md`); watch `quiz_started` vs the old words-only baseline in PostHog. **Gotcha for worktree chats:** the preview harness reads the ORIGINAL repo's `.claude/launch.json` and its port, so it serves the wrong tree; verify via `PORT=<free> npm run dev` + curl instead.
+
 ## TL;DR — Chat close-out audit: 49 idle chats harvested + archived; the loose threads (2026-07-05)
 
 **All idle chats were mined for unstored preferences (now in preferences.md) and unfinished work, then archived.** Genuinely stranded items, by lane — a fresh chat should pick these up:
