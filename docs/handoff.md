@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Chat close-out audit: 49 idle chats harvested + archived; the loose threads (2026-07-05)
+
+**All idle chats were mined for unstored preferences (now in preferences.md) and unfinished work, then archived.** Genuinely stranded items, by lane — a fresh chat should pick these up:
+- **⚠️ Fashionphile enrichment CI is being killed at 55 min THREE days running (Jul 3/4/5, `fashionphile-enrich.yml` "cancelled").** The in-chat full condition sweep (~13.6k rows, target ~90% condition fill vs 8.3%) was also killed before reporting. Fix = make the job resumable/chunked (cursor checkpoint) or raise the workflow timeout; then verify the fill rate.
+- **Bag-page auth-engagement instrumentation never landed:** `AuthEngageTracker` (commit `b2ab316` on `ux/pct-below-median-alerts`, 06-28) exists only on that branch; the article half (TrackArticleView) IS on main. Re-apply to the reworked (07-02 declutter) bag page — persona-journey step 4's missing half.
+- **Auth-guide "Authentication by house" presentation fix:** owner flagged 17 repeating long titles (*"look ridiculous"*); the chat died mid-mockup (API error), no option chosen, nothing landed.
+- **TRR rejection needs disambiguating:** owner said "I was rejected by TRR" (06-29) but `docs/data-collection-handoff.md` §11 still marks TRR buyer-side "✅ keep." Confirm which program rejected (her Gmail has the email; she never answered the read request) and correct the doc.
+- **Impact.com brand intro unfinished:** 3 drafts await her A/B/C pick, and all three open with "The Luxury Catalog" (violates the naming lock) — fix before she pastes. Also pending: name impact.com on `/privacy` + `/disclosure`.
+- **Owner decision, still open:** the TRR daily Firecrawl cron burns ~5 credits/page on PerimeterX 403s — pause it or limit to search-only (recommended 07-05, her call).
+- **Social lane:** the @goldst.ai trend-series enumeration (Apify, 57 videos) died mid-pull; redo when wanted. The Aug 14 2026 "auspicious launch day" candidate lives only in a dead chat — record it as the target if she confirms.
+- **Known her-turn items still standing:** re-film the watermarked diaper reel; paste the TikTok bio URL; record kit 1; supply the 2 Chanel model names (stills manifest); reapply to Skimlinks + nudge Impact; confirm/kill the Miu Miu hold.
+
 ## TL;DR — Parallel-chat collisions FIXED: one landing script + edit blocking (2026-07-05, on `main`)
 
 **Owner hit chat-clobbering + failed merges + CPU spikes again (six live chats shared the primary checkout and switched each other's branch mid-turn).** Root cause: AGENTS.md/wrap-up prescribed `git checkout main && git merge` which ALWAYS fails outside the analyst worktree (it holds `main`), so chats improvised and work got stranded; the worktree guard only warned. Fixes, all live: **(1) `scripts/land-to-main.sh`** is now the ONLY way to land on main (merge origin/main into your branch → green gate, docs-only diffs skip it → shared lock so two chats never `next build` at once → `push origin HEAD:main` with retry) — AGENTS.md §2a + wrap-up skill rewritten to use it; **(2) `worktree-collision-block.sh`** (PreToolUse) hard-BLOCKS file edits in a folder where another chat was active <15 min, keyed on the edited file's path so moving to a fresh worktree unblocks immediately; **(3)** the SessionStart guard now also lists live chats in OTHER folders + the rule **one live chat per lane — never duplicate a running task** (duplicates burn the shared Claude limit). Mechanics: `docs/parallel-sessions.md`.
