@@ -109,7 +109,7 @@ export default function BagActions({
 
   return (
     <section id="your-move" className="scroll-mt-4 border-t border-border pt-8">
-      <h2 className="mb-4 font-serif text-xl text-foreground">Make it yours — or move it on</h2>
+      <h2 className="mb-4 font-serif text-xl text-foreground">Make it yours, or move it on</h2>
 
       {signedIn ? (
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
@@ -158,8 +158,8 @@ export default function BagActions({
               Parting with it?{" "}
               <button type="button" onClick={() => jumpTo("where-to-sell")} className="text-gold hover:underline">
                 See where to sell it
-              </button>{" "}
-              — buyout for cash, or consign for more.
+              </button>
+              . Buyout for cash, or consign for more.
             </p>
           )}
           {closetStatus === "want" && (

@@ -66,7 +66,7 @@ export async function generateMetadata({
   const v = await getVariant(id);
   if (!v) return {};
 
-  const title = `${fullTitle(v)} — production, authentication, and value`;
+  const title = `${fullTitle(v)}: production, authentication, and value`;
   const description = metaDescription(v);
 
   // A "Standard" bucket variant (the ingest home for size-not-stated price
@@ -510,7 +510,7 @@ export default async function BagDetailPage({
     if (r.stampPlacement) {
       authChecks.push({
         label: `Stamp placement (${era})`,
-        detail: r.stampFontNotes ? `${r.stampPlacement} — ${r.stampFontNotes}` : r.stampPlacement,
+        detail: r.stampFontNotes ? `${r.stampPlacement} ${r.stampFontNotes}` : r.stampPlacement,
       });
     }
   }
@@ -988,31 +988,44 @@ export default async function BagDetailPage({
         <div id="price-history" className="scroll-mt-4">
           <Section title="Resale price history">
             <PriceTrend history={recordedSales} retailPrice={v.retailPriceOriginal} />
-            <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
-              {recordedSales
+            {/* The chart tells the story; the row list is the receipt. Cap what's
+                expanded so hundreds of recorded prices can't turn the page into a
+                wall — every row stays reachable behind a zero-JS expander. */}
+            {(() => {
+              const rows = recordedSales
                 .slice()
-                .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded))
-                .map((h) => (
-                  <li
-                    key={h.priceId}
-                    className="flex items-center gap-3 px-5 py-3 text-sm"
-                  >
-                    <span className="text-foreground">
-                      {formatPrice(h.salePrice, h.currency)}
-                    </span>
-                    {h.condition && <span className="text-muted">{h.condition}</span>}
-                    {h.provenanceCompleteness && (
-                      <span className="text-muted">{h.provenanceCompleteness}</span>
-                    )}
-                    {h.platform && (
-                      <span className="text-muted/70">{h.platform}</span>
-                    )}
-                    <span className="ml-auto shrink-0 text-muted">
-                      {h.dateRecorded}
-                    </span>
-                  </li>
-                ))}
-            </ul>
+                .sort((a, b) => b.dateRecorded.localeCompare(a.dateRecorded));
+              const renderRow = (h: (typeof rows)[number]) => (
+                <li key={h.priceId} className="flex items-center gap-3 px-5 py-3 text-sm">
+                  <span className="text-foreground">
+                    {formatPrice(h.salePrice, h.currency)}
+                  </span>
+                  {h.condition && <span className="text-muted">{h.condition}</span>}
+                  {h.provenanceCompleteness && (
+                    <span className="text-muted">{h.provenanceCompleteness}</span>
+                  )}
+                  {h.platform && <span className="text-muted/70">{h.platform}</span>}
+                  <span className="ml-auto shrink-0 text-muted">{h.dateRecorded}</span>
+                </li>
+              );
+              return (
+                <>
+                  <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
+                    {rows.slice(0, 12).map(renderRow)}
+                  </ul>
+                  {rows.length > 12 && (
+                    <details className="mt-3">
+                      <summary className="cursor-pointer text-sm text-gold transition-colors hover:text-gold-soft">
+                        Show all {rows.length.toLocaleString()} recorded prices
+                      </summary>
+                      <ul className="mt-3 divide-y divide-border rounded-xl border border-border bg-surface">
+                        {rows.slice(12).map(renderRow)}
+                      </ul>
+                    </details>
+                  )}
+                </>
+              );
+            })()}
           </Section>
         </div>
       )}
@@ -1023,7 +1036,7 @@ export default async function BagDetailPage({
         <div id="retail-history" className="scroll-mt-4">
           <Section title="Retail price over time">
             <p className="mb-4 text-sm leading-relaxed text-muted">
-              Original boutique price (MSRP) by year — not resale value.
+              Original boutique price (MSRP) by year, not resale value.
               {retailChange != null && retailChange > 0 && (
                 <>
                   {" "}Up <span className="text-gold">{retailChange}%</span> from{" "}
@@ -1038,22 +1051,36 @@ export default async function BagDetailPage({
               )}
             </p>
             <PriceTrend history={retailHistory} noun="retail price" />
-            <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
-              {retailHistory
+            {(() => {
+              const rows = retailHistory
                 .slice()
-                .sort((a, b) => (b.observedOn ?? b.dateRecorded).localeCompare(a.observedOn ?? a.dateRecorded))
-                .map((h) => (
-                  <li
-                    key={h.priceId}
-                    className="flex items-center gap-3 px-5 py-3 text-sm"
-                  >
-                    <span className="text-foreground">
-                      {formatPrice(h.salePrice, h.currency)}
-                    </span>
-                    <span className="ml-auto shrink-0 text-muted">{(h.observedOn ?? h.dateRecorded).slice(0, 10)}</span>
-                  </li>
-                ))}
-            </ul>
+                .sort((a, b) => (b.observedOn ?? b.dateRecorded).localeCompare(a.observedOn ?? a.dateRecorded));
+              const renderRow = (h: (typeof rows)[number]) => (
+                <li key={h.priceId} className="flex items-center gap-3 px-5 py-3 text-sm">
+                  <span className="text-foreground">
+                    {formatPrice(h.salePrice, h.currency)}
+                  </span>
+                  <span className="ml-auto shrink-0 text-muted">{(h.observedOn ?? h.dateRecorded).slice(0, 10)}</span>
+                </li>
+              );
+              return (
+                <>
+                  <ul className="mt-4 divide-y divide-border rounded-xl border border-border bg-surface">
+                    {rows.slice(0, 12).map(renderRow)}
+                  </ul>
+                  {rows.length > 12 && (
+                    <details className="mt-3">
+                      <summary className="cursor-pointer text-sm text-gold transition-colors hover:text-gold-soft">
+                        Show all {rows.length.toLocaleString()} recorded retail prices
+                      </summary>
+                      <ul className="mt-3 divide-y divide-border rounded-xl border border-border bg-surface">
+                        {rows.slice(12).map(renderRow)}
+                      </ul>
+                    </details>
+                  )}
+                </>
+              );
+            })()}
           </Section>
         </div>
       )}
