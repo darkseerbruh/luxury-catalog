@@ -36,8 +36,21 @@ export function QuickSaveHeart({
       if (!res.ok) {
         setSaved(!next);
         // Signed-out save = the moment to create an account (not log in). The
-        // intended bag rides along so the save can finish after signup.
-        if (/log in/i.test(res.error ?? "")) router.push(`/signup?next=/bag/${variantId}`);
+        // intended bag rides along AND the save intent is stashed, so
+        // PendingSaveFlusher completes it the moment the account exists
+        // (before this, the heart flashed, bounced to signup, and the save
+        // was silently lost).
+        if (/log in/i.test(res.error ?? "")) {
+          try {
+            localStorage.setItem(
+              "lc_pending_save",
+              JSON.stringify({ variantId, source }),
+            );
+          } catch {
+            /* private mode: the redirect still carries the bag */
+          }
+          router.push(`/signup?next=/bag/${variantId}`);
+        }
       } else if (next) {
         track(EVENTS.itemSaved, { variant_id: variantId, status: "want", source });
         // First-ever save: nudge the price alert once (FirstAlertNudge gates on a

@@ -162,6 +162,18 @@ export default function BagActions({
               . Buyout for cash, or consign for more.
             </p>
           )}
+          {/* Close the have -> review loop: the journey's last step never had a
+              prompt in this direction (reviews prompted closet-adds, not the
+              reverse), so social proof stayed at zero. */}
+          {closetStatus === "have" && (
+            <p className="text-sm text-muted">
+              How does it wear?{" "}
+              <button type="button" onClick={() => jumpTo("reviews")} className="text-gold hover:underline">
+                Tell the next buyer
+              </button>
+              . Owners&rsquo; reviews are the reference the catalog can&rsquo;t research.
+            </p>
+          )}
           {closetStatus === "want" && (
             <p className="text-sm text-muted">
               {watching ? (

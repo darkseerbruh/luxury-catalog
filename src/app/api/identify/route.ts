@@ -315,11 +315,12 @@ export async function POST(req: Request) {
   // a value: a bag that fails a definitive check gets no price.
   const hardFlag = originHardFlag(identification.brand, identification.madeIn);
 
-  let resale: { median: number; count: number; currency: string; asOf: string | null } | null = null;
+  let resale: { median: number; low: number | null; count: number; currency: string; asOf: string | null } | null = null;
   if (!hardFlag && catalogMatch?.styleId) {
     const shop = await getStyleShopData(catalogMatch.styleId);
     if (shop && shop.count > 0) {
-      resale = { median: shop.medianPrice, count: shop.count, currency: shop.currency, asOf: shop.asOf };
+      // A flipper's buy decision runs on the floor, not the median; send both.
+      resale = { median: shop.medianPrice, low: shop.fromPrice ?? null, count: shop.count, currency: shop.currency, asOf: shop.asOf };
     }
   }
 

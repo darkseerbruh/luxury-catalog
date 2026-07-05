@@ -356,3 +356,33 @@ export async function listMyPosts(limit = 50): Promise<PostSummary[]> {
   if (!user) return [];
   return listByAuthor(user.id, false, limit);
 }
+
+/**
+ * Slug of the published per-house authentication guide for a brand, or null.
+ * Guides follow the locked "{house}-authentication" slug pattern (e.g.
+ * "coach-authentication", "saint-laurent-authentication"). RESILIENT: any
+ * error returns null so callers just omit the link.
+ */
+export async function getBrandAuthGuideSlug(brandName: string): Promise<string | null> {
+  if (!hasSupabase() || !brandName) return null;
+  const slug =
+    brandName
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") + "-authentication";
+  try {
+    const { data, error } = await getSupabase()
+      .from("post")
+      .select("slug")
+      .eq("slug", slug)
+      .eq("status", "published")
+      .maybeSingle();
+    if (error || !data) return null;
+    return data.slug as string;
+  } catch {
+    return null;
+  }
+}

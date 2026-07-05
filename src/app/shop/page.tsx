@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getShopProducts, type ShopProduct, type ShopSort } from "@/lib/listings";
 import { getVariantImages } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
+import { CompareToggle, CompareTray } from "@/components/CompareControls";
 import ShopControls from "./ShopControls";
 
 export const dynamic = "force-dynamic";
@@ -112,7 +113,15 @@ export default async function ShopPage({
                     ? "Good deal in stock"
                     : null;
               return (
-                <li key={p.key}>
+                <li key={p.key} className="relative">
+                  {/* Sibling of the card link (never nested inside it) so the
+                      compare set can be assembled straight from the grid. */}
+                  <CompareToggle
+                    variantId={p.variantId}
+                    label={bagLabel(p)}
+                    compact
+                    className="absolute right-2 top-2 z-10"
+                  />
                   <Link
                     href={`/bag/${p.variantId}#for-sale`}
                     className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-gold"
@@ -157,6 +166,7 @@ export default async function ShopPage({
         listing here may already be gone. Estimates from recorded resale data, not
         appraisals. Affiliate links may earn us a commission.
       </p>
+      <CompareTray />
     </main>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
+import { track, EVENTS } from "@/lib/analytics/events";
+
 type Row = {
   brand: string;
   style: string;
   variant: string;
   value: number | null;
+  valueBasis?: "resale" | "retail" | null;
   currency: string | null;
   paid?: number | null;
   gain?: number | null;
@@ -26,19 +29,33 @@ export default function ReportActions({
   owner: string;
 }) {
   function downloadCsv() {
+    track(EVENTS.reportExported, { format: "csv", rows: rows.length });
     const esc = (s: unknown) => `"${String(s ?? "").replace(/"/g, '""')}"`;
     const row = (cells: unknown[]) => cells.map(esc).join(",");
     const totalPaid = rows.reduce((s, r) => s + (r.paid ?? 0), 0);
     const totalGain = rows.reduce((s, r) => s + (r.gain ?? 0), 0);
     const csv = [
-      row([`Collection report — ${owner}`]),
+      row([`Collection report: ${owner}`]),
       row([`As of ${asOf}`]),
+      row([
+        "Estimates from recorded resale medians (or catalogued retail where marked). Not an appraisal, not tax advice.",
+      ]),
       "",
-      row(["#", "Brand", "Style", "Variant", "Estimated value", "Currency", "Paid", "Gain/loss"]),
+      row(["#", "Brand", "Style", "Variant", "Estimated value", "Value basis", "Currency", "Paid", "Gain/loss"]),
       ...rows.map((r, i) =>
-        row([i + 1, r.brand, r.style, r.variant, r.value ?? "", r.currency ?? "", r.paid ?? "", r.gain ?? ""]),
+        row([
+          i + 1,
+          r.brand,
+          r.style,
+          r.variant,
+          r.value ?? "",
+          r.valueBasis ?? "",
+          r.currency ?? "",
+          r.paid ?? "",
+          r.gain ?? "",
+        ]),
       ),
-      row(["", "", "", "Total", total, currency ?? "", totalPaid, totalGain]),
+      row(["", "", "", "Total", total, "", currency ?? "", totalPaid, totalGain]),
     ].join("\n");
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -54,7 +71,10 @@ export default function ReportActions({
     <div className="flex gap-2">
       <button
         type="button"
-        onClick={() => window.print()}
+        onClick={() => {
+          track(EVENTS.reportExported, { format: "print", rows: rows.length });
+          window.print();
+        }}
         className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
       >
         Print / PDF

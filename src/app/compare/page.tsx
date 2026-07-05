@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCompareBags, type CompareBag } from "@/lib/compare";
+import { getListingsForVariant, type Offer } from "@/lib/listings";
+import { affiliateListingUrl } from "@/lib/affiliate";
+import { estimateLandedCost } from "@/lib/platforms";
 import { BagImage } from "@/components/BagImage";
+import { ListingOutboundLink } from "@/components/ListingOutboundLink";
+import TrackCompareView from "./TrackCompareView";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +74,22 @@ export default async function ComparePage({
   const { ids } = await searchParams;
   const bags = await getCompareBags(parseIds(ids));
 
+  // The decision surface must close the loop: the cheapest live listing per
+  // bag (landed-cost aware), handed off with tracking, so choosing here
+  // doesn't mean backtracking into each bag page to find the buy links.
+  const liveByVariant = new Map<number, Offer | null>();
+  await Promise.all(
+    bags.map(async (b) => {
+      const l = await getListingsForVariant(b.variantId).catch(() => null);
+      const cheapest =
+        l?.offers.reduce<Offer | null>(
+          (lo, o) => (lo == null || o.price < lo.price ? o : lo),
+          null,
+        ) ?? null;
+      liveByVariant.set(b.variantId, cheapest);
+    }),
+  );
+
   if (bags.length < 2) {
     return (
       <main className="mx-auto w-full max-w-2xl px-5 py-16">
@@ -90,6 +111,7 @@ export default async function ComparePage({
 
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-12">
+      <TrackCompareView count={bags.length} ids={bags.map((b) => b.variantId).join(",")} />
       <h1 className="font-serif text-3xl text-foreground">Compare bags</h1>
       <p className="mt-2 mb-8 text-sm text-muted">
         Resale shows the broad range of recorded resale prices, not an appraisal. For the
@@ -127,11 +149,67 @@ export default async function ComparePage({
               </tr>
             ))}
             <tr className="border-t border-border">
+              <td className="p-3 text-muted">Authentication</td>
+              {bags.map((b) => (
+                <td key={b.variantId} className="p-3 align-top">
+                  <Link
+                    href={`/bag/${b.variantId}#authentication`}
+                    className="text-sm text-gold transition-colors hover:text-gold-soft"
+                  >
+                    Check the markers →
+                  </Link>
+                </td>
+              ))}
+            </tr>
+            <tr className="border-t border-border">
+              <td className="p-3 text-muted">For sale now</td>
+              {bags.map((b) => {
+                const offer = liveByVariant.get(b.variantId) ?? null;
+                const href = offer?.sourceUrl
+                  ? affiliateListingUrl(offer.sourceUrl, offer.platform)
+                  : null;
+                const landed =
+                  offer?.platform != null ? estimateLandedCost(offer.price, offer.platform) : null;
+                return (
+                  <td key={b.variantId} className="p-3 align-top">
+                    {offer ? (
+                      <>
+                        <span className="block text-foreground">
+                          from {money(offer.price, offer.currency)}
+                          <span className="block text-xs text-muted">
+                            on {offer.platformLabel}
+                            {landed && landed.total > offer.price
+                              ? ` · ≈ ${money(landed.total, offer.currency)} with fees + shipping`
+                              : ""}
+                          </span>
+                        </span>
+                        {href && (
+                          <ListingOutboundLink
+                            href={href}
+                            variantId={b.variantId}
+                            platform={offer.platform}
+                            price={offer.price}
+                            dealBand={offer.rating?.band ?? null}
+                            source="compare"
+                            className="mt-2 inline-block rounded-full bg-gold px-4 py-1.5 text-xs font-medium text-bg transition-colors hover:bg-gold-soft"
+                          >
+                            View listing
+                          </ListingOutboundLink>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-xs text-muted">No live listings on record</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+            <tr className="border-t border-border">
               <td className="p-3" />
               {bags.map((b) => (
                 <td key={b.variantId} className="p-3">
                   <Link
-                    href={`/bag/${b.variantId}`}
+                    href={`/bag/${b.variantId}#for-sale`}
                     className="inline-block rounded-full border border-border px-4 py-2 text-xs text-foreground transition-colors hover:border-gold"
                   >
                     View bag

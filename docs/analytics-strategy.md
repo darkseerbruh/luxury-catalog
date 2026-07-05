@@ -58,12 +58,15 @@ and `profile-actions.ts`. Journeys below can now be segmented by persona.
 *Moved: all persona-segmented engagement + monetization measurement. Was the
 precondition for everything else.* **Status: DONE (migration 0037, on `main`).**
 
-### G2 — no side-by-side bag compare
-Sofia's defining job ("decide which bag") and the Cross-Shopper's whole mode
-("compare the market") have no dedicated compare surface; the decision happens
-across browser tabs.
+### G2 — side-by-side bag compare — **SHIPPED (core), gaps remain**
+`/compare?ids=…` renders a real 2-4 bag spec/retail/resale table fed by a
+localStorage tray ("Add to compare" on bag pages); `bags_compared` fires on the
+tray link. Discovered half-shipped during the 2026-07-05 persona review, which
+also closed the gaps: compare toggles on shop/search cards, a live-price
+hand-off row + authentication row on /compare, and the mobile tray no longer
+hidden under the sticky action bar.
 *Moves: engagement (decision confidence) and the affiliate buy-click that follows.
-This is the conversion moment for the affiliate-backbone persona.* **Status: open.**
+This is the conversion moment for the affiliate-backbone persona.*
 
 ### G3 (minor) — Jordan's mobile moment is fragmented
 Identify and comps live on separate pages, so the thrift-store "real and worth it
@@ -87,10 +90,10 @@ Derived from each persona's "How we'd recognize her in data" line. **Gated on G1
 
 **Which of these fire today is not tracked here — run `npm run analytics:pulse` and read
 the `instrumentation_readiness` block.** It lists every event in `events.ts` and whether it
-has ever fired, so it never drifts. Two standing taxonomy gaps it will not catch, because
-the events are not defined at all: **closet-value / alert-set** events for Diane, and a
-**rental** value event (monetization lane 2). `/shop` filtering also does not emit
-`catalog_filtered` (only `/search` does).
+has ever fired, so it never drifts. One standing taxonomy gap it will not catch: a
+**rental** value event (monetization lane 2). (Diane's closet-value / alert-set / report
+events were defined + wired in the 2026-07-05 persona-review build; `/shop` DOES emit
+`catalog_filtered` via `ShopControls.tsx`, an earlier version of this doc said otherwise.)
 
 ---
 

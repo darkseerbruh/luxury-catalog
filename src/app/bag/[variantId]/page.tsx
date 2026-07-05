@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
-import { listByBrand, listByStyle } from "@/lib/posts";
+import { listByBrand, listByStyle, getBrandAuthGuideSlug } from "@/lib/posts";
 import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
@@ -46,6 +46,7 @@ import BagDNA from "./BagDNA";
 import VariantSelector from "./VariantSelector";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
+import { translateProvenance } from "@/lib/provenance";
 import { BagImage } from "@/components/BagImage";
 import CompareControls from "@/components/CompareControls";
 
@@ -131,7 +132,9 @@ function SpecRow({ label, value }: { label: string; value: string | null | undef
   return (
     <div className="flex gap-3 py-2 text-sm">
       <span className="w-36 shrink-0 text-muted">{label}</span>
-      <span className="text-foreground">{value}</span>
+      {/* Researched fields can carry editor provenance flags; translate at the
+          shared renderer so no section leaks "Snippet-sourced" to a reader. */}
+      <span className="text-foreground">{translateProvenance(value)}</span>
     </div>
   );
 }
@@ -289,6 +292,14 @@ export default async function BagDetailPage({
   const isRetailRow = (h: (typeof v.priceHistory)[number]) =>
     h.priceType === "retail_msrp" ||
     (h.priceType == null && h.platform != null && RETAIL_PLATFORM_RX.test(h.platform));
+  // Honest range scope: a size-only catalogue variant (no colourway pinned)
+  // blends colours/leathers in one range and the pill must say so.
+  const valueScopeLabel = v.exteriorColorway
+    ? "This exact variant"
+    : v.sizeLabel && v.sizeLabel !== "Standard"
+      ? `All ${v.sizeLabel} colours and leathers`
+      : "All catalogued specs of this style";
+
   const recordedSales = v.priceHistory.filter(
     (h): h is (typeof v.priceHistory)[number] & { salePrice: number } =>
       h.salePrice != null && !isRetailRow(h),
@@ -492,25 +503,47 @@ export default async function BagDetailPage({
       : null;
 
   // "How to authenticate" checklist — enumerated from existing data only.
+  // Trade-jargon glossary (owner rule: define jargon the first time it
+  // appears, in plain words). Only terms that actually occur in this bag's
+  // checklist render, as one quiet line above it.
+  const JARGON_GLOSSARY: { term: string; rx: RegExp; def: string }[] = [
+    { term: "Vachetta", rx: /vachetta/i, def: "the pale untreated cowhide that darkens with age" },
+    { term: "Patina", rx: /patina/i, def: "the honey tone untreated leather develops over time" },
+    { term: "Heat stamp", rx: /heat[ -]?stamp/i, def: "the brand mark pressed into the leather" },
+    { term: "Date code", rx: /date[ -]?code/i, def: "the small letters-and-numbers production tag (not a serial number)" },
+    { term: "Blind stamp", rx: /blind[ -]?stamp/i, def: "a small embossed mark recording year and workshop" },
+    { term: "Creed patch", rx: /creed/i, def: "the leather tag sewn inside the bag" },
+    { term: "Sellier", rx: /sellier/i, def: "built with the stitching outside, for crisp structured edges" },
+    { term: "Retourné", rx: /retourn/i, def: "stitched inside out, for a softer rounded look" },
+    { term: "Turn-lock", rx: /turn[ -]?lock/i, def: "the twisting metal closure" },
+    { term: "Caviar", rx: /caviar/i, def: "pebbled, textured calfskin" },
+    { term: "Hardware", rx: /hardware/i, def: "the metal parts: zips, clasps, chains, feet" },
+  ];
+
   const authChecks: { label: string; detail: string }[] = [];
   if (v.authenticationMarkers) {
-    authChecks.push({ label: "Authentication markers", detail: v.authenticationMarkers });
+    authChecks.push({
+      label: "Authentication markers",
+      detail: translateProvenance(v.authenticationMarkers),
+    });
   }
   for (const r of v.productionRecords) {
     const era = r.productionYear ? `${r.productionYear} record` : "Production record";
     if (r.knownAuthenticationMarkers) {
       authChecks.push({
         label: `Known markers (${era})`,
-        detail: r.knownAuthenticationMarkers,
+        detail: translateProvenance(r.knownAuthenticationMarkers),
       });
     }
     if (r.dateCodeFormat) {
-      authChecks.push({ label: `Date code format (${era})`, detail: r.dateCodeFormat });
+      authChecks.push({ label: `Date code format (${era})`, detail: translateProvenance(r.dateCodeFormat) });
     }
     if (r.stampPlacement) {
       authChecks.push({
         label: `Stamp placement (${era})`,
-        detail: r.stampFontNotes ? `${r.stampPlacement} ${r.stampFontNotes}` : r.stampPlacement,
+        detail: translateProvenance(
+          r.stampFontNotes ? `${r.stampPlacement} ${r.stampFontNotes}` : r.stampPlacement,
+        ),
       });
     }
   }
@@ -520,14 +553,20 @@ export default async function BagDetailPage({
       .join(" · ");
     authChecks.push({
       label: `${t.tagType}${t.verified ? " (verified)" : ""}`,
-      detail: parts || t.authenticationNotes || "Catalogued serial / authentication tag.",
+      detail: translateProvenance(
+        parts || t.authenticationNotes || "Catalogued serial / authentication tag.",
+      ),
     });
   }
 
   // "The Story" editorial module — cited origin/design/culture tidbits for the
   // hero icons, plus a self-updating market fact derived from the resale rows
   // above (no new data source; renders only when we've seeded a story).
-  const bagStory = await getBagStory(v.style.name);
+  const bagStory = await getBagStory(v.style.name, v.brand.name);
+
+  // Published per-house authentication guide, for the digest + escalation
+  // links (null when the house has no live guide; links degrade to the hub).
+  const authGuideSlug = await getBrandAuthGuideSlug(v.brand.name);
   const storyMarketFact: StoryMarketFact | null =
     bagStory && fairMarket
       ? {
@@ -699,6 +738,22 @@ export default async function BagDetailPage({
           demandLevel={demand.level}
           demandLabel={demand.label}
           retailTrendPct={retailChange}
+          scopeLabel={valueScopeLabel}
+          mixNote={(() => {
+            const sold = recordedSales.filter((h) => h.priceType === "sold").length;
+            const ask = recordedSales.length - sold;
+            const parts: string[] = [];
+            if (sold > 0 && ask > 0) {
+              parts.push(`built from ${ask.toLocaleString()} asking + ${sold.toLocaleString()} sold prices`);
+            } else if (sold > 0) {
+              parts.push("all sold prices");
+            }
+            const unknownCondition = recordedSales.filter((h) => !h.condition).length;
+            if (unknownCondition > 0 && byCondition.length >= 2) {
+              parts.push(`${unknownCondition.toLocaleString()} with condition unrecorded`);
+            }
+            return parts.length > 0 ? parts.join(" · ") : null;
+          })()}
           byCondition={byCondition}
           era={era}
           byEra={byEra}
@@ -750,6 +805,42 @@ export default async function BagDetailPage({
         variantId={v.variantId}
         label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
       />
+
+      {/* Authentication at a glance — the value read and the "is it real" read
+          belong on the same screen (the two anxieties are answered together or
+          the buyer bounces). A 3-marker digest; the full checklist is below. */}
+      {authChecks.length > 0 && (
+        <div className="rounded-2xl border border-border bg-surface/50 px-5 py-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-serif text-lg text-foreground">Is it real? Start here</h2>
+            <a href="#authentication" className="text-sm text-gold transition-colors hover:text-gold-soft">
+              Full checklist →
+            </a>
+          </div>
+          <ul className="mt-2 flex flex-col gap-1.5 text-sm text-muted">
+            {authChecks.slice(0, 3).map((c) => (
+              <li key={c.label} className="flex gap-2">
+                <span aria-hidden className="text-gold">✓</span>
+                <span>
+                  <span className="text-foreground">{c.label}:</span>{" "}
+                  {c.detail.length > 110 ? `${c.detail.slice(0, 110).replace(/\s+\S*$/, "")}…` : c.detail}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted/70">
+            Markers to check, not a verdict.
+            {authGuideSlug && (
+              <>
+                {" "}
+                <Link href={`/articles/${authGuideSlug}`} className="text-gold hover:underline">
+                  The {v.brand.name} guide →
+                </Link>
+              </>
+            )}
+          </p>
+        </div>
+      )}
 
       {/* Broaden a want across colourways, when the style actually has colour variation. */}
       {(() => {
@@ -863,6 +954,22 @@ export default async function BagDetailPage({
               you know what to look for; they don&rsquo;t replace an in-hand
               inspection by a qualified authenticator.
             </p>
+            {(() => {
+              const allText = authChecks.map((c) => `${c.label} ${c.detail}`).join(" ");
+              const present = JARGON_GLOSSARY.filter((g) => g.rx.test(allText));
+              if (present.length === 0) return null;
+              return (
+                <p className="mb-4 rounded-xl border border-border/60 bg-surface/50 px-4 py-3 text-xs leading-relaxed text-muted">
+                  <span className="text-foreground">The words, in plain terms:</span>{" "}
+                  {present.map((g, i) => (
+                    <span key={g.term}>
+                      {i > 0 && " · "}
+                      <span className="text-gold-soft">{g.term}</span>: {g.def}
+                    </span>
+                  ))}
+                </p>
+              );
+            })()}
             <ol className="flex flex-col gap-3">
               {authChecks.map((c, i) => (
                 <li
@@ -895,10 +1002,10 @@ export default async function BagDetailPage({
                 We do not guarantee authenticity; verify high-stakes details in person.
               </p>
               <Link
-                href="/articles"
+                href={authGuideSlug ? `/articles/${authGuideSlug}` : "/authentication"}
                 className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
               >
-                Read our authentication guides &rarr;
+                {authGuideSlug ? `Read the ${v.brand.name} authentication guide` : "Read our authentication guides"} &rarr;
               </Link>
             </div>
           </Section>
@@ -965,14 +1072,14 @@ export default async function BagDetailPage({
                         .join(" × ")}
                     />
                   )}
-                  <SpecRow label="Date code format" value={r.dateCodeFormat} />
-                  <SpecRow label="Stamp placement" value={r.stampPlacement} />
-                  <SpecRow label="Stamp font" value={r.stampFontNotes} />
+                  <SpecRow label="Date code format" value={r.dateCodeFormat && translateProvenance(r.dateCodeFormat)} />
+                  <SpecRow label="Stamp placement" value={r.stampPlacement && translateProvenance(r.stampPlacement)} />
+                  <SpecRow label="Stamp font" value={r.stampFontNotes && translateProvenance(r.stampFontNotes)} />
                 </div>
                 {r.knownAuthenticationMarkers && (
                   <p className="mt-3 text-sm leading-relaxed text-foreground">
                     <span className="mr-2 font-medium text-muted">Authentication:</span>
-                    {r.knownAuthenticationMarkers}
+                    {translateProvenance(r.knownAuthenticationMarkers)}
                   </p>
                 )}
               </div>
@@ -1000,6 +1107,17 @@ export default async function BagDetailPage({
                   <span className="text-foreground">
                     {formatPrice(h.salePrice, h.currency)}
                   </span>
+                  {/* Realized vs aspirational: a sold price is the truth, an
+                      asking price is a wish. Label which one each row is. */}
+                  {h.priceType === "sold" ? (
+                    <span className="rounded-full border border-gold/40 px-2 py-0.5 text-[10px] uppercase tracking-wide text-gold/90">
+                      sold
+                    </span>
+                  ) : h.priceType === "listed" ? (
+                    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted/70">
+                      asking
+                    </span>
+                  ) : null}
                   {h.condition && <span className="text-muted">{h.condition}</span>}
                   {h.provenanceCompleteness && (
                     <span className="text-muted">{h.provenanceCompleteness}</span>
@@ -1112,7 +1230,7 @@ export default async function BagDetailPage({
                 {t.authenticationNotes && (
                   <p className="mt-3 text-sm leading-relaxed text-foreground">
                     <span className="mr-2 font-medium text-muted">Notes:</span>
-                    {t.authenticationNotes}
+                    {translateProvenance(t.authenticationNotes)}
                   </p>
                 )}
               </div>
@@ -1216,7 +1334,7 @@ export default async function BagDetailPage({
                 <span className="text-muted">
                   {f.fits === "yes" ? "fits" : f.fits === "tight" ? "tight fit" : "doesn't fit"}
                 </span>
-                {f.notes && <span className="ml-auto text-muted">{f.notes}</span>}
+                {f.notes && <span className="ml-auto text-muted">{translateProvenance(f.notes)}</span>}
                 {f.verified && (
                   <span className="ml-auto shrink-0 rounded-full bg-gold/10 px-2 py-0.5 text-xs text-gold">
                     verified
@@ -1310,8 +1428,20 @@ export default async function BagDetailPage({
           <Section title="Research depth">
             <div className="rounded-xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">
               We haven&rsquo;t researched the authentication details for this
-              variant yet. Search by style to find other bags — what people look
-              for tells us what to dig into next.
+              variant yet.{" "}
+              {authGuideSlug ? (
+                <>
+                  The house-level markers still apply:{" "}
+                  <Link href={`/articles/${authGuideSlug}`} className="text-gold hover:underline">
+                    check the {v.brand.name} guide →
+                  </Link>
+                </>
+              ) : (
+                <>
+                  Search by style to find other bags. What people look for tells
+                  us what to dig into next.
+                </>
+              )}
             </div>
           </Section>
         )}
