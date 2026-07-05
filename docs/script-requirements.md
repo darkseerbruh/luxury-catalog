@@ -100,6 +100,13 @@ content-kit-buildout.md (which now point here).*
     (`aresample=async=1:first_pts=0`) and trims the silent lead BEFORE transcription so
     Whisper never hallucinates on it. Spot-check a mid-clip second: the burned caption
     must equal what she is saying in the audio there.
+22. **Bag on screen carries its NAME near it (owner rule 2026-07-04).** Every cued bag
+    card shows the bag's name (the cue's `label`). Exception: if a rank list already names
+    each bag on screen, the pipeline suppresses the card label so it isn't doubled.
+23. **Spoken price sits near the bag (owner rule 2026-07-04).** A dollar amount pops just
+    under the card that's on screen when she says it. The card must still be up at the
+    price, so let cards auto-hold until the next bag (no short fixed `hold` when the price
+    for that bag comes later in the sentence).
 
 ## The pre-record checklist (run on every script)
 - [ ] Intent named in sentence one

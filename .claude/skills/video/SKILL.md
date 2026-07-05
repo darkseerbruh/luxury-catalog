@@ -79,14 +79,23 @@ in, hold, fade), timed to her words. `say` matches on normalized words, so ignor
 case, punctuation, and accents. Re-run `npm run make <clip>` after editing cues;
 transcription is cached so only the render repeats.
 
-- `label` (optional): a name shown under the image (e.g. "Goyard Saint Louis").
-- hold: by default the image stays up until the next cue (the whole time she talks
-  about it). An explicit `"hold": <seconds>` pins a fixed duration instead.
-- Keep bags OFF her face: place them upper-right (around `xPct` 80, `yPct` 24) unless
-  following a hand.
-- `cutout` (default true): removes the image background so the bag floats as a shape,
-  not a photo card. Best results come from a CLEAN single-bag still (no hands, plain
-  background). Set `false` to keep it as a rounded photo card.
+- `label` (the bag NAME, e.g. "Chanel 25"): shown on the card under the bag. **Owner rule
+  (2026-07-04): every bag image must have its name on screen near it.** So set `label` on
+  each card cue. The ONE exception: if the clip has a rank list (`<base>.list.json`) that
+  already names each bag, the pipeline suppresses card labels so the name isn't doubled.
+  A build-time `note:` warns if a card has no name and nothing else names it.
+- **Price near the bag (owner rule 2026-07-04):** a spoken dollar amount auto-pops just
+  under whichever card is on screen when she says it (`detectDollars`). For that to land,
+  the card must still be up at the price, so DON'T pin a short `hold` on a card whose price
+  comes later in her sentence. Leave `hold` off: the card auto-holds until the next bag
+  (the whole time she talks about it), which covers the price.
+- hold: by default the image stays up until the next cue. An explicit `"hold": <seconds>`
+  pins a fixed duration (avoid it when a price for that bag is spoken later).
+- Keep bags OFF her face: place them upper-left (around `xPct` 13, `yPct` 26).
+- `card` (recommended): renders the cutout bag on a dark gold-edged panel so it pops off a
+  busy background (her real bag wall). `cutout` (default true) makes the bag float as a
+  shape (drop shadow, no panel); it blends into a busy wall, so prefer `card` there.
+  `cutout:false` (no card) keeps the raw photo.
 - `follow` (default false): the bag follows her hand. On first use it builds the Swift
   hand tracker (`native/handtrack.swift` -> `bin/handtrack`) via `swiftc`. Needs a
   visible hand in the shot. If no confident hand is found in the cue window, it falls
