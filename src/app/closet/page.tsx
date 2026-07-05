@@ -7,6 +7,7 @@ import { getVariantImages } from "@/lib/queries";
 import { hasActiveAuthenticators } from "@/lib/authentication";
 import { BagImage } from "@/components/BagImage";
 import AuthInterestButton from "@/components/AuthInterestButton";
+import TrackView from "@/components/TrackView";
 
 export const dynamic = "force-dynamic";
 
@@ -113,6 +114,14 @@ export default async function ClosetPage() {
           className="rounded-2xl border border-border bg-surface p-5"
           aria-label="Collection portfolio summary"
         >
+          <TrackView
+            event="closet_value_viewed"
+            props={{
+              have_count: portfolio.have.count,
+              valued: portfolio.have.resaleValued,
+              has_history: valueHistory.length >= 2,
+            }}
+          />
           <p className="text-sm uppercase tracking-widest text-muted">
             Your collection
           </p>

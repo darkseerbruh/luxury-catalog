@@ -87,6 +87,14 @@ export const EVENTS = {
   attributeObjectViewed: "attribute_object_viewed",
   /** Two or more bags were taken to the side-by-side compare — a decision-intent signal. */
   bagsCompared: "bags_compared",
+  /** The closet portfolio value block was viewed (count/valued buckets attached). */
+  closetValueViewed: "closet_value_viewed",
+  /** A price alert was turned on/off or its rule changed (mode + pct/target attached). */
+  alertUpdated: "alert_updated",
+  /** The collection report was viewed. */
+  reportViewed: "report_viewed",
+  /** The collection report was exported (format: csv | print). */
+  reportExported: "report_exported",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

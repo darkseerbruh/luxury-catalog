@@ -1,5 +1,7 @@
 "use client";
 
+import { track, EVENTS } from "@/lib/analytics/events";
+
 type Row = {
   brand: string;
   style: string;
@@ -27,6 +29,7 @@ export default function ReportActions({
   owner: string;
 }) {
   function downloadCsv() {
+    track(EVENTS.reportExported, { format: "csv", rows: rows.length });
     const esc = (s: unknown) => `"${String(s ?? "").replace(/"/g, '""')}"`;
     const row = (cells: unknown[]) => cells.map(esc).join(",");
     const totalPaid = rows.reduce((s, r) => s + (r.paid ?? 0), 0);
@@ -68,7 +71,10 @@ export default function ReportActions({
     <div className="flex gap-2">
       <button
         type="button"
-        onClick={() => window.print()}
+        onClick={() => {
+          track(EVENTS.reportExported, { format: "print", rows: rows.length });
+          window.print();
+        }}
         className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
       >
         Print / PDF

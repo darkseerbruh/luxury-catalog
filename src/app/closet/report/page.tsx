@@ -5,6 +5,7 @@ import { getCloset, getPurchaseInfo } from "@/lib/collections";
 import { getResaleMedians } from "@/lib/portfolio";
 import ReportActions from "./ReportActions";
 import PurchasePriceField from "./PurchasePriceField";
+import TrackView from "@/components/TrackView";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,10 @@ export default async function CollectionReportPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-12">
+      <TrackView
+        event="report_viewed"
+        props={{ rows: rows.length, has_cost_basis: hasCostBasis }}
+      />
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm uppercase tracking-widest text-muted">Collection report</p>
