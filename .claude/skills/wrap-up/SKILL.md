@@ -13,7 +13,9 @@ pause for an outward-facing or irreversible op (see step 5).
 
 ## Step 0 — Orient
 - `git status` and `git branch --show-current` to see the branch and what changed.
-- `git log main..HEAD --oneline` to see what this session actually landed.
+- `git fetch origin main`, then `git log origin/main..HEAD --oneline` to see what this
+  session actually produced. (Compare against `origin/main`, not local `main` — local
+  `main` is checked out in the analyst worktree and is usually behind.)
 - Read `docs/handoff.md` (current state) and the ENFORCED block + Preference Bar at the
   top of `docs/preferences.md` before editing either.
 
@@ -57,23 +59,26 @@ until it does, or drop it):
   that topic first; update it rather than duplicating.
 - If `doc-budget.sh` has been warning about drift, do the cleanup pass now.
 
-## Step 4 — Gate, then merge to main
+## Step 4 — Land on main via the landing script (NEVER `git checkout main`)
 `main` is the single source of truth. Verified work must land there, even when the
-session was developed on a per-session branch.
+session was developed on a per-session branch. Local `main` is permanently checked out
+in the analyst worktree, so `git checkout main` FAILS in every other chat — landing
+happens by pushing to the remote, and `scripts/land-to-main.sh` is the only sanctioned
+way to do it.
 
 1. Commit your work on the current branch with a clear message. End the commit message
    with the Co-Authored-By trailer this environment requires.
-2. Run the FULL green gate and show the output. ALL must pass:
-   - `npx tsc --noEmit`
-   - `npm run lint`
-   - `npm run build`
-   - `npm test`
-3. If anything is red: fix it, or if you cannot, STOP and report the failure with output.
-   Do not merge a red tree.
-4. If green: `git checkout main && git pull && git merge --no-ff <session-branch>` then
-   `git push origin main`.
-5. EXCEPTION: only skip the merge if the owner explicitly said to hold the work on the
-   branch or to open a PR for review instead. In that case push the branch and say so.
+2. Run `bash scripts/land-to-main.sh` and show its output. It does, in order:
+   merge `origin/main` into your branch → full green gate (`tsc --noEmit`, lint,
+   `next build`, `npm test`; auto-skipped when the diff is docs/hooks-only) → waits on
+   the shared landing lock so two chats never build at once → `git push origin
+   HEAD:main`, retrying with a re-merge if another chat lands first.
+3. If the gate is red: fix it and rerun the script, or if you cannot fix it, STOP and
+   report the failure with output. Do not land a red tree.
+4. If the script reports a merge conflict: resolve it in YOUR worktree, commit the
+   merge, rerun the script.
+5. EXCEPTION: only skip the landing if the owner explicitly said to hold the work on
+   the branch or to open a PR for review instead. In that case push the branch and say so.
 
 ## Step 5 — Leave the outward-facing ops to her
 Do NOT perform email, public posts, paid sign-ups, DNS changes, or DB migrations. If the

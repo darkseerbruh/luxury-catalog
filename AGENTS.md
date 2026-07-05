@@ -51,21 +51,27 @@ docs stay within budget) and warns at session start when something drifts. Note:
 `main` is the **single source of truth** for this project. Work accumulates there
 so separate Claude sessions/chats don't drift into parallel copies.
 
-1. **Start of every session:** sync with `main` before doing any work —
-   `git fetch origin && git checkout main && git pull`. If the environment
-   assigned you a per-session branch, create it FROM the latest `main`
-   (`git checkout -b <branch> origin/main`).
+1. **Start of every session:** sync before doing any work — `git fetch origin main`,
+   then base your work on `origin/main`. **Never `git checkout main`** — `main` is
+   permanently checked out in the analyst worktree, so the checkout fails everywhere
+   else. If the environment assigned you a per-session branch, create it FROM
+   `origin/main` (`git checkout -b <branch> origin/main`). If another live chat is in
+   your folder (the worktree guard will say so), move to your own worktree first —
+   `docs/parallel-sessions.md` has the one-liner.
 2. **End of every session (wrap-up — do BOTH, every chat):**
-   a. **Merge your work back into `main` and push it**, so the next chat starts from
-      it. Never leave finished work stranded only on a per-session branch. **This
-      applies even when the environment assigned you a per-session branch and told
-      you to develop on it** — that branch is where you *develop*; `main` is where
-      verified work *lands*. So: develop + commit + push on the session branch, then
-      at the end merge it into `main` (`git checkout main && git merge --no-ff
-      <session-branch>`) and `git push origin main`. Don't wait to be asked. **Only**
-      skip the merge if the user explicitly says to hold it on the branch or to open
-      a PR for review instead. Gate the merge on green `tsc --noEmit`, `eslint src`,
-      `next build`, and `npm test`.
+   a. **Land your work on `main` with `bash scripts/land-to-main.sh`** (run from your
+      session branch), so the next chat starts from it. Never leave finished work
+      stranded only on a per-session branch. **This applies even when the environment
+      assigned you a per-session branch and told you to develop on it** — that branch
+      is where you *develop*; `main` is where verified work *lands*. The script is the
+      ONLY sanctioned landing path: it merges `origin/main` into your branch, runs the
+      green gate (`tsc --noEmit`, lint, `next build`, `npm test` — auto-skipped for
+      docs-only diffs), serializes with other chats via a lock, and pushes
+      `HEAD:main` with retry when another chat lands first. **Never `git checkout
+      main && git merge`** — main is held by the analyst worktree and the checkout
+      fails, which is how work used to get stranded. Don't wait to be asked. **Only**
+      skip the landing if the user explicitly says to hold it on the branch or to
+      open a PR for review instead.
    b. **Update `docs/preferences.md`** with any DURABLE working preferences,
       decisions, or product/brand choices the owner revealed this chat (how she likes
       to work, things she locked or paused). **Every line you add must pass The Preference

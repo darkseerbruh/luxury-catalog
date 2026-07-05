@@ -31,29 +31,34 @@ List / remove:       `git worktree list` · `git worktree remove <folder>`
 
 ## Rules that keep it clean
 
-> **Automated backstop (since 2026-06-28):** a SessionStart hook
-> (`.claude/hooks/worktree-guard.sh`, paired with `worktree-heartbeat.sh` on every turn)
-> heartbeats each chat by its Claude `session_id` into the shared git common-dir, then
-> WARNS at the top of a session when another live chat is sitting in the same folder, with
-> the exact `git worktree add` command to fix it. Warn-only by default (the env auto-switches
-> branches, so a hard block could strand a legit single chat); flip `GUARD_MODE=block` in the
-> hook to harden. No-op on remote/web sessions. The rules below are still the policy; the hook
-> just makes a violation impossible to miss.
+> **Automated backstop (hardened 2026-07-05):** every chat heartbeats by its Claude
+> `session_id` into the shared git common-dir (`worktree-guard.sh` at SessionStart +
+> `worktree-heartbeat.sh` every turn). Two layers act on it:
+> **(1) warn** — the SessionStart guard prints a collision banner with the `git worktree add`
+> one-liner when another live chat shares your folder; **(2) block** — a PreToolUse hook
+> (`worktree-collision-block.sh`) REJECTS any file edit inside a folder where another chat
+> was active in the last 15 min, printing the escape hatch. The block keys on the edited
+> FILE's location, so a chat that moves itself into a fresh worktree can edit there
+> immediately. (Warn-only proved insufficient: on 2026-07-05 six live chats shared the
+> primary checkout and switched each other's branch mid-turn.) No-op on remote/web sessions.
 
-1. Each chat stays in **its own folder, on its own branch** off `main`.
+1. Each chat stays in **its own folder, on its own branch** off `origin/main`.
+   **One live chat per lane/task** — if the guard shows another live chat already on your
+   task (same branch or same lane), do NOT start a duplicate: tell the owner and stop.
+   Duplicate chats burn the shared Claude usage limit doing the same work twice.
 2. Each chat works **only in its own folder** (its worktree). Within that folder a chat may
    edit **any file its task needs** — lanes are not file-fences (see the registry). The only
    collision risk is two **live** chats editing the same files at once; when that happens, the
    natural split is ingest/pipeline (`supabase/ingest/**`, `scripts/**`) vs. shop UI
    (`src/app/**`, `src/components/**`).
-3. **Land work onto `main`** without touching the other chat's checkout:
-   ```
-   git fetch origin
-   git merge origin/main        # pull in the other chat's merges first
-   # …run gates: tsc --noEmit, eslint src, next build, npm test…
-   git push origin <your-branch>:main   # fast-forward main on the remote
-   ```
-   If the push is rejected (other chat merged first), `git merge origin/main` again and retry.
+3. **Land work onto `main` with `bash scripts/land-to-main.sh`** — run from your session
+   branch, in your worktree. It does the whole race-safe sequence for you: merge
+   `origin/main` into your branch → green gate (docs-only diffs skip it) → shared landing
+   lock (so two chats never run `next build` at the same time — this was the CPU killer) →
+   `git push origin HEAD:main` with automatic re-merge + retry when another chat lands
+   first. **Never `git checkout main`** — local `main` is permanently checked out in the
+   analyst worktree (`~/Documents/luxury-catalog-analyst`), so the checkout fails in every
+   other folder; that failure is how landed-looking work used to get stranded off GitHub.
 
 ## Shared resources worktrees do NOT isolate
 - **Prod Supabase DB** — every chat hits the same database. Coordinate before restructuring
