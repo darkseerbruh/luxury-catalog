@@ -191,13 +191,13 @@ out on hero pieces.
 | Tier | Asset | Its job | Metric it moves | Face | Effort / cadence |
 |---|---|---|---|---|---|
 | **Hero** | Data slideshows (real price/resale data, charts, campaign cutouts) | Teach a counterintuitive truth | Saves + site traffic | Faceless | High, 1-2 a week |
-| **Signature** | Arielle + her real bags, face-in | Credibility + warmth, a real owner behind the data | Follows + saves, feeds the quiz | Face-in | Low-med, 2-3 a week |
+| **Signature** | Arielle's real bags, styled / in-hand | Credibility, a real owner's real bags behind the data | Follows + saves, feeds the quiz | Faceless | Low-med, 2-3 a week |
 | **Keep-warm** | Phone B-roll backdrop + a value text hook | Hold cadence, catch the occasional viral hook | Reach (consistency), marginal per post | Optional | Very low, near-daily |
 
 Rules:
-- **Face-in is ON for the Signature tier** (owner call 2026-07-05, better engagement).
-  Founder-as-face may gush first person (voice §3); the system layer stays specific.
-  Hero data slideshows stay faceless.
+- **Social is faceless, no photos of her** (owner call 2026-07-05, after she reviewed
+  her library and ruled the personal/face shots out). Signature tier shows her real
+  owned bags styled or in-hand, never her face. All tiers faceless.
 - **Value-first every tier:** the hook carries a real, useful point. Never post an asset
   just because we have it (no pretty B-roll with no reason).
 - **Bag-to-background contrast is an always rule:** the bag must pop, never dark on
