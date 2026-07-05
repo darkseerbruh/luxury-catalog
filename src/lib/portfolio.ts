@@ -131,3 +131,33 @@ export async function getClosetValue(): Promise<ClosetValue | null> {
     return null;
   }
 }
+
+export interface ClosetValuePoint {
+  takenOn: string;
+  total: number;
+  currency: string | null;
+}
+
+/**
+ * The signed-in user's closet-value history (closet_value_snapshot, migration
+ * 0043, written weekly by the closet-snapshots cron). RESILIENT: pre-migration
+ * or any error returns [] and the closet simply shows no sparkline.
+ */
+export async function getClosetValueHistory(): Promise<ClosetValuePoint[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
+  try {
+    const { createServerSupabase } = await import("./supabase/server");
+    const supabase = await createServerSupabase();
+    const { data, error } = await supabase
+      .from("closet_value_snapshot")
+      .select("taken_on, total, currency")
+      .order("taken_on", { ascending: true })
+      .limit(120);
+    if (error || !data) return [];
+    return (data as { taken_on: string; total: number | string; currency: string | null }[]).map(
+      (r) => ({ takenOn: r.taken_on, total: Number(r.total), currency: r.currency }),
+    );
+  } catch {
+    return [];
+  }
+}

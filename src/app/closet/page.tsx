@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { getCloset, getWatchlist } from "@/lib/collections";
-import { getResaleMedians, type VariantResaleEstimate } from "@/lib/portfolio";
+import { getResaleMedians, getClosetValueHistory, type VariantResaleEstimate } from "@/lib/portfolio";
 import { getVariantImages } from "@/lib/queries";
 import { hasActiveAuthenticators } from "@/lib/authentication";
 import { BagImage } from "@/components/BagImage";
@@ -89,6 +89,7 @@ export default async function ClosetPage() {
   const authComingSoon = !(await hasActiveAuthenticators());
 
   const medians = await getResaleMedians(closet.map((c) => c.variantId));
+  const valueHistory = await getClosetValueHistory();
   const portfolio = buildPortfolio(closet, medians);
 
   const groups: { key: string; label: string }[] = [
@@ -134,6 +135,47 @@ export default async function ClosetPage() {
               ? ` · ${portfolio.have.count - portfolio.have.pricedCount} without a price not counted`
               : ""}
           </p>
+
+          {/* Value over time — from weekly snapshots (migration 0043); renders
+              only once two points exist, never a fabricated curve. */}
+          {valueHistory.length >= 2 && (() => {
+            const pts = valueHistory;
+            const min = Math.min(...pts.map((p) => p.total));
+            const max = Math.max(...pts.map((p) => p.total));
+            const span = Math.max(max - min, 1);
+            const coords = pts
+              .map((p, i) => {
+                const x = (i / (pts.length - 1)) * 100;
+                const y = 28 - ((p.total - min) / span) * 24;
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+              })
+              .join(" ");
+            const first = pts[0];
+            const last = pts[pts.length - 1];
+            return (
+              <div className="mt-3">
+                <svg
+                  viewBox="0 0 100 30"
+                  preserveAspectRatio="none"
+                  className="h-8 w-full"
+                  role="img"
+                  aria-label={`Collection value from ${formatPrice(first.total, first.currency)} on ${first.takenOn} to ${formatPrice(last.total, last.currency)} on ${last.takenOn}`}
+                >
+                  <polyline
+                    points={coords}
+                    fill="none"
+                    stroke="var(--color-gold)"
+                    strokeWidth="1.5"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+                <p className="mt-1 text-xs text-muted/70">
+                  Since {first.takenOn}: {formatPrice(first.total, first.currency)} →{" "}
+                  {formatPrice(last.total, last.currency)} · weekly snapshots
+                </p>
+              </div>
+            );
+          })()}
 
           <div className="mt-4 grid grid-cols-3 gap-3 text-center">
             <Stat
