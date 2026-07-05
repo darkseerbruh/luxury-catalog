@@ -492,25 +492,45 @@ export default async function BagDetailPage({
       : null;
 
   // "How to authenticate" checklist — enumerated from existing data only.
+  // Research-provenance flags are internal editor language. A reader at her
+  // most anxious moment shouldn't parse "Snippet-sourced; needs verification."
+  // Translate to a plain-language hedge (never silently strip it: the softness
+  // must survive, per the calibrated-hedge rule).
+  const readerHedge = "(widely repeated detail; confirm on the bag in hand)";
+  const hedgeRx = /\(widely repeated detail; confirm on the bag in hand\)/;
+  const translateProvenance = (text: string): string =>
+    text
+      .replace(/Snippet-sourced;?\s*needs (browser\/physical |physical )?verification\.?/gi, readerHedge)
+      .replace(/Snippet-sourced\.?/gi, readerHedge)
+      .replace(/\bneeds verification\.?/gi, readerHedge)
+      .replace(new RegExp(`${hedgeRx.source}(\\s*${hedgeRx.source})+`, "g"), readerHedge)
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
   const authChecks: { label: string; detail: string }[] = [];
   if (v.authenticationMarkers) {
-    authChecks.push({ label: "Authentication markers", detail: v.authenticationMarkers });
+    authChecks.push({
+      label: "Authentication markers",
+      detail: translateProvenance(v.authenticationMarkers),
+    });
   }
   for (const r of v.productionRecords) {
     const era = r.productionYear ? `${r.productionYear} record` : "Production record";
     if (r.knownAuthenticationMarkers) {
       authChecks.push({
         label: `Known markers (${era})`,
-        detail: r.knownAuthenticationMarkers,
+        detail: translateProvenance(r.knownAuthenticationMarkers),
       });
     }
     if (r.dateCodeFormat) {
-      authChecks.push({ label: `Date code format (${era})`, detail: r.dateCodeFormat });
+      authChecks.push({ label: `Date code format (${era})`, detail: translateProvenance(r.dateCodeFormat) });
     }
     if (r.stampPlacement) {
       authChecks.push({
         label: `Stamp placement (${era})`,
-        detail: r.stampFontNotes ? `${r.stampPlacement} ${r.stampFontNotes}` : r.stampPlacement,
+        detail: translateProvenance(
+          r.stampFontNotes ? `${r.stampPlacement} ${r.stampFontNotes}` : r.stampPlacement,
+        ),
       });
     }
   }
@@ -520,7 +540,9 @@ export default async function BagDetailPage({
       .join(" · ");
     authChecks.push({
       label: `${t.tagType}${t.verified ? " (verified)" : ""}`,
-      detail: parts || t.authenticationNotes || "Catalogued serial / authentication tag.",
+      detail: translateProvenance(
+        parts || t.authenticationNotes || "Catalogued serial / authentication tag.",
+      ),
     });
   }
 
