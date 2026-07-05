@@ -10,7 +10,7 @@ export default function DisclosurePage() {
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-3xl text-foreground">Affiliate disclosure</h1>
-      <p className="mt-2 text-sm text-muted">Last updated June 22, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated July 5, 2026</p>
 
       <div className="mt-8 space-y-5 text-sm leading-relaxed text-muted">
         <p>
@@ -20,6 +20,16 @@ export default function DisclosurePage() {
           <span className="text-foreground">affiliate links</span>. If you click one and make a
           purchase, we may earn a commission, <span className="text-foreground">at no extra cost to
           you</span>.
+        </p>
+        <p>
+          Those links are managed through affiliate networks, including{" "}
+          <span className="text-foreground">Impact (impact.com)</span>, CJ (Commission Junction), Awin,
+          Skimlinks, and the eBay Partner Network. The network credits your purchase to us and processes
+          that data under its own privacy terms; see our{" "}
+          <a href="/privacy" className="text-foreground underline hover:text-gold">
+            privacy policy
+          </a>{" "}
+          for how that tracking works and how to limit it.
         </p>
         <p>
           We may also earn a referral fee when we link you to a service that buys, consigns, insures,

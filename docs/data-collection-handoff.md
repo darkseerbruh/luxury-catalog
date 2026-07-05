@@ -384,7 +384,18 @@ partners but it does not carry the resale players.
 | **Vestiaire Collective** | **CJ** + **Skimlinks** (network 826) | ~5.7–6%, 15-day cookie, US ok | covered by Skimlinks catch-all |
 
 **Application status (2026-06-24):** ✅ **Applied & pending approval — The RealReal** (direct),
-**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days). ✅ **CJ publisher account
+**Fashionphile** (Impact), **Skimlinks** (catch-all; ≤3 working days).
+
+**Status check against Gmail (2026-07-05), resolving the owner's 06-29 "I was rejected by TRR":**
+- ❌ **Skimlinks REJECTED 2026-06-25** ("your website is not suitable for Skimlinks at this time",
+  approvals@skimlinks.com). This is the **only** rejection email on record — the owner's "rejected
+  by TRR" most plausibly refers to this. Reapply once traffic/content grows (her-turn item).
+  Until then the Vestiaire "covered by Skimlinks" line above has **no active coverage**.
+- ⏳ **The RealReal buyer-side: NO decision email — still pending as of 2026-07-05.** The
+  application actually went via **impact.com** (Contract Application, 2026-06-22), not only the
+  direct form; no "declined" notice from impact.com or TRR since. Buyer-side "keep" stands.
+  If she saw a rejection, it lives in the impact.com dashboard — confirm there before changing course.
+- ⏳ **Fashionphile (Impact): applied 2026-06-30** (Contract Application email), no decision yet. ✅ **CJ publisher account
 ACTIVE** (account ID `7997608`, property = luxurycatalog.com, primary model = Product
 Comparison/Discovery). ✅ **Inside CJ: Rebag applied** (advertiser 5749848, manual review pending). Rebag terms worth
 noting: 7% commission but **new (first-time) customers only**, tiered down to **3% on orders >$2,500**
