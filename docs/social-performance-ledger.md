@@ -9,9 +9,9 @@ Rows are permanent historical data points — never deleted, never called stale.
 *A post = its ingredient combination (formula + hook + visual + audio + CTA +
 tag set); use stable reusable ingredient names, per §5 of the standard.*
 
-| date | postId | network | tier/format | topic/kit | formula | hook (short) | visual (clip/set) | audio | CTA type | search key | tag set | face? |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-07-06 | 346134521 | IG+TT | hero / data carousel | Lady Dior size pricing | formula:data-carousel-7 | "You'd think the biggest bag costs the most" | slides-v4:lady-dior-sizes | none/native | save + link-in-bio | none | tags:brand+resale-core (#ladydior +6) | no |
+| date | postId | network | tier/format | topic/kit | formula | hook (short) | visual (clip/set) | audio | CTA type | search key | tag set | face? | hypothesis |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-07-06 | 346134521 | IG+TT | hero / data carousel | Lady Dior size pricing | formula:data-carousel-7 | "You'd think the biggest bag costs the most" | slides-v4:lady-dior-sizes | none/native | save + link-in-bio | none | tags:brand+resale-core (#ladydior +6) | no | counterintuitive price-flip data earns saves (baseline seed, first post) |
 
 ## Ingredient scorecard
 
@@ -30,6 +30,22 @@ n≥3 uses with verdicts.*
 ## Verdicts
 
 *(none yet — first post published 2026-07-06; verdicts need ≥3 days live, §2)*
+
+## Open questions (drive the exploratory slots, §6b)
+
+*What we don't know yet. Each ties to the experiment that would answer it;
+weekly runs pick from here first and append new questions as they surface.*
+
+- Keep-warm follows: aspirational lines vs reflective lines? (Already staged as
+  a natural A/B — the 20 keep-warm drafts alternate registers by odd/even date;
+  read it once both arms have ≥4 posts live.)
+- Same data story as carousel vs as reel: which bridges better to the site
+  (search-key entries / saves)?
+- Does the spoken search key produce more site entries than "link in bio" on
+  otherwise-matched posts? (PostHog `social_key` vs `/social` landings.)
+- Question-hook cover vs statement cover on carousels: which earns more saves?
+- Does a trending audio lift keep-warm reach vs original/native sound, holding
+  footage + copy?
 
 ## Pending Notion sync
 

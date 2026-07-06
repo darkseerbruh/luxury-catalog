@@ -153,6 +153,37 @@ demotion; when unsure, leave it neutral and say so in the scorecard row.
 - If the Notion MCP is unavailable in a run, append the items to the ledger
   under `## Pending Notion sync` and sync them the next run that has Notion.
 
+## §6b The playground posture (owner-locked 2026-07-06)
+
+Social is an **experimentation playground**, not a broadcast queue. Every post
+is a hypothesis; publishing is how we learn. Binding rules:
+
+- **Every post carries a hypothesis at draft time** (ledger column): which
+  combination it tests and what we expect to move, on which metric. A modest
+  hypothesis is fine ("plane-window b-roll + identity line lifts follows vs the
+  reflective line"); no hypothesis, no post.
+- **Batch mix — explore AND exploit.** Each weekly batch reserves roughly a
+  third of its slots (minimum 1) for **exploratory posts**: novel combinations
+  of individually-cleared ingredients, or one new ingredient introduced against
+  proven ones. The rest iterate winners per §4. Exploration never waits for a
+  winner to exist first.
+- **Novel recombination of cleared ingredients = auto-greenlightable.** If
+  every ingredient individually passes the hard guardrails and the claims are
+  already sourced, the combination itself is the experiment and the engine may
+  produce + draft it. Genuinely NEW raw material (new claim territory, new
+  concept family, anything needing new factual sourcing or her footage) still
+  enters the pipeline as 💡/🎯 for her pass.
+- **An underperforming exploratory post is a successful experiment.** Log the
+  learning in the verdict ("X doesn't pair with Y for saves"), update the
+  scorecard, move on. Only the §5b bar (repeated failure + a clean test)
+  retires an ingredient; one flop never does.
+- **Open questions drive exploration.** The ledger keeps an `## Open questions`
+  list — what we don't know yet, each tied to the experiment that would answer
+  it. Weekly runs pick exploratory slots from this list first, and add new
+  questions as they surface. Attribution note: iteration experiments stay
+  one-variable (§4); for exploratory combos the hypothesis IS the combination,
+  and the scorecard's per-ingredient priors are how we read the result.
+
 ## §7 Creation + draft contract (what the engine may do alone)
 
 MAY, without owner input: run analysis; write backlog items + the ledger; create
