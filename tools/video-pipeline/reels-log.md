@@ -42,6 +42,12 @@ re-rendered in this style.
 
 ## Metricool staging
 
+- **2026-07-06** — the 3 Chanel reel drafts SWAPPED to the follow-card cut (full-quality
+  re-render with the on-screen "+ Follow for the full Chanel map" pill). Media re-hosted via
+  a temp GitHub release that Metricool ingested (then deleted). Same text, schedules, and
+  `draft:true` kept; only the video changed. New post ids: 346158025 (starter map, Jul 8),
+  346158158 (taxonomy, Jul 24), 346158698 (25 debate, Aug 11). Owner reviews + publishes
+  from the planner.
 - **2026-07-05** — the 3 Chanel reels staged as Metricool **drafts** (blogId 6480195,
   `draft:true`, `autoPublish:false`), each targeting Instagram Reel + TikTok, media on
   Metricool's CDN. Post ids 345666985 (starter map), 345667051 (taxonomy), 345667089
