@@ -214,6 +214,9 @@ the voice reference for anything new. (Dupes noted where you sent a line twice.)
   not most people.*
 
 **Value / resale reframe**
+> *Keep these casual and about ONE specific bag. No statistical hedging ("often two
+> to three times," "varies by house") — it sounds robotic. The first-person,
+> one-bag framing is the hedge.*
 - *Friendly reminder… you can buy that Fendi on Emily in Paris three times over if
   you get it used vs new.*
 - *Not to be dramatic but I'll never buy a designer bag brand new again.*
