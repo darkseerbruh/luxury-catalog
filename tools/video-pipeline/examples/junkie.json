@@ -3,20 +3,20 @@
   "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/broll/B roll/IMG_2588.MOV",
   "start": 2,
   "duration": 6,
-  "fontPx": 70,
+  "fontPx": 54,
   "zoom": 0.03,
-  "caption": "I wasted thousands on designer bags. And I'll do it again because I'm a junkie.",
+  "caption": "junkie",
   "blocks": [
     {
-      "text": "I wasted thousands on designer bags.",
-      "fontPx": 72
+      "text": "I'm not afraid to admit I wasted thousands of dollars on designer bags.",
+      "fontPx": 56
     },
     {
-      "text": "And I'll do it again.",
-      "fontPx": 52
+      "text": "And I'll probably do it again.",
+      "fontPx": 46
     },
     {
-      "text": "Because I'm a junkie.",
+      "text": "Because I'm a junkie 😜",
       "fontPx": 40
     }
   ]

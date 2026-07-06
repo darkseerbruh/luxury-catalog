@@ -3,27 +3,27 @@
   "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/broll/B roll/IMG_2561.MOV",
   "start": 12,
   "duration": 6,
-  "fontPx": 86,
+  "fontPx": 64,
   "zoom": 0.03,
-  "caption": "Hills I will die on as a handbag collector.",
+  "caption": "hills",
   "blocks": [
     {
       "text": "Hills I will die on as a handbag collector.",
-      "fontPx": 60
+      "fontPx": 58
     },
     {
       "text": "Purses never go on the ground",
-      "fontPx": 38,
+      "fontPx": 36,
       "bullet": true
     },
     {
-      "text": "Condition the leather less than you think",
-      "fontPx": 38,
+      "text": "You don't have to condition your leather as often as you think",
+      "fontPx": 36,
       "bullet": true
     },
     {
-      "text": "Bag liners should come included",
-      "fontPx": 38,
+      "text": "Bag liners should come included with expensive purses 😡",
+      "fontPx": 36,
       "bullet": true
     }
   ]
