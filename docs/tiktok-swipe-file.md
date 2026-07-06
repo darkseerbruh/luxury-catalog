@@ -516,3 +516,47 @@ engagement + eventual monetization surface). The meme, affirmation, and manifest
 lines are top-of-funnel reach to grow follows now, per the keep-warm goal. Value
 payoffs marked "[pull real number]" must get a real figure from `/data` before
 publishing (factuality rule).*
+
+---
+
+## 9. Rules — copy + per-post-type (owner-locked)
+
+Every rule she has given, in one place. Copy rules govern what we write; the
+on-screen rendering rules live in `docs/video-accessibility.md` (enforced in the
+video pipeline). Applies to all short-form.
+
+### Copy rules (all formats)
+1. **Keep her hooks verbatim.** Never trim or paraphrase, especially the TikTok
+   opener ("I don't know who needs to hear this but…", "Friendly reminder…", "I'm
+   not afraid to admit…", "I wish someone had told me…"). **Every post has its
+   hook.** Only shorten if she asks.
+2. **Collectors don't purge.** No downsizing / culling / "which bags survive" angles.
+3. **No partner/husband-justification** content (tradwife-coded).
+4. **No industry jargon; keep it casual** ("flap-bag price creep", "new-at-retail",
+   "preloved of the same style" are out). Write how a nervous real buyer talks.
+5. **Real problems only** (no manufactured non-issues like "a rare colour that's
+   actually everywhere").
+6. **First-person opinion hooks don't get robotic hedging** ("often two to three
+   times" reads like a computer). It's her take on ONE specific bag; that framing is
+   the hedge. Casual > precise. (This is the narrow exception to the value-hedge
+   rule; on-site value claims still hedge + cite.)
+7. **Published numbers are real + sourced + refreshed** before posting (resale is
+   live inventory).
+
+### Per-post-type playbook
+| Post type | Copy shape | On screen |
+|---|---|---|
+| Netflix documentary | Real *struggle/bad thing*, consequential, absurd self-devotion; no purge, no partner | Full deadpan line, one clip |
+| Here's exactly what I'd do | Casual nervous-buyer opener; steps in caption | Headline; steps go in caption |
+| I wish someone had told me… | Lesson; tips in caption | Headline + small **"(more in caption)"** hint |
+| Most people will never know… but you | Insider truth | Full line |
+| Value / resale reframe | One specific bag, real numbers, no robotic hedge | Full line (drop the number in slide/caption) |
+| This is your sign to… / Not to be dramatic but… | Casual reframe | Full line |
+| Confessional (junkie) | Her verbatim, playful, keep emoji | Stack lines with **shrinking size** |
+| Affirmation / you deserve | Warm, feel-seen | Full line |
+| Collector hot-takes / "Hills I will die on" | Verbatim list, keep emoji | Headline + the **bulleted list ON the page**, bullets smaller |
+
+### On-screen rendering (see `docs/video-accessibility.md`)
+Min text 46px (headline ≥56); dark backing behind text + footer (never shadow
+alone); verify on the brightest frame; text on screen from frame 0 (no pop-in);
+Playfair serif, one uniform style; brand footer lifted off the bottom.

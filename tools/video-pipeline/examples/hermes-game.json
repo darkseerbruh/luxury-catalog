@@ -5,5 +5,16 @@
   "duration": 6,
   "fontPx": 70,
   "zoom": 0.03,
-  "caption": "I wish someone had told me this before I tried to play the Hermès game."
+  "caption": "hermes",
+  "blocks": [
+    {
+      "text": "I wish someone had told me this before I tried to play the Hermès game.",
+      "fontPx": 64
+    },
+    {
+      "text": "(more in caption)",
+      "fontPx": 38,
+      "hint": true
+    }
+  ]
 }

@@ -9,21 +9,21 @@
   "blocks": [
     {
       "text": "Hills I will die on as a handbag collector.",
-      "fontPx": 58
+      "fontPx": 56
     },
     {
       "text": "Purses never go on the ground",
-      "fontPx": 36,
+      "fontPx": 46,
       "bullet": true
     },
     {
-      "text": "You don't have to condition your leather as often as you think",
-      "fontPx": 36,
+      "text": "Don't condition the leather as often as you think",
+      "fontPx": 46,
       "bullet": true
     },
     {
-      "text": "Bag liners should come included with expensive purses 😡",
-      "fontPx": 36,
+      "text": "Bag liners should come included",
+      "fontPx": 46,
       "bullet": true
     }
   ]

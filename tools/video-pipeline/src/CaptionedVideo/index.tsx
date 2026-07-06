@@ -88,6 +88,7 @@ export const captionedVideoSchema = z.object({
         fontPx: z.number(),
         italic: z.boolean().optional(),
         bullet: z.boolean().optional(),
+        hint: z.boolean().optional(),
       }),
     )
     .optional(),
@@ -281,6 +282,10 @@ export const CaptionedVideo: React.FC<Props> = ({
       {callouts.map((c, i) => (
         <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
       ))}
+
+      {cardBlocks ? (
+        <AbsoluteFill style={{ background: BRAND.cardScrim }} />
+      ) : null}
 
       {cardBlocks ? <CardStack blocks={cardBlocks} /> : null}
 

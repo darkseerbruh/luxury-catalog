@@ -6,12 +6,18 @@ import { CAPTION_SERIF_FAMILY } from "../load-font";
 // A static stacked text card: the whole thing is on screen from frame 0 (no
 // pop-in), Playfair serif, cream. Each block sets its own size; `bullet` blocks
 // render as a left-aligned gold-diamond list, `italic` for emphasis lines.
+// Accessibility: every size is clamped to a floor, and the text sits on a soft
+// dark backing so cream text stays legible on bright footage (see brand.ts +
+// docs/video-accessibility.md).
 export type CardBlock = {
   text: string;
   fontPx: number;
   italic?: boolean;
   bullet?: boolean;
+  hint?: boolean; // small muted pointer like "(more in caption)" — exempt from the size floor
 };
+
+const sz = (px: number) => Math.max(BRAND.minCardCaptionPx, px);
 
 export const CardStack: React.FC<{
   readonly blocks: CardBlock[];
@@ -49,12 +55,12 @@ export const CardStack: React.FC<{
                 fontFamily: CAPTION_SERIF_FAMILY,
                 fontWeight: 600,
                 color: BRAND.captionColor,
-                fontSize: r.fontPx,
+                fontSize: sz(r.fontPx),
                 lineHeight: 1.22,
                 textAlign: "left",
               }}
             >
-              <span style={{ color: BRAND.activeWordColor, fontSize: r.fontPx * 0.6 }}>
+              <span style={{ color: BRAND.activeWordColor, fontSize: sz(r.fontPx) * 0.6 }}>
                 &#9670;
               </span>
               <span>{r.text}</span>
@@ -69,11 +75,15 @@ export const CardStack: React.FC<{
           key={key++}
           style={{
             fontFamily: CAPTION_SERIF_FAMILY,
-            fontStyle: b.italic ? "italic" : "normal",
-            fontWeight: 700,
+            fontStyle: b.hint || b.italic ? "italic" : "normal",
+            fontWeight: b.hint ? 500 : 700,
             color: BRAND.captionColor,
-            fontSize: b.fontPx,
+            opacity: b.hint ? 0.9 : 1,
+            // Hints (e.g. "(more in caption)") are a minor pointer, so they are
+            // allowed below the content floor, but never below basic legibility.
+            fontSize: b.hint ? Math.max(34, b.fontPx) : sz(b.fontPx),
             lineHeight: 1.2,
+            marginTop: b.hint ? -6 : 0,
             textAlign: "center",
           }}
         >
@@ -91,8 +101,8 @@ export const CardStack: React.FC<{
         bottom: bottomPx,
         justifyContent: "center",
         alignItems: "center",
-        paddingLeft: 70,
-        paddingRight: 70,
+        paddingLeft: 60,
+        paddingRight: 60,
       }}
     >
       <div
@@ -102,7 +112,10 @@ export const CardStack: React.FC<{
           alignItems: "center",
           gap: 20,
           maxWidth: 940,
-          textShadow: BRAND.captionShadow,
+          padding: "54px 60px",
+          borderRadius: 44,
+          background: BRAND.cardTextBacking,
+          textShadow: BRAND.cardTextShadow,
         }}
       >
         {items}

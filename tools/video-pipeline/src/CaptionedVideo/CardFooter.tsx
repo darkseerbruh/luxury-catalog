@@ -32,7 +32,10 @@ export const CardFooter: React.FC<{
           flexDirection: "column",
           alignItems: "center",
           gap: 16,
-          textShadow: BRAND.captionShadow,
+          padding: "30px 52px",
+          borderRadius: 34,
+          background: BRAND.cardTextBacking,
+          textShadow: BRAND.cardTextShadow,
         }}
       >
         <div style={{ color: BRAND.activeWordColor, fontSize: 18, lineHeight: 1 }}>
