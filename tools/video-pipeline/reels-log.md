@@ -58,8 +58,8 @@ gitignored `output/broll-cuts/` (capped at 4 per clip; ask to generate more from
 
 - **2026-07-06 keep-warm batch** — 6 reflective question-reels (single-textbox text cards
   over approved b-roll) staged as Metricool **drafts** (blogId 6480195, draft+autoPublish
-  false), IG Reel + TikTok, 09:00 ET 2026-07-07..12. Specs `examples/kw-*.json`. Post ids
-  346175960 / 346176067 / 346176141 / 346176222 / 346176327 / 346176435. Owner adds a
+  false), IG Reel + TikTok, 10:00 ET 2026-07-07..12 (Metricool best-time peak on both
+  networks, reslotted from 09:00). Specs `examples/kw-*.json`. Owner adds a
   trending sound in-app + publishes. Media host: temp GitHub release `reels-keepwarm-2026-07-06`
   (deleted post-ingest). Love-language reel (post 346160480) staged same way for 2026-07-06 18:00.
 
