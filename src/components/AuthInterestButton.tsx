@@ -40,14 +40,14 @@ export default function AuthInterestButton({
   if (state === "registered") {
     return (
       <p className="text-sm text-foreground">
-        ✓ You&rsquo;re on the list — we&rsquo;ll email you the moment it&rsquo;s live.
+        ✓ You&rsquo;re on the list. We&rsquo;ll email you the moment it&rsquo;s live.
       </p>
     );
   }
   if (state === "needsLogin") {
     return (
       <p className="text-sm text-foreground">
-        Noted — thanks!{" "}
+        Noted, thanks!{" "}
         <Link href="/login" className="text-gold hover:underline">Log in</Link> so we can reach you.
       </p>
     );
