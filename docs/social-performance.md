@@ -88,17 +88,52 @@ cheap → mid → expensive when signals tie.
 ## §5 The experiment ledger (append-only, the engine's memory)
 
 Lives at `docs/social-performance-ledger.md`. One table row per post at draft
-time + one row per verdict at analysis time. Schema:
+time + one row per verdict at analysis time. **Every post is recorded as its
+ingredient combination** — the compositional model (owner-locked 2026-07-06):
+a post = formula + hook + visual + audio + CTA + tag set, and iteration means
+swapping ONE ingredient while the rest hold. Schema:
 
 ```
-| date | postId | network | tier/format | topic/kit | hook (short) | visual source | CTA type | search key | tags (n) | face? |
+| date | postId | network | tier/format | topic/kit | formula | hook (short) | visual (clip/set) | audio | CTA type | search key | tag set | face? |
 ```
+
+Ingredient naming: use stable, reusable names, not prose ("broll:plane-window",
+"hook:how-my-brain-sounds", "formula:text-card", "tags:bagtok-core",
+"audio:original-vo") so the same ingredient is recognizable across posts. Audio
+is recorded once known (she picks sounds in-app; backfill from the platform when
+analyzing).
 
 Verdict rows append: `postId · age (days) · primary metric vs baseline · verdict ·
 experiment spawned (Notion item) or "none" · one-line why`. Every number carries
 its date + n. Never delete rows (historical data points are permanent, owner
 rule). Runs also append a 3-line run summary (posts read, verdicts, experiments
 written).
+
+## §5b Ingredient scorecard (promote the winners, retire the losers)
+
+At every weekly run, roll the verdicts up **per ingredient across all posts** in
+a scorecard table in the ledger:
+
+```
+| ingredient | type (formula/hook/visual/audio/CTA/tags) | uses (n) | median primary vs baseline | status | since |
+```
+
+Status ladder (small-n honest, all thresholds on the post's PRIMARY metric §3):
+
+- **proven** — n≥3 uses, median ≥1.5× baseline. New posts assemble proven
+  ingredients by default; a proven ingredient is the "hold constant" layer
+  experiments build on.
+- **neutral** — everything else. Available, not favored.
+- **watch** — n≥3 uses, median ≤0.7×. Used only in an experiment that tests it
+  directly, never as filler.
+- **retired** — n≥4 uses, median ≤0.5×, INCLUDING at least one clean
+  one-variable test where it was the swapped variable. Stop using it; keep the
+  row (permanent record + the reason).
+
+Confound honesty: cross-post rollups are observational — an ingredient that only
+ever appeared in weak combos may be innocent. Before retiring anything, run one
+clean §4 experiment where IT is the single variable. Promotion is cheaper than
+demotion; when unsure, leave it neutral and say so in the scorecard row.
 
 ## §6 Backlog contract (Notion Content Pipeline is master)
 

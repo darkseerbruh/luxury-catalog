@@ -6,9 +6,21 @@ Rows are permanent historical data points — never deleted, never called stale.
 
 ## Post metadata
 
-| date | postId | network | tier/format | topic/kit | hook (short) | visual source | CTA type | search key | tags (n) | face? |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-07-06 | 346134521 | IG+TT | hero / data carousel (7 slides) | Lady Dior size pricing | "You'd think the biggest bag costs the most" | in-session slide renders (design v4) | save + link-in-bio | none | 7 | no |
+*A post = its ingredient combination (formula + hook + visual + audio + CTA +
+tag set); use stable reusable ingredient names, per §5 of the standard.*
+
+| date | postId | network | tier/format | topic/kit | formula | hook (short) | visual (clip/set) | audio | CTA type | search key | tag set | face? |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-07-06 | 346134521 | IG+TT | hero / data carousel | Lady Dior size pricing | formula:data-carousel-7 | "You'd think the biggest bag costs the most" | slides-v4:lady-dior-sizes | none/native | save + link-in-bio | none | tags:brand+resale-core (#ladydior +6) | no |
+
+## Ingredient scorecard
+
+*Cross-post rollup per §5b: promote proven ingredients, retire consistent
+losers (only after a clean one-variable test). Empty until ingredients reach
+n≥3 uses with verdicts.*
+
+| ingredient | type | uses (n) | median primary vs baseline | status | since |
+|---|---|---|---|---|---|
 
 > **BACKFILL (first engine run):** pull every post from `getScheduledPosts`
 > (blogId 6480195, window 2026-07-06 → 2026-09-06) and `tools/video-pipeline/reels-log.md`,
