@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — B-roll review + week-2 content sprint staged (2026-07-06, on `main`)
+
+**Reviewed the whole b-roll bank, then stocked 9 posts across all 3 tiers as Metricool drafts.**
+- **B-roll usage manifest:** `tools/video-pipeline/broll-manifest.json` = owner's per-clip in/out windows, tags, rejects (2588/2578/2606 = too much movement), hold (3053 waterfall) from a full review of the ~92-clip bank. Un-annotated clips = full clip. READ IT before pulling any keep-warm clip. Ready 6s vertical cuts from the trimmed windows are in gitignored `output/broll-cuts/`.
+- **Publish-time default locked:** 10:00 ET (peak on both IG + TikTok, Metricool best-time 2026-07-06), then 18:00, then 12:00; one post per slot per day. Canon: `docs/social-content-calendar.md` §3.5; also in preferences.
+- **Staged as Metricool drafts (blogId 6480195, autoPublish false):** love-language reel (today 18:00); 6 keep-warm reflective reels 10:00 Jul 7-12; 6 more keep-warm 10:00 Jul 13-18; **Hero** Chanel-flap leather/hardware data carousel (Jul 15 18:00); **Signature** her-real-bags carousel (Jul 17 18:00). Specs `examples/kw-*.json` + `kw2-*.json`; slides via new `scripts/make-slides.py` (Georgia serif, ink+gold). Full ids in `tools/video-pipeline/reels-log.md`.
+- **Media-host workflow (zero-setup):** render → temp GitHub release → Metricool ingests the public URL to its CDN → delete the release. Confirmed working this session for video + image carousels.
+
+**YOUR TURN (2026-07-06):** (1) add a trending sound in-app to each staged reel, then publish from the Metricool planner (all draft, none auto-publish); (2) **refresh the Hero carousel's two figures** (~$7,200 / ~$4,700, Chanel Classic Flap caviar+gold vs lambskin+silver; source TheRealReal June 2026 n=116) against live data before publishing; (3) optional: tell me the exact models of the Signature bags and I'll add accurate names.
+
+---
+
 ## TL;DR — TikTok swipe file + batch 1 reels (text-card format) (2026-07-06, on `main`)
 
 **From her saved TikTok DMs → a hook bank + 8 post-ready reels + a locked video format.**
