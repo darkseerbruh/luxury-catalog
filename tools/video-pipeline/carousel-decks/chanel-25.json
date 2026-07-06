@@ -1,0 +1,13 @@
+{
+  "name": "chanel-25",
+  "targetTerm": "chanel 25 bag (2.82M, 2026-07-01 US TikTok pull)",
+  "caption": "See docs/social-batch-2026-07-gap.md post 2",
+  "slides": [
+    {"type": "cover", "kicker": "The Chanel 25", "headline": "Is the Chanel 25 the new It bag?", "accent": ["25"]},
+    {"type": "point", "kicker": "What it is", "headline": "Chanel's 2025 everyday line", "body": "Softer, lighter, less structured than the Classic Flap. Built to be carried, not babied.", "accent": ["carried"]},
+    {"type": "point", "kicker": "The name rule", "headline": "Since 2019 the lines take their birth year", "body": "The 19. The 22. The 25. It's a year, not a size.", "accent": ["25", "19", "22"]},
+    {"type": "bullets", "kicker": "25 vs Classic Flap", "headline": "Two different jobs", "bullets": ["Classic Flap: structured, formal, the one you protect", "The 25: soft, casual, a bag for the actual day"], "accent": ["25"]},
+    {"type": "point", "kicker": "What it resells for", "headline": "New line, thin resale supply", "body": "Asking prices move week to week. We won't quote a number that's stale by the time you read it. The live range, dated and sourced, is on the page. An estimate of the market, not an appraisal of one bag.", "accent": ["live range"]},
+    {"type": "cta", "kicker": "", "headline": "The Chanel 25, decoded", "body": "See it next to the Classic Flap, and where it's actually selling.", "hint": "link in bio", "accent": ["25"]}
+  ]
+}

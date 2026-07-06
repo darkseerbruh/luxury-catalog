@@ -1,0 +1,13 @@
+{
+  "name": "coach-school",
+  "targetTerm": "coach tote bag for school (657K, +193%, 2026-07-01 US TikTok pull)",
+  "caption": "See docs/social-batch-2026-07-gap.md post 1",
+  "slides": [
+    {"type": "cover", "kicker": "Back to school", "headline": "Which Coach actually survives a semester?", "accent": ["survives"]},
+    {"type": "point", "kicker": "Two questions", "headline": "Survives a semester vs holds its value", "body": "They pull in different directions. One is about the leather. The other is about resale.", "accent": []},
+    {"type": "point", "kicker": "Survives", "headline": "Built to take a beating", "body": "Structured leather or coated canvas shrugs off a full backpack load and a coffee lid that betrays you.", "accent": []},
+    {"type": "point", "kicker": "Holds value", "headline": "Here, secondhand wins", "body": "A real vintage or Tabby picked up under retail tends to keep more of what you paid than a brand-new tote that's everywhere this fall.", "accent": ["under retail"]},
+    {"type": "bullets", "kicker": "Buying pre-loved?", "headline": "One 10-second check first", "bullets": ["The creed stamp: clean, even lettering is a good marker", "Sloppy or misaligned is a flag", "A marker to check, not a verdict, so run the full list before you pay"], "accent": []},
+    {"type": "cta", "kicker": "", "headline": "What a Coach actually resells for", "body": "Plus the real authentication walkthrough.", "hint": "link in bio, save before you check out", "accent": []}
+  ]
+}

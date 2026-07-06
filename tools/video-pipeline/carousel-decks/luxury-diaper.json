@@ -1,0 +1,13 @@
+{
+  "name": "luxury-diaper",
+  "targetTerm": "luxury diaper bag (~0.85M cluster, 2026-07-01 US TikTok pull)",
+  "caption": "See docs/social-batch-2026-07-gap.md post 3",
+  "slides": [
+    {"type": "cover", "kicker": "The practical splurge", "headline": "Is a luxury diaper bag actually worth it?", "accent": ["worth it"]},
+    {"type": "point", "kicker": "The math", "headline": "You carry it every day for years", "body": "That is exactly the math that makes cost-per-use small. This is the rare splurge that earns the worth it.", "accent": ["worth it"]},
+    {"type": "point", "kicker": "The catch", "headline": "Most are bought for the name, not the day", "body": "Ranked honestly on what actually works, the order changes.", "accent": []},
+    {"type": "bullets", "kicker": "What actually works", "headline": "Wipe-clean beats precious leather", "bullets": ["Coated canvas takes a blowout and cleans up", "Does it stand open on its own", "Crossbody, so your hands stay free", "Fits a changing pad flat"], "accent": []},
+    {"type": "point", "kicker": "One honest caveat", "headline": "It won't hold value like a collector piece", "body": "A bag you use this hard isn't an investment, and that's fine. You bought it to use.", "accent": []},
+    {"type": "cta", "kicker": "", "headline": "Luxury diaper bags, honestly ranked", "body": "Find the one that fits your actual life.", "hint": "take the taste quiz, link in bio", "accent": []}
+  ]
+}
