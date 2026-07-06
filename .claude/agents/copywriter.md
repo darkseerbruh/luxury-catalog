@@ -23,6 +23,16 @@ Hard gates on every line you hand back:
 - Factuality: every spec, price, value, or stat traces to fresh evidence with its
   date / n / anchor, or it gets cut. Never invent a number.
 
+When the copy is an **article or on-page editorial** (anything meant to earn search /
+AI-citation traffic), write to real demand, not from a blank page:
+- Read `docs/trends/proven-hashtags.md` §2 (our demand map, built from TikTok trend
+  research) and the relevant brief in `docs/research-drafts/`. Pick the angle where our
+  edge meets high demand + low saturation.
+- Phrase the title and H2s in the reader's own search words (the verbatim search phrases
+  in that file), so the piece answers the question people actually type.
+- This closes the loop: the same research that feeds our hashtags feeds our articles. If
+  no demand data fits the topic, say so rather than guessing at keywords.
+
 When you present copy, follow the owner's house style: give 2-3 concrete options plus a
 sensible default, not one take. Keep it tight; do not over-produce. Lead with your
 recommended option and say why in one line.

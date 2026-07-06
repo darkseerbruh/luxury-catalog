@@ -23,6 +23,14 @@ the owner recording it by hand. Everything after is scripted.
    creates/updates pages in the *TikTok Trending Terms* data source. Match on **Term**;
    write only the machine columns (Popularity, Pop #, Growth, Brand, Suggested content,
    Priority) so the owner-edited **Creators / saturation** and **Status** are preserved.
+7. **Regenerate the caption/article bridge (closes the loop):** in that same session,
+   refresh `scripts/trends/terms_seed.json` from the updated Notion rows (the curated layer:
+   Term, Brand, Pop #, Growth, Category, Creators / saturation, decode), then run
+   `python3 scripts/trends/hashtag_blocks.py` to rewrite `docs/trends/proven-hashtags.md`.
+   Commit both. This is what the `social` agent (hashtags) and `copywriter` (article
+   angles) read, so the research reaches the captions and the articles instead of dying in
+   Notion. Once we have live reach data, fold our own top-performing tags into the seed so
+   "proven" means proven for us, not just TikTok demand.
 
 ## Why no standalone Notion script?
 The Notion connection is the session-scoped MCP connector, not a repo token, so the upsert

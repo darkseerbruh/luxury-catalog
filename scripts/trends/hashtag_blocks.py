@@ -8,9 +8,11 @@ repo-readable file the `social` agent (hashtags) and the `copywriter` agent (art
 angles + on-page keywords) both READ at draft time. Neither agent can query Notion, so
 this committed digest is the connective tissue between the research and the copy.
 
-Input (first that exists, or pass a path):
-  1. scripts/trends/clean.json      <- fresh, straight off the OCR pipeline (preferred)
-  2. scripts/trends/terms_seed.json <- committed curated snapshot (fallback / seed)
+Input:  scripts/trends/terms_seed.json  (or pass another path as argv[1]).
+  This is the CURATED layer exported from the Notion 'TikTok Trending Terms' DB: it
+  carries the Category, Creators/saturation and decode fields the ranker needs. The raw
+  OCR `clean.json` does NOT (categories + saturation are the owner's Notion work), so it
+  feeds Notion, not this ranker. Refresh the seed from Notion, then rerun (README step 7).
 
 Weighting (owner rule: "lean most heavily on PROVEN"):
   - PROVEN demand leads. Rank within every block by Pop # (search volume), then by
@@ -88,12 +90,9 @@ def load(path=None):
     if path and os.path.exists(path):
         p = path
     else:
-        for cand in ("clean.json", "terms_seed.json"):
-            p = os.path.join(HERE, cand)
-            if os.path.exists(p):
-                break
-        else:
-            sys.exit("no input: expected clean.json or terms_seed.json in scripts/trends/")
+        p = os.path.join(HERE, "terms_seed.json")
+        if not os.path.exists(p):
+            sys.exit("no input: expected scripts/trends/terms_seed.json (or pass a path)")
     with open(p) as f:
         data = json.load(f)
     return p, data
