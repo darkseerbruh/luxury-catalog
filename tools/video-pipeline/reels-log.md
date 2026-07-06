@@ -3,6 +3,15 @@
 Durable record of every video the pipeline makes. The render files live locally in
 `output/` (too large for git); this log is the committed history. Newest first.
 
+**2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
+takes an optional `"follow"` line (e.g. `"Follow for the full Chanel map"`), rendered as a
+bottom pill that pops at the outro and holds to the cut. Never spoken; it satisfies
+script-requirements.md rule 27 (the follow ask, our current growth goal) without a re-film.
+Timing defaults to the site-CTA phrase, or set `"followAt"`. The 3 Chanel reels below have
+`"follow"` added to their (gitignored) `input/*.headline.json`; they need a re-render
+(`npm run make <base>.mp4`) and a Metricool re-stage to carry the card. New reels: just add
+the `"follow"` line.
+
 | Date | Concept | Mode | Source | Caption / script | Status |
 |------|---------|------|--------|------------------|--------|
 | 2026-07-03 | Chanel 25: classic or Boy? (the debate) | talking-head + synced mic + 4 cued cutouts | `Chanel_2026_0 3.MOV` + `script 4.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (25, Classic Flap, Boy) VIDEO-USE library | Her script (kit 1 debate). Headline "Chanel 25: Classic or Boy?", CTA box luxurycatalog.com. Fixes: garbled CTA re-transcribed from clean mic ("search Chanel 2026 on luxurycatalog.com"), dropped final "comments." restored | draft v4 (captions aligned to audio; opens on scripted "Is the Chanel 25" via trim.json startPhrase, ad-lib "a tale of two futures" cut; passes npm run verify; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
