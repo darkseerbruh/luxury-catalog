@@ -5,5 +5,19 @@
   "duration": 6,
   "fontPx": 70,
   "zoom": 0.03,
-  "caption": "I wasted thousands on designer bags. And I'll do it again because I'm a junkie."
+  "caption": "I wasted thousands on designer bags. And I'll do it again because I'm a junkie.",
+  "blocks": [
+    {
+      "text": "I wasted thousands on designer bags.",
+      "fontPx": 72
+    },
+    {
+      "text": "And I'll do it again.",
+      "fontPx": 52
+    },
+    {
+      "text": "Because I'm a junkie.",
+      "fontPx": 40
+    }
+  ]
 }

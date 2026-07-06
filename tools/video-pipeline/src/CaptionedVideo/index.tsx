@@ -17,6 +17,7 @@ import {
 import { z } from "zod";
 import { BRAND } from "../brand";
 import { CardFooter } from "./CardFooter";
+import { CardStack } from "./CardStack";
 import { CtaBox } from "./CtaBox";
 import { FollowCta } from "./FollowCta";
 import { Headline } from "./Headline";
@@ -78,6 +79,18 @@ export const captionedVideoSchema = z.object({
   captionFontPx: z.number().optional(),
   // Render the editorial brand footer (tagline + FOLLOW ALONG + site pill).
   cardFooter: z.boolean().default(false),
+  // Static stacked text card (no pop-in, per-line sizes, optional bullets).
+  // When set, replaces the animated word-by-word caption for text-card reels.
+  cardBlocks: z
+    .array(
+      z.object({
+        text: z.string(),
+        fontPx: z.number(),
+        italic: z.boolean().optional(),
+        bullet: z.boolean().optional(),
+      }),
+    )
+    .optional(),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
@@ -117,6 +130,7 @@ export const CaptionedVideo: React.FC<Props> = ({
   zoom,
   captionFontPx,
   cardFooter,
+  cardBlocks,
   overlays,
   rankTracker,
   rankList,
@@ -200,7 +214,8 @@ export const CaptionedVideo: React.FC<Props> = ({
         );
       })}
 
-      {pages.map((page, index) => {
+      {!cardBlocks &&
+        pages.map((page, index) => {
         const nextPage = pages[index + 1] ?? null;
         const subtitleStartFrame = (page.startMs / 1000) * fps;
         const subtitleEndFrame = Math.min(
@@ -267,9 +282,11 @@ export const CaptionedVideo: React.FC<Props> = ({
         <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
       ))}
 
+      {cardBlocks ? <CardStack blocks={cardBlocks} /> : null}
+
       {cardFooter ? <CardFooter /> : null}
 
-      {subtitles.length === 0 ? <NoCaptionFile /> : null}
+      {subtitles.length === 0 && !cardBlocks ? <NoCaptionFile /> : null}
     </AbsoluteFill>
   );
 };

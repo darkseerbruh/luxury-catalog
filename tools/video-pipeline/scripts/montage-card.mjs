@@ -32,21 +32,16 @@ execFileSync("ffmpeg", [
   "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "veryfast", baseVideo, "-y",
 ], { stdio: ["ignore", "ignore", "inherit"] });
 
-// 2. Whole hook as ONE page: all words within a <1200ms window so the caption
-//    system keeps them on a single page (gold sweep, then held for the clip).
-const words = caption.trim().split(/\s+/);
-const SWEEP = 900; // ms for the word-by-word reveal, under the 1200ms page limit
-const per = SWEEP / words.length;
-const captions = words.map((w, i) => {
-  const from = Math.round(150 + i * per);
-  const to = Math.round(150 + (i + 1) * per);
-  return { text: (i === 0 ? "" : " ") + w, startMs: from, endMs: to, timestampMs: Math.round((from + to) / 2), confidence: 1 };
-});
-writeFileSync(path.join(PUBLIC_DIR, `${name}.json`), JSON.stringify(captions, null, 2));
+// 2. Static text card: the whole hook (or the per-line blocks) is on screen from
+//    frame 0, no pop-in. No caption timing needed; write an empty caption file.
+const blocks = Array.isArray(spec.blocks) && spec.blocks.length
+  ? spec.blocks
+  : [{ text: caption, fontPx }];
+writeFileSync(path.join(PUBLIC_DIR, `${name}.json`), JSON.stringify([], null, 2));
 
-// 3. Render with the fixed card font size.
+// 3. Render the static card + footer.
 const propsPath = path.join(TEMP_DIR, `${name}.props.json`);
-writeFileSync(propsPath, JSON.stringify({ src: `${name}.mp4`, zoom, captionFontPx: fontPx, cardFooter: spec.footer !== false, overlays: [] }));
+writeFileSync(propsPath, JSON.stringify({ src: `${name}.mp4`, zoom, cardBlocks: blocks, cardFooter: spec.footer !== false, overlays: [] }));
 const outPath = path.join(OUTPUT_DIR, `${name}.mp4`);
 console.log("  rendering...");
 execFileSync("npx", ["remotion", "render", "src/index.ts", "CaptionedVideo", outPath, `--props=${propsPath}`, "--log=error"], { stdio: "inherit" });

@@ -5,5 +5,26 @@
   "duration": 6,
   "fontPx": 86,
   "zoom": 0.03,
-  "caption": "Hills I will die on as a handbag collector."
+  "caption": "Hills I will die on as a handbag collector.",
+  "blocks": [
+    {
+      "text": "Hills I will die on as a handbag collector.",
+      "fontPx": 60
+    },
+    {
+      "text": "Purses never go on the ground",
+      "fontPx": 38,
+      "bullet": true
+    },
+    {
+      "text": "Condition the leather less than you think",
+      "fontPx": 38,
+      "bullet": true
+    },
+    {
+      "text": "Bag liners should come included",
+      "fontPx": 38,
+      "bullet": true
+    }
+  ]
 }
