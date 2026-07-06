@@ -250,7 +250,113 @@ the voice reference for anything new. (Dupes noted where you sent a line twice.)
 
 ---
 
-*Monetization note: the product-led (§6) + value-reframe + "the one research tool"
-lines point to the site's value/authentication tools (drives the tool = engagement
-+ eventual monetization surface). The meme, affirmation, and manifesto lines are
-top-of-funnel reach to grow follows now, per the keep-warm goal.*
+---
+
+## 7. Full hook bank (rule-filtered, casual)
+
+Fresh lines, all run through your rules: real problems only · no purging · no
+partner-justification · no jargon · casual over precise · first-person opinion
+framing is the hedge (no robotic "two to three times"). Your originals are marked
+*(yours)*.
+
+**Netflix documentary on [real collector struggle / absurd devotion]**
+- *…on having to sell my entire purse collection and start over.* *(yours)*
+- *…on putting my purse on my lap the whole meal because there's no spare chair and
+  it's my baby.* *(yours)*
+- *…on holding my bag the whole flight because I don't trust the overhead bin.*
+- *…on re-buying, at triple the price, the exact bag I sold two years ago and never
+  got over.*
+- *…on being my bag's human umbrella so it stays dry while I don't.*
+- *…on selling three bags just to finally afford the one.*
+- *…on refusing to set my bag down in a restaurant with no hooks and no spare seat.*
+- *…on saving my "good" bag for so long I've somehow never actually used it.*
+
+**Here's exactly what I would do if I were… [casual, nervous first-time buyer]**
+- *…buying my first big girl bag.* *(yours)*
+- *…considering buying a bag for thousands of dollars.* *(yours)*
+- *…about to drop my first $2,000 on a bag and low-key scared I'll regret it.*
+- *…finally buying the bag I've been staring at for two years.*
+- *…trying to tell if a vintage one is the real deal before I hand over the cash.*
+- *…spending a whole paycheck on one bag.*
+- *…buying from a reseller I found online and nervous it's a scam.*
+
+**I wish someone had told me this before… [real lesson / money regret]**
+- *…I spent weeks researching the perfect bag.* *(yours)*
+- *…I tried to play the Hermès game.* *(yours)*
+- *…I bought new instead of checking what the same bag sells for barely used.*
+- *…I paid full price for a bag that lost half its value the second I walked out.*
+- *…I bought the trendy one instead of the one I'd still want in ten years.*
+- *…I paid the "limited edition" premium for something that wasn't actually hard to
+  find.*
+
+**Most people will never know [X]… but you**
+- *Most people will never know whether you got it from the store or preloved.*
+  *(yours)*
+- *Most people will never know the data behind the fashion they love. But you're
+  not most people.* *(yours)*
+- *Most people will never know if it's this season's or from ten years ago. You
+  will.*
+- *Most people scroll right past the resale price. You're not most people.*
+
+**Value / resale reframe (casual, one specific bag, no robotic hedging)**
+- *Friendly reminder… you can buy that Fendi on Emily in Paris three times over if
+  you get it used vs new.* *(yours)*
+- *The bag that sold out in an hour? It's sitting preloved right now for less than
+  retail.*
+- *Everyone's paying full price for the new It bag. Last year's It bag is a steal
+  right now.*
+- *You don't need the brand-new one. The one from two years ago is nearly identical
+  and way less.*
+
+**"This is your sign to…"**
+- *This is your sign to try renting designer bags instead of buying them.* *(yours)*
+- *This is your sign to buy the preloved one and put the difference toward a second
+  bag.*
+- *This is your sign to check the resale price before you ever pay retail.*
+- *This is your sign to carry the "special occasion" bag on a regular Tuesday.*
+
+**"Not to be dramatic but…"**
+- *Not to be dramatic but I'll never buy a designer bag brand new again.* *(yours)*
+- *Not to be dramatic but a good dust bag and a bag liner will outlive us all.*
+- *Not to be dramatic but the resale value is the whole personality of a smart buy.*
+
+**Confessional / relatable**
+- *I'm not afraid to admit I wasted thousands on designer bags. And I'll do it again
+  because I'm a junkie 😜* *(yours)*
+- *I have more bags than places to put them and I regret nothing.*
+- *I check resale prices for fun. On bags I already own. For no reason.*
+- *I've named my bags. We don't need to talk about it.*
+
+**Product-led ("I used to… now Luxury Catalog")**
+- *I used to watch every review video on YouTube to find out whether a medium-sized
+  bag would fit my MacBook. Now I just look on Luxury Catalog.* *(yours, keeper)*
+- *I used to screenshot a dozen listings to guess if a price was fair. Now I just
+  check the range.*
+- *I used to ask a Facebook group "is this real?" and hope. Now I check the markers
+  myself first.*
+- *I used to guess whether a bag was a good deal. Now I actually know before I buy.*
+
+**Affirmation / "you deserve" — feel-seen**
+- *In case no one told you today, you're allowed to spend money on things just
+  because they're beautiful.* *(yours)*
+- *You deserve beautiful things in your life just because you love them.* *(yours)*
+- *For the woman who struggles to spend on herself: you are a work of art that
+  deserves to be framed well.* *(yours)*
+- *You don't have to "earn" the bag. Wanting it is enough.*
+- *Buying something beautiful for yourself isn't frivolous. It's a love language.*
+
+**Collector manifesto / hot-takes**
+- *I have a crazy theory that everyone should carry art on their arm at least once
+  in their lives.* *(yours)*
+- *Hills I will die on: purses never go on the ground / you don't need to condition
+  the leather as often as they say / bag liners should come included 😡* *(yours)*
+- *More hills: suede isn't as scary as they made it sound / vintage doesn't mean
+  beat up / the "boring" color is the one you'll carry forever.*
+- *A bag you actually use beats a bag you're "saving." Use the good one.*
+
+---
+
+*Monetization note: the product-led (§6/§7) + value-reframe + "the one research
+tool" lines point to the site's value/authentication tools (drives the tool =
+engagement + eventual monetization surface). The meme, affirmation, and manifesto
+lines are top-of-funnel reach to grow follows now, per the keep-warm goal.*
