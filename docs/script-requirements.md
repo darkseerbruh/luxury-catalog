@@ -203,10 +203,41 @@ before the reel is shown or staged. Full pipeline how-to lives in the `video` sk
     auto-hold until the next bag (no short fixed `hold` when the price comes later in the
     sentence).
 
+## Video performance craft (short-form, from the 2026-07-05 creator study)
+*Distilled from two content coaches whose SUBJECT is irrelevant to us; only the technique
+transfers. Depth: docs/social-study-lana-k-social.md + docs/social-study-personalbrandlaunch.md.
+These govern how the video TRAVELS, on top of the script rules above.*
+
+24. **Layer three hooks in the first second.** The spoken hook (rule 4) PLUS an on-screen
+    written hook PLUS a visual on screen (chart, cutout, bag card). All three name the same
+    thing. Rule 4 covers only the spoken one; the written + visual hooks are the addition.
+25. **Earn the second watch.** Right after the hook, one roadmap line says what they'll get
+    ("here's what the numbers actually show"). No reason to stay means the scroll wins.
+26. **One trade of value per video, and value is not only information.** A shortcut, a myth
+    broken, a number that surprises, a perspective shift, a laugh. If there's nothing in it
+    for the viewer, cut it.
+27. **Aim each hero video at one follow trigger:** usefulness (a save-worthy shortcut),
+    identity ("that's me"), or hope (their future can change). Layer more than one when you
+    can. This is the follow lever, our current goal.
+28. **Make it unmistakably ours even faceless.** Same fonts, colours, card style every
+    time, and NAME our methods (e.g. "the price check") so the framework is remembered, not
+    just the fact.
+29. **Categorize for the algorithm.** The target search phrase appears in the on-screen
+    text AND the spoken words AND the caption AND a tag (extends rule 17 to the video frame
+    and the audio). Clarity over cleverness; make it obvious what the video is about.
+30. **Low-fi is the format, not a compromise.** Plain talking-head or voiceover-over-data
+    beats high production for growth (save polish for brand-deal pieces). Don't over-edit.
+31. **One topic, many angles.** The production unit is a cluster: pick one bag or stat with
+    proven demand, make several videos on it from different angles, never a one-off. Pairs
+    with the kit system.
+
 ## The pre-record / pre-publish checklist
 
 - [ ] Worth-it bar: payload named in one sentence; a usable move / decision / correction
 - [ ] Hook verb literally true; intent named in sentence one; benefit, not gotcha
+- [ ] Hook layered: spoken + on-screen text + visual, all naming the same thing (rule 24)
+- [ ] A roadmap line gives a reason to keep watching past the hook (rule 25)
+- [ ] One follow trigger targeted: useful / identity / hope (rule 27)
 - [ ] No totality claims; scope turned into receipts
 - [ ] No stale hedges (anything documentable is confirmed with an anchor or cut)
 - [ ] Comparisons and "moments" carry their meaning/why; name collisions disambiguated
@@ -214,6 +245,7 @@ before the reel is shown or staged. Full pipeline how-to lives in the `video` sk
 - [ ] I-voice; no brochure lines; opinions labeled mine; advice is a move
 - [ ] One register per take; credibility at the data moment; name once per series max
 - [ ] Ends on a comments question or "Just search <key>..." + bio tag
+- [ ] Search phrase categorized across on-screen text + spoken + caption + tag (rule 29)
 - [ ] Contractions, full spoken numbers with units, full house names, no fragments, no
       tics, max one hedge, no em dashes, no internal jargon
 - [ ] Size run/lineup/ranking has its visual (script cue + article diagram)
