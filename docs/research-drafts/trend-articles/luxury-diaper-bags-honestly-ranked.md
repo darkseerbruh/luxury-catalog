@@ -1,4 +1,14 @@
 <!--
+STATUS: PUBLISHED and LIVE at /articles/luxury-diaper-bags-honestly-ranked (post #35).
+The canonical live body is supabase/seed/seed-diaper-article.ts (re-run it to edit the
+live article); the chart is src/app/articles/[slug]/DiaperRankChart.tsx. This file is the
+research archive and the prose below is the PRE-SHIP draft (loose ns, old H2s) kept for
+provenance. FACTUALITY RE-VERIFY 2026-07-06: all comps re-run against prod with the app's
+canonical deduped pool; ns corrected (were raw/all-version counts), medians restated,
+H2s reworded into the reader's search words, ns moved to the chart per voice §7b. See the
+seed header for the corrected figures.
+
+--- original pre-ship draft below (superseded by the seed) ---
 DRAFT for owner review. Not published. Data pass pending: fill every [DATA] placeholder
 from prod price_history, resolve every [VERIFY], then run the voice-and-tone §8 checklist.
 

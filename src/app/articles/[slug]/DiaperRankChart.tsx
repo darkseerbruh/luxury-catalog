@@ -3,8 +3,9 @@ import type { ComponentType } from "react";
 /**
  * The four ranked diaper-duty totes, by preloved asking median, with the
  * Neverfull's realized-sold contrast. Built per content rule 6.3 (rankings get
- * a chart on OUR data). Numbers re-confirmed against prod 2026-07-02; the
- * Ophidia Medium keeps its late-June family read. Original SVG/CSS, no logos.
+ * a chart on OUR data). Numbers re-verified against prod 2026-07-06 with the
+ * app's canonical deduped live-asking pool (matches the on-page shop CTA), so
+ * the ns are deduped listings, not raw observations. Original SVG/CSS, no logos.
  */
 const FG = "#f3ede0";
 const MUTED = "#a89c87";
@@ -19,10 +20,10 @@ const MAX = 2800;
 const pct = (v: number) => `${((v / MAX) * 100).toFixed(1)}%`;
 
 const ROWS = [
-  { label: "Goyard Saint Louis GM", v: 2495, n: 90, date: "Jul 2" },
-  { label: "Louis Vuitton OnTheGo GM", v: 2350, n: 263, date: "Jul 2" },
-  { label: "Louis Vuitton Neverfull MM", v: 1565, n: 913, date: "Jul 2", sold: 770, soldN: 87 },
-  { label: "Gucci Ophidia (Medium)", v: 1250, n: 155, date: "late Jun" },
+  { label: "Goyard Saint Louis GM", v: 2425, n: 37, date: "Jul 6" },
+  { label: "Louis Vuitton OnTheGo GM", v: 2150, n: 93, date: "Jul 2" },
+  { label: "Louis Vuitton Neverfull MM", v: 1506, n: 350, date: "Jul 2", sold: 770, soldN: 87 },
+  { label: "Gucci Ophidia (Medium)", v: 1240, n: 50, date: "Jul 2" },
 ];
 
 export function DiaperRankChart() {
@@ -63,7 +64,7 @@ export function DiaperRankChart() {
         </div>
       </div>
       <figcaption className="sr-only">
-        Preloved asking medians for the four ranked diaper-duty totes: Goyard Saint Louis GM about $2,495, Louis Vuitton OnTheGo GM about $2,350, Louis Vuitton Neverfull MM about $1,565 asking but near $770 in tracked sales, Gucci Ophidia Medium about $1,250.
+        Preloved asking medians for the four ranked diaper-duty totes: Goyard Saint Louis GM about $2,425, Louis Vuitton OnTheGo GM about $2,150, Louis Vuitton Neverfull MM about $1,506 asking but near $770 in tracked sales, Gucci Ophidia Medium about $1,240.
       </figcaption>
     </figure>
   );
