@@ -3,6 +3,27 @@
 Durable record of every video the pipeline makes. The render files live locally in
 `output/` (too large for git); this log is the committed history. Newest first.
 
+**2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
+takes an optional `"follow"` line, rendered as a bottom pill with a `+ Follow` badge that
+pops at the outro and holds to the cut. Phrase the value to CONTINUE the badge (e.g.
+`"for the full Chanel map"` reads as "+ Follow for the full Chanel map"), not to repeat the
+word Follow. Never spoken; it satisfies
+script-requirements.md rule 27 (the follow ask, our current growth goal) without a re-film.
+Timing defaults to the site-CTA phrase, or set `"followAt"`. The 3 Chanel reels below have
+`"follow"` added to their (gitignored) `input/*.headline.json`; they need a re-render
+(`npm run make <base>.mp4`) and a Metricool re-stage to carry the card. New reels: just add
+the `"follow"` line.
+
+**2026-07-06 — text-card mode (pipeline feature).** For text-hook reels (the "put
+a thought on screen over one clip" format): `scripts/montage-card.mjs` renders ONE
+held clip with the whole hook shown statically on one screen, in the brand **Playfair
+serif** (not Poppins, no per-word gold sweep), size set per hook via `captionFontPx`.
+`cardFooter:true` adds the editorial footer (gold diamond + italic "know the facts on
+every bag" + FOLLOW ALONG + luxurycatalog.com pill), placed in the lower third and
+lifted off the very bottom so it clears TikTok's caption + action buttons. Serif +
+italic loaded in `load-font.ts`; style in `Page.tsx` / `CardFooter.tsx`. Batch 1 below
+re-rendered in this style.
+
 | Date | Concept | Mode | Source | Caption / script | Status |
 |------|---------|------|--------|------------------|--------|
 | 2026-07-03 | Chanel 25: classic or Boy? (the debate) | talking-head + synced mic + 4 cued cutouts | `Chanel_2026_0 3.MOV` + `script 4.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (25, Classic Flap, Boy) VIDEO-USE library | Her script (kit 1 debate). Headline "Chanel 25: Classic or Boy?", CTA box luxurycatalog.com. Fixes: garbled CTA re-transcribed from clean mic ("search Chanel 2026 on luxurycatalog.com"), dropped final "comments." restored | draft v4 (captions aligned to audio; opens on scripted "Is the Chanel 25" via trim.json startPhrase, ad-lib "a tale of two futures" cut; passes npm run verify; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
@@ -10,9 +31,23 @@ Durable record of every video the pipeline makes. The render files live locally 
 | 2026-07-03 | Chanel in 2026, decoded (starter map) | talking-head + synced mic + 5 cued cutouts | `Chanel_2026_0.MOV` + `script 1.m4a` (auto-synced, match 0.84); cutouts = Chanel brand images (25, Classic Flap, 19, 22, WOC) VIDEO-USE library | Her script (kit 1 explainer). Headline "Chanel in 2026, decoded", CTA box. Prices spoken as pre-loved asking medians. Fixes: BLANK_AUDIO tail stripped, year-named-too | draft v2 (captions RE-ALIGNED to audio after the sync-delay caption bug fix; opens on her first word, 2.4s dead air cut; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
 | 2026-07-02 | 4 luxury bags moms use as diaper bags, ranked | talking-head + synced mic + 4 cued cutouts | phone video + computer-mic audio (auto-synced); bag stills = web stand-ins (Gucci Ophidia, LV OnTheGo, Goyard Saint Louis, LV Neverfull) | Her own script (ranked 4→1, CTA to luxurycatalog.com "search luxury diaper bags") | draft v2 (pipeline fixes: captions aligned to audio, opens on first word, bags now on gold-edged CARDS upper-left off her face; passes npm run verify. STILL BLOCKED to post: Teleprompter.com watermark baked into her source footage moves around/onto the headline -> re-film; stand-in images -> swap) |
 | 2026-07-01 | Know your Hermès (8-bag roll call) | headless montage | `_by_bag/`: Birkin 40, Mini Kelly 20, Constance, Lindy, Bolide, Evelyne, Roulis, Picotin | Per bag: "The <name>" | draft (demo; 2 clips are spread shots + some show competitor tags, recut before posting) |
+| 2026-07-06 | Swipe batch 1: aff-deserve | text-card (one held clip, full hook on one screen, font 66) | broll bank IMG_6332 | "You deserve beautiful things just because you love them." | draft (silent; add trending sound in-app; payoff in post caption per docs/social-batch-2026-07-06.md) |
+| 2026-07-06 | Swipe batch 1: value-fendi | text-card (font 62) | broll bank IMG_6668 (Paris) | "You can buy that Fendi three times over used vs new." | draft (real July 2026 figures live in §8/caption; refresh before posting) |
+| 2026-07-06 | Swipe batch 1: doc-flight | text-card (font 52) | broll bank IMG_6240 | "A Netflix documentary on holding my bag the whole flight because I don't trust the overhead bin." | draft |
+| 2026-07-06 | Swipe batch 1: first-bag | text-card (font 58) | broll bank IMG_2561 | "Here's exactly what I would do if I were buying my first big girl bag." | draft (payoff = 5-step checklist in caption) |
+| 2026-07-06 | Swipe batch 1: hermes-game | text-card (font 58) | broll bank IMG_2607 | "I wish someone told me this before I tried to play the Hermès game." | draft |
+| 2026-07-06 | Swipe batch 1: macbook-fit | text-card (font 50) | broll bank IMG_2581 | "I used to watch every review to see if a bag fit my MacBook. Now I just check Luxury Catalog." | draft (verify a bag page shows fit data before linking) |
+| 2026-07-06 | Swipe batch 1: junkie | text-card (font 56) | broll bank IMG_2588 | "I wasted thousands on designer bags. And I'll do it again because I'm a junkie." | draft |
+| 2026-07-06 | Swipe batch 1: hills | text-card (font 66) | broll bank IMG_2561 @12 (shares first-bag location; diversify later) | "Hills I will die on as a handbag collector." | draft (payoff = the 3 hills in caption) |
 
 ## Metricool staging
 
+- **2026-07-06** — the 3 Chanel reel drafts SWAPPED to the follow-card cut (full-quality
+  re-render with the on-screen "+ Follow for the full Chanel map" pill). Media re-hosted via
+  a temp GitHub release that Metricool ingested (then deleted). Same text, schedules, and
+  `draft:true` kept; only the video changed. New post ids: 346158025 (starter map, Jul 8),
+  346158158 (taxonomy, Jul 24), 346158698 (25 debate, Aug 11). Owner reviews + publishes
+  from the planner.
 - **2026-07-05** — the 3 Chanel reels staged as Metricool **drafts** (blogId 6480195,
   `draft:true`, `autoPublish:false`), each targeting Instagram Reel + TikTok, media on
   Metricool's CDN. Post ids 345666985 (starter map), 345667051 (taxonomy), 345667089

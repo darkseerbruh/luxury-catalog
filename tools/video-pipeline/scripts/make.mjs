@@ -330,19 +330,34 @@ const resolveHeadline = (base) => {
   const p = path.join(INPUT_DIR, `${base}.headline.json`);
   if (!existsSync(p)) return undefined;
   const cfg = JSON.parse(readFileSync(p, "utf8"));
+  // Resolve a spoken phrase to its start time (seconds) from the caption track.
+  const timeToPhrase = (phrase) => {
+    const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+    if (!phrase || !existsSync(capsPath)) return undefined;
+    const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+    const firstWord = norm(phrase).split(" ")[0];
+    const hit = caps.find((c) => norm(c.text).includes(firstWord));
+    return hit ? hit.startMs / 1000 : undefined;
+  };
   // Optional cta line under the headline, timed to when she says `ctaAt`.
   if (cfg.ctaAt) {
-    const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
-    if (existsSync(capsPath)) {
-      const caps = JSON.parse(readFileSync(capsPath, "utf8"));
-      const firstWord = norm(cfg.ctaAt).split(" ")[0];
-      const hit = caps.find((c) => norm(c.text).includes(firstWord));
-      if (hit) {
-        cfg.ctaSec = hit.startMs / 1000;
-        console.log(`  headline cta: "${cfg.cta}" at ${cfg.ctaSec.toFixed(1)}s`);
-      } else {
-        console.log(`  headline cta: phrase not found -> "${cfg.ctaAt}"`);
-      }
+    const sec = timeToPhrase(cfg.ctaAt);
+    if (sec !== undefined) {
+      cfg.ctaSec = sec;
+      console.log(`  headline cta: "${cfg.cta}" at ${cfg.ctaSec.toFixed(1)}s`);
+    } else {
+      console.log(`  headline cta: phrase not found -> "${cfg.ctaAt}"`);
+    }
+  }
+  // Optional on-screen follow ask, pinned bottom, timed to `followAt` (defaults to the
+  // same phrase as the site CTA). Never spoken (script-requirements.md rule 27).
+  if (cfg.follow) {
+    const sec = timeToPhrase(cfg.followAt || cfg.ctaAt);
+    if (sec !== undefined) {
+      cfg.followSec = sec;
+      console.log(`  headline follow: "${cfg.follow}" at ${cfg.followSec.toFixed(1)}s`);
+    } else {
+      console.log(`  headline follow: phrase not found -> "${cfg.followAt || cfg.ctaAt}"`);
     }
   }
   return cfg;

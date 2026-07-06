@@ -6,6 +6,32 @@
 ## TL;DR — AUTOMATED social engine: closed loop analyze → iterate → backlog → create → draft (2026-07-06, on `main`)
 
 **The social pipeline now runs itself to the draft line; publishing stays hers in Metricool.** New standard **`docs/social-performance.md`** (binding on engine runs): Metricool analytics (field IDs verified live 2026-07-06) + PostHog search-key entries → per-post verdicts vs segment baselines with small-n honesty → the §4 decision tree spawns **ONE-variable experiments** (same messaging × new visuals, same visuals × new messaging, new CTA, new hashtags, new timing) → written to the **Notion Content Pipeline** (Source: Analyst; auto-greenlight only for faceless variants of solid-or-better parents) → faceless creation (video pipeline, slideshow rules, cleared libraries) → **Metricool drafts (`draft:true`), never published**. Append-only memory: `docs/social-performance-ledger.md`. Anything needing her face/voice/footage = a **FILM ASK** (Notion item + push notification), never a blocker. **Orchestrators:** scheduled tasks `social-engine-weekly` (Thu 9am, full loop) + `social-engine-pulse` (Mon 8:30am, breakout fast-follow + 7-day runway top-up), both running the `social` agent in the new dedicated worktree `~/Documents/luxury-catalog-social-engine` (branch `social-engine`, resets to origin/main each run). Agent def updated: third run added, publish-gate vs draft-gate split, Metricool + Notion MCP tools added to its allowlist, campaign/b-roll libraries added to media sources. **⚠️ Your turn (one-time, ~2 min): click "Run now" on `social-engine-weekly` in the Scheduled sidebar and approve its tool prompts once — approvals stick to the task and future runs never pause. Note the Metricool Free plan's 20-post/month cap paces the engine until upgraded.**
+---
+
+## TL;DR — TikTok swipe file + batch 1 reels (text-card format) (2026-07-06, on `main`)
+
+**From her saved TikTok DMs → a hook bank + 8 post-ready reels + a locked video format.**
+- `docs/tiktok-swipe-file.md`: her saved inspo (creators + which sounds), verbatim caption bank, hook→payoff, the full rule-filtered hook bank, and **§9 = copy + per-post-type rules**. Sound finding: coaching videos use original/voiceover; the reusable trends are "how my brain sounds when…" + "girls will be like I needed this".
+- **Text-card reels** (new pipeline mode, `tools/video-pipeline/scripts/montage-card.mjs`): one held clip + the hook shown STATICALLY on screen, Playfair serif, brand footer. 8 rendered (aff-deserve, value-fendi, doc-flight, first-bag, hermes-game, macbook-fit, junkie, hills) in `tools/video-pipeline/output/` (local, silent by design).
+- **Accessibility enforced in code** (`src/brand.ts`, `CardStack.tsx`): min 46px text (headline ≥56), dark backing behind cream text, no pop-in. Rules: `docs/video-accessibility.md`. Locked in `docs/preferences.md` → "Short-form video + social content".
+- **Post package** (caption + sound direction per reel): `docs/social-batch-2026-07-06.md`.
+- **Owner rule reinforced:** keep her hooks verbatim (never trim the TikTok opener).
+
+**YOUR TURN (2026-07-06):** per reel, pick + add a trending sound in-app, wire link + UTM (`utm_campaign=2026-07-swipe-batch-1`), publish; refresh the Fendi resale figures the day you post. NOTE: Metricool IS connected (see next TL;DR) — no reconnect needed to stage as drafts.
+
+---
+
+## TL;DR — Creator-study video rubric + on-screen follow-CTA shipped (2026-07-06, on `main`)
+
+**Studied two TikTok coaches for transferable CRAFT (not their topics), turned it into a rubric, applied it, and shipped the highest-leverage fix.**
+- **Studies (per-video, not averaged):** `docs/social-study-personalbrandlaunch.md` + `docs/social-study-lana-k-social.md`. Method locked in memory: extract technique, per-video, never adjacent topics.
+- **Rubric:** `docs/script-requirements.md` rules 24-31 (layered hook, reason-to-stay, one follow trigger, categorization keyword, low-fi, one-topic-many-angles) + 4 pre-record checklist items.
+- **Follow-CTA = first-class pipeline feature** (`FollowCta.tsx`; `headline.json` gains a `"follow"` line, auto-timed to the CTA phrase). Verified rendering; every future reel gets it with one line.
+- **Alma PM comps FILLED** (was Ep 7 repo-only) from tracked comps (Fashionphile + The RealReal, US, 2026-06-23..07-02): monogram canvas ~$795 (n=148), Epi ~$1,040 (n=110); reframed the draft's wrong "Epi is cheaper" line. LV-nine series now record-ready.
+- **3 Chanel reel drafts SWAPPED in Metricool** to the follow-card cut (ids 346158025 / 346158158 / 346158698, still `draft:true`, schedules kept). Metricool IS connected (a startup "needs auth" note was stale; swap workflow = temp GitHub release host → `updateScheduledPost` → delete release).
+
+**YOUR TURN (2026-07-06):** review + publish the 3 follow-card Chanel drafts from the Metricool planner (blogId 6480195) when ready; they only go live on your publish.
+---
 
 ## TL;DR — Social content engine + founder About page + protective-feet feature (2026-07-05, on `main`, merge `75c38a1`, all gates green: tsc/eslint/build/573 tests; keep-warm blend swapped 2026-07-06)
 
@@ -13,7 +39,13 @@ Built a faceless social content engine plus two features, merged same day. **Con
 
 **Keep-warm blend (2026-07-06):** all 20 keep-warm drafts swapped in place to the final blended template — floating gold bag icon + `luxurycatalog.com` footer + a "know the facts on every bag" FOLLOW cue on every one; copy alternates aspirational ("You. This <mood>. And your dream bag.") on odd dates with the approved reflective lines on even. Same footage per date, overlay only. Count stays 60. Rule locked in memory `feedback-keepwarm-register`.
 
-**⚠️ Your turn:** (1) apply `supabase/migrations/0044_style_protective_feet.sql` via the db-migrate Action, then run `npx tsx supabase/seed/seed-protective-feet.ts --write`; (2) in Metricool, pick sounds (suggestions in chat) + set real dates before scheduling the 60 drafts (placeholder-dated Jul 8 to Sep 5); (3) drop a founder photo at `public/about/founder.jpg`; (4) record VOs for the walkthroughs if wanted (scripts in chat).
+**Scheduling + sound setup (2026-07-06):** all 63 drafts rescheduled to **1/day, Jul 8 to Sep 8**, alternating **data/value → founder-voice → keep-warm** (no two keep-warms adjacent, no 3-in-a-row). Split by how sound gets added:
+- **37 photo carousels → notification posts** (`draft:false`, `autoPublish:false`). Metricool auto-downloads the slides + copies the caption to her phone at each date; she selects photos, pastes, **adds a sound, shares**. First ping Jul 9. Needs the **Metricool app + notifications on**. (Why notification: Metricool's music feature is Reels-only, so carousels can't get a scheduler-added sound; she rejected silent carousels and converting slideshows to video.)
+- **26 video reels → still drafts**; her step: in **Metricool web** add a **Top-100 trending song** (TikTok presets / IG Reel audio) to each + set live (auto-publishes). Silent until she does.
+- **Sound facts:** TikTok Business account = Top-100 commercial trending only (fine, auto-publishes via Metricool). Non-commercial/viral songs need a **Personal account + native posting** and lose the clickable bio link, so avoid except a rare hero one-off.
+- **Bios verified live (2026-07-06):** IG `@luxurycatalog_` → `www.luxurycatalog.com/social/instagram`, TikTok `@luxurycatalog_` → `.../social/tiktok` (both set + clickable); both landing pages render (per-platform grids exist on `origin/main`, currently show the same 3 cards until more content is registered).
+
+**⚠️ Your turn:** (1) apply `supabase/migrations/0044_style_protective_feet.sql` via the db-migrate Action, then run `npx tsx supabase/seed/seed-protective-feet.ts --write`; (2) **finish the reels:** add Top-100 sounds in Metricool web + set them live (carousels are already notification-scheduled); (3) drop a founder photo at `public/about/founder.jpg`; (4) record VOs for the walkthroughs if wanted (scripts in chat).
 
 ## TL;DR — Persona/flow review IMPLEMENTED: every rec built same day (2026-07-05, branch `ops/ux-persona-review-0705`, owner said "do all your recs")
 
