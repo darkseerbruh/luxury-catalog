@@ -9,6 +9,7 @@ import {
   removeFromWatchlist,
 } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
+import PremiumInterest from "@/components/PremiumInterest";
 
 const STATUS_LABELS: { value: "want" | "have" | "had"; label: string }[] = [
   { value: "want", label: "Want it" },
@@ -187,6 +188,10 @@ export default function BagActions({
               )}
             </p>
           )}
+          {/* Quiet premium fake-door at the bell moment: someone who just turned
+              on a price alert is the exact person Deal alerts Pro serves. Event-only
+              demand capture (monetization_interest), per the locked fake-door pattern. */}
+          {watching && <PremiumInterest variant="inline" source="bag_alert" />}
           {error && <p className="text-sm text-red-400">{error}</p>}
         </div>
       ) : (

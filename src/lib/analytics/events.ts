@@ -19,8 +19,6 @@ export const EVENTS = {
   searchPerformed: "search_performed",
   /** A search returned zero results — a product-gap signal. */
   searchNotFound: "search_not_found",
-  /** A style detail page was opened. */
-  styleViewed: "style_viewed",
   /** A variant detail page was opened. */
   variantViewed: "variant_viewed",
   /** An authentication section (serial tag, provenance, lock & key) was expanded. */
