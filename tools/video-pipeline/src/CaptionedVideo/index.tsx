@@ -17,6 +17,7 @@ import {
 import { z } from "zod";
 import { BRAND } from "../brand";
 import { CtaBox } from "./CtaBox";
+import { FollowCta } from "./FollowCta";
 import { Headline } from "./Headline";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
@@ -63,6 +64,9 @@ const headlineSchema = z.object({
   ctaSec: z.number().optional(),
   ctaYPct: z.number().optional(),
   yPct: z.number().optional(),
+  follow: z.string().optional(), // on-screen follow-the-account ask (never spoken)
+  followSec: z.number().optional(), // resolved from followAt phrase in make.mjs
+  followYPct: z.number().optional(),
 });
 
 export const captionedVideoSchema = z.object({
@@ -240,6 +244,14 @@ export const CaptionedVideo: React.FC<Props> = ({
           text={headline.cta}
           atSec={headline.ctaSec}
           yPct={headline.ctaYPct}
+        />
+      ) : null}
+
+      {headline?.follow && headline?.followSec !== undefined ? (
+        <FollowCta
+          text={headline.follow}
+          atSec={headline.followSec}
+          yPct={headline.followYPct}
         />
       ) : null}
 
