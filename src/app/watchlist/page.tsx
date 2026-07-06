@@ -87,7 +87,7 @@ export default async function WatchlistPage() {
         </ul>
       )}
 
-      <PremiumInterest surface="watchlist" />
+      <PremiumInterest source="watchlist" />
     </main>
   );
 }
