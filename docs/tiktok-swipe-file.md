@@ -356,7 +356,161 @@ framing is the hedge (no robotic "two to three times"). Your originals are marke
 
 ---
 
-*Monetization note: the product-led (§6/§7) + value-reframe + "the one research
-tool" lines point to the site's value/authentication tools (drives the tool =
+---
+
+## 8. Hook → payoff (slide 2 / caption / the answer)
+
+Every hook above sets up a question. This is the follow-through: what goes on slide
+2, or in the caption, or in the on-site article. Rule for the factual ones: no
+invented numbers. Where a real figure belongs, the copy points to *the range* / the
+bag's own page (pull the actual number from `/data` before posting), or teaches a
+checkable method framed as *markers to check, not a verdict*.
+
+### Netflix documentary (payoff = land the joke + engagement CTA)
+The answer is "yes, it's unhinged, and you're not alone." Slide 2 = the deadpan
+confession; caption = a tag/comment prompt (grows follows + comments).
+- *…flight, overhead bin* ↳ "It did not go under the seat in front of me either. It
+  had my full attention for four hours. Tag someone who'd do the same."
+- *…re-buying at triple the price* ↳ "I had it. I sold it. I have now paid for it
+  twice. Would I do it again? Ask me after I find the next one."
+- *…human umbrella* ↳ "I got soaked. The bag stayed dry. Priorities. 🌧️ Comment if
+  you've done this."
+- *…sold three to afford one* ↳ "Three good bags walked so one great bag could ride.
+  Worth it. Which one would you have kept?"
+- *…no hooks, no spare seat* ↳ "So it sat on my lap through a three-course meal like
+  the dependent it is. If you know, you know."
+- *…saving the 'good' bag* ↳ "Still in the dust bag. Still 'for a special occasion.'
+  This is your sign to use it. I'll go first."
+
+### Here's exactly what I would do if I were… (payoff = the actual steps)
+- *…first big girl bag* ↳ "1. Pick the shape you'll actually carry, not the one
+  that's trending. 2. Check what it sells for preloved before you pay retail. 3.
+  Learn two or three authentication markers for that exact style. 4. Buy from a
+  seller with real, in-hand photos and a return window. 5. Budget a little extra for
+  a liner and dust bag."
+- *…thousands of dollars* ↳ "Same playbook, higher stakes: know the resale range so
+  you know if 'retail' is even a good deal, and never skip the authentication check
+  on a private sale."
+- *…first $2,000, scared I'll regret it* ↳ "Regret usually comes from buying the
+  trend, not the bag. Ask: would I still reach for this in five years? If yes, the
+  price stops being scary."
+- *…staring at it for two years* ↳ "If you've wanted it for two years, it's not an
+  impulse. Check the preloved price first, then go get your bag."
+- *…is the vintage one real* ↳ "Before you pay: check the date code or heat stamp,
+  the stitching, the hardware weight, and the lining against a known-real reference.
+  Markers to check, not a verdict, but they catch most of it."
+- *…whole paycheck on one bag* ↳ "Then it has to earn it: buy something that goes
+  with most of your closet, holds value decently, and makes you happy every single
+  time you pick it up."
+- *…reseller I found online* ↳ "Ask for extra photos of the date code, base, and
+  hardware in natural light. Real sellers say yes fast. Pay somewhere with buyer
+  protection, never off-platform."
+
+### I wish someone had told me this before… (payoff = the lesson)
+- *…weeks researching* ↳ "The specs you spent weeks hunting are usually in one
+  place. Start with the facts, then fall in love."
+- *…the Hermès game* ↳ "You do not have to play it. The bag you actually want is
+  often on the resale market right now, no relationship-building required."
+- *…bought new instead of checking preloved* ↳ "Check the resale range first, always.
+  The same bag, barely touched, is often sitting there for less."
+- *…lost half its value walking out* ↳ "Some bags hold value and some drop the second
+  they're yours. Knowing which before you buy is the whole game."
+- *…trendy over timeless* ↳ "Trends age in a season. Buy the one you'd still want
+  when the algorithm's moved on."
+- *…'limited edition' premium* ↳ "'Limited' is doing a lot of marketing work. Check
+  how many actually exist before you pay extra for 'rare.'"
+
+### Most people will never know… but you (payoff = the insider truth + soft site nod)
+- *…store or preloved* ↳ "A good preloved bag looks identical because it is
+  identical. The only difference is what you paid."
+- *…the data behind the fashion* ↳ "Most people just see the bag. You can see what it
+  cost, what it's worth now, and whether it was a smart buy. That's the fun part."
+- *…this season's or ten years old* ↳ "Great design doesn't expire. The right older
+  bag reads as taste, not age."
+- *…scroll past the resale price* ↳ "One glance at the range tells you if you're
+  getting a deal or getting played. Look before you buy."
+
+### Value / resale reframe (payoff = the reframe; pull real number before posting)
+- *…Fendi three times over* ↳ "Same bag, gently used, a fraction of retail. The
+  screen version costs new money for no reason. [Drop the exact bag + its preloved
+  range from /data.]"
+- *…sold out in an hour* ↳ "The frenzy is for the new one. The patient shopper buys
+  the same bag preloved next month for less. [Name the bag + range.]"
+- *…last year's It bag* ↳ "Today's must-have is next year's steal. If you can wait,
+  the resale market rewards you."
+- *…two years old, way less* ↳ "Compare the current model to the one from two
+  seasons ago. Often nearly the same bag, meaningfully less money."
+
+### This is your sign to… (payoff = why + how to start)
+- *…rent instead of buy* ↳ "Try the bag in your real life before you commit
+  thousands. If you reach for it constantly, then buy. If not, you just saved a
+  fortune."
+- *…put the difference toward a second bag* ↳ "Buy preloved, pocket the gap, and
+  suddenly one budget is two bags. This is how collections happen."
+- *…check resale before retail* ↳ "Thirty seconds on the resale range can save you
+  hundreds. Make it a habit before every purchase."
+- *…carry it on a Tuesday* ↳ "The 'special occasion' is today. Bags are meant to be
+  used, not archived. Take the good one to the grocery store."
+
+### Not to be dramatic but… (payoff = the reasoning)
+- *…never buy brand new again* ↳ "Preloved gets me the same bag, often for way less,
+  and someone already took the resale hit for me. Hard to unsee."
+- *…dust bag + liner outlive us all* ↳ "A little protection is the cheapest way to
+  keep a bag looking new for years. Non-negotiable."
+- *…resale value is the whole personality* ↳ "A bag that holds value isn't just
+  pretty, it's a smart buy. That's the difference between spending and investing in
+  your own taste."
+
+### Confessional (payoff = relatable caption + CTA)
+- *…junkie 😜* ↳ "No notes. No shame. Comment your latest 'oops' purchase, I'll go
+  first."
+- *…more bags than places* ↳ "The shelf situation is dire. The joy is immeasurable.
+  Tag your enabler."
+- *…check resale for fun* ↳ "It's a hobby. It's a personality. It's how I know I'm
+  sitting on good taste. Who else does this?"
+- *…named my bags* ↳ "They have names. They have moods. We move on. Drop your bag's
+  name below."
+
+### Product-led "I used to… now Luxury Catalog" (payoff = what the site does)
+- *…MacBook fit* ↳ "The measurements and what actually fits inside are right on the
+  bag's page. No more 47 review videos."
+- *…screenshot a dozen listings* ↳ "One page shows the price range instead of twelve
+  tabs. You see instantly if a deal's a deal."
+- *…is this real, and hope* ↳ "Learn the markers to check yourself, so you walk in
+  confident instead of hoping."
+- *…guess if it's a good deal* ↳ "Stop guessing. See what it's worth and what it's
+  worth to you, then buy."
+
+### Affirmation / you deserve (payoff = gentle expansion + soft CTA)
+The hook IS the message. Slide 2 = one more warm beat, then a save/share nudge
+(saves + shares are the reach signal here).
+- *…spend on beautiful things* ↳ "Beautiful isn't frivolous. It's allowed to be the
+  reason. Save this for the next time you talk yourself out of it."
+- *…deserve beautiful things* ↳ "Not because you earned it, not because it's on sale.
+  Because you love it. Send this to someone who needs to hear it."
+- *…work of art, framed well* ↳ "You spend on everyone else. Some of it is allowed to
+  be just for you."
+- *…don't have to earn the bag* ↳ "Wanting it is a good enough reason. That's the
+  whole post."
+- *…a love language* ↳ "Buying yourself something beautiful counts. Treat it like it
+  does."
+
+### Collector manifesto / hot-takes (payoff = the reasoning)
+- *…carry art on your arm* ↳ "A great bag is a small, wearable piece of craft. Everyone
+  deserves to carry one at least once."
+- *…hills I'll die on* ↳ "Purses off the ground (bacteria and scuffs are real),
+  over-conditioning dries leather out, and yes, a liner should just come in the box
+  at these prices."
+- *…more hills* ↳ "Suede survives with a little care, vintage means loved not
+  ruined, and the 'boring' neutral is the one you'll still reach for in a decade."
+- *…use the good one* ↳ "A bag living in its dust bag isn't an investment, it's a
+  hostage. Use it."
+
+---
+
+*Monetization note: the product-led (§6/§7/§8) + value-reframe + "the one research
+tool" payoffs point to the site's value/authentication tools (drives the tool =
 engagement + eventual monetization surface). The meme, affirmation, and manifesto
-lines are top-of-funnel reach to grow follows now, per the keep-warm goal.*
+lines are top-of-funnel reach to grow follows now, per the keep-warm goal. Value
+payoffs marked "[pull real number]" must get a real figure from `/data` before
+publishing (factuality rule).*
