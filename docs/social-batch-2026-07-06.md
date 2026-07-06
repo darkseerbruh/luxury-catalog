@@ -60,6 +60,75 @@ URLs + UTMs (`utm_campaign=2026-07-swipe-batch-1`) before posting.*
 
 ---
 
+## Post-ready package (rendered videos + caption + sound)
+
+Renders live at `tools/video-pipeline/output/<name>.mp4` (text-card reels, silent by
+design). For each: pick a current trending audio in-app; the on-screen hook stays as
+filmed. Captions are on-voice (no em dashes). Swap the placeholder tags for whatever
+is trending the day you post.
+
+**1. aff-deserve** — metric: shares + saves → follows
+> In case you needed the reminder today: you don't have to earn the bag, and it
+> doesn't have to be on sale. Loving it is reason enough. Save this for the next time
+> you talk yourself out of something beautiful. Follow for the facts behind every bag.
+> #luxurybags #designerbags #handbagcollector #treatyourself #luxurycatalog
+Sound: soft, aspirational trending audio.
+
+**2. value-fendi** — metric: tool clicks + saves
+> That Baguette from Emily in Paris? New, the medium runs about $3,900. A classic
+> Zucca Baguette on the resale market right now sits around $1,000 to $1,300. Same
+> bag, three times over. This is why I check the resale range before I ever pay retail.
+> #fendi #fendibaguette #emilyinparis #preloved #luxuryresale #luxurycatalog
+Sound: trending audio pick. **Refresh both figures the day you post (live inventory).**
+
+**3. doc-flight** — metric: comments + follows
+> It did not go under the seat in front of me either. Four hours, full attention, zero
+> regrets. Tag someone who would do the exact same thing.
+> #handbagcollector #designerbags #luxurybags #relatable #luxurycatalog
+Sound: a comedic/relatable trending audio.
+
+**4. first-bag** — metric: saves + tool clicks (tips = the "more in caption")
+> Here's exactly what I'd do buying my first big girl bag: 1) Pick the shape you'll
+> actually carry, not the one that's trending. 2) Check what it sells for preloved
+> before you pay retail. 3) Learn two or three authentication markers for that exact
+> style. 4) Buy from a seller with real, in-hand photos and a return window. 5) Budget
+> a little extra for a liner and dust bag. Save this for when you're ready.
+> #firstluxurybag #designerbags #howtobuyluxury #authentication #luxurycatalog
+Sound: trending audio pick.
+
+**5. hermes-game** — metric: saves + follows (tips = the "more in caption")
+> I wish someone had told me this before I tried to play the Hermès game: you don't
+> have to play it. The bag you actually want is often on the resale market right now,
+> no years-long relationship or spending quota required. Check the resale market
+> first, then decide.
+> #hermes #hermesbirkin #hermeskelly #luxuryresale #preloved #luxurycatalog
+Sound: trending audio pick.
+
+**6. macbook-fit** — metric: tool clicks + follows
+> The measurements and what actually fits inside are right on the bag's page. No more
+> 47 review videos to find out if your laptop fits. Follow for the facts behind every
+> bag.
+> #luxurybags #designerbags #whatfitsinmybag #baginsides #luxurycatalog
+Sound: trending audio pick.
+
+**7. junkie** — metric: comments + follows
+> No notes. No shame. I check resale prices for fun on bags I already own. Comment your
+> latest oops purchase and I'll go first.
+> #handbagcollector #designerbags #luxurybags #shopaholic #luxurycatalog
+Sound: trending audio pick.
+
+**8. hills** — metric: comments + saves
+> Hills I will die on as a handbag collector: purses never go on the ground (bacteria
+> and scuffs are real), you don't have to condition the leather as often as they say
+> (over-conditioning dries it out), and a bag liner should just come in the box at
+> these prices. What's yours?
+> #handbagcollector #baghacks #luxurybags #designerbags #luxurycatalog
+Sound: trending audio pick.
+
+*Outward-facing steps that stay with her: pick + add the trending sound in-app, wire
+any link + UTM (`utm_campaign=2026-07-swipe-batch-1`), and publish. Metricool staging
+needs her to reconnect the connector first.*
+
 ## Before anything posts
 - **Numbers:** only #4 carries figures (real, sourced, July 2026); refresh resale range day-of. No other draft is blocked on data.
 - **Live-page checks:** #2, #3, #5, #8 promise a destination; confirm each is live/populated or route to the closest live page. #1, #6, #7 route to home/data hub and are safe.
