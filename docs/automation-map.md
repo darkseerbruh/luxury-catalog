@@ -17,7 +17,7 @@ the cross-feed rules in §2 are binding on every scheduled run.*
 | **Market report** (monthly "State of the Resale Market") | DB `price_history` | factuality protocol (n-gated in `market-report-core.ts`) | `market-report-monthly` (1st): `npx tsx scripts/market-report.ts --write` | `docs/research-drafts/market-reports/` | ALL publishes (draft-only by design) |
 
 Still open, waiting on her: **comment engagement** (needs a non-Metricool pipe,
-e.g. Apify free tier), **GSC queries** (connect Search Console). *(Newsletter
+e.g. Apify free tier), **GSC query data → article engine** (GSC itself IS connected: domain verified + sitemap submitted 2026-06-22, desktop-todo D1; what is missing is the queries pipe, via CSV export or API grant). *(Newsletter
 opt-in SHIPPED 2026-07-06 — capture live once migration `0045` is applied;
 sending/campaigns still to build with the first send.)*
 
