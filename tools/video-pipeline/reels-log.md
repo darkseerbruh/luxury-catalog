@@ -24,19 +24,19 @@ lifted off the very bottom so it clears TikTok's caption + action buttons. Serif
 italic loaded in `load-font.ts`; style in `Page.tsx` / `CardFooter.tsx`. Batch 1 below
 re-rendered in this style.
 
-**2026-07-06 — data-comparison reel mode (Hero tier, new format).** Faceless two-bag value
-comparison rendered from designed 1080x1920 slides (brand ink+gold, Georgia serif) instead
-of b-roll: `scripts/make-compare-reel.py` builds 4 slides (question hook + both bags →
-resale price each → retention payoff with bars → CTA), `scripts/make-compare-reel.sh` adds a
-slow center push-in + 0.5s crossfades + silent AAC and stitches to ~12s. Every number is OUR
-tracked data, dated + n + source on-screen, with a "our estimate, not an appraisal" hedge;
-no appreciation claims. Replaces the wrong reflective b-roll card that was on the
-holds-value post. Rebuild: `REEL_SLIDES=<dir> python3 scripts/make-compare-reel.py` then
-`REEL_SLIDES=<dir> OUT=output/<name>.mp4 bash scripts/make-compare-reel.sh`.
+**2026-07-06 — data-comparison SLIDESHOW mode (Hero tier, new format).** Faceless same-world
+two-bag value comparison as a 5-slide 1080x1350 carousel (brand ink+gold, Georgia serif):
+`scripts/make-compare-slideshow.py` outputs discrete slides (cover question + both bags →
+resale price each → share-of-retail-kept with bars → the take → CTA). Numbers are OUR tracked
+data, dated + n + source on-screen, hedged "our estimate, not an appraisal"; no investment
+claims. **It ships AS a slideshow: we do NOT stitch these into a motion mp4** (owner rule
+2026-07-06 — a Ken-Burns push on a slide deck is a fake video). Pairing config at the top of
+the script (`PAIRS`), swap via `PAIR=<key>`. First superseded the wrong Flap-vs-Neverfull
+pairing (cross-tier, "different worlds") AND a fake-motion reel export — both retired.
 
 | Date | Concept | Mode | Source | Caption / script | Status |
 |------|---------|------|--------|------------------|--------|
-| 2026-07-06 | Which bag holds its value: Chanel Classic Flap vs LV Neverfull | data-comparison reel (4 designed slides, push-in + crossfade, ~12s) | brand cutouts (chanel-classic-flap.png, monogram neverfull.png); numbers = our resale tracking (Flap median $5,700 n=116 TRR Jun 2026; Neverfull MM ~$1,450 FP n=153 Jul 2026; retention ~88% vs ~55%) | On-screen: "Which bag actually holds its value?" → two resale prices → "how much of its original retail each one keeps" 88% vs 55% (hedged) → "compare any two bags yourself, free". Corrected caption drafted (owner's draft had Chanel $7,795/+18% and Neverfull -36%, none of which trace to our data). | **render done** `output/holds-value-flap-vs-neverfull.mp4`. NOT staged: owner reviews corrected numbers + caption first, then it goes to Metricool as a draft. `scripts/make-compare-reel.{py,sh}` |
+| 2026-07-06 | Which icon holds its value: Chanel Classic Flap vs Hermès Birkin 30 | data slideshow (5 slides, 1080x1350 carousel) | brand cutouts (chanel-classic-flap.png, hermes-birkin.png); numbers = our resale tracking (Flap median $5,700 n=116 TRR Jun 2026; Birkin 30 median ~$18,000 n=102 TRR 2026; retention ~88% vs ~155%) | On-screen: "Which icon actually holds its value?" → two resale medians → "how much of its retail each one keeps" 88% vs 155% (hedged, explains >100% = resells above retail because Hermès access-gates new) → "compare any two bags yourself, free". | **slides done** `scratchpad/slideshow/slide-{1..5}.png`. Same-world pairing (replaced the cross-tier Flap-vs-Neverfull). NOT staged: owner picks the pairing + reviews caption, then to Metricool. `scripts/make-compare-slideshow.py` |
 | 2026-07-06 | Love languages, handbag edition | text-card (one held clip, full hook in ONE textbox, font 52) | broll bank IMG_5193 (black CHANEL shopping bag on a cream quilted car seat, door open) | "What's your love language? Mine's Words of Authentication, Acts of Purchase, Receiving Gifts, Quality Leather, and Physical Unboxing." | **staged Metricool draft** (post 346160480, IG Reel + TikTok, 2026-07-06 18:00 ET, draft+autoPublish:false). Owner adds trending sound in-app + publishes. Silent render; ask-a-question hook invites "which one's yours" comments / stitch-your-own-swap. spec `examples/love-language.json` |
 | 2026-07-03 | Chanel 25: classic or Boy? (the debate) | talking-head + synced mic + 4 cued cutouts | `Chanel_2026_0 3.MOV` + `script 4.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (25, Classic Flap, Boy) VIDEO-USE library | Her script (kit 1 debate). Headline "Chanel 25: Classic or Boy?", CTA box luxurycatalog.com. Fixes: garbled CTA re-transcribed from clean mic ("search Chanel 2026 on luxurycatalog.com"), dropped final "comments." restored | draft v4 (captions aligned to audio; opens on scripted "Is the Chanel 25" via trim.json startPhrase, ad-lib "a tale of two futures" cut; passes npm run verify; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
 | 2026-07-03 | Every Chanel type, one pass (taxonomy) | talking-head + synced mic + 7 cued cutouts | `Chanel_2026_0 2.MOV` + `script 3.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (Classic Flap, Boy, WOC, 19, 22, 25, 31) VIDEO-USE library | Her script (kit 1 taxonomy). Headline "Every Chanel type, one pass", CTA box. Fixes: Deauville, 31 Rue Cambon, feed-not-feet, Totes | draft v2 (captions RE-ALIGNED to audio after the sync-delay caption bug fix; opens on her first word, 5.2s dead air cut; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
