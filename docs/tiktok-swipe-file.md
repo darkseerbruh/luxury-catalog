@@ -187,6 +187,18 @@ the voice reference for anything new. (Dupes noted where you sent a line twice.)
 - *…on having to put my purse on my lap for the entire meal because there's no
   spare chair and it's my baby.*
 
+> **Rules for this format (locked 2026-07-06):** it must be a genuine *struggle /
+> bad thing* (documentaries are about hardship, not flexes) · **collectors don't
+> purge**, so no downsizing/culling angles · **no partner/husband justification
+> content** (tradwife-coded) · the sweet spot is *absurd self-inflicted devotion*
+> (bag as a beloved dependent) or a *real collector hardship*. Must be
+> consequential, not trivial (a small-vs-large price gap is too inconsequential).
+> Approved new lines:
+> - *…on holding my bag the whole flight because I don't trust the overhead bin.*
+> - *…on re-buying, at triple the price, the exact bag I sold two years ago and
+>   never got over.*
+> - *…on being my bag's human umbrella so it stays dry while I don't.*
+
 **"Here's exactly what I would do if I were [big purchase]" — advice/authority**
 - *…buying my first big girl bag.*
 - *…considering buying a bag for thousands of dollars.*
