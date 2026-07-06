@@ -72,6 +72,9 @@ const headlineSchema = z.object({
 export const captionedVideoSchema = z.object({
   src: z.string(), // basename of a video file in public/
   zoom: z.number().default(BRAND.zoomIntensity),
+  // Fixed caption size in px for text-card videos (whole hook on one screen,
+  // wrapping). Undefined keeps the default auto-fit talking-head style.
+  captionFontPx: z.number().optional(),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
@@ -109,6 +112,7 @@ const SWITCH_CAPTIONS_EVERY_MS = 1200;
 export const CaptionedVideo: React.FC<Props> = ({
   src,
   zoom,
+  captionFontPx,
   overlays,
   rankTracker,
   rankList,
@@ -209,7 +213,7 @@ export const CaptionedVideo: React.FC<Props> = ({
             from={subtitleStartFrame}
             durationInFrames={dur}
           >
-            <SubtitlePage page={page} />
+            <SubtitlePage page={page} captionFontPx={captionFontPx} />
           </Sequence>
         );
       })}

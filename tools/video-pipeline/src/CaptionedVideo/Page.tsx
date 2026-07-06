@@ -16,7 +16,8 @@ import { CAPTION_FONT_FAMILY } from "../load-font";
 export const Page: React.FC<{
   readonly enterProgress: number;
   readonly page: TikTokPage;
-}> = ({ enterProgress, page }) => {
+  readonly captionFontPx?: number;
+}> = ({ enterProgress, page, captionFontPx }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
   const timeInMs = (frame / fps) * 1000;
@@ -27,16 +28,21 @@ export const Page: React.FC<{
     withinWidth: width * BRAND.captionWidthFraction,
     textTransform: BRAND.uppercase ? "uppercase" : "none",
   });
-  const fontSize = Math.min(BRAND.maxFontSizePx, fitted.fontSize, BRAND.fontSizePx);
+  // Text-card mode: a fixed size so the whole hook wraps onto one screen.
+  // Default mode: auto-fit the short spoken caption as before.
+  const isCard = typeof captionFontPx === "number";
+  const fontSize = isCard
+    ? captionFontPx
+    : Math.min(BRAND.maxFontSizePx, fitted.fontSize, BRAND.fontSizePx);
 
   return (
     <AbsoluteFill
       style={{
         justifyContent: "center",
         alignItems: "center",
-        top: undefined,
-        bottom: BRAND.bottomOffsetPx,
-        height: 220,
+        top: isCard ? 0 : undefined,
+        bottom: isCard ? 0 : BRAND.bottomOffsetPx,
+        height: isCard ? undefined : 220,
         paddingLeft: 48,
         paddingRight: 48,
       }}
@@ -48,7 +54,8 @@ export const Page: React.FC<{
           fontWeight: BRAND.fontWeight,
           letterSpacing: BRAND.letterSpacingPx,
           textAlign: "center",
-          lineHeight: 1.15,
+          lineHeight: isCard ? 1.28 : 1.15,
+          maxWidth: isCard ? width * BRAND.captionWidthFraction : undefined,
           color: BRAND.captionColor,
           textShadow: BRAND.captionShadow,
           textTransform: BRAND.uppercase ? "uppercase" : "none",
@@ -69,7 +76,7 @@ export const Page: React.FC<{
               key={t.fromMs}
               style={{
                 display: "inline",
-                whiteSpace: "pre",
+                whiteSpace: isCard ? "pre-wrap" : "pre",
                 color: active ? BRAND.activeWordColor : BRAND.captionColor,
                 transition: "color 0.1s",
               }}
