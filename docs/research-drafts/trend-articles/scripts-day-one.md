@@ -32,6 +32,17 @@ SPOKEN-STYLE RULES: superseded by docs/script-requirements.md (the canonical lis
 7. Hedge economy: ONE hedge per script; do not stack "estimate not appraisal" onto "dated comps".
 8. Finish every metaphor; prefer plain idioms over writerly ones.
 
+ON-SCREEN LAYER (added 2026-07-05, post/edit only, NO re-filming): each take now carries a
+🖥️ ON-SCREEN line = burned text overlays added in the edit/render pass, to satisfy the
+video-performance rules in docs/script-requirements.md (24 layered hook, 25 reason-to-stay,
+27 follow ask, 29 categorization) without changing a spoken word.
+- HOOK: a written hook in the viewer's real search words, burned over the first ~2 seconds.
+- KEYWORD: the actual term people type (feeds algorithm categorization). The site key
+  ("chanel 2026", "lv nine") stays only in the spoken CTA + the caption pin.
+- FOLLOW: an end-card follow ask, on screen because it is never spoken (our current goal).
+- OPEN LOOP (some takes): a mid-video text teaser that holds the watch to the payoff.
+These re-render the video; they do NOT re-film it.
+
 -->
 
 # Day-one scripts: Chanel in 2026 + the LV gap series
@@ -46,16 +57,22 @@ spoken search key `chanel 2026` in plain text so it pins the article at `/search
 Paste into a Metricool draft with the file; format = Reel (TikTok + Instagram).
 
 **1. Starter map** (`chanel-starter-map`) · TikTok title: *Chanel in 2026, finally decoded*
-> New to Chanel and your feed's a mess? Here's the 2026 starter map with real pre-loved prices. One icon (the Classic Flap), one original (the 2.55), three newcomers named for their birth year (the 19, the 22, the 25), and one entry door (the WOC). Every number is a pre-loved asking median from the prices I track. Search chanel 2026 on luxurycatalog.com and it comes up first. Which Chanel keeps showing up in your feed?
+> New to Chanel and your feed's a mess? Here's the 2026 starter map with real pre-loved prices. One icon (the Classic Flap), one original (the 2.55), three newcomers named for their birth year (the 19, the 22, the 25), and one entry door (the WOC). Every number is a pre-loved asking median from the prices I track. Search chanel 2026 on luxurycatalog.com and it comes up first. Follow for the full Chanel map, one video at a time. Which Chanel keeps showing up in your feed?
 > #chanel #chaneltok #bagtok #pursetok #preloved #chanel25
+>
+> 🖥️ ON-SCREEN (re-render, no re-film): HOOK burn 0–2s "Chanel, decoded for 2026" · KEYWORD chip: chanel 25 · FOLLOW end card "Follow for the full Chanel map →"
 
 **2. Taxonomy** (`chanel-taxonomy`) · TikTok title: *Every Chanel type, in one video*
-> Every Chanel bag type in one pass. The Classic Flap (quilted, chain through leather), the 2.55 (the original, Mademoiselle lock), the Boy, the WOC, and the year-named lines: the 19, the 22, the 25. One trap to dodge: the 31 isn't a year, it's the address, 31 Rue Cambon. The rule since 2019: the everyday lines take their birth year, not a size. Search chanel 2026 on luxurycatalog.com for what each actually resells for. Which one did you not know the name of?
+> Every Chanel bag type in one pass. The Classic Flap (quilted, chain through leather), the 2.55 (the original, Mademoiselle lock), the Boy, the WOC, and the year-named lines: the 19, the 22, the 25. One trap to dodge: the 31 isn't a year, it's the address, 31 Rue Cambon. The rule since 2019: the everyday lines take their birth year, not a size. Search chanel 2026 on luxurycatalog.com for what each actually resells for. Follow for the full Chanel map, one video at a time. Which one did you not know the name of?
 > #chanel #chaneltok #bagtok #pursetok #chanelclassicflap #handbags
+>
+> 🖥️ ON-SCREEN (re-render, no re-film): HOOK burn 0–2s "Every Chanel bag type, one video" · KEYWORD chip: chanel bag types · FOLLOW end card "Follow for the full Chanel map →"
 
 **3. The debate** (`chanel-25-debate`) · TikTok title: *Chanel 25: future classic or future Boy?*
-> Is the Chanel 25 a future classic like the Classic Flap, or does it go the way of the Boy (the hot Chanel of the 2010s, now all over resale for less)? My comps show what each future looks like, and it's too early to call. Anyone handing you a verdict today is guessing. My take, not a rule: buy it if you'll carry it, not for resale. Search chanel 2026 on luxurycatalog.com. Already decided? Tell me your take.
+> Is the Chanel 25 a future classic like the Classic Flap, or does it go the way of the Boy (the hot Chanel of the 2010s, now all over resale for less)? My comps show what each future looks like, and it's too early to call. Anyone handing you a verdict today is guessing. My take, not a rule: buy it if you'll carry it, not for resale. Search chanel 2026 on luxurycatalog.com. Follow for the full Chanel map, one video at a time. Already decided? Tell me your take.
 > #chanel #chanel25 #chaneltok #bagtok #pursetok #resale
+>
+> 🖥️ ON-SCREEN (re-render, no re-film): HOOK burn 0–2s "Chanel 25: future classic?" · OPEN LOOP ~4s "or the next Boy?" · KEYWORD chip: chanel 25 worth it · FOLLOW end card "Follow for the full Chanel map →"
 
 *Metricool auto-drafting is blocked until the render is at a public URL (the API needs
 media as a public link; local files can't attach). Create manually, or enable a public
@@ -67,23 +84,33 @@ video host to make it zero-touch.*
 
 ### 1. The Explainer (~50s, ~135 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Chanel bags, decoded for 2026" · KEYWORD chip: chanel 25 · FOLLOW end card "Follow for the full Chanel map →"
+
 Alt opens if the default hook feels slow: "Chanel comment sections are a mess right now, so let's clean it up." or "Three Chanel questions keep going viral. One video, all three."
 
 Chanel renamed half its lineup after numbers, and the comment sections are a mess of people correcting each other. Here's the clean version. The Chanel 25 is the new everyday line, introduced in 2025: Softer and lighter than a Chanel Classic Flap, built to be carried daily, not babied. It's behind nearly three million TikTok searches a month, per TikTok's Creative Center this July. The other headline is the maxi flap, the oversized piece from Matthieu Blazy's first Chanel collection, which creators report launched in March. And then there are the names. Since 2022, Chanel names new lines after the year they arrive. The Chanel 22, the Chanel 25. Those are birth years, not sizes. Chanel itself is just a surname, Gabrielle's; no hidden meaning. Every claim in this video checks against the twenty thousand plus real prices I track at Luxury Catalog. I'm Arielle, and every bag is decoded at Luxury Catalog dot com. Search chanel 2026, and it comes up first.
 
 ### 2. The Blazy Decode (~40s, ~105 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The Chanel maxi flap, explained" · KEYWORD chip: chanel maxi flap · FOLLOW end card "Follow for the full Chanel map →"
+
 That Chanel maxi flap all over your feed is a debut-collection story. Matthieu Blazy, the designer who previously ran Bottega Veneta, showed his first Chanel collection for spring 2026, and the maxi flap is the piece everyone latched onto. Creators report a Paris launch in early March and worldwide around March 13; I'm treating those dates as reported until I can pin them down. Per TikTok, it's been carried by Dua Lipa, Hailey Bieber, Kendall, and Jennie, and people are framing it as the end of the micro-bag era. Oversized is the new season's statement. I'm Arielle, I track this stuff at Luxury Catalog, and the full decode is on the site. Search chanel 2026.
 
 ### 3. The Taxonomy (~45s, ~130 words)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Every Chanel bag type, one video" · KEYWORD chip: chanel bag types · FOLLOW end card "Follow for the full Chanel map →"
 
 Every Chanel bag type, one pass. The Chanel Classic Flap is the quilted one, with the chain woven through leather and the CC turn-lock. Sizes run mini, in square and rectangular, then small, then medium, which is the default people mean, then jumbo and maxi. The Chanel 2.55 is the original, named for its debut in February 1955; the tells are a rectangular Mademoiselle lock and a chain with no leather through it. The Chanel Boy is the boxier flap with the chunkier chain. The Chanel WOC means wallet on chain, and it's the price entry point to the flap family. The Chanel 22 is the soft slouchy one from 2022. The Chanel 25 is the 2025 everyday line. Totes are the open-top side, currently led by the Chanel Deauville. One rule ties it all together: Since 2022, the numbers are birth years, not sizes. I'm Arielle, I track what every one of these actually resells for at Luxury Catalog, and the full taxonomy is on the site. Search chanel 2026.
 
 ### 4. The Debate (~25s, ~75 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Chanel 25: future classic?" · OPEN LOOP ~4s "or the next Boy?" · KEYWORD chip: chanel 25 worth it · FOLLOW end card "Follow for the full Chanel map →"
+
 Is the Chanel 25 a future classic like the Chanel Classic Flap, or is it headed the way of the Chanel Boy? It's too early to call, and anyone handing you a verdict is guessing. What I watch instead is preloved supply and asking prices in my Luxury Catalog data over the next year, because new lines start thin and the numbers fill in. My take, not a rule: Buy it because you'd carry it, not for its resale fate. I'm Arielle, and the longer read is on the site, search chanel 2026. If you've already picked a side, tell me which one in the comments.
 
 ### 5. The Reply stub (3 alternate one-line openers for reply-to-comment videos)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s = the commenter's question restated in their words · KEYWORD chip: the bag/topic asked about · FOLLOW end card "Follow for the full Chanel map →"
 
 1. "Good question, and half this comment section has it wrong, so let's fix it."
 2. "You're close. One detail changes the answer."
@@ -95,42 +122,63 @@ Is the Chanel 25 a future classic like the Chanel Classic Flap, or is it headed 
 
 ### Pillar (~50s, ~125 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "9 Louis Vuitton bags nobody films" · KEYWORD chip: underrated louis vuitton bags · FOLLOW end card "Follow for all 9 →"
+
 Alt opens if the default hook feels slow: "TikTok has a Louis Vuitton blind spot, and it's nine bags wide." or "Six-figure searches. Almost nobody making the videos. Let's talk about it."
 
 There's a strange gap on TikTok right now. Nine Louis Vuitton bags each pull five and six figure monthly searches, and every single one has fewer than 200 creators covering it. That's straight from TikTok Creative Center, pulled this July. Huge demand, almost no videos, and that combination usually means the market knows something the algorithm hasn't caught up to yet. So I'm doing all nine: What each bag actually is, who it suits, and what the preloved market shows, with every price an estimate from dated comps, never an appraisal. My take, and it's exactly that, a take: These are the bags to shop before the videos arrive, not after. I'm Arielle. I run Luxury Catalog, where I track more than twenty thousand real asking and sold prices across the major resale sites, so what you hear is tracked, not guessed. The whole list is live at Luxury Catalog dot com. Search lv nine, and it comes up first.
 
 ### 1. Liv Pochette (~28s, ~85 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Which Louis Vuitton Pochette?" · KEYWORD chip: lv pochette · FOLLOW end card "Follow for all 9 →"
+
 When TikTok searches "lv pochette," the bag people mostly mean is the Louis Vuitton Liv Pochette, one of the newer named models. It sits in the pochette family next to the Louis Vuitton Pochette Accessoires, the little 90s monogram pouch on a strap that fits a phone, a cardholder, and lip balm, plus the Metis and the Eva. Suits anyone who wants the smallest entry into monogram; the honest caveat is that small is the whole job. Preloved read: The Liv itself asks around eighteen hundred and ninety-five dollars, but that's from just five listings, so hold it loosely. The classic Louis Vuitton Pochette Accessoires asks around seven hundred and seventy-eight dollars, from fourteen. My estimates, tracked early July 2026. I'm Arielle, and I track prices like that one at Luxury Catalog. The full family comparison is on the site. Search lv nine.
 
 ### 2. Boulogne PM (~27s, ~80 words)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The most slept-on Louis Vuitton" · KEYWORD chip: louis vuitton boulogne · FOLLOW end card "Follow for all 9 →"
 
 The Louis Vuitton Boulogne PM is my pick for the most overlooked everyday shape in the lineup. A rounded monogram shoulder bag, known for a braided strap detail, and it zips fully shut, which anyone who's ridden a subway with a flap bag will appreciate. It sits close to the body and doesn't announce itself across a room. One honest note: Strap and hardware details have varied, so check the exact listing. Preloved read: Around two thousand one hundred and ninety dollars, from a dozen listings I tracked in early July. My estimate from comps, not an appraisal. I'm Arielle. I track what these actually sell for at Luxury Catalog; the full series is on the site, search lv nine. Would you carry a bag this quiet? Tell me in the comments.
 
 ### 3. Cosmetic pouch (~30s, ~90 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The Louis Vuitton cosmetic pouch hack" · OPEN LOOP ~4s "a mini bag for a fraction" · KEYWORD chip: lv cosmetic pouch · FOLLOW end card "Follow for all 9 →"
+
 The Louis Vuitton cosmetic pouch is sold as a makeup bag, and TikTok made it famous for the conversion: Add an aftermarket chain and it becomes a mini bag for a fraction of a mini bag's price. Two honest things first. It was never built to be worn, so the trim takes strap stress it wasn't designed for. And a modification can affect resale. Know both tradeoffs and want it anyway? I don't judge. Preloved read: The pouch asks around four hundred and ninety-five dollars preloved, while the classic Louis Vuitton Pochette Accessoires runs around seven hundred and seventy-eight. That gap is where the hack lives. Early July numbers, my estimates. I'm Arielle, and running the math past the hype is what I do at Luxury Catalog. The full math is on the site. Search lv nine.
 
 ### 4. Lineup BB and MM (~27s, ~80 words)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Louis Vuitton Lineup vs Speedy" · KEYWORD chip: louis vuitton lineup · FOLLOW end card "Follow for all 9 →"
 
 The Louis Vuitton Lineup is the current everyday monogram line people keep cross-shopping against the Louis Vuitton Speedy 20, and the headline is simple: The MM fits a laptop, which almost nothing in classic monogram does gracefully. The BB is the pick if the Louis Vuitton Speedy's hand-carry shape never worked for you. The caveat is newness; preloved comps are still building. Preloved read: Too new for a fair read yet. I found two listings, and two listings isn't data, so I won't pretend it is. I'm Arielle. I track both bags' prices at Luxury Catalog; the full list is on the site, search lv nine. Louis Vuitton Speedy 20 or the Lineup, which side are you on? Tell me in the comments.
 
 ### 5. Montsouris (~28s, ~85 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "LV Montsouris: vintage vs reissue" · KEYWORD chip: louis vuitton montsouris · FOLLOW end card "Follow for all 9 →"
+
 The Louis Vuitton Montsouris is the monogram drawstring backpack from the 90s, reissued in modern sizes, plus a new Cargo version in denim. Hands-free, holds a water bottle and a light layer, which is why the TikTok on it is all commuters and moms. The quiet money angle: Vintage originals still circulate for less than the reissue. The caveat comes with it; inspect condition on a decades-old bag. Preloved read: Vintage MMs ask around nine hundred and ninety-five dollars, while the reissue sizes run from about seventeen hundred to two thousand. Small samples, early July, but the vintage discount looks real. My estimates from dated comps. I'm Arielle, and reads like the vintage-versus-reissue gap are exactly why I built Luxury Catalog. The full story is on the site. Search lv nine.
 
 ### 6. Neverfull PM (~27s, ~80 words)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "Neverfull PM or MM?" · OPEN LOOP ~4s "the 45-dollar surprise" (holds to the payoff) · KEYWORD chip: neverfull pm vs mm · FOLLOW end card "Follow for all 9 →"
 
 Everyone covers the Louis Vuitton Neverfull MM. Nobody covers the PM, the smallest one, and it's the version petite frames actually want, the Louis Vuitton Neverfull look without carrying a duffel. It's a genuinely compact tote, and that's also the honest caveat: Everyday cargo yes, laptop no. Worth checking whether the PM is still in current production; preloved is where it reliably lives. Preloved read: Here's the twist. The PM asks around fourteen hundred and fifty dollars and the MM around fourteen hundred and ninety-five, from over a hundred listings each in my early-July comps. The smaller bag saves you about forty-five dollars. So size down for fit, not for savings. That's the real finding. I'm Arielle. I track the sizes separately at Luxury Catalog, because the spread is the story; the full read is on the site, search lv nine. Are you team PM or team MM? Tell me in the comments.
 
 ### 7. Alma PM (~30s, ~90 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The most underrated Louis Vuitton classic" · KEYWORD chip: louis vuitton alma pm · FOLLOW end card "Follow for all 9 →"
+⚠️ HOLD: this take still has a spoken [DATA] slot below, so it is not recordable/postable until the number is filled. On-screen text can't cover a missing spoken price.
+
 The Louis Vuitton Alma PM is the structured dome bag, with design roots that reportedly go back to the house's 1930s, and the most underrated classic on this list. If you hate bags that slump into a puddle, this is the one that won't. And in Epi, the ridged leather, rain stops being a worry and there's no pale vachetta to baby. That's also the caveat: Classic monogram versions come with the vachetta Epi avoids. My take, and it's mine, not the market's: vintage Epi Almas are one of the quiet value plays in Louis Vuitton. Preloved read: [DATA: Alma PM asking/sold median, monogram vs Epi split, + n + date]. I'm Arielle. I track these prices at Luxury Catalog, dated and counted. The full case is on the site. Search lv nine.
 
 ### 8. Slouchy (~26s, ~80 words)
 
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The LV that carries like a Chanel 22" · KEYWORD chip: louis vuitton slouchy · FOLLOW end card "Follow for all 9 →"
+
 The Louis Vuitton Slouchy PM is exactly what the name promises: A soft, unstructured monogram hobo that collapses against your side instead of holding a shape. If you love the Chanel 22 but live in the Louis Vuitton universe, this is your lane, and it's the cure for stiff corners digging into your hip. The caveat is that it's a newer line, so details are still being confirmed and preloved supply may run thin. Preloved read: The MM asks around two thousand four hundred and ten dollars, from just ten listings, and the PM is still too thin to read. Early July, hold it loosely. I'm Arielle, and thin-supply reads like this one are exactly what I track at Luxury Catalog. More on the site. Search lv nine.
 
 ### 9. CarryAll (~27s, ~80 words)
+
+🖥️ ON-SCREEN (post edit, no re-film): HOOK burn 0–2s "The Louis Vuitton that zips shut" · KEYWORD chip: louis vuitton carryall · FOLLOW end card "Follow for all 9 →"
 
 The Louis Vuitton CarryAll is the curved-top monogram tote that zips closed, which the Louis Vuitton Neverfull famously doesn't. It's the do-everything bag in the current lineup: Work, weekend, the gym you keep meaning to go to. Suits the one-bag person who wants the whole day in it and zipped. One note, sizes and closure details vary by version, so confirm the exact one in your listing. Preloved read: The PM asks around three thousand and sixty-five dollars preloved, from a thin twenty listings we tracked in early July, so hold that number loosely. I'm Arielle. I track real resale prices at Luxury Catalog, dated and counted. The full rundown is on the site. Search lv nine.
