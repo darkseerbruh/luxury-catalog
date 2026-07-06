@@ -110,3 +110,35 @@ Three surfaces, by altitude:
 
 The runner owns delivery; the agent owns judgment and writes the doc. The agent ends its
 run with the `URGENT_PUSH:` / `EMAIL_BODY:` contract block the runner parses.
+
+---
+
+## 6. The implementer — closing the loop (owner-locked 2026-07-06: "everything circular, self-updating")
+
+A decision that sits OPEN is a loop left open. From 2026-07-06, every decision written
+in the §4 format also carries a **`Class:`** line, and the weekly run implements what
+is safe to implement.
+
+**Class: AUTO** — implementable unattended. ALL must hold:
+- in-repo change only, reversible via git;
+- not outward-facing (never: email, public posts, paid sign-ups, DNS, **DB migrations**);
+- does not change a published number, price, value claim, or hedge;
+- does not touch the protected primary nav, brand position, or the strategy docs' bets;
+- expected to pass the green gate (tsc / eslint / build / tests).
+
+**Class: OWNER** — everything else: strategy forks, spend, outward ops, anything the
+ENFORCED block reserves for her. These stay OPEN in the feed, as today.
+
+**Implementation protocol (weekly run, after the brief is written):**
+1. Collect every OPEN `Class: AUTO` decision (including prior weeks' backlog), oldest first.
+2. Implement up to **3 per run** (bounded compute) in a fresh temp worktree off
+   `origin/main` (`git worktree add`), never in the analyst worktree itself.
+3. Land each via `scripts/land-to-main.sh` (the green gate lives inside it). A failed
+   gate = revert, leave the decision OPEN with the failure note. Never force.
+4. Flip each landed decision to **`DECIDED (auto-implemented <date>, commit <sha>)`**
+   and list them in the email digest under **"Implemented this week"** so she always
+   sees what the system changed on its own.
+5. Anything skipped by the 3-cap stays OPEN with "queued for next run".
+
+Classification of the pre-2026-07-06 backlog: the first weekly run after this section
+lands re-reads the OPEN feed and adds the `Class:` line to each before implementing.

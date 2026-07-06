@@ -213,3 +213,7 @@ skill + §8 slop sweep, live-page link verified, search key registered + QA gate
   under 7 days. Silent unless something happened.
 - Notifications follow the analyst pattern: the phone is a high bar; a run that
   found nothing says nothing.
+- **Cross-feed (binding, `docs/automation-map.md` §2):** an outperformer with no
+  covering site article also spawns an `docs/article-backlog.md` item; weekly
+  runs read `docs/article-backlog.md`'s results log for article winners worth a
+  social series.
