@@ -317,6 +317,18 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
   on the condensed voice notes in this file.
 - **The voice is a standing gate, not a one-time pass.** Parallel feature sessions ship user-facing copy *without* the guide and reintroduce banned patterns — a later overhaul re-added the hype word *"definitive"* in the footer and leaked an internal *"migration 0014"* string into a user-facing error. So when `main` moves or you reconcile sessions, **re-check new/changed user-facing copy against `docs/voice-and-tone.md`** and fix the drift. Mechanics that held up well: a copy-only pass touching *only* display strings (headings, labels, empty states, errors, metadata) while leaving code/structure/data untouched, **preserving every hedge & legal disclosure verbatim**, and **never inventing facts** (e.g. dropped an "what it's worth" CTA on `/identify` because the tool returns no value).
 
+## Short-form video + social content (locked) — canonical: `docs/tiktok-swipe-file.md` §9 (copy + per-type) · `docs/video-accessibility.md` (rendering, non-negotiable)
+- **Keep her hooks verbatim.** Never trim or paraphrase, especially the TikTok opener ("I don't know who needs to hear this but…", "Friendly reminder…", "I'm not afraid to admit…", "I wish someone had told me…"). Every post keeps its hook.
+- **Collectors don't purge.** No downsizing/culling angles.
+- **No partner/husband-justification content** (tradwife-coded).
+- **No industry jargon; casual over precise.** Write how a nervous real buyer talks.
+- **Real problems only** (no manufactured non-issues).
+- **First-person opinion hooks get NO robotic statistical hedging** — her take on one specific bag IS the hedge (the narrow exception; on-site value claims still hedge + cite).
+- **Text-card reels = one held clip (no cuts), text on screen from frame 0 (no pop-in), Playfair serif uniform** (not the per-word caption sweep), brand footer lifted off the bottom.
+- **Accessibility is non-negotiable:** min on-screen text 46px (headline ≥56); cream text ALWAYS on a dark backing (shadow alone fails on bright footage); verify on the BRIGHTEST frame.
+- **Footage:** no people walking into frame (trim or replace); match motion to the message (low-motion window under calm copy); keep text off a centered subject (`pos:"top"`).
+- **Per-type layout:** tips posts = headline + small "(more in caption)"; listicles ("Hills I will die on") = the bulleted list ON the page; confessional = shrinking line sizes.
+
 ## Surfacing features on the home/entry pages (UX copy)
 - **CTA copy = max 3 words** (4 only in a rare case). "Save your read, get your matches" is too long; use "Save it" / "Create account" / "See my bags." Sell the value *around* the button, never on it.
 - **Name a feature one way.** The taste feature is **"Style read"** (the feature) + **"What your style says"** (the line); don't also call it "Find your taste," "Your read," or "What your style does." Pick one name per thing and use it everywhere.
