@@ -340,6 +340,8 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Accessibility is non-negotiable:** min on-screen text 46px (headline ≥56); cream text ALWAYS on a dark backing (shadow alone fails on bright footage); verify on the BRIGHTEST frame.
 - **Footage:** no people walking into frame (trim or replace); match motion to the message (low-motion window under calm copy); keep text off a centered subject (`pos:"top"`).
 - **Per-type layout:** tips posts = headline + small "(more in caption)"; listicles ("Hills I will die on") = the bulleted list ON the page; confessional = shrinking line sizes.
+- **Publish-time default = 10:00 ET, then 18:00, then 12:00; one post per slot per day.** Metricool best-time peak on both IG + TikTok (2026-07-06). Canonical: `docs/social-content-calendar.md` §3.5.
+- **Keep-warm b-roll = only per `tools/video-pipeline/broll-manifest.json`** (owner-reviewed in/out windows, tags, rejects). Never pull a clip or range it marks reject/hold.
 
 ## Surfacing features on the home/entry pages (UX copy)
 - **CTA copy = max 3 words** (4 only in a rare case). "Save your read, get your matches" is too long; use "Save it" / "Create account" / "See my bags." Sell the value *around* the button, never on it.

@@ -1,0 +1,1202 @@
+{
+  "_doc": "Owner-reviewed b-roll usage manifest (2026-07-06). ranges=[in,out] usable seconds. status: use | reject | hold. Default for un-annotated clips = full clip, good throughout. Source folder: ~/Documents/handbag-campaign-images/broll/B roll.",
+  "clips": [
+    {
+      "clip": "IMG_6332.MOV",
+      "duration": 268.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7
+        ]
+      ],
+      "tags": [],
+      "note": "Only reuse the opening segment already pulled (aff-deserve). Rest of the clip has her on camera, do not pull new segments."
+    },
+    {
+      "clip": "IMG_6668.MOV",
+      "duration": 198.4,
+      "status": "use",
+      "ranges": [
+        [
+          90,
+          198.4
+        ]
+      ],
+      "tags": [],
+      "note": "Usable from 1:30 on."
+    },
+    {
+      "clip": "IMG_7431.MOV",
+      "duration": 188.6,
+      "status": "use",
+      "ranges": [
+        [
+          55,
+          188.6
+        ]
+      ],
+      "tags": [
+        "playful",
+        "whimsical",
+        "fun",
+        "contemplative"
+      ],
+      "note": "Good after 0:55."
+    },
+    {
+      "clip": "IMG_6683.MOV",
+      "duration": 146.0,
+      "status": "use",
+      "ranges": [
+        [
+          93,
+          146.0
+        ]
+      ],
+      "tags": [
+        "contemplative",
+        "luxury",
+        "moody"
+      ],
+      "note": "Anything after 1:33."
+    },
+    {
+      "clip": "IMG_2607.MOV",
+      "duration": 67.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          37
+        ],
+        [
+          56,
+          67.2
+        ]
+      ],
+      "tags": [],
+      "note": "Two subjects, treat as two clips: A 0:00-0:37, B 0:56-end."
+    },
+    {
+      "clip": "IMG_2582.MOV",
+      "duration": 55.0,
+      "status": "use",
+      "ranges": [
+        [
+          23,
+          55.0
+        ]
+      ],
+      "tags": [],
+      "note": "Horizontal until 0:23; only use after 0:23."
+    },
+    {
+      "clip": "IMG_2609.MOV",
+      "duration": 43.4,
+      "status": "use",
+      "ranges": [
+        [
+          17,
+          43.4
+        ]
+      ],
+      "tags": [],
+      "note": "She is in it (ok). Use only after setup, from 0:17."
+    },
+    {
+      "clip": "IMG_2588.MOV",
+      "duration": 37.5,
+      "status": "reject",
+      "ranges": [],
+      "tags": [],
+      "note": "Too much movement. Do not reuse going forward. (junkie.json draft already built on it is cleared to post as-is, per owner 2026-07-06.)"
+    },
+    {
+      "clip": "IMG_2607(1).mov",
+      "duration": 35.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          35.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6240.MOV",
+      "duration": 35.4,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          21
+        ]
+      ],
+      "tags": [],
+      "note": "Good until 0:21, boring after; do not use past 0:21."
+    },
+    {
+      "clip": "IMG_2582(1).mov",
+      "duration": 33.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          33.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6220.mov",
+      "duration": 28.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          28.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_2561.MOV",
+      "duration": 28.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          28.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_6283.mov",
+      "duration": 27.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          27.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_2581.MOV",
+      "duration": 25.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          15
+        ]
+      ],
+      "tags": [],
+      "note": "Good until 0:15."
+    },
+    {
+      "clip": "IMG_2925.mov",
+      "duration": 23.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          23.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "66E0BCBA-F925-4361-A170-E92CA55A9E2D-10295-00000565145888FC.mov",
+      "duration": 22.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          22.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_0014.MOV",
+      "duration": 20.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          20.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_2578.MOV",
+      "duration": 19.3,
+      "status": "reject",
+      "ranges": [],
+      "tags": [],
+      "note": "Too much movement. CUT."
+    },
+    {
+      "clip": "IMG_2585.MOV",
+      "duration": 16.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          16.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_2558.MOV",
+      "duration": 16.3,
+      "status": "use",
+      "ranges": [
+        [
+          5.5,
+          11
+        ]
+      ],
+      "tags": [],
+      "note": "Most stable in the middle, looking at the lake."
+    },
+    {
+      "clip": "IMG_7106.MOV",
+      "duration": 16.0,
+      "status": "use",
+      "ranges": [
+        [
+          4,
+          16.0
+        ]
+      ],
+      "tags": [],
+      "note": "Start at 0:04."
+    },
+    {
+      "clip": "IMG_2606.MOV",
+      "duration": 15.0,
+      "status": "reject",
+      "ranges": [],
+      "tags": [],
+      "note": "Can be cut. CUT."
+    },
+    {
+      "clip": "IMG_3053.MOV",
+      "duration": 14.9,
+      "status": "hold",
+      "ranges": [
+        [
+          0,
+          14.9
+        ]
+      ],
+      "tags": [
+        "waterfall",
+        "distinctive"
+      ],
+      "note": "Waterfall, cool + different. Use-case TBD (not sure when appropriate for our content)."
+    },
+    {
+      "clip": "IMG_2459.MOV",
+      "duration": 14.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          14.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_6112.mov",
+      "duration": 14.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          14.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout."
+    },
+    {
+      "clip": "IMG_1345.MOV",
+      "duration": 14.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          14.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5443.MOV",
+      "duration": 13.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          13.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "0F2CF5E0-0315-4FF0-8F30-7F986659B4B3-5396-00000239B02EFE69.mov",
+      "duration": 13.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          13.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_0229.MOV",
+      "duration": 12.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          12.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2462.MOV",
+      "duration": 12.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          12.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2736.MOV",
+      "duration": 12.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          12.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_0963.MOV",
+      "duration": 11.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          11.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6243.MOV",
+      "duration": 10.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          10.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2602.MOV",
+      "duration": 10.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          10.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6280.mov",
+      "duration": 9.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          9.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5442.MOV",
+      "duration": 9.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          9.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1404.mp4",
+      "duration": 9.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          9.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7165.MOV",
+      "duration": 8.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          8.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "2022_10_06_13_56_35_58868_101860_6867892081.mov",
+      "duration": 8.4,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          8.4
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "BCA39342-5344-4285-AB50-F7627F5461D0-5396-0000023AF3C3793D.mov",
+      "duration": 8.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          8.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_0272.MOV",
+      "duration": 8.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          8.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1445.mp4",
+      "duration": 8.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          8.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_8736.MOV",
+      "duration": 7.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_8737.MOV",
+      "duration": 7.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_1_a792e47eb3f343f7b8ee310c985111cb.mp4",
+      "duration": 7.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2790.MOV",
+      "duration": 7.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "5FCDDC29-43A2-4F46-B390-2F7071486B56-60297-00000A457FFC0A6A.mov",
+      "duration": 7.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7684.MOV",
+      "duration": 7.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          7.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_4162.MOV",
+      "duration": 6.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1461.MOV",
+      "duration": 6.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5614.MOV",
+      "duration": 6.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2605.MOV",
+      "duration": 6.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_3851(1).mov",
+      "duration": 6.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5852.MOV",
+      "duration": 6.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1405.mp4",
+      "duration": 6.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1834.MOV",
+      "duration": 6.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2601.MOV",
+      "duration": 6.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_3644.MOV",
+      "duration": 6.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "clouds-flight.mp4",
+      "duration": 6.1,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          6.1
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "2EFD5922-C860-4572-8007-3CF8FC2457BC.mp4",
+      "duration": 5.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1470.MOV",
+      "duration": 5.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_3563.MOV",
+      "duration": 5.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7428.MOV",
+      "duration": 5.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1349.MOV",
+      "duration": 5.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2460.MOV",
+      "duration": 5.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_0264.MOV",
+      "duration": 5.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_3851.mov",
+      "duration": 5.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video.mov",
+      "duration": 5.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          5.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7931.MOV",
+      "duration": 4.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5508.MOV",
+      "duration": 4.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7426.MOV",
+      "duration": 4.5,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.5
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_5193.MOV",
+      "duration": 4.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7429.MOV",
+      "duration": 4.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1543.MOV",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1556.MOV",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6858.MOV",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_0_20f2572e6ddb432dbd711a5cf62e6d66.mp4",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_0_b33e22c438de426b8fdfe96365557f0a.mp4",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_1_69ef75db2e314be1a763ad90c42a3af0.mp4",
+      "duration": 4.0,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          4.0
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2884.MOV",
+      "duration": 3.9,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.9
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_1549.mp4",
+      "duration": 3.8,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.8
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_7250.MOV",
+      "duration": 3.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2461.MOV",
+      "duration": 3.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_1_4429c0def79a428d8613dc7e809ccbe7.mp4",
+      "duration": 3.6,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.6
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "video_1_bdbc4930db044f4b82728c31a509c2fc.mp4",
+      "duration": 3.3,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.3
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_0837.MOV",
+      "duration": 3.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_2586.MOV",
+      "duration": 3.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6604.MOV",
+      "duration": 3.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          3.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "192EDE03-F28F-4209-A3C9-83F25DB9E127.mov",
+      "duration": 2.4,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          2.4
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_6335.MOV",
+      "duration": 2.2,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          2.2
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    },
+    {
+      "clip": "IMG_8902.MOV",
+      "duration": 1.7,
+      "status": "use",
+      "ranges": [
+        [
+          0,
+          1.7
+        ]
+      ],
+      "tags": [],
+      "note": "Good throughout (owner default)."
+    }
+  ]
+}
