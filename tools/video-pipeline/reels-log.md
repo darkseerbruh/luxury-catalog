@@ -56,6 +56,14 @@ gitignored `output/broll-cuts/` (capped at 4 per clip; ask to generate more from
 
 ## Metricool staging
 
+- **2026-07-06 keep-warm batch** — 6 reflective question-reels (single-textbox text cards
+  over approved b-roll) staged as Metricool **drafts** (blogId 6480195, draft+autoPublish
+  false), IG Reel + TikTok, 09:00 ET 2026-07-07..12. Specs `examples/kw-*.json`. Post ids
+  346175960 / 346176067 / 346176141 / 346176222 / 346176327 / 346176435. Owner adds a
+  trending sound in-app + publishes. Media host: temp GitHub release `reels-keepwarm-2026-07-06`
+  (deleted post-ingest). Love-language reel (post 346160480) staged same way for 2026-07-06 18:00.
+
+
 - **2026-07-06** — the 3 Chanel reel drafts SWAPPED to the follow-card cut (full-quality
   re-render with the on-screen "+ Follow for the full Chanel map" pill). Media re-hosted via
   a temp GitHub release that Metricool ingested (then deleted). Same text, schedules, and
