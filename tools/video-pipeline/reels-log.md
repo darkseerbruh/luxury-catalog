@@ -4,8 +4,10 @@ Durable record of every video the pipeline makes. The render files live locally 
 `output/` (too large for git); this log is the committed history. Newest first.
 
 **2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
-takes an optional `"follow"` line (e.g. `"Follow for the full Chanel map"`), rendered as a
-bottom pill that pops at the outro and holds to the cut. Never spoken; it satisfies
+takes an optional `"follow"` line, rendered as a bottom pill with a `+ Follow` badge that
+pops at the outro and holds to the cut. Phrase the value to CONTINUE the badge (e.g.
+`"for the full Chanel map"` reads as "+ Follow for the full Chanel map"), not to repeat the
+word Follow. Never spoken; it satisfies
 script-requirements.md rule 27 (the follow ask, our current growth goal) without a re-film.
 Timing defaults to the site-CTA phrase, or set `"followAt"`. The 3 Chanel reels below have
 `"follow"` added to their (gitignored) `input/*.headline.json`; they need a re-render
