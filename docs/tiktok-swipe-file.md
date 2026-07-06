@@ -175,7 +175,67 @@ value (estimate, not appraisal), warm, no snobbery.
 
 ---
 
-*Monetization note: §3 Mon–Fri + §5 product-led hooks point to the site's
-value/authentication tools (drives the tool = the engagement + eventual
-monetization surface). The trend-sound reposts (§1) are top-of-funnel reach to grow
-follows now, per the keep-warm goal.*
+---
+
+## 6. Caption bank — your verbatim hooks (grouped by format)
+
+Your own lines, kept exact, deduped, sorted into the format each one is. This is
+the voice reference for anything new. (Dupes noted where you sent a line twice.)
+
+**"Netflix documentary on [mundane luxury struggle]" — deadpan meme**
+- *…on having to sell my entire purse collection and start over.*
+- *…on having to put my purse on my lap for the entire meal because there's no
+  spare chair and it's my baby.*
+
+**"Here's exactly what I would do if I were [big purchase]" — advice/authority**
+- *…buying my first big girl bag.*
+- *…considering buying a bag for thousands of dollars.*
+
+**"I wish someone had told me this before [effort]" — lesson/regret**
+- *…I spent weeks researching the perfect bag.*
+- *…I tried to play the Hermès game.*
+
+**"Most people will never know [X]… but you're not most people" — insider**
+- *Reminder that most people will never know whether you got it from the store or
+  preloved.*
+- *Most people will never know the data behind the fashion they love… But you're
+  not most people.*
+
+**Value / resale reframe**
+- *Friendly reminder… you can buy that Fendi on Emily in Paris three times over if
+  you get it used vs new.*
+- *Not to be dramatic but I'll never buy a designer bag brand new again.*
+- *This is your sign to try renting designer bags instead of buying them.*
+
+**Confessional / relatable**
+- *I'm not afraid to admit that I wasted thousands of dollars on designer bags… And
+  I'll probably do it again because I'm a junkie 😜*
+
+**Product-led ("I used to… now Luxury Catalog")**
+- *I used to watch every review video on YouTube to find out whether a medium-sized
+  bag would fit my MacBook… Now I just look on Luxury Catalog.* (your most-repeated
+  line — sent 3×; this is a keeper)
+- *The one research tool that saves you from a bag you'll want to replace in a
+  month.*
+
+**Affirmation / "you deserve" — feel-seen**
+- *In case no one told you today, you're allowed to spend money on things just
+  because they are beautiful.*
+- *I don't know who needs to hear this but you deserve beautiful things in your life
+  just because you love them.*
+- *For the woman who struggles to spend money on herself, remember that you are a
+  work of art that deserves to be framed well.*
+
+**Collector manifesto / hot-takes**
+- *I have a crazy theory that everyone should carry art on their arm at least once
+  in their lives.*
+- *Hills I will die on as a handbag collector: Purses never go on the ground / You
+  don't have to condition your purse's leather as often as you think you do / Bag
+  liners should come included with expensive purses 😡*
+
+---
+
+*Monetization note: the product-led (§6) + value-reframe + "the one research tool"
+lines point to the site's value/authentication tools (drives the tool = engagement
++ eventual monetization surface). The meme, affirmation, and manifesto lines are
+top-of-funnel reach to grow follows now, per the keep-warm goal.*
