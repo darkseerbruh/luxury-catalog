@@ -14,6 +14,16 @@ Timing defaults to the site-CTA phrase, or set `"followAt"`. The 3 Chanel reels 
 (`npm run make <base>.mp4`) and a Metricool re-stage to carry the card. New reels: just add
 the `"follow"` line.
 
+**2026-07-06 — text-card mode (pipeline feature).** For text-hook reels (the "put
+a thought on screen over one clip" format): `scripts/montage-card.mjs` renders ONE
+held clip with the whole hook shown statically on one screen, in the brand **Playfair
+serif** (not Poppins, no per-word gold sweep), size set per hook via `captionFontPx`.
+`cardFooter:true` adds the editorial footer (gold diamond + italic "know the facts on
+every bag" + FOLLOW ALONG + luxurycatalog.com pill), placed in the lower third and
+lifted off the very bottom so it clears TikTok's caption + action buttons. Serif +
+italic loaded in `load-font.ts`; style in `Page.tsx` / `CardFooter.tsx`. Batch 1 below
+re-rendered in this style.
+
 | Date | Concept | Mode | Source | Caption / script | Status |
 |------|---------|------|--------|------------------|--------|
 | 2026-07-03 | Chanel 25: classic or Boy? (the debate) | talking-head + synced mic + 4 cued cutouts | `Chanel_2026_0 3.MOV` + `script 4.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (25, Classic Flap, Boy) VIDEO-USE library | Her script (kit 1 debate). Headline "Chanel 25: Classic or Boy?", CTA box luxurycatalog.com. Fixes: garbled CTA re-transcribed from clean mic ("search Chanel 2026 on luxurycatalog.com"), dropped final "comments." restored | draft v4 (captions aligned to audio; opens on scripted "Is the Chanel 25" via trim.json startPhrase, ad-lib "a tale of two futures" cut; passes npm run verify; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |

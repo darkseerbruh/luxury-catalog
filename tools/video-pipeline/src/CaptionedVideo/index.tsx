@@ -16,6 +16,7 @@ import {
 } from "remotion";
 import { z } from "zod";
 import { BRAND } from "../brand";
+import { CardFooter } from "./CardFooter";
 import { CtaBox } from "./CtaBox";
 import { FollowCta } from "./FollowCta";
 import { Headline } from "./Headline";
@@ -75,6 +76,8 @@ export const captionedVideoSchema = z.object({
   // Fixed caption size in px for text-card videos (whole hook on one screen,
   // wrapping). Undefined keeps the default auto-fit talking-head style.
   captionFontPx: z.number().optional(),
+  // Render the editorial brand footer (tagline + FOLLOW ALONG + site pill).
+  cardFooter: z.boolean().default(false),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
@@ -113,6 +116,7 @@ export const CaptionedVideo: React.FC<Props> = ({
   src,
   zoom,
   captionFontPx,
+  cardFooter,
   overlays,
   rankTracker,
   rankList,
@@ -262,6 +266,8 @@ export const CaptionedVideo: React.FC<Props> = ({
       {callouts.map((c, i) => (
         <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
       ))}
+
+      {cardFooter ? <CardFooter /> : null}
 
       {subtitles.length === 0 ? <NoCaptionFile /> : null}
     </AbsoluteFill>

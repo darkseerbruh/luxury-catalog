@@ -46,7 +46,7 @@ writeFileSync(path.join(PUBLIC_DIR, `${name}.json`), JSON.stringify(captions, nu
 
 // 3. Render with the fixed card font size.
 const propsPath = path.join(TEMP_DIR, `${name}.props.json`);
-writeFileSync(propsPath, JSON.stringify({ src: `${name}.mp4`, zoom, captionFontPx: fontPx, overlays: [] }));
+writeFileSync(propsPath, JSON.stringify({ src: `${name}.mp4`, zoom, captionFontPx: fontPx, cardFooter: spec.footer !== false, overlays: [] }));
 const outPath = path.join(OUTPUT_DIR, `${name}.mp4`);
 console.log("  rendering...");
 execFileSync("npx", ["remotion", "render", "src/index.ts", "CaptionedVideo", outPath, `--props=${propsPath}`, "--log=error"], { stdio: "inherit" });
