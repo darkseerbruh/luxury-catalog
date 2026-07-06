@@ -142,3 +142,25 @@ ENFORCED block reserves for her. These stay OPEN in the feed, as today.
 
 Classification of the pre-2026-07-06 backlog: the first weekly run after this section
 lands re-reads the OPEN feed and adds the `Class:` line to each before implementing.
+
+---
+
+## 7. The three lenses (owner-locked 2026-07-06: one super-analyst, not three roles)
+
+The analyst IS the UX reviewer and the marketer. One agent, one data pull, one decision
+feed — but every weekly brief MUST walk all three lenses explicitly (a lens with nothing
+to say writes one line saying so; silence = a dropped lens, not a clean bill):
+
+| Lens | What it asks | Signals it reads |
+|---|---|---|
+| **Analyst** (strategy + instrumentation) | Are the bets tracking? Is the tree honest? | §1-2 as today: pulse, assumption register, funnel drop-offs |
+| **Marketer** (acquisition + conversion) | Where do people come FROM and what converts them? | Source mix vs the GEO bet · social→site handoff (`social_key` entries, `/social` landings, UTM campaigns) · CTA performance (outbound/quiz/save rates per surface) · which content pulls (article entries, `docs/article-backlog.md` results) |
+| **UX reviewer** (friction + flow) | Where does the SITE lose people who already came? | In-page drop-offs (deep engagement → no hand-off) · `search_not_found` · mobile-vs-desktop splits · dead clicks/loops where events allow · persona-flow gaps vs `docs/personas.md` |
+
+**Monthly persona walk (first weekly brief of each month):** additionally walk the live
+site as each persona (Maya, Jordan, Sofia, Diane — `docs/personas.md`), following their
+documented journey end to end on production, and flag concrete friction. Template + bar:
+`docs/ux/persona-flow-review-2026-07-05.md`. Findings enter the decision feed like
+everything else, classed AUTO or OWNER (§6). Pre-launch caveat applies to all lenses:
+mostly first-party traffic, so reads are readiness reads, stated with n, not performance
+verdicts.

@@ -10,8 +10,8 @@ the cross-feed rules in §2 are binding on every scheduled run.*
 |---|---|---|---|---|---|
 | **Social engine** | Metricool + PostHog `social_key` | `social-performance.md` | `social-engine-weekly` (Thu) + `-pulse` (Mon) | `social-performance-ledger.md` | Flip a Metricool draft live |
 | **Article engine** | pulse (`search_not_found`, article reads) + backlogs | `article-engine.md` | `article-engine-weekly` (Tue) | `article-backlog.md` | Flip a DB draft → published |
-| **Analyst + implementer** | `npm run analytics:pulse` | `analyst-standard.md` (§6 = implementer) | `analyst-daily-scan` + `analyst-weekly-brief` (Mon, implements ≤3 `Class: AUTO`) | `analyst-decisions.md` | `Class: OWNER` decisions |
-| **Archivist pull** | seasonal-archive worklist | archive conventions | `archivist-monthly-pull` (1st) | `research-drafts/seasonal-archive/` | none (doc-only, sourced) |
+| **Analyst + implementer** (three lenses: analyst · marketer · UX reviewer, §7; monthly persona walk) | `npm run analytics:pulse` | `analyst-standard.md` (§6 implementer, §7 lenses) | `analyst-daily-scan` + `analyst-weekly-brief` (Mon, implements ≤3 `Class: AUTO`) | `analyst-decisions.md` | `Class: OWNER` decisions |
+| **Archivist pull** | seasonal-archive worklist | archive conventions | `archivist-monthly-pull` (1st + 15th) | `research-drafts/seasonal-archive/` | none (doc-only, sourced) |
 | **Market data → site** | Firecrawl/FP captures | `capture-runbook.md` | GitHub Actions (daily/monthly) | DB `price_history` | none (pages live-query) |
 | **Content freshness** | quarterly re-review | `freshness-runbook.md` | `quarterly-content-freshness-review` | freshness report | ALL number changes (by design) |
 
