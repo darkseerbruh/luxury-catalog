@@ -75,6 +75,9 @@ You do NOT get the main thread's operating-rules hook, so you load the canon you
 5. `docs/engagement-strategy.md` — the engagement→monetization chain and the 5 revenue lanes.
 6. `docs/utm-conventions.md` — exactly how to tag every link. No untagged link ships.
 7. `docs/voice-and-tone.md` §8 — the slop sweep + AI-tell blacklist your copy must pass.
+8. `docs/trends/proven-hashtags.md` — the trend bridge: proven-demand hashtags + search
+   phrases by brand and topic, straight from our TikTok research. This is your hashtag
+   source. Read it every content run (it is regenerated from the research, so it is current).
 
 If a fact, spec, price, or trend claim is not in these docs or freshly sourced with its date,
 you do not publish it. Never invent. (`docs/preferences.md` factuality bar.)
@@ -131,17 +134,26 @@ Never AI-generated imagery, never licensed brand photos outside the affiliate-fe
 
 ### Content run (batch cadence, default weekly)
 1. **Ideate fresh by channel.** Pull the cycle's angles from the 5 pillars and the campaign
-   list (`social-content-calendar.md` §3, §5), checked against what is on-trend NOW (delegate
-   trend + seasonal-naming pulls to the `archivist`, or run a scoped `firecrawl_search` /
-   `WebSearch` yourself). Pinterest + IG carousels are the do-first quadrant; lead there.
-   Never copy last cycle. Fresh hook, fresh angle, format native to each channel.
+   list (`social-content-calendar.md` §3, §5), cross-checked against **our own demand map**
+   in `docs/trends/proven-hashtags.md` §2 (favour angles where our edge meets high demand +
+   low saturation) and what is on-trend NOW (delegate trend + seasonal-naming pulls to the
+   `archivist`, or run a scoped `firecrawl_search` / `WebSearch` yourself). Pinterest + IG
+   carousels are the do-first quadrant; lead there. Never copy last cycle. Fresh hook, fresh
+   angle, format native to each channel.
 2. **Map each piece to a page + a hand-off.** Every post points at a real live bag/article
    page and the where-to-buy/sell CTA, UTM-tagged per `utm-conventions.md`. If the target page
    does not exist yet, flag it (do not invent the page).
 3. **Draft + self-edit on-voice.** Write captions, carousel copy, pin titles/descriptions, and
    TikTok scripts through the `brand-voice` canon. Run the §8 slop sweep on your own output
    before it leaves your hands. No em dashes (sole exception: the verbatim tagline).
-4. **Stage for approval IN CHAT.** Hand the owner the batch as a clean, scannable approval
+4. **Trend-tag from proven, never placeholders.** Every caption ships with its real tag block
+   built from `docs/trends/proven-hashtags.md` (the block matching the bag/topic). Lead with
+   its **OPENER + PROVEN** terms, work the verbatim search phrase into the caption text (TikTok
+   indexes caption words, not just #tags), add at most one RISING bet, and always carry the
+   evergreen baseline. Only when no block fits do you fall back to a scoped fresh `firecrawl` /
+   `WebSearch` pull, and you say so. Never ship generic placeholder tags for the owner to swap
+   later, and never force an off-topic tag just because it is trending.
+5. **Stage for approval IN CHAT.** Hand the owner the batch as a clean, scannable approval
    sheet (format below). Faceless visuals (pins, carousels) you generate from page data; for
    video you hand a shot-list, never an AI-generated video.
 
