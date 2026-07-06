@@ -431,9 +431,11 @@ confession; caption = a tag/comment prompt (grows follows + comments).
   getting a deal or getting played. Look before you buy."
 
 ### Value / resale reframe (payoff = the reframe; pull real number before posting)
-- *…Fendi three times over* ↳ "Same bag, gently used, a fraction of retail. The
-  screen version costs new money for no reason. [Drop the exact bag + its preloved
-  range from /data.]"
+- *…Fendi three times over* ↳ "That Baguette from Emily in Paris? New, the medium
+  runs about $3,900. A classic Zucca Baguette on the resale market right now? Around
+  $1,000 to $1,300. That's your bag three times over." *(Sources, July 2026: Fendi
+  Mamma Baguette Medium $3,900, fendi.com; preloved Zucca/Zucchino Baguettes
+  $995–$1,645 across 145 live listings, fashionphile.com. Refresh before reposting.)*
 - *…sold out in an hour* ↳ "The frenzy is for the new one. The patient shopper buys
   the same bag preloved next month for less. [Name the bag + range.]"
 - *…last year's It bag* ↳ "Today's must-have is next year's steal. If you can wait,
