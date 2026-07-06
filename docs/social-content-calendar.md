@@ -209,6 +209,10 @@ Rules:
   templates = `docs/social-slideshow-hooks.md`.
 - **Repurpose across tiers:** one hero insight spins into a Signature post (you holding
   the bag it is about) and a Keep-warm text-over-B-roll. One idea, three posts.
+- **Default publish slot = 10:00 ET; second slot 18:00 ET; third 12:00 ET.** Metricool
+  best-time peak on BOTH Instagram and TikTok (pulled 2026-07-06). One post per slot per
+  day, so a second post the same day goes to 18:00, not stacked at 10:00. This is a
+  category-model estimate (account is new), refine once real audience data accrues.
 
 ---
 

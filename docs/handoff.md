@@ -6,6 +6,19 @@
 ## TL;DR — AUTOMATED social engine: closed loop analyze → iterate → backlog → create → draft (2026-07-06, on `main`)
 
 **The social pipeline now runs itself to the draft line; publishing stays hers in Metricool.** New standard **`docs/social-performance.md`** (binding on engine runs): Metricool analytics (field IDs verified live 2026-07-06) + PostHog search-key entries → per-post verdicts vs segment baselines with small-n honesty → the §4 decision tree spawns **ONE-variable experiments** (same messaging × new visuals, same visuals × new messaging, new CTA, new hashtags, new timing) → written to the **Notion Content Pipeline** (Source: Analyst; auto-greenlight only for faceless variants of solid-or-better parents) → faceless creation (video pipeline, slideshow rules, cleared libraries) → **Metricool drafts (`draft:true`), never published**. Append-only memory: `docs/social-performance-ledger.md`. Anything needing her face/voice/footage = a **FILM ASK** (Notion item + push notification), never a blocker. **Orchestrators:** scheduled tasks `social-engine-weekly` (Thu 9am, full loop) + `social-engine-pulse` (Mon 8:30am, breakout fast-follow + 7-day runway top-up), both running the `social` agent in the new dedicated worktree `~/Documents/luxury-catalog-social-engine` (branch `social-engine`, resets to origin/main each run). Agent def updated: third run added, publish-gate vs draft-gate split, Metricool + Notion MCP tools added to its allowlist, campaign/b-roll libraries added to media sources. **⚠️ Your turn (one-time, ~2 min): click "Run now" on `social-engine-weekly` in the Scheduled sidebar and approve its tool prompts once — approvals stick to the task and future runs never pause. Note the Metricool Free plan's 20-post/month cap paces the engine until upgraded.**
+
+---
+
+## TL;DR — B-roll review + week-2 content sprint staged (2026-07-06, on `main`)
+
+**Reviewed the whole b-roll bank, then stocked 9 posts across all 3 tiers as Metricool drafts.**
+- **B-roll usage manifest:** `tools/video-pipeline/broll-manifest.json` = owner's per-clip in/out windows, tags, rejects (2588/2578/2606 = too much movement), hold (3053 waterfall) from a full review of the ~92-clip bank. Un-annotated clips = full clip. READ IT before pulling any keep-warm clip. Ready 6s vertical cuts from the trimmed windows are in gitignored `output/broll-cuts/`.
+- **Publish-time default locked:** 10:00 ET (peak on both IG + TikTok, Metricool best-time 2026-07-06), then 18:00, then 12:00; one post per slot per day. Canon: `docs/social-content-calendar.md` §3.5; also in preferences.
+- **Staged as Metricool drafts (blogId 6480195, autoPublish false):** love-language reel (today 18:00); 6 keep-warm reflective reels 10:00 Jul 7-12; 6 more keep-warm 10:00 Jul 13-18; **Hero** Chanel-flap leather/hardware data carousel (Jul 15 18:00); **Signature** her-real-bags carousel (Jul 17 18:00). Specs `examples/kw-*.json` + `kw2-*.json`; slides via new `scripts/make-slides.py` (Georgia serif, ink+gold). Full ids in `tools/video-pipeline/reels-log.md`.
+- **Media-host workflow (zero-setup):** render → temp GitHub release → Metricool ingests the public URL to its CDN → delete the release. Confirmed working this session for video + image carousels.
+
+**YOUR TURN (2026-07-06):** (1) add a trending sound in-app to each staged reel, then publish from the Metricool planner (all draft, none auto-publish); (2) **refresh the Hero carousel's two figures** (~$7,200 / ~$4,700, Chanel Classic Flap caviar+gold vs lambskin+silver; source TheRealReal June 2026 n=116) against live data before publishing; (3) optional: tell me the exact models of the Signature bags and I'll add accurate names.
+
 ---
 
 ## TL;DR — TikTok swipe file + batch 1 reels (text-card format) (2026-07-06, on `main`)
