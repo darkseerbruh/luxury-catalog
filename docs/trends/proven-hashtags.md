@@ -4,7 +4,7 @@
 > edit the seed (`scripts/trends/terms_seed.json`) or refresh `clean.json`, then rerun.
 
 **Source:** TikTok Creative Center pull, US, via scripts/trends OCR pipeline -> Notion 'TikTok Trending Terms'  
-**Captured:** 2026-07-01 · **n:** one Creative Center pull (US); 392 ranked terms live in Notion, this seed is the curated high-signal subset with real Pop # + saturation  
+**Captured:** 2026-07-01 · **n:** full set of distinct trending terms with a Pop # (or searches-per-creator) explicitly stated in the 2026-07-01 committed analysis doc + docs/social-content-ideas.md TikTok section; every figure is verbatim from those docs (no inferred/rounded numbers); a term with no printed figure for a field uses null  
 **Read as:** Popularity/Pop # = TikTok search demand, NOT our reach. Growth 'breakout' = emerging (not yet crowded). spc = searches per creator (Pop # / creators) = demand-vs-supply opening. Treat all as a demand signal, not a verdict.
 
 ## How to use this
@@ -28,7 +28,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 
 ### Miu Miu
 
-**OPENER (high demand, low supply - lean here)**
+**PILLAR / SEO only (crowded - weak as a wedge)**
 - `miu miu city bag` : 4.31M · spc 29,122 · #miumiucity
 
 *Evergreen:* #miumiu
@@ -36,12 +36,16 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 ### Chanel
 
 **OPENER (high demand, low supply - lean here)**
-- `chanel 25bag` : 2.82M · spc 2,765 · #chanel25bag
-- `chanel maxi flap 2026` : spc-ranked · spc 3,508 · #chanelmaxiflap2026
+- `chanel 25bag` : 2.82M · spc 2,765 · = The Chanel 25 (2025 everyday line) · #chanel25bag
+- `chanel maxi flap bag 2026` : 435K · spc 3,508 · #chanelmaxiflap2026 · routes to price-history angle (no page yet)
 - `teal chanel` : spc-ranked · spc 2,773 · #tealchanel
 
 **PROVEN (established demand)**
-- `new vs old chanel` : 431K · #newoldchanel
+- `new vs old chanel` : 431K · #newoldchanel · routes to price-history angle (no page yet)
+- `chanel classic` : 118K · #chanelclassic · routes to /articles/is-the-chanel-classic-flap-worth-it
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `chanel flap` : 265K · #chanelflap · routes to /articles/is-the-chanel-classic-flap-worth-it
 
 *Evergreen:* #chanelbag #chanelclassicflap
 
@@ -50,6 +54,8 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 **PILLAR / SEO only (crowded - weak as a wedge)**
 - `balenciaga foil bag` : 2.38M · breakout · = Balenciaga Trash Pouch (foil-look glazed calfskin, ~$1,790) · #balenciagafoil
 - `balenciaga rodeo` : 742K · #balenciagarodeo
+- `balenciaga purse` : spc-ranked · spc 2,095 · #balenciagapurse
+- `city bag balenciaga` : unranked · #citybalenciaga
 
 *Evergreen:* #balenciaga
 
@@ -66,20 +72,25 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 ### Louis Vuitton
 
 **OPENER (high demand, low supply - lean here)**
+- `bring it on louis vuitton` : spc-ranked · spc 2,426 · #bringitonlouisvuitton
 - `lv pochette` : spc-ranked · spc 2,198 · #lvpochette
 
 **PROVEN (established demand)**
-- `large lv vanity bag` : 1.09M · #largelvvanity
+- `large lv vanity bag` : 1.09M · = LV Vanity PM/GM · #largelvvanity
 - `lv by marc jacobs` : 375K · #lvbymarcjacobs
 - `lv speedy 20 vs 25` : 277K · #lvspeedy2025
 - `lv diaper bag` : 271K · #lvdiaper
 - `how to know if a lv is real` : 180K · #lvreal
 
 **RISING bet (optional; use at most 1 per caption)**
-- `lv all in bb bag` : 354K · +282% · #lvallinbb
+- `lv all in bb bag` : 354K · +282% · = LV All In BB (Pre-Fall 2025, Low Key line, Murakami version) · #lvallinbb
 - `nano vs mini lv bag` : 280K · breakout · #nanominilv
 - `1990 louis vuitton` : 262K · +210% · #1990louisvuitton
 - `old vintage lv` : 210K · +279% · #oldvintagelv
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `reselling lv` : unranked · #resellinglv
+- `monogram lv` : unranked · #monogramlv
 
 *Evergreen:* #louisvuitton #lvbag
 
@@ -90,11 +101,18 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `using a birkin` : spc-ranked · spc 1,971 · #usingbirkin
 
 **PROVEN (established demand)**
-- `birkin bag xxl` : 757K · #birkinxxl
+- `birkin bag xxl` : 757K · = Oversized Birkin / HAC (Haute à Courroies) / Birkin 40+ · #birkinxxl
+- `hermes quota bag` : 278K · #hermesquota · routes to no page yet
+- `walking into hermes asking for a birkin` : 244K · #walkingintohermesaskingbirkin · routes to no page yet
 - `original birkin` : 235K · #originalbirkin
+- `paris hermes appointment` : 213K · #parishermesappointment · routes to no page yet
+- `birkin vs kelly` : 187K · #birkinkelly · routes to /articles/birkin-vs-kelly-which-hermes-bag
 
 **RISING bet (optional; use at most 1 per caption)**
-- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin
+- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin · routes to /articles/birkin-vs-kelly-which-hermes-bag
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `buying a birkin` : unranked · #buyingbirkin
 
 *Evergreen:* #hermes #birkin #hermeskelly
 
@@ -104,7 +122,8 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `christian dior tote bags` : spc-ranked · spc 2,473 · #christiandiortote
 
 **PROVEN (established demand)**
-- `dior malice pearl bag` : 396K · #diormalicepearl
+- `dior malice pearl bag` : 396K · = Dior Malice (2025, pearl chain strap) · #diormalicepearl
+- `medium lady dior` : 299K · #mediumladydior · routes to /articles/does-a-smaller-bag-cost-more
 - `vintage dior` : 273K · #vintagedior
 - `dior by yves saint laurent` : 190K · #diorbyyvessaintlaurent
 
@@ -112,45 +131,48 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `dior romantique bag` : 472K · +197% · = Galliano-era Dior Romantique (Y2K trotter) · #diorromantique
 
 **PILLAR / SEO only (crowded - weak as a wedge)**
-- `lady dior bags` : 665K · #ladydior
+- `lady dior bags` : 665K · +131% · #ladydior · routes to /articles/does-a-smaller-bag-cost-more
 
 *Evergreen:* #diorbag #ladydior
 
 ### Coach
 
+**OPENER (high demand, low supply - lean here)**
+- `gate coach bag` : spc-ranked · spc 1,985 · #gatecoach
+
 **PROVEN (established demand)**
-- `erin coach bag` : 322K · #erincoach
+- `erin coach bag` : 322K · = Coach Erin Shoulder · #erincoach
 - `vintage coach collection` : 239K · +114% · #vintagecoachcollection
-- `etta coach bag` : 235K · #ettacoach
+- `etta coach bag` : 235K · = Coach Etta Flap · #ettacoach
 - `y2k coach` : 190K · #y2kcoach
 
 **RISING bet (optional; use at most 1 per caption)**
-- `coach tote bag for school` : 657K · +193% · #coachtoteschool
+- `coach tote bag for school` : 657K · +193% · #coachtoteschool · routes to Coach Tabby + authenticate articles
 
 **PILLAR / SEO only (crowded - weak as a wedge)**
-- `coach trail bag` : 555K · +237% · #coachtrail
+- `coach trail bag` : 555K · +237% · #coachtrail · routes to Coach Tabby + authenticate articles
 
 *Evergreen:* #coach #coachbag #vintagecoach
 
 ### Margiela
 
 **PROVEN (established demand)**
-- `margiela glam slam bag` : 504K · #margielaglamslam
+- `margiela bags` : 504K · = Maison Margiela Glam Slam (quilted matelassé) · #margiela
 
 *Evergreen:* #margiela #maisonmargiela
 
 ### The Row
 
 **PROVEN (established demand)**
-- `the row marlo bag 17` : 447K · #rowmarlo17
+- `the row marlo bag 17` : 447K · = The Row Marlo (size 17), successor to discontinued Margaux · #rowmarlo17
 
 *Evergreen:* #therow #quietluxury
 
 ### Loewe
 
 **PROVEN (established demand)**
-- `howls moving castle loewe` : 423K · #howlsmovingcastleloewe
-- `amazona loewe` : 214K · #amazonaloewe
+- `howls moving castle loewe` : 423K · = Loewe x Studio Ghibli Howl's Moving Castle capsule · #howlsmovingcastleloewe
+- `amazona loewe` : 214K · = Loewe Amazona model · #amazonaloewe
 
 *Evergreen:* #loewe #loewepuzzle
 
@@ -175,6 +197,9 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `how much is a goyard` : 290K · #goyard
 - `goyard diaper bag` : 273K · #goyarddiaper
 
+**RISING bet (optional; use at most 1 per caption)**
+- `goyard mini anjou green` : 271K · breakout · #goyardminianjougreen
+
 *Evergreen:* #goyard #goyardbag
 
 ### McQueen
@@ -190,14 +215,14 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `givenchy micro antigona bag` : 214K · spc 1,408 · #givenchymicroantigona
 
 **RISING bet (optional; use at most 1 per caption)**
-- `givenchy nano voyou bag` : 282K · breakout · #givenchynanovoyou
+- `givenchy nano voyou bag` : 282K · breakout · = Givenchy Voyou (nano) · #givenchynanovoyou
 
 *Evergreen:* #givenchy
 
 ### Gerard Darel
 
 **RISING bet (optional; use at most 1 per caption)**
-- `gerard darel bag` : 271K · breakout · #gerarddarel
+- `gerard darel bag` : 271K · breakout · = Gérard Darel 24 CC / 24H slouchy hobo · #gerarddarel
 
 *Evergreen:* #gerarddarel
 
@@ -207,7 +232,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `white prada bag` : 267K · spc 1,757 · #whiteprada
 
 **RISING bet (optional; use at most 1 per caption)**
-- `prada fairy bag` : 229K · breakout · #pradafairy
+- `prada fairy bag` : 229K · breakout · = Prada Fairy Bag (2008 archival, re-released) · #pradafairy
 
 *Evergreen:* #prada #pradabag
 
@@ -222,12 +247,15 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `tom ford gucci 1995` : 172K · spc 1,194 · #tomfordgucci1995
 - `gucci gg marmont bag` : 164K · spc 1,242 · #gucciggmarmont
 
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `gucci marmont` : unranked · #guccimarmont
+
 *Evergreen:* #guccibag #vintagegucci
 
 ### Jacquemus
 
 **PROVEN (established demand)**
-- `jacquemus bambinos bag` : 236K · #jacquemusbambinos
+- `jacquemus bambinos bag` : 236K · = Jacquemus Le Bambino / Bambimou · #jacquemusbambinos
 
 *Evergreen:* #jacquemus
 
@@ -240,7 +268,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `old celine` : 213K · = Phoebe Philo era Celine · #oldceline
 
 **RISING bet (optional; use at most 1 per caption)**
-- `celine bittersweet bag` : 216K · breakout · #celinebittersweet
+- `celine bittersweet bag` : 216K · breakout · = Céline Bittersweet (pebbled leather ruched hobo) · #celinebittersweet
 
 *Evergreen:* #celine #celinebag
 
@@ -249,7 +277,16 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 **PROVEN (established demand)**
 - `emily in paris fendi bag` : 200K · #emilyinparisfendi
 
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `fendi crossbody bag` : unranked · #fendicrossbody
+- `fendi peekaboo` : unranked · #fendipeekaboo
+
 *Evergreen:* #fendi #fendibaguette
+
+### Bottega
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `bottega jodie` : unranked · #bottegajodie
 
 ## 2. By topic - article angles + caption themes
 
@@ -257,7 +294,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 *Angle:* Our strongest edge: real comps -> an honest 'is it worth it' (estimate, not appraisal). ~2.8M combined demand, answered poorly.
 
 **OPENER (high demand, low supply - lean here)**
-- `chanel maxi flap 2026` : spc-ranked · spc 3,508 · #chanelmaxiflap2026
+- `chanel maxi flap bag 2026` : 435K · spc 3,508 · #chanelmaxiflap2026 · routes to price-history angle (no page yet)
 - `celine bag price` : spc-ranked · spc 1,953 · #celineprice
 
 **PROVEN (established demand)**
@@ -267,11 +304,12 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 *Angle:* Our compare pages fit exactly. Decision-paralysis before a big spend. ~2.3M demand, rarely answered with data.
 
 **PROVEN (established demand)**
-- `new vs old chanel` : 431K · #newoldchanel
+- `new vs old chanel` : 431K · #newoldchanel · routes to price-history angle (no page yet)
 - `lv speedy 20 vs 25` : 277K · #lvspeedy2025
+- `birkin vs kelly` : 187K · #birkinkelly · routes to /articles/birkin-vs-kelly-which-hermes-bag
 
 **RISING bet (optional; use at most 1 per caption)**
-- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin
+- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin · routes to /articles/birkin-vs-kelly-which-hermes-bag
 - `nano vs mini lv bag` : 280K · breakout · #nanominilv
 
 ### Diaper bag
@@ -290,7 +328,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `mcqueen backpack` : 294K · spc 1,284 · #mcqueenbackpack
 
 **RISING bet (optional; use at most 1 per caption)**
-- `coach tote bag for school` : 657K · +193% · #coachtoteschool
+- `coach tote bag for school` : 657K · +193% · #coachtoteschool · routes to Coach Tabby + authenticate articles
 - `ysl mini college bag` : 290K · +159% · #yslminicollege
 
 ### Work / commuter
@@ -313,15 +351,18 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 *Angle:* Our Coach/thrift wedge. 'Luxury for less' treasure-hunt. ~1.6M, chaotic -> room for a trustworthy voice.
 
 **PROVEN (established demand)**
-- `erin coach bag` : 322K · #erincoach
+- `erin coach bag` : 322K · = Coach Erin Shoulder · #erincoach
 - `tj maxx luxury finds` : 293K · #tjmaxxluxuryfinds
 - `vintage coach collection` : 239K · +114% · #vintagecoachcollection
-- `etta coach bag` : 235K · #ettacoach
+- `etta coach bag` : 235K · = Coach Etta Flap · #ettacoach
 - `y2k coach` : 190K · #y2kcoach
 
 **RISING bet (optional; use at most 1 per caption)**
-- `coach tote bag for school` : 657K · +193% · #coachtoteschool
-- `gerard darel bag` : 271K · breakout · #gerarddarel
+- `coach tote bag for school` : 657K · +193% · #coachtoteschool · routes to Coach Tabby + authenticate articles
+- `gerard darel bag` : 271K · breakout · = Gérard Darel 24 CC / 24H slouchy hobo · #gerarddarel
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `reselling lv` : unranked · #resellinglv
 
 ### Vintage / Y2K
 *Angle:* Nostalgia + 'found it secondhand' flex. ~3.8M, chaotic on names/dates -> our decode edge.
@@ -333,14 +374,14 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 **PROVEN (established demand)**
 - `vintage dior` : 273K · #vintagedior
 - `vintage coach collection` : 239K · +114% · #vintagecoachcollection
-- `amazona loewe` : 214K · #amazonaloewe
+- `amazona loewe` : 214K · = Loewe Amazona model · #amazonaloewe
 - `y2k coach` : 190K · #y2kcoach
 
 **RISING bet (optional; use at most 1 per caption)**
 - `dior romantique bag` : 472K · +197% · = Galliano-era Dior Romantique (Y2K trotter) · #diorromantique
 - `1990 louis vuitton` : 262K · +210% · #1990louisvuitton
-- `prada fairy bag` : 229K · breakout · #pradafairy
-- `celine bittersweet bag` : 216K · breakout · #celinebittersweet
+- `prada fairy bag` : 229K · breakout · = Prada Fairy Bag (2008 archival, re-released) · #pradafairy
+- `celine bittersweet bag` : 216K · breakout · = Céline Bittersweet (pebbled leather ruched hobo) · #celinebittersweet
 - `old vintage lv` : 210K · +279% · #oldvintagelv
 
 ### Designer era
@@ -350,7 +391,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `vintage mombasa bag` : 1.11M · spc 2,284 · = YSL Mombasa, Tom Ford era · #vintagemombasa
 
 **PROVEN (established demand)**
-- `new vs old chanel` : 431K · #newoldchanel
+- `new vs old chanel` : 431K · #newoldchanel · routes to price-history angle (no page yet)
 - `lv by marc jacobs` : 375K · #lvbymarcjacobs
 - `old celine` : 213K · = Phoebe Philo era Celine · #oldceline
 - `dior by yves saint laurent` : 190K · #diorbyyvessaintlaurent
@@ -373,7 +414,7 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 **RISING bet (optional; use at most 1 per caption)**
 - `dior romantique bag` : 472K · +197% · = Galliano-era Dior Romantique (Y2K trotter) · #diorromantique
 - `1990 louis vuitton` : 262K · +210% · #1990louisvuitton
-- `prada fairy bag` : 229K · breakout · #pradafairy
+- `prada fairy bag` : 229K · breakout · = Prada Fairy Bag (2008 archival, re-released) · #pradafairy
 - `old vintage lv` : 210K · +279% · #oldvintagelv
 
 ### Color story
@@ -384,27 +425,36 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `teal chanel` : spc-ranked · spc 2,773 · #tealchanel
 - `goyard pink limited edition` : spc-ranked · spc 2,750 · #goyardpinklimitededition
 
+**RISING bet (optional; use at most 1 per caption)**
+- `goyard mini anjou green` : 271K · breakout · #goyardminianjougreen
+
 ### Status / hierarchy
 *Angle:* Ranking/tier debates print engagement. Bring rigour where others bring takes.
 
 **OPENER (high demand, low supply - lean here)**
-- `miu miu city bag` : 4.31M · spc 29,122 · #miumiucity
 - `lv pochette` : spc-ranked · spc 2,198 · #lvpochette
 
 **PROVEN (established demand)**
-- `birkin bag xxl` : 757K · #birkinxxl
-- `margiela glam slam bag` : 504K · #margielaglamslam
-- `the row marlo bag 17` : 447K · #rowmarlo17
+- `birkin bag xxl` : 757K · = Oversized Birkin / HAC (Haute à Courroies) / Birkin 40+ · #birkinxxl
+- `margiela bags` : 504K · = Maison Margiela Glam Slam (quilted matelassé) · #margiela
+- `the row marlo bag 17` : 447K · = The Row Marlo (size 17), successor to discontinued Margaux · #rowmarlo17
+- `medium lady dior` : 299K · #mediumladydior · routes to /articles/does-a-smaller-bag-cost-more
 - `gucci gg marmont bag` : 164K · spc 1,242 · #gucciggmarmont
+- `chanel classic` : 118K · #chanelclassic · routes to /articles/is-the-chanel-classic-flap-worth-it
 
 **RISING bet (optional; use at most 1 per caption)**
 - `luxury bag hierarchy` : 295K · breakout · #luxuryhierarchy
-- `gerard darel bag` : 271K · breakout · #gerarddarel
+- `gerard darel bag` : 271K · breakout · = Gérard Darel 24 CC / 24H slouchy hobo · #gerarddarel
 
 **PILLAR / SEO only (crowded - weak as a wedge)**
 - `telfar bag` : 4.98M · #telfar
+- `miu miu city bag` : 4.31M · spc 29,122 · #miumiucity
 - `balenciaga foil bag` : 2.38M · breakout · = Balenciaga Trash Pouch (foil-look glazed calfskin, ~$1,790) · #balenciagafoil
-- `lady dior bags` : 665K · #ladydior
+- `lady dior bags` : 665K · +131% · #ladydior · routes to /articles/does-a-smaller-bag-cost-more
+- `chanel flap` : 265K · #chanelflap · routes to /articles/is-the-chanel-classic-flap-worth-it
+- `balenciaga purse` : spc-ranked · spc 2,095 · #balenciagapurse
+- `monogram lv` : unranked · #monogramlv
+- `gucci marmont` : unranked · #guccimarmont
 
 ### Hermès game
 *Angle:* The acquisition ritual fascinates even non-buyers. No clean neutral explainer exists.
@@ -413,43 +463,53 @@ Global: #luxurybags #designerbags #handbagcollector #luxuryresale #preloved #lux
 - `using a birkin` : spc-ranked · spc 1,971 · #usingbirkin
 
 **PROVEN (established demand)**
+- `hermes quota bag` : 278K · #hermesquota · routes to no page yet
+- `walking into hermes asking for a birkin` : 244K · #walkingintohermesaskingbirkin · routes to no page yet
 - `original birkin` : 235K · #originalbirkin
+- `paris hermes appointment` : 213K · #parishermesappointment · routes to no page yet
+- `birkin vs kelly` : 187K · #birkinkelly · routes to /articles/birkin-vs-kelly-which-hermes-bag
 
 **RISING bet (optional; use at most 1 per caption)**
-- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin
+- `mini kelly vs birkin` : 297K · breakout · #minikellybirkin · routes to /articles/birkin-vs-kelly-which-hermes-bag
+
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `buying a birkin` : unranked · #buyingbirkin
 
 ### New release
 *Angle:* 'Is this the new It bag' curiosity. Fast to go stale -> post while the window is open.
 
 **OPENER (high demand, low supply - lean here)**
-- `chanel 25bag` : 2.82M · spc 2,765 · #chanel25bag
+- `chanel 25bag` : 2.82M · spc 2,765 · = The Chanel 25 (2025 everyday line) · #chanel25bag
+- `chanel maxi flap bag 2026` : 435K · spc 3,508 · #chanelmaxiflap2026 · routes to price-history angle (no page yet)
 - `birkin mini micro model` : 293K · spc 2,363 · #birkinminimicromodel
 - `gucci baby bag` : 239K · spc 2,213 · #guccibaby
-- `chanel maxi flap 2026` : spc-ranked · spc 3,508 · #chanelmaxiflap2026
 
 **PROVEN (established demand)**
-- `large lv vanity bag` : 1.09M · #largelvvanity
-- `howls moving castle loewe` : 423K · #howlsmovingcastleloewe
-- `dior malice pearl bag` : 396K · #diormalicepearl
+- `large lv vanity bag` : 1.09M · = LV Vanity PM/GM · #largelvvanity
+- `howls moving castle loewe` : 423K · = Loewe x Studio Ghibli Howl's Moving Castle capsule · #howlsmovingcastleloewe
+- `dior malice pearl bag` : 396K · = Dior Malice (2025, pearl chain strap) · #diormalicepearl
 - `mini dionysus gucci bag` : 266K · spc 1,478 · #minidionysusgucci
-- `jacquemus bambinos bag` : 236K · #jacquemusbambinos
+- `jacquemus bambinos bag` : 236K · = Jacquemus Le Bambino / Bambimou · #jacquemusbambinos
 - `givenchy micro antigona bag` : 214K · spc 1,408 · #givenchymicroantigona
 
 **RISING bet (optional; use at most 1 per caption)**
-- `lv all in bb bag` : 354K · +282% · #lvallinbb
-- `givenchy nano voyou bag` : 282K · breakout · #givenchynanovoyou
+- `lv all in bb bag` : 354K · +282% · = LV All In BB (Pre-Fall 2025, Low Key line, Murakami version) · #lvallinbb
+- `givenchy nano voyou bag` : 282K · breakout · = Givenchy Voyou (nano) · #givenchynanovoyou
 
 **PILLAR / SEO only (crowded - weak as a wedge)**
 - `balenciaga foil bag` : 2.38M · breakout · = Balenciaga Trash Pouch (foil-look glazed calfskin, ~$1,790) · #balenciagafoil
 - `balenciaga rodeo` : 742K · #balenciagarodeo
-- `coach trail bag` : 555K · +237% · #coachtrail
+- `coach trail bag` : 555K · +237% · #coachtrail · routes to Coach Tabby + authenticate articles
 
 ### Media tie-in
 *Angle:* Show/film-driven spikes. Tag the media, ride the moment.
 
 **PROVEN (established demand)**
-- `howls moving castle loewe` : 423K · #howlsmovingcastleloewe
+- `howls moving castle loewe` : 423K · = Loewe x Studio Ghibli Howl's Moving Castle capsule · #howlsmovingcastleloewe
 - `emily in paris fendi bag` : 200K · #emilyinparisfendi
 
+**PILLAR / SEO only (crowded - weak as a wedge)**
+- `fendi peekaboo` : unranked · #fendipeekaboo
+
 ---
-*Generated from `scripts/trends/terms_seed.json` · 66 terms · regenerate after every Notion trends refresh.*
+*Generated from `scripts/trends/terms_seed.json` · 85 terms · regenerate after every Notion trends refresh.*

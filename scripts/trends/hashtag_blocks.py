@@ -149,7 +149,8 @@ def badge(t):
 def line(t):
     b = badge(t)
     sfx = f" · {b}" if b else ""
-    return f'- `{t["term"]}` : {fmt_demand(t)}{sfx} · {slug(t["term"])}'
+    page = f' · routes to {t["our_page"]}' if t.get("our_page") else ""
+    return f'- `{t["term"]}` : {fmt_demand(t)}{sfx} · {slug(t["term"])}{page}'
 
 
 # tiers, most-proven first
