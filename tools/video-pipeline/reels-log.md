@@ -26,6 +26,7 @@ re-rendered in this style.
 
 | Date | Concept | Mode | Source | Caption / script | Status |
 |------|---------|------|--------|------------------|--------|
+| 2026-07-06 | Love languages, handbag edition | text-card (one held clip, full hook in ONE textbox, font 52) | broll bank IMG_5193 (black CHANEL shopping bag on a cream quilted car seat, door open) | "What's your love language? Mine's Words of Authentication, Acts of Purchase, Receiving Gifts, Quality Leather, and Physical Unboxing." | **staged Metricool draft** (post 346160480, IG Reel + TikTok, 2026-07-06 18:00 ET, draft+autoPublish:false). Owner adds trending sound in-app + publishes. Silent render; ask-a-question hook invites "which one's yours" comments / stitch-your-own-swap. spec `examples/love-language.json` |
 | 2026-07-03 | Chanel 25: classic or Boy? (the debate) | talking-head + synced mic + 4 cued cutouts | `Chanel_2026_0 3.MOV` + `script 4.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (25, Classic Flap, Boy) VIDEO-USE library | Her script (kit 1 debate). Headline "Chanel 25: Classic or Boy?", CTA box luxurycatalog.com. Fixes: garbled CTA re-transcribed from clean mic ("search Chanel 2026 on luxurycatalog.com"), dropped final "comments." restored | draft v4 (captions aligned to audio; opens on scripted "Is the Chanel 25" via trim.json startPhrase, ad-lib "a tale of two futures" cut; passes npm run verify; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
 | 2026-07-03 | Every Chanel type, one pass (taxonomy) | talking-head + synced mic + 7 cued cutouts | `Chanel_2026_0 2.MOV` + `script 3.m4a` (auto-synced, match 0.83); cutouts = Chanel brand images (Classic Flap, Boy, WOC, 19, 22, 25, 31) VIDEO-USE library | Her script (kit 1 taxonomy). Headline "Every Chanel type, one pass", CTA box. Fixes: Deauville, 31 Rue Cambon, feed-not-feet, Totes | draft v2 (captions RE-ALIGNED to audio after the sync-delay caption bug fix; opens on her first word, 5.2s dead air cut; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
 | 2026-07-03 | Chanel in 2026, decoded (starter map) | talking-head + synced mic + 5 cued cutouts | `Chanel_2026_0.MOV` + `script 1.m4a` (auto-synced, match 0.84); cutouts = Chanel brand images (25, Classic Flap, 19, 22, WOC) VIDEO-USE library | Her script (kit 1 explainer). Headline "Chanel in 2026, decoded", CTA box. Prices spoken as pre-loved asking medians. Fixes: BLANK_AUDIO tail stripped, year-named-too | draft v2 (captions RE-ALIGNED to audio after the sync-delay caption bug fix; opens on her first word, 2.4s dead air cut; bags on gold-edged cards, each NAMED, with the spoken price pinned under the card) |
@@ -39,6 +40,19 @@ re-rendered in this style.
 | 2026-07-06 | Swipe batch 1: macbook-fit | text-card (font 50) | broll bank IMG_2581 | "I used to watch every review to see if a bag fit my MacBook. Now I just check Luxury Catalog." | draft (verify a bag page shows fit data before linking) |
 | 2026-07-06 | Swipe batch 1: junkie | text-card (font 56) | broll bank IMG_2588 | "I wasted thousands on designer bags. And I'll do it again because I'm a junkie." | draft |
 | 2026-07-06 | Swipe batch 1: hills | text-card (font 66) | broll bank IMG_2561 @12 (shares first-bag location; diversify later) | "Hills I will die on as a handbag collector." | draft (payoff = the 3 hills in caption) |
+
+## B-roll usage manifest
+
+**2026-07-06** — owner reviewed the full ~92-clip b-roll bank. Her calls (in/out
+usable ranges, tags, rejects, holds) live in `tools/video-pipeline/broll-manifest.json`
+(`ranges`=[in,out] usable seconds; `status` use/reject/hold; un-annotated clips default
+to the full clip, "good throughout"). Read it before pulling any keep-warm clip. Rejects:
+IMG_2588, IMG_2578, IMG_2606 (too much movement). Hold: IMG_3053 (waterfall, distinctive,
+use-case TBD). Note: `examples/junkie.json` was built on now-rejected IMG_2588; owner
+cleared it to post as-is (2026-07-06), but do not reuse IMG_2588 for anything new.
+
+Ready-to-post 6s vertical segments cut from the trimmed usable windows live in the
+gitignored `output/broll-cuts/` (capped at 4 per clip; ask to generate more from any clip).
 
 ## Metricool staging
 
