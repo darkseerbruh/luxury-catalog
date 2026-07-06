@@ -10,6 +10,7 @@ import {
   classifyDepartment,
   type DepartmentId,
 } from "@/lib/article-departments";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 export const dynamic = "force-dynamic";
 
@@ -532,6 +533,18 @@ export default async function ArticlesPage({
         {rail}
         {content}
       </div>
+
+      {/* Newsletter opt-in — a quiet block, deliberately not a popup. Capture
+          only for now; unsubscribe + double opt-in ship with the first Resend
+          send, so no dead links here. */}
+      <section className="mt-14 rounded-lg border border-border bg-surface/50 p-6">
+        <h2 className="font-serif text-xl text-foreground">The Journal, in your inbox</h2>
+        <NewsletterSignup
+          source="articles_index"
+          valueProp="Price-drop alerts and a monthly read on the resale market, built from real numbers."
+          className="mt-2 max-w-md"
+        />
+      </section>
     </main>
   );
 }
