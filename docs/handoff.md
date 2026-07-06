@@ -3,6 +3,31 @@
 
 ---
 
+## TL;DR — TikTok swipe file + batch 1 reels (text-card format) (2026-07-06, on `main`)
+
+**From her saved TikTok DMs → a hook bank + 8 post-ready reels + a locked video format.**
+- `docs/tiktok-swipe-file.md`: her saved inspo (creators + which sounds), verbatim caption bank, hook→payoff, the full rule-filtered hook bank, and **§9 = copy + per-post-type rules**. Sound finding: coaching videos use original/voiceover; the reusable trends are "how my brain sounds when…" + "girls will be like I needed this".
+- **Text-card reels** (new pipeline mode, `tools/video-pipeline/scripts/montage-card.mjs`): one held clip + the hook shown STATICALLY on screen, Playfair serif, brand footer. 8 rendered (aff-deserve, value-fendi, doc-flight, first-bag, hermes-game, macbook-fit, junkie, hills) in `tools/video-pipeline/output/` (local, silent by design).
+- **Accessibility enforced in code** (`src/brand.ts`, `CardStack.tsx`): min 46px text (headline ≥56), dark backing behind cream text, no pop-in. Rules: `docs/video-accessibility.md`. Locked in `docs/preferences.md` → "Short-form video + social content".
+- **Post package** (caption + sound direction per reel): `docs/social-batch-2026-07-06.md`.
+- **Owner rule reinforced:** keep her hooks verbatim (never trim the TikTok opener).
+
+**YOUR TURN (2026-07-06):** per reel, pick + add a trending sound in-app, wire link + UTM (`utm_campaign=2026-07-swipe-batch-1`), publish; refresh the Fendi resale figures the day you post. NOTE: Metricool IS connected (see next TL;DR) — no reconnect needed to stage as drafts.
+
+---
+
+## TL;DR — Creator-study video rubric + on-screen follow-CTA shipped (2026-07-06, on `main`)
+
+**Studied two TikTok coaches for transferable CRAFT (not their topics), turned it into a rubric, applied it, and shipped the highest-leverage fix.**
+- **Studies (per-video, not averaged):** `docs/social-study-personalbrandlaunch.md` + `docs/social-study-lana-k-social.md`. Method locked in memory: extract technique, per-video, never adjacent topics.
+- **Rubric:** `docs/script-requirements.md` rules 24-31 (layered hook, reason-to-stay, one follow trigger, categorization keyword, low-fi, one-topic-many-angles) + 4 pre-record checklist items.
+- **Follow-CTA = first-class pipeline feature** (`FollowCta.tsx`; `headline.json` gains a `"follow"` line, auto-timed to the CTA phrase). Verified rendering; every future reel gets it with one line.
+- **Alma PM comps FILLED** (was Ep 7 repo-only) from tracked comps (Fashionphile + The RealReal, US, 2026-06-23..07-02): monogram canvas ~$795 (n=148), Epi ~$1,040 (n=110); reframed the draft's wrong "Epi is cheaper" line. LV-nine series now record-ready.
+- **3 Chanel reel drafts SWAPPED in Metricool** to the follow-card cut (ids 346158025 / 346158158 / 346158698, still `draft:true`, schedules kept). Metricool IS connected (a startup "needs auth" note was stale; swap workflow = temp GitHub release host → `updateScheduledPost` → delete release).
+
+**YOUR TURN (2026-07-06):** review + publish the 3 follow-card Chanel drafts from the Metricool planner (blogId 6480195) when ready; they only go live on your publish.
+---
+
 ## TL;DR — Social content engine + founder About page + protective-feet feature (2026-07-05, on `main`, merge `75c38a1`, all gates green: tsc/eslint/build/573 tests; keep-warm blend swapped 2026-07-06)
 
 Built a faceless social content engine plus two features, merged same day. **Content: 60 Metricool DRAFTS staged (Jul 8 to Sep 5, ~1/day)** = data slideshows + history decks + opinion posts (overrated Chanel Flap, modern-usage thesis, auth myths, why-I-built, first-buyer, etc.) + persona posts + mobile-walkthrough reels + **20 keep-warm b-roll reels (Aug 2 to Sep 5)**. All FACELESS: owner can't film talking-head (blocker), but VOICEOVER is fine. **Design v4 locked:** question-hook covers, two-bag vs covers, NO spotlight circle (solid bg contrasting the bag), worth-it framing not negotiation, high bag/bg contrast. Hosted via GitHub-release then Metricool ingest. **New content types:** the mobile walkthrough (faceless, dynamic, VO-ready screen-recording of the live site; 3 built = worth/quiz/compare), the 3-tier system (Hero/Signature/Keep-warm), the b-roll bank (91 clips at `~/Documents/handbag-campaign-images/broll`). **Founder About page** (`/about`, editorial, framer-motion + lenis scroll motion): her real story (bag-feet origin to data democratization), feature-pivoting, quiz CTA, search key "the founder". **Protective-feet feature** (her origin made real): `has_protective_feet` attribute + Shop filter + review-report field + 13 hero styles seeded; **migration `0044`**. Source of truth: `docs/founder-story.md`. Many social/founder rules locked into `preferences.md`.

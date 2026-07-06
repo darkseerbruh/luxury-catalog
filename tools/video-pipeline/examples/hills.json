@@ -1,0 +1,30 @@
+{
+  "name": "hills",
+  "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/broll/B roll/IMG_2561.MOV",
+  "start": 12,
+  "duration": 6,
+  "fontPx": 64,
+  "zoom": 0.03,
+  "caption": "hills",
+  "blocks": [
+    {
+      "text": "Hills I will die on as a handbag collector.",
+      "fontPx": 56
+    },
+    {
+      "text": "Purses never go on the ground",
+      "fontPx": 46,
+      "bullet": true
+    },
+    {
+      "text": "You don't have to condition as often as you think you do",
+      "fontPx": 46,
+      "bullet": true
+    },
+    {
+      "text": "Bag liners should come included with expensive purses 😡",
+      "fontPx": 46,
+      "bullet": true
+    }
+  ]
+}

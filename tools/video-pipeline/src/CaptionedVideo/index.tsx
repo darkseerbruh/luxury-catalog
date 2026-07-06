@@ -16,7 +16,10 @@ import {
 } from "remotion";
 import { z } from "zod";
 import { BRAND } from "../brand";
+import { CardFooter } from "./CardFooter";
+import { CardStack } from "./CardStack";
 import { CtaBox } from "./CtaBox";
+import { FollowCta } from "./FollowCta";
 import { Headline } from "./Headline";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Overlay } from "./Overlay";
@@ -63,11 +66,33 @@ const headlineSchema = z.object({
   ctaSec: z.number().optional(),
   ctaYPct: z.number().optional(),
   yPct: z.number().optional(),
+  follow: z.string().optional(), // on-screen follow-the-account ask (never spoken)
+  followSec: z.number().optional(), // resolved from followAt phrase in make.mjs
+  followYPct: z.number().optional(),
 });
 
 export const captionedVideoSchema = z.object({
   src: z.string(), // basename of a video file in public/
   zoom: z.number().default(BRAND.zoomIntensity),
+  // Fixed caption size in px for text-card videos (whole hook on one screen,
+  // wrapping). Undefined keeps the default auto-fit talking-head style.
+  captionFontPx: z.number().optional(),
+  // Render the editorial brand footer (tagline + FOLLOW ALONG + site pill).
+  cardFooter: z.boolean().default(false),
+  // Static stacked text card (no pop-in, per-line sizes, optional bullets).
+  // When set, replaces the animated word-by-word caption for text-card reels.
+  cardBlocks: z
+    .array(
+      z.object({
+        text: z.string(),
+        fontPx: z.number(),
+        italic: z.boolean().optional(),
+        bullet: z.boolean().optional(),
+        hint: z.boolean().optional(),
+      }),
+    )
+    .optional(),
+  cardTextPos: z.enum(["center", "top"]).optional(),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
@@ -105,6 +130,10 @@ const SWITCH_CAPTIONS_EVERY_MS = 1200;
 export const CaptionedVideo: React.FC<Props> = ({
   src,
   zoom,
+  captionFontPx,
+  cardFooter,
+  cardBlocks,
+  cardTextPos,
   overlays,
   rankTracker,
   rankList,
@@ -188,7 +217,8 @@ export const CaptionedVideo: React.FC<Props> = ({
         );
       })}
 
-      {pages.map((page, index) => {
+      {!cardBlocks &&
+        pages.map((page, index) => {
         const nextPage = pages[index + 1] ?? null;
         const subtitleStartFrame = (page.startMs / 1000) * fps;
         const subtitleEndFrame = Math.min(
@@ -205,7 +235,7 @@ export const CaptionedVideo: React.FC<Props> = ({
             from={subtitleStartFrame}
             durationInFrames={dur}
           >
-            <SubtitlePage page={page} />
+            <SubtitlePage page={page} captionFontPx={captionFontPx} />
           </Sequence>
         );
       })}
@@ -243,11 +273,27 @@ export const CaptionedVideo: React.FC<Props> = ({
         />
       ) : null}
 
+      {headline?.follow && headline?.followSec !== undefined ? (
+        <FollowCta
+          text={headline.follow}
+          atSec={headline.followSec}
+          yPct={headline.followYPct}
+        />
+      ) : null}
+
       {callouts.map((c, i) => (
         <StatCallout key={i} text={c.text} atSec={c.atSec} hold={c.hold} xPct={c.xPct} yPct={c.yPct} />
       ))}
 
-      {subtitles.length === 0 ? <NoCaptionFile /> : null}
+      {cardBlocks ? (
+        <AbsoluteFill style={{ background: BRAND.cardScrim }} />
+      ) : null}
+
+      {cardBlocks ? <CardStack blocks={cardBlocks} pos={cardTextPos} /> : null}
+
+      {cardFooter ? <CardFooter /> : null}
+
+      {subtitles.length === 0 && !cardBlocks ? <NoCaptionFile /> : null}
     </AbsoluteFill>
   );
 };

@@ -163,6 +163,18 @@ populate as each is reached.
    markers, never a verdict (see the hedging frames in `docs/preferences.md`).
 4. `node scripts/montage.mjs examples/<name>.json`.
 
+## Step 3c — Text-card mode (text-hook reels: one clip + text on screen)
+For the "put a thought on screen over one held clip" format (her saved TikTok
+style), use `scripts/montage-card.mjs`. Spec: `{ name, clip, start, duration,
+caption, fontPx }`, or `blocks:[{text,fontPx,italic?,bullet?,hint?}]` for per-line
+sizes / bulleted lists / a "(more in caption)" hint.
+**Before rendering, read `docs/video-accessibility.md` (NON-NEGOTIABLE)** and
+`docs/tiktok-swipe-file.md` §9 (copy + per-type rules). The look: one clip held (no
+cuts), text on screen from frame 0 (no pop-in), Playfair serif (not the per-word
+caption sweep), min text 46px (headline ≥56), a dark backing behind text + footer
+(never shadow alone — cream-on-bright fails), brand footer lifted off the bottom.
+**Keep her hooks verbatim.** Verify on the BRIGHTEST frame of the clip.
+
 ## Speed rules (READ THIS — renders are the expensive step)
 A full 1080x1920 render is minutes per clip, so the goal is ONE correct render, not five.
 - **Iterate in draft.** `npm run draft <clip>` renders at half resolution on all cores

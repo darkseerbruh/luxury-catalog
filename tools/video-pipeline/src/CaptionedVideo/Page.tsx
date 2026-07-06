@@ -9,14 +9,15 @@ import {
   useVideoConfig,
 } from "remotion";
 import { BRAND } from "../brand";
-import { CAPTION_FONT_FAMILY } from "../load-font";
+import { CAPTION_FONT_FAMILY, CAPTION_SERIF_FAMILY } from "../load-font";
 
 // A restrained, editorial caption: cream text, gold on the active word, soft
 // shadow instead of the loud default black stroke. Tuned in src/brand.ts.
 export const Page: React.FC<{
   readonly enterProgress: number;
   readonly page: TikTokPage;
-}> = ({ enterProgress, page }) => {
+  readonly captionFontPx?: number;
+}> = ({ enterProgress, page, captionFontPx }) => {
   const frame = useCurrentFrame();
   const { width, fps } = useVideoConfig();
   const timeInMs = (frame / fps) * 1000;
@@ -27,16 +28,23 @@ export const Page: React.FC<{
     withinWidth: width * BRAND.captionWidthFraction,
     textTransform: BRAND.uppercase ? "uppercase" : "none",
   });
-  const fontSize = Math.min(BRAND.maxFontSizePx, fitted.fontSize, BRAND.fontSizePx);
+  // Text-card mode: a fixed size so the whole hook wraps onto one screen.
+  // Default mode: auto-fit the short spoken caption as before.
+  const isCard = typeof captionFontPx === "number";
+  const fontSize = isCard
+    ? captionFontPx
+    : Math.min(BRAND.maxFontSizePx, fitted.fontSize, BRAND.fontSizePx);
 
   return (
     <AbsoluteFill
       style={{
         justifyContent: "center",
         alignItems: "center",
-        top: undefined,
-        bottom: BRAND.bottomOffsetPx,
-        height: 220,
+        top: isCard ? 0 : undefined,
+        // Card mode: center the hook in the upper region so a big block clears
+        // the footer that sits in the lower third.
+        bottom: isCard ? 560 : BRAND.bottomOffsetPx,
+        height: isCard ? undefined : 220,
         paddingLeft: 48,
         paddingRight: 48,
       }}
@@ -44,11 +52,12 @@ export const Page: React.FC<{
       <div
         style={{
           fontSize,
-          fontFamily: CAPTION_FONT_FAMILY,
-          fontWeight: BRAND.fontWeight,
-          letterSpacing: BRAND.letterSpacingPx,
+          fontFamily: isCard ? CAPTION_SERIF_FAMILY : CAPTION_FONT_FAMILY,
+          fontWeight: isCard ? 700 : BRAND.fontWeight,
+          letterSpacing: isCard ? 0 : BRAND.letterSpacingPx,
           textAlign: "center",
-          lineHeight: 1.15,
+          lineHeight: isCard ? 1.25 : 1.15,
+          maxWidth: isCard ? width * BRAND.captionWidthFraction : undefined,
           color: BRAND.captionColor,
           textShadow: BRAND.captionShadow,
           textTransform: BRAND.uppercase ? "uppercase" : "none",
@@ -69,8 +78,9 @@ export const Page: React.FC<{
               key={t.fromMs}
               style={{
                 display: "inline",
-                whiteSpace: "pre",
-                color: active ? BRAND.activeWordColor : BRAND.captionColor,
+                whiteSpace: isCard ? "pre-wrap" : "pre",
+                // Card mode: one uniform static style (no per-word gold sweep).
+                color: !isCard && active ? BRAND.activeWordColor : BRAND.captionColor,
                 transition: "color 0.1s",
               }}
             >
