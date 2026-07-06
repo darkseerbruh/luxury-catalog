@@ -14,10 +14,12 @@ the cross-feed rules in §2 are binding on every scheduled run.*
 | **Archivist pull** | seasonal-archive worklist | archive conventions | `archivist-monthly-pull` (1st + 15th) | `research-drafts/seasonal-archive/` | none (doc-only, sourced) |
 | **Market data → site** | Firecrawl/FP captures | `capture-runbook.md` | GitHub Actions (daily/monthly) | DB `price_history` | none (pages live-query) |
 | **Content freshness** | quarterly re-review | `freshness-runbook.md` | `quarterly-content-freshness-review` | freshness report | ALL number changes (by design) |
+| **Market report** (monthly "State of the Resale Market") | DB `price_history` | factuality protocol (n-gated in `market-report-core.ts`) | `market-report-monthly` (1st): `npx tsx scripts/market-report.ts --write` | `docs/research-drafts/market-reports/` | ALL publishes (draft-only by design) |
 
 Still open, waiting on her: **comment engagement** (needs a non-Metricool pipe,
-e.g. Apify free tier), **newsletter** (opt-in unbuilt), **GSC queries** (connect
-Search Console).
+e.g. Apify free tier), **GSC queries** (connect Search Console). *(Newsletter
+opt-in SHIPPED 2026-07-06 — capture live once migration `0045` is applied;
+sending/campaigns still to build with the first send.)*
 
 ## §2 Cross-feed rules (binding; this is what makes it a flywheel)
 
