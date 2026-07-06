@@ -92,6 +92,7 @@ export const captionedVideoSchema = z.object({
       }),
     )
     .optional(),
+  cardTextPos: z.enum(["center", "top"]).optional(),
   overlays: z.array(overlaySchema).default([]),
   rankTracker: rankTrackerSchema.optional(),
   rankList: rankListSchema.optional(),
@@ -132,6 +133,7 @@ export const CaptionedVideo: React.FC<Props> = ({
   captionFontPx,
   cardFooter,
   cardBlocks,
+  cardTextPos,
   overlays,
   rankTracker,
   rankList,
@@ -287,7 +289,7 @@ export const CaptionedVideo: React.FC<Props> = ({
         <AbsoluteFill style={{ background: BRAND.cardScrim }} />
       ) : null}
 
-      {cardBlocks ? <CardStack blocks={cardBlocks} /> : null}
+      {cardBlocks ? <CardStack blocks={cardBlocks} pos={cardTextPos} /> : null}
 
       {cardFooter ? <CardFooter /> : null}
 

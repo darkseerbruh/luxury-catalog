@@ -45,6 +45,18 @@ the `video` skill (how to run it).*
 - **Value / resale reframe:** real, sourced numbers only; refresh the range before
   posting (resale is live inventory).
 
+## 3b. Footage selection
+
+- **No people walking into frame.** Scan the whole clip window; if someone enters
+  (even at the very end), trim the segment to a clean window or pick another clip.
+- **Match motion to the message.** For calm/confessional posts, pick a **low-motion
+  window** (measure it: `fps,tblend=difference,signalstats` YAVG per second, choose
+  the lowest) and drop the Ken Burns push (`zoom` ~0.01). Never a jarring/spinning
+  shot under reflective copy.
+- **Keep text off a centered subject.** If the hero of the clip is centered (a bag on
+  a chair), set `pos:"top"` so the text sits at the top and the subject stays the
+  focus.
+
 ## 4. Pre-delivery checklist
 
 1. Brightest-frame readability (contrast holds).

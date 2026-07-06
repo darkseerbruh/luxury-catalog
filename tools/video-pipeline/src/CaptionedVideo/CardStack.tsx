@@ -22,7 +22,8 @@ const sz = (px: number) => Math.max(BRAND.minCardCaptionPx, px);
 export const CardStack: React.FC<{
   readonly blocks: CardBlock[];
   readonly bottomPx?: number;
-}> = ({ blocks, bottomPx = 560 }) => {
+  readonly pos?: "center" | "top"; // "top" keeps the hook clear of a centered subject
+}> = ({ blocks, bottomPx = 560, pos = "center" }) => {
   const items: React.ReactNode[] = [];
   let i = 0;
   let key = 0;
@@ -98,9 +99,10 @@ export const CardStack: React.FC<{
     <AbsoluteFill
       style={{
         top: 0,
-        bottom: bottomPx,
-        justifyContent: "center",
+        bottom: pos === "top" ? 0 : bottomPx,
+        justifyContent: pos === "top" ? "flex-start" : "center",
         alignItems: "center",
+        paddingTop: pos === "top" ? 150 : 0,
         paddingLeft: 60,
         paddingRight: 60,
       }}
