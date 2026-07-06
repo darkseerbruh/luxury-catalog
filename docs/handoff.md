@@ -3,6 +3,19 @@
 
 ---
 
+## TL;DR — TikTok swipe file + batch 1 reels (text-card format) (2026-07-06, on `main`)
+
+**From her saved TikTok DMs → a hook bank + 8 post-ready reels + a locked video format.**
+- `docs/tiktok-swipe-file.md`: her saved inspo (creators + which sounds), verbatim caption bank, hook→payoff, the full rule-filtered hook bank, and **§9 = copy + per-post-type rules**. Sound finding: coaching videos use original/voiceover; the reusable trends are "how my brain sounds when…" + "girls will be like I needed this".
+- **Text-card reels** (new pipeline mode, `tools/video-pipeline/scripts/montage-card.mjs`): one held clip + the hook shown STATICALLY on screen, Playfair serif, brand footer. 8 rendered (aff-deserve, value-fendi, doc-flight, first-bag, hermes-game, macbook-fit, junkie, hills) in `tools/video-pipeline/output/` (local, silent by design).
+- **Accessibility enforced in code** (`src/brand.ts`, `CardStack.tsx`): min 46px text (headline ≥56), dark backing behind cream text, no pop-in. Rules: `docs/video-accessibility.md`. Locked in `docs/preferences.md` → "Short-form video + social content".
+- **Post package** (caption + sound direction per reel): `docs/social-batch-2026-07-06.md`.
+- **Owner rule reinforced:** keep her hooks verbatim (never trim the TikTok opener).
+
+**YOUR TURN (2026-07-06):** per reel, pick + add a trending sound in-app, wire link + UTM (`utm_campaign=2026-07-swipe-batch-1`), publish; refresh the Fendi resale figures the day you post; reconnect Metricool to stage these as drafts.
+
+---
+
 ## TL;DR — Bag-detail declutter: compact hero + honest selector axes (2026-07-02, on `main`)
 
 **Owner flagged the bag page fold + weird selector labels; both fixed same day.** Hero image (photo or placeholder) capped at 320×240 centered (was full-column ~575px tall) so the value module sits above the fold. Variant data normalized (styles 218/3/200/2): size chips = size code only (PM/MM/GM/BB), colour chips = canonical canvas/colour name (Monogram, Damier Ebene), "varies by season" junk nulled; originals preserved in commit `3e8161c`'s message. **New rule (locked in preferences): every per-variant detail = own DB column + selector dimension** — selector now derives axes from ALL captured fields via `src/lib/variant-dims.ts` (shows an axis only when it varies AND isn't implied 1:1 by an earlier axis; unit-tested). **⚠️ Owner action: run the "Apply database migrations" GitHub Action** to apply `0041_variant_trim_material.sql` (adds `variant.trim_material` + Neverfull backfill); the app degrades gracefully until then (wide select falls back, Trim axis just doesn't appear).
