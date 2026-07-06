@@ -12,7 +12,20 @@
 - **Post package** (caption + sound direction per reel): `docs/social-batch-2026-07-06.md`.
 - **Owner rule reinforced:** keep her hooks verbatim (never trim the TikTok opener).
 
-**YOUR TURN (2026-07-06):** per reel, pick + add a trending sound in-app, wire link + UTM (`utm_campaign=2026-07-swipe-batch-1`), publish; refresh the Fendi resale figures the day you post; reconnect Metricool to stage these as drafts.
+**YOUR TURN (2026-07-06):** per reel, pick + add a trending sound in-app, wire link + UTM (`utm_campaign=2026-07-swipe-batch-1`), publish; refresh the Fendi resale figures the day you post. NOTE: Metricool IS connected (see next TL;DR) — no reconnect needed to stage as drafts.
+
+---
+
+## TL;DR — Creator-study video rubric + on-screen follow-CTA shipped (2026-07-06, on `main`)
+
+**Studied two TikTok coaches for transferable CRAFT (not their topics), turned it into a rubric, applied it, and shipped the highest-leverage fix.**
+- **Studies (per-video, not averaged):** `docs/social-study-personalbrandlaunch.md` + `docs/social-study-lana-k-social.md`. Method locked in memory: extract technique, per-video, never adjacent topics.
+- **Rubric:** `docs/script-requirements.md` rules 24-31 (layered hook, reason-to-stay, one follow trigger, categorization keyword, low-fi, one-topic-many-angles) + 4 pre-record checklist items.
+- **Follow-CTA = first-class pipeline feature** (`FollowCta.tsx`; `headline.json` gains a `"follow"` line, auto-timed to the CTA phrase). Verified rendering; every future reel gets it with one line.
+- **Alma PM comps FILLED** (was Ep 7 repo-only) from tracked comps (Fashionphile + The RealReal, US, 2026-06-23..07-02): monogram canvas ~$795 (n=148), Epi ~$1,040 (n=110); reframed the draft's wrong "Epi is cheaper" line. LV-nine series now record-ready.
+- **3 Chanel reel drafts SWAPPED in Metricool** to the follow-card cut (ids 346158025 / 346158158 / 346158698, still `draft:true`, schedules kept). Metricool IS connected (a startup "needs auth" note was stale; swap workflow = temp GitHub release host → `updateScheduledPost` → delete release).
+
+**YOUR TURN (2026-07-06):** review + publish the 3 follow-card Chanel drafts from the Metricool planner (blogId 6480195) when ready; they only go live on your publish.
 
 ---
 
