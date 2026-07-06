@@ -11,6 +11,7 @@ import PendingSaveFlusher from "@/components/PendingSaveFlusher";
 import HeaderNav from "@/components/HeaderNav";
 import FooterAccountLinks from "@/components/FooterAccountLinks";
 import { FirstAlertNudge } from "@/components/FirstAlertNudge";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -112,6 +113,16 @@ export default async function RootLayout({
             {/* "You" = personal, auth-gated surfaces (client-resolved so the
                 layout stays cookieless). Signed out: Account links instead. */}
             <FooterAccountLinks />
+          </div>
+          {/* Newsletter opt-in — capture only for now; unsubscribe + double
+              opt-in ship with the first Resend send, so no dead links here. */}
+          <div className="mx-auto mt-8 max-w-5xl border-t border-border pt-6">
+            <p className="font-serif text-foreground">The market, in your inbox</p>
+            <NewsletterSignup
+              source="footer"
+              valueProp="Price-drop alerts and a monthly read on the resale market, built from real numbers."
+              className="mt-2 max-w-md"
+            />
           </div>
           <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-start sm:justify-between">
             <p className="max-w-xl text-muted/60">

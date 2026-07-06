@@ -74,7 +74,9 @@ export const EVENTS = {
   experimentExposed: "experiment_exposed",
   /** A personalized rec section was viewed (impression, not click). */
   personalizedRecsViewed: "personalized_recs_viewed",
-  /** A user subscribed to the newsletter. */
+  /** A user subscribed to the newsletter (capture only; sending comes later).
+   *  Carries `source` = the placement that captured it (footer,
+   *  articles_index, homepage, taste_page). The owned-audience growth signal. */
   newsletterSubscribed: "newsletter_subscribed",
   /** The homepage hero search box was engaged (focused or submitted) — the success
    *  metric for the home_headline copy test. Carries `flag`, `variant`, `kind`. */
