@@ -26,3 +26,4 @@ Rows are permanent historical data points — never deleted, never called stale.
 ## Run summaries
 
 - 2026-07-06 · engine built this session; no analysis run yet (n=1 published post, below the n=4 floor in §2).
+- 2026-07-06 · weekly run SKIPPED — Metricool MCP unreachable (getBrandSettings 503 / OAuth not available in unattended session). No analytics pulled, no drafts created.
