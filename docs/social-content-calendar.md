@@ -243,11 +243,13 @@ variant is the same idea for talking pieces and rides along as a secondary cell.
 | C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
 
 **Rules for the test:**
-- **Reuse proven text only** (see above). First cohort = 9 existing statement posts re-bedded
-  over the founder bank: `aff-deserve, doc-flight, value-fendi, first-bag, hermes-game, hills,
-  junkie, love-language, macbook-fit` -> `output/<name>-founder.mp4`, specs `examples/<name>-founder.json`.
-  Each is a matched pair against its faceless original. Voiceover/opinion pieces are the second cohort.
-  Data-slideshow heroes stay faceless: there, the chart IS the visual.
+- **Reuse existing text only** (see above), never freshly-written copy. Cohort = all 21
+  existing text posts re-bedded over the founder bank, each a matched pair vs its faceless
+  original: 9 swipe-batch statements (`aff-deserve, doc-flight, value-fendi, first-bag,
+  hermes-game, hills, junkie, love-language, macbook-fit`) + 12 keep-warm reflective
+  questions (`kw-*, kw2-*`). Renders `output/<name>-founder.mp4`, specs `examples/<name>-founder.json`.
+  Voiceover/opinion pieces are the secondary cohort. Data-slideshow heroes stay faceless:
+  there, the chart IS the visual.
 - **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
   same channel, so the bed is the only thing that moves.
 - **Primary metric = watch-through (retention) + follows.** Secondary = saves + comments.
