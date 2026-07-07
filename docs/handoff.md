@@ -3,6 +3,24 @@
 
 ---
 
+## TL;DR — Metricool calendar re-timed to clean 2/day; migrations confirmed live; stale branches cleaned (2026-07-07, on `main`)
+
+**Calendar (blogId 6480195) re-shaped to a crisp cadence, no collisions.** Supersedes the prior "1/day Jul 8–Sep 8" note for the Jul 7–Aug 20 window.
+- 📅 **Jul 7–26 = 2/day, alternating:** value/data post at **12:00**, lighter keep-warm/reflection reel at **18:00**.
+- 📅 **Jul 27–Aug 20 = 1/day** at **12:00** (value, a few reflection reels mixed). Content only supports ~1/day past the launch fortnight; not forcing 2/day with filler.
+- 🧹 Fixed 3 collisions (value/founder posts double-stacked at 18:00 → moved to open noon slots), un-jammed the overloaded Jul 15–18 (moved 4 orphan engagement reels 10:00 → 18:00 on sparse Jul 23–26), and **emptied the awkward 10:00 lane entirely**.
+- ⚠️ **Co-editing is live:** this Metricool is edited by several concurrent chats (with her consulting). Make **surgical diffs, never blind full-calendar rewrites**. Metricool ops gotchas: `getScheduledPosts` needs a full ISO offset (`...T00:00:00.000-04:00`), `updateScheduledPost` echoes the WHOLE payload and returns a NEW `id` each save (uuid is the stable key).
+
+**Migrations 0044 + 0045 CONFIRMED APPLIED to the DB** — closes the older "your turn: apply 0044" item. Run `28824249861` (`db-migrate.yml`, 2026-07-06 21:24 UTC, success) log shows `Applying migration 0044_style_protective_feet.sql` + `0045_newsletter_subscriber.sql`. Protective-feet + newsletter table are live (project `pewmdztviyrtbhtebcct`). `db-migrate` is manual-dispatch only; future migrations need her to run the Action.
+
+**Stale branch cleanup (both were already full ancestors of `main`, nothing to merge):** deleted `feat/about-founder-editorial` (local + remote) and `feat/protective-feet` (local); removed their 2 idle agent worktrees (verified 0 uncommitted first). Their deliverables (About editorial, migration 0044) shipped on `main` days ago.
+
+**Face-rule corrected in `preferences.md`:** there is **NO faceless rule** — her face is welcome when it's purpose-shot and looks good; the bar is QUALITY, not a ban. Old candid captures come down; new talking-head is a pacing choice, never a blocker. (Memory `social-content-tiers` already held this; preferences now matches.)
+
+**⚠️ YOUR TURN (outward-facing only):** (1) publish the notification carousels as their phone pings land (auto-publish reels fire on their own; the love-language reel already has its music); (2) add trending sounds in-app where you want them; (3) upgrade Metricool to paid to lift the Free 20-posts/month cap.
+
+---
+
 ## TL;DR — Monetization sprint: strategy asked, ALL greenlit, shipped + verified same day (2026-07-06, on `main`)
 
 **Owner asked "make the most money"; greenlit every lever; every build item landed, deployed, and verified live.**
