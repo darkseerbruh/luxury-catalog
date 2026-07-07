@@ -216,6 +216,44 @@ Rules:
 
 ---
 
+## 3.6 Visual-bed variable (founder-face A/B, added 2026-07-06)
+
+Face-vs-faceless is no longer fixed per tier. For **voiceover / spoken-opinion content**
+it is a **testable variable**: hold the audio and script constant, swap only the visual
+bed underneath, and measure which wins. This is how we earn (or reject) a change to the
+locked ~1 face : 2 faceless ratio with data instead of a guess.
+
+**The variable — visual bed under a fixed opinion voiceover:**
+
+| Cell | Visual bed | Source | Notes |
+|---|---|---|---|
+| **A — Control** | Faceless slideshow / scenery b-roll + captions | existing default | What we ship today |
+| **B — Variant** | Founder-face b-roll (her at the desk, bag wall behind) + captions | `founder-broll-manifest.json` (vertical/) | Same voice, her face on screen |
+| C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
+
+**Rules for the test:**
+- **Only voiceover/opinion pieces** enter this test (hot-takes, confessionals, "my take",
+  reframes). Data-slideshow heroes stay faceless: there, the chart IS the visual.
+- **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
+  same channel, so the bed is the only thing that moves.
+- **Primary metric = watch-through (retention) + follows.** Secondary = saves + comments.
+  Hypothesis: a real face under a real opinion lifts retention and follows vs faceless.
+- **Bag wall stays in frame** on variant B (14 of 16 clips have it) = silent credibility.
+- **Production:** existing opinion audio + a founder-b-roll bed + synced captions. The
+  pipeline already does headless montage + burned captions over `founder-broll/vertical`;
+  muxing an EXISTING voiceover track over that montage (instead of caption-only) is a small
+  one-time addition to `montage.mjs`, not a built path yet. No new filming: one bank feeds
+  every future variant.
+- **Read before scaling:** if B beats A on retention + follows across ~3-4 matched pairs,
+  raise the face ratio and make founder-bed the default for opinion content. If not, keep
+  faceless and retire the bank to occasional Signature use.
+
+**First test cell (owner picks the pieces):** re-bed 3-4 existing opinion renders (e.g.
+`gucci-myth`, `value-fendi`, `neverfull-gap`, a collector hot-take) as variant B, pair each
+against its faceless original, tag `utm_campaign=2026-07-visualbed-ab`.
+
+---
+
 ## 4. Email playbook (detail)
 
 > **Blocked on the opt-in dependency in §2.2** — content-ready, build-pending.

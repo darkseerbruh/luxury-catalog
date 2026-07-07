@@ -1,0 +1,27 @@
+{
+  "_doc": "Founder b-roll bank (2026-07-06). Arielle's OWN face + bag-wall b-roll, filmed deliberately for content. PRIMARY USE = a VISUAL BED for her voiceover/opinion content: lay an existing spoken-opinion track + captions over these clips instead of a faceless slideshow/scenery bed. This is the founder-face variant in the visual-bed A/B (see docs/social-content-calendar.md 3.6). NOT the faceless scenery bank (that is broll-manifest.json). Media lives outside the repo: originals ~/Documents/handbag-campaign-images/founder-broll/originals (4K, rotation-flagged portrait); social-ready 1080x1920 H.264 in .../founder-broll/vertical. rating: A=hero keeper, B=usable, C=weak/skip. status: use | hold (hold = quality skip, NOT a clearance issue). keeper rating is Claude's take; final cut is owner's.",
+  "cleared": true,
+  "_cleared_note": "Owner cleared ALL 16 for posting (2026-07-06). 'hold' status is a quality recommendation only, not a permission gate.",
+  "sessions": {
+    "A": "rust/terracotta button top, hair down, glasses",
+    "B": "brown tee, hair up, arm tattoo visible, glasses"
+  },
+  "clips": [
+    { "clip": "IMG_7898", "session": "A", "duration": 10.0, "rating": "B", "status": "use", "action": "to-camera-neutral", "bagWall": false, "note": "Soft look to camera, keyboard in foreground, CURTAINS behind (not the bag wall this angle). Clean neutral opener but loses the credibility backdrop." },
+    { "clip": "IMG_7900", "session": "A", "duration": 13.2, "rating": "A", "status": "use", "action": "typing", "bagWall": true, "note": "HERO. Typing, head down then up, full bag wall behind. The 'she actually knows bags' credibility shot. Longest usable typing clip." },
+    { "clip": "IMG_7901", "session": "A", "duration": 7.3, "rating": "A", "status": "use", "action": "coffee-sip", "bagWall": true, "note": "Sipping from speckled mug, bag wall. Warm working-moment." },
+    { "clip": "IMG_7902", "session": "A", "duration": 8.9, "rating": "A", "status": "use", "action": "coffee-hold-to-camera", "bagWall": true, "note": "Both hands on mug, looking straight to camera, bag wall. Good hook frame / eye contact." },
+    { "clip": "IMG_7903", "session": "A", "duration": 5.3, "rating": "B", "status": "use", "action": "coffee-cheers", "bagWall": true, "note": "Reaches mug toward camera, playful/cheeky. A bit much on its own; fine as a punchy cutaway." },
+    { "clip": "IMG_7904", "session": "A", "duration": 2.3, "rating": "A", "status": "use", "action": "thinking-pose", "bagWall": true, "note": "Chin on hand, playful thinking beat. Only 2s but perfect transition / 'let me think' cutaway." },
+    { "clip": "IMG_7905", "session": "A", "duration": 3.7, "rating": "A", "status": "use", "action": "smile-to-camera", "bagWall": true, "note": "HERO. Big genuine smile straight to camera, bag wall. The warmest frame of the set. Strong opener/closer." },
+    { "clip": "IMG_7906", "session": "A", "duration": 8.4, "rating": "A", "status": "use", "action": "coffee-smile", "bagWall": true, "note": "Holding mug, soft smile, bag wall. Reliable warm working b-roll." },
+    { "clip": "IMG_7907", "session": "A", "duration": 6.9, "rating": "B", "status": "use", "action": "coffee-drink-face-hidden", "bagWall": true, "note": "Drinking, mug covers most of face. USEFUL for the face-optional need: warm and human without showing full face." },
+    { "clip": "IMG_7908", "session": "A", "duration": 16.0, "rating": "B", "status": "hold", "action": "product-hold-closeup", "bagWall": true, "note": "Close-up holding a small beauty product (lip gloss/sample), looking down. Off-topic for handbags; nice hands/close-up texture but not obviously on-brand. Hold unless a beauty-adjacent post needs it." },
+    { "clip": "IMG_7909", "session": "B", "duration": 9.6, "rating": "B", "status": "use", "action": "gesture-looking-down", "bagWall": true, "note": "Brown tee, hand gesture on desk, looking down / mid-talk. Good b-roll under a voiceover; edges toward talking-head so keep it as silent b-roll." },
+    { "clip": "IMG_7912", "session": "B", "duration": 8.8, "rating": "C", "status": "hold", "action": "reaching-setup", "bagWall": true, "note": "Reaching both arms toward camera (looks like adjusting the phone) while talking. Reads as setup/blooper. Skip unless a specific relatable-BTS beat wants it." },
+    { "clip": "IMG_7913", "session": "B", "duration": 9.5, "rating": "A", "status": "use", "action": "coffee-drink", "bagWall": true, "note": "Brown tee, drinking coffee, bag wall. Second-outfit coffee moment, keeps the bank from looking single-take." },
+    { "clip": "IMG_7915", "session": "B", "duration": 9.8, "rating": "A", "status": "use", "action": "typing-headphones", "bagWall": true, "note": "HERO. Headphones on, heads-down typing, bag wall. The 'in the zone / doing the work' shot. Pairs with 7900." },
+    { "clip": "IMG_7916", "session": "B", "duration": 12.5, "rating": "A", "status": "use", "action": "cat-to-camera", "bagWall": true, "note": "HERO. Holding the black cat, smiling to camera, bag wall. Personality + scroll-stopper (cats perform). Humanizes the founder." },
+    { "clip": "IMG_7917", "session": "B", "duration": 10.4, "rating": "A", "status": "use", "action": "cat-pet", "bagWall": true, "note": "Petting the cat, looking down, bag wall. Warm ambient b-roll; great under a voiceover or text hook." }
+  ]
+}
