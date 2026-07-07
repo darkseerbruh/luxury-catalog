@@ -242,14 +242,17 @@ variant is the same idea for talking pieces and rides along as a secondary cell.
 | B2 — Variant (voiceover) | Founder-face bed under the same opinion voice | `montage-vo.mjs` | Same voice, her face on screen |
 | C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
 
+**Full registry: `docs/social-experiments.md`** (hypothesis, variable, held-constant
+ingredients, both arms' Metricool post ids, results). That file is the source of truth for
+the experiment; Metricool is the source of truth for the posts.
+
 **Rules for the test:**
-- **Reuse existing text only** (see above), never freshly-written copy. Cohort = all 21
-  existing text posts re-bedded over the founder bank, each a matched pair vs its faceless
-  original: 9 swipe-batch statements (`aff-deserve, doc-flight, value-fendi, first-bag,
-  hermes-game, hills, junkie, love-language, macbook-fit`) + 12 keep-warm reflective
-  questions (`kw-*, kw2-*`). Renders `output/<name>-founder.mp4`, specs `examples/<name>-founder.json`.
-  Voiceover/opinion pieces are the secondary cohort. Data-slideshow heroes stay faceless:
-  there, the chart IS the visual.
+- **Reuse existing text only** (see above), never freshly-written copy. An arm exists only if
+  its faceless twin is a real Metricool post (no twin in Metricool = not real, not an arm).
+  Live cohort = **12 matched pairs** (the `kw-*/kw2-*` keep-warm questions + `love-language`),
+  each B-arm staged as a draft mirroring its faceless twin. The 8 statement hooks + `kw2-the-day`
+  had no Metricool twin and are shelved. Voiceover/opinion pieces are the secondary cohort.
+  Data-slideshow heroes stay faceless: there, the chart IS the visual.
 - **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
   same channel, so the bed is the only thing that moves.
 - **Primary metric = watch-through (retention) + follows.** Secondary = saves + comments.

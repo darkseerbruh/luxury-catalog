@@ -17,11 +17,13 @@ faceless twin exactly, B-arm at twin-date + ~7d, 18:00 ET):
 `kw-hold-value` 346294253 (Jul21) · `kw-bought-young` 346294277 (Jul23) · `kw-go-back` 346294629 (Jul25) ·
 `kw2-too-many` 346294647 (Jul27) · `kw2-pass-down` 346294654 (Jul29) · `kw2-wait` 346294661 (Jul30) ·
 `kw2-first-taught` 346294667 (Jul31) · `kw2-still-thinking` 346294669 (Aug2) · `love-language` 346294671 (Aug4).
-**9 NOT yet staged** (no clean scheduled twin found Jul1-Sep9): `kw2-the-day` (subagent mis-mapped it)
-+ the 8 statements (`first-bag, hermes-game, hills, junkie, macbook-fit, value-fendi, doc-flight,
-aff-deserve`) which read as ALREADY-PUBLISHED swipe-batch-1 (scheduled-posts endpoint only returns
-unpublished, so their captions aren't retrievable there). Need owner to point to their captions.
-Owner picks sound + publishes. Canon: `docs/social-content-calendar.md` 3.6.
+**9 SHELVED (not real):** `kw2-the-day` + the 8 statements (`first-bag, hermes-game, hills,
+junkie, macbook-fit, value-fendi, doc-flight, aff-deserve`) have **no faceless twin in Metricool**,
+so they are not experiment arms (owner rule: if it isn't in Metricool it isn't real). Their
+founder renders stay in `output/` unused unless a faceless twin is ever posted. **Experiment is
+12 pairs, complete.** Temp media release deleted after Metricool ingested the 12. **Registry:
+`docs/social-experiments.md`** (hypothesis + both arms' post ids per pair). Owner picks sound +
+publishes each B-arm draft. Canon: `docs/social-content-calendar.md` 3.6.
 
 **2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
 takes an optional `"follow"` line, rendered as a bottom pill with a `+ Follow` badge that
