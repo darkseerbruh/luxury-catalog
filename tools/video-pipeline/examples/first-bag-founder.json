@@ -1,0 +1,21 @@
+{
+  "name": "first-bag-founder",
+  "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7902.mp4",
+  "start": 1,
+  "duration": 6,
+  "fontPx": 72,
+  "zoom": 0.03,
+  "caption": "first-bag",
+  "blocks": [
+    {
+      "text": "Here's exactly what I would do if I were buying my first big girl bag.",
+      "fontPx": 66
+    },
+    {
+      "text": "(more in caption)",
+      "fontPx": 38,
+      "hint": true
+    }
+  ],
+  "pos": "top"
+}

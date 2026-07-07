@@ -218,15 +218,20 @@ Rules:
 
 ## 3.6 Visual-bed variable (founder-face A/B, added 2026-07-06)
 
-Face-vs-faceless is no longer fixed per tier. For **voiceover / spoken-opinion content**
-it is a **testable variable**: hold the audio and script constant, swap only the visual
-bed underneath, and measure which wins. This is how we earn (or reject) a change to the
-locked ~1 face : 2 faceless ratio with data instead of a guess.
+Face-vs-faceless is no longer fixed per tier. It is a **testable variable**: hold the
+content constant, swap only the visual bed underneath, and measure which wins. This is how
+we earn (or reject) a change to the locked ~1 face : 2 faceless ratio with data instead of
+a guess.
+
+**Change ONE variable = reuse PROVEN text verbatim.** The bed is the only thing being
+tested, so the text must be copy we have ALREADY run (existing hooks from our other videos),
+reused word-for-word. New/never-posted copy confounds the test: a win could be the bed OR the
+new words, and we would not know which. Do not write fresh hooks for this test. (2026-07-06:
+first cohort = 9 existing statement posts re-bedded, `output/*-founder.mp4`.)
 
 **Priority: text-hook posts first, voiceover second.** The primary variant is the silent
-Keep-warm **text-hook** post (a reflective question held over the bed): swap its scenery
-b-roll for the founder bed, nothing else changes. The voiceover/opinion variant is the
-same idea for talking pieces and rides along as a secondary cell.
+text-hook post: swap its scenery b-roll for the founder bed, same words. The voiceover/opinion
+variant is the same idea for talking pieces and rides along as a secondary cell.
 
 **The variable — visual bed under a fixed hook (text or voice):**
 
@@ -238,8 +243,10 @@ same idea for talking pieces and rides along as a secondary cell.
 | C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
 
 **Rules for the test:**
-- **Text-hook Keep-warm posts are the first cohort** (12 built 2026-07-06, `output/kw*-founder.mp4`).
-  Voiceover/opinion pieces (hot-takes, confessionals, reframes) are the second cohort.
+- **Reuse proven text only** (see above). First cohort = 9 existing statement posts re-bedded
+  over the founder bank: `aff-deserve, doc-flight, value-fendi, first-bag, hermes-game, hills,
+  junkie, love-language, macbook-fit` -> `output/<name>-founder.mp4`, specs `examples/<name>-founder.json`.
+  Each is a matched pair against its faceless original. Voiceover/opinion pieces are the second cohort.
   Data-slideshow heroes stay faceless: there, the chart IS the visual.
 - **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
   same channel, so the bed is the only thing that moves.
