@@ -216,6 +216,63 @@ Rules:
 
 ---
 
+## 3.6 Visual-bed variable (founder-face A/B, added 2026-07-06)
+
+Face-vs-faceless is no longer fixed per tier. It is a **testable variable**: hold the
+content constant, swap only the visual bed underneath, and measure which wins. This is how
+we earn (or reject) a change to the locked ~1 face : 2 faceless ratio with data instead of
+a guess.
+
+**Change ONE variable = reuse PROVEN text verbatim.** The bed is the only thing being
+tested, so the text must be copy we have ALREADY run (existing hooks from our other videos),
+reused word-for-word. New/never-posted copy confounds the test: a win could be the bed OR the
+new words, and we would not know which. Do not write fresh hooks for this test. (2026-07-06:
+first cohort = 9 existing statement posts re-bedded, `output/*-founder.mp4`.)
+
+**Priority: text-hook posts first, voiceover second.** The primary variant is the silent
+text-hook post: swap its scenery b-roll for the founder bed, same words. The voiceover/opinion
+variant is the same idea for talking pieces and rides along as a secondary cell.
+
+**The variable — visual bed under a fixed hook (text or voice):**
+
+| Cell | Visual bed | Source | Notes |
+|---|---|---|---|
+| **A — Control** | Faceless scenery b-roll (+ text hook, or + captions) | existing default | What we ship today |
+| **B — Variant (primary)** | Founder-face bed under the SAME text hook | `founder-broll-manifest.json` (vertical/), `montage-card.mjs`, specs `examples/kw*-founder.json` | Silent, hook up top (`pos:"top"`) clears her face |
+| B2 — Variant (voiceover) | Founder-face bed under the same opinion voice | `montage-vo.mjs` | Same voice, her face on screen |
+| C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
+
+**Full registry: `docs/social-experiments.md`** (hypothesis, variable, held-constant
+ingredients, both arms' Metricool post ids, results). That file is the source of truth for
+the experiment; Metricool is the source of truth for the posts.
+
+**Rules for the test:**
+- **Reuse existing text only** (see above), never freshly-written copy. An arm exists only if
+  its faceless twin is a real Metricool post (no twin in Metricool = not real, not an arm).
+  Live cohort = **12 matched pairs** (the `kw-*/kw2-*` keep-warm questions + `love-language`),
+  each B-arm staged as a draft mirroring its faceless twin. The 8 statement hooks + `kw2-the-day`
+  had no Metricool twin and are shelved. Voiceover/opinion pieces are the secondary cohort.
+  Data-slideshow heroes stay faceless: there, the chart IS the visual.
+- **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
+  same channel, so the bed is the only thing that moves.
+- **Primary metric = watch-through (retention) + follows.** Secondary = saves + comments.
+  Hypothesis: a real face under a real opinion lifts retention and follows vs faceless.
+- **Bag wall stays in frame** on variant B (14 of 16 clips have it) = silent credibility.
+- **Production:** existing opinion audio + a founder-b-roll bed + synced captions. The
+  pipeline already does headless montage + burned captions over `founder-broll/vertical`;
+  muxing an EXISTING voiceover track over that montage (instead of caption-only) is a small
+  one-time addition to `montage.mjs`, not a built path yet. No new filming: one bank feeds
+  every future variant.
+- **Read before scaling:** if B beats A on retention + follows across ~3-4 matched pairs,
+  raise the face ratio and make founder-bed the default for opinion content. If not, keep
+  faceless and retire the bank to occasional Signature use.
+
+**First test cell (owner picks the pieces):** re-bed 3-4 existing opinion renders (e.g.
+`gucci-myth`, `value-fendi`, `neverfull-gap`, a collector hot-take) as variant B, pair each
+against its faceless original, tag `utm_campaign=2026-07-visualbed-ab`.
+
+---
+
 ## 4. Email playbook (detail)
 
 > **Blocked on the opt-in dependency in §2.2** — content-ready, build-pending.
