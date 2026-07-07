@@ -223,17 +223,24 @@ it is a **testable variable**: hold the audio and script constant, swap only the
 bed underneath, and measure which wins. This is how we earn (or reject) a change to the
 locked ~1 face : 2 faceless ratio with data instead of a guess.
 
-**The variable — visual bed under a fixed opinion voiceover:**
+**Priority: text-hook posts first, voiceover second.** The primary variant is the silent
+Keep-warm **text-hook** post (a reflective question held over the bed): swap its scenery
+b-roll for the founder bed, nothing else changes. The voiceover/opinion variant is the
+same idea for talking pieces and rides along as a secondary cell.
+
+**The variable — visual bed under a fixed hook (text or voice):**
 
 | Cell | Visual bed | Source | Notes |
 |---|---|---|---|
-| **A — Control** | Faceless slideshow / scenery b-roll + captions | existing default | What we ship today |
-| **B — Variant** | Founder-face b-roll (her at the desk, bag wall behind) + captions | `founder-broll-manifest.json` (vertical/) | Same voice, her face on screen |
+| **A — Control** | Faceless scenery b-roll (+ text hook, or + captions) | existing default | What we ship today |
+| **B — Variant (primary)** | Founder-face bed under the SAME text hook | `founder-broll-manifest.json` (vertical/), `montage-card.mjs`, specs `examples/kw*-founder.json` | Silent, hook up top (`pos:"top"`) clears her face |
+| B2 — Variant (voiceover) | Founder-face bed under the same opinion voice | `montage-vo.mjs` | Same voice, her face on screen |
 | C — Hybrid (later) | Open on founder face, cut to slideshow for the data beat | both banks | Only after A vs B reads |
 
 **Rules for the test:**
-- **Only voiceover/opinion pieces** enter this test (hot-takes, confessionals, "my take",
-  reframes). Data-slideshow heroes stay faceless: there, the chart IS the visual.
+- **Text-hook Keep-warm posts are the first cohort** (12 built 2026-07-06, `output/kw*-founder.mp4`).
+  Voiceover/opinion pieces (hot-takes, confessionals, reframes) are the second cohort.
+  Data-slideshow heroes stay faceless: there, the chart IS the visual.
 - **Matched pairs:** same script/audio rendered both ways, posted a few days apart on the
   same channel, so the bed is the only thing that moves.
 - **Primary metric = watch-through (retention) + follows.** Secondary = saves + comments.
