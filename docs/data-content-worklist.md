@@ -8,6 +8,16 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
+- ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
+  also searched ×1. Goyard price data + a Goyard authentication article both already
+  exist, so this is a **search-match gap** (the query did not surface a result), not a
+  data-capture gap. Fix in the search/index layer: confirm "goyard" maps to the brand
+  + its styles in on-site search. Logged by `article-engine-weekly` 2026-07-07.
+- ⬜ **"alma" ×3** (to 2026-07-02) — LV Alma demand with no dedicated article. Needs an
+  Alma resale price pull (Fashionphile asking + eBay sold, with n) before the article
+  backlog item (`docs/article-backlog.md`) can be written to the data bar.
+
 ## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
 asking rows, closing the icon-scope gap (measured 2026-07-02: only 60.0% of FP's 6,250+ live
