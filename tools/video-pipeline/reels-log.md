@@ -3,6 +3,20 @@
 Durable record of every video the pipeline makes. The render files live locally in
 `output/` (too large for git); this log is the committed history. Newest first.
 
+**2026-07-06 — FOUNDER-FACE visual-bed A/B (new bank + 21 variants).** Owner filmed 16
+own-face desk clips (bag wall behind); banked at `~/Documents/handbag-campaign-images/founder-broll`
+(originals + silent 1080x1920 vertical cuts), catalog `founder-broll-manifest.json`. Built
+founder-bed variants of all 21 existing text posts (9 swipe-batch statements + 12 kw/kw2
+questions) via `scripts/montage-card.mjs` with `pos:top` (hook clears her face), same
+text/font/duration as each faceless twin so the A/B isolates ONE variable (the bed). Plus a
+voiceover pilot `gucci-myth-founder` via new `scripts/montage-vo.mjs`. Media hosted on temp
+GitHub release `founder-broll-2026-07-06` (Metricool ingests, then delete). **3 matched-pair
+drafts STAGED** (draft:true, autoPublish:false, IG Reel + TikTok, caption/title mirror the
+faceless twin exactly, B-arm scheduled twin-date + 7d, 18:00 ET): `kw-love-you-founder` post
+346293700 (Jul 15), `kw-keep-one-founder` 346293732 (Jul 17), `kw-when-knew-founder` 346293746
+(Jul 19). **PENDING owner go:** stage the other 18 (each needs its faceless twin's exact caption
+pulled from the planner). Owner picks sound + publishes. Canon: `docs/social-content-calendar.md` 3.6.
+
 **2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
 takes an optional `"follow"` line, rendered as a bottom pill with a `+ Follow` badge that
 pops at the outro and holds to the cut. Phrase the value to CONTINUE the badge (e.g.
