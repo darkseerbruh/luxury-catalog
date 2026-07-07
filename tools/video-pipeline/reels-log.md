@@ -10,12 +10,18 @@ founder-bed variants of all 21 existing text posts (9 swipe-batch statements + 1
 questions) via `scripts/montage-card.mjs` with `pos:top` (hook clears her face), same
 text/font/duration as each faceless twin so the A/B isolates ONE variable (the bed). Plus a
 voiceover pilot `gucci-myth-founder` via new `scripts/montage-vo.mjs`. Media hosted on temp
-GitHub release `founder-broll-2026-07-06` (Metricool ingests, then delete). **3 matched-pair
+GitHub release `founder-broll-2026-07-06` (Metricool ingests, then delete). **12 matched-pair
 drafts STAGED** (draft:true, autoPublish:false, IG Reel + TikTok, caption/title mirror the
-faceless twin exactly, B-arm scheduled twin-date + 7d, 18:00 ET): `kw-love-you-founder` post
-346293700 (Jul 15), `kw-keep-one-founder` 346293732 (Jul 17), `kw-when-knew-founder` 346293746
-(Jul 19). **PENDING owner go:** stage the other 18 (each needs its faceless twin's exact caption
-pulled from the planner). Owner picks sound + publishes. Canon: `docs/social-content-calendar.md` 3.6.
+faceless twin exactly, B-arm at twin-date + ~7d, 18:00 ET):
+`kw-love-you` 346293700 (Jul15) · `kw-keep-one` 346293732 (Jul17) · `kw-when-knew` 346293746 (Jul19) ·
+`kw-hold-value` 346294253 (Jul21) · `kw-bought-young` 346294277 (Jul23) · `kw-go-back` 346294629 (Jul25) ·
+`kw2-too-many` 346294647 (Jul27) · `kw2-pass-down` 346294654 (Jul29) · `kw2-wait` 346294661 (Jul30) ·
+`kw2-first-taught` 346294667 (Jul31) · `kw2-still-thinking` 346294669 (Aug2) · `love-language` 346294671 (Aug4).
+**9 NOT yet staged** (no clean scheduled twin found Jul1-Sep9): `kw2-the-day` (subagent mis-mapped it)
++ the 8 statements (`first-bag, hermes-game, hills, junkie, macbook-fit, value-fendi, doc-flight,
+aff-deserve`) which read as ALREADY-PUBLISHED swipe-batch-1 (scheduled-posts endpoint only returns
+unpublished, so their captions aren't retrievable there). Need owner to point to their captions.
+Owner picks sound + publishes. Canon: `docs/social-content-calendar.md` 3.6.
 
 **2026-07-06 — on-screen follow-CTA card added (pipeline feature).** `headline.json` now
 takes an optional `"follow"` line, rendered as a bottom pill with a `+ Follow` badge that
