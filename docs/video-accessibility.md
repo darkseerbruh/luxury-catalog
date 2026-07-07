@@ -20,6 +20,14 @@ the `video` skill (how to run it).*
   palest part of the clip and confirm the text is clearly readable before
   delivering.
 - **Prefer darker, less-busy footage** for text-heavy cards.
+- **Stay inside the side safe zone.** The platform's right-side action rail (avatar,
+  like/comment/save) and the mid-right profile bubble sit on top of the frame, so
+  text AND its dark backing box must clear both edges. Keep every block in the
+  center ~66%: reserve **≥ 180px (~17%) on each side at 1080 wide**, card centered.
+  Enforced by `BRAND.cardSideSafePx` / `cardMaxWidthPx` (720px max block width) in
+  `CardStack`. Evidence for the tighter margin: two 2026-07-07 screenshots where the
+  old 940px box (edge at 93.5% of width) ran the hook and the backing box straight
+  into the avatar and action buttons.
 
 ## 2. Format (the look)
 
@@ -30,7 +38,8 @@ the `video` skill (how to run it).*
 - **Footer on every card:** gold diamond + *know the facts on every bag* + FOLLOW
   ALONG + the `luxurycatalog.com` pill. Sits in the lower third, lifted off the
   very bottom so it clears TikTok's caption and right-side action buttons.
-- Hook centered in the upper-middle so bigger text clears the footer.
+- Hook centered in the upper-middle so bigger text clears the footer, and inside the
+  side safe zone (§1) so it clears the right-side action rail and avatar.
 
 ## 3. Per-post-type layout
 
@@ -63,4 +72,6 @@ the `video` skill (how to run it).*
 2. All content text ≥ the floor.
 3. Text present at frame 0 (no pop-in).
 4. Footer clears the bottom UI zone.
-5. Hooks are **verbatim** to her line (never trimmed — see the copy rules).
+5. Text + backing box clear the side safe zone — nothing touches the right-side
+   action rail or the avatar (§1).
+6. Hooks are **verbatim** to her line (never trimmed — see the copy rules).
