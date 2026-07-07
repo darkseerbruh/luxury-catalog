@@ -1,0 +1,22 @@
+{
+  "name": "gucci-myth-founder",
+  "audioFrom": "output/gucci-myth.synced.mp4",
+  "captionsFrom": "public/gucci-myth.synced.json",
+  "propsFrom": "temp/gucci-myth.synced.props.json",
+  "zoom": 0.03,
+  "bed": [
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7905.mp4", "start": 0.3, "duration": 3.2 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7900.mp4", "start": 1.0, "duration": 5.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7902.mp4", "start": 1.0, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7915.mp4", "start": 1.0, "duration": 5.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7901.mp4", "start": 0.5, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7904.mp4", "start": 0.2, "duration": 2.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7906.mp4", "start": 1.0, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7913.mp4", "start": 1.5, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7909.mp4", "start": 1.5, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7916.mp4", "start": 1.0, "duration": 5.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7917.mp4", "start": 1.0, "duration": 4.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7903.mp4", "start": 0.5, "duration": 3.0 },
+    { "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7907.mp4", "start": 0.5, "duration": 3.0 }
+  ]
+}

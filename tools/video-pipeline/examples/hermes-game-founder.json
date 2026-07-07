@@ -1,0 +1,21 @@
+{
+  "name": "hermes-game-founder",
+  "clip": "/Users/ariellecoambes/Documents/handbag-campaign-images/founder-broll/vertical/IMG_7909.mp4",
+  "start": 1.5,
+  "duration": 6,
+  "fontPx": 70,
+  "zoom": 0.03,
+  "caption": "hermes",
+  "blocks": [
+    {
+      "text": "I wish someone had told me this before I tried to play the Hermès game.",
+      "fontPx": 64
+    },
+    {
+      "text": "(more in caption)",
+      "fontPx": 38,
+      "hint": true
+    }
+  ],
+  "pos": "top"
+}
