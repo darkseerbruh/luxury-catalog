@@ -54,6 +54,12 @@ export const TIER_COST: Record<Tier, number> = {
   NotCarried: Infinity, // source elsewhere (owned / Fashionphile / UGC)
 };
 
+/** The owner's Vivrelle plan: how many items of each tier she can hold per month.
+ *  The Couture slot can only be filled by a Couture-tier bag (the >$4k / rare closet);
+ *  the Classique slot by a Classique-tier bag. A Couture slot left unfilled by a
+ *  Couture-only need is wasted spend — the ranking flags that. */
+export const PLAN = { coutureSlots: 1, classiqueSlots: 1 } as const;
+
 /** Once ANY variant of a silhouette is shot (e.g. an Epi Neverfull), the bag page
  *  placeholder is filled and the shape is represented, so the exact marquee-canvas
  *  twin is worth only a fraction of a fresh bag. Its remaining need is scored at
