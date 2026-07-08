@@ -344,12 +344,20 @@ export default function HeaderNav({
       {open && (
         <>
           <div className="fixed inset-0 top-[57px] z-10 bg-bg/60 sm:hidden" aria-hidden="true" onClick={close} />
-          <nav className="absolute inset-x-0 top-full z-20 flex flex-col gap-1 border-b border-border bg-bg/95 px-5 py-3 shadow-lg backdrop-blur-sm sm:hidden">
-            {/* Search — same BagFinder as desktop: populated grid + model→colour. */}
+          <nav className="absolute inset-x-0 top-full z-20 flex max-h-[calc(100dvh-57px)] flex-col gap-1 overflow-y-auto overscroll-contain border-b border-border bg-bg/95 px-5 py-3 shadow-lg backdrop-blur-sm sm:hidden">
+            {/* Search — same BagFinder as desktop, but capped to 4 suggestions with a
+                "View all results" hand-off, so the grid never buries the rest of the
+                menu (the panel itself scrolls too). */}
             <div className="mb-2">
               <BagFinder
                 mode="nav"
+                maxModels={4}
                 onNavigate={close}
+                onViewAll={(term) => {
+                  const t = term.trim();
+                  router.push(t ? `/search?q=${encodeURIComponent(t)}` : "/search");
+                  close();
+                }}
                 onSubmitQuery={(term) => {
                   const t = term.trim();
                   if (t) {

@@ -850,6 +850,64 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
   }));
 }
 
+const TLC_PLATFORM = "The Luxury Closet";
+
+/**
+ * A live The Luxury Closet listing photo per variant (from `listing_image`, keyed
+ * by the price_history listing_ref), for the given variant ids. Used as the last
+ * image fallback so a bag with no catalog/community shot still shows the picture
+ * from its for-sale offer. RESILIENT: returns {} on any error (e.g. pre-0047
+ * listing_image table) so callers keep the placeholder.
+ */
+async function getTlcListingImages(
+  sb: ReturnType<typeof getSupabase>,
+  variantIds: number[],
+): Promise<Map<number, string>> {
+  const out = new Map<number, string>();
+  if (variantIds.length === 0) return out;
+  try {
+    // Live TLC offers for these variants; newest observation of each listing wins.
+    const { data: priceRows, error: pErr } = await sb
+      .from("price_history")
+      .select("variant_id, listing_ref, listing_status, observed_on")
+      .in("variant_id", variantIds)
+      .eq("platform", TLC_PLATFORM)
+      .eq("price_type", "listed")
+      .not("listing_ref", "is", null)
+      .order("observed_on", { ascending: false })
+      .limit(5000);
+    if (pErr || !priceRows) return out;
+
+    // Best (most recent, still-live) listing_ref per variant.
+    const refByVariant = new Map<number, string>();
+    for (const r of priceRows as { variant_id: number; listing_ref: string | null; listing_status: string | null }[]) {
+      if (!r.listing_ref || r.listing_status === "sold") continue;
+      if (!refByVariant.has(r.variant_id)) refByVariant.set(r.variant_id, r.listing_ref); // rows are newest-first
+    }
+    if (refByVariant.size === 0) return out;
+
+    const refs = [...new Set(refByVariant.values())];
+    const { data: imgRows, error: iErr } = await sb
+      .from("listing_image")
+      .select("listing_ref, image_url")
+      .eq("platform", TLC_PLATFORM)
+      .in("listing_ref", refs);
+    if (iErr || !imgRows) return out;
+
+    const urlByRef = new Map<string, string>();
+    for (const im of imgRows as { listing_ref: string; image_url: string }[]) {
+      if (im.image_url) urlByRef.set(im.listing_ref, im.image_url);
+    }
+    for (const [vid, ref] of refByVariant) {
+      const url = urlByRef.get(ref);
+      if (url) out.set(vid, url);
+    }
+    return out;
+  } catch {
+    return out;
+  }
+}
+
 /**
  * Primary image URLs for a set of variants, keyed by variant id. RESILIENT: if the
  * `image_url` column doesn't exist yet (migration 0013 not applied) or the query
@@ -890,6 +948,17 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       for (const [vid, { path }] of best) {
         map[vid] = sb.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
       }
+    }
+
+    // Final fallback: a live The Luxury Closet listing photo. Nearly every bag we
+    // list has at least one for-sale TLC offer, so this gives a real header image
+    // to variants with no catalog or community shot — across grids, search, and
+    // the bag page (they all read through here). Resilient: pre-0047 (no
+    // listing_image table) or any error leaves the placeholder.
+    const stillMissing = ids.filter((id) => !map[id]);
+    if (stillMissing.length > 0) {
+      const tlc = await getTlcListingImages(sb, stillMissing);
+      for (const [vid, url] of tlc) map[vid] = url;
     }
     return map;
   } catch {

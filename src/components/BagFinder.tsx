@@ -36,11 +36,24 @@ interface Props {
   /** Nav mode: fired after a tile click routes away, so a host menu can close. */
   onNavigate?: () => void;
   autoFocus?: boolean;
+  /** Cap the suggestion grid to this many tiles (mobile keeps the menu short + scrollable). */
+  maxModels?: number;
+  /** Show a "View all results" CTA under the grid that hands off to the full search page. */
+  onViewAll?: (query: string) => void;
 }
 
 const HINT = "   (start typing →)";
 
-export function BagFinder({ mode, onSelect, allowRequest = true, onSubmitQuery, onNavigate, autoFocus }: Props) {
+export function BagFinder({
+  mode,
+  onSelect,
+  allowRequest = true,
+  onSubmitQuery,
+  onNavigate,
+  autoFocus,
+  maxModels,
+  onViewAll,
+}: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [models, setModels] = useState<FinderModel[]>([]);
@@ -196,7 +209,7 @@ export function BagFinder({ mode, onSelect, allowRequest = true, onSubmitQuery, 
             <p className="px-1 py-6 text-center text-sm text-muted">No match yet</p>
           ) : (
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-              {models.map((m) => (
+              {(maxModels ? models.slice(0, maxModels) : models).map((m) => (
                 <button key={m.styleId} type="button" onClick={() => openModel(m)} className={tile}>
                   <div className="relative">
                     <BagImage
@@ -219,6 +232,16 @@ export function BagFinder({ mode, onSelect, allowRequest = true, onSubmitQuery, 
                 </button>
               ))}
             </div>
+          )}
+          {onViewAll && models.length > 0 && (
+            <button
+              type="button"
+              onClick={() => onViewAll(q)}
+              className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-full border border-gold/60 bg-surface px-4 py-2 text-sm font-medium text-gold transition-colors hover:bg-gold hover:text-bg"
+            >
+              View all results
+              <span aria-hidden="true">→</span>
+            </button>
           )}
         </div>
       )}
