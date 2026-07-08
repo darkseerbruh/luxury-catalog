@@ -46,6 +46,9 @@ function parseFlags(argv: string[]): Flags {
   return flags;
 }
 
+/** Rows per upsert batch. Keeps each statement under Supabase's statement timeout. */
+const UPSERT_CHUNK = 500;
+
 type BrandRow = { brand_id: number; name: string };
 type StyleRow = { style_id: number; name: string; brand_id: number };
 
@@ -218,10 +221,15 @@ async function main() {
   }
 
   if (rows.length > 0) {
-    const { error } = await supabaseAdmin
-      .from("price_history")
-      .upsert(rows, { onConflict: "variant_id,platform,price_type,observed_on,sale_price,listing_ref", ignoreDuplicates: true });
-    if (error) throw error;
+    // Chunk the upsert: a single statement over a full-catalog pull (10k+ rows) hits
+    // Supabase's statement timeout (57014) and rolls the whole thing back. Batches of
+    // UPSERT_CHUNK stay under it and persist incrementally.
+    for (let i = 0; i < rows.length; i += UPSERT_CHUNK) {
+      const { error } = await supabaseAdmin
+        .from("price_history")
+        .upsert(rows.slice(i, i + UPSERT_CHUNK), { onConflict: "variant_id,platform,price_type,observed_on,sale_price,listing_ref", ignoreDuplicates: true });
+      if (error) throw error;
+    }
     console.log(`Upserted ${rows.length} price row(s). Refresh variant_price_summary to surface them.`);
   }
 
@@ -229,10 +237,16 @@ async function main() {
   // the loader keeps working (the unresolved rows are simply not captured this run,
   // as before) so merging this ahead of the migration never breaks a load.
   if (discovered.length > 0) {
-    const upsert = (rows: Record<string, unknown>[]) =>
-      supabaseAdmin
-        .from("discovered_listing")
-        .upsert(rows, { onConflict: "platform,listing_ref,observed_on,sale_price", ignoreDuplicates: true });
+    const upsert = async (rows: Record<string, unknown>[]) => {
+      // Same chunking rationale as price_history above.
+      for (let i = 0; i < rows.length; i += UPSERT_CHUNK) {
+        const { error } = await supabaseAdmin
+          .from("discovered_listing")
+          .upsert(rows.slice(i, i + UPSERT_CHUNK), { onConflict: "platform,listing_ref,observed_on,sale_price", ignoreDuplicates: true });
+        if (error) return { error };
+      }
+      return { error: null as { code?: string } | null };
+    };
     let { error } = await upsert(discovered);
     // Column missing: migration 0038 (region/condition_detail/enrichment) not applied
     // yet. PostgREST reports this as PGRST204 (schema cache) on write, Postgres as 42703.

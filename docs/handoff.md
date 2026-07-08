@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — "Pull them all": full-catalog capture is now the standing method (2026-07-08, on `main`)
+
+**Owner directive: stop pulling specific bags from our sources, pull the ENTIRE catalog.** Acted on it.
+- 🕸️ **Ran the full Fashionphile pull:** the master crawler (`fashionphile-crawl.ts handbags`) captured all **20,242 live listings**. Loaded **13,498 curated prices** (refreshes every known style to today) + banked **6,254 unmatched listings** to `discovered_listing`. price_history 63k → **77k rows**; the RPC now returns **607 styles** (was 526) as dormant styles gained fresh prices.
+- 🔧 **Fixed the loader's statement-timeout bug:** `load-prices.ts` upserted 10k+ rows in ONE statement (57014 rollback → nothing persisted). Now batched at 500/upsert. This is what made a full-catalogue load possible at all.
+- 🔁 **Made it the standing cadence:** `market-refresh.yml` already crawled the full catalogue every 3h but by old design only retired sold bags ("bulk-loading would flood"). Now it ALSO loads the whole catalogue's prices ONCE DAILY (the 05:xx UTC run; gated to bound row growth ~13.5k/day). The old "sold-only" scope is retired.
+- 🧭 **The real reframe — capture is solved, PROMOTION is the lever.** The catch-all already banks every unmatched listing: `discovered_listing` holds **51,006 rows** right now (Fashionphile + RealReal + …). They aren't becoming catalog pages because promotion needs name-clustering (auto-promote would fork junk styles like "Monogram Multicolor Alma White" off the real "Alma"). Held promotion this session on the quality bar.
+- ⬜ **YOUR TURN / next levers:** (a) TheRealReal + eBay full catalogue pulls still need a browser session / Firecrawl credits (not headless-CI-able) — the TRR runbook exists. (b) A **promotion pass** over the 51k discovered backlog with proper name normalization is the highest-value catalog-growth work (turns banked listings into real bag pages). (c) Consider applying migration **0038** so discovered listings keep region/condition columns. (d) Tune the daily-load cadence / add a prune of superseded same-listing snapshots if price_history growth needs trimming.
+
+---
+
 ## TL;DR — LC Index accuracy fix: contaminated medians + floor + why-notes (2026-07-08, on `main`, migration 0050 PENDING)
 
 **You spotted the live `/rankings` was wrong (Kelly Pochette #1, impossible). Diagnosed against the live DB and fixed all three at the source.** Spec updated: `docs/ux/lc-index-spec.md` → "v2 accuracy fix".
