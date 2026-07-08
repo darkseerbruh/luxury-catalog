@@ -47,7 +47,8 @@ import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
 import StandingCard from "@/components/StandingCard";
-import { getStyleStandingView } from "@/lib/lc-index";
+import { getStyleStandingView, type BrandTier } from "@/lib/lc-index";
+import { tierDisplay } from "@/lib/house-standing";
 import VariantSelector from "./VariantSelector";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
@@ -647,7 +648,7 @@ export default async function BagDetailPage({
       <TrackBagView
         variantId={v.variantId}
         brand={v.brand.name}
-        brandTier={(v.brand.tier as "thrift" | "mid" | "premium" | "ultra-luxury") || null}
+        brandTier={(v.brand.tier as BrandTier) || null}
         style={v.style.name}
         silhouette={v.style.silhouette}
         hasPriceHistory={v.priceHistory.length > 0}
@@ -679,7 +680,7 @@ export default async function BagDetailPage({
       {/* Hero header */}
       <header>
         <p className="text-sm uppercase tracking-widest text-muted">
-          {v.brand.name} · {v.brand.tier.replace("-", " ")}
+          {v.brand.name} · {tierDisplay(v.brand.tier).label}
         </p>
         <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">
           {v.style.name}

@@ -113,7 +113,8 @@ export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
  */
 export interface CatalogEventProperties {
   brand?: string;
-  brand_tier?: "thrift" | "mid" | "premium" | "ultra-luxury";
+  // Legacy string tiers or the numbered House Standing tiers ("1"-"5").
+  brand_tier?: string;
   style?: string;
   silhouette?: string;
   material_category?: string;

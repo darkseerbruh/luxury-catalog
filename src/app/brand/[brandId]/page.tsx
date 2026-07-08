@@ -7,6 +7,7 @@ import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { BagImage } from "@/components/BagImage";
 import { ArticleList } from "@/components/ArticleList";
 import { HouseStory } from "@/components/HouseStory";
+import { tierDisplay } from "@/lib/house-standing";
 
 export const dynamic = "force-dynamic";
 
@@ -174,7 +175,7 @@ export default async function BrandPage({
       {/* Heritage header */}
       <header>
         <p className="text-sm uppercase tracking-widest text-muted">
-          {brand.tier.replace("-", " ")}
+          {tierDisplay(brand.tier).label}
           {brand.countryOfOrigin ? ` · ${brand.countryOfOrigin}` : ""}
           {brand.foundedYear ? ` · est. ${brand.foundedYear}` : ""}
         </p>
@@ -498,7 +499,7 @@ export default async function BrandPage({
                   {b.name.charAt(0)}
                 </span>
                 <span className="mt-2 line-clamp-2 font-serif text-sm text-foreground">{b.name}</span>
-                <span className="text-xs capitalize text-muted">{b.tier.replace("-", " ")}</span>
+                <span className="text-xs capitalize text-muted">{tierDisplay(b.tier).label}</span>
               </Link>
             ))}
           </div>

@@ -68,6 +68,36 @@ export const TIER_DESCRIPTOR: Record<TierRank, string> = {
   5: "Entry standing, everyday reach",
 };
 
+/** Legacy string tiers → display label, so the transition window (before the
+ * numbered backfill lands) still reads cleanly. Removed once every brand is numeric. */
+const LEGACY_TIER_LABEL: Record<string, string> = {
+  "ultra-luxury": "Ultra-luxury",
+  premium: "Premium",
+  mid: "Luxury",
+  thrift: "Contemporary",
+};
+
+export interface TierDisplay {
+  rank: TierRank | null;
+  label: string;
+  descriptor: string | null;
+}
+
+/**
+ * Display for a brand's stored tier value, tolerant of BOTH schemes during the
+ * rollout: numeric "1".."5" → "Tier N" + its plain gloss; a legacy string →
+ * its old label (no gloss); null/unknown → an empty, gloss-less display.
+ */
+export function tierDisplay(tier: string | null | undefined): TierDisplay {
+  if (tier == null) return { rank: null, label: "", descriptor: null };
+  const n = Number(tier);
+  if (Number.isInteger(n) && n >= 1 && n <= 5) {
+    const rank = n as TierRank;
+    return { rank, label: `Tier ${rank}`, descriptor: TIER_DESCRIPTOR[rank] };
+  }
+  return { rank: null, label: LEGACY_TIER_LABEL[tier] ?? tier, descriptor: null };
+}
+
 /** Band for a score (assumes 0-100). Highest matching cutoff wins. */
 export function tierForScore(score: number): TierRank {
   for (const b of HOUSE_STANDING_BANDS) if (score >= b.min) return b.tier;
