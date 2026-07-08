@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks, isCjTrackingUrl } from "../affiliate";
+import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks, isCjTrackingUrl, isTheLuxuryClosetUrl, cjDeepLink } from "../affiliate";
 
 const DEFAULT_CAMPID = "5339158071";
 
@@ -98,5 +98,26 @@ describe("CJ tracking links (The Luxury Closet product feed)", () => {
 
   it("passes an already-tracked CJ link through unchanged (no double-wrap)", () => {
     expect(affiliateListingUrl(cjLink, "The Luxury Closet")).toBe(cjLink);
+  });
+});
+
+describe("The Luxury Closet deep-link attribution", () => {
+  const raw = "https://theluxurycloset.com/us-en/women/bottega-veneta-cassette-p1007702";
+
+  it("detects a raw TLC product URL", () => {
+    expect(isTheLuxuryClosetUrl(raw)).toBe(true);
+    expect(isTheLuxuryClosetUrl("https://www.theluxurycloset.com/x")).toBe(true);
+    expect(isTheLuxuryClosetUrl("https://fashionphile.com/p/x")).toBe(false);
+  });
+
+  it("wraps a raw TLC URL in a CJ deep link with our PID", () => {
+    const out = affiliateListingUrl(raw, "The Luxury Closet");
+    expect(out).toBe(`https://www.anrdoezrs.net/links/101810137/type/dlg/${raw}`);
+    expect(cjDeepLink(raw)).toContain("anrdoezrs.net/links/101810137/type/dlg/");
+  });
+
+  it("does not double-wrap an already-tracked TLC deep link", () => {
+    const wrapped = cjDeepLink(raw);
+    expect(affiliateListingUrl(wrapped, "The Luxury Closet")).toBe(wrapped);
   });
 });
