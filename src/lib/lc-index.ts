@@ -19,7 +19,11 @@
 import { unstable_cache } from "next/cache";
 import { getSupabase } from "./supabase";
 
-export type BrandTier = "thrift" | "mid" | "premium" | "ultra-luxury";
+// Legacy string tiers + the numbered House Standing tiers ("1" highest → "5").
+// Both are tolerated through the rollout; see docs/ux/tier-formula-spec.md.
+export type BrandTier =
+  | "thrift" | "mid" | "premium" | "ultra-luxury"
+  | "1" | "2" | "3" | "4" | "5";
 
 /** Raw per-style signals as returned by style_index_signals(). */
 export interface StyleSignals {
@@ -115,11 +119,18 @@ export const LC_INDEX_MIN_N = 20;
  */
 export const LC_INDEX_MIN_SOURCES = 2;
 
-const TIER_RANK: Record<BrandTier, number> = {
-  thrift: 1,
-  mid: 2,
-  premium: 3,
-  "ultra-luxury": 4,
+// Tier as a 0–100 standing signal, higher = stronger house. Handles both schemes:
+// legacy strings and the numbered tiers (Tier 1 highest → 100, Tier 5 → 0).
+const TIER_SCORE: Record<BrandTier, number> = {
+  thrift: 0,
+  mid: 33,
+  premium: 67,
+  "ultra-luxury": 100,
+  "5": 0,
+  "4": 25,
+  "3": 50,
+  "2": 75,
+  "1": 100,
 };
 
 /**
@@ -135,7 +146,7 @@ export function percentileOf(value: number, population: number[]): number {
 
 function tierPercentile(tier: BrandTier | null): number {
   if (!tier) return 0;
-  return ((TIER_RANK[tier] - 1) / 3) * 100;
+  return TIER_SCORE[tier] ?? 0;
 }
 
 /**
@@ -360,7 +371,7 @@ interface RawSignalRow {
   rep_variant_id: number | string | null;
 }
 
-const VALID_TIERS: BrandTier[] = ["thrift", "mid", "premium", "ultra-luxury"];
+const VALID_TIERS: BrandTier[] = ["thrift", "mid", "premium", "ultra-luxury", "1", "2", "3", "4", "5"];
 
 /** Fetch raw per-style signals from the RPC. Resilient: [] on any missing env / error. */
 async function loadStyleSignals(): Promise<StyleSignals[]> {

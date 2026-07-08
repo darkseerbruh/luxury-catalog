@@ -11,14 +11,8 @@
 
 import Link from "next/link";
 import type { StandingView, StandingBoardRow } from "@/lib/lc-index";
+import { tierDisplay } from "@/lib/house-standing";
 import MovementPill from "./MovementPill";
-
-const TIER_LABEL: Record<string, string> = {
-  "ultra-luxury": "Ultra-luxury",
-  premium: "Premium",
-  mid: "Luxury",
-  thrift: "Contemporary",
-};
 
 function Board({
   title,
@@ -68,7 +62,7 @@ export default function StandingCard({ view }: { view: StandingView }) {
   const { rank, totalRanked, styleName, brandName, tier, priceCount, boards } = view;
   if (rank == null) return null;
   const totalLabel = totalRanked.toLocaleString();
-  const houseLabel = tier ? TIER_LABEL[tier] ?? null : null;
+  const houseLabel = tier ? tierDisplay(tier).label || null : null;
 
   return (
     <section aria-label={`LC Index standing: ranked ${rank} of ${totalLabel}`}>
