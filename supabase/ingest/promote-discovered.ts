@@ -336,7 +336,15 @@ async function persistPromotions(
   );
 
   for (const c of clusters) {
-    const styleName = bagModelName(c) ?? c.styleGuess; // clean canonical model name
+    // NEVER fork a raw marketplace title into a style. The caller already filters to
+    // clusters where bagModelName != null; this guard makes that a hard invariant so a
+    // future refactor of the filter can't silently create "Monogram Multicolor Alma
+    // White" as a new style instead of mapping to the canonical "Alma".
+    const styleName = bagModelName(c); // clean canonical model name, or null
+    if (!styleName) {
+      console.warn(`  ⚠ skip: cluster "${c.brandGuess} / ${c.styleGuess}" has no canonical bag model — not forking a raw title`);
+      continue;
+    }
     const brandName = canonicalBrand(c.brandGuess) || c.brandGuess;
     const brandKey = norm(normalizeDesigner(brandName));
 
