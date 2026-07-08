@@ -30,8 +30,41 @@ describe("buildSlots", () => {
     expect(slots.find((s) => s.key === "wears")!.filled).toBe(false);
   });
 
-  it("everything given -> all slots filled", () => {
+  it("everything given -> all base slots filled", () => {
     const slots = buildSlots({ hasPhoto: true, hasReview: true, axisDone: 5, axisTotal: 5 });
     expect(slots.every((s) => s.filled)).toBe(true);
+  });
+
+  it("carry + weight slots are absent until the wear table exists", () => {
+    const slots = buildSlots({ hasPhoto: false, hasReview: false, axisDone: 0, axisTotal: 5 });
+    expect(slots.some((s) => s.key === "carry" || s.key === "weight")).toBe(false);
+  });
+
+  it("wearAvailable adds carry + weight slots anchored to the wear section", () => {
+    const slots = buildSlots({
+      hasPhoto: false,
+      hasReview: false,
+      axisDone: 0,
+      axisTotal: 5,
+      wearAvailable: true,
+    });
+    expect(slots.map((s) => s.key)).toEqual(["photo", "review", "wears", "carry", "weight"]);
+    const wearSlots = slots.filter((s) => s.key === "carry" || s.key === "weight");
+    expect(wearSlots.every((s) => s.anchor === "#how-you-carry")).toBe(true);
+    expect(wearSlots.every((s) => s.filled)).toBe(false);
+  });
+
+  it("carry/weight fill independently", () => {
+    const slots = buildSlots({
+      hasPhoto: false,
+      hasReview: false,
+      axisDone: 0,
+      axisTotal: 5,
+      wearAvailable: true,
+      hasCarry: true,
+      hasWeight: false,
+    });
+    expect(slots.find((s) => s.key === "carry")!.filled).toBe(true);
+    expect(slots.find((s) => s.key === "weight")!.filled).toBe(false);
   });
 });

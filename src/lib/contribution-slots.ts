@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getReviews } from "@/lib/reviews";
 import { getAxisVotes } from "@/lib/votes";
+import { getWear } from "@/lib/wear";
 
 /**
  * The contribution-slots model for a bag: a gap-aware view of what the current
@@ -10,15 +11,15 @@ import { getAxisVotes } from "@/lib/votes";
  * One shared idea, two fillers (see docs/ux/review-data-leaderboards.md): the
  * same slots are filled first by Arielle (in-hand capture) and then by anyone
  * who has carried the bag. This layer only READS existing storage — reviews,
- * axis votes, and photo contributions already exist. It adds no schema: it is
- * the conversion surface that pulls people into the controls they scroll past.
+ * axis votes, photo contributions, and (once 0046 is migrated) carry + weight
+ * taps. It adds no schema of its own: it is the conversion surface that pulls
+ * people into the controls they scroll past.
  *
- * Slots with no storage yet (carry, weight-feel, what-fit, measured dimensions)
- * are deliberately absent until their migration lands. Never invent a slot that
- * has nowhere to write.
+ * The carry/weight slots appear only when the 0046 `bag_wear` table exists;
+ * until then they are absent. Never invent a slot that has nowhere to write.
  */
 export interface ContributionSlot {
-  key: "photo" | "review" | "wears";
+  key: "photo" | "review" | "wears" | "carry" | "weight";
   /** Short chip label — the ask. */
   label: string;
   /** One line saying what it is, in her voice. No jargon. */
@@ -55,17 +56,26 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
     return { signedIn: false, slots, filled: 0, total: slots.length, complete: false };
   }
 
-  const [reviews, votes, hasPhoto] = await Promise.all([
+  const [reviews, votes, hasPhoto, wear] = await Promise.all([
     getReviews(variantId).catch(() => null),
     getAxisVotes(variantId).catch(() => null),
     userHasPhoto(variantId, user.id).catch(() => false),
+    getWear(variantId).catch(() => null),
   ]);
 
   const hasReview = !!reviews?.myReview;
   const axisTotal = votes?.axes.length ?? 5;
   const axisDone = votes?.axes.filter((a) => a.myValue != null).length ?? 0;
 
-  const slots = buildSlots({ hasPhoto, hasReview, axisDone, axisTotal });
+  const slots = buildSlots({
+    hasPhoto,
+    hasReview,
+    axisDone,
+    axisTotal,
+    wearAvailable: wear?.available ?? false,
+    hasCarry: !!wear?.myCarry,
+    hasWeight: !!wear?.myWeightFeel,
+  });
   const filled = slots.filter((s) => s.filled).length;
   return {
     signedIn: true,
@@ -86,8 +96,12 @@ export function buildSlots(input: {
   hasReview: boolean;
   axisDone: number;
   axisTotal: number;
+  /** True once the 0046 `bag_wear` table exists — gates the carry/weight slots. */
+  wearAvailable?: boolean;
+  hasCarry?: boolean;
+  hasWeight?: boolean;
 }): ContributionSlot[] {
-  return [
+  const slots: ContributionSlot[] = [
     {
       key: "photo",
       label: "Add a photo",
@@ -112,6 +126,28 @@ export function buildSlots(input: {
       sub: { done: input.axisDone, total: input.axisTotal },
     },
   ];
+
+  // Carry + weight-feel taps only exist once their table is migrated (0046).
+  if (input.wearAvailable) {
+    slots.push(
+      {
+        key: "carry",
+        label: "Say how you carry it",
+        hint: "By the handles, on the shoulder, or crossbody.",
+        anchor: "#how-you-carry",
+        filled: !!input.hasCarry,
+      },
+      {
+        key: "weight",
+        label: "Say how it feels",
+        hint: "Light, just right, or heavy in hand.",
+        anchor: "#how-you-carry",
+        filled: !!input.hasWeight,
+      }
+    );
+  }
+
+  return slots;
 }
 
 /** Does this user already have a photo (any non-rejected status) for this bag? */

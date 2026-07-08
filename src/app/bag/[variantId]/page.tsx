@@ -39,6 +39,7 @@ import { hasActiveAuthenticators } from "@/lib/authentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
 import ContributionSlots from "./ContributionSlots";
+import WearNotes from "./WearNotes";
 import Resources from "./Resources";
 import BagStory, { type StoryMarketFact } from "./BagStory";
 import { getBagStory } from "@/lib/bag-stories";
@@ -1468,6 +1469,9 @@ export default async function BagDetailPage({
 
       {/* Multi-axis owner ratings (Fragrantica-style character bars) */}
       <AxisVotes variantId={v.variantId} />
+
+      {/* Lived carry + weight-feel taps (renders only once 0046 is migrated) */}
+      <WearNotes variantId={v.variantId} />
 
       {/* Content-based "similar bags" over catalogued attributes */}
       <SimilarBags variantId={v.variantId} />
