@@ -29,6 +29,8 @@
 - ✅ **Retire sold listings:** the adapter writes a per-run live snapshot (`data/ingest/_raw/tlc-live.json`); the workflow runs `reconcile:sold --platform="The Luxury Closet"` to stamp any stored TLC row not in it `sold` (50% safety cap). Verified live: a run retired 53 sold listings. No dead links on the rail.
 - ✅ **Coverage telemetry + wider models:** the adapter logs "TOP UNMATCHED known-brand bags" each run; added Burberry / Balenciaga / Valentino / Dolce & Gabbana bag models from that evidence (the shoe/SLG guard keeps their footwear out). Emitted bags: 15,969 → 17,529.
 
+- ✅ **Product photos on the buy cards (migration 0047 applied 2026-07-08):** `listing_image` table (platform, listing_ref -> https photo); adapter writes them, `load:tlc-images` upserts (deduped by ref), `getListingsForVariant` reads resiliently, `ListingsForSale` renders a thumbnail. Live: 5,890 photos, verified rendering on prod. TLC CDN is https.
+
 ## Known follow-ups
 - **Fix the local `.env.local` anon key** (truncated) so `getListingsForVariant` can be tested locally.
 - **Breadth:** `canonicalModel` (~68 models) bounds matches; extend `MODELS` in `model-normalize.ts` for more coverage.
