@@ -199,9 +199,11 @@ more to wrap). Direct monetization: none, this is the flywheel above. The metric
 protect is **submission start → complete**, which the slot model raises by shrinking
 the minimum unit to one tap.
 
-## Build status (2026-07-07)
+## Build status (2026-07-08: all phases LIVE)
 
-**All three phases BUILT and landed on `main`.** Files: `ContributionSlots.tsx`
+**All three phases BUILT, landed, and LIVE.** `0046` applied to prod 2026-07-08
+(db-migrate run `28920858437`; verified `bag_wear` + `fits_note` respond via REST).
+Files: `ContributionSlots.tsx`
 (+`SlotChip.tsx`), `WearNotes.tsx`/`WearTaps.tsx`, `contribution-slots.ts`, `wear.ts`
 /`wear-options.ts`/`wear-actions.ts`, migration `0046_bag_wear.sql`.
 
@@ -209,12 +211,10 @@ the minimum unit to one tap.
   signed-in user has given (photo / review / axis bars), shows only open slots, an
   "added X of Y" pull, and a thank-you when complete. Anchors to the existing
   controls (`#photos`, `#reviews`, `#owner-ratings`).
-- **Phase 2 + 3 (BUILT, dark until `0046` is applied):** carry + weight-feel taps
-  and a short "what fits inside" note, all on the `bag_wear` table. `getWear` returns
-  `available:false` when the table is absent, so the page is unchanged pre-migration
-  and the slots + `#how-you-carry` section light up after. **OWNER applies `0046`
-  via the db-migrate Action.** If another parallel session also created a `0046`,
-  renumber the UNAPPLIED duplicate (never the recorded one).
+- **Phase 2 + 3 (LIVE since 2026-07-08):** carry + weight-feel taps and a short
+  "what fits inside" note, all on the `bag_wear` table (`0046`, now applied). The
+  slots + `#how-you-carry` section render for signed-in owners. `getWear` still
+  returns `available:false` if the table is ever absent, so the page degrades safely.
 - **Measured dimensions:** deliberately NOT a slot. It is catalog data, captured
   through the existing "Suggest an edit" widget, per "measurable = data, not a vote".
 - **Instrumentation:** open-slot clicks fire `contribution_slot_clicked`
