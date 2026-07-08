@@ -69,13 +69,33 @@ Bags / Houses toggle: same layout at brand level (a house's rank blends its styl
 - Hedge line: **"Our index, not a verdict."** + a **"How we rank"** methodology-page link.
 - Never a verdict word ("best", "worth it"). Frame = standing/estimate, per the calibrated-hedge rules.
 
-## Open, before build
+## Built 2026-07-08 (branch `claude/bag-ranking-context-6lr7k0`)
+- **Engine:** `src/lib/lc-index.ts` (`computeLcIndex`, percentiles, weighted composite, n-gate,
+  why-meter bars, lead signal, neighbor boards, `whyNote`), 13 unit tests. Pure core, no I/O.
+- **Data:** `style_index_signals()` RPC (migration `0048`) returns per-style median / trade count /
+  live count / tier / rep variant. `getLcIndex` caches hourly; degrades to empty when unapplied.
+- **UI:** `StandingGlyph` (why-meter) + `StandingCard`; `/rankings` (the Index list) +
+  `/rankings/how-we-rank` (weights published live from the constant, so it never drifts);
+  StandingCard wired onto the bag page at the value moment.
+- Gate green: tsc, eslint, 655 tests, next build. `/rankings` prerenders static.
+
+### v1 simplifications (honest, revisit later)
+- Style price = **pooled** resale median across the style's variants (mixes colours/sizes). Fine
+  for a market-standing read; revisit if a per-variant index is ever wanted.
+- **StandingCard neighbor rows are not links yet** (needs styleId → rep-variant resolution per
+  neighbor). The Index-page rows DO link to bags.
+- **Movement pill deferred:** needs a stored monthly rank history (a `lc_index_snapshot` table).
+  Until two cycles exist, no pill renders, per "never invent motion".
+
+## Open, before / around ship
+- **Apply migration `0048`** (owner-gated) via the db-migrate Action, then the module populates.
 - **Validate the formula against real data:** compute the true top ~20 and eyeball the order vs
-  gut before shipping. Needs DB access this build container lacks (no anon key + proxy-blocked);
-  run where creds exist, or owner pastes a key.
-- **Nav placement for the Index page** (owner call, nav is protected): its own top-level door vs
-  under an existing one.
-- **"How we rank" page:** publish the recipe + weights so the index is defensible and citable (GEO).
+  gut. Needs DB access this build container lacks (no anon key + proxy-blocked).
+- **Nav placement for `/rankings`** (owner call, nav is protected): its own top-level door vs
+  under an existing one. The page exists and is linked from the bag-page card, not yet from nav.
+- **Concept C, the inline rank link:** approved, not yet built. Wire `getStyleStanding` into the
+  shop / search / closet cards as "· #N in the Index".
+- **Movement pill:** add the monthly snapshot table + a recompute step when the index goes live.
 
 ## Metrics it moves
 - StandingCard + glyph cross-links → **pages per session**, taps into bag pages (buy/sell moment).
