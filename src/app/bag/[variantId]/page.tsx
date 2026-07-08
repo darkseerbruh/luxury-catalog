@@ -38,6 +38,8 @@ import RequestAuthentication from "./RequestAuthentication";
 import { hasActiveAuthenticators } from "@/lib/authentication";
 import Reviews from "./Reviews";
 import AxisVotes from "./AxisVotes";
+import ContributionSlots from "./ContributionSlots";
+import WearNotes from "./WearNotes";
 import Resources from "./Resources";
 import BagStory, { type StoryMarketFact } from "./BagStory";
 import { getBagStory } from "@/lib/bag-stories";
@@ -604,6 +606,7 @@ export default async function BagDetailPage({
     retailHistory.length > 1 ? { id: "retail-history", label: "Retail history" } : null,
     hasBuyLinks ? { id: "where-to-buy", label: "Buy" } : null,
     hasSellLinks ? { id: "where-to-sell", label: "Sell" } : null,
+    { id: "contribute", label: "Add yours" },
     { id: "reviews", label: "Reviews" },
     { id: "owner-ratings", label: "Owner ratings" },
   ].filter((x): x is { id: string; label: string } => x !== null);
@@ -898,6 +901,10 @@ export default async function BagDetailPage({
           </div>
         </section>
       )}
+
+      {/* "Have this in hand?" — gap-aware contribution entry. Reads what this user
+          has already given for this bag and links to the open slots below. */}
+      <ContributionSlots variantId={v.variantId} />
 
       {/* User photo contributions — real, owned reference shots + the rare-find
           recruiting empty state (the UGC engine the tier ladder rewards). */}
@@ -1462,6 +1469,9 @@ export default async function BagDetailPage({
 
       {/* Multi-axis owner ratings (Fragrantica-style character bars) */}
       <AxisVotes variantId={v.variantId} />
+
+      {/* Lived carry + weight-feel taps (renders only once 0046 is migrated) */}
+      <WearNotes variantId={v.variantId} />
 
       {/* Content-based "similar bags" over catalogued attributes */}
       <SimilarBags variantId={v.variantId} />

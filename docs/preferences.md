@@ -184,6 +184,7 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Content ideas come from the archive.** The archivist proposes a ranked slate (`docs/research-drafts/seasonal-archive/content-ideas.md`, tagged GEO vs engagement, CTA-tied); the `copywriter` drafts; final publish/seeding stays the owner-gated Content lane.
 
 ## Product decisions she's locked
+- **No display ads until traffic is much larger.** Revisit only past a premium-network floor (~50K sessions/mo, so we skip cheap AdSense) AND once ad RPM is proven to beat the affiliate revenue it would cannibalize. Until then, no. (Affiliate is the backbone for a high-AOV audience; ads are a scale play that would tax the luxury feel. Rationale + traffic math: `docs/monetization-projections.md`. Locked 2026-07-07.)
 - **Brand mark = interlocked "LC" monogram** (ivory L over gold C, Playfair Display, on a dark rounded tile). It's the site favicon (`src/app/icon.svg` + `favicon.ico` + `apple-icon.png`) and her LinkedIn company logo. Glyphs are outlined to vector paths (font-independent); regen lives in the session scratchpad. Don't redesign it without her say.
 - **User avatars use one component** (`src/components/Avatar.tsx`): branded gold-initial fallback, person glyph when nameless, never the browser broken-image icon. Reuse it, never re-roll an inline avatar.
 - **Canonical app = the full catalog lineage** (search/identify/admin/closet/watchlist/reviews/etc.). A separate analytics-prototype lineage was merged in and retired.
