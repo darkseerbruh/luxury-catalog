@@ -85,6 +85,22 @@ export function isEbayUrl(url: string): boolean {
   }
 }
 
+/** CJ (Commission Junction) click-redirect domains. A product-feed link already
+ * routes through one of these with attribution baked in, so it must never be
+ * re-wrapped. */
+const CJ_TRACKING_HOSTS = [
+  "anrdoezrs.net", "dpbolvw.net", "tkqlhce.com", "jdoqocy.com", "kqzyfj.com",
+  "emjcd.com", "ftjcfx.com", "awltovhc.com", "lduhtrp.net", "tqlkg.com", "qksrv.net",
+];
+export function isCjTrackingUrl(url: string): boolean {
+  try {
+    const h = new URL(url).hostname.toLowerCase();
+    return CJ_TRACKING_HOSTS.some((d) => h === d || h.endsWith(`.${d}`));
+  } catch {
+    return CJ_TRACKING_HOSTS.some((d) => url.toLowerCase().includes(d));
+  }
+}
+
 /**
  * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
  * campaign id configured this returns the URL unchanged, so eBay links always work
@@ -132,6 +148,9 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
     return applyEbayAffiliate(url);
   }
+  // Already a CJ-tracked deep link (e.g. The Luxury Closet product feed): the
+  // attribution is baked in, so return it untouched — never re-wrap.
+  if (isCjTrackingUrl(url)) return url;
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);
