@@ -43,8 +43,11 @@ const LUXURY_HOUSES = new Set(
     "goyard", "the row", "chloé", "chloe", "balenciaga", "valentino", "delvaux", "moynat",
   ].map((s) => norm(s)),
 );
-function tierForNewBrand(name: string): "thrift" | "mid" | "ultra-luxury" {
-  return LUXURY_HOUSES.has(norm(name)) ? "ultra-luxury" : "mid";
+// Numbered House Standing tiers ("1" highest → "5"); see docs/ux/tier-formula-spec.md.
+// A NEW brand is born with a provisional tier (luxury house → "2", else "4"); the
+// house-standing backfill re-tiers it precisely once it has recorded prices.
+function tierForNewBrand(name: string): "2" | "4" {
+  return LUXURY_HOUSES.has(norm(name)) ? "2" : "4";
 }
 
 /** A cluster is promotable to the catalog only if it names a real BAG model (the
