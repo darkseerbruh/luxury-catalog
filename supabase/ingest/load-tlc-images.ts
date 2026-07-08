@@ -28,9 +28,20 @@ async function main(): Promise<void> {
     return;
   }
   const parsed = JSON.parse(fs.readFileSync(FILE, "utf8")) as ImageRow[];
-  const rows = (Array.isArray(parsed) ? parsed : [])
-    .filter((r) => r && r.listing_ref && r.image_url)
-    .map((r) => ({ platform: PLATFORM, listing_ref: r.listing_ref, image_url: r.image_url, updated_at: new Date().toISOString() }));
+  // Dedupe by listing_ref — the feed can carry the same product more than once,
+  // and Postgres rejects an upsert that hits the same (platform, listing_ref)
+  // conflict key twice in one statement.
+  const byRef = new Map<string, string>();
+  for (const r of Array.isArray(parsed) ? parsed : []) {
+    if (r && r.listing_ref && r.image_url) byRef.set(r.listing_ref, r.image_url);
+  }
+  const now = new Date().toISOString();
+  const rows = [...byRef.entries()].map(([listing_ref, image_url]) => ({
+    platform: PLATFORM,
+    listing_ref,
+    image_url,
+    updated_at: now,
+  }));
 
   console.log(`[tlc-images] ${rows.length} listing photo(s) ${write ? "to upsert" : "(DRY RUN)"}.`);
   if (!write || rows.length === 0) {
