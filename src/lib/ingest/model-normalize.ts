@@ -58,6 +58,8 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/balenciaga/i, "Balenciaga"],
   [/valentino/i, "Valentino"],
   [/dolce\s*&?\s*gabbana|\bd&g\b/i, "Dolce & Gabbana"],
+  [/michael\s*kors|^mk\b/i, "Michael Kors"],   // incl. "MICHAEL Michael Kors" diffusion line
+  [/tory\s*burch/i, "Tory Burch"],
 ];
 
 /** Resolve any raw brand/sub-brand/collab string to a canonical brand. */
@@ -123,6 +125,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Lady D-Lite", "d-lite", "lady d-lite"], ["Lady D-Joy", "d-joy", "d joy"], ["Lady Dior", "lady dior"],
     ["Saddle", "saddle"], ["Book Tote", "book tote", "book"], ["30 Montaigne", "30 montaigne", "montaigne"],
     ["Caro", "caro"], ["Bobby", "bobby"], ["Dior Toujours", "toujours"], ["Diorama", "diorama"], ["Dior Key", "dior key"],
+    ["Diorissimo", "diorissimo"],
   ],
   "Bottega Veneta": [
     ["Andiamo", "andiamo"], ["Arco", "arco"], ["Jodie", "jodie"], ["Cassette", "cassette"],
@@ -160,6 +163,22 @@ const MODELS: Record<string, ModelDef[]> = {
   ],
   "Dolce & Gabbana": [
     ["Miss Sicily", "miss sicily"], ["Sicily", "sicily"], ["Devotion", "devotion"], ["DG Girls", "dg girls"],
+  ],
+  "Michael Kors": [
+    ["Cassie", "cassie"], ["Jet Set", "jet set"], ["Hamilton", "hamilton"], ["Selma", "selma"],
+    ["Mercer", "mercer"], ["Bedford", "bedford"], ["Bradshaw", "bradshaw"], ["Voyager", "voyager"],
+    ["Whitney", "whitney"], ["Greenwich", "greenwich"], ["Sloan", "sloan"], ["Soho", "soho"],
+  ],
+  Coach: [
+    ["Tabby", "tabby"], ["Willow", "willow"], ["Rogue", "rogue"], ["Dinky", "dinky"],
+    ["Swagger", "swagger"], ["Brooklyn", "brooklyn"], ["Cassie", "cassie"], ["Hutton", "hutton"],
+    ["Pillow", "pillow"], ["Nolita", "nolita"], ["Kacey", "kacey"], ["Bandit", "bandit"],
+    ["Georgie", "georgie"], ["Lana", "lana"], ["Field Tote", "field tote"],
+  ],
+  "Tory Burch": [
+    ["Reva", "reva"], ["Robinson", "robinson"], ["Fleming", "fleming"], ["Kira", "kira"],
+    ["McGraw", "mcgraw"], ["Ella", "ella"], ["Perry", "perry"], ["Lee Radziwill", "lee radziwill"],
+    ["Miller", "miller"], ["Britten", "britten"],
   ],
 };
 
