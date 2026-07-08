@@ -982,6 +982,34 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
   }
 }
 
+/**
+ * Style-level catalog hero images, keyed by style id: the first variant of the
+ * style that has a catalog `image_url`. Last-resort fallback for grids whose
+ * tile variant resolved no photo — a sibling colourway's photo beats the
+ * placeholder (the tile is the STYLE at a size; text already names the spec).
+ * RESILIENT: returns {} on any error.
+ */
+export async function getStyleHeroImages(styleIds: number[]): Promise<Record<number, string>> {
+  const ids = Array.from(new Set(styleIds.filter((n) => Number.isFinite(n))));
+  if (ids.length === 0) return {};
+  try {
+    const { data, error } = await getSupabase()
+      .from("variant")
+      .select("style_id, variant_id, image_url")
+      .in("style_id", ids)
+      .not("image_url", "is", null)
+      .order("variant_id", { ascending: true });
+    if (error) return {};
+    const map: Record<number, string> = {};
+    for (const r of (data ?? []) as { style_id: number; image_url: string | null }[]) {
+      if (r.image_url && !(r.style_id in map)) map[r.style_id] = r.image_url;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 export interface BrandResaleStats {
   highestSale: number | null;
   currency: string | null;

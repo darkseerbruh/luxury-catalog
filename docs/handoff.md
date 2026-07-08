@@ -1,5 +1,44 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (unified bag-finder + closet-add-is-review shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (camera identify v2: video + live capture + haul mode shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — The LC Index: bag-ranking module + Index page SHIPPED (2026-07-08, on `main`)
+
+**Owner's concept: help a layperson see where a bag stands (Marc Jacobs vs Louis Vuitton) at a glance.** Design converged over 5 chat rounds; spec `docs/ux/lc-index-spec.md`. Built, landed to `main` (3 lands: `87041cf`, `c331835`, + engine), both migrations applied to prod.
+- 🧮 **The formula (the LC Index):** one rank per style blending resale **price 40% + trade volume 25% + scarcity 20% + house tier 15%**, each a percentile across all styles. Pure engine `src/lib/lc-index.ts` (`computeLcIndex`), 19 unit tests. n-gate: a style needs ≥8 recorded prices or it stays unranked (never a fake rank). Framed **"our index, not a verdict"** with a live `/rankings/how-we-rank` page publishing the weights from the code constant.
+- 📊 **The standing module (`StandingCard`):** big rank headline + the three measures as side-by-side mini-leaderboards. On the bag page at the value moment. **The why-meter (`StandingGlyph`):** three bars (Price/Trade/Scarcity, lead brightened) so a row explains its own rank. Owner-loved after iterating away from spectrums/stat-tiles.
+- 📜 **The Index page (`/rankings`):** numbered list, affiliate photo + why-meter + resale-median column; ItemList JSON-LD + sitemap entries (GEO). **Concept C** inline rank link (`IndexRankLink`) live on the shop grid (stretched-link card, real sibling link).
+- 📈 **Movement pills:** `lc_index_snapshot` (migration 0049) + monthly cron `/api/cron/lc-index-snapshot`; `MovementPill` shows ▲/▼ vs last month, hidden until a prior month exists.
+- 🗄️ **Migrations 0048 (`style_index_signals()` RPC) + 0049 APPLIED to prod 2026-07-08** (db-migrate runs 27 + 28, logs confirm). Everything degrades gracefully (empty index → module hides).
+- ⬜ **YOUR TURN:** (a) **eyeball `/rankings` on the live site and gut-check the order** (real data; tell me if a bag sits wrong and I'll trace data vs weights, it's one constant). (b) **Nav placement for `/rankings`** is your call (nav is protected); it's linked from the bag card, not the menu. (c) Optional: trigger `/api/cron/lc-index-snapshot` once (needs CRON_SECRET) to capture July now, else it auto-runs Aug 1 and pills start Sep. (d) Concept C can extend to search/recs/closet cards on your word.
+
+---
+
+## TL;DR — Camera identify v2: video in, live capture feedback, haul mode, logo pass (2026-07-08, on `main`)
+
+**`/identify` (Spot the Fake) went from single-photo to the thrift-flipper tool.** Grew out of the owner's Goodwill field test: Claude chat read her bags one at a time, choked on her 13 `.mov` files, and gave overconfident verdicts; we prototyped on her real footage in-chat (rack scan + 5-bag haul + native-res logo crops) and she greenlit the build. Strategic frame she locked: **being a thrift flippers' resource is gold**.
+- 🎥 **Video in:** videos never upload raw. Frames are sampled in-browser, scored for sharpness (Laplacian variance, `src/lib/identify/frame-picking.ts`, 11 unit tests), best 4 upload as JPEGs capped at the vision ceiling (`extract.ts`).
+- 📷 **Live capture with real-time feedback (owner's favorite):** `CameraCapture.tsx` viewfinder shows chips that REACT instead of instructing (QR-scanner model): Sharp/Hold-steady, frames n/4, and "Read: 'the sak'" the moment a stamp is legible (throttled Haiku pings to new `/api/identify/live-read`, stop on first success, ≤12/session, 40/5min rate limit).
+- 🔍 **The logo pass:** first pass returns `logoHints` (normalized regions of stamps/labels/tags/medallions + legible flag). Unread hints get re-cropped CLIENT-side at native resolution (re-seek the video / re-decode the photo) and sent once more with the prior JSON (`prior` field → refine prompt). Proven manually on her footage: turned "navy crossbody, unknown" into a legible "liz claiborne" disc and flipped a wrong Brahmin read.
+- 🧺 **Haul mode:** multiple files queue as one list; each VIDEO = its own bag, photos in one selection = angles of ONE bag; runs sequentially (rate-limit + phone-memory kind). Rate limit bumped 6→12/5min for the multi-bag session.
+- 🏷️ **Price-tag OCR:** `priceTagText` read off store stickers (worked on both Savers tags in her footage); shown as a Sticker spec row + weighed next to the resale range copy (no computed margin % claims).
+- 🛒 **Off-catalog fallback (the strategic one):** thrift racks are mall brands; when a read has no catalog style match, the card says so honestly, links **eBay SOLD comps** (`buildEbaySoldCompsLink`, EPN attribution built-in, fires `outbound_resale_clicked` source=identify_offcatalog), and the miss logs to `searched_not_found` (`[camera]` prefix) = the demand sensor for which thrift-tier brands earn catalog coverage next.
+- 📊 **New events:** `identify_scan_started` (kind: photo|video|live|haul) + `identify_scan_completed` (matched/confidence/brand/refined). Result card extracted to `ScanResult.tsx` (all flows share it; calibration copy unchanged: markers not verdicts, value only "if genuine").
+- 🧪 **Gates:** tsc/eslint/tests(642)/next build all green. ⚠️ Container gotcha: this env ships NO `NEXT_PUBLIC_SUPABASE_ANON_KEY`; build-time queries fail gracefully, so a `.env.local` with a labeled dummy value gates compile+render (real key would come from the env store; egress to the live site is proxy-blocked here).
+- ⬜ **YOUR TURN:** (a) open `/identify` on your phone against prod and run the live camera on a real bag (needs https + camera permission; verify the chips tick). (b) The rack-scan mode (pan a whole shelf → pinned flags) is validated on your footage but NOT built; say the word next session. (c) Optional: drop the real anon key into the cloud env store so future build gates run against live data.
+
+---
+
+## TL;DR — Camera identify v2 verified end-to-end on the LIVE site + 429 resume fix landed (2026-07-08, on `main`, NOT yet deployed)
+
+**Ran the full v2 verification against `www.luxurycatalog.com/identify` on her real thrift `.mov`s. All 5 checks PASS.**
+- ✅ **Upload/haul + reads:** each item renders its own **Bag n** card, stepper runs, results show the **"We read:"** chips. Reads are calibrated, NOT overconfident: rack pans returned brand/style `null` ("Couldn't place this one"); a held bag read **Liz Claiborne** (medium) one call, `null` the next (model is non-deterministic and hedges to null when unsure — good).
+- ✅ **Off-catalog + eBay:** Liz Claiborne had no catalog match → off-catalog card + eBay SOLD button; live href carries `LH_Sold=1`, `LH_Complete=1`, `campid=5339158071`, `customid=identify-offcatalog`.
+- ✅ **Live camera chips:** all three tick — **Sharp**, **Frames n/4** (counts up), **Read: $24.99** (flipped via real `/api/identify/live-read`; blank frame → `readable:false`). Webcam prompt + physical bag are hers to do live.
+- ✅ **Data trail:** PostHog got `identify_scan_started` + `identify_scan_completed`; Supabase `searched_not_found` gained `[camera] Liz Claiborne`.
+- 🔧 **Rate-limit finding + fix:** the limiter is **in-memory PER serverless instance** (by design, `rate-limit.ts`), so `12/5min` is soft — a **concurrent** burst fans across instances and does NOT trip (14/14 → 200); a **sequential** haul sticks to one warm instance and DOES (calls 10–16 → 429, `Retry-After` ~198s). Old UI dead-ended every later bag on "Too many requests." **Fixed** (`postIdentify` now waits out `Retry-After`, shows a "holding your spot" status, retries bounded ×2; commit `b744849`). ⚠️ On `main`, **awaiting a manual `vercel --prod`** — not live yet, so not live-verified. Follow-up worth considering: shorten the window or add a per-user token so hauls rarely wait ~3–5 min.
+- 📌 **Verification method note:** the browser file-picker is sandboxed in this harness (no OS-picker uploads), so the front-end was driven by in-page injection (canvas `File` + a captured real prod response) and the backend by direct `curl` to prod `/api/identify`. Genuine, but a true phone-upload pass on her device is still the gold check.
 
 ---
 
@@ -11,6 +50,27 @@
 - 🔧 **Fixed red `main`:** the `/about` founder page imported `framer-motion` + `lenis` with the manifest entries present but never install-verified. Clean `npm ci` + full gate (tsc/eslint/next build/**593 tests**) now green; landed the reproducible seed script (`00882ad`). Docs landed at `c98fbfe`.
 - 📌 Durable learnings captured in `docs/article-engine.md`: article renderer supports only `## `/`- `/`> `/paragraph/`**bold**`/registered `[diagram:]` (NO tables, NO `---`); use `seed-archive-reference-articles.ts` as the clean seed template (status on INSERT only).
 - ✅ **DONE (both prior "your turn" items):** the 2 drafts are published (above); `framer-motion` + `lenis` are now declared + installed in the working folder, so local dev on `/about` works. Nothing outstanding.
+
+---
+
+## TL;DR — iOS zoom + shop-grid trust fixes (badge saturation, contrast, overlap, placeholder images), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported 4 issues from her phone (screenshots, 2026-07-08); all four fixed:**
+- 📵 **iOS zoom on the menu search killed.** iOS Safari auto-zooms any focused input with font-size < 16px. Fix: `BagFinder` input is `text-base sm:text-sm`, PLUS a global guard in `globals.css` (`@media (max-width: 639px)`: every text input/select/textarea `font-size: max(16px, 1em) !important`) so no future input regresses. Verified: menu search, hero search, newsletter all compute 16px at 393px.
+- 🏷️ **"Great deal" badge saturation fixed, then REMOVED from the grid entirely (owner ruled, same day).** Root cause of saturation: the tile badged the BEST band across ALL its listings — with 50-113 listings/tile, one is always ≥10% under its bucket median, so every tile badged. First fix rated the tile's "from" price instead; owner overruled: a rollup tile is a category representative (photo + from-price included), NOT an item for sale, so NO price verdict belongs on it however computed. Grid now shows no deal chip; verdicts stay at LISTING level (bag-page rail, homepage Best deals). `ShopProduct.dealBand` (from-price semantics) survives as the INTERNAL signal for the `deals=1` filter + best-deal sort only.
+- 🎨 **Badge legible everywhere:** solid dark pill (`bg-emerald-950/90` + `text-emerald-200`), moved to the image's BOTTOM-left; "+ Compare" stays top-right, so they can never collide on narrow 2-col mobile cards (they overlapped before).
+- 🖼️ **Shop placeholder tiles (e.g. Neverfulls) fixed.** The tile's image was keyed ONLY to the cheapest listing's variant; a photo-less eBay-only cheapest (only TLC writes `listing_image`) blanked tiles whose siblings have photos. Now: cheapest's variant → other listed variants (`ShopProduct.imageVariantIds`) → ANY catalog photo on the style (`getStyleHeroImages`, new in queries.ts).
+- ✅ Verified end-to-end against a local mock PostgREST (deterministic comps: fair from-price tile shows NO badge even with a 20%-under listing in another bucket; great from-price tile badges; both image fallbacks hit) + Playwright at 393×852 (no overlap, computed styles). Gates green (tsc/eslint/642 tests + build via land script). ⚠️ Couldn't verify against prod data: this container's `SUPABASE_SERVICE_ROLE_KEY` is rejected ("Invalid API key") — worth checking that env secret.
+
+---
+
+## TL;DR — Mobile menu: search collapsed until tapped (follow-up fix), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported the mobile menu STILL buried under an uncapped grid** (screenshot showed 6+ tiles, no View-all — i.e. the pre-fix bundle, but the 4-cap alone also left the menu links below the fold on a 393px phone). Structural fix:
+- 📱 **Menu first:** `BagFinder` gained `collapsedUntilFocus` — in the mobile menu, ONLY the search field renders until it's tapped (no grid, no "Ask us to add it"), so opening the hamburger shows the whole menu instantly. Once tapped: capped **4** suggestions + "View all results →" (unchanged). Engagement is sticky (no collapse on blur — a blur-collapse would yank tiles out from under the tap). Desktop + closet-add unchanged.
+- 🎨 **Ghosting fixed:** the mobile panel is now opaque `bg-bg` (was `bg-bg/95` + blur), so page copy can't bleed through it (visible in her screenshot).
+- ✅ Verified end-to-end with Playwright at 393×852 (menu-open: 0 tiles + all links visible; engaged: exactly 4 tiles + CTA; typing: cap holds). Gates green (tsc/eslint/642 tests + build via land script).
+- ℹ️ If she STILL sees the old behavior after this deploy: hard-refresh / clear Safari cache — her screenshot predated the 14:41 UTC deploy of the first fix.
 
 ---
 

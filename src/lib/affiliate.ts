@@ -182,6 +182,28 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   return url;
 }
 
+/**
+ * eBay SOLD-comps search for a bag — the off-catalog fallback on the identify
+ * tool. When a scanned bag isn't in our catalog (mall brands dominate thrift
+ * racks), realized eBay sales are the honest comp source we can hand the user
+ * in one tap. EPN attribution rides along via applyEbayAffiliate, so this link
+ * monetizes from day one with no env config.
+ */
+export function buildEbaySoldCompsLink(
+  brand: string,
+  style: string,
+  customId?: string
+): ResaleLink | null {
+  const q = [brand, style].filter(Boolean).join(" ").trim();
+  if (!q) return null;
+  const url = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(q)}&LH_Sold=1&LH_Complete=1`;
+  return {
+    key: "ebay-sold",
+    name: "eBay sold listings",
+    url: applyEbayAffiliate(url, customId),
+  };
+}
+
 /** Resale search links for a bag, with affiliate attribution applied when configured. */
 export function buildResaleLinks(brand: string, style: string): ResaleLink[] {
   const q = encodeURIComponent([brand, style].filter(Boolean).join(" ").trim());

@@ -99,6 +99,10 @@ export const EVENTS = {
   reportViewed: "report_viewed",
   /** The collection report was exported (format: csv | print). */
   reportExported: "report_exported",
+  /** A camera identify scan started (kind: photo | video | live | haul; count). */
+  identifyScanStarted: "identify_scan_started",
+  /** A camera identify scan finished (matched, confidence, brand, refined, kind). */
+  identifyScanCompleted: "identify_scan_completed",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
