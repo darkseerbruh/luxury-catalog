@@ -58,6 +58,9 @@ async function fetchViaSftp(): Promise<string[]> {
     port: 22,
     username: user,
     password: pass,
+    // CJ's legacy-crypto handshake over the CI link can take longer than the 20s
+    // default ("Timed out while waiting for handshake"); give it room.
+    readyTimeout: 90000,
     // CJ's server authenticates via keyboard-interactive, not plain password
     // ("All configured authentication methods failed" otherwise). This makes
     // ssh2 answer the interactive prompt with the same password.
