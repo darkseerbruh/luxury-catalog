@@ -70,6 +70,10 @@ jobs:
           npm run load:tlc-images -- --write
           npm run summary:refresh
 
+      - name: Capture unknown-model bags to discovered_listing (raw evidence layer)
+        if: env.WRITE == 'true'
+        run: npm run load:prices -- tlc-discovered --discovered-only --write
+
       - name: Retire sold TLC listings (diff vs this run's live snapshot)
         if: env.WRITE == 'true'
         run: |

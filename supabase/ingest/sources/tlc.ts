@@ -237,6 +237,11 @@ async function run(): Promise<void> {
   const unmatchedByBrand = new Map<string, number>();
   const unmatchedSamples = new Map<string, string>();
   const observations: PriceObservation[] = [];
+  // Unknown-model BAGS (a bag we recognise as a bag but can't name from the MODELS
+  // dictionary). NOT noise: each is evidence of a bag we're missing or mis-mapping.
+  // Captured to discovered_listing (raw layer) via the discovered-only load instead
+  // of being dropped, so a promote pass can roll recurring models into the catalog.
+  const discoveredObs: PriceObservation[] = [];
   // Per-listing photos (listing_ref -> https image), loaded into listing_image
   // so the bag-page rail can show a picture next to each live offer.
   const images: { listing_ref: string; image_url: string }[] = [];
@@ -257,8 +262,30 @@ async function run(): Promise<void> {
       if (brand && looksLikeBag(l.title)) {
         unmatchedByBrand.set(brand, (unmatchedByBrand.get(brand) ?? 0) + 1);
         if (!unmatchedSamples.has(brand)) unmatchedSamples.set(brand, l.title);
+        // Capture, don't discard: affiliate data is priority evidence. The raw
+        // title rides as style_guess; the discovered-only load routes it straight
+        // to discovered_listing (never pickStyle'd, so no loose-match pollution).
+        discoveredObs.push({
+          brand,
+          style: l.title,
+          attrs: {
+            exterior_colorway: l.color,
+            exterior_material: l.material,
+            condition_detail: l.itemCondition,
+            listing_ref: l.externalId,
+          },
+          platform: PLATFORM,
+          price_type: "listed",
+          sale_price: price,
+          currency: "USD",
+          condition: null,
+          observed_on: observedOn,
+          source_url: l.clickUrl,
+          confidence: "low",
+          notes: "unmatched-model (dictionary miss) — captured for triage",
+        });
       }
-      continue; // only bags we can name — never guess a style
+      continue; // named bags -> price_history; unknown-model bags captured above
     }
     observations.push({
       brand,
@@ -287,6 +314,10 @@ async function run(): Promise<void> {
 
   const { file, kept, dropped } = writeObservations(SOURCE, observations);
 
+  // Unknown-model bags -> their own landing, loaded with --discovered-only so they
+  // land in discovered_listing (raw layer) for triage, never on a curated variant.
+  const disc = writeObservations(`${SOURCE}-discovered`, discoveredObs);
+
   // Authoritative "still for sale" snapshot for reconcile-sold: the listing_refs
   // of every in-stock bag in THIS run. Overwrite (not merge) so a ref that drops
   // out = sold. reconcile-sold stamps stored TLC rows not in this set as sold.
@@ -310,7 +341,9 @@ async function run(): Promise<void> {
     `[tlc] feed rows(USD)=${listings.length} · emitted=${observations.length} · kept=${kept} · dropped=${dropped}\n` +
       `      skipped: unknown-model=${skippedUnknownModel}, out-of-stock=${skippedOutOfStock}\n` +
       `      live snapshot: ${liveRefs.length} refs -> ${snapFile}\n` +
-      `      -> ${file}\n      next: npm run load:prices -- tlc --write\n` +
+      `      unknown-model bags captured for triage: ${disc.kept} -> ${disc.file}\n` +
+      `      -> ${file}\n      next: npm run load:prices -- tlc --write` +
+      ` && npm run load:prices -- tlc-discovered --discovered-only --write\n` +
       `      TOP UNMATCHED known-brand bags (extend MODELS from these):\n${topUnmatched}`
   );
 }
