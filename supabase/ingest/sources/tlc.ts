@@ -28,6 +28,14 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env.local"), override: 
 const PLATFORM = "The Luxury Closet";
 const SOURCE = "tlc";
 
+// Title looks like a handbag (for coverage telemetry only — NOT used for
+// matching, which stays on canonicalModel). Bag-ish word present, no footwear.
+const BAG_WORDS = /\b(bag|tote|clutch|crossbody|cross body|satchel|hobo|shoulder|backpack|bucket|saddle|flap|top handle|messenger|minaudiere|vanity|duffle|boston|camera)\b/i;
+const NOT_BAG_WORDS = /\b(sneaker|pump|sandal|mule|loafer|boot|espadrille|slide|heel|flat|wallet|cardholder|card holder|belt|scarf|sunglass|necklace|earring|bracelet|ring|watch|perfume|shoe)\b/i;
+function looksLikeBag(title: string): boolean {
+  return BAG_WORDS.test(title) && !NOT_BAG_WORDS.test(title);
+}
+
 /** Decode a feed payload (raw CSV/TXT or a .zip, detected by the PK magic bytes)
  * into each member's text. */
 function decodeFeed(buf: Uint8Array): string[] {
@@ -243,7 +251,10 @@ async function run(): Promise<void> {
     const model = brand ? canonicalModel(brand, l.title) : null;
     if (!brand || !model) {
       skippedUnknownModel++;
-      if (brand) {
+      // Telemetry counts only real missed BAGS (bag-worded title, no shoe/SLG
+      // word), so the "extend MODELS" signal isn't drowned out by the shoes,
+      // jewellery and wallets we correctly skip.
+      if (brand && looksLikeBag(l.title)) {
         unmatchedByBrand.set(brand, (unmatchedByBrand.get(brand) ?? 0) + 1);
         if (!unmatchedSamples.has(brand)) unmatchedSamples.set(brand, l.title);
       }
