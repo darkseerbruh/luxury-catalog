@@ -1,5 +1,18 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (de-AI/anti-slop audit added on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (unified bag-finder + closet-add-is-review shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Unified bag-finder + closet-add-is-review, SHIPPED (2026-07-08, on `main`)
+
+**One search component now powers the nav (desktop + mobile) and adding a bag to your closet; adding a Have/Had bag IS the review.** Spec: `docs/ux/unified-search-and-review-spec.md`. Grew out of the owner's founder-first-reviews idea (she wants to be the first reviewer on every bag she has carried; recruit founding reviewers into a working flow).
+- 🔎 **`BagFinder` (`src/components/BagFinder.tsx`) + `/api/bag-finder` (`src/lib/bag-finder.ts`, 12 unit tests):** click into search and a popular-first grid is ALREADY there (populate on focus, never a blank box); typing narrows live; a query that resolves to one model, or tapping a model, shows that model in its COLOURWAYS so a fuzzy owner picks by sight, plus a "Not sure" tile that always completes. Only the click DIFFERS by context: nav opens `/bag/[variantId]`, closet opens the Want/Have/Had fork.
+- 📝 **Closet-add-is-review (`src/components/ClosetAddFlow.tsx`, `/closet/add`):** Have/Had opens the review inline in one sheet, wired to existing `submitReview` + `saveToCloset`: stars + words + worth-it + occasion + durability + the 5 opinion axes as optional 1-5 pips (`castAxisVote`). Reviews are PER-VARIANT (the chosen colour's rep variant; "Not sure" uses the model hero). All fields past the star rating are optional so the founding-reviewer floor stays low.
+- 🧩 **Refactor:** `AXES`/`AXIS_META` moved to server-free `src/lib/axes.ts` (votes.ts re-exports) so the client sheet imports them without server code. `holds_value` + `worth_the_price` stay app-layer-excluded (facts, not votes).
+- ✅ **Correction:** migration 0012 was ALREADY applied (verified live: `bag_axis_vote` responds 200 + has data; `<AxisVotes>` renders on bag pages). Fixed the stale "not yet applied" notes in `review-data-leaderboards.md`.
+- 🧪 **Gates green each land** (tsc/eslint/next build/605→628 tests). API verified vs REAL data on the Vercel preview (populate-on-focus, `q=lady`, colourways all returned real bags). Landed via `scripts/land-to-main.sh` (commits incl. `237ec44`); PR #15 merged.
+- ⬜ **YOUR TURN:** (a) eyeball the UI on the live site (nav search grid + `/closet/add` behind login) if you want a human pass. (b) The **founding-reviewer recruiting copy is drafted** (Chanel-group post + DM + alt hook) in this chat, ready to post when you are (outward-facing, so yours). Recruit only once you are happy with the live flow.
+- 🔧 **Follow-up (optional):** richer photo-fallback that maps an uploaded photo to the exact catalog bag (today the fallback reuses `requestBag`: "ask us to add it", never a dead end). Mobile nav now uses the same finder.
 
 ---
 
