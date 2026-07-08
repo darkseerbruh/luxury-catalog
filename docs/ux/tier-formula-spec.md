@@ -50,24 +50,35 @@ Draft weights (55 / 25 / 20) produce this order. Bands are the recommended v1 cu
 Five natural clusters fall out of the data (clean gaps at ~90, ~75, Prada 59 -> Valentino 48,
 Coach 30 -> Jacquemus 27.7). A 4-band scheme is possible by merging the bottom two.
 
-## Tier names (OPEN — user-facing copy, voice-gated)
+## Tier names — LOCKED: numbered (owner decision 2026-07-08)
 
-Current DB values (`thrift / mid / premium / ultra-luxury`) are industry-borrowed and
-"thrift" reads as a knock. Replace with our own spectrum language, non-pejorative at the
-low end. Candidate sets (apex -> accessible), to finalise via the brand-voice canon:
+Tiers are **numbered Tier 1 (highest standing) → Tier 5**, not industry words. Numbered is
+formula-native (like the rankings list), non-pejorative at every level, and dodges the
+"icon / grail / thrift" clash + knock problems. Each number carries a plain one-line
+descriptor for laypeople (draft copy, voice-gated):
 
-- **A. Canon:** Icon · Heritage · Signature · Contemporary · Everyday
-- **B. Standing:** Grail · Blue Chip · Established · Rising · Accessible
-- **C. Plain:** Apex · Prestige · Core · Approachable · Entry
+| Tier | One-line descriptor (draft) |
+|---|---|
+| **Tier 1** | Commands the most, trades the most |
+| **Tier 2** | High-standing houses, deep resale demand |
+| **Tier 3** | Established houses, active resale |
+| **Tier 4** | Accessible standing, steady resale |
+| **Tier 5** | Entry standing, everyday reach |
+
+The numbers are the label; the descriptor is the plain-words gloss shown next to it.
+
+## Decisions — LOCKED (2026-07-08)
+
+- **Band count: 5** (matches the natural gaps in the data).
+- **Names: numbered** Tier 1 (top) → Tier 5, with the plain descriptors above.
+- **Weights: 55 / 25 / 20** (median / ceiling / trade).
 
 ## Rollout (owner-gated)
 
-1. Land this spec + a pure `computeHouseStanding()` (unit-tested, no I/O), like the LC Index core.
-2. Show the re-tiered distribution as a dry-run (done above).
-3. On approval: migration to rename the `brand_tier` enum values + backfill each brand's tier from its band, plus the "how we tier houses" page copy. Migration + site copy = owner-gated.
-
-## Open decisions for the owner
-
-1. Band count: **5** (recommended, matches the natural gaps) or 4.
-2. Tier name set: A / B / C / other.
-3. Weights: keep 55 / 25 / 20 or adjust (e.g. raise trade volume).
+1. Land this spec (done).
+2. Build a pure `computeHouseStanding()` (unit-tested, no I/O) + a report script that
+   prints the placement from live data; mirrors the LC Index core. (Reversible; I land it.)
+3. **Owner-gated migration:** restructure `brand_tier` (thrift/mid/premium/ultra-luxury
+   → Tier 1-5), backfill each brand's tier from its band, update every UI reference
+   (`BrandTier` type, `TIER_RANK`, on-page tier labels), and add the "how we tier houses"
+   page copy. Enum change + broad UI copy = owner applies after review.
