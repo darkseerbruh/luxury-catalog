@@ -375,7 +375,23 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
     }
 
     const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
-    const target = rows.find((r) => r.variantId === variantId);
+
+    // The style-wide query above is capped at 1000 rows by PostgREST, so for a
+    // style with many listings (e.g. after the TLC feed load) the TARGET
+    // variant's own rows can fall outside that window and vanish from `offers`.
+    // Fetch this variant's rows directly (its own listings comfortably fit under
+    // 1000) so its offers are always complete; the style pool stays for comps.
+    const { data: vData } = await getSupabase()
+      .from("price_history")
+      .select(buildSelect(STYLE_SELECT_NO_FEET))
+      .eq("variant_id", variantId)
+      .not("sale_price", "is", null)
+      .limit(1000);
+    const variantRows = ((vData as unknown as RawRow[]) ?? [])
+      .map(mapRow)
+      .filter((r): r is PriceRow => r !== null);
+
+    const target = variantRows.find((r) => r.variantId === variantId) ?? rows.find((r) => r.variantId === variantId);
     const sizeLabel = target?.sizeLabel ?? displaySizeLabel((v as { size_label: string | null }).size_label);
 
     // Comps: resale rows of the same style + size (size controlled here, spec by the core).
@@ -383,7 +399,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .filter((r) => !isRetail(r) && (sizeLabel == null || r.sizeLabel === sizeLabel))
       .map(specComp);
 
-    const offers = dedupeByListing(rows.filter((r) => r.variantId === variantId && isListed(r)))
+    const offers = dedupeByListing(variantRows.filter((r) => isListed(r)))
       .map((r) => toOffer(r, comps))
       .sort(compareOffers);
 
