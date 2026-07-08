@@ -189,7 +189,6 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Ville", "ville"], ["Papier", "papier"], ["Rodeo", "rodeo"], ["City", "city bag", "classic city"],
     ["Hardware", "hardware bag"], ["Downtown", "downtown"],
     ["Bel Air", "bel air"], ["Everyday", "everyday"], ["Monaco", "monaco"], ["Crush", "crush bag"],
-    ["Arena", "arena"],
   ],
   Valentino: [
     ["Rockstud", "rockstud"], ["Roman Stud", "roman stud"], ["VLogo", "vlogo"],
