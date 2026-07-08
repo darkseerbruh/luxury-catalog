@@ -1,7 +1,12 @@
-# Our social tests
+# Our social tests (plain-language guide)
 
-The one place that tracks: **what are we trying to learn, what did we change, which posts
-are we comparing, and which one won.**
+The one place that explains, in normal words: **what are we trying to learn, what did we
+change, which posts are we comparing, and which one won.**
+
+> **This is the friendly front door.** The full machine-readable tracker the engine writes
+> to is `docs/social-performance-ledger.md` (one row per post: ingredients + hypothesis +
+> verdict), with the rules in `docs/social-performance.md` §5-6b. When they disagree, the
+> ledger + standard win. This page is here so a test is understandable without the jargon.
 
 Metricool is the real home of the posts. This file just wraps a test around them and
 records what we learn.

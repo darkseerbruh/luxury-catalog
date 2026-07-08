@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Founder-face b-roll bank + face-vs-faceless test staged (2026-07-07, on `main`)
+
+**Owner filmed 16 own-face desk clips (bag wall behind); built a reusable bank + a face-vs-faceless test.**
+- 🎥 **Bank:** `~/Documents/handbag-campaign-images/founder-broll` (16 originals + silent 1080x1920 vertical cuts; TV background audio stripped). Catalog + ratings: `tools/video-pipeline/founder-broll-manifest.json`. These are a VISUAL BED for existing text/voiceover posts, not standalone clips.
+- 🛠️ **Tools:** `scripts/montage-vo.mjs` (lay an existing voiceover + its captions over a founder bed) and `scripts/montage-card.mjs` with `pos:top` (text hook over a founder bed, clears her face). Founder variants of all 21 text posts + 1 VO pilot built (`output/*-founder.mp4`).
+- 🧪 **The test (face vs faceless):** 12 matched pairs staged as Metricool **drafts** (blogId 6480195, `draft:true`, `autoPublish:false`), each B-arm mirroring its faceless twin's exact caption/hook, ~7 days after the twin (Jul 15–Aug 4). Plain-language tracker: `docs/social-experiments.md` (front door to the ledger). Post ids in `tools/video-pipeline/reels-log.md`.
+- 🧠 **Rules locked:** Metricool = source of truth (if a post isn't there it isn't real); when the tested variable is the visual, reuse existing text verbatim (both in `preferences.md`).
+- ⬜ **YOUR TURN (2026-07-07):** (a) **These 12 are DRAFTS**, which conflicts with the locked "scheduled + autoPublish ON" default — decide per pair whether to flip them to auto-publish (Metricool auto-picks sound) or keep as review-drafts; auto-publishing 12 test posts is outward-facing, so left to you. (b) **Re-confirm the 12 faceless twin ids** in `social-experiments.md` (paired by title; least-sure = `still-thinking` #346293447). (c) 9 statement/`kw2-the-day` founder renders are **shelved** (no Metricool twin = not real).
+- 🔧 **Follow-up:** `docs/social-experiments.md` (plain) overlaps the engine's `social-performance-ledger.md`; kept as the friendly front door pointing to the ledger. The engine's backfill (pull `getScheduledPosts` + `reels-log.md`) will log the 12 pairs as ledger rows automatically.
+
+---
+
 ## TL;DR — De-AI / anti-slop audit: site is CLEAN; 2 small fixes pending owner greenlight (2026-07-08, audit only, nothing landed)
 
 **Audited the whole site (design + copy, read from the real source) against the impeccable.style "de-AI"/anti-slop checklist.** Source of the checklist = the open-source repo `pbakaus/impeccable` (`.agents/skills/impeccable/reference/{craft,typeset,critique,brand}.md` on raw.githubusercontent); the live `impeccable.style/slop/` page 403s our proxy and firecrawl was not mounted, so the repo is the recovery path if we need it again.
