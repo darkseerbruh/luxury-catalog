@@ -58,6 +58,10 @@ async function fetchViaSftp(): Promise<string[]> {
     port: 22,
     username: user,
     password: pass,
+    // CJ's server authenticates via keyboard-interactive, not plain password
+    // ("All configured authentication methods failed" otherwise). This makes
+    // ssh2 answer the interactive prompt with the same password.
+    tryKeyboard: true,
     // CJ's datatransfer server offers legacy host-key + kex algorithms that
     // modern ssh2 disables by default ("no matching host key format"). Re-enable
     // the older ones so the handshake succeeds.
