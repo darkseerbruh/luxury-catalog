@@ -3,6 +3,19 @@
 
 ---
 
+## TL;DR — LC Index accuracy fix: contaminated medians + floor + why-notes (2026-07-08, on `main`, migration 0050 PENDING)
+
+**You spotted the live `/rankings` was wrong (Kelly Pochette #1, impossible). Diagnosed against the live DB and fixed all three at the source.** Spec updated: `docs/ux/lc-index-spec.md` → "v2 accuracy fix".
+- 🔎 **Root cause was NOT currency (the brief's guess).** Prod is 100% USD. The real bug: `price_history` records the **same live listing many times** (re-scraped over days). The median and counts were computed over every raw row, so listings re-observed more often dominated. Kelly Pochette's "53 prices" were only **15 real listings**, its pricey exotic ones over-counted → a $20,995 median above the Birkin.
+- 🧮 **Fix (migration `0050_style_index_signals_v2.sql`):** dedupe to **one row per listing** (latest observation) before the median + counts; dominant-currency guard added for future non-USD ingest (no-op today). Never edits 0048.
+- 📏 **Floor 8 → 20** (from the real deduped distribution): drops the thin contaminated styles (Kelly Pochette at 15) while keeping ~220 legit styles. Demand-first gate: prove market activity, THEN scarcity is measured among survivors.
+- ⚖️ **Scarcity stays inverted-live-count.** Tested sell-through pressure and rejected it: it ranked the **Birkin #11** behind fast movers like a Wallet on Chain (grails sell slowly precisely because they cost most). Weights unchanged.
+- ✍️ **Why-notes:** the repeated "Priced above most of the catalog" is gone; `whyNote` now writes one short line per bag from its own signal profile + house. **0 adjacent duplicates, 0 em-dash/verdict violations across all 222 rows.**
+- ✅ **Corrected real top 5:** Birkin, Kelly, Constance, Chanel 25, Classic Flap. Kelly Pochette now unranked. ("Coco Base Shopping Bag" at #6 is a **real** Chanel tote, 33 real Fashionphile listings, kept per the factuality bar.) Gate green: tsc, eslint, 668 tests, build.
+- ⬜ **YOUR TURN:** migration `0050` is **not yet applied** — it lands via the **db-migrate GitHub Action** (owner-gated). Once merged to `main`, run the Action, then reload `/rankings` on the live site and confirm Birkin sits #1. Until 0050 runs, prod still serves the v1 (contaminated) RPC even after this code deploys.
+
+---
+
 ## TL;DR — The LC Index: bag-ranking module + Index page SHIPPED (2026-07-08, on `main`)
 
 **Owner's concept: help a layperson see where a bag stands (Marc Jacobs vs Louis Vuitton) at a glance.** Design converged over 5 chat rounds; spec `docs/ux/lc-index-spec.md`. Built, landed to `main` (3 lands: `87041cf`, `c331835`, + engine), both migrations applied to prod.

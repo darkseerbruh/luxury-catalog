@@ -92,8 +92,16 @@ export const LC_INDEX_WEIGHTS = {
   tier: 0.15,
 } as const;
 
-/** A style needs at least this many recorded prices to earn a rank. */
-export const LC_INDEX_MIN_N = 8;
+/**
+ * A style needs at least this many recorded prices (distinct listings, after the
+ * v2 RPC dedupes re-observations) to earn a rank. Set from the real distribution
+ * (scripts/diagnose-lc-index.ts, 2026-07-08): the deduped per-style count has a
+ * median of ~14, and the contaminated thin styles that ranked too high sat at 15
+ * (Kelly Pochette). 20 clears them with margin while keeping ~220 legitimate
+ * styles ranked. This is the "demand first" gate: a style proves real market
+ * activity before scarcity is even measured among the survivors.
+ */
+export const LC_INDEX_MIN_N = 20;
 
 const TIER_RANK: Record<BrandTier, number> = {
   thrift: 1,
@@ -119,18 +127,76 @@ function tierPercentile(tier: BrandTier | null): number {
 }
 
 /**
- * A short, plain-words caption for the why-meter: names the signal driving the
- * rank, as a market fact (never a verdict). Decisive, and honest at both ends.
+ * A short, plain-words caption for the why-meter: one line naming what actually
+ * distinguishes THIS bag, keyed off its standout signal(s), its comparative
+ * position, and its house. A market fact, never a verdict, and honest at both
+ * ends (a widely-available bag is told it is easy to find).
+ *
+ * Deterministic: the same inputs always produce the same line, so ranks are
+ * stable across renders. Differentiated: the line is composed from the bag's
+ * band profile rather than three canned strings, and where two bags share an
+ * identical profile a rank-parity variant keeps adjacent rows from reading the
+ * same. Constraints (owner voice): no em dashes, no verdict words ("best",
+ * "worth it"), no unbacked value-retention claims, as short as it can be.
+ *
+ * Percentiles are within the ranked set, so "priced with the grails" means
+ * against the other ranked bags, not the whole world.
  */
-export function whyNote(s: Pick<Standing, "lead" | "pricePct" | "tradePct" | "scarcityPct">): string {
-  switch (s.lead) {
-    case "price":
-      return s.pricePct >= 50 ? "Priced above most of the catalog" : "An accessible price";
-    case "trade":
-      return s.tradePct >= 50 ? "One of the most-traded bags we track" : "Trades quietly";
-    case "scarcity":
-      return s.scarcityPct >= 50 ? "Rarely listed right now" : "Widely available today";
-  }
+export function whyNote(
+  s: Pick<Standing, "rank" | "brandName" | "pricePct" | "tradePct" | "scarcityPct">,
+): string {
+  const { rank, brandName, pricePct, tradePct, scarcityPct } = s;
+
+  // #1 is the benchmark the rest of the index is read against. Scarcity-honest:
+  // the top bag can be the most-listed of all, so we claim price + volume only.
+  if (rank === 1) return "The benchmark. Nothing we rank prices higher, and it trades in real volume.";
+
+  const priceTop = pricePct >= 90; // grail-tier pricing language allowed only here
+  const priceHi = pricePct >= 70;
+  const priceMid = pricePct >= 40;
+  const tradeHeavy = tradePct >= 85;
+  const tradeActive = tradePct >= 55;
+  const tradeQuiet = tradePct < 30;
+  const scarce = scarcityPct >= 75;
+  const open = scarcityPct <= 25;
+  // Deterministic lexical variety. Adjacent ranks always differ in parity, so
+  // giving every branch a base + alt phrasing guarantees two bags with an
+  // identical profile never read the same when they sit next to each other.
+  const alt = rank != null && rank % 2 === 0;
+
+  // Most distinctive trait leads. Scarcity is only ever claimed when the bag
+  // really is seldom-listed (high scarcity percentile), never for a top seller.
+  // "Grail pricing" is reserved for priceTop; a merely-expensive bag is not called a grail.
+  if (scarce && priceTop)
+    return alt
+      ? "Seldom surfaces, and priced with the grails when it does."
+      : "Grail-level pricing on a bag that rarely comes up for sale.";
+  if (priceTop && tradeHeavy)
+    return alt
+      ? "Grail pricing at real trading volume."
+      : `${brandName}'s blue chip: grail pricing at real volume.`;
+  if (tradeHeavy)
+    return alt
+      ? "The liquid one. Changes hands more than almost anything here."
+      : "Trades constantly, one of the easiest names here to buy or sell.";
+  if (scarce)
+    return alt ? "Hard to find listed right now." : "Rarely on the market, even quietly.";
+  if (priceTop)
+    return alt
+      ? "Among the highest medians we rank."
+      : "Sits near the top of the index on price.";
+  if (priceHi && tradeQuiet)
+    return alt
+      ? "Expensive, and it seldom comes up."
+      : "Among the pricier names, and rarely listed.";
+  if (priceHi)
+    return alt ? "Priced above most of the index." : "One of the pricier names we rank.";
+  if (priceMid && tradeActive)
+    return alt ? "Mid-market pricing at steady volume." : "A steady mid-market trader.";
+  if (open && tradeQuiet) return alt ? "Easy to find, and priced to match." : "Common on the market, and priced softly.";
+  if (open) return alt ? "Widely available today." : "Easy to come by right now.";
+  if (priceMid) return alt ? "Holds a mid-market price." : "Sits mid-pack on price.";
+  return alt ? "An accessible entry into the index." : "One of the softer prices we rank.";
 }
 
 export interface LcIndexData {
