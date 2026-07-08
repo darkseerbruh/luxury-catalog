@@ -488,6 +488,48 @@ const detectDollars = (base, overlays = []) => {
   return out;
 };
 
+// Authored callouts: input/<base>.callouts.json places a text card (e.g. a price the
+// SCRIPT speaks as words, "thirty bucks", which detectDollars can't catch because there
+// is no "$" token) timed to a spoken phrase, resolved from the transcript like a cue.
+//   [{ "say": "thirty bucks", "text": "$29.99 · Savers", "hold": 2.6, "yPct": 40 }]
+// Give `atSec` directly instead of `say` to pin an exact time. Phrases that are not
+// found are skipped with a warning (never crash the render).
+const resolveCallouts = (base) => {
+  const p = path.join(INPUT_DIR, `${base}.callouts.json`);
+  if (!existsSync(p)) return [];
+  const cfg = JSON.parse(readFileSync(p, "utf8"));
+  const capsPath = path.join(PUBLIC_DIR, `${base}.json`);
+  let words = [];
+  if (existsSync(capsPath)) {
+    const caps = JSON.parse(readFileSync(capsPath, "utf8"));
+    words = caps.map((c) => ({ w: norm(c.text), t: c.startMs / 1000 })).filter((x) => x.w);
+  }
+  const find = (phrase) => {
+    const ph = norm(phrase).split(" ").filter(Boolean);
+    for (let i = 0; i + ph.length <= words.length; i++) {
+      let ok = true;
+      for (let j = 0; j < ph.length; j++) {
+        if (words[i + j].w !== ph[j]) { ok = false; break; }
+      }
+      if (ok) return words[i].t;
+    }
+    return null;
+  };
+  const out = [];
+  for (const c of cfg) {
+    let atSec = typeof c.atSec === "number" ? c.atSec : c.say ? find(c.say) : null;
+    if (atSec === null || atSec === undefined) {
+      console.log(`  callout: phrase not found -> "${c.say ?? c.text}"`);
+      continue;
+    }
+    out.push({ text: c.text, atSec: atSec + (c.delay ?? 0), hold: c.hold, xPct: c.xPct, yPct: c.yPct });
+  }
+  if (out.length) {
+    console.log(`  authored callouts: ${out.map((o) => `${o.text}@${o.atSec.toFixed(1)}`).join(", ")}`);
+  }
+  return out;
+};
+
 // Find where her SPEECH begins, skipping both the leading digital-silence pad the sync
 // step prepends AND the room tone before she talks. The threshold must clear room tone
 // (raw peak ~3000-5000) and land on real speech (~10000+); too low and it stops on room
@@ -661,7 +703,7 @@ const processClip = async (fileName) => {
       if (!o.label) console.log(`  note: card ${o.img} has no name label (add "label" to its cue)`);
     }
   }
-  const callouts = detectDollars(base, overlays);
+  const callouts = [...detectDollars(base, overlays), ...resolveCallouts(base)];
   const propsPath = path.join(TEMP_DIR, `${base}.props.json`);
   writeFileSync(
     propsPath,
