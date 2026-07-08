@@ -191,7 +191,8 @@ export const NEEDS: Need[] = [
     style: "GG Marmont",
     surfaces: ["seeded_auth"],
     tier: "Classique",
-    provenance: "seed-hero-styles research/gucci-gg-marmont.json",
+    note: "Also in the Premier closet ($49 add-on); the Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08).",
+    provenance: "seed-hero-styles research/gucci-gg-marmont.json; archivist Premier pull 2026-07-08",
   },
   {
     brand: "Gucci",
@@ -247,9 +248,9 @@ export const NEEDS: Need[] = [
     brand: "Bottega Veneta",
     style: "Cassette",
     surfaces: ["protective_feet"],
-    tier: "Unconfirmed",
-    note: "Vivrelle carries Bottega; Cassette model not individually confirmed.",
-    provenance: "seed-protective-feet; archivist Vivrelle pull 2026-07-07 (unconfirmed model)",
+    tier: "Classique",
+    note: "Confirmed carried (Premier closet: Candy/Mini Cassette, ~$1,250-2,200), archivist 2026-07-08; reachable on a Classique slot.",
+    provenance: "seed-protective-feet; archivist Premier pull 2026-07-08 (indexed pages, medium confidence)",
   },
   {
     brand: "Hermès",

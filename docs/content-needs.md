@@ -53,15 +53,16 @@ _Spec: square, >=1000px source, plain even-lit background. The primary is both t
 | 5 | — none needed · wasted slot | Goyard Saint Louis (value 3) |
 | 6 | — none needed · wasted slot | Gucci GG Marmont (value 2) |
 | 7 | — none needed · wasted slot | Gucci Jackie 1961 (value 2) |
-| 8 | — none needed · wasted slot | Louis Vuitton Neverfull (value 1.5) |
-| 9 | — none needed · wasted slot | Goyard Artois (value 1) |
-| 10 | — none needed · wasted slot | Louis Vuitton Pochette Métis (value 1) |
-| 11 | — none needed · wasted slot | Louis Vuitton OnTheGo (value 1) |
+| 8 | — none needed · wasted slot | Bottega Veneta Cassette (value 2) |
+| 9 | — none needed · wasted slot | Louis Vuitton Neverfull (value 1.5) |
+| 10 | — none needed · wasted slot | Goyard Artois (value 1) |
+| 11 | — none needed · wasted slot | Louis Vuitton Pochette Métis (value 1) |
+| 12 | — none needed · wasted slot | Louis Vuitton OnTheGo (value 1) |
 
 ## Plan check — is the Couture slot worth it?
 
 - **Couture track after the in-hand Classic Flap: 1 bag left** (total value 2.0). The Classic Flap in hand is the one bag that clearly earns the Couture slot.
-- **Classique track: 10 bags queued**, and that is where nearly all the site's photo needs live.
+- **Classique track: 11 bags queued**, and that is where nearly all the site's photo needs live.
 - **My take (recommended):** shoot the Classic Flap this month on the Couture slot, then **switch to the cheaper 2× Classique plan.** The Couture queue runs dry almost immediately, while the Classique queue is deep, so two Classique pulls a month clears real gaps faster and stops paying the Couture premium for a slot with nothing left to shoot. Keep a one-off Couture month in your pocket only if you later want a rare/seasonal Chanel or the 2.55 Reissue.
 
 ## Classique track — ranked (deep queue)
@@ -72,8 +73,9 @@ _Spec: square, >=1000px source, plain even-lit background. The primary is both t
 | Dior Lady Dior · homepage #5 | protective-feet hero, About-page cutout | Classique (~$139/mo) | 5 | Vivrelle carries Dior; confirm Lady Dior is live at Classique (Book Tote is the best-confirmed Dior). |
 | Louis Vuitton Alma | protective-feet hero, live on-site search demand | Classique (~$139/mo) | 4 | Searched 'alma' ×3 to 2026-07-02 (PostHog) with no dedicated coverage. |
 | Goyard Saint Louis | live on-site search demand, high social recognition | Classique (~$139/mo) | 3 | Only recorded search_not_found ('goyard', PostHog 2026-06-28); Vivrelle's Goyard depth is real. |
-| Gucci GG Marmont | seeded auth-research hero | Classique (~$139/mo) | 2 | — |
+| Gucci GG Marmont | seeded auth-research hero | Classique (~$139/mo) | 2 | Also in the Premier closet ($49 add-on); the Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08). |
 | Gucci Jackie 1961 | protective-feet hero | Classique (~$139/mo) | 2 | — |
+| Bottega Veneta Cassette | protective-feet hero | Classique (~$139/mo) | 2 | Confirmed carried (Premier closet: Candy/Mini Cassette, ~$1,250-2,200), archivist 2026-07-08; reachable on a Classique slot. |
 | Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 1.5 (×0.25 variant covered) | Marquee spec (the in-hand variant does not cover it). Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 | Goyard Artois | high social recognition | Classique (~$139/mo) | 1 | — |
 | Louis Vuitton Pochette Métis | high social recognition | Classique (~$139/mo) | 1 | — |
@@ -90,7 +92,6 @@ _Spec: square, >=1000px source, plain even-lit background. The primary is both t
 | Bag | Fills | Vivrelle tier | Value | Note |
 |---|---|---|---|---|
 | Saint Laurent Sac de Jour | protective-feet hero | Brand carried, model unconfirmed | 2 | Vivrelle has YSL Loulou/Kate; Sac de Jour not confirmed in the lineup. |
-| Bottega Veneta Cassette | protective-feet hero | Brand carried, model unconfirmed | 2 | Vivrelle carries Bottega; Cassette model not individually confirmed. |
 | Hermès Bolide | protective-feet hero | Brand carried, model unconfirmed | 2 | — |
 | Hermès Garden Party | protective-feet hero | Brand carried, model unconfirmed | 2 | — |
 
