@@ -56,6 +56,12 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
     returns: "Final sale",
     buyerPremiumPct: 0.26, buyerProtectionPct: 0, typicalShippingUsd: 60,
   },
+  theluxurycloset: {
+    key: "theluxurycloset", label: "The Luxury Closet", authenticates: "all",
+    authNote: "Seller-authenticated pre-owned luxury",
+    returns: "Per The Luxury Closet's return policy",
+    buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
+  },
 };
 
 export interface LandedCost {

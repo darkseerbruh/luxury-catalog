@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks } from "../affiliate";
+import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks, isCjTrackingUrl } from "../affiliate";
 
 const DEFAULT_CAMPID = "5339158071";
 
@@ -83,5 +83,20 @@ describe("eBay campaign id is overridable via env without a code change", () => 
     const mod = await import("../affiliate");
     const out = mod.applyEbayAffiliate("https://www.ebay.com/itm/1");
     expect(new URL(out).searchParams.get("campid")).toBe("9999999999");
+  });
+});
+
+describe("CJ tracking links (The Luxury Closet product feed)", () => {
+  const cjLink = "https://www.anrdoezrs.net/links/101810137/type/dlg/https://theluxurycloset.com/us-en/women/x-p1270103";
+
+  it("recognises CJ redirect domains", () => {
+    expect(isCjTrackingUrl(cjLink)).toBe(true);
+    expect(isCjTrackingUrl("https://www.tkqlhce.com/click?x")).toBe(true);
+    expect(isCjTrackingUrl("https://theluxurycloset.com/us-en/women/x-p1270103")).toBe(false);
+    expect(isCjTrackingUrl("not a url")).toBe(false);
+  });
+
+  it("passes an already-tracked CJ link through unchanged (no double-wrap)", () => {
+    expect(affiliateListingUrl(cjLink, "The Luxury Closet")).toBe(cjLink);
   });
 });
