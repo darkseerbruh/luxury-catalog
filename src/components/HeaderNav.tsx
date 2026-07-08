@@ -244,6 +244,7 @@ export default function HeaderNav({
                 <BagFinder
                   mode="nav"
                   autoFocus
+                  onNavigate={() => setSearchOpen(false)}
                   onSubmitQuery={(term) => {
                     const t = term.trim();
                     if (t) {
@@ -344,15 +345,20 @@ export default function HeaderNav({
         <>
           <div className="fixed inset-0 top-[57px] z-10 bg-bg/60 sm:hidden" aria-hidden="true" onClick={close} />
           <nav className="absolute inset-x-0 top-full z-20 flex flex-col gap-1 border-b border-border bg-bg/95 px-5 py-3 shadow-lg backdrop-blur-sm sm:hidden">
-            {/* Search */}
-            <form action="/search" method="GET" className="mb-2" onSubmit={close}>
-              <input
-                name="q"
-                type="search"
-                placeholder="Search bags…"
-                className="w-full rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
+            {/* Search — same BagFinder as desktop: populated grid + model→colour. */}
+            <div className="mb-2">
+              <BagFinder
+                mode="nav"
+                onNavigate={close}
+                onSubmitQuery={(term) => {
+                  const t = term.trim();
+                  if (t) {
+                    router.push(`/search?q=${encodeURIComponent(t)}`);
+                    close();
+                  }
+                }}
               />
-            </form>
+            </div>
 
             {/* Authentication */}
             <Link href="/authentication" onClick={close} className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">

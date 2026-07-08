@@ -32,12 +32,14 @@ interface Props {
   onPhotoFallback?: () => void;
   /** Optional: Enter on the field submits the raw query (e.g. nav → full /search). */
   onSubmitQuery?: (query: string) => void;
+  /** Nav mode: fired after a tile click routes away, so a host menu can close. */
+  onNavigate?: () => void;
   autoFocus?: boolean;
 }
 
 const HINT = "   (start typing →)";
 
-export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, autoFocus }: Props) {
+export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, onNavigate, autoFocus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [models, setModels] = useState<FinderModel[]>([]);
@@ -98,7 +100,10 @@ export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, auto
       colourName: c ? c.colourName : null,
     };
     if (mode === "nav") {
-      if (sel.variantId != null) router.push(`/bag/${sel.variantId}`);
+      if (sel.variantId != null) {
+        router.push(`/bag/${sel.variantId}`);
+        onNavigate?.();
+      }
     } else {
       onSelect?.(sel);
     }
