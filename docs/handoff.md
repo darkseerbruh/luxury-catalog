@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — The LC Index: bag-ranking module + Index page SHIPPED (2026-07-08, on `main`)
+
+**Owner's concept: help a layperson see where a bag stands (Marc Jacobs vs Louis Vuitton) at a glance.** Design converged over 5 chat rounds; spec `docs/ux/lc-index-spec.md`. Built, landed to `main` (3 lands: `87041cf`, `c331835`, + engine), both migrations applied to prod.
+- 🧮 **The formula (the LC Index):** one rank per style blending resale **price 40% + trade volume 25% + scarcity 20% + house tier 15%**, each a percentile across all styles. Pure engine `src/lib/lc-index.ts` (`computeLcIndex`), 19 unit tests. n-gate: a style needs ≥8 recorded prices or it stays unranked (never a fake rank). Framed **"our index, not a verdict"** with a live `/rankings/how-we-rank` page publishing the weights from the code constant.
+- 📊 **The standing module (`StandingCard`):** big rank headline + the three measures as side-by-side mini-leaderboards. On the bag page at the value moment. **The why-meter (`StandingGlyph`):** three bars (Price/Trade/Scarcity, lead brightened) so a row explains its own rank. Owner-loved after iterating away from spectrums/stat-tiles.
+- 📜 **The Index page (`/rankings`):** numbered list, affiliate photo + why-meter + resale-median column; ItemList JSON-LD + sitemap entries (GEO). **Concept C** inline rank link (`IndexRankLink`) live on the shop grid (stretched-link card, real sibling link).
+- 📈 **Movement pills:** `lc_index_snapshot` (migration 0049) + monthly cron `/api/cron/lc-index-snapshot`; `MovementPill` shows ▲/▼ vs last month, hidden until a prior month exists.
+- 🗄️ **Migrations 0048 (`style_index_signals()` RPC) + 0049 APPLIED to prod 2026-07-08** (db-migrate runs 27 + 28, logs confirm). Everything degrades gracefully (empty index → module hides).
+- ⬜ **YOUR TURN:** (a) **eyeball `/rankings` on the live site and gut-check the order** (real data; tell me if a bag sits wrong and I'll trace data vs weights, it's one constant). (b) **Nav placement for `/rankings`** is your call (nav is protected); it's linked from the bag card, not the menu. (c) Optional: trigger `/api/cron/lc-index-snapshot` once (needs CRON_SECRET) to capture July now, else it auto-runs Aug 1 and pills start Sep. (d) Concept C can extend to search/recs/closet cards on your word.
+
+---
+
 ## TL;DR — Camera identify v2: video in, live capture feedback, haul mode, logo pass (2026-07-08, on `main`)
 
 **`/identify` (Spot the Fake) went from single-photo to the thrift-flipper tool.** Grew out of the owner's Goodwill field test: Claude chat read her bags one at a time, choked on her 13 `.mov` files, and gave overconfident verdicts; we prototyped on her real footage in-chat (rack scan + 5-bag haul + native-res logo crops) and she greenlit the build. Strategic frame she locked: **being a thrift flippers' resource is gold**.
