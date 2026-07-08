@@ -10,20 +10,20 @@
 
 | Bag | Fills | Vivrelle tier | Bang-for-buck | Note |
 |---|---|---|---|---|
-| Chanel Classic Flap · homepage #3 | compare-slideshow cutout (wired, empty), seeded auth-research hero, protective-feet hero, About-page cutout | Couture (~$239/mo) | 7.1 (value 12) | IN HAND — closes this hero. Marquee = black caviar + gold hardware (the iridescent detail shot on file is off-marquee). |
-| Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 6.0 (value 6) | IN HAND (off-marquee variant) — shoot it, but the marquee spec below stays open. Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
+| Chanel Classic Flap · homepage #3 | compare-slideshow cutout (wired, empty), seeded auth-research hero, protective-feet hero, About-page cutout | Couture (~$239/mo) | 1.8 (value 12, ×0.25 variant covered) | IN HAND — closes this hero. Marquee = black caviar + gold hardware (the iridescent detail shot on file is off-marquee). |
+| Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 1.5 (value 6, ×0.25 variant covered) | IN HAND (off-marquee variant) — shoot it, but the marquee spec below stays open. Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 
 ## Shoot next — rentable, ranked by bang-for-buck
 
 | Bag | Fills | Vivrelle tier | Bang-for-buck | Note |
 |---|---|---|---|---|
 | Louis Vuitton Speedy · homepage #4 | compare-slideshow cutout (wired, empty), About-page cutout | Classique (~$139/mo) | 7.0 (value 7) | — |
-| Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 6.0 (value 6) | Marquee spec still open (the in-hand variant does not cover it). Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 | Dior Lady Dior · homepage #5 | protective-feet hero, About-page cutout | Classique (~$139/mo) | 5.0 (value 5) | Vivrelle carries Dior; confirm Lady Dior is live at Classique (Book Tote is the best-confirmed Dior). |
 | Louis Vuitton Alma | protective-feet hero, live on-site search demand | Classique (~$139/mo) | 4.0 (value 4) | Searched 'alma' ×3 to 2026-07-02 (PostHog) with no dedicated coverage. |
 | Goyard Saint Louis | live on-site search demand, high social recognition | Classique (~$139/mo) | 3.0 (value 3) | Only recorded search_not_found ('goyard', PostHog 2026-06-28); Vivrelle's Goyard depth is real. |
 | Gucci GG Marmont | seeded auth-research hero | Classique (~$139/mo) | 2.0 (value 2) | — |
 | Gucci Jackie 1961 | protective-feet hero | Classique (~$139/mo) | 2.0 (value 2) | — |
+| Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 1.5 (value 6, ×0.25 variant covered) | Marquee spec still open (the in-hand variant does not cover it). Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 | Chanel 2.55 Reissue | protective-feet hero | Couture (~$239/mo) | 1.2 (value 2) | — |
 | Goyard Artois | high social recognition | Classique (~$139/mo) | 1.0 (value 1) | — |
 | Louis Vuitton Pochette Métis | high social recognition | Classique (~$139/mo) | 1.0 (value 1) | — |

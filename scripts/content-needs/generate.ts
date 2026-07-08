@@ -14,6 +14,7 @@ import path from "path";
 import { parse } from "csv-parse/sync";
 import {
   NEEDS,
+  PARTIAL_CREDIT_FACTOR,
   SURFACE_LABEL,
   TIER_LABEL,
   bangForBuck,
@@ -64,14 +65,35 @@ function stateOf(need: Need, captures: Capture[]): State {
   return "open";
 }
 
-const fills = (need: Need): string => need.surfaces.map((s) => SURFACE_LABEL[s]).join(", ");
-const score = (need: Need): string => `${bangForBuck(need).toFixed(1)} (value ${valueScore(need)})`;
+/** True when a DIFFERENT variant of this silhouette is already shot or in hand
+ *  (placeholder filled, shape represented) so the marquee twin gets partial credit. */
+function hasVariantCovered(need: Need, captures: Capture[]): boolean {
+  if (!need.preferredSpec) return false;
+  return capturesFor(need, captures).some(
+    (c) => (c.status === "shot" || c.status === "published" || c.status === "in_hand") && !specMatch(need, c),
+  );
+}
 
-function row(need: Need, extra?: string): string {
+/** Bang-for-buck actually used for ranking: discounted when a variant is already covered. */
+function effectiveBfb(need: Need, captures: Capture[]): number {
+  return bangForBuck(need) * (hasVariantCovered(need, captures) ? PARTIAL_CREDIT_FACTOR : 1);
+}
+
+const fills = (need: Need): string => need.surfaces.map((s) => SURFACE_LABEL[s]).join(", ");
+
+function scoreCell(need: Need, captures: Capture[]): string {
+  const eff = effectiveBfb(need, captures);
+  if (hasVariantCovered(need, captures)) {
+    return `${eff.toFixed(1)} (value ${valueScore(need)}, ×${PARTIAL_CREDIT_FACTOR} variant covered)`;
+  }
+  return `${eff.toFixed(1)} (value ${valueScore(need)})`;
+}
+
+function row(need: Need, captures: Capture[], extra?: string): string {
   const name = `${need.brand} ${need.style}`;
   const rank = need.homepageRank ? ` · homepage #${need.homepageRank}` : "";
   const note = [extra, need.note].filter(Boolean).join(" ");
-  return `| ${name}${rank} | ${fills(need)} | ${TIER_LABEL[need.tier]} | ${score(need)} | ${note || "—"} |`;
+  return `| ${name}${rank} | ${fills(need)} | ${TIER_LABEL[need.tier]} | ${scoreCell(need, captures)} | ${note || "—"} |`;
 }
 
 const TABLE_HEAD = "| Bag | Fills | Vivrelle tier | Bang-for-buck | Note |\n|---|---|---|---|---|";
@@ -84,11 +106,11 @@ function main(): void {
 
   const rentable = withState
     .filter((x) => (x.state === "open" || x.state === "in_hand_partial") && (x.need.tier === "Classique" || x.need.tier === "Couture"))
-    .sort((a, b) => bangForBuck(b.need) - bangForBuck(a.need) || valueScore(b.need) - valueScore(a.need));
+    .sort((a, b) => effectiveBfb(b.need, captures) - effectiveBfb(a.need, captures) || valueScore(b.need) - valueScore(a.need));
 
   const unconfirmed = withState
     .filter((x) => x.state === "open" && x.need.tier === "Unconfirmed")
-    .sort((a, b) => bangForBuck(b.need) - bangForBuck(a.need));
+    .sort((a, b) => effectiveBfb(b.need, captures) - effectiveBfb(a.need, captures));
 
   const gated = withState.filter((x) => x.state === "open" && x.need.tier === "Reserve");
   const notCarried = withState.filter((x) => x.state === "open" && x.need.tier === "NotCarried");
@@ -115,7 +137,7 @@ function main(): void {
     L.push(TABLE_HEAD);
     for (const x of inHand) {
       const tag = x.state === "in_hand_closing" ? "IN HAND — closes this hero." : "IN HAND (off-marquee variant) — shoot it, but the marquee spec below stays open.";
-      L.push(row(x.need, tag));
+      L.push(row(x.need, captures, tag));
     }
   }
   L.push("");
@@ -125,7 +147,7 @@ function main(): void {
   L.push(TABLE_HEAD);
   for (const x of rentable) {
     const tag = x.state === "in_hand_partial" ? "Marquee spec still open (the in-hand variant does not cover it)." : "";
-    L.push(row(x.need, tag));
+    L.push(row(x.need, captures, tag));
   }
   L.push("");
 
@@ -133,7 +155,7 @@ function main(): void {
     L.push("## Rentability unconfirmed — check the live closet first");
     L.push("");
     L.push(TABLE_HEAD);
-    for (const x of unconfirmed) L.push(row(x.need));
+    for (const x of unconfirmed) L.push(row(x.need, captures));
     L.push("");
   }
 
@@ -141,7 +163,7 @@ function main(): void {
     L.push("## Gated — invite-only tier ($800/mo)");
     L.push("");
     L.push(TABLE_HEAD);
-    for (const x of gated) L.push(row(x.need));
+    for (const x of gated) L.push(row(x.need, captures));
     L.push("");
   }
 
@@ -149,7 +171,7 @@ function main(): void {
     L.push("## Not via Vivrelle — source elsewhere (owned / Fashionphile / UGC)");
     L.push("");
     L.push(TABLE_HEAD);
-    for (const x of notCarried) L.push(row(x.need));
+    for (const x of notCarried) L.push(row(x.need, captures));
     L.push("");
   }
 

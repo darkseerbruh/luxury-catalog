@@ -54,6 +54,12 @@ export const TIER_COST: Record<Tier, number> = {
   NotCarried: Infinity, // source elsewhere (owned / Fashionphile / UGC)
 };
 
+/** Once ANY variant of a silhouette is shot (e.g. an Epi Neverfull), the bag page
+ *  placeholder is filled and the shape is represented, so the exact marquee-canvas
+ *  twin is worth only a fraction of a fresh bag. Its remaining need is scored at
+ *  this factor so it drops down the list instead of demanding a second rental month. */
+export const PARTIAL_CREDIT_FACTOR = 0.25;
+
 export const TIER_LABEL: Record<Tier, string> = {
   Classique: "Classique (~$139/mo)",
   Couture: "Couture (~$239/mo)",
