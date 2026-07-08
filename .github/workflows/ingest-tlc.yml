@@ -39,10 +39,8 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      CJ_FEED_HOST: ${{ secrets.CJ_FEED_HOST }}
-      CJ_FEED_USER: ${{ secrets.CJ_FEED_USER }}
-      CJ_FEED_PASS: ${{ secrets.CJ_FEED_PASS }}
-      CJ_FEED_PATH: ${{ secrets.CJ_FEED_PATH }}
+      # CJ Product Feed GraphQL API token (the working transport; SFTP is dead).
+      CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
       # Scheduled runs always write; manual runs honour the dry-run toggle.
       WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
     steps:
@@ -55,10 +53,10 @@ jobs:
 
       - run: npm ci
 
-      - name: Fail early if the CJ SFTP secrets are missing
+      - name: Fail early if the CJ API token is missing
         run: |
-          if [ -z "$CJ_FEED_HOST" ] || [ -z "$CJ_FEED_USER" ] || [ -z "$CJ_FEED_PASS" ]; then
-            echo "::error::CJ_FEED_HOST / CJ_FEED_USER / CJ_FEED_PASS not all set (Settings -> Secrets and variables -> Actions)."
+          if [ -z "$CJ_API_TOKEN" ]; then
+            echo "::error::CJ_API_TOKEN not set (Settings -> Secrets and variables -> Actions)."
             exit 1
           fi
 

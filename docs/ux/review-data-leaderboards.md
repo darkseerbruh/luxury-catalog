@@ -10,10 +10,13 @@ bag-page leaderboards, data-viz, and a contribution loop. Pairs with
 `rating` 1-5 · `worth_it` boolean · `occasion` *(free text)* · `durability_rating`
 1-5 · `title`/`body` free text.
 
-**Multi-axis votes (`0012_bag_axis_votes.sql`, HUMAN-GATED, not yet applied):**
+**Multi-axis votes (`0012_bag_axis_votes.sql`, APPLIED — verified live 2026-07-08:
+`bag_axis_vote` exists and holds data; `<AxisVotes>` renders on every bag page):**
 Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars":
 `build_quality, everyday_wearability, holds_value, roomy_vs_compact, comfort,
-versatility, worth_the_price`.
+versatility, worth_the_price`. Votable subset (opinion-only) lives in `src/lib/axes.ts`;
+`holds_value` + `worth_the_price` stay excluded (see correction below). Owners can now
+also set these axes inline from the closet-add review sheet, not just the bag page.
 
 ## Correction to the 0012 axis vocabulary (decided 2026-06-23)
 
@@ -94,8 +97,10 @@ invented ranking. All numbers labeled and dated.
 
 ## Build dependencies / sequence
 
-1. **Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
-   `worth_the_price` vs review `worth_it`. (Edit the migration; it's not yet applied.)
+1. ~~**Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
+   `worth_the_price` vs review `worth_it`.~~ RESOLVED: 0012 is applied with the full
+   enum; the exclusion is enforced at the APP layer (`src/lib/axes.ts` `AXES`/`isAxis`),
+   not by editing the migration. No DB enum change was made.
 2. ~~**New migration:** convert `review.occasion` free text → enum (+ backfill).~~
    **DONE** — `0028_review_occasion_enum.sql` + `src/lib/occasions.ts`.
 3. ~~**Leaderboard queries:** aggregate per board, resilient reads (empty until data),
@@ -199,9 +204,11 @@ more to wrap). Direct monetization: none, this is the flywheel above. The metric
 protect is **submission start → complete**, which the slot model raises by shrinking
 the minimum unit to one tap.
 
-## Build status (2026-07-07)
+## Build status (2026-07-08: all phases LIVE)
 
-**All three phases BUILT and landed on `main`.** Files: `ContributionSlots.tsx`
+**All three phases BUILT, landed, and LIVE.** `0046` applied to prod 2026-07-08
+(db-migrate run `28920858437`; verified `bag_wear` + `fits_note` respond via REST).
+Files: `ContributionSlots.tsx`
 (+`SlotChip.tsx`), `WearNotes.tsx`/`WearTaps.tsx`, `contribution-slots.ts`, `wear.ts`
 /`wear-options.ts`/`wear-actions.ts`, migration `0046_bag_wear.sql`.
 
@@ -209,12 +216,10 @@ the minimum unit to one tap.
   signed-in user has given (photo / review / axis bars), shows only open slots, an
   "added X of Y" pull, and a thank-you when complete. Anchors to the existing
   controls (`#photos`, `#reviews`, `#owner-ratings`).
-- **Phase 2 + 3 (BUILT, dark until `0046` is applied):** carry + weight-feel taps
-  and a short "what fits inside" note, all on the `bag_wear` table. `getWear` returns
-  `available:false` when the table is absent, so the page is unchanged pre-migration
-  and the slots + `#how-you-carry` section light up after. **OWNER applies `0046`
-  via the db-migrate Action.** If another parallel session also created a `0046`,
-  renumber the UNAPPLIED duplicate (never the recorded one).
+- **Phase 2 + 3 (LIVE since 2026-07-08):** carry + weight-feel taps and a short
+  "what fits inside" note, all on the `bag_wear` table (`0046`, now applied). The
+  slots + `#how-you-carry` section render for signed-in owners. `getWear` still
+  returns `available:false` if the table is ever absent, so the page degrades safely.
 - **Measured dimensions:** deliberately NOT a slot. It is catalog data, captured
   through the existing "Suggest an edit" widget, per "measurable = data, not a vote".
 - **Instrumentation:** open-slot clicks fire `contribution_slot_clicked`

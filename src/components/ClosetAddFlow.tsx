@@ -4,19 +4,62 @@ import { useState } from "react";
 import { BagFinder, type BagFinderSelection } from "@/components/BagFinder";
 import { saveToCloset } from "@/lib/collection-actions";
 import { submitReview } from "@/lib/review-actions";
+import { castAxisVote } from "@/lib/vote-actions";
 import { OCCASIONS } from "@/lib/occasions";
+import { AXES, AXIS_META } from "@/lib/axes";
 
 /**
  * Adding a bag to your closet IS reviewing it (docs/ux/unified-search-and-review-spec.md).
  * Find the bag → Want / Have / Had → and Have/Had opens the review inline in the
  * SAME sheet (Letterboxd's single Log sheet). Wired to the existing per-variant
- * `submitReview` + `saveToCloset` server actions. Opinion axes (votes 0012) are
- * deferred until that migration is applied, so v1 captures rating + words + worth-it
- * + occasion + durability only.
+ * `submitReview` + `saveToCloset` + `castAxisVote` server actions. All fields past
+ * the star rating are optional, so the floor stays low for founding reviewers.
  */
 
 type Step = "find" | "fork" | "done";
 type Status = "want" | "have" | "had";
+
+function AxisPips({
+  value,
+  onChange,
+  meta,
+}: {
+  value: number;
+  onChange: (n: number) => void;
+  meta: { label: string; low: string; high: string };
+}) {
+  return (
+    <div>
+      <div className="mb-1 flex items-baseline justify-between gap-2">
+        <p className="text-sm text-foreground">{meta.label}</p>
+        {value > 0 && (
+          <button type="button" onClick={() => onChange(0)} className="text-xs text-muted hover:text-gold">
+            clear
+          </button>
+        )}
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-16 shrink-0 text-right text-[0.7rem] text-muted/70">{meta.low}</span>
+        <div className="flex flex-1 justify-between" role="radiogroup" aria-label={meta.label}>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              role="radio"
+              aria-checked={value === n}
+              aria-label={`${meta.label}: ${n} of 5`}
+              onClick={() => onChange(n)}
+              className={`h-6 w-6 rounded-full border transition-colors ${
+                value === n ? "border-gold bg-gold" : "border-border bg-surface hover:border-gold"
+              }`}
+            />
+          ))}
+        </div>
+        <span className="w-16 shrink-0 text-[0.7rem] text-muted/70">{meta.high}</span>
+      </div>
+    </div>
+  );
+}
 
 function Stars({ value, onChange, label }: { value: number; onChange: (n: number) => void; label: string }) {
   return (
@@ -52,6 +95,7 @@ export function ClosetAddFlow() {
   const [worthIt, setWorthIt] = useState<boolean | null>(null);
   const [occasion, setOccasion] = useState<string | null>(null);
   const [durability, setDurability] = useState(0);
+  const [axisValues, setAxisValues] = useState<Record<string, number>>({});
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +109,7 @@ export function ClosetAddFlow() {
     setWorthIt(null);
     setOccasion(null);
     setDurability(0);
+    setAxisValues({});
     setError(null);
     setStep("find");
   }
@@ -99,6 +144,13 @@ export function ClosetAddFlow() {
       occasion: occasion ?? undefined,
       durabilityRating: durability > 0 ? durability : null,
     });
+    // Opinion axes are optional and best-effort: a failed axis vote never blocks
+    // the saved review. One upsert per axis the reviewer actually set.
+    const variantId = sel.variantId;
+    const setAxes = Object.entries(axisValues).filter(([, v]) => v > 0);
+    if (setAxes.length > 0) {
+      await Promise.all(setAxes.map(([axis, value]) => castAxisVote({ variantId, axis, value })));
+    }
     setSaving(false);
     if (!rev.ok) return setError(rev.error ?? "Could not save your review.");
     setStep("done");
@@ -225,6 +277,20 @@ export function ClosetAddFlow() {
           </div>
 
           <Stars value={durability} onChange={setDurability} label="How's it holding up? (optional)" />
+
+          <div>
+            <p className="mb-3 text-sm text-muted">How it wears <span className="text-muted/60">optional</span></p>
+            <div className="flex flex-col gap-4">
+              {AXES.map((axis) => (
+                <AxisPips
+                  key={axis}
+                  meta={AXIS_META[axis]}
+                  value={axisValues[axis] ?? 0}
+                  onChange={(n) => setAxisValues((prev) => ({ ...prev, [axis]: n }))}
+                />
+              ))}
+            </div>
+          </div>
 
           <button
             type="button"

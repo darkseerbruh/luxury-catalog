@@ -1,13 +1,26 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (de-AI/anti-slop audit added on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (unified bag-finder + closet-add-is-review shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Unified bag-finder + closet-add-is-review, SHIPPED (2026-07-08, on `main`)
+
+**One search component now powers the nav (desktop + mobile) and adding a bag to your closet; adding a Have/Had bag IS the review.** Spec: `docs/ux/unified-search-and-review-spec.md`. Grew out of the owner's founder-first-reviews idea (she wants to be the first reviewer on every bag she has carried; recruit founding reviewers into a working flow).
+- 🔎 **`BagFinder` (`src/components/BagFinder.tsx`) + `/api/bag-finder` (`src/lib/bag-finder.ts`, 12 unit tests):** click into search and a popular-first grid is ALREADY there (populate on focus, never a blank box); typing narrows live; a query that resolves to one model, or tapping a model, shows that model in its COLOURWAYS so a fuzzy owner picks by sight, plus a "Not sure" tile that always completes. Only the click DIFFERS by context: nav opens `/bag/[variantId]`, closet opens the Want/Have/Had fork.
+- 📝 **Closet-add-is-review (`src/components/ClosetAddFlow.tsx`, `/closet/add`):** Have/Had opens the review inline in one sheet, wired to existing `submitReview` + `saveToCloset`: stars + words + worth-it + occasion + durability + the 5 opinion axes as optional 1-5 pips (`castAxisVote`). Reviews are PER-VARIANT (the chosen colour's rep variant; "Not sure" uses the model hero). All fields past the star rating are optional so the founding-reviewer floor stays low.
+- 🧩 **Refactor:** `AXES`/`AXIS_META` moved to server-free `src/lib/axes.ts` (votes.ts re-exports) so the client sheet imports them without server code. `holds_value` + `worth_the_price` stay app-layer-excluded (facts, not votes).
+- ✅ **Correction:** migration 0012 was ALREADY applied (verified live: `bag_axis_vote` responds 200 + has data; `<AxisVotes>` renders on bag pages). Fixed the stale "not yet applied" notes in `review-data-leaderboards.md`.
+- 🧪 **Gates green each land** (tsc/eslint/next build/605→628 tests). API verified vs REAL data on the Vercel preview (populate-on-focus, `q=lady`, colourways all returned real bags). Landed via `scripts/land-to-main.sh` (commits incl. `237ec44`); PR #15 merged.
+- ⬜ **YOUR TURN:** (a) eyeball the UI on the live site (nav search grid + `/closet/add` behind login) if you want a human pass. (b) The **founding-reviewer recruiting copy is drafted** (Chanel-group post + DM + alt hook) in this chat, ready to post when you are (outward-facing, so yours). Recruit only once you are happy with the live flow.
+- 🔧 **Follow-up (optional):** richer photo-fallback that maps an uploaded photo to the exact catalog bag (today the fallback reuses `requestBag`: "ask us to add it", never a dead end). Mobile nav now uses the same finder.
 
 ---
 
 ## TL;DR — Bag-page contribution slots: "Have this in hand?" (2026-07-08, on `main`)
 
-**The "give us your stuff" surface for bag pages, all 3 phases BUILT + landed.** A gap-aware banner (`ContributionSlots.tsx` + `SlotChip.tsx`) reads what the signed-in user already gave for a bag and shows only the OPEN slots, each one tap/photo, with an "added X of Y" pull and a thank-you when done. Locked copy (owner-approved 2026-07-07): headline *"Have this in hand? Show us how it really carries."* + sub *"Takes a second. Add what you've got. Skip the rest."* Spec + status: `docs/ux/review-data-leaderboards.md` (Build status 2026-07-07).
+**The "give us your stuff" surface for bag pages, all 3 phases LIVE (migration applied 2026-07-08).** A gap-aware banner (`ContributionSlots.tsx` + `SlotChip.tsx`) reads what the signed-in user already gave for a bag and shows only the OPEN slots, each one tap/photo, with an "added X of Y" pull and a thank-you when done. Locked copy (owner-approved 2026-07-07): headline *"Have this in hand? Show us how it really carries."* + sub *"Takes a second. Add what you've got. Skip the rest."* Spec + status: `docs/ux/review-data-leaderboards.md` (Build status 2026-07-07).
 - **Phase 1 LIVE now** (no migration): photo / review / axis-bars slots, anchored to the existing controls.
-- **Phases 2+3 BUILT but DARK until `0046_bag_wear.sql` is applied:** carry + weight-feel taps + a short "what fits inside" note on new table `bag_wear`. Resilient: `getWear` returns `available:false` when the table is absent, so the page is unchanged pre-migration and lights up after. **YOUR TURN: apply `0046` via the db-migrate Action** (renumber the UNAPPLIED dupe if a parallel `0046` exists). Measured dimensions intentionally NOT a slot (catalog data → Suggest-an-edit).
+- **Phases 2+3 NOW LIVE:** carry + weight-feel taps + a short "what fits inside" note on table `bag_wear`. **`0046` APPLIED to prod 2026-07-08** (db-migrate run `28920858437`; it was the only pending migration, clean; verified `bag_wear` + `fits_note` respond 200 via REST). `getWear` still returns `available:false` if the table is ever absent, so the page degrades safely. Measured dimensions intentionally NOT a slot (catalog data → Suggest-an-edit).
 - **Instrumentation:** open-slot clicks fire `contribution_slot_clicked` (`slot`+`variant_id`) = funnel START; completion read from the rows. Gates green each land (tsc/eslint/next build/tests); verified pre-migration render on `/bag/1002`.
 
 ## TL;DR — Founder-face b-roll bank + face-vs-faceless test staged (2026-07-07, on `main`)
