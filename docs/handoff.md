@@ -1,5 +1,15 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-25 (preference-governance + docs cleanup; recaps split to docs/handoff-archive.md). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (de-AI/anti-slop audit added on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — De-AI / anti-slop audit: site is CLEAN; 2 small fixes pending owner greenlight (2026-07-08, audit only, nothing landed)
+
+**Audited the whole site (design + copy, read from the real source) against the impeccable.style "de-AI"/anti-slop checklist.** Source of the checklist = the open-source repo `pbakaus/impeccable` (`.agents/skills/impeccable/reference/{craft,typeset,critique,brand}.md` on raw.githubusercontent); the live `impeccable.style/slop/` page 403s our proxy and firecrawl was not mounted, so the repo is the recovery path if we need it again.
+- 🎨 **Design: clean, ONE tell.** We use **Playfair Display** (serif), named on their "reflex serif" avoid-list — and our own `voice-and-tone.md` §0 warns against exactly this heritage-hush serif cliché. Everything else passed: zero purple/blue "make-it-pop" gradients (our 8 are gold/surface tones), zero gradient text, 9 shadows total site-wide, no side-tab-border cards, no icon-tile-per-heading, zero emoji.
+- ✍️ **Copy: clean.** Full editorial read (20+ seed articles, ~30 bag + ~35 house stories, HomeHero, AboutStory). Filler-phrase sweep and "not just X, but Y" sweep = zero in shipped prose. Only 3 one-word hype nits: "ultimate" (`src/lib/bag-stories/data.ts:1303`), "iconic" (`supabase/seed/seed-archive-reference-articles.ts:171`), "vibrant" (same file:177).
+- ⬜ **PENDING (owner did NOT greenlight — do NOT do unasked):** (a) swap Playfair → distinctive serif, recommended **Newsreader** (keep Poppins for sans); (b) fix the 3 hype words above; (c) optional — vary the compliance closer "an estimate, not an appraisal" (repeated verbatim across many data articles) so a binge-reader doesn't clock the identical sentence; keep the hedge itself (locked). All low-effort, one build pass.
+- ⚠️ **Coverage caveat:** 100% of repo-seeded content was read. Any article typed straight into the LIVE site editor (`/articles/new`) exists only in the DB and was NOT audited — owner never confirmed whether any such DB-only content exists. If it does, needs Chrome/desktop or DB read access to check.
 
 ---
 
