@@ -49,14 +49,22 @@ instead of a draft (the data loop feeds this one).
   iconography through every narrative.
 - Topic-tag by runtime name lookup, never hardcoded ids (locked 2026-06-30).
 - No appreciation/return promises; no unsourced retail.
+- **Renderer tokens only** (`src/app/articles/[slug]/page.tsx`): `## ` heads,
+  `- ` lists, `> ` quotes, paragraphs, `**bold**`, and `[diagram: <id>]` for a
+  REGISTERED id only. It does NOT render markdown tables or `---` rules, so
+  convert every table to `- **Label:** value` bullet beats and never leave a
+  `---` line (both print as literal text). Verified 2026-07-07.
 
 ## §4 Production (what a run may do alone)
 
 - Draft via the `copywriter` subagent (it loads `brand-voice` itself); numbers
   pulled fresh from the DB in the run, never from memory.
-- Stage each batch with a seed script following the proven pattern
-  (`supabase/seed/seed-data-articles.ts` et al.): `status: "draft"` on INSERT,
-  **status never touched on update**. Run it with the local service key; if the
+- Stage each batch with a seed script following the CLEAN template
+  (`supabase/seed/seed-archive-reference-articles.ts`, added 2026-07-07):
+  `status: "draft"` set ONLY on the INSERT branch, the update row omits status
+  entirely. Do NOT copy `seed-data-articles.ts` verbatim: it puts `status` in
+  the shared row used for both insert and update, so a re-run silently flips a
+  since-published article back to draft. Run with the local service key; if the
   key is unavailable, commit the ready script + flag it in the notification.
 - Cap: **2 new articles per weekly run** (quality over volume) + any number of
   backlog updates.
