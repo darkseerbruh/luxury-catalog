@@ -15,10 +15,21 @@ resale = dated estimates (Guess $15-35, Steve Madden $10-22, Vera Bradley $18-35
 ~$0), archivist sold comps 2026-07-08, framed as estimate-not-appraisal. Open/close verbatim; no
 grails found so the "no grails" close stands. Lexicon: added vera bradley, bcbg, goodwill, bottega
 (steve madden/shein already present; "guess" deliberately NOT added, it collides with the verb).
-**Status: packaged for local render** (owner records VO to `input/thrift-class-2-vo.m4a`, drops the
-17 clips in `input/clips/`, then `node scripts/build-thrift-bed.mjs examples/thrift-class-2.json &&
-npm run make thrift-class-2`). Only $4.99 was a hard price on screen; every other tag was the new
-QR style or unreadable, so no other price beats (never invented an ask).
+**Status: RENDERED 2026-07-08** to `output/thrift-class-2.mp4` (1080x1920, ~152s). Owner recorded the
+VO herself (`scripts/thrift class script.m4a` -> `input/thrift-class-2-vo.m4a`, 152s, continuous
+speech, no dead air). Build order (note the `.mp4` on make): `node scripts/build-thrift-bed.mjs
+examples/thrift-class-2.json && npm run make thrift-class-2.mp4`. Whisper mishears fixed via
+`input/thrift-class-2.corrections.json` (guest->Guess, "there are broadly"->Vera Bradley,
+potato->Bottega, camo->camel, "less than one"->Lesson one, etc.), which also re-lands the Guess +
+Vera Bradley resale cards. Bed is TIMED to the actual VO (each bag on screen when named: Guess 14.5s,
+Steve Madden 21.2, Vera Bradley 28.4, BCBG 37.8, canvas/$4.99 59.7, Chanel dupe 72.4, china tag 97.8,
+mustard 105.6, landfill 123.7); resale cards verified sitting on the correct bag, text no longer
+clips. Cards read "Resale ~$X-Y" (the "as of July 2026, not an appraisal, just a range" date is
+carried in her voice). Only $4.99 was a hard price on screen; every other tag was the new QR style or
+unreadable, so no other price beats (never invented an ask). Caveats to review before posting:
+(1) ~152s is over IG Reels' 90s cap (fine for TikTok); (2) the auto dollar-detector adds cards for
+spoken "$35" and two "$5" beats on top of the authored resale cards; (3) the handle-crack close-up
+lands ~2s before the "see that" line (clip-clamp drift), crack footage is in-window but not word-locked.
 
 **2026-07-06 — FOUNDER-FACE visual-bed A/B (new bank + 21 variants).** Owner filmed 16
 own-face desk clips (bag wall behind); banked at `~/Documents/handbag-campaign-images/founder-broll`
