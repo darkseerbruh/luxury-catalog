@@ -104,3 +104,97 @@ invented ranking. All numbers labeled and dated.
 4. **Homepage "What the community knows" section** + the contribution driver
    (axis bars, worth-it, add-a-photo, tier progress).
 5. **Value-retention board** computed from `price_history` (data, not votes).
+
+---
+
+# In-hand capture + the "give us your stuff" contribution surface
+
+*Added 2026-07-07. One shared slot schema, two fillers: Arielle captures every bag
+she physically holds (first reviewer), the community fills the same open slots after.
+Locked copy below. Design goal: make it trivially easy to contribute assets that come
+back **formatted**, without adding conversion friction.*
+
+## Principle: one schema, two fillers
+
+- **Slots are shared.** A bag page shows named slots (interior photo, on-body shot,
+  carry, weight feel, what fit, worth-it take). Arielle fills them first via the
+  in-hand capture kit; the community fills whatever stays open. A bag stacks
+  contributions over time.
+- **Reuse the existing fields, never a parallel schema.** Map every slot onto the
+  live review/vote fields below. New taps only where lived experience isn't already
+  captured. **Locked rule still binds: anything we can measure from catalog/price
+  data is data, not a vote** (weight-feel and roominess are captured as *felt*, deduped
+  against the measured catalog value, same pattern as `roomy_vs_compact`).
+
+## The in-hand capture kit (Arielle, internal)
+
+Fires for **any bag she physically holds**: owned, rented (Vivrelle), borrowed, a
+friend's, one handled in store. Not just rentals. One pass, because most bags leave
+and can't be reshot. This is the exception window to the standing no-bag-footage rule
+(she doesn't own most bags; in-hand is the one time real footage is hers to take).
+
+- **Tag on capture:** `source` (owned / rented / borrowed / in-store) and
+  `reshoot_window` (leaving-soon vs keep). The one-pass urgency only fires when the
+  bag is leaving.
+- **Capture list (per bag, ~20 min):**
+
+| Asset | Grab | Feeds |
+|---|---|---|
+| Clean stills | front, back, sides, bottom, top, flat | detail page, slideshows |
+| Macro stills | hardware, logo plate, feet, zip, stitching, grain, interior + pockets, date/heat stamp | detail page, "markers to check" |
+| Scale + carry stills | on-body 3 ways, next to a phone | Signature posts, detail page |
+| 360 turnaround video | slow rotate, good light | b-roll bank, detail page |
+| What-fits video | load real daily items, show capacity | reviews, "does it work" |
+| On-body walk | 5-10s each strap position | Keep-warm, Signature |
+| Sound clips | clasp click, zip, opening | reel texture |
+| Founder review (talking head) | honest take: comfort, weight, worth-it | Signature tier, review surface |
+| Hard data | dimensions, empty weight, strap drop, what fit | detail page hard data |
+
+Handling note: rentals/borrows return, so **no destructive or wear testing**, just
+capture. Stills are detail-page/editorial assets, never framed as sellable (per the
+still-library rule).
+
+## The community contribution slots (external, UGC)
+
+Same slots, mapped to live fields. Conversion rule: the **minimum unit is one slot**
+(one tap or one photo).
+
+| Slot | Input (controlled) | Maps to |
+|---|---|---|
+| Photo | one photo, tap which kind (interior / hardware / on-body) | existing add-a-photo UGC |
+| Carry | chips: hand / shoulder / crossbody | *new lived tap* (dedupe vs catalog carry spec) |
+| Weight feel | chips: light / just right / heavy | *new felt tap* (dedupe vs catalog weight) |
+| What fit inside | short chips or one line | capacity content (felt, not measured) |
+| Worth-it take | 1-5 + optional one line | existing review `worth_it` + `rating` |
+| Occasion | existing taps: everyday / work / evening / travel / special | `src/lib/occasions.ts` |
+| Real dimensions / weight | numbers, optional | catalog hard data (gap-fill only) |
+| Character bars | existing 1-5 axis votes | `build_quality`, `comfort`, `everyday_wearability`, `versatility`, `roomy_vs_compact` |
+
+## Friction rules (protect submission start → complete)
+
+1. **Slots, not a form.** No blank-box wall as the primary ask. Blank boxes lower
+   conversion and return unformatted mess.
+2. **Only ask for the gap.** If a bag already has interior photos, don't ask for
+   interior. Ask what's missing on *that* bag. Fewer asks per person; catalog fills
+   evenly.
+3. **Controlled inputs = formatted for free.** Taps, chips, single photo per slot,
+   optional one-line caption. Never freeform as the required unit.
+4. **Progressive + visible progress.** Required = which bag + one of {a photo *or* a
+   tap rating}. Everything else optional, framed "add more if you have it," with a
+   "3 of 8 filled" pull.
+
+## Locked copy (2026-07-07, owner-approved)
+
+- **Entry headline:** *Have this in hand? Show us how it really carries.*
+- **Subline:** *Takes a second. Add what you've got. Skip the rest.*
+
+Voice: question hook, feel-seen (they're the expert on their own bag), signals a
+one-tap ask. No em dashes.
+
+## Metric
+
+Engagement (more reviews, contributor identity, return visits) plus indirect
+monetization (richer detail pages help GEO/SEO and give the affiliate/resale surface
+more to wrap). Direct monetization: none, this is the flywheel above. The metric to
+protect is **submission start → complete**, which the slot model raises by shrinking
+the minimum unit to one tap.
