@@ -121,20 +121,94 @@ async function fetchFeedFiles(): Promise<string[]> {
   return decodeFeed(new Uint8Array(await res.arrayBuffer()));
 }
 
+// --- CJ GraphQL Product Feed API (the working transport; SFTP is dead, see the
+// spec) -----------------------------------------------------------------------
+const CJ_GRAPHQL_ENDPOINT = "https://ads.api.cj.com/query";
+// Publisher company id (CID). Non-secret (rides in URLs); overridable via env.
+const CJ_CID = process.env.CJ_CID || "7997608";
+
+interface ApiAmount { amount: string | null; currency: string | null }
+interface ApiProduct {
+  id: string; title: string | null; brand: string | null;
+  availability: string | null; condition: string | null; color: string | null; material: string | null;
+  link: string | null; imageLink: string | null;
+  price: ApiAmount | null; salePrice: ApiAmount | null;
+}
+
+/** Pull all USD products for our joined advertisers (TLC) from CJ's GraphQL API,
+ * paginating via `nextPage`. Returns CSV-shaped rows so the existing tested
+ * parser (parseTlcFeedRows) handles all normalisation unchanged. */
+async function fetchApiRows(): Promise<Record<string, string>[]> {
+  const token = process.env.CJ_API_TOKEN;
+  if (!token) throw new Error("CJ_API_TOKEN not set");
+  const query = `query($cid: ID!, $limit: Int, $page: String) {
+    products(companyId: $cid, currency: "USD", limit: $limit, page: $page) {
+      totalCount count nextPage
+      resultList { id title brand availability condition color material link imageLink price { amount currency } salePrice { amount currency } }
+    }
+  }`;
+  const rows: Record<string, string>[] = [];
+  let page: string | null = null;
+  let total = 0;
+  const amt = (a: ApiAmount | null) => (a && a.amount ? `${a.amount} ${a.currency ?? "USD"}` : "");
+  for (let guard = 0; guard < 500; guard++) {
+    const res = await fetch(CJ_GRAPHQL_ENDPOINT, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables: { cid: CJ_CID, limit: 1000, page } }),
+    });
+    if (!res.ok) throw new Error(`CJ API HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const json = (await res.json()) as {
+      data?: { products?: { totalCount: number; count: number; nextPage: string | null; resultList: ApiProduct[] } };
+      errors?: unknown;
+    };
+    if (json.errors) throw new Error(`CJ API errors: ${JSON.stringify(json.errors).slice(0, 400)}`);
+    const p = json.data?.products;
+    if (!p) throw new Error("CJ API: no products block in response");
+    total = p.totalCount;
+    for (const it of p.resultList || []) {
+      rows.push({
+        id: it.id ?? "",
+        title: it.title ?? "",
+        brand: it.brand ?? "",
+        link: it.link ?? "",
+        image_link: it.imageLink ?? "",
+        price: amt(it.price),
+        sale_price: amt(it.salePrice),
+        availability: it.availability ?? "",
+        condition: it.condition ?? "",
+        color: it.color ?? "",
+        material: it.material ?? "",
+      });
+    }
+    if (!p.nextPage || (p.resultList || []).length === 0) break;
+    page = p.nextPage;
+  }
+  console.log(`[tlc] api fetched ${rows.length} products (totalCount=${total})`);
+  return rows;
+}
+
 async function run(): Promise<void> {
-  const files = await fetchFeedFiles();
   const observedOn = new Date().toISOString().slice(0, 10);
 
-  const listings = files.flatMap((csv) => {
-    const rows = parse(csv, {
-      columns: true,
-      skip_empty_lines: true,
-      relax_column_count: true,
-      relax_quotes: true,
-      trim: true,
-    }) as Record<string, string>[];
-    return parseTlcFeedRows(rows, { currency: "USD" });
-  });
+  // Prefer the CJ API (token) — the only transport that works. Fall back to the
+  // file/CSV path (local file) when no token is set.
+  let listings;
+  if (process.env.CJ_API_TOKEN) {
+    listings = parseTlcFeedRows(await fetchApiRows(), { currency: "USD" });
+  } else {
+    const files = await fetchFeedFiles();
+    listings = files.flatMap((csv) => {
+      const rows = parse(csv, {
+        columns: true,
+        skip_empty_lines: true,
+        relax_column_count: true,
+        relax_quotes: true,
+        trim: true,
+      }) as Record<string, string>[];
+      return parseTlcFeedRows(rows, { currency: "USD" });
+    });
+  }
 
   let skippedUnknownModel = 0;
   let skippedOutOfStock = 0;
