@@ -68,3 +68,9 @@ jobs:
         run: |
           npm run load:prices -- tlc --write
           npm run summary:refresh
+
+      - name: Retire sold TLC listings (diff vs this run's live snapshot)
+        if: env.WRITE == 'true'
+        run: |
+          npm run reconcile:sold -- --platform="The Luxury Closet" --snapshot=data/ingest/_raw/tlc-live.json --write
+          npm run summary:refresh

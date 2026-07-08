@@ -21,6 +21,7 @@ import { writeObservations } from "../lib/landing";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 import * as dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.local"), override: true });
 
@@ -260,10 +261,21 @@ async function run(): Promise<void> {
   }
 
   const { file, kept, dropped } = writeObservations(SOURCE, observations);
+
+  // Authoritative "still for sale" snapshot for reconcile-sold: the listing_refs
+  // of every in-stock bag in THIS run. Overwrite (not merge) so a ref that drops
+  // out = sold. reconcile-sold stamps stored TLC rows not in this set as sold.
+  const liveRefs = [...new Set(observations.map((o) => o.attrs.listing_ref).filter((r): r is string => !!r))];
+  const snapDir = path.resolve(__dirname, "../../../data/ingest/_raw");
+  fs.mkdirSync(snapDir, { recursive: true });
+  const snapFile = path.join(snapDir, "tlc-live.json");
+  fs.writeFileSync(snapFile, JSON.stringify(liveRefs));
+
   console.log(
     `[tlc] feed rows(USD)=${listings.length} · emitted=${observations.length} · kept=${kept} · dropped=${dropped}\n` +
       `      skipped: unknown-model=${skippedUnknownModel}, out-of-stock=${skippedOutOfStock}\n` +
-      `      -> ${file}\n      next: npm run ingest:load -- --write`
+      `      live snapshot: ${liveRefs.length} refs -> ${snapFile}\n` +
+      `      -> ${file}\n      next: npm run load:prices -- tlc --write`
   );
 }
 
