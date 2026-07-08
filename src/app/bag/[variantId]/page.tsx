@@ -30,6 +30,7 @@ import TrackBagView from "./TrackBagView";
 import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
+import { getHeroListing } from "@/lib/listings";
 import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
@@ -369,6 +370,9 @@ export default async function BagDetailPage({
         }
       : null;
   const heroImage = images[v.variantId] ?? null;
+  // No first-party photo? Stand in a live for-sale listing's photo (framed as
+  // "available now", linked to buy) rather than a bare placeholder.
+  const heroListing = heroImage ? null : await getHeroListing(v.variantId);
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)
       ? heroImage
@@ -702,12 +706,40 @@ export default async function BagDetailPage({
           so the page reads as complete (never an AI-faked or unlicensed photo).
           Kept compact (capped width, not full-bleed) so the value summary and
           variant selector stay above the fold. */}
-      <BagImage
-        imageUrl={images[v.variantId]}
-        brand={v.brand.name}
-        alt={`${v.brand.name} ${v.style.name}`}
-        className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
-      />
+      {heroListing ? (
+        /* No first-party photo: a real live listing stands in, clearly framed as
+           for-sale (linked to buy, "available now" caption) — never passed off as
+           our own editorial shot. Drops back to the placeholder if it sells. */
+        <a
+          href={heroListing.buyUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow sponsored"
+          className="group relative mx-auto block aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-border"
+        >
+          <BagImage
+            imageUrl={heroListing.imageUrl}
+            brand={v.brand.name}
+            alt={`${v.brand.name} ${v.style.name} available at ${heroListing.platformLabel}`}
+            invite={false}
+            className="h-full w-full"
+          />
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-bg/90 to-transparent px-3 py-2">
+            <span className="text-[11px] uppercase tracking-wide text-gold-soft">
+              Available now · {heroListing.platformLabel}
+            </span>
+            <span className="font-serif text-sm text-foreground group-hover:text-gold">
+              {formatPrice(heroListing.price, "USD")} →
+            </span>
+          </span>
+        </a>
+      ) : (
+        <BagImage
+          imageUrl={images[v.variantId]}
+          brand={v.brand.name}
+          alt={`${v.brand.name} ${v.style.name}`}
+          className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
+        />
+      )}
 
       {/* Amazon-style variant selector — placed at the very top, right under the
           title. Each option links to its own indexable /bag/[id] page. */}
