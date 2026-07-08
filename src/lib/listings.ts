@@ -82,7 +82,10 @@ export interface ShopProduct {
   fromPrice: number;
   currency: string | null;
   /** Deal verdict for the "from" price, only when its market value is a like-for-like
-   *  (leather + color) basis; null when we can't honestly assert one. */
+   *  (leather + color) basis; null when we can't honestly assert one. INTERNAL ranking
+   *  signal (deals-only filter, best-deal sort) — never rendered on the rollup tile:
+   *  the tile is a category representative, so a price verdict there would overclaim
+   *  (owner ruled 2026-07-08). Listing-level verdicts live on the bag page. */
   dealBand: DealBand | null;
 }
 

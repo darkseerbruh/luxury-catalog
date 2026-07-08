@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getShopProducts, type ShopProduct, type ShopSort } from "@/lib/listings";
-import { bandLabel } from "@/lib/listings-core";
 import { getVariantImages, getStyleHeroImages } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
 import { CompareToggle, CompareTray } from "@/components/CompareControls";
@@ -128,12 +127,12 @@ export default async function ShopPage({
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {result.products.map((p) => {
               const imageUrl = tileImage.get(p.key) ?? null;
-              // The badge rates the "from" price the tile shows (same labels as the
-              // bag page's per-listing verdicts). great/good only — fair isn't news.
-              const pulse =
-                p.dealBand === "great" || p.dealBand === "good"
-                  ? bandLabel(p.dealBand)
-                  : null;
+              // NO deal chip on these tiles (owner ruled 2026-07-08): a tile fronts
+              // a whole style at a size (dozens of variants; the photo and from-price
+              // are category-representative, not an item for sale), so a price verdict
+              // here overclaims however it's computed. Deal verdicts live at LISTING
+              // level: the bag page's for-sale rail and the homepage Best deals row.
+              // p.dealBand still drives the deals-only filter + best-deal sort.
               return (
                 <li key={p.key} className="relative">
                   {/* Sibling of the card link (never nested inside it) so the
@@ -155,14 +154,6 @@ export default async function ShopPage({
                         alt={imageUrl ? bagLabel(p) : undefined}
                         className="aspect-square w-full"
                       />
-                      {/* Bottom-left, away from the top-right Compare pill (they
-                          collided on narrow 2-col mobile cards), on a SOLID dark
-                          pill so it stays legible over white product photos. */}
-                      {pulse && (
-                        <span className="absolute bottom-2 left-2 rounded-full border border-emerald-400/40 bg-emerald-950/90 px-2 py-0.5 text-xs font-medium text-emerald-200">
-                          {pulse}
-                        </span>
-                      )}
                     </div>
                     <div className="flex flex-1 flex-col px-3 py-3">
                       <p className="truncate font-serif text-foreground">{bagLabel(p)}</p>
