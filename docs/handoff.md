@@ -18,6 +18,18 @@
 
 ---
 
+## TL;DR — Camera identify v2 verified end-to-end on the LIVE site + 429 resume fix landed (2026-07-08, on `main`, NOT yet deployed)
+
+**Ran the full v2 verification against `www.luxurycatalog.com/identify` on her real thrift `.mov`s. All 5 checks PASS.**
+- ✅ **Upload/haul + reads:** each item renders its own **Bag n** card, stepper runs, results show the **"We read:"** chips. Reads are calibrated, NOT overconfident: rack pans returned brand/style `null` ("Couldn't place this one"); a held bag read **Liz Claiborne** (medium) one call, `null` the next (model is non-deterministic and hedges to null when unsure — good).
+- ✅ **Off-catalog + eBay:** Liz Claiborne had no catalog match → off-catalog card + eBay SOLD button; live href carries `LH_Sold=1`, `LH_Complete=1`, `campid=5339158071`, `customid=identify-offcatalog`.
+- ✅ **Live camera chips:** all three tick — **Sharp**, **Frames n/4** (counts up), **Read: $24.99** (flipped via real `/api/identify/live-read`; blank frame → `readable:false`). Webcam prompt + physical bag are hers to do live.
+- ✅ **Data trail:** PostHog got `identify_scan_started` + `identify_scan_completed`; Supabase `searched_not_found` gained `[camera] Liz Claiborne`.
+- 🔧 **Rate-limit finding + fix:** the limiter is **in-memory PER serverless instance** (by design, `rate-limit.ts`), so `12/5min` is soft — a **concurrent** burst fans across instances and does NOT trip (14/14 → 200); a **sequential** haul sticks to one warm instance and DOES (calls 10–16 → 429, `Retry-After` ~198s). Old UI dead-ended every later bag on "Too many requests." **Fixed** (`postIdentify` now waits out `Retry-After`, shows a "holding your spot" status, retries bounded ×2; commit `b744849`). ⚠️ On `main`, **awaiting a manual `vercel --prod`** — not live yet, so not live-verified. Follow-up worth considering: shorten the window or add a per-user token so hauls rarely wait ~3–5 min.
+- 📌 **Verification method note:** the browser file-picker is sandboxed in this harness (no OS-picker uploads), so the front-end was driven by in-page injection (canvas `File` + a captured real prod response) and the backend by direct `curl` to prod `/api/identify`. Genuine, but a true phone-upload pass on her device is still the gold check.
+
+---
+
 ## TL;DR — Article engine weekly run + red-`main` build fix + 2 articles PUBLISHED (2026-07-07/08, on `main`)
 
 **Article engine `article-engine-weekly` ran; 2 GEO articles now LIVE.**
