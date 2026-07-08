@@ -48,26 +48,18 @@ _Spec: square, >=1000px source, plain even-lit background. The primary is both t
 |---|---|---|
 | 1 | Louis Vuitton Speedy (v7) | Dior Lady Dior (v5) |
 | 2 | Louis Vuitton Alma (v4) | Goyard Saint Louis (v3) |
-| 3 | Gucci Jackie 1961 (v2) | Louis Vuitton Neverfull (v1.5) |
-| 4 | Goyard Artois (v1) | Louis Vuitton Pochette Métis (v1) |
-| 5 | Louis Vuitton OnTheGo (v1) | — |
+| 3 | Gucci GG Marmont (v2) | Gucci Jackie 1961 (v2) |
+| 4 | Bottega Veneta Cassette (v2) | Louis Vuitton Neverfull (v1.5) |
+| 5 | Goyard Artois (v1) | Louis Vuitton Pochette Métis (v1) |
+| 6 | Louis Vuitton OnTheGo (v1) | — |
 
 _In hand this cycle (separate from the plan above): Chanel Classic Flap, Louis Vuitton Neverfull. Shoot them before returning._
 
 ## Plan check
 
 - **Plan set: Classique+ (2 items/mo).** The in-hand Classic Flap was the last Couture-worthy shot; the only remaining Couture-only need is the 2.55 Reissue (value 2), which would take a one-off Couture month, not a standing slot.
-- **Classique queue: 9 bags → ~5 months at 2/mo.**
-- **Premier add-on:** a short-term $49/mo add grabs Marmont + Cassette as extra items without spending a Classique slot (one per 30-day cycle, then cancel). See the sweep below.
-
-## Premier add-on sweep — short-term, then cancel
-
-_These sit in Vivrelle's Premier closet, so a ~$49/mo Premier add-on grabs each as an EXTRA item without spending a Classique slot (one per 30-day cycle, then cancel the add-on). ~$49 per bag vs ~$124 for a Classique slot. Confirm both are in the Premier closet in-app (medium confidence)._
-
-| Bag | Fills | Vivrelle tier | Value | Note |
-|---|---|---|---|---|
-| Gucci GG Marmont | seeded auth-research hero | Classique (~$139/mo) | 2 | In the Premier closet; sweep via the $49 add-on. Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08). |
-| Bottega Veneta Cassette | protective-feet hero | Classique (~$139/mo) | 2 | In the Premier closet (Candy/Mini Cassette, ~$1,250-2,200); sweep via the $49 add-on (archivist 2026-07-08, medium confidence). |
+- **Classique queue: 11 bags → ~6 months at 2/mo.**
+- **No add-on:** the Premier closet only has mini/belt variants; the bags we need are all Classique.
 
 ## Classique track — ranked (deep queue)
 
@@ -77,7 +69,9 @@ _These sit in Vivrelle's Premier closet, so a ~$49/mo Premier add-on grabs each 
 | Dior Lady Dior · homepage #5 | protective-feet hero, About-page cutout | Classique (~$139/mo) | 5 | Vivrelle carries Dior; confirm Lady Dior is live at Classique (Book Tote is the best-confirmed Dior). |
 | Louis Vuitton Alma | protective-feet hero, live on-site search demand | Classique (~$139/mo) | 4 | Searched 'alma' ×3 to 2026-07-02 (PostHog) with no dedicated coverage. |
 | Goyard Saint Louis | live on-site search demand, high social recognition | Classique (~$139/mo) | 3 | Only recorded search_not_found ('goyard', PostHog 2026-06-28); Vivrelle's Goyard depth is real. |
+| Gucci GG Marmont | seeded auth-research hero | Classique (~$139/mo) | 2 | The iconic matelassé flap is in the Classique closet (owner live check 2026-07-08); Premier only carries mini/belt variants, not our hero need. Shoot on a Classique slot. |
 | Gucci Jackie 1961 | protective-feet hero | Classique (~$139/mo) | 2 | — |
+| Bottega Veneta Cassette | protective-feet hero | Classique (~$139/mo) | 2 | The full-size Cassette is in the Classique closet (owner live check 2026-07-08); Premier only has Candy/Mini variants. Shoot on a Classique slot. |
 | Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 1.5 (×0.25 variant covered) | Marquee spec (the in-hand variant does not cover it). Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 | Goyard Artois | high social recognition | Classique (~$139/mo) | 1 | — |
 | Louis Vuitton Pochette Métis | high social recognition | Classique (~$139/mo) | 1 | — |
@@ -135,7 +129,7 @@ _These sit in Vivrelle's Premier closet, so a ~$49/mo Premier add-on grabs each 
 
 - **2026-07-08:** Skip Réservé/Privée (~$800/mo, Birkin/Kelly) for image needs. Both are already shot via the Fashionphile showroom, so a rental fills ~0 image gap; the tier costs ~6x a Classique month and is invite-only. Revisit ONLY for a deliberate content/experience play or a validated Vivrelle affiliate recoup, never to fill a bag page.
 - **2026-07-08:** Base plan: Classique+ (2 Classique items/mo) for the icon queue. Downgraded off Couture after the in-hand Classic Flap (the last Couture-worthy shot); the 2.55 Reissue would need a one-off Couture month, not a standing slot.
-- **2026-07-08:** Premier add-on (~$49/mo, verified recurring not one-time; Vivrelle How It Works, 2026-07-08): add short-term to sweep Gucci GG Marmont then Bottega Cassette (Premier-closet bags), one per 30-day cycle, then cancel. ~$49/bag, additive throughput, keeps Classique slots on icons. Confirm both are in the Premier closet in-app (medium confidence).
+- **2026-07-08:** Skip the Premier add-on. Owner live check (2026-07-08): the iconic full-size Gucci Marmont flap and Bottega Cassette are in the CLASSIQUE closet, reachable on a normal Classique slot; Premier only carries mini/belt variants we don't need. So no add-on; shoot Marmont + Cassette on Classique slots when they come up. (The $49 add-on is a real recurring option, just not useful here.)
 
 ---
 

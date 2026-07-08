@@ -119,7 +119,7 @@ export const DECISIONS: Decision[] = [
     date: "2026-07-08",
   },
   {
-    text: "Premier add-on (~$49/mo, verified recurring not one-time; Vivrelle How It Works, 2026-07-08): add short-term to sweep Gucci GG Marmont then Bottega Cassette (Premier-closet bags), one per 30-day cycle, then cancel. ~$49/bag, additive throughput, keeps Classique slots on icons. Confirm both are in the Premier closet in-app (medium confidence).",
+    text: "Skip the Premier add-on. Owner live check (2026-07-08): the iconic full-size Gucci Marmont flap and Bottega Cassette are in the CLASSIQUE closet, reachable on a normal Classique slot; Premier only carries mini/belt variants we don't need. So no add-on; shoot Marmont + Cassette on Classique slots when they come up. (The $49 add-on is a real recurring option, just not useful here.)",
     date: "2026-07-08",
   },
 ];
@@ -202,9 +202,8 @@ export const NEEDS: Need[] = [
     style: "GG Marmont",
     surfaces: ["seeded_auth"],
     tier: "Classique",
-    plannedVia: "premier",
-    note: "In the Premier closet; sweep via the $49 add-on. Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08).",
-    provenance: "seed-hero-styles research/gucci-gg-marmont.json; archivist Premier pull 2026-07-08",
+    note: "The iconic matelassé flap is in the Classique closet (owner live check 2026-07-08); Premier only carries mini/belt variants, not our hero need. Shoot on a Classique slot.",
+    provenance: "seed-hero-styles research/gucci-gg-marmont.json; owner live check 2026-07-08",
   },
   {
     brand: "Gucci",
@@ -261,9 +260,8 @@ export const NEEDS: Need[] = [
     style: "Cassette",
     surfaces: ["protective_feet"],
     tier: "Classique",
-    plannedVia: "premier",
-    note: "In the Premier closet (Candy/Mini Cassette, ~$1,250-2,200); sweep via the $49 add-on (archivist 2026-07-08, medium confidence).",
-    provenance: "seed-protective-feet; archivist Premier pull 2026-07-08 (indexed pages, medium confidence)",
+    note: "The full-size Cassette is in the Classique closet (owner live check 2026-07-08); Premier only has Candy/Mini variants. Shoot on a Classique slot.",
+    provenance: "seed-protective-feet; owner live check 2026-07-08",
   },
   {
     brand: "Hermès",

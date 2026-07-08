@@ -203,7 +203,11 @@ function main(): void {
   if (coutureSlots === 0) {
     L.push("- **Plan set: Classique+ (2 items/mo).** The in-hand Classic Flap was the last Couture-worthy shot; the only remaining Couture-only need is the 2.55 Reissue (value 2), which would take a one-off Couture month, not a standing slot.");
     L.push(`- **Classique queue: ${classiqueLeft} bags → ~${months} months at ${classiqueSlots}/mo.**`);
-    L.push("- **Premier add-on:** a short-term $49/mo add grabs Marmont + Cassette as extra items without spending a Classique slot (one per 30-day cycle, then cancel). See the sweep below.");
+    if (premierSweep.length > 0) {
+      L.push("- **Premier add-on:** a short-term $49/mo add grabs these as extra items without spending a Classique slot (one per 30-day cycle, then cancel). See the sweep below.");
+    } else {
+      L.push("- **No add-on:** the Premier closet only has mini/belt variants; the bags we need are all Classique.");
+    }
   } else {
     const coutureLeft = coutureQueue.length;
     L.push(`- **Couture track: ${coutureLeft} bag${coutureLeft === 1 ? "" : "s"} left.** **Classique track: ${classiqueLeft} bags.**`);
