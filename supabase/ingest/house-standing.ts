@@ -24,14 +24,12 @@ const WRITE = process.argv.includes("--write");
 const PAGE = 1000;
 const RETAIL = /retail|boutique|msrp|in[-\s]?store|flagship/i;
 
-async function fetchAll<T>(t: string, c: string, apply?: (q: any) => any): Promise<T[]> {
+async function fetchAll<T>(table: string, columns: string): Promise<T[]> {
   const out: T[] = [];
   let from = 0;
   for (;;) {
-    let q = sb.from(t).select(c).range(from, from + PAGE - 1);
-    if (apply) q = apply(q);
-    const { data, error } = await q;
-    if (error) throw new Error(`${t}: ${error.message}`);
+    const { data, error } = await sb.from(table).select(columns).range(from, from + PAGE - 1);
+    if (error) throw new Error(`${table}: ${error.message}`);
     const rows = (data ?? []) as T[];
     out.push(...rows);
     if (rows.length < PAGE) break;
@@ -46,16 +44,19 @@ function pctile(sorted: number[], p: number): number | null {
 }
 
 async function loadSignals(): Promise<BrandSignals[]> {
-  const brands = await fetchAll<any>("brand", "brand_id, name");
-  const styles = await fetchAll<any>("style", "style_id, brand_id");
-  const variants = await fetchAll<any>("variant", "variant_id, style_id");
+  const brands = await fetchAll<{ brand_id: number; name: string }>("brand", "brand_id, name");
+  const styles = await fetchAll<{ style_id: number; brand_id: number }>("style", "style_id, brand_id");
+  const variants = await fetchAll<{ variant_id: number; style_id: number }>("variant", "variant_id, style_id");
   const styleBrand = new Map<number, number>(styles.map((s) => [s.style_id, s.brand_id]));
   const variantBrand = new Map<number, number>();
   for (const v of variants) {
     const b = styleBrand.get(v.style_id);
     if (b != null) variantBrand.set(v.variant_id, b);
   }
-  const prices = await fetchAll<any>("price_history", "variant_id, sale_price, platform");
+  const prices = await fetchAll<{ variant_id: number; sale_price: number | string | null; platform: string | null }>(
+    "price_history",
+    "variant_id, sale_price, platform",
+  );
   const byBrand = new Map<number, number[]>();
   for (const r of prices) {
     if (r.platform && RETAIL.test(r.platform)) continue;
