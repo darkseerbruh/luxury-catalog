@@ -1,5 +1,27 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-06-25 (preference-governance + docs cleanup; recaps split to docs/handoff-archive.md). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (de-AI/anti-slop audit added on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Founder-face b-roll bank + face-vs-faceless test staged (2026-07-07, on `main`)
+
+**Owner filmed 16 own-face desk clips (bag wall behind); built a reusable bank + a face-vs-faceless test.**
+- 🎥 **Bank:** `~/Documents/handbag-campaign-images/founder-broll` (16 originals + silent 1080x1920 vertical cuts; TV background audio stripped). Catalog + ratings: `tools/video-pipeline/founder-broll-manifest.json`. These are a VISUAL BED for existing text/voiceover posts, not standalone clips.
+- 🛠️ **Tools:** `scripts/montage-vo.mjs` (lay an existing voiceover + its captions over a founder bed) and `scripts/montage-card.mjs` with `pos:top` (text hook over a founder bed, clears her face). Founder variants of all 21 text posts + 1 VO pilot built (`output/*-founder.mp4`).
+- 🧪 **The test (face vs faceless):** 12 matched pairs staged as Metricool **drafts** (blogId 6480195, `draft:true`, `autoPublish:false`), each B-arm mirroring its faceless twin's exact caption/hook, ~7 days after the twin (Jul 15–Aug 4). Plain-language tracker: `docs/social-experiments.md` (front door to the ledger). Post ids in `tools/video-pipeline/reels-log.md`.
+- 🧠 **Rules locked:** Metricool = source of truth (if a post isn't there it isn't real); when the tested variable is the visual, reuse existing text verbatim (both in `preferences.md`).
+- ⬜ **YOUR TURN (2026-07-07):** (a) **These 12 are DRAFTS**, which conflicts with the locked "scheduled + autoPublish ON" default — decide per pair whether to flip them to auto-publish (Metricool auto-picks sound) or keep as review-drafts; auto-publishing 12 test posts is outward-facing, so left to you. (b) **Re-confirm the 12 faceless twin ids** in `social-experiments.md` (paired by title; least-sure = `still-thinking` #346293447). (c) 9 statement/`kw2-the-day` founder renders are **shelved** (no Metricool twin = not real).
+- 🔧 **Follow-up:** `docs/social-experiments.md` (plain) overlaps the engine's `social-performance-ledger.md`; kept as the friendly front door pointing to the ledger. The engine's backfill (pull `getScheduledPosts` + `reels-log.md`) will log the 12 pairs as ledger rows automatically.
+
+---
+
+## TL;DR — De-AI / anti-slop audit: site is CLEAN; 2 small fixes pending owner greenlight (2026-07-08, audit only, nothing landed)
+
+**Audited the whole site (design + copy, read from the real source) against the impeccable.style "de-AI"/anti-slop checklist.** Source of the checklist = the open-source repo `pbakaus/impeccable` (`.agents/skills/impeccable/reference/{craft,typeset,critique,brand}.md` on raw.githubusercontent); the live `impeccable.style/slop/` page 403s our proxy and firecrawl was not mounted, so the repo is the recovery path if we need it again.
+- 🎨 **Design: clean, ONE tell.** We use **Playfair Display** (serif), named on their "reflex serif" avoid-list — and our own `voice-and-tone.md` §0 warns against exactly this heritage-hush serif cliché. Everything else passed: zero purple/blue "make-it-pop" gradients (our 8 are gold/surface tones), zero gradient text, 9 shadows total site-wide, no side-tab-border cards, no icon-tile-per-heading, zero emoji.
+- ✍️ **Copy: clean.** Full editorial read (20+ seed articles, ~30 bag + ~35 house stories, HomeHero, AboutStory). Filler-phrase sweep and "not just X, but Y" sweep = zero in shipped prose. Only 3 one-word hype nits: "ultimate" (`src/lib/bag-stories/data.ts:1303`), "iconic" (`supabase/seed/seed-archive-reference-articles.ts:171`), "vibrant" (same file:177).
+- ⬜ **PENDING (owner did NOT greenlight — do NOT do unasked):** (a) swap Playfair → distinctive serif, recommended **Newsreader** (keep Poppins for sans); (b) fix the 3 hype words above; (c) optional — vary the compliance closer "an estimate, not an appraisal" (repeated verbatim across many data articles) so a binge-reader doesn't clock the identical sentence; keep the hedge itself (locked). All low-effort, one build pass.
+- ⚠️ **Coverage caveat:** 100% of repo-seeded content was read. Any article typed straight into the LIVE site editor (`/articles/new`) exists only in the DB and was NOT audited — owner never confirmed whether any such DB-only content exists. If it does, needs Chrome/desktop or DB read access to check.
 
 ---
 

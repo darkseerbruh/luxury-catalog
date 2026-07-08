@@ -43,7 +43,7 @@ export const CardStack: React.FC<{
             alignItems: "flex-start",
             gap: 16,
             marginTop: 14,
-            maxWidth: 860,
+            maxWidth: BRAND.cardMaxWidthPx - 120, // inside the card's own padding
           }}
         >
           {run.map((r, j) => (
@@ -103,8 +103,10 @@ export const CardStack: React.FC<{
         justifyContent: pos === "top" ? "flex-start" : "center",
         alignItems: "center",
         paddingTop: pos === "top" ? 150 : 0,
-        paddingLeft: 60,
-        paddingRight: 60,
+        // Reserve the side safe zone so text + backing box clear the right-side
+        // action rail and the mid-right profile bubble (see brand.ts).
+        paddingLeft: BRAND.cardSideSafePx,
+        paddingRight: BRAND.cardSideSafePx,
       }}
     >
       <div
@@ -113,7 +115,7 @@ export const CardStack: React.FC<{
           flexDirection: "column",
           alignItems: "center",
           gap: 20,
-          maxWidth: 940,
+          maxWidth: BRAND.cardMaxWidthPx,
           padding: "54px 60px",
           borderRadius: 44,
           background: BRAND.cardTextBacking,

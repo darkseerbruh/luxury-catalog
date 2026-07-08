@@ -26,6 +26,13 @@ export const BRAND = {
   // over bright footage. These floors are enforced in code, not by eyeballing.
   minCardCaptionPx: 46, // no on-screen text smaller than this at 1080x1920
   minCardHeadlinePx: 56, // the lead hook line
+  // Horizontal safe zone. The right-side action rail (avatar, like/comment/save)
+  // and the mid-right profile bubble overlap the frame, so text AND its backing
+  // box must stay off both edges. Reserve this much on each side at 1080 wide and
+  // keep the card centered; the binding side is the right rail. See screenshots in
+  // docs/video-accessibility.md §1.
+  cardSideSafePx: 180, // ~17% clear each side -> box lives in the center ~66%
+  cardMaxWidthPx: 720, // = 1080 - 2*cardSideSafePx; the widest a text block may be
   // A tight dark halo + soft glow so edges hold even mid-transition.
   cardTextShadow:
     "0 0 4px rgba(0,0,0,0.92), 0 0 12px rgba(0,0,0,0.55), 0 2px 3px rgba(0,0,0,0.9)",
