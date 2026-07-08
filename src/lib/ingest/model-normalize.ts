@@ -56,6 +56,8 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/kate\s*spade/i, "Kate Spade"],
   [/goyard/i, "Goyard"],
   [/balenciaga/i, "Balenciaga"],
+  [/valentino/i, "Valentino"],
+  [/dolce\s*&?\s*gabbana|\bd&g\b/i, "Dolce & Gabbana"],
 ];
 
 /** Resolve any raw brand/sub-brand/collab string to a canonical brand. */
@@ -141,6 +143,23 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Puzzle Edge", "puzzle edge"], ["Puzzle", "puzzle"], ["Hammock", "hammock"], ["Flamenco", "flamenco"],
     ["Gate", "gate"], ["Goya", "goya"], ["Amazona", "amazona"], ["Squeeze", "squeeze"],
     ["Basket", "basket"], ["Paseo", "paseo"],
+  ],
+  Burberry: [
+    ["TB Bag", "tb bag"], ["Lola", "lola"], ["Olympia", "olympia"], ["Catherine", "catherine"],
+    ["Knight", "knight"], ["Frances", "frances"], ["Note", "note bag"], ["Pocket Bag", "pocket bag"],
+    ["Title", "title bag"], ["Banner", "banner"],
+  ],
+  Balenciaga: [
+    ["Hourglass", "hourglass"], ["Le Cagole", "cagole"], ["Neo Classic", "neo classic"],
+    ["Ville", "ville"], ["Papier", "papier"], ["Rodeo", "rodeo"], ["City", "city bag", "classic city"],
+    ["Hardware", "hardware bag"], ["Downtown", "downtown"],
+  ],
+  Valentino: [
+    ["Rockstud", "rockstud"], ["Roman Stud", "roman stud"], ["VLogo", "vlogo"],
+    ["Loco", "loco"], ["One Stud", "one stud"], ["VSling", "vsling"], ["Escape", "escape"],
+  ],
+  "Dolce & Gabbana": [
+    ["Miss Sicily", "miss sicily"], ["Sicily", "sicily"], ["Devotion", "devotion"], ["DG Girls", "dg girls"],
   ],
 };
 
