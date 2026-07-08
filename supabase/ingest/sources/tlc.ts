@@ -27,20 +27,9 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env.local"), override: 
 const PLATFORM = "The Luxury Closet";
 const SOURCE = "tlc";
 
-/** Fetch the feed and return each CSV/TXT member's text (handles raw CSV or a
- * .zip, detected by the PK magic bytes). */
-async function fetchFeedFiles(): Promise<string[]> {
-  const url = process.env.CJ_FEED_URL;
-  const user = process.env.CJ_FEED_USER;
-  const pass = process.env.CJ_FEED_PASS;
-  if (!url || !user || !pass) {
-    throw new Error("CJ feed env missing (CJ_FEED_URL / CJ_FEED_USER / CJ_FEED_PASS)");
-  }
-  const res = await fetch(url, {
-    headers: { Authorization: "Basic " + Buffer.from(`${user}:${pass}`).toString("base64") },
-  });
-  if (!res.ok) throw new Error(`CJ feed fetch failed: ${res.status} ${res.statusText}`);
-  const buf = new Uint8Array(await res.arrayBuffer());
+/** Decode a feed payload (raw CSV/TXT or a .zip, detected by the PK magic bytes)
+ * into each member's text. */
+function decodeFeed(buf: Uint8Array): string[] {
   const isZip = buf[0] === 0x50 && buf[1] === 0x4b; // "PK"
   if (!isZip) return [strFromU8(buf)];
   const files = unzipSync(buf);
@@ -50,6 +39,27 @@ async function fetchFeedFiles(): Promise<string[]> {
   }
   if (!out.length) throw new Error("CJ feed archive had no .csv/.txt member");
   return out;
+}
+
+/** Load the feed from a local file (CJ_FEED_FILE, for a one-time verify against a
+ * downloaded export) or over HTTP (CJ_FEED_URL + basic auth). Local file wins. */
+async function fetchFeedFiles(): Promise<string[]> {
+  const file = process.env.CJ_FEED_FILE;
+  if (file) {
+    const fs = await import("fs");
+    return decodeFeed(new Uint8Array(fs.readFileSync(file)));
+  }
+  const url = process.env.CJ_FEED_URL;
+  const user = process.env.CJ_FEED_USER;
+  const pass = process.env.CJ_FEED_PASS;
+  if (!url || !user || !pass) {
+    throw new Error("CJ feed env missing: set CJ_FEED_FILE (local) or CJ_FEED_URL + CJ_FEED_USER + CJ_FEED_PASS");
+  }
+  const res = await fetch(url, {
+    headers: { Authorization: "Basic " + Buffer.from(`${user}:${pass}`).toString("base64") },
+  });
+  if (!res.ok) throw new Error(`CJ feed fetch failed: ${res.status} ${res.statusText}`);
+  return decodeFeed(new Uint8Array(await res.arrayBuffer()));
 }
 
 async function run(): Promise<void> {
