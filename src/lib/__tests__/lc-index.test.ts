@@ -6,6 +6,7 @@ import {
   whyNote,
   movementLabel,
   LC_INDEX_MIN_N,
+  LC_INDEX_MIN_SOURCES,
   type StyleSignals,
   type BrandTier,
 } from "../lc-index";
@@ -24,6 +25,7 @@ function sig(overrides: Partial<StyleSignals> = {}): StyleSignals {
     resaleMedian: overrides.resaleMedian ?? 1000,
     priceCount: overrides.priceCount ?? 100,
     liveCount: overrides.liveCount ?? 10,
+    sourceCount: overrides.sourceCount ?? 3,
     repVariantId: overrides.repVariantId ?? id,
     // apply real overrides last so the defaults above never clobber them
     ...overrides,
@@ -108,9 +110,15 @@ describe("why-meter bars", () => {
   });
 });
 
-// ── the n-gate (honesty) ────────────────────────────────────────────────────────
+// ── the n-gate / floor (honesty + demand-first) ─────────────────────────────────
 
 describe("n-gate", () => {
+  it("floor is set from the real distribution to drop thin, contaminated styles", () => {
+    // Raised from 8 → 20 after the 2026-07-08 diagnosis: the thin styles that ranked
+    // too high (Kelly Pochette at 15 deduped listings) must fall below the floor.
+    expect(LC_INDEX_MIN_N).toBe(20);
+  });
+
   it("leaves a thin style unranked rather than inventing a rank", () => {
     const signals = [
       sig({ styleId: 1, resaleMedian: 5000, priceCount: 200, liveCount: 10 }),
@@ -122,6 +130,17 @@ describe("n-gate", () => {
     expect(unrankedStyleIds).toEqual([2]);
   });
 
+  it("ranks a style exactly at the floor, unranks one just below it (demand-first gate)", () => {
+    const signals = [
+      sig({ styleId: 1, resaleMedian: 5000, priceCount: LC_INDEX_MIN_N, liveCount: 10 }), // exactly at floor
+      sig({ styleId: 2, resaleMedian: 9000, priceCount: LC_INDEX_MIN_N - 1, liveCount: 1 }), // pricey + scarce but thin
+    ];
+    const { ranked, unrankedStyleIds } = computeLcIndex(signals);
+    // The thin style stays out even though its price + scarcity would otherwise rank it high.
+    expect(ranked.map((r) => r.styleId)).toEqual([1]);
+    expect(unrankedStyleIds).toEqual([2]);
+  });
+
   it("leaves a style with no resale median unranked", () => {
     const signals = [
       sig({ styleId: 1, resaleMedian: 5000, priceCount: 200 }),
@@ -129,6 +148,34 @@ describe("n-gate", () => {
     ];
     const { unrankedStyleIds } = computeLcIndex(signals);
     expect(unrankedStyleIds).toEqual([2]);
+  });
+});
+
+// ── the source gate (independence, not just quantity) ───────────────────────────
+
+describe("source gate", () => {
+  it("requires at least two distinct sources to rank", () => {
+    expect(LC_INDEX_MIN_SOURCES).toBe(2);
+  });
+
+  it("unranks a single-source style even with plenty of prices (one merchant is not the market)", () => {
+    const signals = [
+      sig({ styleId: 1, resaleMedian: 5000, priceCount: 300, sourceCount: 3 }),
+      // A pricier, plentiful style, but every listing is from ONE reseller.
+      sig({ styleId: 2, resaleMedian: 9000, priceCount: 40, sourceCount: 1 }),
+    ];
+    const { ranked, unrankedStyleIds } = computeLcIndex(signals);
+    expect(ranked.map((r) => r.styleId)).toEqual([1]);
+    expect(unrankedStyleIds).toEqual([2]);
+  });
+
+  it("ranks a two-source style that clears the price floor", () => {
+    const signals = [
+      sig({ styleId: 1, resaleMedian: 5000, priceCount: LC_INDEX_MIN_N, sourceCount: LC_INDEX_MIN_SOURCES }),
+    ];
+    const { ranked, unrankedStyleIds } = computeLcIndex(signals);
+    expect(ranked.map((r) => r.styleId)).toEqual([1]);
+    expect(unrankedStyleIds).toEqual([]);
   });
 });
 
@@ -158,34 +205,57 @@ describe("boardAround", () => {
   });
 });
 
-// ── whyNote (row caption) ───────────────────────────────────────────────────────
+// ── whyNote (row caption) — the differentiated generator ────────────────────────
 
 describe("whyNote", () => {
-  it("names the leading signal as a market fact, honest at both ends", () => {
-    expect(whyNote({ lead: "price", pricePct: 90, tradePct: 0, scarcityPct: 0 })).toBe(
-      "Priced above most of the catalog",
-    );
-    expect(whyNote({ lead: "price", pricePct: 20, tradePct: 0, scarcityPct: 0 })).toBe(
-      "An accessible price",
-    );
-    expect(whyNote({ lead: "trade", pricePct: 0, tradePct: 88, scarcityPct: 0 })).toBe(
-      "One of the most-traded bags we track",
-    );
-    expect(whyNote({ lead: "scarcity", pricePct: 0, tradePct: 0, scarcityPct: 95 })).toBe(
-      "Rarely listed right now",
-    );
-    expect(whyNote({ lead: "scarcity", pricePct: 0, tradePct: 0, scarcityPct: 10 })).toBe(
-      "Widely available today",
-    );
+  const note = (o: Partial<Parameters<typeof whyNote>[0]>) =>
+    whyNote({ rank: 3, brandName: "Hermès", pricePct: 50, tradePct: 50, scarcityPct: 50, ...o });
+
+  it("gives #1 the benchmark line, without a false scarcity claim", () => {
+    // The top bag can be the MOST-listed of all (Birkin), so #1 speaks to price + volume only.
+    const n = whyNote({ rank: 1, brandName: "Hermès", pricePct: 100, tradePct: 99, scarcityPct: 1 });
+    expect(n).toBe("The benchmark. Nothing we rank prices higher, and it trades in real volume.");
   });
 
-  it("never uses an em dash or a verdict word", () => {
+  it("leads with scarcity only when the bag really is seldom listed", () => {
+    // priceTop + genuinely scarce → a 'rarely surfaces' line.
+    expect(note({ pricePct: 98, tradePct: 29, scarcityPct: 83 })).toMatch(/seldom|rarely comes up/i);
+    // A top seller (low scarcity percentile) is NEVER told it is scarce.
+    const heavy = note({ pricePct: 95, tradePct: 100, scarcityPct: 0 });
+    expect(heavy).not.toMatch(/seldom|rarely|hard to find/i);
+  });
+
+  it("reserves 'grail' pricing for top-of-index price, not merely-expensive bags", () => {
+    // A high-volume but mid-priced bag (a Wallet on Chain) gets a volume story, no 'grail'.
+    const woc = note({ rank: 20, brandName: "Chanel", pricePct: 83, tradePct: 86, scarcityPct: 21 });
+    expect(woc).toMatch(/liquid|trades constantly/i);
+    expect(woc.toLowerCase()).not.toContain("grail");
+  });
+
+  it("is honest at the soft end (easy to find, softer price)", () => {
+    const easy = note({ rank: 200, pricePct: 15, tradePct: 10, scarcityPct: 10 });
+    expect(easy.toLowerCase()).toMatch(/easy to find|priced softly|softer price|accessible|mid-pack/);
+  });
+
+  it("is deterministic: same inputs always produce the same line", () => {
+    const input = { rank: 7, brandName: "Chanel", pricePct: 91, tradePct: 88, scarcityPct: 12 };
+    expect(whyNote(input)).toBe(whyNote(input));
+  });
+
+  it("never uses an em dash or a verdict word, across the whole ranked set", () => {
     const canon = computeLcIndex(canonSignals());
     for (const r of canon.ranked) {
-      const note = whyNote(r);
-      expect(note).not.toContain("—");
-      expect(note.toLowerCase()).not.toMatch(/\bbest\b|\bworth it\b/);
+      const n = whyNote(r);
+      expect(n).not.toContain("—");
+      expect(n.toLowerCase()).not.toMatch(/\bbest\b|\bworth it\b|\byou should\b/);
     }
+  });
+
+  it("keeps adjacent rows distinct even when their signal profiles are identical", () => {
+    // Two neighbors with the SAME profile must not read the same (rank-parity variant).
+    const a = whyNote({ rank: 4, brandName: "Hermès", pricePct: 92, tradePct: 90, scarcityPct: 10 });
+    const b = whyNote({ rank: 5, brandName: "Hermès", pricePct: 92, tradePct: 90, scarcityPct: 10 });
+    expect(a).not.toBe(b);
   });
 });
 
