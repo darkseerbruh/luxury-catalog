@@ -58,7 +58,7 @@ export const TIER_COST: Record<Tier, number> = {
  *  The Couture slot can only be filled by a Couture-tier bag (the >$4k / rare closet);
  *  the Classique slot by a Classique-tier bag. A Couture slot left unfilled by a
  *  Couture-only need is wasted spend — the ranking flags that. */
-export const PLAN = { coutureSlots: 1, classiqueSlots: 1 } as const;
+export const PLAN = { coutureSlots: 0, classiqueSlots: 2 } as const;
 
 /** Once ANY variant of a silhouette is shot (e.g. an Epi Neverfull), the bag page
  *  placeholder is filled and the shape is represented, so the exact marquee-canvas
@@ -87,6 +87,9 @@ export interface Need {
   preferredSpec?: RegExp;
   /** Bag-specific close-ups to capture, on top of GENERIC_SHOTLIST. */
   detailShots?: string[];
+  /** Planned to be shot via a specific route rather than a standing slot.
+   *  "premier" = grab via a short-term $49/mo Premier add-on, not a Classique slot. */
+  plannedVia?: "premier";
   note?: string;
   provenance: string;
 }
@@ -109,6 +112,14 @@ export interface Decision {
 export const DECISIONS: Decision[] = [
   {
     text: "Skip Réservé/Privée (~$800/mo, Birkin/Kelly) for image needs. Both are already shot via the Fashionphile showroom, so a rental fills ~0 image gap; the tier costs ~6x a Classique month and is invite-only. Revisit ONLY for a deliberate content/experience play or a validated Vivrelle affiliate recoup, never to fill a bag page.",
+    date: "2026-07-08",
+  },
+  {
+    text: "Base plan: Classique+ (2 Classique items/mo) for the icon queue. Downgraded off Couture after the in-hand Classic Flap (the last Couture-worthy shot); the 2.55 Reissue would need a one-off Couture month, not a standing slot.",
+    date: "2026-07-08",
+  },
+  {
+    text: "Premier add-on (~$49/mo, verified recurring not one-time; Vivrelle How It Works, 2026-07-08): add short-term to sweep Gucci GG Marmont then Bottega Cassette (Premier-closet bags), one per 30-day cycle, then cancel. ~$49/bag, additive throughput, keeps Classique slots on icons. Confirm both are in the Premier closet in-app (medium confidence).",
     date: "2026-07-08",
   },
 ];
@@ -191,7 +202,8 @@ export const NEEDS: Need[] = [
     style: "GG Marmont",
     surfaces: ["seeded_auth"],
     tier: "Classique",
-    note: "Also in the Premier closet ($49 add-on); the Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08).",
+    plannedVia: "premier",
+    note: "In the Premier closet; sweep via the $49 add-on. Mini Chain crossbody / Mini Round shoulder are the true matelassé matches (archivist 2026-07-08).",
     provenance: "seed-hero-styles research/gucci-gg-marmont.json; archivist Premier pull 2026-07-08",
   },
   {
@@ -249,7 +261,8 @@ export const NEEDS: Need[] = [
     style: "Cassette",
     surfaces: ["protective_feet"],
     tier: "Classique",
-    note: "Confirmed carried (Premier closet: Candy/Mini Cassette, ~$1,250-2,200), archivist 2026-07-08; reachable on a Classique slot.",
+    plannedVia: "premier",
+    note: "In the Premier closet (Candy/Mini Cassette, ~$1,250-2,200); sweep via the $49 add-on (archivist 2026-07-08, medium confidence).",
     provenance: "seed-protective-feet; archivist Premier pull 2026-07-08 (indexed pages, medium confidence)",
   },
   {
