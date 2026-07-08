@@ -30,12 +30,14 @@ interface Props {
   onSelect?: (sel: BagFinderSelection) => void;
   /** Optional "can't find it? add a photo" escape hatch; hidden when absent. */
   onPhotoFallback?: () => void;
+  /** Optional: Enter on the field submits the raw query (e.g. nav → full /search). */
+  onSubmitQuery?: (query: string) => void;
   autoFocus?: boolean;
 }
 
 const HINT = "   (start typing →)";
 
-export function BagFinder({ mode, onSelect, onPhotoFallback, autoFocus }: Props) {
+export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, autoFocus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [models, setModels] = useState<FinderModel[]>([]);
@@ -124,6 +126,12 @@ export function BagFinder({ mode, onSelect, onPhotoFallback, autoFocus }: Props)
           value={q}
           autoFocus={autoFocus}
           onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && onSubmitQuery) {
+              e.preventDefault();
+              onSubmitQuery(q);
+            }
+          }}
           placeholder={
             mode === "nav" ? `Chanel flap, black caviar${HINT}` : `Which bag are you adding?${HINT}`
           }

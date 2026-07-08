@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuthState } from "@/components/AuthProvider";
+import { BagFinder } from "@/components/BagFinder";
 
 type NavLink = {
   href: string;
@@ -97,31 +98,7 @@ export default function HeaderNav({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const [suggestions, setSuggestions] = useState<{ label: string; sub: string; href: string }[]>([]);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Debounced autocomplete: fetch example matches (brands, bags, articles) as the
-  // user types. All state updates happen in the deferred callback (not the effect
-  // body). Aborts in-flight requests; clears under 2 chars.
-  useEffect(() => {
-    const term = q.trim();
-    const ctl = new AbortController();
-    const t = setTimeout(() => {
-      if (term.length < 2) {
-        setSuggestions([]);
-        return;
-      }
-      fetch(`/api/search-suggest?q=${encodeURIComponent(term)}`, { signal: ctl.signal })
-        .then((r) => r.json())
-        .then((d) => setSuggestions(d.suggestions ?? []))
-        .catch(() => {});
-    }, 160);
-    return () => {
-      clearTimeout(t);
-      ctl.abort();
-    };
-  }, [q]);
+  const router = useRouter();
 
   useEffect(() => {
     if (!open && !searchOpen) return;
@@ -134,10 +111,6 @@ export default function HeaderNav({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, searchOpen]);
-
-  useEffect(() => {
-    if (searchOpen) searchInputRef.current?.focus();
-  }, [searchOpen]);
 
   const isActive = (href: string) => {
     const base = href.split("?")[0];
@@ -265,33 +238,21 @@ export default function HeaderNav({
         <div className="group relative flex items-center">
           {searchOpen ? (
             <div className="relative">
-              <form action="/search" method="GET" className="flex items-center gap-1">
-                <input
-                  ref={searchInputRef}
-                  name="q"
-                  type="search"
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search bags…"
-                  onBlur={() => setTimeout(() => setSearchOpen(false), 160)}
-                  className="w-56 rounded-full border border-gold bg-surface px-4 py-1.5 text-sm text-foreground placeholder:text-muted focus:outline-none"
+              {/* Click-away layer so a tile click (navigation) wins over a blur race. */}
+              <div className="fixed inset-0 z-20" aria-hidden="true" onClick={() => setSearchOpen(false)} />
+              <div className="absolute right-0 top-0 z-30 w-[26rem] max-w-[92vw] rounded-2xl border border-border bg-bg/95 p-3 shadow-lg backdrop-blur-sm">
+                <BagFinder
+                  mode="nav"
+                  autoFocus
+                  onSubmitQuery={(term) => {
+                    const t = term.trim();
+                    if (t) {
+                      router.push(`/search?q=${encodeURIComponent(t)}`);
+                      setSearchOpen(false);
+                    }
+                  }}
                 />
-              </form>
-              {suggestions.length > 0 && (
-                <div className="absolute right-0 top-full z-30 mt-2 w-72 overflow-hidden rounded-2xl border border-border bg-bg/95 p-1.5 shadow-lg backdrop-blur-sm">
-                  {suggestions.map((s) => (
-                    <Link
-                      key={`${s.sub}-${s.href}`}
-                      href={s.href}
-                      onMouseDown={(e) => e.preventDefault()}
-                      className="flex items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
-                    >
-                      <span className="truncate">{s.label}</span>
-                      <span className="shrink-0 text-[10px] uppercase tracking-widest text-muted/60">{s.sub}</span>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              </div>
             </div>
           ) : (
             <button
