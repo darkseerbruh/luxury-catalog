@@ -22,14 +22,15 @@
 
 create or replace function style_index_signals()
 returns table (
-  style_id      bigint,
-  style_name    text,
-  brand_id      bigint,
-  brand_name    text,
-  tier          text,
-  resale_median numeric,
-  price_count   integer,
-  live_count    integer
+  style_id        bigint,
+  style_name      text,
+  brand_id        bigint,
+  brand_name      text,
+  tier            text,
+  resale_median   numeric,
+  price_count     integer,
+  live_count      integer,
+  rep_variant_id  bigint
 )
 language sql
 stable
@@ -41,6 +42,7 @@ as $$
       b.brand_id,
       b.name        as brand_name,
       b.tier,
+      v.variant_id,
       ph.sale_price,
       ph.listing_ref,
       ph.listing_status
@@ -68,7 +70,8 @@ as $$
     count(*) filter (
       where r.listing_ref is not null
         and r.listing_status is distinct from 'sold'
-    )::integer                                                   as live_count
+    )::integer                                                   as live_count,
+    min(r.variant_id)::bigint                                    as rep_variant_id
   from resale r
   group by r.style_id;
 $$;

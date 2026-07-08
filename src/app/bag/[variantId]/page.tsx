@@ -46,6 +46,8 @@ import BagStory, { type StoryMarketFact } from "./BagStory";
 import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
+import StandingCard from "@/components/StandingCard";
+import { getStyleStandingView } from "@/lib/lc-index";
 import VariantSelector from "./VariantSelector";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
@@ -283,6 +285,10 @@ export default async function BagDetailPage({
   // Demand signal (privacy-safe counts of wants + watchers) — powers the timing
   // read; renders only when there's real signal.
   const demand = await getVariantDemand(v.variantId);
+
+  // LC Index standing (docs/ux/lc-index-spec.md). Null when the style is unranked
+  // or migration 0048 is not yet applied, so the module simply does not render.
+  const standingView = await getStyleStandingView(v.style.styleId);
 
   // Fair Market Range — computed ONLY from recorded RESALE sales (no fabrication).
   // KBB "Fair Market Range, not a single price" + StockX "Last Sale". Exclude
@@ -827,6 +833,15 @@ export default async function BagDetailPage({
           </div>
         </dl>
       </section>
+
+      {/* LC Index standing — where this bag ranks in the whole market, at the
+          decision point. Renders only when the style is ranked. */}
+      {standingView && (
+        <section aria-label="Market standing" className="rounded-2xl border border-border bg-surface p-5">
+          <h2 className="mb-4 font-serif text-lg text-foreground">Where it stands</h2>
+          <StandingCard view={standingView} />
+        </section>
+      )}
 
       {/* Decision cluster at the value moment: closet intent (want/have/had) +
           price watch + the Buy/Sell outbound CTAs — the monetization moments,

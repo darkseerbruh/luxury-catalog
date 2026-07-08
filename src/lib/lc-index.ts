@@ -34,6 +34,8 @@ export interface StyleSignals {
   priceCount: number;
   /** Count of live for-sale listings right now = the scarcity source. */
   liveCount: number;
+  /** A representative variant id for the style (photo + link target). */
+  repVariantId: number | null;
 }
 
 /** One style's computed standing: its rank plus the three why-meter bars (0–100). */
@@ -51,6 +53,7 @@ export interface Standing {
   resaleMedian: number | null;
   priceCount: number;
   liveCount: number;
+  repVariantId: number | null;
   /** Why-meter bars, each a 0–100 percentile within the ranked set. */
   pricePct: number;
   tradePct: number;
@@ -90,6 +93,21 @@ export function percentileOf(value: number, population: number[]): number {
 function tierPercentile(tier: BrandTier | null): number {
   if (!tier) return 0;
   return ((TIER_RANK[tier] - 1) / 3) * 100;
+}
+
+/**
+ * A short, plain-words caption for the why-meter: names the signal driving the
+ * rank, as a market fact (never a verdict). Decisive, and honest at both ends.
+ */
+export function whyNote(s: Pick<Standing, "lead" | "pricePct" | "tradePct" | "scarcityPct">): string {
+  switch (s.lead) {
+    case "price":
+      return s.pricePct >= 50 ? "Priced above most of the catalog" : "An accessible price";
+    case "trade":
+      return s.tradePct >= 50 ? "One of the most-traded bags we track" : "Trades quietly";
+    case "scarcity":
+      return s.scarcityPct >= 50 ? "Rarely listed right now" : "Widely available today";
+  }
 }
 
 export interface LcIndexData {
@@ -176,6 +194,7 @@ export function computeLcIndex(signals: StyleSignals[]): LcIndexData {
     resaleMedian: row.signals.resaleMedian,
     priceCount: row.signals.priceCount,
     liveCount: row.signals.liveCount,
+    repVariantId: row.signals.repVariantId,
     pricePct: Math.round(row.pricePct),
     tradePct: Math.round(row.tradePct),
     scarcityPct: Math.round(row.scarcityPct),
@@ -237,6 +256,7 @@ interface RawSignalRow {
   resale_median: number | string | null;
   price_count: number | string | null;
   live_count: number | string | null;
+  rep_variant_id: number | string | null;
 }
 
 const VALID_TIERS: BrandTier[] = ["thrift", "mid", "premium", "ultra-luxury"];
@@ -258,6 +278,7 @@ async function loadStyleSignals(): Promise<StyleSignals[]> {
         resaleMedian: median != null && Number.isFinite(median) ? median : null,
         priceCount: Number(r.price_count ?? 0),
         liveCount: Number(r.live_count ?? 0),
+        repVariantId: r.rep_variant_id == null ? null : Number(r.rep_variant_id),
       };
     });
   } catch {
@@ -276,4 +297,28 @@ export const getLcIndex = unstable_cache(
 export async function getStyleStanding(styleId: number): Promise<Standing | null> {
   const data = await getLcIndex();
   return data.ranked.find((r) => r.styleId === styleId) ?? null;
+}
+
+/** The self-contained view model the StandingCard renders. */
+export interface StandingView extends Standing {
+  boards: {
+    price: StandingBoardRow[];
+    trade: StandingBoardRow[];
+    scarcity: StandingBoardRow[];
+  };
+}
+
+/** Assemble a style's full StandingCard view (standing + the three neighbor boards). */
+export async function getStyleStandingView(styleId: number): Promise<StandingView | null> {
+  const data = await getLcIndex();
+  const standing = data.ranked.find((r) => r.styleId === styleId);
+  if (!standing) return null;
+  return {
+    ...standing,
+    boards: {
+      price: boardAround(data, "price", styleId),
+      trade: boardAround(data, "trade", styleId),
+      scarcity: boardAround(data, "scarcity", styleId),
+    },
+  };
 }

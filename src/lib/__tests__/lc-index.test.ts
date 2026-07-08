@@ -22,6 +22,7 @@ function sig(overrides: Partial<StyleSignals> = {}): StyleSignals {
     resaleMedian: overrides.resaleMedian ?? 1000,
     priceCount: overrides.priceCount ?? 100,
     liveCount: overrides.liveCount ?? 10,
+    repVariantId: overrides.repVariantId ?? id,
     // apply real overrides last so the defaults above never clobber them
     ...overrides,
   };
