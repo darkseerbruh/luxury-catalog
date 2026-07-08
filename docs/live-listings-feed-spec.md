@@ -25,8 +25,10 @@
 - `.github/workflows/ingest-tlc.yml` — daily (`23 8 * * *`) + on-demand. Runs `ingest:tlc` (API) → `load:prices -- tlc --write` → `summary:refresh`.
 - **Secrets (GitHub Actions):** `CJ_API_TOKEN` (the working one), Supabase service role (pre-existing). The old `CJ_FEED_HOST/USER/PASS` (SFTP) are now unused.
 
+## Done since launch (2026-07-08)
+- ✅ **Retire sold listings:** the adapter writes a per-run live snapshot (`data/ingest/_raw/tlc-live.json`); the workflow runs `reconcile:sold --platform="The Luxury Closet"` to stamp any stored TLC row not in it `sold` (50% safety cap). Verified live: a run retired 53 sold listings. No dead links on the rail.
+- ✅ **Coverage telemetry + wider models:** the adapter logs "TOP UNMATCHED known-brand bags" each run; added Burberry / Balenciaga / Valentino / Dolce & Gabbana bag models from that evidence (the shoe/SLG guard keeps their footwear out). Emitted bags: 15,969 → 17,529.
+
 ## Known follow-ups
-- **Verify buy-card render + wrapped link on prod** after the deploy lands (the one 🟡 above).
-- **Reconcile sold TLC listings:** `load:prices` appends; a sold TLC bag lingers until retired. Mirror `reconcile-sold`/`market-refresh` for TLC so dead links drop. (Pre-launch, low urgency.)
 - **Fix the local `.env.local` anon key** (truncated) so `getListingsForVariant` can be tested locally.
 - **Breadth:** `canonicalModel` (~68 models) bounds matches; extend `MODELS` in `model-normalize.ts` for more coverage.
