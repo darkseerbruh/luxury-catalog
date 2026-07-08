@@ -67,6 +67,7 @@ jobs:
         if: env.WRITE == 'true'
         run: |
           npm run load:prices -- tlc --write
+          npm run load:tlc-images -- --write
           npm run summary:refresh
 
       - name: Retire sold TLC listings (diff vs this run's live snapshot)

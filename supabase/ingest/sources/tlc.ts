@@ -15,7 +15,7 @@
  */
 import { unzipSync, strFromU8 } from "fflate";
 import { parse } from "csv-parse/sync";
-import { parseTlcFeedRows } from "../../../src/lib/ingest/tlc-feed";
+import { parseTlcFeedRows, toHttps } from "../../../src/lib/ingest/tlc-feed";
 import { canonicalModel } from "../../../src/lib/ingest/model-normalize";
 import { writeObservations } from "../lib/landing";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
@@ -229,6 +229,9 @@ async function run(): Promise<void> {
   const unmatchedByBrand = new Map<string, number>();
   const unmatchedSamples = new Map<string, string>();
   const observations: PriceObservation[] = [];
+  // Per-listing photos (listing_ref -> https image), loaded into listing_image
+  // so the bag-page rail can show a picture next to each live offer.
+  const images: { listing_ref: string; image_url: string }[] = [];
   for (const l of listings) {
     if (l.availability !== "in_stock") {
       skippedOutOfStock++;
@@ -267,6 +270,8 @@ async function run(): Promise<void> {
         ? `on sale from ${l.price}`
         : null,
     });
+    const img = toHttps(l.imageUrl);
+    if (img) images.push({ listing_ref: l.externalId, image_url: img });
   }
 
   const { file, kept, dropped } = writeObservations(SOURCE, observations);
@@ -279,6 +284,10 @@ async function run(): Promise<void> {
   fs.mkdirSync(snapDir, { recursive: true });
   const snapFile = path.join(snapDir, "tlc-live.json");
   fs.writeFileSync(snapFile, JSON.stringify(liveRefs));
+
+  // Per-listing photos for load-tlc-images.ts (loaded on --write runs only).
+  const imgFile = path.join(snapDir, "tlc-images.json");
+  fs.writeFileSync(imgFile, JSON.stringify(images));
 
   const topUnmatched = [...unmatchedByBrand.entries()]
     .sort((a, b) => b[1] - a[1])
