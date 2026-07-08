@@ -3,6 +3,23 @@
 Durable record of every video the pipeline makes. The render files live locally in
 `output/` (too large for git); this log is the committed history. Newest first.
 
+**2026-07-08 — "Class is in session" thrift reel #2 (haul IMG_7921-7937).** Second run of
+the come-thrift-with-me / class-is-in-session format (reuses `scripts/build-thrift-bed.mjs`).
+17 clips identified from ffmpeg frames; spec `examples/thrift-class-2.json`, VO script
+`examples/thrift-class-2.vo-script.md`, bag IDs + comp sources `examples/thrift-class-2.bags.md`.
+Structure: trustworthy brands (Guess tote, Steve Madden floral crossbody, Vera Bradley quilted,
+BCBG camel satchel) → dupes (blue fleece Chanel-flap knockoff HERO, mustard woven-PU, the white
+made-in-China care tag / no maker's stamp) → landfill (nude patent croc with the cracking/peeling
+handle). On-screen numbers all traceable: **$4.99** = the one legible Goodwill tag (red, IMG_7929);
+resale = dated estimates (Guess $15-35, Steve Madden $10-22, Vera Bradley $18-35, BCBG $18-35, dupes
+~$0), archivist sold comps 2026-07-08, framed as estimate-not-appraisal. Open/close verbatim; no
+grails found so the "no grails" close stands. Lexicon: added vera bradley, bcbg, goodwill, bottega
+(steve madden/shein already present; "guess" deliberately NOT added, it collides with the verb).
+**Status: packaged for local render** (owner records VO to `input/thrift-class-2-vo.m4a`, drops the
+17 clips in `input/clips/`, then `node scripts/build-thrift-bed.mjs examples/thrift-class-2.json &&
+npm run make thrift-class-2`). Only $4.99 was a hard price on screen; every other tag was the new
+QR style or unreadable, so no other price beats (never invented an ask).
+
 **2026-07-06 — FOUNDER-FACE visual-bed A/B (new bank + 21 variants).** Owner filmed 16
 own-face desk clips (bag wall behind); banked at `~/Documents/handbag-campaign-images/founder-broll`
 (originals + silent 1080x1920 vertical cuts), catalog `founder-broll-manifest.json`. Built

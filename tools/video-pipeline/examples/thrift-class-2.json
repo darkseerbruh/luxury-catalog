@@ -1,0 +1,57 @@
+{
+  "_comment": "COME-THRIFT-WITH-ME / 'class is in session' reel #2 (haul IMG_7921-7937). VO-over-b-roll. Run: node scripts/build-thrift-bed.mjs examples/thrift-class-2.json (builds input/thrift-class-2.mp4 + sidecars), then npm run make thrift-class-2. Durations clamp to each clip's real length and the bed loops to fill the voice, so tweak freely. VO script + bag IDs + comp sources: examples/thrift-class-2.vo-script.md and examples/thrift-class-2.bags.md. See build-thrift-bed.mjs header.",
+  "name": "thrift-class-2",
+  "vo": "input/thrift-class-2-vo.m4a",
+  "clipsDir": "input/clips",
+  "zoom": 0.03,
+  "bed": [
+    { "img": "IMG_7921", "start": 0.2, "duration": 2.3, "note": "INTRO: rack pan, her hunting" },
+
+    { "img": "IMG_7921", "start": 2.8, "duration": 1.8, "note": "SEG1: black Guess tote closeup (triangle zip pull)" },
+    { "img": "IMG_7926", "start": 0.8, "duration": 4.5, "note": "SEG1: Steve Madden yellow floral crossbody" },
+    { "img": "IMG_7926", "start": 15.0, "duration": 3.0, "note": "SEG1: Steve Madden lining logo (name printed in lining)" },
+    { "img": "IMG_7928", "start": 0.4, "duration": 4.0, "note": "SEG1: Vera Bradley navy floral quilted" },
+    { "img": "IMG_7928", "start": 5.0, "duration": 2.5, "note": "SEG1: Vera Bradley signature script in the print" },
+    { "img": "IMG_7936", "start": 0.3, "duration": 4.0, "note": "SEG1: BCBG camel dome satchel (gold plate)" },
+    { "img": "IMG_7936", "start": 6.0, "duration": 3.0, "note": "SEG1: BCBG clean grey lining" },
+    { "img": "IMG_7929", "start": 0.5, "duration": 2.2, "note": "SEG1->PRICE: beige canvas tote (the $4.99 beat)" },
+
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "SEG2 HERO: blue fleece Chanel-flap dupe (Chanel ref pops on 'the real one')" },
+    { "img": "IMG_7933", "start": 0.3, "duration": 3.0, "note": "SEG2: fleece flap turn-lock + satin lining detail" },
+    { "img": "IMG_7931", "start": 0.5, "duration": 2.5, "note": "SEG2: mustard woven-PU Bottega-style dupe" },
+    { "img": "IMG_7925", "start": 0.3, "duration": 2.2, "note": "SEG2: white made-in-China care tag (the tell pops on 'white made-in-China tag')" },
+    { "img": "IMG_7923", "start": 0.5, "duration": 3.0, "note": "SEG2: studded satchel, no maker's stamp" },
+    { "img": "IMG_7924", "start": 0.5, "duration": 2.5, "note": "SEG2: studded satchel interior" },
+
+    { "img": "IMG_7934", "start": 0.3, "duration": 1.8, "note": "SEG3 landfill: nude patent croc dome (looks fine)" },
+    { "img": "IMG_7935", "start": 0.0, "duration": 1.3, "note": "SEG3 landfill: handle cracking/peeling (money shot on 'watch the handle')" },
+    { "img": "IMG_7937", "start": 0.5, "duration": 2.5, "note": "SEG3 landfill: ostrich-emboss PU, looks lux, no name" },
+    { "img": "IMG_7922", "start": 0.5, "duration": 3.0, "note": "SEG3 landfill: dark PU tote, context" },
+
+    { "img": "IMG_7930", "start": 0.3, "duration": 2.0, "note": "CLOSE: rack transition" },
+    { "img": "IMG_7921", "start": 0.2, "duration": 2.0, "note": "CLOSE: back to rack pan" },
+    { "img": "IMG_7936", "start": 0.3, "duration": 2.5, "note": "CLOSE: end on a good bag (BCBG)" }
+  ],
+
+  "headline": {
+    "title": "CLASS IS IN SESSION",
+    "subtitle": "what to actually buy at the thrift",
+    "cta": "luxurycatalog.com",
+    "ctaAt": "luxurycatalog"
+  },
+
+  "trim": { "startPhrase": "sit down" },
+
+  "cues": [
+    { "say": "the real one", "img": "chanel-255.jpg", "cutout": false, "label": "A real Chanel flap", "xPct": 72, "yPct": 33, "widthPct": 42, "hold": 3.5, "tilt": -3 }
+  ],
+
+  "callouts": [
+    { "say": "Guess tote", "text": "Resale est. $15–35 · Jul 2026", "hold": 2.6, "yPct": 62 },
+    { "say": "Steve Madden", "text": "Resale est. $10–22 · Jul 2026", "hold": 2.6, "yPct": 62 },
+    { "say": "Vera Bradley", "text": "Resale est. $18–35 · Jul 2026", "hold": 2.6, "yPct": 62 },
+    { "say": "BCBG", "text": "Resale est. $18–35 · Jul 2026", "hold": 2.6, "yPct": 62 },
+    { "say": "four ninety-nine", "text": "$4.99 · Goodwill tag", "hold": 2.8, "yPct": 62 },
+    { "say": "do not resell", "text": "Dupes: resale ~$0 · Jul 2026", "hold": 2.6, "yPct": 62 }
+  ]
+}
