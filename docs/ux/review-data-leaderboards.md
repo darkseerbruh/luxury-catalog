@@ -10,10 +10,13 @@ bag-page leaderboards, data-viz, and a contribution loop. Pairs with
 `rating` 1-5 · `worth_it` boolean · `occasion` *(free text)* · `durability_rating`
 1-5 · `title`/`body` free text.
 
-**Multi-axis votes (`0012_bag_axis_votes.sql`, HUMAN-GATED, not yet applied):**
+**Multi-axis votes (`0012_bag_axis_votes.sql`, APPLIED — verified live 2026-07-08:
+`bag_axis_vote` exists and holds data; `<AxisVotes>` renders on every bag page):**
 Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars":
 `build_quality, everyday_wearability, holds_value, roomy_vs_compact, comfort,
-versatility, worth_the_price`.
+versatility, worth_the_price`. Votable subset (opinion-only) lives in `src/lib/axes.ts`;
+`holds_value` + `worth_the_price` stay excluded (see correction below). Owners can now
+also set these axes inline from the closet-add review sheet, not just the bag page.
 
 ## Correction to the 0012 axis vocabulary (decided 2026-06-23)
 
@@ -94,8 +97,10 @@ invented ranking. All numbers labeled and dated.
 
 ## Build dependencies / sequence
 
-1. **Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
-   `worth_the_price` vs review `worth_it`. (Edit the migration; it's not yet applied.)
+1. ~~**Fix the `0012` axis enum before applying it:** drop `holds_value`, dedupe
+   `worth_the_price` vs review `worth_it`.~~ RESOLVED: 0012 is applied with the full
+   enum; the exclusion is enforced at the APP layer (`src/lib/axes.ts` `AXES`/`isAxis`),
+   not by editing the migration. No DB enum change was made.
 2. ~~**New migration:** convert `review.occasion` free text → enum (+ backfill).~~
    **DONE** — `0028_review_occasion_enum.sql` + `src/lib/occasions.ts`.
 3. ~~**Leaderboard queries:** aggregate per board, resilient reads (empty until data),
