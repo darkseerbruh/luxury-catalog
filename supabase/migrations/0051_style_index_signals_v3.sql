@@ -13,6 +13,12 @@
 -- Platform labels are normalised (lower-case, spaces stripped) so "The RealReal" /
 -- "TheRealReal" and "ebay" / "eBay" each count once. Null-platform rows are ignored for
 -- the source count (they carry no provenance).
+--
+-- Adding a column to the RETURNS TABLE changes the function's return type, which
+-- CREATE OR REPLACE cannot do (SQLSTATE 42P13). Drop first, then recreate. The grant
+-- below restores anon/authenticated execute after the recreate.
+
+drop function if exists style_index_signals();
 
 create or replace function style_index_signals()
 returns table (
