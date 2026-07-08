@@ -4,6 +4,7 @@ import { BagImage } from "@/components/BagImage";
 import StandingGlyph from "@/components/StandingGlyph";
 import { getLcIndex, whyNote } from "@/lib/lc-index";
 import { getVariantImages } from "@/lib/queries";
+import { SITE_URL } from "@/lib/geo";
 
 export const metadata: Metadata = {
   title: "The LC Index — where every bag stands in the market",
@@ -29,8 +30,35 @@ export default async function RankingsPage() {
   const variantIds = rows.map((r) => r.repVariantId).filter((id): id is number => id != null);
   const images = variantIds.length > 0 ? await getVariantImages(variantIds) : {};
 
+  // Citable ranked asset for AI search / Google (docs/marketing-plan.md, GEO). One
+  // ItemList entry per ranked bag, in rank order, each pointing at its bag page.
+  const itemListJsonLd =
+    rows.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "The LC Index",
+          description:
+            "Handbag styles ranked by market standing: resale price, trade volume, and scarcity, weighted by house tier.",
+          numberOfItems: rows.length,
+          itemListOrder: "https://schema.org/ItemListOrderDescending",
+          itemListElement: rows.map((r) => ({
+            "@type": "ListItem",
+            position: r.rank,
+            name: `${r.brandName} ${r.styleName}`,
+            url: r.repVariantId != null ? `${SITE_URL}/bag/${r.repVariantId}` : undefined,
+          })),
+        }
+      : null;
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
+      {itemListJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
       <header className="mb-6">
         <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">The LC Index</p>
         <h1 className="font-serif text-3xl text-foreground">Where every bag stands</h1>

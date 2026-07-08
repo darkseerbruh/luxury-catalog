@@ -3,6 +3,7 @@ import {
   computeLcIndex,
   percentileOf,
   boardAround,
+  whyNote,
   LC_INDEX_MIN_N,
   type StyleSignals,
   type BrandTier,
@@ -153,6 +154,37 @@ describe("boardAround", () => {
   it("returns an empty board for an unranked style", () => {
     const data = computeLcIndex(canonSignals());
     expect(boardAround(data, "price", 999)).toEqual([]);
+  });
+});
+
+// ── whyNote (row caption) ───────────────────────────────────────────────────────
+
+describe("whyNote", () => {
+  it("names the leading signal as a market fact, honest at both ends", () => {
+    expect(whyNote({ lead: "price", pricePct: 90, tradePct: 0, scarcityPct: 0 })).toBe(
+      "Priced above most of the catalog",
+    );
+    expect(whyNote({ lead: "price", pricePct: 20, tradePct: 0, scarcityPct: 0 })).toBe(
+      "An accessible price",
+    );
+    expect(whyNote({ lead: "trade", pricePct: 0, tradePct: 88, scarcityPct: 0 })).toBe(
+      "One of the most-traded bags we track",
+    );
+    expect(whyNote({ lead: "scarcity", pricePct: 0, tradePct: 0, scarcityPct: 95 })).toBe(
+      "Rarely listed right now",
+    );
+    expect(whyNote({ lead: "scarcity", pricePct: 0, tradePct: 0, scarcityPct: 10 })).toBe(
+      "Widely available today",
+    );
+  });
+
+  it("never uses an em dash or a verdict word", () => {
+    const canon = computeLcIndex(canonSignals());
+    for (const r of canon.ranked) {
+      const note = whyNote(r);
+      expect(note).not.toContain("—");
+      expect(note.toLowerCase()).not.toMatch(/\bbest\b|\bworth it\b/);
+    }
   });
 });
 
