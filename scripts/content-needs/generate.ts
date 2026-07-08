@@ -14,6 +14,8 @@ import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync";
 import {
+  DECISIONS,
+  GENERIC_SHOTLIST,
   NEEDS,
   PARTIAL_CREDIT_FACTOR,
   PLAN,
@@ -142,6 +144,22 @@ function main(): void {
   }
   L.push("");
 
+  // ---- Shoot list: what's in hand + the next pull ----
+  const shotListNeeds = [...inHand.map((x) => x.need)];
+  if (classiqueQueue[0]) shotListNeeds.push(classiqueQueue[0].need);
+  if (shotListNeeds.length > 0) {
+    L.push("## Shoot list — in hand + next up");
+    L.push("");
+    L.push("_Spec: square, >=1000px source, plain even-lit background. The primary is both the bag-page hero and the cutout source._");
+    L.push("");
+    for (const need of shotListNeeds) {
+      L.push(`**${need.brand} ${need.style}**`);
+      for (const s of GENERIC_SHOTLIST) L.push(`- ${s}`);
+      for (const s of need.detailShots ?? []) L.push(`- ${s}`);
+      L.push("");
+    }
+  }
+
   // ---- Monthly plan ----
   L.push("## Your monthly plan (1 Couture + 1 Classique)");
   L.push("");
@@ -216,6 +234,13 @@ function main(): void {
     L.push(`| ${c.brand} ${c.style} | ${spec} | ${c.source} | ${c.date || "—"} |`);
   }
   L.push("");
+
+  if (DECISIONS.length > 0) {
+    L.push("## Decisions (logged)");
+    L.push("");
+    for (const d of DECISIONS) L.push(`- **${d.date}:** ${d.text}`);
+    L.push("");
+  }
 
   L.push("---");
   L.push("");

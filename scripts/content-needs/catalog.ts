@@ -85,9 +85,33 @@ export interface Need {
    *  Neverfull everyone pictures is Monogram/Damier canvas, not Epi). A capture
    *  of an off-marquee variant is logged, but the need stays open. */
   preferredSpec?: RegExp;
+  /** Bag-specific close-ups to capture, on top of GENERIC_SHOTLIST. */
+  detailShots?: string[];
   note?: string;
   provenance: string;
 }
+
+/** Every bag gets these frames; detailShots add the bag-specific close-ups.
+ *  Spec: square, >=1000px source, plain even-lit background (crops to the 4:3
+ *  bag-page slot and background-removes cleanly for a cutout). */
+export const GENERIC_SHOTLIST: string[] = [
+  "Primary: front-on, upright, full bag on a plain even-lit background (this is the hero image AND the cutout source)",
+  "Base / underside (feeds the has_protective_feet attribute)",
+  "Interior: lining + any date/serial stamp (first-party authentication marker we own outright)",
+];
+
+export interface Decision {
+  text: string;
+  date: string;
+}
+
+/** Logged decisions so a future session does not re-litigate them. Rendered in the doc. */
+export const DECISIONS: Decision[] = [
+  {
+    text: "Skip Réservé/Privée (~$800/mo, Birkin/Kelly) for image needs. Both are already shot via the Fashionphile showroom, so a rental fills ~0 image gap; the tier costs ~6x a Classique month and is invite-only. Revisit ONLY for a deliberate content/experience play or a validated Vivrelle affiliate recoup, never to fill a bag page.",
+    date: "2026-07-08",
+  },
+];
 
 export const NEEDS: Need[] = [
   {
@@ -113,6 +137,7 @@ export const NEEDS: Need[] = [
     surfaces: ["slideshow_cutout", "seeded_auth", "protective_feet", "about_cutout"],
     tier: "Couture",
     preferredSpec: /black/i,
+    detailShots: ["CC turn-lock clasp, close", "Caviar texture + diamond quilting", "Leather-woven chain strap"],
     note: "Marquee = black caviar + gold hardware (the iridescent detail shot on file is off-marquee).",
     provenance: "queries HERO_STYLES #3; slideshow PAIRS; seed-hero-styles; seed-protective-feet; AboutStory chanel-flap",
   },
@@ -122,6 +147,7 @@ export const NEEDS: Need[] = [
     homepageRank: 4,
     surfaces: ["slideshow_cutout", "about_cutout"],
     tier: "Classique",
+    detailShots: ["Padlock + zip pull", "Monogram canvas + Vachetta trim", "Rolled handle + heat stamp"],
     provenance: "queries HERO_STYLES #4; slideshow PAIRS lv-speedy; AboutStory lv-speedy",
   },
   {
@@ -140,6 +166,7 @@ export const NEEDS: Need[] = [
     surfaces: ["slideshow_cutout", "protective_feet"],
     tier: "Classique",
     preferredSpec: /monogram|damier/i,
+    detailShots: ["Epi grain texture", "Side lacing / cinch", "LV heat stamp", "Interior + removable pouch"],
     note: "Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one.",
     provenance: "queries HERO_STYLES #6; slideshow PAIRS neverfull; seed-protective-feet",
   },

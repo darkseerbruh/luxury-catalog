@@ -13,6 +13,35 @@
 | Chanel Classic Flap · homepage #3 | compare-slideshow cutout (wired, empty), seeded auth-research hero, protective-feet hero, About-page cutout | Couture (~$239/mo) | 3.0 (×0.25 variant covered) | IN HAND — closes this hero. Marquee = black caviar + gold hardware (the iridescent detail shot on file is off-marquee). |
 | Louis Vuitton Neverfull · homepage #6 | compare-slideshow cutout (wired, empty), protective-feet hero | Classique (~$139/mo) | 1.5 (×0.25 variant covered) | IN HAND (off-marquee variant) — shoot it; the marquee spec stays a low-priority future pull. Marquee = Monogram/Damier canvas. Epi is a separate variant slot, not the iconic one. |
 
+## Shoot list — in hand + next up
+
+_Spec: square, >=1000px source, plain even-lit background. The primary is both the bag-page hero and the cutout source._
+
+**Chanel Classic Flap**
+- Primary: front-on, upright, full bag on a plain even-lit background (this is the hero image AND the cutout source)
+- Base / underside (feeds the has_protective_feet attribute)
+- Interior: lining + any date/serial stamp (first-party authentication marker we own outright)
+- CC turn-lock clasp, close
+- Caviar texture + diamond quilting
+- Leather-woven chain strap
+
+**Louis Vuitton Neverfull**
+- Primary: front-on, upright, full bag on a plain even-lit background (this is the hero image AND the cutout source)
+- Base / underside (feeds the has_protective_feet attribute)
+- Interior: lining + any date/serial stamp (first-party authentication marker we own outright)
+- Epi grain texture
+- Side lacing / cinch
+- LV heat stamp
+- Interior + removable pouch
+
+**Louis Vuitton Speedy**
+- Primary: front-on, upright, full bag on a plain even-lit background (this is the hero image AND the cutout source)
+- Base / underside (feeds the has_protective_feet attribute)
+- Interior: lining + any date/serial stamp (first-party authentication marker we own outright)
+- Padlock + zip pull
+- Monogram canvas + Vachetta trim
+- Rolled handle + heat stamp
+
 ## Your monthly plan (1 Couture + 1 Classique)
 
 | Pull | Couture slot | Classique slot |
@@ -98,6 +127,10 @@
 | Louis Vuitton Twist | cream epi | owned | — |
 | Prada Re-Edition 1995 | brushed leather | Vivrelle | 2024-03-18 |
 | Saint Laurent LouLou | black | owned | — |
+
+## Decisions (logged)
+
+- **2026-07-08:** Skip Réservé/Privée (~$800/mo, Birkin/Kelly) for image needs. Both are already shot via the Fashionphile showroom, so a rental fills ~0 image gap; the tier costs ~6x a Classique month and is invite-only. Revisit ONLY for a deliberate content/experience play or a validated Vivrelle affiliate recoup, never to fill a bag page.
 
 ---
 
