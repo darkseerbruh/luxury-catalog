@@ -126,6 +126,9 @@ async function fetchFeedFiles(): Promise<string[]> {
 const CJ_GRAPHQL_ENDPOINT = "https://ads.api.cj.com/query";
 // Publisher company id (CID). Non-secret (rides in URLs); overridable via env.
 const CJ_CID = process.env.CJ_CID || "7997608";
+// The Luxury Closet's CJ advertiser id. WITHOUT this the query returns CJ's
+// ENTIRE network (266M products) and mislabels them as TLC — always scope it.
+const TLC_ADVERTISER_ID = process.env.CJ_ADVERTISER_ID || "5312449";
 
 interface ApiAmount { amount: string | null; currency: string | null }
 interface ApiProduct {
@@ -143,8 +146,8 @@ async function fetchApiRows(): Promise<Record<string, string>[]> {
   if (!token) throw new Error("CJ_API_TOKEN not set");
   // `resultList` is the Product INTERFACE; the shopping fields live on the
   // concrete `Shopping` type, so select them via an inline fragment.
-  const query = `query($cid: ID!, $limit: Int, $page: String) {
-    products(companyId: $cid, currency: "USD", limit: $limit, page: $page) {
+  const query = `query($cid: ID!, $partner: ID!, $limit: Int, $page: String) {
+    products(companyId: $cid, partnerIds: $partner, currency: "USD", limit: $limit, page: $page) {
       totalCount count nextPage
       resultList {
         ... on Shopping {
@@ -162,7 +165,7 @@ async function fetchApiRows(): Promise<Record<string, string>[]> {
     const res = await fetch(CJ_GRAPHQL_ENDPOINT, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ query, variables: { cid: CJ_CID, limit: 1000, page } }),
+      body: JSON.stringify({ query, variables: { cid: CJ_CID, partner: TLC_ADVERTISER_ID, limit: 1000, page } }),
     });
     if (!res.ok) throw new Error(`CJ API HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const json = (await res.json()) as {
