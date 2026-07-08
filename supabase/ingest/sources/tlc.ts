@@ -41,19 +41,52 @@ function decodeFeed(buf: Uint8Array): string[] {
   return out;
 }
 
-/** Load the feed from a local file (CJ_FEED_FILE, for a one-time verify against a
- * downloaded export) or over HTTP (CJ_FEED_URL + basic auth). Local file wins. */
+/** Pull the newest Shopping feed archive over SFTP (CJ's stable transport). Lists
+ * the account directory, prefers a USD file, picks the newest, downloads + decodes.
+ * Credentials come from env; the runner (CI/scheduler) provides them so the
+ * password is never handled in the app. */
+async function fetchViaSftp(): Promise<string[]> {
+  const host = process.env.CJ_FEED_HOST!;
+  const user = process.env.CJ_FEED_USER;
+  const pass = process.env.CJ_FEED_PASS;
+  const dir = process.env.CJ_FEED_PATH || ".";
+  if (!user || !pass) throw new Error("CJ SFTP creds missing (CJ_FEED_USER / CJ_FEED_PASS)");
+  const Client = (await import("ssh2-sftp-client")).default;
+  const sftp = new Client();
+  await sftp.connect({ host, port: 22, username: user, password: pass });
+  try {
+    const list = await sftp.list(dir);
+    const zips = list.filter((f) => f.type === "-" && /shopping.*\.zip$/i.test(f.name));
+    if (!zips.length) throw new Error(`CJ SFTP: no shopping*.zip in ${dir}`);
+    // Prefer a USD-named file, then newest by modify time.
+    zips.sort((a, b) => {
+      const usd = (n: string) => (/usd/i.test(n) ? 1 : 0);
+      return usd(b.name) - usd(a.name) || b.modifyTime - a.modifyTime;
+    });
+    const pick = zips[0];
+    const remote = dir === "." ? pick.name : `${dir.replace(/\/$/, "")}/${pick.name}`;
+    const buf = (await sftp.get(remote)) as Buffer;
+    console.log(`[tlc] sftp picked ${pick.name} (${buf.length} bytes) from ${host}:${dir}`);
+    return decodeFeed(new Uint8Array(buf));
+  } finally {
+    await sftp.end();
+  }
+}
+
+/** Load the feed, in priority order: a local file (CJ_FEED_FILE, one-time verify),
+ * SFTP (CJ_FEED_HOST, the automated transport), or HTTP (CJ_FEED_URL, legacy). */
 async function fetchFeedFiles(): Promise<string[]> {
   const file = process.env.CJ_FEED_FILE;
   if (file) {
     const fs = await import("fs");
     return decodeFeed(new Uint8Array(fs.readFileSync(file)));
   }
+  if (process.env.CJ_FEED_HOST) return fetchViaSftp();
   const url = process.env.CJ_FEED_URL;
   const user = process.env.CJ_FEED_USER;
   const pass = process.env.CJ_FEED_PASS;
   if (!url || !user || !pass) {
-    throw new Error("CJ feed env missing: set CJ_FEED_FILE (local) or CJ_FEED_URL + CJ_FEED_USER + CJ_FEED_PASS");
+    throw new Error("CJ feed env missing: set CJ_FEED_FILE (local), CJ_FEED_HOST (SFTP), or CJ_FEED_URL + CJ_FEED_USER + CJ_FEED_PASS");
   }
   const res = await fetch(url, {
     headers: { Authorization: "Basic " + Buffer.from(`${user}:${pass}`).toString("base64") },
