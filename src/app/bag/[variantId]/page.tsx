@@ -370,9 +370,13 @@ export default async function BagDetailPage({
         }
       : null;
   const heroImage = images[v.variantId] ?? null;
-  // No first-party photo? Stand in a live for-sale listing's photo (framed as
-  // "available now", linked to buy) rather than a bare placeholder.
-  const heroListing = heroImage ? null : await getHeroListing(v.variantId);
+  // When the only photo is an affiliate LISTING photo (no first-party / UGC
+  // shot), show it framed as "available now" + linked to buy, never as our own
+  // editorial hero. getVariantImages already surfaces the affiliate photo
+  // (theluxurycloset.com) catalog-wide; on the bag hero we upgrade it to a
+  // for-sale card. A genuine first-party photo stays a plain hero.
+  const heroIsAffiliate = !heroImage || heroImage.includes("theluxurycloset.com");
+  const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId) : null;
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)
       ? heroImage
