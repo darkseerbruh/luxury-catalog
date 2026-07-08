@@ -223,6 +223,11 @@ async function run(): Promise<void> {
 
   let skippedUnknownModel = 0;
   let skippedOutOfStock = 0;
+  // Coverage telemetry: which known-brand, in-stock bags we FAIL to name, so the
+  // MODELS dictionary can be extended from evidence (not guesses). SLGs/shoes are
+  // excluded by canonicalModel already, so this skews toward real missed models.
+  const unmatchedByBrand = new Map<string, number>();
+  const unmatchedSamples = new Map<string, string>();
   const observations: PriceObservation[] = [];
   for (const l of listings) {
     if (l.availability !== "in_stock") {
@@ -235,6 +240,10 @@ async function run(): Promise<void> {
     const model = brand ? canonicalModel(brand, l.title) : null;
     if (!brand || !model) {
       skippedUnknownModel++;
+      if (brand) {
+        unmatchedByBrand.set(brand, (unmatchedByBrand.get(brand) ?? 0) + 1);
+        if (!unmatchedSamples.has(brand)) unmatchedSamples.set(brand, l.title);
+      }
       continue; // only bags we can name — never guess a style
     }
     observations.push({
@@ -271,11 +280,18 @@ async function run(): Promise<void> {
   const snapFile = path.join(snapDir, "tlc-live.json");
   fs.writeFileSync(snapFile, JSON.stringify(liveRefs));
 
+  const topUnmatched = [...unmatchedByBrand.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([b, n]) => `        ${n}× ${b} — e.g. "${unmatchedSamples.get(b)}"`)
+    .join("\n");
+
   console.log(
     `[tlc] feed rows(USD)=${listings.length} · emitted=${observations.length} · kept=${kept} · dropped=${dropped}\n` +
       `      skipped: unknown-model=${skippedUnknownModel}, out-of-stock=${skippedOutOfStock}\n` +
       `      live snapshot: ${liveRefs.length} refs -> ${snapFile}\n` +
-      `      -> ${file}\n      next: npm run load:prices -- tlc --write`
+      `      -> ${file}\n      next: npm run load:prices -- tlc --write\n` +
+      `      TOP UNMATCHED known-brand bags (extend MODELS from these):\n${topUnmatched}`
   );
 }
 
