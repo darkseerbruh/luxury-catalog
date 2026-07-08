@@ -2,11 +2,11 @@
 
 **Goal:** real in-stock TLC listings (photo + live price + tracked buy link) on bag pages via the CJ affiliate feed. "Learn here, buy there." Strongest lever on the buyer-affiliate stream. Outreach/terms: [affiliate-outreach-log.md](affiliate-outreach-log.md).
 
-## Status (2026-07-08) — LIVE, one verification pending
+## Status (2026-07-08) — LIVE + EARNING (complete)
 - ✅ **Feed → API → match → `price_history`: WORKING + LIVE.** A daily GitHub Action pulls TLC's catalog, matches bags, and loads them. Last run: **213,619 products fetched → 15,969 recognised bags → 15,876 matched to variants → ~5,342 distinct live listings** in `price_history`. Verified all hosts = `theluxurycloset.com`.
 - ✅ **Drives real data on bag pages.** e.g. the Bottega Cassette page went from a bare stub to a **+206% resale trend ($420→$1,286, 115 sales)** with TLC asking prices dated today.
 - ✅ **Attribution built + verified** (see §Attribution).
-- 🟡 **PENDING:** confirm the clickable "For sale right now" buy cards render TLC with the **wrapped** CJ link on prod. Blocked tonight by (a) Vercel deploy of the affiliate wrapper not yet propagated (prod still shows 0 `anrdoezrs`), and (b) local `getListingsForVariant` can't be tested — the `.env.local` anon key is truncated (47 chars). Re-check after the deploy lands.
+- ✅ **DONE:** the "For sale right now" rail renders TLC listings with **CJ-tracked buy links** (verified live: a wrapped link on www redirects to the product with `cjevent`). Two fixes got it there: (1) production was pinned to an old build — promoted via `vercel --prod`; (2) `getListingsForVariant` hit the **PostgREST 1000-row cap** once TLC pushed hot styles past 1000 price rows, so the target variant's offers were truncated — now fetched variant-scoped. ~80 tracked buy links/page.
 
 ## Transport — SFTP is DEAD, the CJ GraphQL API is the transport
 - ❌ **CJ SFTP (datatransfer.cj.com) is unusable:** the server offers ONLY `ssh-dss` host keys (verified from its KEXINIT). DSA is removed from OpenSSH 10.x and Node `ssh2`, so no modern client can connect. Do not retry SFTP.
