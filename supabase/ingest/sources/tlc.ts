@@ -141,10 +141,17 @@ interface ApiProduct {
 async function fetchApiRows(): Promise<Record<string, string>[]> {
   const token = process.env.CJ_API_TOKEN;
   if (!token) throw new Error("CJ_API_TOKEN not set");
+  // `resultList` is the Product INTERFACE; the shopping fields live on the
+  // concrete `Shopping` type, so select them via an inline fragment.
   const query = `query($cid: ID!, $limit: Int, $page: String) {
     products(companyId: $cid, currency: "USD", limit: $limit, page: $page) {
       totalCount count nextPage
-      resultList { id title brand availability condition color material link imageLink price { amount currency } salePrice { amount currency } }
+      resultList {
+        ... on Shopping {
+          id title brand availability condition color material link imageLink
+          price { amount currency } salePrice { amount currency }
+        }
+      }
     }
   }`;
   const rows: Record<string, string>[] = [];
