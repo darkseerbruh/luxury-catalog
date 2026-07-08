@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { getShopProducts, type ShopProduct, type ShopSort } from "@/lib/listings";
 import { getVariantImages, getStyleHeroImages } from "@/lib/queries";
+import { getStyleRanks } from "@/lib/lc-index";
 import { BagImage } from "@/components/BagImage";
+import IndexRankLink from "@/components/IndexRankLink";
 import { CompareToggle, CompareTray } from "@/components/CompareControls";
 import ShopControls from "./ShopControls";
 
@@ -94,6 +96,10 @@ export default async function ShopPage({
     }
   }
 
+  // LC Index rank per style (Concept C). Empty when the index is unavailable, so
+  // the inline link simply does not render.
+  const ranks = await getStyleRanks(result.products.map((p) => p.styleId));
+
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-5 py-10">
       <header>
@@ -134,19 +140,25 @@ export default async function ShopPage({
               // level: the bag page's for-sale rail and the homepage Best deals row.
               // p.dealBand still drives the deals-only filter + best-deal sort.
               return (
-                <li key={p.key} className="relative">
-                  {/* Sibling of the card link (never nested inside it) so the
-                      compare set can be assembled straight from the grid. */}
+                <li key={p.key} className="group relative">
+                  {/* Stretched-link card: the bag Link fills the tile (z-0), the
+                      content sits above it but passes clicks through (pointer-events-
+                      none), and the two real interactive bits — CompareToggle and the
+                      Index rank link — opt back in with pointer-events-auto. This keeps
+                      the rank a genuine sibling link, never an anchor nested in an
+                      anchor. */}
                   <CompareToggle
                     variantId={p.variantId}
                     label={bagLabel(p)}
                     compact
-                    className="absolute right-2 top-2 z-10"
+                    className="absolute right-2 top-2 z-20"
                   />
                   <Link
                     href={`/bag/${p.variantId}#for-sale`}
-                    className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:border-gold"
-                  >
+                    aria-label={bagLabel(p)}
+                    className="absolute inset-0 z-0 rounded-2xl"
+                  />
+                  <div className="pointer-events-none flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-colors group-hover:border-gold">
                     <div className="relative">
                       <BagImage
                         imageUrl={imageUrl}
@@ -157,6 +169,12 @@ export default async function ShopPage({
                     </div>
                     <div className="flex flex-1 flex-col px-3 py-3">
                       <p className="truncate font-serif text-foreground">{bagLabel(p)}</p>
+                      {ranks[p.styleId] != null && (
+                        <IndexRankLink
+                          rank={ranks[p.styleId]}
+                          className="pointer-events-auto relative z-10 mt-0.5 text-xs"
+                        />
+                      )}
                       {subLabel(p) && (
                         <p className="truncate text-xs text-muted">{subLabel(p)}</p>
                       )}
@@ -168,7 +186,7 @@ export default async function ShopPage({
                         {p.sellerCount} {p.sellerCount === 1 ? "seller" : "sellers"}
                       </p>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               );
             })}

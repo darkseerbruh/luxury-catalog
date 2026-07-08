@@ -299,6 +299,18 @@ export async function getStyleStanding(styleId: number): Promise<Standing | null
   return data.ranked.find((r) => r.styleId === styleId) ?? null;
 }
 
+/** Bulk styleId → rank lookup for card surfaces (Concept C, the inline rank link). */
+export async function getStyleRanks(styleIds: number[]): Promise<Record<number, number>> {
+  if (styleIds.length === 0) return {};
+  const data = await getLcIndex();
+  const want = new Set(styleIds);
+  const out: Record<number, number> = {};
+  for (const r of data.ranked) {
+    if (r.rank != null && want.has(r.styleId)) out[r.styleId] = r.rank;
+  }
+  return out;
+}
+
 /** The self-contained view model the StandingCard renders. */
 export interface StandingView extends Standing {
   boards: {

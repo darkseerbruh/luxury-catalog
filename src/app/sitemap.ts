@@ -23,6 +23,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/coveted-closets`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${SITE_URL}/found`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    // The LC Index — a citable ranked asset; recomputed monthly (docs/ux/lc-index-spec.md).
+    { url: `${SITE_URL}/rankings`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${SITE_URL}/rankings/how-we-rank`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   const { variantIds, brandIds } = await getSitemapTargets();
