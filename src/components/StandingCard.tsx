@@ -11,6 +11,7 @@
 
 import Link from "next/link";
 import type { StandingView, StandingBoardRow } from "@/lib/lc-index";
+import MovementPill from "./MovementPill";
 
 const TIER_LABEL: Record<string, string> = {
   "ultra-luxury": "Ultra-luxury",
@@ -75,9 +76,12 @@ export default function StandingCard({ view }: { view: StandingView }) {
         {/* Left: the rank as the headline, with what/why/trust beats. */}
         <div className="flex flex-col border-border md:border-r md:pr-6">
           <div className="font-serif text-6xl leading-none text-gold-soft tabular-nums">#{rank}</div>
-          <p className="mb-4 mt-1 text-[13.5px] text-foreground">
+          <p className="mt-1 text-[13.5px] text-foreground">
             of <b className="font-semibold text-gold-soft">{totalLabel} styles</b> in the LC Index
           </p>
+          <div className="mb-4 mt-1.5">
+            <MovementPill rank={rank} previousRank={view.previousRank} />
+          </div>
           <ul className="flex flex-col gap-2 text-xs leading-relaxed text-muted">
             <li className="grid grid-cols-[18px_1fr] gap-2">
               <span className="text-center text-gold">✦</span>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BagImage } from "@/components/BagImage";
 import StandingGlyph from "@/components/StandingGlyph";
+import MovementPill from "@/components/MovementPill";
 import { getLcIndex, whyNote } from "@/lib/lc-index";
 import { getVariantImages } from "@/lib/queries";
 import { SITE_URL } from "@/lib/geo";
@@ -107,10 +108,13 @@ export default async function RankingsPage() {
                       />
                     </Link>
                     <div className="min-w-0">
-                      <Link href={href} className="block truncate text-[15px] text-foreground hover:text-gold-soft">
-                        <span className="font-semibold">{r.styleName}</span>
-                        <span className="text-muted"> · {r.brandName}</span>
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <Link href={href} className="min-w-0 truncate text-[15px] text-foreground hover:text-gold-soft">
+                          <span className="font-semibold">{r.styleName}</span>
+                          <span className="text-muted"> · {r.brandName}</span>
+                        </Link>
+                        <MovementPill rank={r.rank} previousRank={r.previousRank} />
+                      </div>
                       <p className="mt-1 truncate text-[11.5px] text-muted">{whyNote(r)}</p>
                     </div>
                     <StandingGlyph

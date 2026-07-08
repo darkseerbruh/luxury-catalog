@@ -60,6 +60,29 @@ export interface Standing {
   scarcityPct: number;
   /** The single signal driving this rank most (biggest weighted contribution). */
   lead: "price" | "trade" | "scarcity";
+  /** This style's rank in the most recent prior-month snapshot, if any. */
+  previousRank?: number | null;
+}
+
+/** The movement pill: how a rank changed since last month. Null = no prior data. */
+export interface RankMovement {
+  dir: "up" | "down" | "flat";
+  /** Positive magnitude of the change (0 when flat). */
+  delta: number;
+  label: string;
+}
+
+/**
+ * PURE: describe a rank's month-over-month movement. A smaller rank is better, so
+ * a drop in rank number is an "up" move. Returns null when there is no prior rank,
+ * so the pill never invents motion on a style we have not tracked across a month.
+ */
+export function movementLabel(rank: number, previousRank: number | null | undefined): RankMovement | null {
+  if (previousRank == null) return null;
+  const delta = previousRank - rank;
+  if (delta > 0) return { dir: "up", delta, label: `Up ${delta} this month` };
+  if (delta < 0) return { dir: "down", delta: -delta, label: `Down ${-delta} this month` };
+  return { dir: "flat", delta: 0, label: "Steady" };
 }
 
 export const LC_INDEX_WEIGHTS = {
@@ -286,9 +309,58 @@ async function loadStyleSignals(): Promise<StyleSignals[]> {
   }
 }
 
+/** First day of the current month, as an ISO date string (YYYY-MM-01). */
+export function currentMonthStart(now: Date = new Date()): string {
+  const y = now.getUTCFullYear();
+  const m = String(now.getUTCMonth() + 1).padStart(2, "0");
+  return `${y}-${m}-01`;
+}
+
+/**
+ * Prior-month rank per style, from the most recent snapshot strictly BEFORE this
+ * month. Powers the movement pill. Resilient: {} when the table is absent (pre-0049)
+ * or empty, so no pill renders.
+ */
+async function loadPreviousRanks(): Promise<Record<number, number>> {
+  try {
+    const supa = getSupabase();
+    const before = currentMonthStart();
+    const { data: latest, error: mErr } = await supa
+      .from("lc_index_snapshot")
+      .select("captured_month")
+      .lt("captured_month", before)
+      .order("captured_month", { ascending: false })
+      .limit(1);
+    if (mErr || !Array.isArray(latest) || latest.length === 0) return {};
+    const month = (latest[0] as { captured_month: string }).captured_month;
+    const { data, error } = await supa
+      .from("lc_index_snapshot")
+      .select("style_id, rank")
+      .eq("captured_month", month);
+    if (error || !Array.isArray(data)) return {};
+    const out: Record<number, number> = {};
+    for (const r of data as { style_id: number | string; rank: number | string }[]) {
+      out[Number(r.style_id)] = Number(r.rank);
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 /** The whole computed index, cached hourly (the underlying signals move slowly). */
 export const getLcIndex = unstable_cache(
-  async (): Promise<LcIndexData> => computeLcIndex(await loadStyleSignals()),
+  async (): Promise<LcIndexData> => {
+    const [signals, previous] = await Promise.all([loadStyleSignals(), loadPreviousRanks()]);
+    const data = computeLcIndex(signals);
+    if (Object.keys(previous).length > 0) {
+      for (const r of data.ranked) {
+        const prev = previous[r.styleId];
+        if (prev != null) r.previousRank = prev;
+      }
+    }
+    return data;
+  },
   ["lc-index"],
   { revalidate: 3600 },
 );

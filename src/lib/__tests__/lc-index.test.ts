@@ -4,6 +4,7 @@ import {
   percentileOf,
   boardAround,
   whyNote,
+  movementLabel,
   LC_INDEX_MIN_N,
   type StyleSignals,
   type BrandTier,
@@ -185,6 +186,33 @@ describe("whyNote", () => {
       expect(note).not.toContain("—");
       expect(note.toLowerCase()).not.toMatch(/\bbest\b|\bworth it\b/);
     }
+  });
+});
+
+// ── movementLabel (the pill) ────────────────────────────────────────────────────
+
+describe("movementLabel", () => {
+  it("reads a drop in rank number as an upward move", () => {
+    const m = movementLabel(2, 4)!; // was #4, now #2
+    expect(m.dir).toBe("up");
+    expect(m.delta).toBe(2);
+    expect(m.label).toBe("Up 2 this month");
+  });
+
+  it("reads a rise in rank number as a downward move", () => {
+    const m = movementLabel(7, 5)!; // was #5, now #7
+    expect(m.dir).toBe("down");
+    expect(m.delta).toBe(2);
+    expect(m.label).toBe("Down 2 this month");
+  });
+
+  it("is steady when unchanged", () => {
+    expect(movementLabel(3, 3)).toEqual({ dir: "flat", delta: 0, label: "Steady" });
+  });
+
+  it("returns null when there is no prior rank, so it never invents motion", () => {
+    expect(movementLabel(3, null)).toBeNull();
+    expect(movementLabel(3, undefined)).toBeNull();
   });
 });
 

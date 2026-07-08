@@ -84,8 +84,10 @@ Bags / Houses toggle: same layout at brand level (a house's rank blends its styl
   for a market-standing read; revisit if a per-variant index is ever wanted.
 - **StandingCard neighbor rows are not links yet** (needs styleId → rep-variant resolution per
   neighbor). The Index-page rows DO link to bags.
-- **Movement pill deferred:** needs a stored monthly rank history (a `lc_index_snapshot` table).
-  Until two cycles exist, no pill renders, per "never invent motion".
+- ~~Movement pill deferred~~ **BUILT 2026-07-08:** `lc_index_snapshot` table (migration `0049`) +
+  `/api/cron/lc-index-snapshot` (monthly, 1st @ 07:00) + `movementLabel` (pure, tested) + a
+  `MovementPill` shown on the card and Index rows. Compares the live rank to the most recent
+  PRIOR-month snapshot, so it renders nothing until a prior month exists (never invents motion).
 
 ## Open, before / around ship
 - ✅ **Migration `0048` APPLIED to prod 2026-07-08** (db-migrate run 27 on the branch; log:
@@ -96,9 +98,12 @@ Bags / Houses toggle: same layout at brand level (a house's rank blends its styl
   gut. Needs DB access this build container lacks (no anon key + proxy-blocked).
 - **Nav placement for `/rankings`** (owner call, nav is protected): its own top-level door vs
   under an existing one. The page exists and is linked from the bag-page card, not yet from nav.
-- **Concept C, the inline rank link:** approved, not yet built. Wire `getStyleStanding` into the
-  shop / search / closet cards as "· #N in the Index".
-- **Movement pill:** add the monthly snapshot table + a recompute step when the index goes live.
+- ✅ **Concept C, the inline rank link:** BUILT on the **shop grid** (`IndexRankLink`, stretched-link
+  card so it stays a real sibling link). Still to wire on search results, recs, and closet cards.
+- **Apply migration `0049`** (owner-gated) + run `/api/cron/lc-index-snapshot` once to capture the
+  first month, so movement pills start next month. Needs `CRON_SECRET` + service role (already set
+  for the other crons).
+- **GEO:** `/rankings` + `/rankings/how-we-rank` are in the sitemap; `/rankings` emits ItemList JSON-LD.
 
 ## Metrics it moves
 - StandingCard + glyph cross-links → **pages per session**, taps into bag pages (buy/sell moment).
