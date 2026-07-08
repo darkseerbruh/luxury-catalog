@@ -245,6 +245,40 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
 price_history from Fashionphile and now power the /data "Gold or silver / colors / leathers"
 sections. Only production_year (7%) + condition (13%) remain sparse.*
 
+### Discovered-backlog PROMOTION pass — DONE 2026-07-08 (ops/catalog-promote-0708)
+*Turned banked market listings into clean canonical catalog pages without polluting.*
+- ✅ **Dictionary strengthened** (`src/lib/ingest/model-normalize.ts`): +~130 evidence-verified
+  real bag models across 16 houses + 5 previously-empty brands (Chloé, Goyard, Givenchy, Miu
+  Miu, The Row). Match rate on the 41.9k discovered backlog **4% → 11%** (+3.3k rows resolve to
+  canonical). Materials/patterns/silhouettes deliberately excluded (never-invent); dropped
+  Balenciaga "Arena" (a leather, not a model).
+- ✅ **Promotion hardened**: `promote-safe --create-new` now resolves a cluster to its confident
+  canonical model and CREATES the curated style when none exists (bag-gated via `canonicalModel`
+  — never forks a raw title), landing the asking comps in `price_history` (closes the
+  stranded-prices gap). `promote-discovered` `?? c.styleGuess` junk-fork fallback removed.
+- ✅ **Ran** `normalize:discovered --write` (3,991 style_guess → canonical) → `promote-safe
+  --create-new --write` min=10 then min=5 → `reconcile-promoted-dupes --write` → `summary:refresh`.
+- ✅ **RESULT**: styles 800 → **851** (+51 clean new: LV Lockme/Musette/Pallas/Boîte Chapeau/
+  Palm Springs/Batignolles/Luco/Grand Palais/Passy/Pont-Neuf/All-In/Belem/Berri/Estrela/
+  Kensington/Manhattan, Chanel Souplissimo, Gucci Abbey/Sukey/Britt/Hysteria/Pelham, Fendi Kan
+  I/Kan U/2Jours/Dotcom, Prada Diagramme/Promenade, The Row Banana, Hermès Plume/Double Sens,
+  Balenciaga Bel Air/Monaco/Everyday, Celine Nino, SL Muse/Downtown/Cassandra/Puffer, Dior Miss
+  Dior/Malice, Loewe Barcelona, Givenchy). price_history +2,169; **3,344 discovered rows promoted**
+  (12,487 promoted total, 38,519 still banked). signals rows 607 → 660. Multi-source styles:
+  225/660 ≥2 sources, 93 ≥3 (Palm Springs now 3: FP+TRR+TLC). **Zero new duplicate style-clusters**
+  (canonical dup-clusters unchanged at 94); 10 true orphans (pre-existing).
+- ⬜ **FOLLOW-UP (owner-gated / risk-laden, flagged separate)**: ~220 PRE-EXISTING redundant
+  style rows from the older breadth-load (verbose one-off titles like "Hermes Black Togo …
+  Birkin 35 Bag" alongside clean "Birkin"). NOT bulk-mergeable — mixed with INTENTIONAL
+  hand-managed silhouette buckets (Gucci Ophidia Shoulder/Crossbody/Tote, Chanel CC Filigree
+  Vanity Case, Celine Triomphe Oval) per the 2026-06-30 collision lesson. Needs a reviewed
+  style-level merge (re-point variants+price_history, delete), not a token collapse.
+- ⬜ **NEW-STYLE editorial**: the 51 new styles are bare style+variant+price (no hero image /
+  description / spectrum placement yet) — layer content later per full-spectrum goal.
+- ⬜ **Still owner-gated (task part 1)**: FULL TheRealReal pull needs a logged-in Claude-in-Chrome
+  session (bot-blocked to fetch); FULL eBay pull burns Firecrawl credits. 10k TRR rows already
+  banked were mined by this pass. Broad re-capture stays hers.
+
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
 - ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").
   Full-set median **$2,273** vs our current icon-skewed **$4,045** — the representativeness fix is real.
