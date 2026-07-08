@@ -25,6 +25,34 @@
  * exported function, unit-tested against in-memory fixtures (no DB).
  */
 import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
+import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+/**
+ * Tier for a NEWLY created brand (existing brands keep their tier — we never
+ * overwrite). The catalog is full-spectrum, so contemporary/accessible houses are
+ * welcome; they default to 'mid'. The DB enum is coarse (thrift | mid |
+ * ultra-luxury), so the luxury houses collapse to 'ultra-luxury' and everything
+ * else new lands 'mid'. Most true-luxury houses already exist, so this mainly
+ * tiers the contemporary newcomers (Michael Kors, Tory Burch, D&G) as 'mid'.
+ */
+const LUXURY_HOUSES = new Set(
+  [
+    "hermès", "hermes", "chanel", "louis vuitton", "dior", "christian dior", "gucci",
+    "bottega veneta", "celine", "céline", "saint laurent", "prada", "fendi", "loewe",
+    "goyard", "the row", "chloé", "chloe", "balenciaga", "valentino", "delvaux", "moynat",
+  ].map((s) => norm(s)),
+);
+function tierForNewBrand(name: string): "thrift" | "mid" | "ultra-luxury" {
+  return LUXURY_HOUSES.has(norm(name)) ? "ultra-luxury" : "mid";
+}
+
+/** A cluster is promotable to the catalog only if it names a real BAG model (the
+ * dictionary resolves it). Guards against a recurring garment/shoe title ever
+ * becoming a style — the catalogue is every BAG, not every fashion item. */
+function bagModelName(c: { brandGuess: string; styleGuess: string }): string | null {
+  return canonicalModel(c.brandGuess, c.styleGuess);
+}
 
 /**
  * A row read from `discovered_listing` (subset we need for promotion). Mirrors the
@@ -180,10 +208,10 @@ function planFor(c: DiscoveredCluster): string[] {
 async function main() {
   const flags = parseFlags(process.argv.slice(2));
 
-  // Lazy DB handle: created ONLY for --write, so importing this module for tests
-  // never needs .env.local. Mirrors supabase/seed/lib/client.ts (override:true so
-  // a local .env.local wins over ambient placeholder vars).
-  async function loadRows(): Promise<DiscoveredRow[]> {
+  // Lazy DB handle: created ONLY when we actually touch the DB, so importing this
+  // module for tests never needs .env.local. Mirrors supabase/seed/lib/client.ts
+  // (override:true so a local .env.local wins over ambient placeholder vars).
+  async function connect() {
     const { createClient } = await import("@supabase/supabase-js");
     const dotenv = await import("dotenv");
     const path = await import("path");
@@ -193,7 +221,9 @@ async function main() {
     if (!url || !serviceKey) {
       throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local");
     }
-    const supabase = createClient(url, serviceKey, { auth: { persistSession: false } });
+    return createClient(url, serviceKey, { auth: { persistSession: false } });
+  }
+  async function loadRows(supabase: Awaited<ReturnType<typeof connect>>): Promise<DiscoveredRow[]> {
     // Paginate: a plain select caps at 1000 rows, which would silently cluster on a
     // fraction of the table. Page through with .range() until exhausted.
     const out: DiscoveredRow[] = [];
@@ -217,9 +247,11 @@ async function main() {
   // The DB read is itself deferred behind loadRows() (needs env). In dry-run we
   // still need the rows to report — but a missing-env / missing-table failure must
   // not pretend success, so surface it.
+  let supabase: Awaited<ReturnType<typeof connect>>;
   let rows: DiscoveredRow[];
   try {
-    rows = await loadRows();
+    supabase = await connect();
+    rows = await loadRows(supabase);
   } catch (e) {
     console.error(`Could not read discovered_listing: ${(e as Error).message}`);
     console.error(`(This pass needs .env.local + an applied migration 0026. The grouping logic is unit-tested without a DB.)`);
@@ -228,40 +260,151 @@ async function main() {
 
   console.log(`Read ${rows.length} unpromoted discovered listing(s).`);
   const clusters = groupDiscovered(rows);
-  const promotable = clusters.filter((c) => c.count >= flags.minCount);
-  console.log(`${clusters.length} distinct model cluster(s); ${promotable.length} promotable (≥ ${flags.minCount}).`);
+  const atThreshold = clusters.filter((c) => c.count >= flags.minCount);
+  // BAG GATE: only promote clusters that name a real bag model. A recurring
+  // garment/shoe title (from the FP/TRR catch-all capture) must never become a
+  // catalog style. The clean canonical model name becomes the style name.
+  const promotable = atThreshold.filter((c) => bagModelName(c) != null);
+  const excludedNonBag = atThreshold.length - promotable.length;
+  console.log(
+    `${clusters.length} distinct cluster(s); ${atThreshold.length} ≥ ${flags.minCount}; ` +
+      `${promotable.length} are bags (promotable), ${excludedNonBag} non-bag excluded.`,
+  );
 
   if (promotable.length === 0) {
-    console.log("Nothing to promote yet — keep capturing.");
+    console.log("No promotable bag clusters yet — keep capturing (run normalize:discovered first).");
     return;
   }
 
   console.table(
     promotable.map((c) => ({
       brand: c.brandGuess || "(none)",
-      style: c.styleGuess || "(none)",
+      style: bagModelName(c) ?? c.styleGuess,
       size: c.sizeLabel ?? "(none)",
       count: c.count,
       price: priceRange(c),
     }))
   );
 
-  console.log("\nPromotion plan:");
-  for (const c of promotable) {
-    for (const line of planFor(c)) console.log(line);
-  }
-
   if (!flags.write) {
-    console.log(`\nDRY RUN — re-run with --write to persist the above.`);
+    console.log("\nPromotion plan (dry run):");
+    for (const c of promotable) for (const line of planFor(c)) console.log(line);
+    console.log(`\nDRY RUN — re-run with --write to persist ${promotable.length} bag cluster(s).`);
     return;
   }
 
-  // --write path is intentionally a guarded stub: it cannot run in the authoring
-  // worktree (no DB), and promoting a model into the CLEAN curated catalog is an
-  // owner-gated decision (AGENTS.md: additive + idempotent, no unattended writes).
-  // Wire the real find-or-create + re-point here once the owner approves a batch.
-  console.error("\n--write is not yet wired to persist (owner-gated catalog change). Review the dry-run plan first.");
-  process.exit(1);
+  // --- WRITE: find-or-create brand -> style -> variant, then re-point the cluster's
+  // discovered rows. Additive + idempotent (AGENTS.md): existing rows are matched by
+  // normalized name and reused, never duplicated or mutated; a re-run promotes only
+  // what's still unpromoted. New brands get a tier; existing brands keep theirs.
+  const created = await persistPromotions(supabase, rows, promotable);
+  console.log(
+    `\n✅ promoted ${promotable.length} cluster(s): ` +
+      `+${created.brands} brand(s), +${created.styles} style(s), +${created.variants} variant(s); ` +
+      `re-pointed ${created.repointed} discovered row(s).`,
+  );
+}
+
+/** Re-derive each unpromoted row's cluster key (mirrors groupDiscovered) so we can
+ * re-point a cluster's member rows after it's promoted. */
+function rowsByClusterKey(rows: DiscoveredRow[]): Map<string, number[]> {
+  const out = new Map<string, number[]>();
+  for (const r of rows) {
+    if (r.promoted_variant_id != null) continue;
+    const brand = (r.brand_guess ?? "").trim();
+    const style = (r.style_guess ?? "").trim();
+    if (!brand && !style) continue;
+    const key = `${keyPart(brand ? normalizeDesigner(brand) : "")}|${keyPart(style)}|${keyPart(r.size_label?.trim() || null)}`;
+    if (r.discovered_id == null) continue;
+    (out.get(key) ?? out.set(key, []).get(key)!).push(r.discovered_id);
+  }
+  return out;
+}
+
+async function persistPromotions(
+  supabase: SupabaseClient,
+  rows: DiscoveredRow[],
+  clusters: DiscoveredCluster[],
+): Promise<{ brands: number; styles: number; variants: number; repointed: number }> {
+  const tally = { brands: 0, styles: 0, variants: 0, repointed: 0 };
+  const byKey = rowsByClusterKey(rows);
+
+  // Preload brands once; find-or-create keeps the cache warm across clusters.
+  const { data: brandRows } = await supabase.from("brand").select("brand_id, name");
+  const brandByNorm = new Map<string, number>(
+    ((brandRows ?? []) as { brand_id: number; name: string }[]).map((b) => [norm(normalizeDesigner(b.name)), b.brand_id]),
+  );
+
+  for (const c of clusters) {
+    const styleName = bagModelName(c) ?? c.styleGuess; // clean canonical model name
+    const brandName = canonicalBrand(c.brandGuess) || c.brandGuess;
+    const brandKey = norm(normalizeDesigner(brandName));
+
+    // 1) brand (find-or-create; new brands get a tier, existing keep theirs)
+    let brandId = c.matchedBrandId ?? brandByNorm.get(brandKey) ?? null;
+    if (brandId == null) {
+      const ins = await supabase.from("brand").insert({ name: brandName, tier: tierForNewBrand(brandName) }).select("brand_id").single();
+      if (ins.error) {
+        const ref = await supabase.from("brand").select("brand_id").eq("name", brandName).maybeSingle();
+        brandId = ref.data?.brand_id ?? null;
+      } else {
+        brandId = ins.data.brand_id;
+        tally.brands++;
+      }
+      if (brandId != null) brandByNorm.set(brandKey, brandId);
+    }
+    if (brandId == null) {
+      console.warn(`  ⚠ skip: could not resolve/create brand "${brandName}"`);
+      continue;
+    }
+
+    // 2) style (find by normalized name within brand, else create)
+    let styleId = c.matchedStyleId ?? null;
+    if (styleId == null) {
+      const { data: styleRows } = await supabase.from("style").select("style_id, name").eq("brand_id", brandId);
+      styleId = ((styleRows ?? []) as { style_id: number; name: string }[]).find((s) => norm(s.name) === norm(styleName))?.style_id ?? null;
+    }
+    if (styleId == null) {
+      const ins = await supabase.from("style").insert({ brand_id: brandId, name: styleName }).select("style_id").single();
+      if (ins.error) {
+        const ref = await supabase.from("style").select("style_id").eq("brand_id", brandId).eq("name", styleName).maybeSingle();
+        styleId = ref.data?.style_id ?? null;
+      } else {
+        styleId = ins.data.style_id;
+        tally.styles++;
+      }
+    }
+    if (styleId == null) {
+      console.warn(`  ⚠ skip: could not resolve/create style "${brandName} / ${styleName}"`);
+      continue;
+    }
+
+    // 3) variant (find by normalized size within style, else create)
+    const size = c.sizeLabel;
+    const { data: variantRows } = await supabase.from("variant").select("variant_id, size_label").eq("style_id", styleId);
+    let variantId =
+      ((variantRows ?? []) as { variant_id: number; size_label: string | null }[]).find((v) => norm(v.size_label) === norm(size ?? ""))?.variant_id ?? null;
+    if (variantId == null) {
+      const ins = await supabase.from("variant").insert({ style_id: styleId, size_label: size }).select("variant_id").single();
+      if (ins.error) {
+        console.warn(`  ⚠ skip variant for "${brandName} / ${styleName} / ${size ?? "(no size)"}": ${ins.error.message}`);
+        continue;
+      }
+      variantId = ins.data.variant_id;
+      tally.variants++;
+    }
+
+    // 4) re-point this cluster's discovered rows to the resolved variant
+    const ids = byKey.get(c.key) ?? [];
+    if (ids.length) {
+      const { error } = await supabase
+        .from("discovered_listing")
+        .update({ promoted_variant_id: variantId, promoted_at: new Date().toISOString() })
+        .in("discovered_id", ids);
+      if (!error) tally.repointed += ids.length;
+    }
+  }
+  return tally;
 }
 
 // Run only as a CLI (keep importable for tests — no top-level DB/env access).
