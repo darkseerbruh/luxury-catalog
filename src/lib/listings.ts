@@ -45,6 +45,9 @@ export interface Offer {
   hardwareColor: string | null;
   sourceUrl: string | null;
   observedOn: string | null;
+  /** Product photo for this listing (from listing_image), when the source feed
+   * carries one. Null for sources without photos, or pre-0047 migration. */
+  imageUrl: string | null;
   /** Null when the bag has too little recorded resale to rate honestly. */
   rating: DealRating | null;
 }
@@ -319,8 +322,28 @@ function toOffer(r: PriceRow, comps: SpecComp[]): Offer {
     hardwareColor: r.spec.hardwareColor,
     sourceUrl: r.sourceUrl,
     observedOn: r.observedOn,
+    imageUrl: null,
     rating: rateListing(r.price, r.spec, comps),
   };
+}
+
+/** Photos for a set of listing_refs, keyed by ref. Resilient: returns an empty
+ * map if listing_image isn't migrated yet (0047) so the rail never breaks. */
+async function fetchListingImages(refs: string[]): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  const unique = [...new Set(refs.filter(Boolean))];
+  if (unique.length === 0) return out;
+  try {
+    const { data, error } = await getSupabase()
+      .from("listing_image")
+      .select("listing_ref, image_url")
+      .in("listing_ref", unique);
+    if (error || !data) return out;
+    for (const r of data as { listing_ref: string; image_url: string }[]) out.set(r.listing_ref, r.image_url);
+  } catch {
+    /* table missing pre-migration — render photo-less */
+  }
+  return out;
 }
 
 /** Order offers: rated deals first (great → above), unrated last; ties by price asc. */
@@ -399,8 +422,12 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .filter((r) => !isRetail(r) && (sizeLabel == null || r.sizeLabel === sizeLabel))
       .map(specComp);
 
-    const offers = dedupeByListing(variantRows.filter((r) => isListed(r)))
-      .map((r) => toOffer(r, comps))
+    const listedRows = dedupeByListing(variantRows.filter((r) => isListed(r)));
+    const imagesByRef = await fetchListingImages(
+      listedRows.map((r) => r.listingRef).filter((x): x is string => !!x),
+    );
+    const offers = listedRows
+      .map((r) => ({ ...toOffer(r, comps), imageUrl: (r.listingRef && imagesByRef.get(r.listingRef)) || null }))
       .sort(compareOffers);
 
     return {

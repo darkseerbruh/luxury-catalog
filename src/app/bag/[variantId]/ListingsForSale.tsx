@@ -70,6 +70,17 @@ export default async function ListingsForSale({ variantId }: { variantId: number
     return (
       <li key={i} className="rounded-2xl border border-border bg-surface px-4 py-4">
         <div className="flex items-start justify-between gap-3">
+          {offer.imageUrl && (
+            /* Seller's product photo (display + link-back licensed while live).
+               Plain img: CSP allows https and this keeps the card zero-JS. */
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={offer.imageUrl}
+              alt={`${data.brandName} ${data.styleName} at ${offer.platformLabel}`}
+              loading="lazy"
+              className="h-16 w-16 shrink-0 rounded-lg border border-border object-cover"
+            />
+          )}
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap gap-1.5">
               {specChips(offer).map((c) => (
