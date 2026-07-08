@@ -6,6 +6,7 @@ import {
   whyNote,
   movementLabel,
   LC_INDEX_MIN_N,
+  LC_INDEX_MIN_SOURCES,
   type StyleSignals,
   type BrandTier,
 } from "../lc-index";
@@ -24,6 +25,7 @@ function sig(overrides: Partial<StyleSignals> = {}): StyleSignals {
     resaleMedian: overrides.resaleMedian ?? 1000,
     priceCount: overrides.priceCount ?? 100,
     liveCount: overrides.liveCount ?? 10,
+    sourceCount: overrides.sourceCount ?? 3,
     repVariantId: overrides.repVariantId ?? id,
     // apply real overrides last so the defaults above never clobber them
     ...overrides,
@@ -146,6 +148,34 @@ describe("n-gate", () => {
     ];
     const { unrankedStyleIds } = computeLcIndex(signals);
     expect(unrankedStyleIds).toEqual([2]);
+  });
+});
+
+// ── the source gate (independence, not just quantity) ───────────────────────────
+
+describe("source gate", () => {
+  it("requires at least two distinct sources to rank", () => {
+    expect(LC_INDEX_MIN_SOURCES).toBe(2);
+  });
+
+  it("unranks a single-source style even with plenty of prices (one merchant is not the market)", () => {
+    const signals = [
+      sig({ styleId: 1, resaleMedian: 5000, priceCount: 300, sourceCount: 3 }),
+      // A pricier, plentiful style, but every listing is from ONE reseller.
+      sig({ styleId: 2, resaleMedian: 9000, priceCount: 40, sourceCount: 1 }),
+    ];
+    const { ranked, unrankedStyleIds } = computeLcIndex(signals);
+    expect(ranked.map((r) => r.styleId)).toEqual([1]);
+    expect(unrankedStyleIds).toEqual([2]);
+  });
+
+  it("ranks a two-source style that clears the price floor", () => {
+    const signals = [
+      sig({ styleId: 1, resaleMedian: 5000, priceCount: LC_INDEX_MIN_N, sourceCount: LC_INDEX_MIN_SOURCES }),
+    ];
+    const { ranked, unrankedStyleIds } = computeLcIndex(signals);
+    expect(ranked.map((r) => r.styleId)).toEqual([1]);
+    expect(unrankedStyleIds).toEqual([]);
   });
 });
 

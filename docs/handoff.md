@@ -11,8 +11,10 @@
 - 📏 **Floor 8 → 20** (from the real deduped distribution): drops the thin contaminated styles (Kelly Pochette at 15) while keeping ~220 legit styles. Demand-first gate: prove market activity, THEN scarcity is measured among survivors.
 - ⚖️ **Scarcity stays inverted-live-count.** Tested sell-through pressure and rejected it: it ranked the **Birkin #11** behind fast movers like a Wallet on Chain (grails sell slowly precisely because they cost most). Weights unchanged.
 - ✍️ **Why-notes:** the repeated "Priced above most of the catalog" is gone; `whyNote` now writes one short line per bag from its own signal profile + house. **0 adjacent duplicates, 0 em-dash/verdict violations across all 222 rows.**
-- ✅ **Corrected real top 5:** Birkin, Kelly, Constance, Chanel 25, Classic Flap. Kelly Pochette now unranked. ("Coco Base Shopping Bag" at #6 is a **real** Chanel tote, 33 real Fashionphile listings, kept per the factuality bar.) Gate green: tsc, eslint, 668 tests, build.
-- ⬜ **YOUR TURN:** migration `0050` is **not yet applied** — it lands via the **db-migrate GitHub Action** (owner-gated). Once merged to `main`, run the Action, then reload `/rankings` on the live site and confirm Birkin sits #1. Until 0050 runs, prod still serves the v1 (contaminated) RPC even after this code deploys.
+- ✅ **Corrected real top 5:** Birkin, Kelly, Constance, Chanel 25, Classic Flap. Kelly Pochette now unranked. Gate green: tsc, eslint, 668 tests, build.
+- 🔗 **Source gate added (you flagged single-source styles).** ~33-42 listings all from ONE reseller (Coco Base Shopping Bag, Souplissimo) is one merchant's price, not the market's. Migration `0051` returns a distinct-source count; the engine now needs **≥ 2 platforms** to rank. Effect: 229 → 151 ranked, grail top unchanged, **Chanel 19 rises to #8**. (0050 + 0051 both applied 2026-07-08.)
+- 🧭 **Collection hole noted + queued:** the 1,000-vs-300 gap (Birkin/Kelly vs Chanel 19) is mostly real (two Hermès bags soak up ~43% of the house's resale volume) but partly a capture miss: the **Chanel 19 has zero RealReal** while the Classic Flap pulls 178 there. A targeted RealReal + eBay pull for undercounted mid-tier styles is queued (see task chip).
+- ⬜ **YOUR TURN:** reload `/rankings` on the live site once the code deploys (your manual `vercel --prod` promote) and confirm Birkin #1 with no single-source styles up top. The RPC (0050 + 0051) is already live and verified.
 
 ---
 

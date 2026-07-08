@@ -34,6 +34,8 @@ export interface StyleSignals {
   priceCount: number;
   /** Count of live for-sale listings right now = the scarcity source. */
   liveCount: number;
+  /** Distinct resale platforms the style has been seen on = evidence independence. */
+  sourceCount: number;
   /** A representative variant id for the style (photo + link target). */
   repVariantId: number | null;
 }
@@ -102,6 +104,16 @@ export const LC_INDEX_WEIGHTS = {
  * activity before scarcity is even measured among the survivors.
  */
 export const LC_INDEX_MIN_N = 20;
+
+/**
+ * A style must have been seen on at least this many distinct resale platforms to
+ * earn a rank. A market STANDING built on one merchant is that merchant's asking
+ * price, not the market's. Added 2026-07-08 after the owner flagged single-source
+ * styles (Coco Base Shopping Bag, Souplissimo Maxi Flap: ~33-42 listings, all
+ * Fashionphile) ranking too high. Independence, not just quantity: the demand-first
+ * gate now also requires the demand to have been seen by more than one market.
+ */
+export const LC_INDEX_MIN_SOURCES = 2;
 
 const TIER_RANK: Record<BrandTier, number> = {
   thrift: 1,
@@ -212,20 +224,19 @@ export interface LcIndexData {
 /**
  * PURE: turn raw per-style signals into ranked standings. No I/O.
  *
- * A style is ranked only if it has a resale median AND at least LC_INDEX_MIN_N
- * recorded prices. Percentiles are computed WITHIN the ranked set so the four
- * signals share one 0–100 scale before the weighted blend.
+ * A style is ranked only if it has a resale median, at least LC_INDEX_MIN_N
+ * recorded prices, AND at least LC_INDEX_MIN_SOURCES distinct platforms (so its
+ * standing is not one merchant's asking price). Percentiles are computed WITHIN
+ * the ranked set so the four signals share one 0–100 scale before the weighted blend.
  */
 export function computeLcIndex(signals: StyleSignals[]): LcIndexData {
   const names: Record<number, { styleName: string; brandName: string }> = {};
   for (const s of signals) names[s.styleId] = { styleName: s.styleName, brandName: s.brandName };
 
-  const eligible = signals.filter(
-    (s) => s.resaleMedian != null && s.priceCount >= LC_INDEX_MIN_N,
-  );
-  const unrankedStyleIds = signals
-    .filter((s) => !(s.resaleMedian != null && s.priceCount >= LC_INDEX_MIN_N))
-    .map((s) => s.styleId);
+  const isEligible = (s: StyleSignals) =>
+    s.resaleMedian != null && s.priceCount >= LC_INDEX_MIN_N && s.sourceCount >= LC_INDEX_MIN_SOURCES;
+  const eligible = signals.filter(isEligible);
+  const unrankedStyleIds = signals.filter((s) => !isEligible(s)).map((s) => s.styleId);
 
   const medians = eligible.map((s) => s.resaleMedian as number);
   const trades = eligible.map((s) => s.priceCount);
@@ -345,6 +356,7 @@ interface RawSignalRow {
   resale_median: number | string | null;
   price_count: number | string | null;
   live_count: number | string | null;
+  source_count?: number | string | null;
   rep_variant_id: number | string | null;
 }
 
@@ -367,6 +379,9 @@ async function loadStyleSignals(): Promise<StyleSignals[]> {
         resaleMedian: median != null && Number.isFinite(median) ? median : null,
         priceCount: Number(r.price_count ?? 0),
         liveCount: Number(r.live_count ?? 0),
+        // Missing on the pre-0051 RPC: default to the minimum so the source gate is a
+        // no-op until the migration lands (floor-only behaviour), never unranks everything.
+        sourceCount: r.source_count == null ? LC_INDEX_MIN_SOURCES : Number(r.source_count),
         repVariantId: r.rep_variant_id == null ? null : Number(r.rep_variant_id),
       };
     });

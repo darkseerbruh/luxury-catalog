@@ -126,6 +126,15 @@ Birkin is impossible) and thin styles ranked too high. Diagnosed against prod (t
 - **Floor 8 → 20.** From the deduped distribution (per-style median count ≈ 14). 20 clears the
   contaminated thin styles (Kelly Pochette at 15) with margin while keeping ~220 legitimate
   styles ranked.
+- **Source gate: ≥ 2 distinct platforms to rank (migration `0051`, `LC_INDEX_MIN_SOURCES`).**
+  The floor fixed quantity, not independence: 31% of ranked styles sat on a single reseller
+  (Coco Base Shopping Bag + Souplissimo Maxi Flap: ~33-42 listings, all Fashionphile). A market
+  standing built on one merchant is that merchant's asking price, not the market's. The v3 RPC
+  returns `source_count` (distinct normalised platforms among the deduped, dominant-currency
+  listings); the engine ranks a style only if it clears the price floor AND has been seen on ≥ 2
+  platforms. Effect: 229 → 151 ranked, the grail top is unchanged, and the Chanel 19 rises. The
+  engine degrades safely on the pre-0051 RPC (missing `source_count` → treated as passing, so the
+  gate is a no-op until the migration lands).
 - **Scarcity stays inverted-live-count.** We tried **sell-through pressure** (sold ÷ (sold+live))
   and rejected it on the data: it ranks the Birkin **#11**, behind cheap-but-fast movers like a
   Wallet on Chain, because grails sell slowly precisely because they cost the most. Inverted live
