@@ -19,7 +19,7 @@ import { getWear } from "@/lib/wear";
  * until then they are absent. Never invent a slot that has nowhere to write.
  */
 export interface ContributionSlot {
-  key: "photo" | "review" | "wears" | "carry" | "weight";
+  key: "photo" | "review" | "wears" | "carry" | "weight" | "fits";
   /** Short chip label — the ask. */
   label: string;
   /** One line saying what it is, in her voice. No jargon. */
@@ -75,6 +75,7 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
     wearAvailable: wear?.available ?? false,
     hasCarry: !!wear?.myCarry,
     hasWeight: !!wear?.myWeightFeel,
+    hasFits: !!wear?.myFitsNote,
   });
   const filled = slots.filter((s) => s.filled).length;
   return {
@@ -96,10 +97,11 @@ export function buildSlots(input: {
   hasReview: boolean;
   axisDone: number;
   axisTotal: number;
-  /** True once the 0046 `bag_wear` table exists — gates the carry/weight slots. */
+  /** True once the 0046 `bag_wear` table exists — gates the carry/weight/fits slots. */
   wearAvailable?: boolean;
   hasCarry?: boolean;
   hasWeight?: boolean;
+  hasFits?: boolean;
 }): ContributionSlot[] {
   const slots: ContributionSlot[] = [
     {
@@ -143,6 +145,13 @@ export function buildSlots(input: {
         hint: "Light, just right, or heavy in hand.",
         anchor: "#how-you-carry",
         filled: !!input.hasWeight,
+      },
+      {
+        key: "fits",
+        label: "Say what fits inside",
+        hint: "Phone, wallet, sunglasses, or a whole laptop.",
+        anchor: "#how-you-carry",
+        filled: !!input.hasFits,
       }
     );
   }

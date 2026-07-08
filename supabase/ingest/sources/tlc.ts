@@ -53,7 +53,33 @@ async function fetchViaSftp(): Promise<string[]> {
   if (!user || !pass) throw new Error("CJ SFTP creds missing (CJ_FEED_USER / CJ_FEED_PASS)");
   const Client = (await import("ssh2-sftp-client")).default;
   const sftp = new Client();
-  await sftp.connect({ host, port: 22, username: user, password: pass });
+  await sftp.connect({
+    host,
+    port: 22,
+    username: user,
+    password: pass,
+    // CJ's legacy-crypto handshake over the CI link can take longer than the 20s
+    // default ("Timed out while waiting for handshake"); give it room.
+    readyTimeout: 90000,
+    // CJ's server authenticates via keyboard-interactive, not plain password
+    // ("All configured authentication methods failed" otherwise). This makes
+    // ssh2 answer the interactive prompt with the same password.
+    tryKeyboard: true,
+    // CJ's datatransfer server offers legacy host-key + kex algorithms that
+    // modern ssh2 disables by default ("no matching host key format"). Re-enable
+    // the older ones so the handshake succeeds.
+    algorithms: {
+      serverHostKey: ["ssh-rsa", "rsa-sha2-512", "rsa-sha2-256", "ssh-dss", "ecdsa-sha2-nistp256", "ssh-ed25519"],
+      kex: [
+        "diffie-hellman-group14-sha1",
+        "diffie-hellman-group1-sha1",
+        "diffie-hellman-group-exchange-sha1",
+        "diffie-hellman-group14-sha256",
+        "diffie-hellman-group16-sha512",
+        "ecdh-sha2-nistp256",
+      ],
+    },
+  });
   try {
     const list = await sftp.list(dir);
     const zips = list.filter((f) => f.type === "-" && /shopping.*\.zip$/i.test(f.name));

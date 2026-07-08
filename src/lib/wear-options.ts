@@ -4,6 +4,9 @@
  * constraints; keep the three in sync (SQL, these constants, the type guards).
  */
 
+/** Max length of a "what fits inside" note. Matches the 0046 fits_note CHECK. */
+export const FITS_NOTE_MAX = 140;
+
 export const CARRY_OPTIONS = [
   { value: "hand", label: "By the handles" },
   { value: "shoulder", label: "On the shoulder" },

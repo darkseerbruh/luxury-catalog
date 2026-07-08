@@ -66,6 +66,10 @@ export const EVENTS = {
   correctionSubmitted: "correction_submitted",
   /** A user submitted a photo of a bag (UGC contribution). */
   photoSubmitted: "photo_submitted",
+  /** An open contribution slot was clicked from the "Have this in hand?" surface
+   *  (carries `slot` + `variant_id`) — the funnel-START signal for UGC. Completion
+   *  is measured directly from the review/vote/photo/wear rows it leads to. */
+  contributionSlotClicked: "contribution_slot_clicked",
   /** A user requested professional authentication — a marketplace-demand / lead signal. */
   authenticationRequested: "authentication_requested",
   /** A user raised their hand for the (not-yet-live) authentication service — fake-door demand. */

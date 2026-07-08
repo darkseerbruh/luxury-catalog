@@ -28,6 +28,11 @@ create table bag_wear (
   variant_id bigint not null references variant(variant_id) on delete cascade,
   carry text check (carry in ('hand', 'shoulder', 'crossbody')),
   weight_feel text check (weight_feel in ('light', 'just_right', 'heavy')),
+  -- A short, free "what actually fit inside" note (phone, wallet, laptop...).
+  -- Length-capped here and in the write action; kept as free text since
+  -- capacity is lived and open-ended. Measured dimensions stay catalog data
+  -- (Suggest an edit), never a per-user vote, per the "measurable = data" rule.
+  fits_note text check (fits_note is null or char_length(fits_note) <= 140),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (user_id, variant_id)

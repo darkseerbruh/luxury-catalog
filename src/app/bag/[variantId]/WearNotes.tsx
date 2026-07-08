@@ -27,6 +27,22 @@ export default async function WearNotes({ variantId }: { variantId: number }) {
         <LeaderLine lead="Most say it feels" tallies={wear.weight} total={wear.totalWeight} />
       </div>
 
+      {wear.fitsNotes.length > 0 && (
+        <div className="mt-4">
+          <p className="mb-2 text-sm font-medium text-foreground">What owners fit inside</p>
+          <ul className="flex flex-wrap gap-2">
+            {wear.fitsNotes.map((note, i) => (
+              <li
+                key={i}
+                className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-muted"
+              >
+                {note}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {!wear.signedIn ? (
         <p className="mt-4 text-sm text-muted">
           <a href="/login" className="text-gold hover:underline">
@@ -39,6 +55,7 @@ export default async function WearNotes({ variantId }: { variantId: number }) {
           variantId={variantId}
           initialCarry={wear.myCarry}
           initialWeight={wear.myWeightFeel}
+          initialFitsNote={wear.myFitsNote}
         />
       )}
     </section>
