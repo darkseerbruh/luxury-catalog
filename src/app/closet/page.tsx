@@ -107,6 +107,12 @@ export default async function ClosetPage() {
         <p className="mt-2 text-muted">
           The ones you want, the ones you have, the ones you used to. All in one place.
         </p>
+        <Link
+          href="/closet/add"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
+        >
+          + Add a bag
+        </Link>
       </header>
 
       {closet.length > 0 && (
