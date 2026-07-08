@@ -15,17 +15,26 @@
  */
 import { unzipSync, strFromU8 } from "fflate";
 import { parse } from "csv-parse/sync";
-import { parseTlcFeedRows } from "../../../src/lib/ingest/tlc-feed";
+import { parseTlcFeedRows, toHttps } from "../../../src/lib/ingest/tlc-feed";
 import { canonicalModel } from "../../../src/lib/ingest/model-normalize";
 import { writeObservations } from "../lib/landing";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 import * as dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env.local"), override: true });
 
 const PLATFORM = "The Luxury Closet";
 const SOURCE = "tlc";
+
+// Title looks like a handbag (for coverage telemetry only — NOT used for
+// matching, which stays on canonicalModel). Bag-ish word present, no footwear.
+const BAG_WORDS = /\b(bag|tote|clutch|crossbody|cross body|satchel|hobo|shoulder|backpack|bucket|saddle|flap|top handle|messenger|minaudiere|vanity|duffle|boston|camera)\b/i;
+const NOT_BAG_WORDS = /\b(sneaker|pump|sandal|mule|loafer|boot|espadrille|slide|heel|flat|wallet|cardholder|card holder|belt|scarf|sunglass|necklace|earring|bracelet|ring|watch|perfume|shoe)\b/i;
+function looksLikeBag(title: string): boolean {
+  return BAG_WORDS.test(title) && !NOT_BAG_WORDS.test(title);
+}
 
 /** Decode a feed payload (raw CSV/TXT or a .zip, detected by the PK magic bytes)
  * into each member's text. */
@@ -222,7 +231,20 @@ async function run(): Promise<void> {
 
   let skippedUnknownModel = 0;
   let skippedOutOfStock = 0;
+  // Coverage telemetry: which known-brand, in-stock bags we FAIL to name, so the
+  // MODELS dictionary can be extended from evidence (not guesses). SLGs/shoes are
+  // excluded by canonicalModel already, so this skews toward real missed models.
+  const unmatchedByBrand = new Map<string, number>();
+  const unmatchedSamples = new Map<string, string>();
   const observations: PriceObservation[] = [];
+  // Unknown-model BAGS (a bag we recognise as a bag but can't name from the MODELS
+  // dictionary). NOT noise: each is evidence of a bag we're missing or mis-mapping.
+  // Captured to discovered_listing (raw layer) via the discovered-only load instead
+  // of being dropped, so a promote pass can roll recurring models into the catalog.
+  const discoveredObs: PriceObservation[] = [];
+  // Per-listing photos (listing_ref -> https image), loaded into listing_image
+  // so the bag-page rail can show a picture next to each live offer.
+  const images: { listing_ref: string; image_url: string }[] = [];
   for (const l of listings) {
     if (l.availability !== "in_stock") {
       skippedOutOfStock++;
@@ -234,7 +256,36 @@ async function run(): Promise<void> {
     const model = brand ? canonicalModel(brand, l.title) : null;
     if (!brand || !model) {
       skippedUnknownModel++;
-      continue; // only bags we can name — never guess a style
+      // Telemetry counts only real missed BAGS (bag-worded title, no shoe/SLG
+      // word), so the "extend MODELS" signal isn't drowned out by the shoes,
+      // jewellery and wallets we correctly skip.
+      if (brand && looksLikeBag(l.title)) {
+        unmatchedByBrand.set(brand, (unmatchedByBrand.get(brand) ?? 0) + 1);
+        if (!unmatchedSamples.has(brand)) unmatchedSamples.set(brand, l.title);
+        // Capture, don't discard: affiliate data is priority evidence. The raw
+        // title rides as style_guess; the discovered-only load routes it straight
+        // to discovered_listing (never pickStyle'd, so no loose-match pollution).
+        discoveredObs.push({
+          brand,
+          style: l.title,
+          attrs: {
+            exterior_colorway: l.color,
+            exterior_material: l.material,
+            condition_detail: l.itemCondition,
+            listing_ref: l.externalId,
+          },
+          platform: PLATFORM,
+          price_type: "listed",
+          sale_price: price,
+          currency: "USD",
+          condition: null,
+          observed_on: observedOn,
+          source_url: l.clickUrl,
+          confidence: "low",
+          notes: "unmatched-model (dictionary miss) — captured for triage",
+        });
+      }
+      continue; // named bags -> price_history; unknown-model bags captured above
     }
     observations.push({
       brand,
@@ -257,13 +308,43 @@ async function run(): Promise<void> {
         ? `on sale from ${l.price}`
         : null,
     });
+    const img = toHttps(l.imageUrl);
+    if (img) images.push({ listing_ref: l.externalId, image_url: img });
   }
 
   const { file, kept, dropped } = writeObservations(SOURCE, observations);
+
+  // Unknown-model bags -> their own landing, loaded with --discovered-only so they
+  // land in discovered_listing (raw layer) for triage, never on a curated variant.
+  const disc = writeObservations(`${SOURCE}-discovered`, discoveredObs);
+
+  // Authoritative "still for sale" snapshot for reconcile-sold: the listing_refs
+  // of every in-stock bag in THIS run. Overwrite (not merge) so a ref that drops
+  // out = sold. reconcile-sold stamps stored TLC rows not in this set as sold.
+  const liveRefs = [...new Set(observations.map((o) => o.attrs.listing_ref).filter((r): r is string => !!r))];
+  const snapDir = path.resolve(__dirname, "../../../data/ingest/_raw");
+  fs.mkdirSync(snapDir, { recursive: true });
+  const snapFile = path.join(snapDir, "tlc-live.json");
+  fs.writeFileSync(snapFile, JSON.stringify(liveRefs));
+
+  // Per-listing photos for load-tlc-images.ts (loaded on --write runs only).
+  const imgFile = path.join(snapDir, "tlc-images.json");
+  fs.writeFileSync(imgFile, JSON.stringify(images));
+
+  const topUnmatched = [...unmatchedByBrand.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([b, n]) => `        ${n}× ${b} — e.g. "${unmatchedSamples.get(b)}"`)
+    .join("\n");
+
   console.log(
     `[tlc] feed rows(USD)=${listings.length} · emitted=${observations.length} · kept=${kept} · dropped=${dropped}\n` +
       `      skipped: unknown-model=${skippedUnknownModel}, out-of-stock=${skippedOutOfStock}\n` +
-      `      -> ${file}\n      next: npm run ingest:load -- --write`
+      `      live snapshot: ${liveRefs.length} refs -> ${snapFile}\n` +
+      `      unknown-model bags captured for triage: ${disc.kept} -> ${disc.file}\n` +
+      `      -> ${file}\n      next: npm run load:prices -- tlc --write` +
+      ` && npm run load:prices -- tlc-discovered --discovered-only --write\n` +
+      `      TOP UNMATCHED known-brand bags (extend MODELS from these):\n${topUnmatched}`
   );
 }
 

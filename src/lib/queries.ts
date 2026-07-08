@@ -851,6 +851,78 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
 }
 
 /**
+ * A live affiliate listing photo per variant (from `listing_image`, joined to the
+ * variant's for-sale `price_history` row by its (platform, listing_ref) key), for
+ * the given variant ids. Source-agnostic: The Luxury Closet is the only feed
+ * writing `listing_image` today, but any affiliate feed that populates it is picked
+ * up here automatically. For each variant the NEWEST live listing that actually has
+ * a photo wins. RESILIENT: returns {} on any error (e.g. pre-0047 listing_image
+ * table) so callers keep the placeholder.
+ */
+async function getAffiliateListingImages(
+  sb: ReturnType<typeof getSupabase>,
+  variantIds: number[],
+): Promise<Map<number, string>> {
+  const out = new Map<number, string>();
+  if (variantIds.length === 0) return out;
+  try {
+    // Live affiliate offers for these variants, newest first.
+    const { data: priceRows, error: pErr } = await sb
+      .from("price_history")
+      .select("variant_id, platform, listing_ref, listing_status, observed_on")
+      .in("variant_id", variantIds)
+      .eq("price_type", "listed")
+      .not("listing_ref", "is", null)
+      .order("observed_on", { ascending: false })
+      .limit(5000);
+    if (pErr || !priceRows) return out;
+
+    // Ordered candidate (platform, listing_ref) keys per variant, newest first —
+    // listing_image is keyed by BOTH, so match on the composite.
+    const candidatesByVariant = new Map<number, string[]>();
+    const allRefs = new Set<string>();
+    for (const r of priceRows as {
+      variant_id: number;
+      platform: string | null;
+      listing_ref: string | null;
+      listing_status: string | null;
+    }[]) {
+      if (!r.listing_ref || r.listing_status === "sold") continue;
+      const key = `${r.platform ?? ""}|${r.listing_ref}`;
+      const list = candidatesByVariant.get(r.variant_id) ?? [];
+      if (!list.includes(key)) list.push(key);
+      candidatesByVariant.set(r.variant_id, list);
+      allRefs.add(r.listing_ref);
+    }
+    if (allRefs.size === 0) return out;
+
+    const { data: imgRows, error: iErr } = await sb
+      .from("listing_image")
+      .select("platform, listing_ref, image_url")
+      .in("listing_ref", [...allRefs]);
+    if (iErr || !imgRows) return out;
+
+    const urlByKey = new Map<string, string>();
+    for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
+      if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
+    }
+    // Newest candidate listing that has a photo wins.
+    for (const [vid, keys] of candidatesByVariant) {
+      for (const key of keys) {
+        const url = urlByKey.get(key);
+        if (url) {
+          out.set(vid, url);
+          break;
+        }
+      }
+    }
+    return out;
+  } catch {
+    return out;
+  }
+}
+
+/**
  * Primary image URLs for a set of variants, keyed by variant id. RESILIENT: if the
  * `image_url` column doesn't exist yet (migration 0013 not applied) or the query
  * fails, it returns {} so callers fall back to the BagImage placeholder — it never
@@ -871,15 +943,28 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       if (r.image_url) map[r.variant_id] = r.image_url;
     }
 
-    // Backfill gaps with community photos so a contributed shot becomes the image
-    // the WHOLE catalog shows (grids, search, recs), not only the bag-page gallery.
-    // Featured wins over plain approved. Resilient: any error leaves the placeholder.
-    const missing = ids.filter((id) => !map[id]);
-    if (missing.length > 0) {
+    // Tier 2: a live affiliate listing photo (The Luxury Closet today; any feed
+    // that writes listing_image works). Preferred over community photos because
+    // affiliate feeds are studio-shot + consistently formatted; nearly every bag
+    // we list has a for-sale offer, so this covers most gaps. This is the image the
+    // WHOLE catalog shows (grids, search, recs, bag page — all read through here).
+    // Resilient: pre-0047 (no listing_image table) or any error leaves the placeholder.
+    const missingAffiliate = ids.filter((id) => !map[id]);
+    if (missingAffiliate.length > 0) {
+      const affiliate = await getAffiliateListingImages(sb, missingAffiliate);
+      for (const [vid, url] of affiliate) map[vid] = url;
+    }
+
+    // Tier 3 (last resort): a community-contributed photo. Lower quality + social-
+    // media style + inconsistently formatted, so it only fills what catalog and
+    // affiliate photos didn't — but it beats an empty placeholder. Featured wins
+    // over plain approved. Resilient: any error leaves the placeholder.
+    const missingCommunity = ids.filter((id) => !map[id]);
+    if (missingCommunity.length > 0) {
       const { data: photos } = await sb
         .from("bag_photo")
         .select("variant_id, storage_path, status")
-        .in("variant_id", missing)
+        .in("variant_id", missingCommunity)
         .in("status", ["approved", "featured"]);
       const best = new Map<number, { path: string; featured: boolean }>();
       for (const p of (photos ?? []) as { variant_id: number; storage_path: string; status: string }[]) {
@@ -890,6 +975,34 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       for (const [vid, { path }] of best) {
         map[vid] = sb.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
       }
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Style-level catalog hero images, keyed by style id: the first variant of the
+ * style that has a catalog `image_url`. Last-resort fallback for grids whose
+ * tile variant resolved no photo — a sibling colourway's photo beats the
+ * placeholder (the tile is the STYLE at a size; text already names the spec).
+ * RESILIENT: returns {} on any error.
+ */
+export async function getStyleHeroImages(styleIds: number[]): Promise<Record<number, string>> {
+  const ids = Array.from(new Set(styleIds.filter((n) => Number.isFinite(n))));
+  if (ids.length === 0) return {};
+  try {
+    const { data, error } = await getSupabase()
+      .from("variant")
+      .select("style_id, variant_id, image_url")
+      .in("style_id", ids)
+      .not("image_url", "is", null)
+      .order("variant_id", { ascending: true });
+    if (error) return {};
+    const map: Record<number, string> = {};
+    for (const r of (data ?? []) as { style_id: number; image_url: string | null }[]) {
+      if (r.image_url && !(r.style_id in map)) map[r.style_id] = r.image_url;
     }
     return map;
   } catch {

@@ -30,6 +30,7 @@ import TrackBagView from "./TrackBagView";
 import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
+import { getHeroListing } from "@/lib/listings";
 import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
 import StickyActionBar from "./StickyActionBar";
@@ -45,6 +46,8 @@ import BagStory, { type StoryMarketFact } from "./BagStory";
 import { getBagStory } from "@/lib/bag-stories";
 import SimilarBags from "./SimilarBags";
 import BagDNA from "./BagDNA";
+import StandingCard from "@/components/StandingCard";
+import { getStyleStandingView } from "@/lib/lc-index";
 import VariantSelector from "./VariantSelector";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
@@ -283,6 +286,10 @@ export default async function BagDetailPage({
   // read; renders only when there's real signal.
   const demand = await getVariantDemand(v.variantId);
 
+  // LC Index standing (docs/ux/lc-index-spec.md). Null when the style is unranked
+  // or migration 0048 is not yet applied, so the module simply does not render.
+  const standingView = await getStyleStandingView(v.style.styleId);
+
   // Fair Market Range — computed ONLY from recorded RESALE sales (no fabrication).
   // KBB "Fair Market Range, not a single price" + StockX "Last Sale". Exclude
   // retail/boutique/MSRP rows so the range reflects the secondary market, not the
@@ -369,6 +376,13 @@ export default async function BagDetailPage({
         }
       : null;
   const heroImage = images[v.variantId] ?? null;
+  // When the only photo is an affiliate LISTING photo (no first-party / UGC
+  // shot), show it framed as "available now" + linked to buy, never as our own
+  // editorial hero. getVariantImages already surfaces the affiliate photo
+  // (theluxurycloset.com) catalog-wide; on the bag hero we upgrade it to a
+  // for-sale card. A genuine first-party photo stays a plain hero.
+  const heroIsAffiliate = !heroImage || heroImage.includes("theluxurycloset.com");
+  const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId) : null;
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)
       ? heroImage
@@ -702,12 +716,40 @@ export default async function BagDetailPage({
           so the page reads as complete (never an AI-faked or unlicensed photo).
           Kept compact (capped width, not full-bleed) so the value summary and
           variant selector stay above the fold. */}
-      <BagImage
-        imageUrl={images[v.variantId]}
-        brand={v.brand.name}
-        alt={`${v.brand.name} ${v.style.name}`}
-        className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
-      />
+      {heroListing ? (
+        /* No first-party photo: a real live listing stands in, clearly framed as
+           for-sale (linked to buy, "available now" caption) — never passed off as
+           our own editorial shot. Drops back to the placeholder if it sells. */
+        <a
+          href={heroListing.buyUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow sponsored"
+          className="group relative mx-auto block aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-border"
+        >
+          <BagImage
+            imageUrl={heroListing.imageUrl}
+            brand={v.brand.name}
+            alt={`${v.brand.name} ${v.style.name} available at ${heroListing.platformLabel}`}
+            invite={false}
+            className="h-full w-full"
+          />
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-bg/90 to-transparent px-3 py-2">
+            <span className="text-[11px] uppercase tracking-wide text-gold-soft">
+              Available now · {heroListing.platformLabel}
+            </span>
+            <span className="font-serif text-sm text-foreground group-hover:text-gold">
+              {formatPrice(heroListing.price, "USD")} →
+            </span>
+          </span>
+        </a>
+      ) : (
+        <BagImage
+          imageUrl={images[v.variantId]}
+          brand={v.brand.name}
+          alt={`${v.brand.name} ${v.style.name}`}
+          className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
+        />
+      )}
 
       {/* Amazon-style variant selector — placed at the very top, right under the
           title. Each option links to its own indexable /bag/[id] page. */}
@@ -791,6 +833,15 @@ export default async function BagDetailPage({
           </div>
         </dl>
       </section>
+
+      {/* LC Index standing — where this bag ranks in the whole market, at the
+          decision point. Renders only when the style is ranked. */}
+      {standingView && (
+        <section aria-label="Market standing" className="rounded-2xl border border-border bg-surface p-5">
+          <h2 className="mb-4 font-serif text-lg text-foreground">Where it stands</h2>
+          <StandingCard view={standingView} />
+        </section>
+      )}
 
       {/* Decision cluster at the value moment: closet intent (want/have/had) +
           price watch + the Buy/Sell outbound CTAs — the monetization moments,
