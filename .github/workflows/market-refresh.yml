@@ -4,10 +4,17 @@ name: Refresh market listings (Fashionphile)
 # inventory and retires the listings we still show that the crawl no longer sees
 # (sold / pulled) — so the Shop reflects what's actually for sale, untouched by hand.
 #
-# SCOPE: this job ONLY retires sold listings; it does NOT load new prices. Loading
-# fresh prices / new bags stays the existing manual, curated pipeline (ingest -> raw
-# adapter -> load:prices) — bulk-loading the whole 20k catalogue nightly would flood
-# discovered_listing and isn't needed to keep sold status current.
+# SCOPE (updated 2026-07-08, owner directive "pull them all"): every run retires sold
+# listings; ONCE DAILY (the 05:xx UTC run) it also loads the WHOLE live catalogue's
+# prices — curated listings refresh their known styles, everything unmatched banks to
+# discovered_listing for promotion. The old "sold-only" scope is retired: we now ingest
+# the full market, not a hand-picked style list.
+#
+# GROWTH NOTE: a full load appends ~13.5k rows/day (each day's snapshot of a live
+# listing is a new row). The LC Index RPC dedupes by listing_ref (keeps the latest), so
+# medians stay honest, but price_history grows ~400k rows/month. The load is gated to
+# ONCE daily to bound this; tune the gate hour below, or add a prune of superseded
+# same-listing_ref observations if the table needs trimming.
 #
 # Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
 # Fashionphile is the only source crawlable headless in CI today; TheRealReal /
@@ -33,6 +40,10 @@ on:
         description: "Apply changes? false = dry run (crawl + report only, no DB writes)"
         required: false
         default: "true"
+      full_load:
+        description: "Load the full catalogue's prices this run? auto = only the daily 05:xx run; true = force now; false = sold-reconcile only"
+        required: false
+        default: "auto"
 
 # Never let two refreshes overlap (they touch the same listings).
 concurrency:
@@ -70,3 +81,23 @@ jobs:
           else
             npm run reconcile:sold -- --platform=fashionphile --snapshot="$SNAP"
           fi
+
+      - name: Load the full catalogue's prices (once daily)
+        env:
+          FULL_LOAD: ${{ github.event.inputs.full_load || 'auto' }}
+        run: |
+          HOUR=$(date -u +%H)
+          # auto = load only on the daily 05:xx run; true = force; false = skip.
+          if [ "$FULL_LOAD" = "false" ]; then echo "full_load=false — skipping full price load."; exit 0; fi
+          if [ "$FULL_LOAD" != "true" ] && [ "$HOUR" != "05" ]; then
+            echo "full_load=auto and hour=$HOUR UTC (not 05) — sold-reconcile only this run."; exit 0
+          fi
+          if [ "$WRITE" != "true" ]; then echo "Dry run — skipping DB writes for the full load."; exit 0; fi
+          echo "Loading the full live catalogue's prices..."
+          # The crawl above already wrote the raw dump. Curated listings -> known styles;
+          # the catch-all pass banks everything unmatched to discovered_listing.
+          npx tsx supabase/ingest/sources/fashionphile.ts --raw
+          npx tsx supabase/ingest/load-prices.ts fashionphile --write
+          npx tsx supabase/ingest/sources/fashionphile.ts --catch-all
+          npx tsx supabase/ingest/load-prices.ts fashionphile --discovered-only --write
+          npm run summary:refresh
