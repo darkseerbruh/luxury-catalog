@@ -146,7 +146,7 @@ async function fetchApiRows(): Promise<Record<string, string>[]> {
   if (!token) throw new Error("CJ_API_TOKEN not set");
   // `resultList` is the Product INTERFACE; the shopping fields live on the
   // concrete `Shopping` type, so select them via an inline fragment.
-  const query = `query($cid: ID!, $partner: ID!, $limit: Int, $page: String) {
+  const query = `query($cid: ID!, $partner: [ID!], $limit: Int, $page: String) {
     products(companyId: $cid, partnerIds: $partner, currency: "USD", limit: $limit, page: $page) {
       totalCount count nextPage
       resultList {
@@ -165,7 +165,7 @@ async function fetchApiRows(): Promise<Record<string, string>[]> {
     const res = await fetch(CJ_GRAPHQL_ENDPOINT, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ query, variables: { cid: CJ_CID, partner: TLC_ADVERTISER_ID, limit: 1000, page } }),
+      body: JSON.stringify({ query, variables: { cid: CJ_CID, partner: [TLC_ADVERTISER_ID], limit: 1000, page } }),
     });
     if (!res.ok) throw new Error(`CJ API HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const json = (await res.json()) as {
