@@ -1,4 +1,5 @@
 import { getContributionSlots } from "@/lib/contribution-slots";
+import SlotChip from "./SlotChip";
 
 /**
  * "Have this in hand?" — the contribution entry surface (locked copy 2026-07-07,
@@ -55,28 +56,14 @@ export default async function ContributionSlots({ variantId }: { variantId: numb
       <ul className="mt-4 flex flex-col gap-3">
         {open.map((slot) => (
           <li key={slot.key}>
-            <a
-              href={slot.anchor}
-              className="group flex items-start gap-3 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-gold"
-            >
-              <span
-                aria-hidden
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border text-muted group-hover:border-gold group-hover:text-gold"
-              >
-                +
-              </span>
-              <span className="min-w-0">
-                <span className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="font-medium text-foreground">{slot.label}</span>
-                  {slot.sub && slot.sub.done > 0 && (
-                    <span className="text-xs text-muted">
-                      {slot.sub.done} of {slot.sub.total} so far
-                    </span>
-                  )}
-                </span>
-                <span className="mt-0.5 block text-sm text-muted">{slot.hint}</span>
-              </span>
-            </a>
+            <SlotChip
+              variantId={variantId}
+              slotKey={slot.key}
+              label={slot.label}
+              hint={slot.hint}
+              anchor={slot.anchor}
+              sub={slot.sub}
+            />
           </li>
         ))}
       </ul>

@@ -3,6 +3,13 @@
 
 ---
 
+## TL;DR — Bag-page contribution slots: "Have this in hand?" (2026-07-08, on `main`)
+
+**The "give us your stuff" surface for bag pages, all 3 phases BUILT + landed.** A gap-aware banner (`ContributionSlots.tsx` + `SlotChip.tsx`) reads what the signed-in user already gave for a bag and shows only the OPEN slots, each one tap/photo, with an "added X of Y" pull and a thank-you when done. Locked copy (owner-approved 2026-07-07): headline *"Have this in hand? Show us how it really carries."* + sub *"Takes a second. Add what you've got. Skip the rest."* Spec + status: `docs/ux/review-data-leaderboards.md` (Build status 2026-07-07).
+- **Phase 1 LIVE now** (no migration): photo / review / axis-bars slots, anchored to the existing controls.
+- **Phases 2+3 BUILT but DARK until `0046_bag_wear.sql` is applied:** carry + weight-feel taps + a short "what fits inside" note on new table `bag_wear`. Resilient: `getWear` returns `available:false` when the table is absent, so the page is unchanged pre-migration and lights up after. **YOUR TURN: apply `0046` via the db-migrate Action** (renumber the UNAPPLIED dupe if a parallel `0046` exists). Measured dimensions intentionally NOT a slot (catalog data → Suggest-an-edit).
+- **Instrumentation:** open-slot clicks fire `contribution_slot_clicked` (`slot`+`variant_id`) = funnel START; completion read from the rows. Gates green each land (tsc/eslint/next build/tests); verified pre-migration render on `/bag/1002`.
+
 ## TL;DR — Founder-face b-roll bank + face-vs-faceless test staged (2026-07-07, on `main`)
 
 **Owner filmed 16 own-face desk clips (bag wall behind); built a reusable bank + a face-vs-faceless test.**

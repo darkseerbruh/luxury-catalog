@@ -3,28 +3,53 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { setWear } from "@/lib/wear-actions";
-import { CARRY_OPTIONS, WEIGHT_OPTIONS, type Carry, type WeightFeel } from "@/lib/wear-options";
+import {
+  CARRY_OPTIONS,
+  WEIGHT_OPTIONS,
+  FITS_NOTE_MAX,
+  type Carry,
+  type WeightFeel,
+} from "@/lib/wear-options";
 
 /**
- * Signed-in carry + weight-feel taps for a bag. Each row is a single-select chip
- * group; tapping your current pick again clears it. Saves via setWear (one field
- * at a time, server-merged) then refreshes so the aggregate re-renders. Mirrors
- * AxisVoteControl. Dependency-free.
+ * Signed-in carry + weight-feel taps for a bag, plus a short "what fit inside"
+ * note. Each chip row is single-select; tapping your current pick again clears
+ * it. Saves via setWear (one field at a time, server-merged) then refreshes so
+ * the aggregate re-renders. Mirrors AxisVoteControl. Dependency-free.
  */
 export default function WearTaps({
   variantId,
   initialCarry,
   initialWeight,
+  initialFitsNote,
 }: {
   variantId: number;
   initialCarry: Carry | null;
   initialWeight: WeightFeel | null;
+  initialFitsNote: string | null;
 }) {
   const router = useRouter();
   const [carry, setCarry] = useState<Carry | null>(initialCarry);
   const [weight, setWeight] = useState<WeightFeel | null>(initialWeight);
+  const [fitsNote, setFitsNote] = useState<string>(initialFitsNote ?? "");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const fitsDirty = fitsNote.trim() !== (initialFitsNote ?? "").trim();
+
+  function saveFits() {
+    if (!fitsDirty) return;
+    setError(null);
+    startTransition(async () => {
+      const res = await setWear({ variantId, fitsNote });
+      if (!res.ok) {
+        setError(res.error ?? "Something went wrong.");
+        setFitsNote(initialFitsNote ?? "");
+        return;
+      }
+      router.refresh();
+    });
+  }
 
   function pickCarry(next: Carry) {
     setError(null);
@@ -74,6 +99,34 @@ export default function WearTaps({
         disabled={pending}
         onPick={(v) => pickWeight(v as WeightFeel)}
       />
+
+      <div>
+        <label htmlFor="fits-note" className="mb-2 block text-sm font-medium text-foreground">
+          What fits inside?
+        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            id="fits-note"
+            type="text"
+            value={fitsNote}
+            maxLength={FITS_NOTE_MAX}
+            disabled={pending}
+            placeholder="Phone, wallet, sunglasses..."
+            onChange={(e) => setFitsNote(e.target.value)}
+            onBlur={saveFits}
+            className="min-w-0 flex-1 rounded-full border border-border bg-surface px-4 py-1.5 text-sm text-foreground placeholder:text-muted/60 focus:border-gold focus:outline-none disabled:opacity-50"
+          />
+          <button
+            type="button"
+            onClick={saveFits}
+            disabled={pending || !fitsDirty}
+            className="rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold disabled:opacity-40"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+
       {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
   );

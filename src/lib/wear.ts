@@ -31,6 +31,9 @@ export interface Tally {
   count: number;
 }
 
+/** How many "what fits inside" notes to surface on the page (most recent first). */
+const FITS_DISPLAY_CAP = 6;
+
 export interface WearSummary {
   /** False when the migration/table is absent — callers hide the taps entirely. */
   available: boolean;
@@ -41,6 +44,10 @@ export interface WearSummary {
   totalWeight: number;
   myCarry: Carry | null;
   myWeightFeel: WeightFeel | null;
+  /** A capped list of "what fit inside" notes from owners (most recent first). */
+  fitsNotes: string[];
+  totalFits: number;
+  myFitsNote: string | null;
 }
 
 function emptySummary(signedIn: boolean, available: boolean): WearSummary {
@@ -53,6 +60,9 @@ function emptySummary(signedIn: boolean, available: boolean): WearSummary {
     totalWeight: 0,
     myCarry: null,
     myWeightFeel: null,
+    fitsNotes: [],
+    totalFits: 0,
+    myFitsNote: null,
   };
 }
 
@@ -70,27 +80,38 @@ export async function getWear(variantId: number): Promise<WearSummary> {
   const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("bag_wear")
-    .select("user_id, carry, weight_feel")
+    .select("user_id, carry, weight_feel, fits_note, updated_at")
     .eq("variant_id", variantId)
+    .order("updated_at", { ascending: false })
     .limit(5000);
 
   // Table missing / not migrated / any read error → hide the taps, don't crash.
   if (error || !data) return emptySummary(signedIn, false);
 
-  const rows = data as { user_id: string; carry: string | null; weight_feel: string | null }[];
+  const rows = data as {
+    user_id: string;
+    carry: string | null;
+    weight_feel: string | null;
+    fits_note: string | null;
+  }[];
 
   const carryCounts = new Map<string, number>();
   const weightCounts = new Map<string, number>();
   let myCarry: Carry | null = null;
   let myWeightFeel: WeightFeel | null = null;
+  let myFitsNote: string | null = null;
+  const fitsAll: string[] = [];
 
   for (const r of rows) {
     if (r.carry && isCarry(r.carry)) carryCounts.set(r.carry, (carryCounts.get(r.carry) ?? 0) + 1);
     if (r.weight_feel && isWeightFeel(r.weight_feel))
       weightCounts.set(r.weight_feel, (weightCounts.get(r.weight_feel) ?? 0) + 1);
+    const note = r.fits_note?.trim();
+    if (note) fitsAll.push(note);
     if (user && r.user_id === user.id) {
       if (r.carry && isCarry(r.carry)) myCarry = r.carry;
       if (r.weight_feel && isWeightFeel(r.weight_feel)) myWeightFeel = r.weight_feel;
+      if (note) myFitsNote = note;
     }
   }
 
@@ -114,5 +135,8 @@ export async function getWear(variantId: number): Promise<WearSummary> {
     totalWeight: weight.reduce((n, t) => n + t.count, 0),
     myCarry,
     myWeightFeel,
+    fitsNotes: fitsAll.slice(0, FITS_DISPLAY_CAP),
+    totalFits: fitsAll.length,
+    myFitsNote,
   };
 }

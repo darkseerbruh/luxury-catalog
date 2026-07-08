@@ -48,13 +48,20 @@ describe("buildSlots", () => {
       axisTotal: 5,
       wearAvailable: true,
     });
-    expect(slots.map((s) => s.key)).toEqual(["photo", "review", "wears", "carry", "weight"]);
-    const wearSlots = slots.filter((s) => s.key === "carry" || s.key === "weight");
+    expect(slots.map((s) => s.key)).toEqual([
+      "photo",
+      "review",
+      "wears",
+      "carry",
+      "weight",
+      "fits",
+    ]);
+    const wearSlots = slots.filter((s) => ["carry", "weight", "fits"].includes(s.key));
     expect(wearSlots.every((s) => s.anchor === "#how-you-carry")).toBe(true);
     expect(wearSlots.every((s) => s.filled)).toBe(false);
   });
 
-  it("carry/weight fill independently", () => {
+  it("carry / weight / fits fill independently", () => {
     const slots = buildSlots({
       hasPhoto: false,
       hasReview: false,
@@ -63,8 +70,10 @@ describe("buildSlots", () => {
       wearAvailable: true,
       hasCarry: true,
       hasWeight: false,
+      hasFits: true,
     });
     expect(slots.find((s) => s.key === "carry")!.filled).toBe(true);
     expect(slots.find((s) => s.key === "weight")!.filled).toBe(false);
+    expect(slots.find((s) => s.key === "fits")!.filled).toBe(true);
   });
 });
