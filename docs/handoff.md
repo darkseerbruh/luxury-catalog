@@ -29,6 +29,16 @@
 
 ---
 
+## TL;DR — Mobile menu: search collapsed until tapped (follow-up fix), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported the mobile menu STILL buried under an uncapped grid** (screenshot showed 6+ tiles, no View-all — i.e. the pre-fix bundle, but the 4-cap alone also left the menu links below the fold on a 393px phone). Structural fix:
+- 📱 **Menu first:** `BagFinder` gained `collapsedUntilFocus` — in the mobile menu, ONLY the search field renders until it's tapped (no grid, no "Ask us to add it"), so opening the hamburger shows the whole menu instantly. Once tapped: capped **4** suggestions + "View all results →" (unchanged). Engagement is sticky (no collapse on blur — a blur-collapse would yank tiles out from under the tap). Desktop + closet-add unchanged.
+- 🎨 **Ghosting fixed:** the mobile panel is now opaque `bg-bg` (was `bg-bg/95` + blur), so page copy can't bleed through it (visible in her screenshot).
+- ✅ Verified end-to-end with Playwright at 393×852 (menu-open: 0 tiles + all links visible; engaged: exactly 4 tiles + CTA; typing: cap holds). Gates green (tsc/eslint/642 tests + build via land script).
+- ℹ️ If she STILL sees the old behavior after this deploy: hard-refresh / clear Safari cache — her screenshot predated the 14:41 UTC deploy of the first fix.
+
+---
+
 ## TL;DR — Affiliate photos as bag headers + capped mobile menu search, SHIPPED (2026-07-08, on `main`)
 
 **Two owner asks, both landed + deploying.**

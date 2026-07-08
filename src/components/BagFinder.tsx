@@ -40,6 +40,13 @@ interface Props {
   maxModels?: number;
   /** Show a "View all results" CTA under the grid that hands off to the full search page. */
   onViewAll?: (query: string) => void;
+  /**
+   * Render ONLY the input until the field is focused (mobile menu: the grid must
+   * never sit between the owner and the rest of the menu). Once engaged, the
+   * suggestions stay for the life of the component — collapsing on blur would
+   * yank a tile out from under the tap that's about to select it.
+   */
+  collapsedUntilFocus?: boolean;
 }
 
 const HINT = "   (start typing →)";
@@ -53,9 +60,11 @@ export function BagFinder({
   autoFocus,
   maxModels,
   onViewAll,
+  collapsedUntilFocus = false,
 }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
+  const [engaged, setEngaged] = useState(!collapsedUntilFocus);
   const [models, setModels] = useState<FinderModel[]>([]);
   const [colours, setColours] = useState<FinderColour[]>([]);
   const [focus, setFocus] = useState<FinderModel | null>(null);
@@ -98,13 +107,14 @@ export function BagFinder({
 
   // Populate on focus + live narrow: q starts empty (focus null), so this fires
   // fetchModels("") on mount for the populated grid, then re-narrows as they type.
+  // Collapsed hosts skip the fetch entirely until the field is engaged.
   // The fetch is scheduled in a timeout, so no synchronous setState in the effect.
   useEffect(() => {
-    if (focus) return;
+    if (focus || !engaged) return;
     const t = setTimeout(() => void fetchModels(q), q ? 180 : 0);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q]);
+  }, [q, engaged]);
 
   function choose(m: FinderModel, c: FinderColour | null) {
     const sel: BagFinderSelection = {
@@ -145,6 +155,7 @@ export function BagFinder({
           type="search"
           value={q}
           autoFocus={autoFocus}
+          onFocus={() => setEngaged(true)}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && onSubmitQuery) {
@@ -160,7 +171,7 @@ export function BagFinder({
         />
       </div>
 
-      {focus ? (
+      {!engaged ? null : focus ? (
         <div className="mt-3">
           <button
             type="button"
@@ -246,7 +257,7 @@ export function BagFinder({
         </div>
       )}
 
-      {allowRequest && !focus && (
+      {allowRequest && engaged && !focus && (
         <div className="mt-3">
           {requesting ? (
             <RequestBagForm query={q} />
