@@ -26,6 +26,7 @@
  */
 import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
 import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Tier for a NEWLY created brand (existing brands keep their tier — we never
@@ -321,7 +322,7 @@ function rowsByClusterKey(rows: DiscoveredRow[]): Map<string, number[]> {
 }
 
 async function persistPromotions(
-  supabase: { from: (t: string) => any },
+  supabase: SupabaseClient,
   rows: DiscoveredRow[],
   clusters: DiscoveredCluster[],
 ): Promise<{ brands: number; styles: number; variants: number; repointed: number }> {
