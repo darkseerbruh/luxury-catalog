@@ -88,7 +88,10 @@ Bags / Houses toggle: same layout at brand level (a house's rank blends its styl
   Until two cycles exist, no pill renders, per "never invent motion".
 
 ## Open, before / around ship
-- **Apply migration `0048`** (owner-gated) via the db-migrate Action, then the module populates.
+- ✅ **Migration `0048` APPLIED to prod 2026-07-08** (db-migrate run 27 on the branch; log:
+  "Applying migration 0048_style_index_signals.sql"). The RPC is live; live REST verification
+  is pending (this container is proxy-blocked from Supabase). Feature code still needs to land
+  to `main` to deploy (owner deploy gate).
 - **Validate the formula against real data:** compute the true top ~20 and eyeball the order vs
   gut. Needs DB access this build container lacks (no anon key + proxy-blocked).
 - **Nav placement for `/rankings`** (owner call, nav is protected): its own top-level door vs
