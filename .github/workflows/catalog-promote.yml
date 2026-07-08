@@ -1,0 +1,72 @@
+name: Promote discovered bags into the catalogue
+
+# Full-spectrum catalogue build-out. The ingests capture every listing they can't
+# place into discovered_listing (raw layer). This pass normalises those titles to
+# canonical bag models, then promotes recurring bag clusters into curated
+# brand/style/variant rows so a page exists for every bag. Bag-gated: garments and
+# shoes from the catch-all capture never become styles.
+#
+# OWNER-GATED WRITES (AGENTS.md: no unattended catalog writes):
+#   - Scheduled runs are ALWAYS dry-run — they only REPORT what's promotable.
+#   - To actually persist, run manually (Actions tab -> this workflow -> Run
+#     workflow) with write = true. Promotion is additive + idempotent, so a
+#     re-run only promotes what's still unpromoted.
+#
+# After a write run, the next scheduled ingests (TLC/FP/TRR) place live listings
+# on the new variants, so the promoted bags gain their "for sale" offers (and TLC
+# photos) automatically.
+
+on:
+  schedule:
+    # Weekly dry-run report of what's newly promotable. Tune here.
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Persist to the catalogue? false = normalise + report only (dry run)"
+        required: false
+        default: "false"
+      min:
+        description: "Cluster size threshold to promote (default 5)"
+        required: false
+        default: "5"
+
+concurrency:
+  group: catalog-promote
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # Only a manual dispatch with write=true persists; schedule is always dry-run.
+      WRITE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.write || 'false' }}
+      MIN: ${{ github.event.inputs.min || '5' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Normalise discovered titles to canonical bag models
+        run: |
+          if [ "$WRITE" = "true" ]; then
+            npm run normalize:discovered -- --write
+          else
+            npm run normalize:discovered
+          fi
+
+      - name: Promote recurring bag clusters into the catalogue
+        run: |
+          if [ "$WRITE" = "true" ]; then
+            npm run promote:discovered -- --write --min="$MIN"
+          else
+            npm run promote:discovered -- --min="$MIN"
+          fi
