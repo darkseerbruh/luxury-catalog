@@ -850,57 +850,71 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
   }));
 }
 
-const TLC_PLATFORM = "The Luxury Closet";
-
 /**
- * A live The Luxury Closet listing photo per variant (from `listing_image`, keyed
- * by the price_history listing_ref), for the given variant ids. Used as the last
- * image fallback so a bag with no catalog/community shot still shows the picture
- * from its for-sale offer. RESILIENT: returns {} on any error (e.g. pre-0047
- * listing_image table) so callers keep the placeholder.
+ * A live affiliate listing photo per variant (from `listing_image`, joined to the
+ * variant's for-sale `price_history` row by its (platform, listing_ref) key), for
+ * the given variant ids. Source-agnostic: The Luxury Closet is the only feed
+ * writing `listing_image` today, but any affiliate feed that populates it is picked
+ * up here automatically. For each variant the NEWEST live listing that actually has
+ * a photo wins. RESILIENT: returns {} on any error (e.g. pre-0047 listing_image
+ * table) so callers keep the placeholder.
  */
-async function getTlcListingImages(
+async function getAffiliateListingImages(
   sb: ReturnType<typeof getSupabase>,
   variantIds: number[],
 ): Promise<Map<number, string>> {
   const out = new Map<number, string>();
   if (variantIds.length === 0) return out;
   try {
-    // Live TLC offers for these variants; newest observation of each listing wins.
+    // Live affiliate offers for these variants, newest first.
     const { data: priceRows, error: pErr } = await sb
       .from("price_history")
-      .select("variant_id, listing_ref, listing_status, observed_on")
+      .select("variant_id, platform, listing_ref, listing_status, observed_on")
       .in("variant_id", variantIds)
-      .eq("platform", TLC_PLATFORM)
       .eq("price_type", "listed")
       .not("listing_ref", "is", null)
       .order("observed_on", { ascending: false })
       .limit(5000);
     if (pErr || !priceRows) return out;
 
-    // Best (most recent, still-live) listing_ref per variant.
-    const refByVariant = new Map<number, string>();
-    for (const r of priceRows as { variant_id: number; listing_ref: string | null; listing_status: string | null }[]) {
+    // Ordered candidate (platform, listing_ref) keys per variant, newest first —
+    // listing_image is keyed by BOTH, so match on the composite.
+    const candidatesByVariant = new Map<number, string[]>();
+    const allRefs = new Set<string>();
+    for (const r of priceRows as {
+      variant_id: number;
+      platform: string | null;
+      listing_ref: string | null;
+      listing_status: string | null;
+    }[]) {
       if (!r.listing_ref || r.listing_status === "sold") continue;
-      if (!refByVariant.has(r.variant_id)) refByVariant.set(r.variant_id, r.listing_ref); // rows are newest-first
+      const key = `${r.platform ?? ""}|${r.listing_ref}`;
+      const list = candidatesByVariant.get(r.variant_id) ?? [];
+      if (!list.includes(key)) list.push(key);
+      candidatesByVariant.set(r.variant_id, list);
+      allRefs.add(r.listing_ref);
     }
-    if (refByVariant.size === 0) return out;
+    if (allRefs.size === 0) return out;
 
-    const refs = [...new Set(refByVariant.values())];
     const { data: imgRows, error: iErr } = await sb
       .from("listing_image")
-      .select("listing_ref, image_url")
-      .eq("platform", TLC_PLATFORM)
-      .in("listing_ref", refs);
+      .select("platform, listing_ref, image_url")
+      .in("listing_ref", [...allRefs]);
     if (iErr || !imgRows) return out;
 
-    const urlByRef = new Map<string, string>();
-    for (const im of imgRows as { listing_ref: string; image_url: string }[]) {
-      if (im.image_url) urlByRef.set(im.listing_ref, im.image_url);
+    const urlByKey = new Map<string, string>();
+    for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
+      if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
     }
-    for (const [vid, ref] of refByVariant) {
-      const url = urlByRef.get(ref);
-      if (url) out.set(vid, url);
+    // Newest candidate listing that has a photo wins.
+    for (const [vid, keys] of candidatesByVariant) {
+      for (const key of keys) {
+        const url = urlByKey.get(key);
+        if (url) {
+          out.set(vid, url);
+          break;
+        }
+      }
     }
     return out;
   } catch {
@@ -929,15 +943,28 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       if (r.image_url) map[r.variant_id] = r.image_url;
     }
 
-    // Backfill gaps with community photos so a contributed shot becomes the image
-    // the WHOLE catalog shows (grids, search, recs), not only the bag-page gallery.
-    // Featured wins over plain approved. Resilient: any error leaves the placeholder.
-    const missing = ids.filter((id) => !map[id]);
-    if (missing.length > 0) {
+    // Tier 2: a live affiliate listing photo (The Luxury Closet today; any feed
+    // that writes listing_image works). Preferred over community photos because
+    // affiliate feeds are studio-shot + consistently formatted; nearly every bag
+    // we list has a for-sale offer, so this covers most gaps. This is the image the
+    // WHOLE catalog shows (grids, search, recs, bag page — all read through here).
+    // Resilient: pre-0047 (no listing_image table) or any error leaves the placeholder.
+    const missingAffiliate = ids.filter((id) => !map[id]);
+    if (missingAffiliate.length > 0) {
+      const affiliate = await getAffiliateListingImages(sb, missingAffiliate);
+      for (const [vid, url] of affiliate) map[vid] = url;
+    }
+
+    // Tier 3 (last resort): a community-contributed photo. Lower quality + social-
+    // media style + inconsistently formatted, so it only fills what catalog and
+    // affiliate photos didn't — but it beats an empty placeholder. Featured wins
+    // over plain approved. Resilient: any error leaves the placeholder.
+    const missingCommunity = ids.filter((id) => !map[id]);
+    if (missingCommunity.length > 0) {
       const { data: photos } = await sb
         .from("bag_photo")
         .select("variant_id, storage_path, status")
-        .in("variant_id", missing)
+        .in("variant_id", missingCommunity)
         .in("status", ["approved", "featured"]);
       const best = new Map<number, { path: string; featured: boolean }>();
       for (const p of (photos ?? []) as { variant_id: number; storage_path: string; status: string }[]) {
@@ -948,17 +975,6 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       for (const [vid, { path }] of best) {
         map[vid] = sb.storage.from("bag-photos").getPublicUrl(path).data.publicUrl;
       }
-    }
-
-    // Final fallback: a live The Luxury Closet listing photo. Nearly every bag we
-    // list has at least one for-sale TLC offer, so this gives a real header image
-    // to variants with no catalog or community shot — across grids, search, and
-    // the bag page (they all read through here). Resilient: pre-0047 (no
-    // listing_image table) or any error leaves the placeholder.
-    const stillMissing = ids.filter((id) => !map[id]);
-    if (stillMissing.length > 0) {
-      const tlc = await getTlcListingImages(sb, stillMissing);
-      for (const [vid, url] of tlc) map[vid] = url;
     }
     return map;
   } catch {
