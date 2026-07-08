@@ -25,7 +25,6 @@ import { displaySizeLabel } from "./variant-label";
 import {
   rateListing,
   isConfidentBasis,
-  bestBand,
   type DealRating,
   type DealBand,
   type ItemSpec,
@@ -69,6 +68,11 @@ export interface ShopProduct {
   key: string;
   /** Representative variant to link to (the cheapest in-stock one). */
   variantId: number;
+  /** The group's style, for style-level image fallback on the grid. */
+  styleId: number;
+  /** Distinct listed variants (cheapest's first) — image candidates for the tile,
+   *  so one photo-less cheapest listing doesn't blank a tile whose siblings have photos. */
+  imageVariantIds: number[];
   brandName: string;
   styleName: string;
   sizeLabel: string | null;
@@ -78,7 +82,10 @@ export interface ShopProduct {
   fromPrice: number;
   currency: string | null;
   /** Deal verdict for the "from" price, only when its market value is a like-for-like
-   *  (leather + color) basis; null when we can't honestly assert one. */
+   *  (leather + color) basis; null when we can't honestly assert one. INTERNAL ranking
+   *  signal (deals-only filter, best-deal sort) — never rendered on the rollup tile:
+   *  the tile is a category representative, so a price verdict there would overclaim
+   *  (owner ruled 2026-07-08). Listing-level verdicts live on the bag page. */
   dealBand: DealBand | null;
 }
 
@@ -491,6 +498,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
 
 interface ProductGroup {
   key: string;
+  styleId: number;
   brandName: string;
   styleName: string;
   sizeLabel: string | null;
@@ -544,6 +552,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (!g) {
         g = {
           key,
+          styleId: r.styleId,
           brandName: r.brandName,
           styleName: r.styleName,
           sizeLabel: r.sizeLabel,
@@ -649,19 +658,31 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       const sellers = new Set(matching.map((r) => platformLabel(r.platform)));
       const colors = new Set(matching.map((r) => r.spec.colorway?.toLowerCase()).filter(Boolean));
 
-      // Rate EACH listing against its OWN spec's market value, and keep only verdicts on a
-      // like-for-like basis (leather + color) — a blended fallback would falsely call a
-      // cheap colorway a steal. The thumbnail then shows the best deal among the items
-      // behind it: if any one item is genuinely a great deal for its spec, badge the tile.
-      const confidentBands = matching
-        .map((r) => rateListing(r.price, r.spec, g.comps))
-        .filter((rt): rt is DealRating => rt != null && isConfidentBasis(rt.fairValue))
-        .map((rt) => rt.band);
-      const dealBand = bestBand(confidentBands);
+      // Rate the tile by the price the tile SHOWS: the cheapest listing against its own
+      // spec's market value, kept only on a like-for-like basis (leather + color). The
+      // old best-band-of-all-listings badge saturated — over 50+ listings, at least one
+      // always sits 10% under its bucket's median, so every tile read "Great deal" and
+      // the signal meant nothing (owner flagged it 2026-07-08). One listing, one verdict.
+      const cheapestRating = rateListing(cheapest.price, cheapest.spec, g.comps);
+      const dealBand =
+        cheapestRating != null && isConfidentBasis(cheapestRating.fairValue)
+          ? cheapestRating.band
+          : null;
+
+      // Image candidates: the cheapest listing's variant first (it's the price shown),
+      // then the group's other listed variants, newest observation first.
+      const imageVariantIds = [
+        cheapest.variantId,
+        ...[...matching]
+          .sort((a, b) => (b.observedOn ?? "").localeCompare(a.observedOn ?? ""))
+          .map((r) => r.variantId),
+      ].filter((v, i, arr) => arr.indexOf(v) === i).slice(0, 6);
 
       products.push({
         key: g.key,
         variantId: cheapest.variantId,
+        styleId: g.styleId,
+        imageVariantIds,
         brandName: g.brandName,
         styleName: g.styleName,
         sizeLabel: g.sizeLabel,

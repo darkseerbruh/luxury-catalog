@@ -18,6 +18,18 @@
 
 ---
 
+## TL;DR — Camera identify v2 verified end-to-end on the LIVE site + 429 resume fix landed (2026-07-08, on `main`, NOT yet deployed)
+
+**Ran the full v2 verification against `www.luxurycatalog.com/identify` on her real thrift `.mov`s. All 5 checks PASS.**
+- ✅ **Upload/haul + reads:** each item renders its own **Bag n** card, stepper runs, results show the **"We read:"** chips. Reads are calibrated, NOT overconfident: rack pans returned brand/style `null` ("Couldn't place this one"); a held bag read **Liz Claiborne** (medium) one call, `null` the next (model is non-deterministic and hedges to null when unsure — good).
+- ✅ **Off-catalog + eBay:** Liz Claiborne had no catalog match → off-catalog card + eBay SOLD button; live href carries `LH_Sold=1`, `LH_Complete=1`, `campid=5339158071`, `customid=identify-offcatalog`.
+- ✅ **Live camera chips:** all three tick — **Sharp**, **Frames n/4** (counts up), **Read: $24.99** (flipped via real `/api/identify/live-read`; blank frame → `readable:false`). Webcam prompt + physical bag are hers to do live.
+- ✅ **Data trail:** PostHog got `identify_scan_started` + `identify_scan_completed`; Supabase `searched_not_found` gained `[camera] Liz Claiborne`.
+- 🔧 **Rate-limit finding + fix:** the limiter is **in-memory PER serverless instance** (by design, `rate-limit.ts`), so `12/5min` is soft — a **concurrent** burst fans across instances and does NOT trip (14/14 → 200); a **sequential** haul sticks to one warm instance and DOES (calls 10–16 → 429, `Retry-After` ~198s). Old UI dead-ended every later bag on "Too many requests." **Fixed** (`postIdentify` now waits out `Retry-After`, shows a "holding your spot" status, retries bounded ×2; commit `b744849`). ⚠️ On `main`, **awaiting a manual `vercel --prod`** — not live yet, so not live-verified. Follow-up worth considering: shorten the window or add a per-user token so hauls rarely wait ~3–5 min.
+- 📌 **Verification method note:** the browser file-picker is sandboxed in this harness (no OS-picker uploads), so the front-end was driven by in-page injection (canvas `File` + a captured real prod response) and the backend by direct `curl` to prod `/api/identify`. Genuine, but a true phone-upload pass on her device is still the gold check.
+
+---
+
 ## TL;DR — Article engine weekly run + red-`main` build fix + 2 articles PUBLISHED (2026-07-07/08, on `main`)
 
 **Article engine `article-engine-weekly` ran; 2 GEO articles now LIVE.**
@@ -26,6 +38,27 @@
 - 🔧 **Fixed red `main`:** the `/about` founder page imported `framer-motion` + `lenis` with the manifest entries present but never install-verified. Clean `npm ci` + full gate (tsc/eslint/next build/**593 tests**) now green; landed the reproducible seed script (`00882ad`). Docs landed at `c98fbfe`.
 - 📌 Durable learnings captured in `docs/article-engine.md`: article renderer supports only `## `/`- `/`> `/paragraph/`**bold**`/registered `[diagram:]` (NO tables, NO `---`); use `seed-archive-reference-articles.ts` as the clean seed template (status on INSERT only).
 - ✅ **DONE (both prior "your turn" items):** the 2 drafts are published (above); `framer-motion` + `lenis` are now declared + installed in the working folder, so local dev on `/about` works. Nothing outstanding.
+
+---
+
+## TL;DR — iOS zoom + shop-grid trust fixes (badge saturation, contrast, overlap, placeholder images), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported 4 issues from her phone (screenshots, 2026-07-08); all four fixed:**
+- 📵 **iOS zoom on the menu search killed.** iOS Safari auto-zooms any focused input with font-size < 16px. Fix: `BagFinder` input is `text-base sm:text-sm`, PLUS a global guard in `globals.css` (`@media (max-width: 639px)`: every text input/select/textarea `font-size: max(16px, 1em) !important`) so no future input regresses. Verified: menu search, hero search, newsletter all compute 16px at 393px.
+- 🏷️ **"Great deal" badge saturation fixed, then REMOVED from the grid entirely (owner ruled, same day).** Root cause of saturation: the tile badged the BEST band across ALL its listings — with 50-113 listings/tile, one is always ≥10% under its bucket median, so every tile badged. First fix rated the tile's "from" price instead; owner overruled: a rollup tile is a category representative (photo + from-price included), NOT an item for sale, so NO price verdict belongs on it however computed. Grid now shows no deal chip; verdicts stay at LISTING level (bag-page rail, homepage Best deals). `ShopProduct.dealBand` (from-price semantics) survives as the INTERNAL signal for the `deals=1` filter + best-deal sort only.
+- 🎨 **Badge legible everywhere:** solid dark pill (`bg-emerald-950/90` + `text-emerald-200`), moved to the image's BOTTOM-left; "+ Compare" stays top-right, so they can never collide on narrow 2-col mobile cards (they overlapped before).
+- 🖼️ **Shop placeholder tiles (e.g. Neverfulls) fixed.** The tile's image was keyed ONLY to the cheapest listing's variant; a photo-less eBay-only cheapest (only TLC writes `listing_image`) blanked tiles whose siblings have photos. Now: cheapest's variant → other listed variants (`ShopProduct.imageVariantIds`) → ANY catalog photo on the style (`getStyleHeroImages`, new in queries.ts).
+- ✅ Verified end-to-end against a local mock PostgREST (deterministic comps: fair from-price tile shows NO badge even with a 20%-under listing in another bucket; great from-price tile badges; both image fallbacks hit) + Playwright at 393×852 (no overlap, computed styles). Gates green (tsc/eslint/642 tests + build via land script). ⚠️ Couldn't verify against prod data: this container's `SUPABASE_SERVICE_ROLE_KEY` is rejected ("Invalid API key") — worth checking that env secret.
+
+---
+
+## TL;DR — Mobile menu: search collapsed until tapped (follow-up fix), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported the mobile menu STILL buried under an uncapped grid** (screenshot showed 6+ tiles, no View-all — i.e. the pre-fix bundle, but the 4-cap alone also left the menu links below the fold on a 393px phone). Structural fix:
+- 📱 **Menu first:** `BagFinder` gained `collapsedUntilFocus` — in the mobile menu, ONLY the search field renders until it's tapped (no grid, no "Ask us to add it"), so opening the hamburger shows the whole menu instantly. Once tapped: capped **4** suggestions + "View all results →" (unchanged). Engagement is sticky (no collapse on blur — a blur-collapse would yank tiles out from under the tap). Desktop + closet-add unchanged.
+- 🎨 **Ghosting fixed:** the mobile panel is now opaque `bg-bg` (was `bg-bg/95` + blur), so page copy can't bleed through it (visible in her screenshot).
+- ✅ Verified end-to-end with Playwright at 393×852 (menu-open: 0 tiles + all links visible; engaged: exactly 4 tiles + CTA; typing: cap holds). Gates green (tsc/eslint/642 tests + build via land script).
+- ℹ️ If she STILL sees the old behavior after this deploy: hard-refresh / clear Safari cache — her screenshot predated the 14:41 UTC deploy of the first fix.
 
 ---
 

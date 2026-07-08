@@ -34,7 +34,14 @@ import CameraCapture, {
 } from "@/components/identify/CameraCapture";
 import ScanResult from "@/components/identify/ScanResult";
 
-type ItemStatus = "queued" | "extracting" | "analyzing" | "refining" | "done" | "error";
+type ItemStatus =
+  | "queued"
+  | "extracting"
+  | "analyzing"
+  | "waiting"
+  | "refining"
+  | "done"
+  | "error";
 
 interface ScanItem {
   id: number;
@@ -52,6 +59,7 @@ const STATUS_LINE: Record<ItemStatus, string> = {
   queued: "Waiting its turn",
   extracting: "Picking the sharpest frames",
   analyzing: "Checking the markers",
+  waiting: "Lots of scans right now. Holding your spot, back in a moment",
   refining: "Taking a closer look at the stamp",
   done: "",
   error: "",
@@ -86,15 +94,46 @@ function needsRefine(res: IdentifyResponse): boolean {
   return unreadHints && (!res.identification.brand || res.identification.confidence !== "high");
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** How many times a 429'd call waits out its window and retries before giving up. */
+const RATE_LIMIT_MAX_RETRIES = 2;
+/** Cap a single wait so a stuck window can never hang a bag indefinitely. */
+const RATE_LIMIT_MAX_WAIT_MS = 210_000;
+/** Fallback pause when a 429 arrives without a usable Retry-After. */
+const RATE_LIMIT_FALLBACK_WAIT_MS = 5_000;
+
+/**
+ * Posts to the identify API and, when the shared rate limit is hit (429), waits
+ * out the server's Retry-After and resumes rather than failing the bag. A big
+ * haul serializes its calls, so on a warm instance it can trip the limit
+ * mid-queue; without this, every later bag dead-ended on "Too many requests."
+ * onRateLimited lets the caller show a "holding your spot" status while paused.
+ */
 async function postIdentify(
   blobs: Blob[],
-  prior?: IdentifyResponse["identification"]
+  prior?: IdentifyResponse["identification"],
+  onRateLimited?: (retryAfterSeconds: number) => void
 ): Promise<IdentifyResponse> {
   const body = new FormData();
   blobs.forEach((b, i) => body.append("images", b, `frame-${i}.jpg`));
   if (prior) body.append("prior", JSON.stringify(prior));
-  const res = await fetch("/api/identify", { method: "POST", body });
-  return (await res.json()) as IdentifyResponse;
+
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch("/api/identify", { method: "POST", body });
+    if (res.status !== 429 || attempt >= RATE_LIMIT_MAX_RETRIES) {
+      // Success, a non-rate-limit error, or we are out of retries: return the
+      // body as-is (a final 429 falls back to its { error } payload).
+      return (await res.json()) as IdentifyResponse;
+    }
+    const retryAfter = Number(res.headers.get("Retry-After"));
+    const waitMs =
+      Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(retryAfter * 1000, RATE_LIMIT_MAX_WAIT_MS)
+        : RATE_LIMIT_FALLBACK_WAIT_MS;
+    onRateLimited?.(Math.ceil(waitMs / 1000));
+    await sleep(waitMs);
+  }
 }
 
 export default function IdentifyPage() {
@@ -104,7 +143,7 @@ export default function IdentifyPage() {
   const [cameraOpen, setCameraOpen] = useState(false);
   const [cameraNote, setCameraNote] = useState<string | null>(null);
   const busy = items.some((i) =>
-    ["queued", "extracting", "analyzing", "refining"].includes(i.status)
+    ["queued", "extracting", "analyzing", "waiting", "refining"].includes(i.status)
   );
 
   const patchItem = useCallback((id: number, patch: Partial<ScanItem>) => {
@@ -138,7 +177,9 @@ export default function IdentifyPage() {
 
         // 2. First pass.
         patchItem(item.id, { status: "analyzing" });
-        let result = await postIdentify(blobs);
+        let result = await postIdentify(blobs, undefined, () =>
+          patchItem(item.id, { status: "waiting" })
+        );
         if (result.error) throw new Error(result.error);
         let refined = false;
 
@@ -157,7 +198,11 @@ export default function IdentifyPage() {
                 crops.push(await cropImageHintRegion(file, hint));
               }
               if (crops.length > 0 && result.identification) {
-                const second = await postIdentify(crops, result.identification);
+                const second = await postIdentify(
+                  crops,
+                  result.identification,
+                  () => patchItem(item.id, { status: "waiting" })
+                );
                 if (!second.error && second.identification) {
                   result = second;
                   refined = true;
@@ -210,7 +255,9 @@ export default function IdentifyPage() {
       try {
         if (blobs.length === 0) throw new Error("No usable frames in this one.");
         patchItem(item.id, { status: "analyzing" });
-        let result = await postIdentify(blobs);
+        let result = await postIdentify(blobs, undefined, () =>
+          patchItem(item.id, { status: "waiting" })
+        );
         if (result.error) throw new Error(result.error);
         let refined = false;
 
@@ -225,7 +272,11 @@ export default function IdentifyPage() {
                 crops.push(await cropHintRegion(videoFile, hintTime(hint, times), hint));
               }
               if (crops.length > 0 && result.identification) {
-                const second = await postIdentify(crops, result.identification);
+                const second = await postIdentify(
+                  crops,
+                  result.identification,
+                  () => patchItem(item.id, { status: "waiting" })
+                );
                 if (!second.error && second.identification) {
                   result = second;
                   refined = true;
