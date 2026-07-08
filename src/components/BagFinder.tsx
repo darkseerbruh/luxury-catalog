@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BagImage } from "@/components/BagImage";
+import RequestBagForm from "@/app/search/RequestBagForm";
 import type { FinderModel, FinderColour } from "@/lib/bag-finder";
 
 /**
@@ -28,8 +29,8 @@ interface Props {
   mode: "nav" | "closet";
   /** Closet mode: called when a bag (and colour) is chosen. */
   onSelect?: (sel: BagFinderSelection) => void;
-  /** Optional "can't find it? add a photo" escape hatch; hidden when absent. */
-  onPhotoFallback?: () => void;
+  /** Show the "can't find it? ask us to add it" request flow (default true). */
+  allowRequest?: boolean;
   /** Optional: Enter on the field submits the raw query (e.g. nav → full /search). */
   onSubmitQuery?: (query: string) => void;
   /** Nav mode: fired after a tile click routes away, so a host menu can close. */
@@ -39,13 +40,14 @@ interface Props {
 
 const HINT = "   (start typing →)";
 
-export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, onNavigate, autoFocus }: Props) {
+export function BagFinder({ mode, onSelect, allowRequest = true, onSubmitQuery, onNavigate, autoFocus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [models, setModels] = useState<FinderModel[]>([]);
   const [colours, setColours] = useState<FinderColour[]>([]);
   const [focus, setFocus] = useState<FinderModel | null>(null);
   const [loading, setLoading] = useState(true);
+  const [requesting, setRequesting] = useState(false);
   const reqId = useRef(0);
 
   const fetchModels = useCallback(async (query: string) => {
@@ -221,14 +223,20 @@ export function BagFinder({ mode, onSelect, onPhotoFallback, onSubmitQuery, onNa
         </div>
       )}
 
-      {onPhotoFallback && (
-        <button
-          type="button"
-          onClick={onPhotoFallback}
-          className="mt-3 w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-        >
-          Can&apos;t find it? Add a photo
-        </button>
+      {allowRequest && !focus && (
+        <div className="mt-3">
+          {requesting ? (
+            <RequestBagForm query={q} />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setRequesting(true)}
+              className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+            >
+              Can&apos;t find it? Ask us to add it
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
