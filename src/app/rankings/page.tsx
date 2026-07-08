@@ -82,23 +82,20 @@ export default async function RankingsPage() {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-[42px_56px_1fr_150px_88px] gap-4 px-1.5 pb-2 text-[10px] uppercase tracking-wider text-muted/60">
-            <span className="text-right">#</span>
-            <span aria-hidden="true" />
-            <span>Bag</span>
-            <span>Why it ranks here</span>
-            <span className="text-right">Resale median</span>
-          </div>
           <ol className="border-t border-border">
             {rows.map((r) => {
               const href = r.repVariantId != null ? `/bag/${r.repVariantId}` : `/brand/${r.brandId}`;
               return (
                 <li key={r.styleId} className="border-b border-border">
-                  <div className="grid grid-cols-[42px_56px_1fr_150px_88px] items-center gap-4 px-1.5 py-3">
-                    <div className="text-right font-serif text-2xl text-gold-soft tabular-nums">
+                  <div className="flex items-start gap-3 px-1 py-3.5 sm:gap-4">
+                    <div className="w-7 shrink-0 pt-0.5 text-right font-serif text-2xl text-gold-soft tabular-nums sm:w-9">
                       {r.rank}
                     </div>
-                    <Link href={href} className="block" aria-label={`${r.brandName} ${r.styleName}`}>
+                    <Link
+                      href={href}
+                      className="hidden shrink-0 sm:block"
+                      aria-label={`${r.brandName} ${r.styleName}`}
+                    >
                       <BagImage
                         imageUrl={r.repVariantId != null ? images[r.repVariantId] : null}
                         brand={r.brandName}
@@ -107,29 +104,36 @@ export default async function RankingsPage() {
                         className="h-14 w-14 rounded-lg"
                       />
                     </Link>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <Link href={href} className="min-w-0 truncate text-[15px] text-foreground hover:text-gold-soft">
-                          <span className="font-semibold">{r.styleName}</span>
-                          <span className="text-muted"> · {r.brandName}</span>
-                        </Link>
-                        <MovementPill rank={r.rank} previousRank={r.previousRank} />
+                    <div className="flex min-w-0 flex-1 flex-col gap-2">
+                      {/* Name + movement on the left, resale median pinned right. */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                            <Link href={href} className="text-[15px] text-foreground hover:text-gold-soft">
+                              <span className="font-semibold">{r.styleName}</span>
+                              <span className="text-muted"> · {r.brandName}</span>
+                            </Link>
+                            <MovementPill rank={r.rank} previousRank={r.previousRank} />
+                          </div>
+                          <p className="mt-0.5 text-[11.5px] text-muted">{whyNote(r)}</p>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <div className="font-serif text-base text-foreground tabular-nums">
+                            {fmtPrice(r.resaleMedian)}
+                          </div>
+                          <div className="text-[10.5px] text-muted/60">
+                            {r.priceCount.toLocaleString()} {r.priceCount === 1 ? "price" : "prices"}
+                          </div>
+                        </div>
                       </div>
-                      <p className="mt-1 truncate text-[11.5px] text-muted">{whyNote(r)}</p>
-                    </div>
-                    <StandingGlyph
-                      pricePct={r.pricePct}
-                      tradePct={r.tradePct}
-                      scarcityPct={r.scarcityPct}
-                      lead={r.lead}
-                    />
-                    <div className="text-right">
-                      <div className="font-serif text-base text-foreground tabular-nums">
-                        {fmtPrice(r.resaleMedian)}
-                      </div>
-                      <div className="text-[10.5px] text-muted/60">
-                        {r.priceCount.toLocaleString()} {r.priceCount === 1 ? "price" : "prices"}
-                      </div>
+                      {/* The why-meter, capped so it stays readable on wide screens. */}
+                      <StandingGlyph
+                        pricePct={r.pricePct}
+                        tradePct={r.tradePct}
+                        scarcityPct={r.scarcityPct}
+                        lead={r.lead}
+                        className="max-w-[320px]"
+                      />
                     </div>
                   </div>
                 </li>
