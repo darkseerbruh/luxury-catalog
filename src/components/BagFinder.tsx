@@ -167,7 +167,7 @@ export function BagFinder({
             mode === "nav" ? `Chanel flap, black caviar${HINT}` : `Which bag are you adding?${HINT}`
           }
           aria-label="Find a bag"
-          className="w-full rounded-full border border-gold bg-surface py-2 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus:outline-none"
+          className="w-full rounded-full border border-gold bg-surface py-2 pl-10 pr-4 text-base text-foreground placeholder:text-muted focus:outline-none sm:text-sm"
         />
       </div>
 

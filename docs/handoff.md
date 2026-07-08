@@ -29,6 +29,17 @@
 
 ---
 
+## TL;DR — iOS zoom + shop-grid trust fixes (badge saturation, contrast, overlap, placeholder images), SHIPPED (2026-07-08, on `main`)
+
+**Owner reported 4 issues from her phone (screenshots, 2026-07-08); all four fixed:**
+- 📵 **iOS zoom on the menu search killed.** iOS Safari auto-zooms any focused input with font-size < 16px. Fix: `BagFinder` input is `text-base sm:text-sm`, PLUS a global guard in `globals.css` (`@media (max-width: 639px)`: every text input/select/textarea `font-size: max(16px, 1em) !important`) so no future input regresses. Verified: menu search, hero search, newsletter all compute 16px at 393px.
+- 🏷️ **"Great deal" badge saturation fixed (her: "every bag has it, which scares me").** Root cause: the tile badged the BEST band across ALL its listings — with 50-113 listings/tile, one is always ≥10% under its bucket median, so every tile badged. Now the badge rates the "from" price the tile actually shows (the cheapest listing vs ITS spec's like-for-like comps) — one listing, one verdict, matching `ShopProduct.dealBand`'s own doc comment. Labels now reuse `bandLabel` ("Great price"/"Good price"), same as the bag page. NOTE: `deals=1` filter + best-deal sort now also run on from-price semantics.
+- 🎨 **Badge legible everywhere:** solid dark pill (`bg-emerald-950/90` + `text-emerald-200`), moved to the image's BOTTOM-left; "+ Compare" stays top-right, so they can never collide on narrow 2-col mobile cards (they overlapped before).
+- 🖼️ **Shop placeholder tiles (e.g. Neverfulls) fixed.** The tile's image was keyed ONLY to the cheapest listing's variant; a photo-less eBay-only cheapest (only TLC writes `listing_image`) blanked tiles whose siblings have photos. Now: cheapest's variant → other listed variants (`ShopProduct.imageVariantIds`) → ANY catalog photo on the style (`getStyleHeroImages`, new in queries.ts).
+- ✅ Verified end-to-end against a local mock PostgREST (deterministic comps: fair from-price tile shows NO badge even with a 20%-under listing in another bucket; great from-price tile badges; both image fallbacks hit) + Playwright at 393×852 (no overlap, computed styles). Gates green (tsc/eslint/642 tests + build via land script). ⚠️ Couldn't verify against prod data: this container's `SUPABASE_SERVICE_ROLE_KEY` is rejected ("Invalid API key") — worth checking that env secret.
+
+---
+
 ## TL;DR — Mobile menu: search collapsed until tapped (follow-up fix), SHIPPED (2026-07-08, on `main`)
 
 **Owner reported the mobile menu STILL buried under an uncapped grid** (screenshot showed 6+ tiles, no View-all — i.e. the pre-fix bundle, but the 4-cap alone also left the menu links below the fold on a 393px phone). Structural fix:

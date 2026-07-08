@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getShopProducts, type ShopProduct, type ShopSort } from "@/lib/listings";
-import { getVariantImages } from "@/lib/queries";
+import { bandLabel } from "@/lib/listings-core";
+import { getVariantImages, getStyleHeroImages } from "@/lib/queries";
 import { BagImage } from "@/components/BagImage";
 import { CompareToggle, CompareTray } from "@/components/CompareControls";
 import ShopControls from "./ShopControls";
@@ -75,7 +76,24 @@ export default async function ShopPage({
     protectiveFeet,
   });
 
-  const images = await getVariantImages(result.products.map((p) => p.variantId));
+  // Tile photos, three reaches: the cheapest listing's variant, then the group's
+  // other listed variants, then ANY catalog photo on the style — so a photo-less
+  // cheapest listing (e.g. an eBay-only seller; only TLC writes listing_image)
+  // can't blank a tile whose siblings have photos.
+  const images = await getVariantImages(result.products.flatMap((p) => p.imageVariantIds));
+  const tileImage = new Map<string, string>();
+  for (const p of result.products) {
+    const hit = p.imageVariantIds.map((v) => images[v]).find(Boolean);
+    if (hit) tileImage.set(p.key, hit);
+  }
+  const uncovered = result.products.filter((p) => !tileImage.has(p.key));
+  if (uncovered.length > 0) {
+    const styleHeros = await getStyleHeroImages(uncovered.map((p) => p.styleId));
+    for (const p of uncovered) {
+      const url = styleHeros[p.styleId];
+      if (url) tileImage.set(p.key, url);
+    }
+  }
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-5 py-10">
@@ -109,13 +127,13 @@ export default async function ShopPage({
           </p>
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {result.products.map((p) => {
-              const imageUrl = images[p.variantId] ?? null;
+              const imageUrl = tileImage.get(p.key) ?? null;
+              // The badge rates the "from" price the tile shows (same labels as the
+              // bag page's per-listing verdicts). great/good only — fair isn't news.
               const pulse =
-                p.dealBand === "great"
-                  ? "Great deal in stock"
-                  : p.dealBand === "good"
-                    ? "Good deal in stock"
-                    : null;
+                p.dealBand === "great" || p.dealBand === "good"
+                  ? bandLabel(p.dealBand)
+                  : null;
               return (
                 <li key={p.key} className="relative">
                   {/* Sibling of the card link (never nested inside it) so the
@@ -137,8 +155,11 @@ export default async function ShopPage({
                         alt={imageUrl ? bagLabel(p) : undefined}
                         className="aspect-square w-full"
                       />
+                      {/* Bottom-left, away from the top-right Compare pill (they
+                          collided on narrow 2-col mobile cards), on a SOLID dark
+                          pill so it stays legible over white product photos. */}
                       {pulse && (
-                        <span className="absolute left-2 top-2 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-300">
+                        <span className="absolute bottom-2 left-2 rounded-full border border-emerald-400/40 bg-emerald-950/90 px-2 py-0.5 text-xs font-medium text-emerald-200">
                           {pulse}
                         </span>
                       )}
