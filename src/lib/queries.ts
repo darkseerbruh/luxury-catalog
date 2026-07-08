@@ -8,7 +8,9 @@ import { CACHE_CATALOG } from "./cache";
 export interface BrandOverview {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
+  /** House Standing tier "1"–"5" (Tier 1 highest). Legacy string tiers tolerated
+   * during rollout. See docs/ux/tier-formula-spec.md. */
+  tier: string;
   styleCount: number;
   /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
   variantCount: number;
@@ -17,26 +19,34 @@ export interface BrandOverview {
   topStyles: { styleId: number; name: string; variantId: number | null }[];
 }
 
-/** Display order for the brand directory: the tiers most people shop for lead. */
-export const BRAND_TIER_RANK: Record<BrandOverview["tier"], number> = {
+/** Display order for the brand directory: Tier 1 (highest House Standing) leads.
+ * Legacy string keys kept so a brand not yet re-tiered still sorts (mapped near
+ * their numeric equivalent) — removed once every brand is numbered. */
+export const BRAND_TIER_RANK: Record<string, number> = {
+  "1": 0,
+  "2": 1,
+  "3": 2,
+  "4": 3,
+  "5": 4,
+  // legacy fallback
   "ultra-luxury": 0,
-  mid: 1,
-  premium: 2,
-  thrift: 3,
+  mid: 2,
+  premium: 1,
+  thrift: 4,
 };
 
 /**
- * Tier groups for the brand directory, in display order, with section labels.
- * The standardized 4-tier vocabulary (Ultra-luxury / Luxury / Premium / Contemporary).
- * Keys: ultra-luxury, mid→"Luxury", premium (added in migration 0039), thrift→"Contemporary"
- * ("thrift" is never shown, a judgment word). A tier group renders nothing until brands carry
- * that tier, so this is safe before migration 0039/0040 are applied (Premium just shows empty).
+ * Tier groups for the brand directory + nav + homepage, in display order.
+ * Numbered House Standing tiers (Tier 1 highest → Tier 5); see
+ * docs/ux/tier-formula-spec.md. A group renders nothing until brands carry that
+ * tier, so this stays safe if a tier is momentarily empty.
  */
-export const BRAND_TIERS: { key: BrandOverview["tier"]; label: string }[] = [
-  { key: "ultra-luxury", label: "Ultra-luxury" },
-  { key: "mid", label: "Luxury" },
-  { key: "premium", label: "Premium" },
-  { key: "thrift", label: "Contemporary" },
+export const BRAND_TIERS: { key: string; label: string }[] = [
+  { key: "1", label: "Tier 1" },
+  { key: "2", label: "Tier 2" },
+  { key: "3", label: "Tier 3" },
+  { key: "4", label: "Tier 4" },
+  { key: "5", label: "Tier 5" },
 ];
 
 export interface HeroCard {
@@ -72,7 +82,7 @@ export interface StyleSearchResult {
 export interface BrandSearchResult {
   brandId: number;
   name: string;
-  tier: "thrift" | "mid" | "premium" | "ultra-luxury";
+  tier: string;
   variantCount: number;
   /** Styles under the brand, each with a representative variant id to link to its bag page. */
   styles: { styleId: number; name: string; variantId: number | null }[];
@@ -1435,7 +1445,7 @@ async function searchBrandsByName(names: string[]): Promise<BrandSearchResult[]>
 }
 
 function mapBrandRows(
-  rows: { brand_id: number; name: string; tier: "thrift" | "mid" | "premium" | "ultra-luxury"; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
+  rows: { brand_id: number; name: string; tier: string; style: { style_id: number; name: string; variant: { variant_id: number }[] | null }[] | null }[]
 ): BrandSearchResult[] {
   return rows.map((b) => {
     const styles = b.style ?? [];

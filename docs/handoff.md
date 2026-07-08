@@ -1,5 +1,16 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (camera identify v2: video + live capture + haul mode shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (affiliate-capture + full-spectrum promotion + House Standing tier formula shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Affiliate capture + full-spectrum promotion + House Standing tiers (2026-07-08, all on `main`, applied to prod)
+
+**The chain: affiliate data was being DROPPED → now captured → promoted into the catalogue → and brand tiers became our own formula.**
+- 🧲 **Stopped discarding affiliate evidence.** The TLC ingest dropped any in-stock bag it couldn't name from the dictionary (telemetry only). Now unknown-model BAGS (bag-gated, garments/shoes still excluded) land in `discovered_listing` for triage. Wired into the daily `ingest-tlc` Action. Commit `eeb6279`.
+- 🏗️ **Built + RAN the discovered→catalogue promotion.** `promote-discovered --write` was a stub; implemented idempotent find-or-create brand→style→variant + re-point, bag-gated (`canonicalModel`), new brands get a tier. Ran `normalize:discovered --write` (3,383 titles → canonical models) then `promote:discovered --write`: **+2 brands, +32 styles, +164 variants**, 4,143 discovered rows re-pointed. Then triggered `ingest-tlc` → **1,439 live offers placed on the new variants**. New standing Action `catalog-promote.yml` (weekly dry-run report; manual `write=true` persists).
+- 🏅 **Brand tiers = our own formula now (House Standing), numbered Tier 1→5.** Replaces the industry Ultra-luxury/Luxury/Premium/Contemporary scheme. Score = resale median 55% + p90 ceiling 25% + trade volume 20% → percentile blend → cutoffs 90/75/55/30, n-gate ≥30. Spec `docs/ux/tier-formula-spec.md`, pure core `src/lib/house-standing.ts` (6 tests), report `npm run house-standing`, explainer page `/how-we-tier` (live). Migration `0052` APPLIED + backfill run: all **30 brands set to Tier 1-5**. Tier 1 = Hermès, Chanel; Tier 5 = Coach, MK, Tory Burch, etc.
+- 🩹 **Caught + fixed a live regression the backfill caused:** `/brands`, the nav mega-menu, and the homepage brand section rendered ZERO brands (grouping keyed old string tiers). Re-keyed `BRAND_TIERS`/`BRAND_TIER_RANK` to Tier 1-5; verified `/brands` shows 30 brands under Tier 1-5 headings on prod. Commit `36232be`.
+- ⬜ **YOUR TURN (all optional, nothing blocking):** (a) tier **weights (55/25/20) + band cutoffs are v1** — tune if the placement feels off (one edit in `house-standing.ts`, rerun the backfill). (b) **Circularity to revisit:** the LC Index still takes house tier as a 15% input, and tier is now derived from resale price too. (c) Contemporary houses (Tory Burch, Michael Kors, D&G) are now IN the catalog at Tier 4-5 per the full-spectrum call. (d) The `catalog-promote` Action defaults to dry-run; run it with `write=true` to promote the next backlog batch.
 
 ---
 
