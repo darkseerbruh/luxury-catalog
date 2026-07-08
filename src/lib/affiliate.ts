@@ -101,6 +101,26 @@ export function isCjTrackingUrl(url: string): boolean {
   }
 }
 
+// Our CJ publisher website id (PID). NOT a secret — it rides openly in every
+// affiliate URL (like the eBay campaign id). Overridable via env.
+const CJ_PID = process.env.NEXT_PUBLIC_CJ_PID || "101810137";
+
+/** True for a raw The Luxury Closet product URL (not yet CJ-tracked). */
+export function isTheLuxuryClosetUrl(url: string): boolean {
+  try {
+    return /(^|\.)theluxurycloset\.com$/i.test(new URL(url).hostname);
+  } catch {
+    return /theluxurycloset\.com/i.test(url);
+  }
+}
+
+/** Wrap a raw destination URL in a CJ automated deep link so the click is
+ * attributed (verified: redirects to the target with a cjevent param).
+ * Format: https://www.anrdoezrs.net/links/<PID>/type/dlg/<destination>. */
+export function cjDeepLink(url: string): string {
+  return `https://www.anrdoezrs.net/links/${CJ_PID}/type/dlg/${url}`;
+}
+
 /**
  * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
  * campaign id configured this returns the URL unchanged, so eBay links always work
@@ -148,9 +168,11 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
     return applyEbayAffiliate(url);
   }
-  // Already a CJ-tracked deep link (e.g. The Luxury Closet product feed): the
-  // attribution is baked in, so return it untouched — never re-wrap.
+  // Already a CJ-tracked deep link: attribution is baked in, return untouched.
   if (isCjTrackingUrl(url)) return url;
+  // Raw The Luxury Closet product URL (from the CJ API feed): wrap in a CJ deep
+  // link so the click is commission-tracked.
+  if (isTheLuxuryClosetUrl(url)) return cjDeepLink(url);
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);
