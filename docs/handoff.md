@@ -1,5 +1,20 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (unified bag-finder + closet-add-is-review shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-08 (camera identify v2: video + live capture + haul mode shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Camera identify v2: video in, live capture feedback, haul mode, logo pass (2026-07-08, on `main`)
+
+**`/identify` (Spot the Fake) went from single-photo to the thrift-flipper tool.** Grew out of the owner's Goodwill field test: Claude chat read her bags one at a time, choked on her 13 `.mov` files, and gave overconfident verdicts; we prototyped on her real footage in-chat (rack scan + 5-bag haul + native-res logo crops) and she greenlit the build. Strategic frame she locked: **being a thrift flippers' resource is gold**.
+- 🎥 **Video in:** videos never upload raw. Frames are sampled in-browser, scored for sharpness (Laplacian variance, `src/lib/identify/frame-picking.ts`, 11 unit tests), best 4 upload as JPEGs capped at the vision ceiling (`extract.ts`).
+- 📷 **Live capture with real-time feedback (owner's favorite):** `CameraCapture.tsx` viewfinder shows chips that REACT instead of instructing (QR-scanner model): Sharp/Hold-steady, frames n/4, and "Read: 'the sak'" the moment a stamp is legible (throttled Haiku pings to new `/api/identify/live-read`, stop on first success, ≤12/session, 40/5min rate limit).
+- 🔍 **The logo pass:** first pass returns `logoHints` (normalized regions of stamps/labels/tags/medallions + legible flag). Unread hints get re-cropped CLIENT-side at native resolution (re-seek the video / re-decode the photo) and sent once more with the prior JSON (`prior` field → refine prompt). Proven manually on her footage: turned "navy crossbody, unknown" into a legible "liz claiborne" disc and flipped a wrong Brahmin read.
+- 🧺 **Haul mode:** multiple files queue as one list; each VIDEO = its own bag, photos in one selection = angles of ONE bag; runs sequentially (rate-limit + phone-memory kind). Rate limit bumped 6→12/5min for the multi-bag session.
+- 🏷️ **Price-tag OCR:** `priceTagText` read off store stickers (worked on both Savers tags in her footage); shown as a Sticker spec row + weighed next to the resale range copy (no computed margin % claims).
+- 🛒 **Off-catalog fallback (the strategic one):** thrift racks are mall brands; when a read has no catalog style match, the card says so honestly, links **eBay SOLD comps** (`buildEbaySoldCompsLink`, EPN attribution built-in, fires `outbound_resale_clicked` source=identify_offcatalog), and the miss logs to `searched_not_found` (`[camera]` prefix) = the demand sensor for which thrift-tier brands earn catalog coverage next.
+- 📊 **New events:** `identify_scan_started` (kind: photo|video|live|haul) + `identify_scan_completed` (matched/confidence/brand/refined). Result card extracted to `ScanResult.tsx` (all flows share it; calibration copy unchanged: markers not verdicts, value only "if genuine").
+- 🧪 **Gates:** tsc/eslint/tests(642)/next build all green. ⚠️ Container gotcha: this env ships NO `NEXT_PUBLIC_SUPABASE_ANON_KEY`; build-time queries fail gracefully, so a `.env.local` with a labeled dummy value gates compile+render (real key would come from the env store; egress to the live site is proxy-blocked here).
+- ⬜ **YOUR TURN:** (a) open `/identify` on your phone against prod and run the live camera on a real bag (needs https + camera permission; verify the chips tick). (b) The rack-scan mode (pan a whole shelf → pinned flags) is validated on your footage but NOT built; say the word next session. (c) Optional: drop the real anon key into the cloud env store so future build gates run against live data.
 
 ---
 

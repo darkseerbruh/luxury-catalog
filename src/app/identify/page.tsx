@@ -1,158 +1,352 @@
 "use client";
 
-import { useRef, useState } from "react";
+/**
+ * Spot the Fake — the camera identify flow.
+ *
+ * Three ways in, one engine:
+ * - Live camera: viewfinder with real-time feedback chips (sharpness, frames
+ *   collected, "logo read"). The QR-scanner model: the UI teaches by reacting,
+ *   not instructing.
+ * - Snap or upload: photos and VIDEOS, several at once. Each video is treated
+ *   as its own bag (the haul case: film thirteen bags, get thirteen reads);
+ *   photos in one selection are treated as angles of one bag.
+ * - No camera at all: the by-house marker guides remain one tap away.
+ *
+ * Videos never upload raw. Frames are sampled in-browser, scored for
+ * sharpness, and only the best few go up. When the first pass spots a stamp,
+ * label, or tag it could not read, the client re-crops that region at native
+ * resolution and asks once more (the logo pass) — that second look is what
+ * turns "navy crossbody, brand unknown" into a named bag.
+ */
+
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { track, EVENTS } from "@/lib/analytics/events";
+import {
+  cropHintRegion,
+  cropImageHintRegion,
+  extractSharpFrames,
+  imageFileToUploadJpeg,
+} from "@/lib/identify/extract";
+import type { IdentifyResponse, LogoHint } from "@/lib/identify/types";
+import CameraCapture, {
+  type CameraCaptureResult,
+} from "@/components/identify/CameraCapture";
+import ScanResult from "@/components/identify/ScanResult";
 
-interface IdentificationResult {
-  brand: string | null;
-  style: string | null;
-  sizeLabel: string | null;
-  colorway: string | null;
-  hardwareColor: string | null;
-  hardwareType: string | null;
-  materialType: string | null;
-  visibleAuthMarkers: string[];
-  madeIn: string | null;
-  confidence: "high" | "medium" | "low";
-  notes: string | null;
+type ItemStatus = "queued" | "extracting" | "analyzing" | "refining" | "done" | "error";
+
+interface ScanItem {
+  id: number;
+  label: string;
+  kind: "photo" | "video" | "live";
+  status: ItemStatus;
+  /** 0..1 while extracting frames from a video. */
+  progress: number;
+  result: IdentifyResponse | null;
+  liveReadText: string | null;
+  error: string | null;
 }
 
-interface CatalogMatch {
-  styleId: number;
-  styleName: string;
-  brandName: string;
-  variantId: number | null;
-  sizeLabel: string | null;
-  exteriorColorway: string | null;
-  hardwareColor: string | null;
-}
-
-interface ResaleEstimate {
-  median: number;
-  low?: number | null;
-  count: number;
-  currency: string;
-  asOf: string | null;
-}
-
-interface ApiResponse {
-  identification?: IdentificationResult;
-  catalogMatch?: CatalogMatch | null;
-  resale?: ResaleEstimate | null;
-  hardFlag?: { reason: string } | null;
-  error?: string;
-}
-
-function formatPrice(amount: number, currency: string) {
-  const symbol = currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
-  return `${symbol}${Math.round(amount).toLocaleString()}`;
-}
-
-const CONFIDENCE_LABEL: Record<string, string> = {
-  high: "High confidence",
-  medium: "Moderate confidence",
-  low: "Low confidence",
+const STATUS_LINE: Record<ItemStatus, string> = {
+  queued: "Waiting its turn",
+  extracting: "Picking the sharpest frames",
+  analyzing: "Checking the markers",
+  refining: "Taking a closer look at the stamp",
+  done: "",
+  error: "",
 };
 
-const CONFIDENCE_COLOR: Record<string, string> = {
-  high: "text-gold border-gold/40 bg-gold/10",
-  medium: "text-muted border-border",
-  low: "text-muted border-border/50",
-};
+/** Max photos sent as angles of one bag. */
+const MAX_PHOTOS_PER_BAG = 4;
+/** Hints worth a native-res second look, most promising kinds first. */
+const REFINE_KIND_ORDER: LogoHint["kind"][] = [
+  "stamp",
+  "label",
+  "medallion",
+  "tag",
+  "print",
+  "hardware",
+];
+
+function pickRefineHints(hints: LogoHint[]): LogoHint[] {
+  return hints
+    .filter((h) => !h.legible)
+    .sort(
+      (a, b) =>
+        REFINE_KIND_ORDER.indexOf(a.kind) - REFINE_KIND_ORDER.indexOf(b.kind)
+    )
+    .slice(0, 3);
+}
+
+/** A first pass that leaves the brand unread or shaky earns the second look. */
+function needsRefine(res: IdentifyResponse): boolean {
+  if (!res.identification) return false;
+  const unreadHints = (res.logoHints ?? []).some((h) => !h.legible);
+  return unreadHints && (!res.identification.brand || res.identification.confidence !== "high");
+}
+
+async function postIdentify(
+  blobs: Blob[],
+  prior?: IdentifyResponse["identification"]
+): Promise<IdentifyResponse> {
+  const body = new FormData();
+  blobs.forEach((b, i) => body.append("images", b, `frame-${i}.jpg`));
+  if (prior) body.append("prior", JSON.stringify(prior));
+  const res = await fetch("/api/identify", { method: "POST", body });
+  return (await res.json()) as IdentifyResponse;
+}
 
 export default function IdentifyPage() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<ApiResponse | null>(null);
-  const [shareState, setShareState] = useState<"idle" | "copied">("idle");
+  const nextIdRef = useRef(1);
+  const [items, setItems] = useState<ScanItem[]>([]);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [cameraNote, setCameraNote] = useState<string | null>(null);
+  const busy = items.some((i) =>
+    ["queued", "extracting", "analyzing", "refining"].includes(i.status)
+  );
+
+  const patchItem = useCallback((id: number, patch: Partial<ScanItem>) => {
+    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, ...patch } : i)));
+  }, []);
+
+  // Timestamps of the frames each video item uploaded, so the logo pass can
+  // re-seek the same frame in the source video. Keyed by item id.
+  const blobsMetaRef = useRef<Record<number, number[]>>({});
+
+  function hintTime(hint: LogoHint, times: number[] | undefined): number {
+    if (!times || times.length === 0) return 0;
+    return times[Math.min(hint.imageIndex, times.length - 1)]!;
+  }
+
+  /** Photo-set and live-capture path (video goes through runFromPicked). */
+  const runItem = useCallback(
+    async (item: ScanItem, source: { imageFiles?: File[]; frames?: Blob[] }) => {
+      try {
+        // 1. Gather upload frames.
+        let blobs: Blob[];
+        if (source.imageFiles) {
+          patchItem(item.id, { status: "extracting" });
+          blobs = await Promise.all(
+            source.imageFiles.slice(0, MAX_PHOTOS_PER_BAG).map(imageFileToUploadJpeg)
+          );
+        } else {
+          blobs = source.frames ?? [];
+        }
+        if (blobs.length === 0) throw new Error("No usable frames in this one.");
+
+        // 2. First pass.
+        patchItem(item.id, { status: "analyzing" });
+        let result = await postIdentify(blobs);
+        if (result.error) throw new Error(result.error);
+        let refined = false;
+
+        // 3. The logo pass: re-crop unread stamp/label regions at native
+        // resolution and ask once more. Needs the original photos to re-crop
+        // from (live-capture frames are already the best we hold).
+        if (needsRefine(result) && source.imageFiles) {
+          const hints = pickRefineHints(result.logoHints ?? []);
+          if (hints.length > 0) {
+            patchItem(item.id, { status: "refining" });
+            try {
+              const crops: Blob[] = [];
+              for (const hint of hints) {
+                const file =
+                  source.imageFiles[Math.min(hint.imageIndex, source.imageFiles.length - 1)]!;
+                crops.push(await cropImageHintRegion(file, hint));
+              }
+              if (crops.length > 0 && result.identification) {
+                const second = await postIdentify(crops, result.identification);
+                if (!second.error && second.identification) {
+                  result = second;
+                  refined = true;
+                }
+              }
+            } catch {
+              // Refine is best-effort: the first-pass result stands.
+            }
+          }
+        }
+
+        patchItem(item.id, { status: "done", result });
+        track(EVENTS.identifyScanCompleted, {
+          kind: item.kind,
+          matched: Boolean(result.catalogMatch?.styleId),
+          confidence: result.identification?.confidence,
+          brand: result.identification?.brand ?? undefined,
+          refined,
+        });
+      } catch (err) {
+        patchItem(item.id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Something went wrong. Try again.",
+        });
+      }
+    },
+    [patchItem]
+  );
+
+  // Resolves when the given item reaches a terminal state. Polling a ref keeps
+  // this independent of render timing without threading promises through state.
+  const itemsRef = useRef<ScanItem[]>([]);
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+  const waitForItem = useCallback((id: number): Promise<void> => {
+    return new Promise((resolve) => {
+      const check = () => {
+        const it = itemsRef.current.find((i) => i.id === id);
+        if (!it || it.status === "done" || it.status === "error") resolve();
+        else setTimeout(check, 250);
+      };
+      check();
+    });
+  }, []);
+
+  // Video path where frames were already extracted (so timestamps are known).
+  const runFromPicked = useCallback(
+    async (item: ScanItem, videoFile: File, blobs: Blob[]) => {
+      try {
+        if (blobs.length === 0) throw new Error("No usable frames in this one.");
+        patchItem(item.id, { status: "analyzing" });
+        let result = await postIdentify(blobs);
+        if (result.error) throw new Error(result.error);
+        let refined = false;
+
+        if (needsRefine(result)) {
+          const hints = pickRefineHints(result.logoHints ?? []);
+          if (hints.length > 0) {
+            patchItem(item.id, { status: "refining" });
+            try {
+              const times = blobsMetaRef.current[item.id];
+              const crops: Blob[] = [];
+              for (const hint of hints) {
+                crops.push(await cropHintRegion(videoFile, hintTime(hint, times), hint));
+              }
+              if (crops.length > 0 && result.identification) {
+                const second = await postIdentify(crops, result.identification);
+                if (!second.error && second.identification) {
+                  result = second;
+                  refined = true;
+                }
+              }
+            } catch {
+              // Refine is best-effort: the first-pass result stands.
+            }
+          }
+        }
+
+        patchItem(item.id, { status: "done", result });
+        track(EVENTS.identifyScanCompleted, {
+          kind: "video",
+          matched: Boolean(result.catalogMatch?.styleId),
+          confidence: result.identification?.confidence,
+          brand: result.identification?.brand ?? undefined,
+          refined,
+        });
+      } catch (err) {
+        patchItem(item.id, {
+          status: "error",
+          error: err instanceof Error ? err.message : "Something went wrong. Try again.",
+        });
+      }
+    },
+    [patchItem]
+  );
+
+  const enqueueFiles = useCallback(
+    (files: File[]) => {
+      const videos = files.filter((f) => f.type.startsWith("video/"));
+      const images = files.filter((f) => f.type.startsWith("image/"));
+      const newItems: { item: ScanItem; run: () => void }[] = [];
+
+      for (const video of videos) {
+        const id = nextIdRef.current++;
+        const item: ScanItem = {
+          id,
+          label: video.name.replace(/\.[^.]+$/, ""),
+          kind: "video",
+          status: "queued",
+          progress: 0,
+          result: null,
+          liveReadText: null,
+          error: null,
+        };
+        newItems.push({
+          item,
+          run: () =>
+            void (async () => {
+              // Capture the picked timestamps for the refine re-seek.
+              const picked = await extractSharpFrames(video, {
+                onProgress: (f) => patchItem(id, { progress: f, status: "extracting" }),
+              });
+              blobsMetaRef.current[id] = picked.map((p) => p.timeSec);
+              await runFromPicked(item, video, picked.map((p) => p.blob));
+            })(),
+        });
+      }
+      if (images.length > 0) {
+        const id = nextIdRef.current++;
+        const item: ScanItem = {
+          id,
+          label: images.length > 1 ? `${images.length} photos, one bag` : images[0]!.name.replace(/\.[^.]+$/, ""),
+          kind: "photo",
+          status: "queued",
+          progress: 0,
+          result: null,
+          liveReadText: null,
+          error: null,
+        };
+        newItems.push({ item, run: () => void runItem(item, { imageFiles: images }) });
+      }
+      if (newItems.length === 0) return;
+
+      setItems((prev) => [...prev, ...newItems.map((n) => n.item)]);
+      track(EVENTS.identifyScanStarted, {
+        kind: videos.length > 1 ? "haul" : videos.length === 1 ? "video" : "photo",
+        count: newItems.length,
+      });
+      // Run sequentially so a haul doesn't fire five vision calls at once
+      // (kinder to the rate limit and to the phone's memory).
+      void (async () => {
+        for (const n of newItems) {
+          await Promise.resolve(n.run());
+          await waitForItem(n.item.id);
+        }
+      })();
+    },
+    [patchItem, runItem, runFromPicked, waitForItem]
+  );
+
+  function handleCameraDone(capture: CameraCaptureResult) {
+    setCameraOpen(false);
+    if (capture.frames.length === 0) return;
+    const id = nextIdRef.current++;
+    const item: ScanItem = {
+      id,
+      label: "Live capture",
+      kind: "live",
+      status: "queued",
+      progress: 0,
+      result: null,
+      liveReadText: capture.liveReadText,
+      error: null,
+    };
+    setItems((prev) => [...prev, item]);
+    track(EVENTS.identifyScanStarted, { kind: "live", count: 1 });
+    void runItem(item, { frames: capture.frames });
+  }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0] ?? null;
-    setFile(f);
-    setResult(null);
-    if (f) {
-      const url = URL.createObjectURL(f);
-      setPreview(url);
-    } else {
-      setPreview(null);
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!file) return;
-    setLoading(true);
-    setResult(null);
-
-    try {
-      const body = new FormData();
-      body.append("image", file);
-      const res = await fetch("/api/identify", { method: "POST", body });
-      const data: ApiResponse = await res.json();
-      setResult(data);
-    } catch {
-      setResult({ error: "Network error — please try again." });
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function reset() {
-    setFile(null);
-    setPreview(null);
-    setResult(null);
-    setShareState("idle");
+    const files = Array.from(e.target.files ?? []);
+    if (files.length > 0) enqueueFiles(files);
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  const id = result?.identification;
-  const match = result?.catalogMatch;
-
-  const matchUrl =
-    match?.variantId
-      ? `/bag/${match.variantId}`
-      : match?.brandName
-        ? `/search?q=${encodeURIComponent([match.brandName, match.styleName].filter(Boolean).join(" "))}`
-        : null;
-
-  // Best brand/style strings for resale/consign deep-links and the share card.
-  // Prefer the AI identification, fall back to the catalog match.
-  const shareBrand = (id?.brand || match?.brandName || "").trim();
-  const shareStyle = (id?.style || match?.styleName || "").trim();
-  const resaleLinks =
-    shareBrand || shareStyle ? buildResaleLinks(shareBrand, shareStyle) : [];
-  const consignLinks =
-    shareBrand || shareStyle ? buildConsignmentLinks(shareBrand, shareStyle) : [];
-
-  // Link to the bag page's above-the-fold value summary when we have a match.
-  const valueUrl = match?.variantId ? `/bag/${match.variantId}#price` : null;
-
-  const shareLabel = [shareBrand, shareStyle].filter(Boolean).join(" ") || "this bag";
-
-  async function handleShare() {
-    const text = `I found a ${shareLabel} — identified with Luxury Catalog.`;
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({ title: "Luxury Catalog", text, url });
-      } catch {
-        // user cancelled or share failed — no-op
-      }
-      return;
-    }
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(`${text} ${url}`.trim());
-        setShareState("copied");
-        setTimeout(() => setShareState("idle"), 2000);
-      } catch {
-        // clipboard unavailable — no-op
-      }
-    }
+  function reset() {
+    setItems([]);
+    blobsMetaRef.current = {};
   }
 
   return (
@@ -161,490 +355,149 @@ export default function IdentifyPage() {
         <h1 className="font-serif text-3xl text-foreground">Spot the Fake</h1>
         <p className="mt-1 text-lg text-gold-soft">Is it real? Let&rsquo;s check the markers.</p>
         <p className="mt-2 text-muted">
-          Found a bag in the wild? Snap a photo. We&rsquo;ll tell you what it
-          looks like, what it would be worth if genuine, and how to check it&rsquo;s
-          real. We flag what we can see and hedge what we can&rsquo;t. These are
+          Found a bag in the wild? Point your camera at it, or film the whole
+          haul and load it here. We&rsquo;ll tell you what each one looks like,
+          what it would be worth if genuine, and how to check it&rsquo;s real.
+          We flag what we can see and hedge what we can&rsquo;t. These are
           markers to check, not a verdict.
         </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Photo picker */}
-        <div
-          onClick={() => inputRef.current?.click()}
-          className={`relative flex min-h-64 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors ${
-            preview
-              ? "border-gold/40 bg-transparent"
-              : "border-border bg-surface hover:border-gold/60"
-          }`}
-        >
-          {preview ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={preview}
-              alt="Selected bag"
-              className="h-full w-full object-contain"
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-3 p-8 text-center">
-              <CameraIcon />
-              <p className="text-foreground">Tap to shoot a photo or pick one from your library</p>
-              <p className="text-sm text-muted">JPEG, PNG, WebP · max 5 MB</p>
-            </div>
-          )}
-        </div>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={handleFileChange}
+      {cameraOpen ? (
+        <CameraCapture
+          onDone={handleCameraDone}
+          onCancel={() => setCameraOpen(false)}
+          onUnavailable={(message) => {
+            setCameraOpen(false);
+            setCameraNote(message);
+          }}
         />
-
-        <div className="flex gap-3">
-          {preview && (
-            <button
-              type="button"
-              onClick={reset}
-              className="rounded-full border border-border px-5 py-3 text-sm text-muted transition-colors hover:border-gold hover:text-foreground"
-            >
-              Clear
-            </button>
-          )}
+      ) : (
+        <div className="flex flex-col gap-3">
           <button
-            type="submit"
-            disabled={!file || loading}
-            className="flex-1 rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft disabled:cursor-not-allowed disabled:opacity-40"
+            type="button"
+            onClick={() => {
+              setCameraNote(null);
+              setCameraOpen(true);
+            }}
+            className="flex items-center justify-center gap-3 rounded-2xl bg-gold px-5 py-4 font-medium text-bg transition-colors hover:bg-gold-soft"
           >
-            {loading ? "Checking…" : "Spot the fake"}
+            <CameraIcon dark />
+            Point the camera at it
           </button>
-        </div>
-        {/* The photo path has real failure modes (rate limit, bad thrift-store
-            light, low confidence). Always offer the no-photo route so the
-            in-hand moment never dead-ends. */}
-        <p className="text-center text-sm text-muted">
-          No photo, or in a hurry?{" "}
-          <Link href="/authentication" className="text-gold hover:underline">
-            Check the markers by house →
-          </Link>
-        </p>
-      </form>
-
-      {/* Thrift-find logging CTA */}
-      <Link
-        href={
-          id?.brand || id?.style
-            ? `/found?brand=${encodeURIComponent(id.brand ?? "")}&style=${encodeURIComponent(id.style ?? "")}`
-            : "/found"
-        }
-        className="rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 text-center text-sm text-muted transition-colors hover:border-gold/50 hover:text-foreground"
-      >
-        Already snagged it? <span className="text-gold">Log your find →</span>
-      </Link>
-
-      {/* Error */}
-      {result?.error && (
-        <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">
-          {result.error}
+          <div
+            onClick={() => inputRef.current?.click()}
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-surface p-6 text-center transition-colors hover:border-gold/60"
+          >
+            <p className="text-foreground">Or upload photos and videos</p>
+            <p className="text-sm text-muted">
+              Several at once is fine. Each video reads as its own bag, so a
+              filmed haul comes back as a list. JPEG, PNG, WebP, MOV, MP4.
+            </p>
+          </div>
+          {cameraNote && (
+            <p className="text-center text-sm text-muted">{cameraNote}</p>
+          )}
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          {/* The photo path has real failure modes (rate limit, bad thrift-store
+              light, low confidence). Always offer the no-photo route so the
+              in-hand moment never dead-ends. */}
+          <p className="text-center text-sm text-muted">
+            No photo, or in a hurry?{" "}
+            <Link href="/authentication" className="text-gold hover:underline">
+              Check the markers by house →
+            </Link>
+          </p>
         </div>
       )}
 
-      {/* Results */}
-      {id && (
-        <section className="flex flex-col gap-4">
-          {/* Confidence + catalog match banner */}
-          <div className="flex items-center justify-between">
-            <span
-              className={`rounded-full border px-3 py-1 text-xs uppercase tracking-wide ${
-                CONFIDENCE_COLOR[id.confidence] ?? CONFIDENCE_COLOR.low
-              }`}
-            >
-              {CONFIDENCE_LABEL[id.confidence] ?? id.confidence}
-            </span>
-            {matchUrl && match && (
-              <Link
-                href={matchUrl}
-                className="rounded-full bg-gold px-4 py-1.5 text-sm font-medium text-bg transition-colors hover:bg-gold-soft"
-              >
-                View in catalog →
-              </Link>
-            )}
-          </div>
+      {/* Thrift-find logging CTA */}
+      {(() => {
+        const firstDone = items.find((i) => i.status === "done" && i.result?.identification);
+        const idResult = firstDone?.result?.identification;
+        return (
+          <Link
+            href={
+              idResult?.brand || idResult?.style
+                ? `/found?brand=${encodeURIComponent(idResult.brand ?? "")}&style=${encodeURIComponent(idResult.style ?? "")}`
+                : "/found"
+            }
+            className="rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 text-center text-sm text-muted transition-colors hover:border-gold/50 hover:text-foreground"
+          >
+            Already snagged it? <span className="text-gold">Log your find →</span>
+          </Link>
+        );
+      })()}
 
-          {/* Hard, house-confirmed dealbreaker (origin stamp). The only place the
-              tool speaks firmly, and still conditioned on the photo being accurate. */}
-          {result?.hardFlag && (
-            <div className="rounded-2xl border border-[#cf7d59]/50 bg-[#cf7d59]/10 p-6">
-              <div className="flex items-center gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cf7d59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
-                <h2 className="font-serif text-lg text-foreground">A dealbreaker, if the photo is right</h2>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-foreground/90">{result.hardFlag.reason}</p>
-              <p className="mt-2 text-sm text-muted">
-                We would walk away. Confirm it in person before you spend a dollar. We are reading a
-                photo, so check the label yourself, but a wrong country of origin is one of the clearest tells there is.
-              </p>
-            </div>
+      {/* The queue: one card per bag. */}
+      {items.map((item, idx) => (
+        <div key={item.id} className="flex flex-col gap-3">
+          {items.length > 1 && (
+            <h2 className="border-b border-border pb-2 font-serif text-xl text-foreground">
+              Bag {idx + 1}
+              <span className="ml-2 text-sm font-normal text-muted">{item.label}</span>
+            </h2>
           )}
 
-          {/* Identification card */}
-          <div className="rounded-2xl border border-border bg-surface p-6">
-            {id.brand || id.style ? (
-              <>
-                <p className="text-sm uppercase tracking-widest text-muted">
-                  {id.brand ?? "Unknown brand"}
-                </p>
-                <p className="mt-1 font-serif text-2xl text-foreground">
-                  {id.style ?? "Unknown style"}
-                </p>
-              </>
-            ) : (
-              <p className="font-serif text-xl text-foreground">
-                Couldn&rsquo;t place this one
-              </p>
-            )}
-
-            <div className="mt-4 divide-y divide-border">
-              {id.sizeLabel && <SpecRow label="Size" value={id.sizeLabel} />}
-              {id.colorway && <SpecRow label="Colorway" value={id.colorway} />}
-              {id.hardwareColor && (
-                <SpecRow label="Hardware" value={id.hardwareColor} />
-              )}
-              {id.hardwareType && (
-                <SpecRow label="Closure" value={id.hardwareType} />
-              )}
-              {id.materialType && (
-                <SpecRow label="Material" value={id.materialType} />
-              )}
-            </div>
-          </div>
-
-          {/* Shareable result card — screenshot-ready for the thrift-reveal loop */}
-          {(id.brand || id.style) && (
-            <div className="flex flex-col gap-3">
-              <div
-                className="rounded-2xl border border-gold/40 bg-gradient-to-br from-surface-raised to-surface p-6 text-center"
-                aria-label="Shareable result card"
-              >
-                <p className="text-xs uppercase tracking-[0.2em] text-gold/80">
-                  I found a
-                </p>
-                <p className="mt-2 font-serif text-2xl text-foreground">
-                  {shareBrand || "designer bag"}
-                </p>
-                {shareStyle && (
-                  <p className="font-serif text-xl text-gold">{shareStyle}</p>
-                )}
-                <div className="mt-3 flex flex-wrap justify-center gap-1.5 text-xs text-muted">
-                  {[id.sizeLabel, id.colorway, id.materialType]
-                    .filter(Boolean)
-                    .map((spec) => (
-                      <span
-                        key={spec as string}
-                        className="rounded-full border border-border px-2.5 py-0.5"
-                      >
-                        {spec}
-                      </span>
-                    ))}
-                </div>
-                <p className="mt-4 text-xs uppercase tracking-widest text-muted">
-                  Luxury Catalog
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleShare}
-                className="flex items-center justify-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
-              >
-                <ShareIcon />
-                {shareState === "copied" ? "Copied to clipboard" : "Share this find"}
-              </button>
-            </div>
-          )}
-
-          {/* What it's worth — never fabricate a price; link to the value summary. */}
-          {valueUrl ? (
-            <Link
-              href={valueUrl}
-              className="flex items-center justify-between rounded-2xl border border-gold/40 bg-gold/5 px-5 py-4 transition-colors hover:border-gold"
-            >
-              <span>
-                <span className="block text-sm font-medium text-foreground">
-                  See what it actually sells for
-                </span>
-                <span className="block text-xs text-muted">
-                  A resale range built from recorded sales, on the catalog page
-                </span>
-              </span>
-              <span className="shrink-0 text-gold">→</span>
-            </Link>
-          ) : (
-            (id.brand || id.style) && (
-              <Link
-                href={`/search?q=${encodeURIComponent(shareLabel)}`}
-                className="flex items-center justify-between rounded-2xl border border-dashed border-border bg-surface/50 px-5 py-4 transition-colors hover:border-gold/50"
-              >
-                <span>
-                  <span className="block text-sm font-medium text-foreground">
-                    Look it up in the catalog
-                  </span>
-                  <span className="block text-xs text-muted">
-                    The only resale ranges we show are built from recorded sales
-                  </span>
-                </span>
-                <span className="shrink-0 text-gold">→</span>
-              </Link>
-            )
-          )}
-
-          {/* Where to buy / sell — monetize the highest-intent moment. */}
-          {(resaleLinks.length > 0 || consignLinks.length > 0) && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {resaleLinks.length > 0 && (
-                <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
-                  <h2 className="font-serif text-lg text-foreground">Where to buy</h2>
-                  <p className="mt-1 text-xs text-muted">
-                    Pre-filled searches on the major resale platforms.
-                  </p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    {resaleLinks.map((l) => (
-                      <a
-                        key={l.key}
-                        href={l.url}
-                        target="_blank"
-                        rel="noopener noreferrer nofollow sponsored"
-                        onClick={() =>
-                          track(EVENTS.outboundResaleClicked, {
-                            platform: l.key,
-                            brand: shareBrand,
-                            style: shareStyle,
-                            source: "identify",
-                          })
-                        }
-                        className="rounded-full border border-border px-4 py-2 text-center text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
-                      >
-                        Search on {l.name} →
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {consignLinks.length > 0 && (
-                <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
-                  <h2 className="font-serif text-lg text-foreground">Where to sell</h2>
-                  <p className="mt-1 text-xs text-muted">
-                    Sell fast for cash or consign for more.
-                  </p>
-                  <div className="mt-3 flex flex-col gap-2">
-                    {consignLinks.map((l) => (
-                      <a
-                        key={l.key}
-                        href={l.url}
-                        target="_blank"
-                        rel="noopener noreferrer nofollow sponsored"
-                        onClick={() =>
-                          track(EVENTS.outboundConsignClicked, {
-                            platform: l.key,
-                            mode: l.mode,
-                            brand: shareBrand,
-                            style: shareStyle,
-                            source: "identify",
-                          })
-                        }
-                        className="rounded-full border border-border px-4 py-2 text-center text-sm text-foreground transition-colors hover:border-gold hover:text-gold"
-                      >
-                        {l.mode === "buyout"
-                          ? `Get a quote on ${l.name}`
-                          : `Consign with ${l.name}`}{" "}
-                        →
-                      </a>
-                    ))}
-                  </div>
+          {item.status !== "done" && item.status !== "error" && (
+            <div className="rounded-2xl border border-border bg-surface/50 p-5">
+              <p className="text-sm text-foreground">{STATUS_LINE[item.status]}…</p>
+              {item.status === "extracting" && item.kind === "video" && (
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-border">
+                  <div
+                    className="h-full rounded-full bg-gold transition-all"
+                    style={{ width: `${Math.round(item.progress * 100)}%` }}
+                  />
                 </div>
               )}
             </div>
           )}
 
-          {/* Auth markers */}
-          {id.visibleAuthMarkers && id.visibleAuthMarkers.length > 0 && (
-            <div className="rounded-2xl border border-border bg-surface p-6">
-              <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted">
-                Visible authentication markers
-              </h2>
-              <ul className="flex flex-col gap-1.5">
-                {id.visibleAuthMarkers.map((marker, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="mt-0.5 shrink-0 text-gold">·</span>
-                    <span className="text-foreground">{marker}</span>
-                  </li>
-                ))}
-              </ul>
+          {item.status === "error" && (
+            <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-muted">
+              {item.error}
             </div>
           )}
 
-          {/* Catalog match detail */}
-          {match && match.brandName && (
-            <div className="rounded-2xl border border-border bg-surface p-6">
-              <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted">
-                Catalog match
-              </h2>
-              <p className="text-sm text-muted">{match.brandName}</p>
-              {match.styleName && (
-                <p className="mt-0.5 font-serif text-lg text-foreground">
-                  {match.styleName}
-                </p>
-              )}
-              {(match.sizeLabel || match.exteriorColorway) && (
-                <p className="mt-1 text-sm text-muted">
-                  {[match.sizeLabel, match.exteriorColorway]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-              )}
-              {matchUrl && (
-                <Link
-                  href={matchUrl}
-                  className="mt-4 block text-sm text-gold hover:underline"
-                >
-                  See full authentication details →
-                </Link>
-              )}
-            </div>
+          {item.status === "done" && item.result && (
+            <ScanResult result={item.result} liveReadText={item.liveReadText} />
           )}
+        </div>
+      ))}
 
-          {/* What it's worth, IF genuine. Gated on a catalog match + not-low
-              confidence; never a flat value on the unverified bag. */}
-          {match && result?.resale && id.confidence !== "low" && (
-            <div className="rounded-2xl border border-gold/30 bg-gold/5 p-6">
-              <h2 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted">
-                If it&rsquo;s genuine
-              </h2>
-              <p className="font-serif text-2xl text-foreground">
-                {result.resale.low != null && result.resale.low < result.resale.median ? (
-                  <>
-                    from {formatPrice(result.resale.low, result.resale.currency)}{" "}
-                    <span className="text-base text-muted">
-                      live · typically {formatPrice(result.resale.median, result.resale.currency)}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    {formatPrice(result.resale.median, result.resale.currency)}{" "}
-                    <span className="text-base text-muted">typical resale</span>
-                  </>
-                )}
-              </p>
-              <p className="mt-1 text-xs text-muted">
-                Median of {result.resale.count} listings
-                {result.resale.asOf ? `, as of ${result.resale.asOf}` : ""}. An estimate, not
-                an appraisal, and only if the bag is authentic.
-              </p>
-              {matchUrl && (
-                <Link href={matchUrl} className="mt-3 inline-block text-sm font-medium text-gold hover:text-gold-soft">
-                  Check the markers before you trust it &rarr;
-                </Link>
-              )}
-            </div>
-          )}
-
-          {/* No catalog match — calibrated: absence is ambiguous, so we name both
-              readings (uncatalogued vs a shape the house never made) without a verdict. */}
-          {!match && (id.brand || id.style) && (
-            <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-5 text-sm text-muted">
-              We couldn&rsquo;t match this to a{id.brand ? ` ${id.brand}` : ""} bag on record.
-              That can mean one of two things: a bag we haven&rsquo;t catalogued yet, or a
-              print on a shape the house never made, which is a common fake tell. Run the
-              markers before you trust it.{" "}
-              {id.style && (
-                <Link
-                  href={`/search?q=${encodeURIComponent(id.style)}`}
-                  className="text-gold hover:underline"
-                >
-                  Search the catalog for &ldquo;{id.style}&rdquo;
-                </Link>
-              )}
-            </div>
-          )}
-
-          {/* Notes */}
-          {id.notes && (
-            <p className="rounded-xl border border-border bg-surface/50 px-5 py-4 text-sm italic text-muted">
-              {id.notes}
-            </p>
-          )}
-
-          {/* Escalation — the Check rung points up to Verify and Learn
-              (authentication standard §4: never a verdict, always escalate). */}
-          <div className="rounded-2xl border border-border bg-surface/50 p-5 text-sm">
-            <p className="text-muted">
-              These are the markers we can see in a photo, not proof. We don&rsquo;t
-              guarantee authenticity, and a good fake can pass a photo check, so confirm
-              anything high-stakes with a person.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-medium text-gold">
-              <Link href="/authenticate" className="transition-colors hover:text-gold-soft">
-                Get it checked by a pro &rarr;
-              </Link>
-              <Link href="/authentication" className="transition-colors hover:text-gold-soft">
-                Read the authentication guides &rarr;
-              </Link>
-            </div>
-          </div>
-        </section>
+      {items.length > 0 && !busy && (
+        <button
+          type="button"
+          onClick={reset}
+          className="rounded-full border border-border px-5 py-3 text-sm text-muted transition-colors hover:border-gold hover:text-foreground"
+        >
+          Start over
+        </button>
       )}
     </main>
   );
 }
 
-function SpecRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex gap-3 py-2 text-sm">
-      <span className="w-24 shrink-0 text-muted">{label}</span>
-      <span className="text-foreground">{value}</span>
-    </div>
-  );
-}
-
-function ShareIcon() {
+function CameraIcon({ dark = false }: { dark?: boolean }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="18" cy="5" r="3" />
-      <circle cx="6" cy="12" r="3" />
-      <circle cx="18" cy="19" r="3" />
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-    </svg>
-  );
-}
-
-function CameraIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="40"
-      height="40"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="text-muted"
+      className={dark ? "text-bg" : "text-muted"}
     >
       <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
       <circle cx="12" cy="13" r="3" />
