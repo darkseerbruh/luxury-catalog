@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Vivrelle rent-and-shoot content-needs engine (2026-07-08, on `main`)
+
+**Built a self-reranking tool that says which bag to photograph next for the site, tracks what's shot, and schedules against her Vivrelle plan.** Source of truth: `docs/content-needs.md` (regenerate `npm run content:needs`; logic in `scripts/content-needs/` — `catalog.ts` = what the site needs + the plan + logged decisions, `captured.csv` = what's shot).
+- **Plan decided: Classique+ (2 items/mo).** No Couture (in-hand Classic Flap was its last job), no Réservé/Privée (Birkin/Kelly already shot via the Fashionphile showroom, so ~0 image gain for ~$800/mo invite-only), no Premier add-on (owner live check 2026-07-08: Premier only has mini/belt Marmont + Cassette; the real full-size ones are Classique).
+- **Ranking = site-surface value per rental dollar:** homepage canon (`queries.ts HERO_STYLES`) + slideshow cutouts + protective-feet/seeded-auth heroes + About cutouts + live search demand, minus a **partial-credit discount** when a variant already covers the silhouette (Epi Neverfull in hand demotes the Monogram twin from ~6 to 1.5).
+- **Queue (11 Classique, ~6 months at 2/mo):** Speedy → Lady Dior → Alma → Goyard Saint Louis → Marmont → Jackie → Cassette → Neverfull(mono) → Goyard Artois/Pochette Métis/OnTheGo. **In hand now:** black caviar Classic Flap + Epi Neverfull (per-bag shot lists in the doc; shoot before returning).
+- **Vivrelle mechanics learned (archivist, 2026-07-08):** 30-day min hold per item + 1 swap/cycle, so a slot = ~1 bag/month (fast-swapping does NOT add throughput); Classique+ ~$249 = 2 items = best $/bag (~$124.50); Premier add-on ~$49/mo recurring (not one-time), Premier closet only.
+
+**Your turn:** (1) shoot the two bags in hand + tell me so I mark them captured and the queue advances; (2) switch the Vivrelle plan to Classique+ in-app when ready. Work is on branch `claude/vivrelle-rental-bags-4j80zx`, landing to `main` this wrap-up.
+
+---
+
 ## TL;DR — Metricool calendar re-timed to clean 2/day; migrations confirmed live; stale branches cleaned (2026-07-07, on `main`)
 
 **Calendar (blogId 6480195) re-shaped to a crisp cadence, no collisions.** Supersedes the prior "1/day Jul 8–Sep 8" note for the Jul 7–Aug 20 window.
