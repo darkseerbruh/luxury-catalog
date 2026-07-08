@@ -3,6 +3,16 @@
 
 ---
 
+## TL;DR — Affiliate photos as bag headers + capped mobile menu search, SHIPPED (2026-07-08, on `main`)
+
+**Two owner asks, both landed + deploying.**
+- 🖼️ **Affiliate photos fill image gaps everywhere.** `getVariantImages` (`src/lib/queries.ts`) now resolves in tiers: catalog `image_url` → **affiliate listing photo** (`listing_image` joined to a live for-sale `price_history` row by the composite `(platform, listing_ref)` key; newest listing with a photo wins) → community `bag_photo`. Affiliate beats community on purpose (studio-shot vs social-style); community is the floor. Source-agnostic: The Luxury Closet is the only feed writing `listing_image` today, but any affiliate feed that populates it is picked up automatically. One resolver, so it lands on grids, search, recs, AND the bag-page header. Resilient (pre-0047 or any error → placeholder). No migration needed (0047 already applied on prod).
+- 📱 **Mobile menu search no longer buries the menu.** `BagFinder` gained `maxModels` (cap suggestions) + `onViewAll` (a "View all results →" CTA to `/search`). Mobile nav caps to **4** suggestions with the CTA, and the panel is now scrollable (`max-h`/`overflow-y-auto`), so the rest of the menu is reachable. Desktop search unchanged.
+- ✅ Full green gate (tsc/eslint/next build/**631 tests**); landed via `land-to-main.sh` (`3996f5a`). Deploy auto-triggers on the push to `main` (Vercel Git integration).
+- ⬜ **YOUR TURN:** eyeball the live deploy (affiliate header crops across a few bags; mobile menu 4-cap + scroll). **Optional:** greenlight a prod read and I'll measure real before/after image coverage (validates the "nearly every bag has a TLC listing" assumption with n + date).
+
+---
+
 ## TL;DR — Unified bag-finder + closet-add-is-review, SHIPPED (2026-07-08, on `main`)
 
 **One search component now powers the nav (desktop + mobile) and adding a bag to your closet; adding a Have/Had bag IS the review.** Spec: `docs/ux/unified-search-and-review-spec.md`. Grew out of the owner's founder-first-reviews idea (she wants to be the first reviewer on every bag she has carried; recruit founding reviewers into a working flow).
