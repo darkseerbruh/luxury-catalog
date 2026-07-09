@@ -278,13 +278,15 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 - ✅ **TheRealReal FRESH pull — DONE 2026-07-09 via cloud Apify actor** (the durable fix;
   browser capture kept getting kicked + the Chrome classifier was flaky). Actor
   `lulzasaur/therealreal-scraper` (residential proxy, bypasses PerimeterX). Adapter
-  `supabase/ingest/sources/trr-apify.ts`. Two passes 2026-07-09: 949 handbag listings across
-  ~15 sub/men's categories → 509 fresh curated price rows (43 realized SOLD comps) + ~398
-  banked; TRR total 8,038 rows. Method is now the standing TRR capture (memory
-  trr_capture_sessions). ⚠ **Apify FREE tier is ~$5/mo credit; the 2nd pass auto-aborted at
-  $1.74 remaining.** To pull more this cycle the owner must add credits/a card in Apify.
-  ⬜ NEXT (owner-gated spend): once credits added, widen to more subcategories/designers
-  (~120/category cap, no pagination) on a schedule to approach full coverage.
+  `supabase/ingest/sources/trr-apify.ts`. THREE passes 2026-07-09 (600 + 349 + 1,445 across
+  women's + men's bag subcategories) → **819 distinct fresh curated price rows** (49 realized
+  SOLD comps after dedup) + ~1.2k banked; TRR total 8,350 rows; multi-source styles ≥2:497
+  ≥3:254. Owner upgraded Apify FREE→Starter ($29/mo, pay-as-you-go) to unblock; sweep cost
+  ~$7 (within Starter prepaid). Method is the standing TRR capture (memory
+  trr_capture_sessions). Each category caps ~120 (no pagination), so deeper coverage needs
+  designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths + wire a capped weekly
+  refresh schedule (owner-gated recurring spend). Remind owner she can downgrade Apify→Free
+  after the big sweeps if she doesn't want the $29/mo to renew.
 - ⬜ **Still owner-gated (task part 1)**: FULL eBay pull burns Firecrawl credits.
 
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
