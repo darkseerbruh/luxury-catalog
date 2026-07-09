@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { buildResaleLinks } from "@/lib/affiliate";
 import { PLATFORMS } from "@/lib/platforms";
 import { track, EVENTS } from "@/lib/analytics/events";
@@ -25,7 +26,10 @@ export default function WhereToBuy({
       <h2 className="mb-2 font-serif text-xl text-foreground">Where to buy</h2>
       <p className="mb-1 text-sm text-muted">
         Pre-filled searches on the major resale platforms. Listings and prices
-        are set by each reseller.
+        are set by each reseller.{" "}
+        <Link href="/where-to-buy" className="text-gold-soft underline underline-offset-2 hover:text-gold">
+          What protects you at each venue
+        </Link>
       </p>
       <p className="mb-4 text-xs text-muted/70">
         Affiliate links: we may earn a commission if you buy, at no extra cost to you.{" "}
