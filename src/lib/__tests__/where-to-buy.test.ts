@@ -5,7 +5,6 @@ import {
   authAppliesAtPrice,
   remediesFor,
   REMEDIES,
-  PRICE_BANDS,
   TIER_LABELS,
 } from "../where-to-buy";
 
@@ -84,11 +83,10 @@ describe("authAppliesAtPrice (the price-aware flip)", () => {
     expect(authAppliesAtPrice(VENUES_BY_SLUG["facebook-marketplace"], 5000)).toBe(false);
   });
 
-  it("price bands span the eBay/Poshmark threshold so the flip is visible", () => {
+  it("the $500 threshold brackets both sides (the fact the matrix states inline)", () => {
     const ebay = VENUES_BY_SLUG.ebay;
-    const results = PRICE_BANDS.map((b) => authAppliesAtPrice(ebay, b.probe));
-    expect(results).toContain(false);
-    expect(results).toContain(true);
+    expect(authAppliesAtPrice(ebay, 499)).toBe(false);
+    expect(authAppliesAtPrice(ebay, 500)).toBe(true);
   });
 });
 

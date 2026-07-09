@@ -538,14 +538,6 @@ export function authAppliesAtPrice(venue: VenueProfile, priceUsd: number): boole
   }
 }
 
-/** Price bands the hub renders as toggle chips (server-rendered links). */
-export const PRICE_BANDS = [
-  { key: "under-200", label: "Under $200", probe: 150 },
-  { key: "200-500", label: "$200 to $500", probe: 350 },
-  { key: "500-plus", label: "$500 and up", probe: 800 },
-] as const;
-export type PriceBandKey = (typeof PRICE_BANDS)[number]["key"];
-
 /* ------------------------------------------------------------------ */
 /* The remedy library: how to close each gap yourself.                 */
 /* Composed per venue from its `gaps` on the profile page.             */

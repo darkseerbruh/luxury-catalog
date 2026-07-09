@@ -6,9 +6,6 @@ import {
   VENUE_CATEGORIES,
   CATEGORY_LABELS,
   TIER_LABELS,
-  PRICE_BANDS,
-  authAppliesAtPrice,
-  type PriceBandKey,
   type VenueProfile,
 } from "@/lib/where-to-buy";
 import { SITE_URL } from "@/lib/geo";
@@ -32,6 +29,27 @@ function Mark({ ok, note }: { ok: boolean; note?: string }) {
   );
 }
 
+/** Authentication as a stated fact, threshold and all. No input, no toggle. */
+function AuthCell({ venue }: { venue: VenueProfile }) {
+  const t = venue.authentication.type;
+  if (t === "physical-all") return <Mark ok note="any price" />;
+  if (t === "physical-threshold") {
+    const th = venue.authentication.thresholdUsd;
+    return (
+      <span className="flex flex-col gap-0.5 text-[13px]">
+        <span className="text-emerald-600">
+          <span aria-hidden>✓</span> ${th} and up
+        </span>
+        <span className="text-rose-500">
+          <span aria-hidden>✗</span> below ${th}
+        </span>
+      </span>
+    );
+  }
+  if (t === "photo-optional") return <Mark ok={false} note="photo review only" />;
+  return <Mark ok={false} note="none" />;
+}
+
 function tierChip(v: VenueProfile) {
   const styles: Record<string, string> = {
     protected: "border-emerald-600/40 text-emerald-700",
@@ -47,14 +65,7 @@ function tierChip(v: VenueProfile) {
   );
 }
 
-export default async function WhereToBuyPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ price?: string }>;
-}) {
-  const { price } = await searchParams;
-  const band = PRICE_BANDS.find((b) => b.key === (price as PriceBandKey)) ?? PRICE_BANDS[2];
-
+export default async function WhereToBuyPage() {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -80,43 +91,22 @@ export default async function WhereToBuyPage({
         <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Where to buy</p>
         <h1 className="font-serif text-3xl text-foreground">Where to buy, honestly</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          What each venue actually protects, at your price. No judgment, just the receipts:
-          every claim below links to the venue&apos;s own published policy, with the date we
-          checked it.
+          What each venue actually protects. No judgment, just the receipts: every claim
+          below links to the venue&apos;s own published policy, with the date we checked it.
+        </p>
+        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted/80">
+          One thing to read closely: eBay and Poshmark only physically inspect bags priced
+          $500 and up. Below that line, no one checks the bag for you.
         </p>
       </header>
 
-      {/* The signature move: protection depends on price. */}
-      <section className="mb-6">
-        <p className="mb-2 text-xs uppercase tracking-wide text-muted">I&apos;m spending</p>
-        <div className="flex flex-wrap gap-2">
-          {PRICE_BANDS.map((b) => (
-            <Link
-              key={b.key}
-              href={b.key === "500-plus" ? "/where-to-buy" : `/where-to-buy?price=${b.key}`}
-              className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                b.key === band.key
-                  ? "border-gold text-gold"
-                  : "border-border text-muted hover:border-gold-soft"
-              }`}
-            >
-              {b.label}
-            </Link>
-          ))}
-        </div>
-        <p className="mt-2 text-xs text-muted/80">
-          eBay and Poshmark physically inspect bags from $500. Below that line the checkmark
-          you may be picturing does not exist.
-        </p>
-      </section>
-
       {/* The protection matrix. */}
       <div className="overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full min-w-[540px] text-sm">
+        <table className="w-full min-w-[560px] text-sm">
           <thead>
             <tr className="border-b border-border bg-surface text-left text-xs text-muted">
               <th className="px-3 py-2.5 font-normal">Venue</th>
-              <th className="px-3 py-2.5 font-normal">Physical check at {band.label.toLowerCase()}</th>
+              <th className="px-3 py-2.5 font-normal">Physical check</th>
               <th className="px-3 py-2.5 font-normal">Returns</th>
               <th className="px-3 py-2.5 font-normal">If it&apos;s fake</th>
               <th className="px-3 py-2.5 font-normal">Payment held safe</th>
@@ -134,7 +124,6 @@ export default async function WhereToBuyPage({
                   </td>
                 </tr>
                 {VENUES.filter((v) => v.category === cat).map((v) => {
-                  const auth = authAppliesAtPrice(v, band.probe);
                   return (
                     <tr key={v.slug} className="border-b border-border last:border-b-0">
                       <td className="px-3 py-3">
@@ -147,16 +136,7 @@ export default async function WhereToBuyPage({
                         <div className="mt-1">{tierChip(v)}</div>
                       </td>
                       <td className="px-3 py-3">
-                        <Mark
-                          ok={auth}
-                          note={
-                            v.authentication.type === "physical-threshold"
-                              ? `from $${v.authentication.thresholdUsd}`
-                              : v.authentication.type === "photo-optional"
-                              ? "photo review only"
-                              : undefined
-                          }
-                        />
+                        <AuthCell venue={v} />
                       </td>
                       <td className="px-3 py-3">
                         {v.returns.windowDays != null ? (
