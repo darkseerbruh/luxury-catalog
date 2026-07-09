@@ -275,9 +275,16 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   style-level merge (re-point variants+price_history, delete), not a token collapse.
 - ⬜ **NEW-STYLE editorial**: the 51 new styles are bare style+variant+price (no hero image /
   description / spectrum placement yet) — layer content later per full-spectrum goal.
-- ⬜ **Still owner-gated (task part 1)**: FULL TheRealReal pull needs a logged-in Claude-in-Chrome
-  session (bot-blocked to fetch); FULL eBay pull burns Firecrawl credits. 10k TRR rows already
-  banked were mined by this pass. Broad re-capture stays hers.
+- ✅ **TheRealReal FRESH pull — DONE 2026-07-09 via cloud Apify actor** (the durable fix;
+  browser capture kept getting kicked + the Chrome classifier was flaky). Actor
+  `lulzasaur/therealreal-scraper` (residential proxy, bypasses PerimeterX). Adapter
+  `supabase/ingest/sources/trr-apify.ts`. First run: 600 women's-handbag listings across 7
+  subcategories → 325 curated price rows (43 realized SOLD comps) + 275 banked; multi-source
+  styles 225→279 (≥2), 93→110 (≥3); TRR total 7,443 rows. Cost ~$3 (Apify free credit).
+  Method is now the standing TRR capture (see memory trr_capture_sessions). ⬜ NEXT: widen to
+  more subcategories/designers (~120/category cap) on a schedule to approach full coverage.
+- ⬜ **Still owner-gated (task part 1)**: FULL eBay pull burns Firecrawl credits. Broad TRR
+  re-capture is now cheap+reliable via the Apify actor (small per-run spend, her Apify credit).
 
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
 - ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").
