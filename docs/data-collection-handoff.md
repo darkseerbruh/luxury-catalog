@@ -480,8 +480,9 @@ Verdicts (all evidence fetched 2026-07-09 unless noted):
   time n/a; program launched 8/18/2025.** Translation: clicks may not track and commissions may not
   pay out while they're unfunded. Application filed = free queue position; the GATE for any code/feed
   work is Link status = online + exposure level recovered. Re-check the merchant profile before wiring.
-  Status: application teed up in-session 2026-07-09 (modal: promotion type = Content); final
-  checkbox + Join click = owner's (permission layer treats program-joins as her outreach).
+  Status: 🟡 **APPLIED 2026-07-09** (owner clicked Join; Awin confirmed "request to join has been
+  sent to the advertiser"; promotion type = Content). On approval: re-check Link status + exposure
+  level BEFORE any feed/link wiring (the gate above).
 - ❌ **Atlanta Luxury Bags — SKIP as a listed merchant (for now).** Real Shopify store (est. 2018 as
   The Gold ATM, ATL showroom, Entrupy + in-house auth) but: **no affiliate program or feed exists**
   (GoAffPro portal unattached; nothing on CJ/Awin/Impact/ShareASale; on-site "affiliate request form"
