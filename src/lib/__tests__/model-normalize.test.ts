@@ -10,10 +10,22 @@ describe("canonicalModel", () => {
   });
 
   it("excludes accessories / small leather goods (shares a model name)", () => {
-    expect(canonicalModel("Gucci", "Calfskin Mini Dionysus Chain Wallet")).toBeNull();
     expect(canonicalModel("Chanel", "Lambskin Classic Flap Card Holder")).toBeNull();
     expect(canonicalModel("Hermès", "Epsom Constance Slim Wallet")).toBeNull();
     expect(canonicalModel("Gucci", "GG Marmont Key Pouch")).toBeNull();
+    expect(canonicalModel("Celine", "Graphic Print Crew Neck T-Shirt")).toBeNull();
+    expect(canonicalModel("Saint Laurent", "Virgin Wool Blazer")).toBeNull();
+    expect(canonicalModel("Gucci", "GG Supreme Monogram Belt")).toBeNull();
+  });
+
+  it("treats chain-carry formats as bags (WOC precedent, 2026-07-09)", () => {
+    // The catalog ranks Wallet on Chain as a style; chain wallets/WOCs sold as
+    // handbags roll into their parent bag style instead of dead-ending as SLG.
+    expect(canonicalModel("Chanel", "Caviar Quilted Wallet on Chain WOC Black")).toBe("Wallet on Chain");
+    expect(canonicalModel("Gucci", "Calfskin Mini Dionysus Chain Wallet")).toBe("Dionysus");
+    expect(canonicalModel("Louis Vuitton", "Monogram Pochette Felicie Chain Wallet")).toBe("Félicie");
+    expect(canonicalModel("Hermès", "Epsom Kelly Wallet To Go Gold")).toBe("Kelly To Go");
+    expect(canonicalModel("Gucci", "Soft GG Supreme Monogram Web Belt Bag Black")).toBe("Belt Bag");
   });
 
   it("prefers the more-specific model when listed first", () => {
@@ -39,6 +51,18 @@ describe("canonicalModel", () => {
     expect(canonicalBrand("Chanel Pharrell")).toBe("Chanel");
     expect(canonicalBrand("Hermes")).toBe("Hermès");
     expect(canonicalBrand("Balenciaga")).toBe("Balenciaga");
+    expect(canonicalBrand("Chloe")).toBe("Chloé");
+    expect(canonicalBrand("Valentino Garavani")).toBe("Valentino");
+  });
+
+  it("covers every catalog brand previously missing from the alias table", () => {
+    expect(canonicalBrand("Mulberry")).toBe("Mulberry");
+    expect(canonicalBrand("Alexander McQueen")).toBe("Alexander McQueen");
+    expect(canonicalBrand("Jacquemus")).toBe("Jacquemus");
+    expect(canonicalBrand("Off White")).toBe("Off-White");
+    expect(canonicalBrand("OFF-WHITE")).toBe("Off-White");
+    expect(canonicalBrand("Longchamp")).toBe("Longchamp");
+    expect(canonicalBrand("Telfar")).toBe("Telfar");
   });
 
   it("maps models through a sub-brand label", () => {

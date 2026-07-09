@@ -11,13 +11,29 @@
  * MODELS / BRAND_ALIASES as new recurring models surface in triage.
  */
 
-/** Accessory / small-leather-good / non-bag tokens — NOT bags we assign a model to. */
+/** Accessory / small-leather-good / non-bag tokens — NOT bags we assign a model to.
+ *  Garment/shoe tokens added 2026-07-09 from the residue audit (TRR rows include
+ *  apparel; ~1.6k backlog rows were clothing clustering as if they were bags). */
 const SLG_TOKENS = [
   "wallet", "card holder", "cardholder", "card case", "coin", "purse on chain",
-  "pouch", "pochette accessoires", "key pouch", "key case", "agenda", "passport",
+  "pouch", "pochette accessoires", "pochette accessories", "key pouch", "key case", "agenda", "passport",
   "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
   "bag charm", "phone holder", "airpod", "earring", "necklace", "brooch", "cuff",
+  "belt", "watch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
+  "dress", "blazer", "sweater", "jumper", "jeans", "skirt", "hoodie", "sweatshirt",
+  "t-shirt", "t shirt", "tshirt", "tee", "shirt", "jacket", "coat", "pants", "trousers",
+  "shorts", "cardigan", "vest", "gown", "blouse", "jumpsuit", "romper", "heels",
+  "slingback", "ballerina", "ballet", "derby", "oxford", "bracelet",
+];
+
+/** Chain-carry / belted bags whose titles contain an SLG token ("wallet", "pouch",
+ *  "belt") but ARE bags the catalog ranks (WOC is an LC-Index style). Checked BEFORE
+ *  the SLG gate so those tokens don't dead-end them. */
+const BAG_OVERRIDES = [
+  "wallet on chain", "woc", "chain wallet", "wallet to go", "to go wallet",
+  "easy pouch", "the pouch", "mini pouch", "belt bag", "bum bag", "fanny pack",
+  "waist bag", "vanity",
 ];
 
 const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -64,6 +80,21 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/dolce\s*&?\s*gabbana|\bd&g\b/i, "Dolce & Gabbana"],
   [/michael\s*kors|^mk\b/i, "Michael Kors"],   // incl. "MICHAEL Michael Kors" diffusion line
   [/tory\s*burch/i, "Tory Burch"],
+  // New houses with recurring backlog demand (2026-07-09). "^christian$"/"^loro$" catch
+  // TRUNCATED feed brand_guesses (listed AFTER /dior/ so "Christian Dior" still wins).
+  [/louboutin|^christian$/i, "Christian Louboutin"],
+  [/loro\s*piana|^loro$/i, "Loro Piana"],
+  [/b[uv]lgari/i, "Bulgari"],
+  [/\bmcm\b/i, "MCM"],
+  [/ferragamo/i, "Salvatore Ferragamo"],
+  [/khaite/i, "Khaite"],
+  // Catalog brands previously missing here entirely — their feed rows never brand-matched.
+  [/mulberry/i, "Mulberry"],
+  [/mcqueen/i, "Alexander McQueen"],           // Alexander McQueen, McQ
+  [/jacquemus/i, "Jacquemus"],
+  [/off[\s-]*white/i, "Off-White"],
+  [/longchamp/i, "Longchamp"],
+  [/telfar/i, "Telfar"],
 ];
 
 /** Resolve any raw brand/sub-brand/collab string to a canonical brand. */
@@ -82,12 +113,16 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
     ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"], ["Trendy CC", "trendy cc"],
     ["Urban Spirit", "urban spirit"],
-    ["Classic Flap", "classic flap", "double flap", "single flap", "timeless"],
+    ["Classic Flap", "classic flap", "double flap", "single flap", "timeless", "rectangular flap", "square flap", "mini flap"],
     ["Wallet on Chain", "wallet on chain", "woc"],
     ["Camera Bag", "camera"], ["Diana", "diana"], ["Cerf Tote", "cerf"],
     ["Grand Shopping Tote", "grand shopping", "gst"], ["Petite Shopping Tote", "petite shopping", "pst"],
     ["Kelly Shopper", "kelly shopper"], ["Medallion Tote", "medallion"], ["Chanel 31", "chanel 31", "31 bag"],
     ["Duma Backpack", "duma"], ["Souplissimo", "souplissimo"],
+    // Residue-audit additions (2026-07-09). Mini rectangular/square flaps roll up to
+    // Classic Flap (size label carries Mini); Kelly Flap = the vintage Chanel Kelly.
+    ["Kelly Flap", "kelly flap"], ["Urban Essentials", "urban essentials"],
+    ["Pearl Crush", "pearl crush"], ["Uniform", "uniform"],
   ],
   "Louis Vuitton": [
     ["Neverfull", "neverfull"], ["Speedy", "speedy"], ["Alma", "alma"], ["Capucines", "capucines"],
@@ -109,6 +144,51 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Tivoli", "tivoli"], ["Galliera", "galliera"], ["Turenne", "turenne"], ["Cluny", "cluny"],
     ["Croisette", "croisette"], ["Palm Springs", "palm springs"], ["Manhattan", "manhattan"],
     ["Tuileries", "tuileries"], ["Estrela", "estrela"], ["Palermo", "palermo"], ["Batignolles", "batignolles"],
+    // Residue-audit additions (2026-07-09): each recurred ≥5× in unmatched FP/TRR backlog titles.
+    ["Artsy", "artsy"], ["Eva Clutch", "eva"], ["Geronimos", "geronimos"], ["Trouville", "trouville"],
+    ["Amazone", "amazone"], ["Vanity", "vanity"], ["Cité", "cite", "cité"], ["Chelsea", "chelsea"],
+    ["Cabas Mezzo", "cabas mezzo"], ["Cabas Piano", "cabas piano"], ["Neo Cabas", "neo cabas"],
+    ["Saumur", "saumur"], ["Thames", "thames"], ["Cannes", "cannes"], ["Marais", "marais"],
+    ["Bucket", "bucket"], ["Slouchy", "slouchy"], ["Pochette Florentine", "florentine"],
+    ["Easy Pouch On Strap", "easy pouch"], ["Double Zip Pochette", "double zip"],
+    ["Over The Moon", "over the moon"], ["Évasion", "evasion"], ["Nil", "nil"],
+    ["Greenwich", "greenwich"], ["Alizé", "alize"], ["Lodge", "lodge"], ["Reporter", "reporter"],
+    ["Low Key Hobo", "low key"], ["Stockton", "stockton"], ["Catchy", "catchy"], ["Croissant", "croissant"],
+    ["Soft Trunk", "soft trunk"], ["Fold Me Pouch", "fold me"], ["Pochette Marly", "marly"],
+    ["Sully", "sully"], ["Evora", "evora"], ["Girolata", "girolata"], ["Hampstead", "hampstead"],
+    ["Nolita", "nolita"], ["Verona", "verona"], ["Madeleine", "madeleine"], ["Buci", "buci"],
+    ["Sac Plat", "sac plat"], ["Lockit", "lockit"], ["Locky BB", "locky"], ["Rivoli", "rivoli"],
+    ["Saintonge", "saintonge"], ["Spontini", "spontini"], ["New Wave", "new wave"],
+    ["Multipli-Cité", "multipli-cite", "multipli cite"], ["Broadway", "broadway"], ["Belmont", "belmont"],
+    ["Brera", "brera"], ["Duomo", "duomo"], ["Ravello", "ravello"], ["South Bank", "south bank"],
+    ["Porte-Documents Voyage", "porte-documents voyage", "porte documents voyage"],
+    ["Georges", "georges"], ["Maida Hobo", "maida"], ["Carmel Hobo", "carmel"], ["Bel Air", "bel air"],
+    ["Excursion", "excursion"], ["Ursula", "ursula"], ["Pochette Gange", "gange"], ["Sirius", "sirius"],
+    ["Camera Box", "camera box"], ["Judy", "judy"], ["Saint Cloud", "saint cloud"],
+    ["Side Trunk", "side trunk"], ["Tambourin", "tambourin"], ["Reade", "reade"], ["Victoire", "victoire"],
+    ["LV Biker", "biker"], ["On My Side", "on my side"], ["Duo Messenger", "duo messenger"],
+    ["Trio Messenger", "trio messenger"], ["Bosphore", "bosphore"], ["Clapton", "clapton"],
+    ["Parioli", "parioli"], ["Pochette Melville", "melville"], ["Santa Monica", "santa monica"],
+    ["Sistina", "sistina"], ["Uzès", "uzes"], ["District", "district"], ["Avenue Sling", "avenue sling"],
+    ["Tadao", "tadao"], ["Blanche", "blanche"], ["Mini Moon", "mini moon"], ["Sac Sport", "sac sport"],
+    ["Marelle", "marelle"], ["Muria", "muria"], ["Babylone", "babylone"], ["Beverly", "beverly"],
+    ["Hudson", "hudson"], ["Iéna", "iena"], ["Griet", "griet"], ["Marceau", "marceau"],
+    ["Monceau", "monceau"], ["Annie", "annie"], ["Aurelia", "aurelia"], ["Greta", "greta"],
+    ["Sharleen", "sharleen"], ["Pochette Dame", "pochette dame"], ["Pochette Twin", "pochette twin"],
+    ["Popincourt", "popincourt"], ["Randonnée", "randonnee"], ["Sac Souple", "sac souple"],
+    ["Surène", "surene"], ["Vaugirard", "vaugirard"], ["City Steamer", "city steamer"],
+    ["S Lock", "s lock"], ["Brea", "brea"], ["Stresa", "stresa"], ["Aubagne", "aubagne"],
+    ["Caissa", "caissa"], ["Brittany", "brittany"], ["Wight", "wight"], ["Riverside", "riverside"],
+    ["Pochette Ipanema", "ipanema"], ["Portobello", "portobello"], ["Saleya", "saleya"],
+    ["Sarria", "sarria"], ["Illovo", "illovo"], ["Sorbonne", "sorbonne"], ["Soufflot", "soufflot"],
+    ["Atlantis", "atlantis"], ["Odyssée", "odyssee"], ["Lexington", "lexington"], ["Tilsitt", "tilsitt"],
+    ["Baikal", "baikal"], ["Sunset Boulevard", "sunset boulevard"], ["V Tote", "v tote"],
+    ["Westminster", "westminster"], ["Hina", "hina"], ["Abbesses", "abbesses"], ["Blois", "blois"],
+    ["Cartouchière", "cartouchiere"], ["Sonatine", "sonatine"], ["Trunk Clutch", "trunk clutch"],
+    ["Pop My Heart", "pop my heart"], ["Multipass", "multipass"], ["Danube", "danube"],
+    ["Cruiser", "cruiser"], ["Sablons", "sablons"], ["Petit Palais", "petit palais"],
+    ["Ribera", "ribera"], ["Naviglio", "naviglio"], ["Berkeley", "berkeley"], ["Siena", "siena"],
+    ["Daniel", "daniel"], ["Flore", "flore"], ["Mirage", "mirage"],
   ],
   Gucci: [
     ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont"], ["Jackie 1961", "jackie"],
@@ -118,24 +198,34 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Zumi", "zumi"], ["Sylvie", "sylvie"], ["Padlock", "padlock"], ["Bree", "bree"], ["Aphrodite", "aphrodite"],
     ["Abbey", "abbey"], ["Sukey", "sukey"], ["Pelham", "pelham"], ["Hysteria", "hysteria"], ["Britt", "britt"],
     ["Emily", "emily"], ["Rajah", "rajah"],
+    // Residue-audit additions (2026-07-09)
+    ["Neo Vintage", "neo vintage"], ["Belt Bag", "belt bag"], ["Luce", "luce"], ["Emblem", "emblem"],
+    ["Retro Interlocking G", "retro interlocking"], ["Day Backpack", "day backpack"], ["Eden", "eden"],
+    ["Savoy", "savoy"], ["Dome", "dome"], ["Petite GG", "petite gg"],
   ],
   Hermès: [
+    // To Go variants BEFORE the parent models (first match wins).
+    ["Kelly To Go", "kelly wallet to go", "kelly to go"], ["Constance To Go", "constance long to go", "constance to go"],
     ["Birkin", "birkin"], ["Kelly", "kelly"], ["Constance", "constance"], ["Evelyne", "evelyne"],
-    ["Picotin Lock", "picotin"], ["Lindy", "lindy"], ["Bolide", "bolide"], ["Garden Party", "garden party"],
+    ["Picotin Lock", "picotin"], ["Lindy", "lindy"], ["Bolide", "bolide"], ["Garden Party", "garden party", "neo garden"],
     ["Herbag", "herbag"], ["Roulis", "roulis"], ["Jypsière", "jypsi"], ["Halzan", "halzan"],
     ["Steeple", "steeple"], ["Kaba", "kaba"], ["Jige", "jige"], ["Bride-a-Brac", "bride-a-brac", "bride a brac"],
     ["24/24", "24/24", "24 24"], ["Della Cavalleria", "della cavalleria"], ["In-The-Loop", "in-the-loop", "in the loop"],
     ["Geta", "geta"], ["Toolbox", "toolbox"], ["Trim", "trim"], ["Verrou", "verrou"],
     ["Plume", "plume"], ["Victoria", "victoria"], ["Double Sens", "double sens"], ["Massai", "massai"],
     ["Berline", "berline"], ["Fourre-Tout", "fourre-tout", "fourre tout"], ["Haut à Courroies", "haut à courroies", "haut a courroies"],
+    // Residue-audit additions (2026-07-09)
+    ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
   ],
   Celine: [
-    ["Luggage", "luggage"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen"],
+    ["Luggage", "luggage"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen", "soft 16"],
     ["Triomphe", "triomphe"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
-    ["Classic Box", "classic box", "box bag"], ["Sangle", "sangle"], ["Conti", "conti"],
+    ["Classic Box", "classic box", "box bag", "classic"], ["Sangle", "sangle"], ["Conti", "conti"],
     ["Trio", "trio"], ["Tabou", "tabou"], ["Besace", "besace"],
     ["Trapeze", "trapeze"], ["Nino", "nino"], ["Phantom", "phantom"], ["Boogie", "boogie"],
-    ["Frame Bag", "frame bag"], ["Big Bag", "big bag"], ["Nano Bucket", "nano bucket"],
+    ["Frame Bag", "frame bag", "frame"], ["Big Bag", "big bag"], ["Nano Bucket", "nano bucket"],
+    // Residue-audit additions (2026-07-09): FP lists the Classic Box as "Leather Classic <size>".
+    ["Macadam", "macadam"],
   ],
   "Saint Laurent": [
     ["Loulou", "loulou"], ["Niki", "niki"], ["College", "college"], ["Icare", "icare"],
@@ -144,6 +234,11 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Kate", "kate"], ["Sunset", "sunset"], ["Jamie", "jamie"],
     ["Cassandra", "cassandra"], ["Emmanuelle", "emmanuelle"], ["Gaby", "gaby"], ["Muse", "muse"],
     ["Downtown", "downtown"], ["Roady", "roady"], ["Betty", "betty"], ["Puffer", "puffer"],
+    // Residue-audit additions (2026-07-09)
+    ["Triquilt", "triquilt"], ["Shopping Tote", "shopping tote"], ["Le 37", "le 37"],
+    ["Rive Gauche", "rive gauche"], ["Uptown", "uptown"], ["Bea", "bea tote"], ["Joe Backpack", "joe backpack"],
+    ["Nolita", "nolita"], ["Becky", "becky"], ["Le Monogramme", "le monogramme"],
+    ["Belle de Jour", "belle de jour"],
   ],
   Dior: [
     ["Lady D-Lite", "d-lite", "lady d-lite"], ["Lady D-Joy", "d-joy", "d joy"], ["Lady Dior", "lady dior"],
@@ -151,12 +246,14 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Caro", "caro"], ["Bobby", "bobby"], ["Dior Toujours", "toujours"], ["Diorama", "diorama"], ["Dior Key", "dior key"],
     ["Diorissimo", "diorissimo"],
     ["Malice", "malice"], ["Diorever", "diorever"], ["Be Dior", "be dior"], ["Miss Dior", "miss dior"],
-    ["Panarea", "panarea"], ["Granville", "granville"], ["Dior Vibe", "dior vibe"], ["Dior Addict", "dior addict"],
+    ["Panarea", "panarea"], ["Granville", "granville"], ["Boston", "boston"], ["Dior Vibe", "dior vibe", "d-vibe"], ["Dior Addict", "dior addict"],
   ],
   "Bottega Veneta": [
     ["Andiamo", "andiamo"], ["Arco", "arco"], ["Jodie", "jodie"], ["Cassette", "cassette"],
     ["The Pouch", "pouch"], ["Lauren 1980", "lauren"], ["Loop", "loop"], ["Sardine", "sardine"],
     ["Knot", "knot"], ["Hop", "hop"],
+    // Residue-audit additions (2026-07-09)
+    ["Wallace", "wallace"], ["Cabat", "cabat"],
   ],
   Prada: [
     ["Re-Edition 2005", "re-edition 2005", "2005"], ["Galleria", "galleria"], ["Cleo", "cleo"],
@@ -164,6 +261,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Arqué", "arque", "arqué"], ["Re-Nylon Backpack", "re-nylon backpack"],
     ["Cahier", "cahier"], ["Diagramme", "diagramme"], ["Sidonie", "sidonie"], ["Matinée", "matinee", "matinée"],
     ["Odette", "odette"], ["Promenade", "promenade"], ["Double Bag", "double bag"], ["Panier", "panier"],
+    // Residue-audit additions (2026-07-09)
+    ["Canapa", "canapa"], ["Triangle", "triangle"],
   ],
   Fendi: [
     ["Baguette", "baguette"], ["Peekaboo", "peekaboo"], ["Mon Trésor", "mon tresor", "mon trésor"],
@@ -171,6 +270,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["By the Way", "by the way"], ["Fendigraphy", "fendigraphy"],
     ["Kan I", "kan i"], ["Kan U", "kan u"], ["Dotcom", "dotcom"], ["2Jours", "2jours"],
     ["Runaway", "runaway"], ["Selleria", "selleria"], ["Origami", "origami"],
+    // Residue-audit additions (2026-07-09)
+    ["Spy", "spy"],
   ],
   Loewe: [
     ["Puzzle Edge", "puzzle edge"], ["Puzzle", "puzzle"], ["Hammock", "hammock"], ["Flamenco", "flamenco"],
@@ -183,12 +284,16 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Knight", "knight"], ["Frances", "frances"], ["Note", "note bag"], ["Pocket Bag", "pocket bag"],
     ["Title", "title bag"], ["Banner", "banner"],
     ["DK88", "dk88"], ["Bridle", "bridle"], ["Elizabeth", "elizabeth"],
+    // Residue-audit additions (2026-07-09)
+    ["Lorne", "lorne"], ["Sonny", "sonny"],
   ],
   Balenciaga: [
     ["Hourglass", "hourglass"], ["Le Cagole", "cagole"], ["Neo Classic", "neo classic"],
-    ["Ville", "ville"], ["Papier", "papier"], ["Rodeo", "rodeo"], ["City", "city bag", "classic city"],
+    ["Ville", "ville"], ["Papier", "papier"], ["Rodeo", "rodeo"], ["City", "city bag", "classic city", "le city", "city"],
     ["Hardware", "hardware bag"], ["Downtown", "downtown"],
     ["Bel Air", "bel air"], ["Everyday", "everyday"], ["Monaco", "monaco"], ["Crush", "crush bag"],
+    // Residue-audit additions (2026-07-09)
+    ["First", "first"], ["Town", "town"],
   ],
   Valentino: [
     ["Rockstud", "rockstud"], ["Roman Stud", "roman stud"], ["VLogo", "vlogo"],
@@ -235,10 +340,30 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Wander", "wander"], ["Arcadie", "arcadie"], ["Aventure", "aventure"], ["Ivy", "ivy"],
     ["Coffer", "coffer"], ["Miu Miu Pocket", "miu miu pocket"], ["Bow", "bow bag"], ["Dahlia", "dahlia"],
   ],
+  Bulgari: [
+    ["Serpenti Forever", "serpenti"],
+  ],
+  MCM: [
+    ["Liz Tote", "liz"], ["Stark Backpack", "stark"],
+  ],
+  Khaite: [
+    ["Olivia Hobo", "olivia"], ["Lotus Tote", "lotus"],
+  ],
+  "Salvatore Ferragamo": [
+    ["Ginny", "ginny"], ["Hug", "hug"], ["Studio", "studio"],
+  ],
+  "Christian Louboutin": [
+    ["Cabata", "cabata"],
+  ],
+  "Loro Piana": [
+    ["Extra Pocket", "extra pocket"],
+  ],
   "The Row": [
     ["Margaux", "margaux"], ["Bindle", "bindle"], ["Half Moon", "half moon"], ["Park Tote", "park tote", "park"],
     ["90s", "90s"], ["Banana", "banana"], ["Terrasse", "terrasse"], ["Ascot", "ascot"], ["Peggy", "peggy"],
     ["Sienna", "sienna"], ["Soft Margaux", "soft margaux"],
+    // Residue-audit additions (2026-07-09)
+    ["India", "india"],
   ],
 };
 
@@ -249,7 +374,8 @@ const MODELS: Record<string, ModelDef[]> = {
 export function canonicalModel(brand: string, rawName: string | null | undefined): string | null {
   const hay = (rawName ?? "").toLowerCase().replace(/&amp;/g, "&");
   if (!hay) return null;
-  if (SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;
+  const isBagOverride = BAG_OVERRIDES.some((t) => hay.includes(t));
+  if (!isBagOverride && SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;
   const defs = MODELS[canonicalBrand(brand)];
   if (!defs) return null;
   for (const [canonical, ...tokens] of defs) {

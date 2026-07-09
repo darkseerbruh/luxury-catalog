@@ -17,7 +17,7 @@
  *                    by default so the plain run stays new-style-free.
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
-import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
+import { norm } from "../../src/lib/image-import-core";
 import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
 import { promotableClusters, type DiscoveredRow, type DiscoveredCluster } from "./promote-discovered";
 
@@ -93,7 +93,7 @@ async function main() {
   // index brands + styles
   const { data: brands } = await db.from("brand").select("brand_id,name");
   const brandByNorm = new Map<string, number>();
-  (brands ?? []).forEach((b: BrandRow) => brandByNorm.set(norm(normalizeDesigner(b.name)), b.brand_id));
+  (brands ?? []).forEach((b: BrandRow) => brandByNorm.set(norm(canonicalBrand(b.name)), b.brand_id));
   const { data: styles } = await db.from("style").select("style_id,brand_id,name");
   const styleByKey = new Map<string, number>(); // `${brand_id}|${normStyle}` -> style_id
   (styles ?? []).forEach((s: StyleRow) => styleByKey.set(`${s.brand_id}|${norm(s.name)}`, s.style_id));
@@ -101,7 +101,7 @@ async function main() {
   // group discovered rows by cluster key for re-pointing
   const byKey = new Map<string, DiscoveredFullRow[]>();
   for (const r of rows) {
-    const bId = brandByNorm.get(norm(normalizeDesigner(r.brand_guess)));
+    const bId = brandByNorm.get(norm(canonicalBrand(r.brand_guess ?? "")));
     const k = `${bId ?? "?"}|${norm(r.style_guess || "")}|${sizeKey(r.size_label)}`;
     (byKey.get(k) ?? byKey.set(k, []).get(k))!.push(r);
   }
@@ -111,7 +111,7 @@ async function main() {
   // is the clean canonical name to create it under.
   const plan: { brand: string; style: string; styleName: string; size: string; styleId: number | null; create: boolean; count: number; cluster: DiscoveredCluster }[] = [];
   for (const c of clusters) {
-    const bId = brandByNorm.get(norm(normalizeDesigner(c.brandGuess)));
+    const bId = brandByNorm.get(norm(canonicalBrand(c.brandGuess)));
     if (!bId) { needNewStyle++; continue; }
     const styleId = styleByKey.get(`${bId}|${norm(c.styleGuess)}`) ?? null;
     let create = false;
@@ -148,7 +148,7 @@ async function main() {
     // under its brand (idempotent: re-match by normalized name first so a re-run reuses it).
     let styleId = p.styleId;
     if (styleId == null) {
-      const bId = brandByNorm.get(norm(normalizeDesigner(p.brand)));
+      const bId = brandByNorm.get(norm(canonicalBrand(p.brand)));
       if (!bId) { console.error(`skip create: no brand for ${p.brand}`); continue; }
       const { data: existSt } = await db.from("style").select("style_id,name").eq("brand_id", bId);
       styleId = ((existSt ?? []) as StyleRow[]).find((s) => norm(s.name) === norm(p.styleName))?.style_id ?? null;
@@ -168,7 +168,7 @@ async function main() {
       if (error) { console.error(`variant create failed for ${p.brand} ${p.styleName} ${sizeLabel}:`, error.message); continue; }
       variantId = ins!.variant_id; createdVariants++;
     }
-    const members = byKey.get(`${brandByNorm.get(norm(normalizeDesigner(p.brand)))}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
+    const members = byKey.get(`${brandByNorm.get(norm(canonicalBrand(p.brand)))}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
     // existing price_history listing_refs for this variant to dedup
     const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", variantId);
     const seen = new Set((existRefs ?? []).map((r: RefRow) => r.listing_ref));

@@ -24,9 +24,16 @@ export function isHttpUrl(s: string | undefined | null): s is string {
   return !!s && /^https?:\/\/\S+$/i.test(s.trim());
 }
 
-/** Lowercase + collapse to alnum tokens for cheap fuzzy comparison. */
+/** Lowercase + accent-fold + collapse to alnum tokens for cheap fuzzy comparison.
+ *  Accent folding (é→e) is load-bearing: without it "Chloé" normalised to "chlo"
+ *  while the feeds' "Chloe" normalised to "chloe", so accented brands never matched. */
 export function norm(s: string | undefined | null): string {
-  return (s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return (s ?? "")
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 /** Count tokens of `b` that also appear in `a`. */

@@ -16,8 +16,8 @@
  * After --write, run:  npm run promote:discovered   to see the clean clusters.
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
-import { normalizeDesigner, norm } from "../../src/lib/image-import-core";
-import { canonicalModel } from "../../src/lib/ingest/model-normalize";
+import { norm } from "../../src/lib/image-import-core";
+import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
 
 const WRITE = process.argv.includes("--write");
 
@@ -55,7 +55,7 @@ async function main() {
   let matched = 0;
 
   for (const r of rows) {
-    const brand = normalizeDesigner((r.brand_guess ?? "").trim());
+    const brand = canonicalBrand((r.brand_guess ?? "").trim());
     const model = canonicalModel(brand, r.raw_name ?? r.style_guess);
     if (!model) continue;
     matched++;

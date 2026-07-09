@@ -1,5 +1,18 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-08 (affiliate-capture + full-spectrum promotion + House Standing tier formula shipped on top). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-09 (brand-alias fix + dictionary extension + big promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Alias fix + dictionary extension: 764 → 933 styles in one pass (2026-07-09, on `main`, applied to prod)
+
+**Coverage audit found the promotion bottleneck was largely a MATCHING bug, not missing data. Fixed it at the source, extended the dictionary from the residue, promoted.**
+- 🐛 **The accent bug:** `norm()` deleted accents instead of folding them, so catalog "Chloé" normalised to `chlo` while feed "Chloe" normalised to `chloe` — accented brands could NEVER match. Fixed (NFKD fold in `image-import-core.ts`); all brand matching now routes through `canonicalBrand` (was `normalizeDesigner`, which only knew Hermes→Hermès), so "Christian Dior"→Dior, "Valentino Garavani"→Valentino etc. resolve. 6 catalog brands were also missing from `BRAND_ALIASES` entirely (Mulberry, McQueen, Jacquemus, Off-White, Longchamp, Telfar) — added.
+- 🔓 **The WOC gate bug:** the SLG token "wallet" dead-ended EVERY Wallet on Chain listing before the "Wallet on Chain" model could match (same for "pouch" killing BV's The Pouch, "belt" would kill belt bags). New `BAG_OVERRIDES` whitelist (checked before the SLG gate) + decision: chain-carry formats are bags (WOC precedent) — Dionysus/Marmont/Félicie chain wallets roll into their parent style.
+- 📖 **Dictionary extension from the residue audit:** exported all 750 unmatched clusters ≥5 (new `export-residue-clusters.ts`), adjudicated in-session. ~150 model entries added across LV (Artsy, Eva, Trouville, Geronimos, vintage Damier/Monogram lines…), Chanel (mini rectangular/square flap → Classic Flap, Kelly Flap, Pearl Crush, Urban Essentials, Uniform), SL (Triquilt, Le 37, Rive Gauche…), Gucci (Neo Vintage, Belt Bag, Luce…), Hermès (Kelly To Go, Constance To Go, Hac à Dos…), Balenciaga (First, Town, City tokens), Fendi (Spy), + garment tokens in the SLG gate (TRR apparel rows no longer cluster as bags).
+- 🏠 **6 new houses created** (recurring backlog demand): Bulgari (Serpenti), MCM (Liz, Stark), Khaite (Olivia, Lotus), Salvatore Ferragamo (Ginny, Hug, Studio), Christian Louboutin (Cabata), Loro Piana (Extra Pocket) — provisional tiers, House Standing re-tiers from data. New `create-missing-brands.ts` (idempotent).
+- 📈 **Promotion results (two `promote-safe --min=5 --create-new --write` runs):** styles 764 → **933**, variants 1,585 → **1,854**, price_history 79,320 → **84,971**, brands 30 → **36**; discovered backlog 38,519 → **32,677** unpromoted (6,117 rows promoted today). Dictionary detection on the backlog went 4% → **19%**.
+- ✅ Gate green (tsc, eslint, 679 tests incl. new alias/WOC coverage, build via land script).
+- ⬜ **YOUR TURN / next levers:** (a) remaining 32.7k unpromoted rows: ~400 clusters ≥5 still lack a confident model (mostly Chanel seasonal + one-off vintage) + long tail <5 — next dictionary sweep or seasonal-archive route. (b) DKNY/Furla/Versace/Marc Jacobs/Jimmy Choo/Stella/Bulgari-scale houses still uncreated where demand was thinner — same `create-missing-brands.ts` + dictionary pattern when ready. (c) `ingest-tlc` daily Action will place live offers on the new variants automatically (or trigger manually to accelerate). (d) Style-page depth unchanged: descriptions 39%, `year_introduced` 1% — the attribute-capture pass is still the depth lever.
 
 ---
 
