@@ -313,3 +313,26 @@ high and saturation is low. High volume + crowded = skip or angle hard; high vol
 - *new chanel vs old chanel* (431K) and *chanel maxi flap bag 2026* (435K): price-history angle we own.
 - Culture/accessible volume plays: *the telfar bag* (4.98M), *balenciaga foil bag* (2.38M ▲1000%+),
   *miu miu city bag* (4.31M). Reach terms, thinner brand fit, use for top-of-funnel.
+
+---
+
+## Index Movers digest — "movement in the index" as the newsletter's spine (owner idea, 2026-07-09)
+
+Born watching the LC Index absorb a big promotion day (ranked styles 151 → 269 in one day,
+2026-07-09): **index movement is inherently newsletter-shaped.** People who care about bags
+want to know what climbed, what fell, what just entered, and why.
+
+- **The format:** a recurring "Index Movers" email edition: top climbers + fallers with their
+  why-notes, new entrants (styles that just cleared the rank gate), new houses added, one
+  "mover of the month" mini-story. All framed as *our index, not a verdict* (standing rule).
+- **Why it fits the email thesis:** `marketing-plan.md` already rejects "a newsletter nobody
+  wants" in favor of genuine-value capture (watchlist/price alerts). Movement data IS that
+  value: recurring, real, ours alone (no competitor has this index).
+- **Data driver, already built:** `lc_index_snapshot` (migration 0049) snapshots monthly
+  (cron Aug 1); movement math exists (MovementPill). First true movers edition possible
+  after TWO snapshots (Sep); a "new entrants + how we rank" edition could run sooner.
+- **Ties in:** newsletter opt-in feature (in flight, `feat/newsletter-optin`); /rankings as
+  the click-through destination; movers double as faceless Hero-tier slideshow material.
+- **Metric:** owned-audience growth + repeat visits (email opens → /rankings sessions);
+  the same movers list feeds social, so one data pull serves two channels.
+- **Status:** RAW — not committed; needs her call on cadence (monthly matches the snapshot).
