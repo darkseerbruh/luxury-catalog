@@ -34,19 +34,48 @@ const BAG_OVERRIDES = [
   "wallet on chain", "woc", "chain wallet", "wallet to go", "to go wallet",
   "easy pouch", "the pouch", "mini pouch", "belt bag", "bum bag", "fanny pack",
   "waist bag", "vanity",
+  // LV Multi Pochette Accessoires is a bag (own dictionary def), but its full name
+  // contains the "pochette accessoires/accessories" SLG token — override first.
+  "multi pochette",
+  // BV The Pouch's Teen size, and TLC's unspaced "bumbag" (both are ranked bags).
+  "teen pouch", "bumbag",
 ];
 
 const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+/** Space, hyphen, dot and slash are interchangeable separators: URL-slug titles come
+ *  back with every separator flattened to a space ("d-lite" -> "d lite") or dropped
+ *  entirely between digits ("2.55" -> "255", "24/24" -> "2424"), so a literal token
+ *  match under-recognizes exactly the models whose names carry punctuation. The
+ *  separator is optional only between digit parts — never between words, so "all-in"
+ *  ~ "all in" but not "allin". Word-bounded so it can't fire inside "carryall" or
+ *  "chanel 255". Compiled once per token (module-lifetime cache). */
+const tokenReCache = new Map<string, RegExp>();
+function tokenRegex(token: string, plural: boolean): RegExp {
+  const key = plural ? `${token}|s?` : token;
+  let re = tokenReCache.get(key);
+  if (!re) {
+    const parts = token.split(/[\s./-]+/).filter(Boolean);
+    const body = parts
+      .map((p, i) => {
+        if (i === parts.length - 1) return esc(p);
+        const sep = /^\d+$/.test(p) && /^\d+$/.test(parts[i + 1]) ? "[\\s./-]*" : "[\\s./-]+";
+        return esc(p) + sep;
+      })
+      .join("");
+    re = new RegExp(`\\b${body}${plural ? "s?" : ""}\\b`);
+    tokenReCache.set(key, re);
+  }
+  return re;
+}
+
 function has(hay: string, token: string): boolean {
-  if (token.includes(" ")) return hay.includes(token);
-  return new RegExp(`\\b${esc(token)}\\b`).test(hay);
+  return tokenRegex(token, false).test(hay);
 }
 
 /** SLG match, plural-tolerant (so "loafers"/"mules"/"sneakers" are caught, not just singular). */
 function hasSlg(hay: string, token: string): boolean {
-  if (token.includes(" ")) return hay.includes(token);
-  return new RegExp(`\\b${esc(token)}s?\\b`).test(hay);
+  return tokenRegex(token, true).test(hay);
 }
 
 /**
@@ -118,8 +147,10 @@ type ModelDef = [canonical: string, ...tokens: string[]];
 
 const MODELS: Record<string, ModelDef[]> = {
   Chanel: [
-    ["Reissue", "reissue", "2.55"], ["Boy", "boy"],
-    ["Chanel 19", "19 flap", "chanel 19"], ["Chanel 22", "chanel 22", "22 bag"], ["Chanel 25", "chanel 25", "25 bag"],
+    // WOC veto: "2.55 wallet on chain" is a Wallet on Chain (its own LC-Index style),
+    // not the Reissue flap — without it the 2.55 token claims every reissue-style WOC.
+    ["Reissue", "reissue", "2.55", "!wallet on chain", "!woc"], ["Boy", "boy"],
+    ["Chanel 19", "19 flap", "chanel 19"], ["Chanel 22", "chanel 22", "22 bag", "c22"], ["Chanel 25", "chanel 25", "25 bag"],
     ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
     ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"], ["Trendy CC", "trendy cc"],
     ["Urban Spirit", "urban spirit"],
@@ -176,7 +207,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Soft Trunk", "soft trunk"], ["Fold Me Pouch", "fold me"], ["Pochette Marly", "marly"],
     ["Sully", "sully"], ["Evora", "evora"], ["Girolata", "girolata"], ["Hampstead", "hampstead"],
     ["Nolita", "nolita"], ["Verona", "verona"], ["Madeleine", "madeleine"], ["Buci", "buci"],
-    ["Sac Plat", "sac plat"], ["Lockit", "lockit"], ["Locky BB", "locky"], ["Rivoli", "rivoli"],
+    ["Sac Plat", "sac plat"], ["Lockit", "lockit", "lock it"], ["Locky BB", "locky"], ["Rivoli", "rivoli"],
     ["Saintonge", "saintonge"], ["Spontini", "spontini"], ["New Wave", "new wave"],
     ["Multipli-Cité", "multipli-cite", "multipli cite"], ["Broadway", "broadway"], ["Belmont", "belmont"],
     ["Brera", "brera"], ["Duomo", "duomo"], ["Ravello", "ravello"], ["South Bank", "south bank"],
@@ -231,7 +262,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Steeple", "steeple"], ["Kaba", "kaba"], ["Jige", "jige"], ["Bride-a-Brac", "bride-a-brac", "bride a brac"],
     ["24/24", "24/24", "24 24"], ["Della Cavalleria", "della cavalleria"], ["In-The-Loop", "in-the-loop", "in the loop"],
     ["Geta", "geta"], ["Toolbox", "toolbox"], ["Trim", "trim"], ["Verrou", "verrou"],
-    ["Plume", "plume"], ["Victoria", "victoria"], ["Double Sens", "double sens"], ["Massai", "massai"],
+    ["Plume", "plume"], ["Victoria", "victoria"], ["Double Sens", "double sens", "double sense"], ["Massai", "massai"],
     ["Berline", "berline"], ["Fourre-Tout", "fourre-tout", "fourre tout"], ["Haut à Courroies", "haut à courroies", "haut a courroies"],
     // Residue-audit additions (2026-07-09)
     ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
@@ -315,7 +346,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["First", "first"], ["Town", "town"],
   ],
   Valentino: [
-    ["Rockstud", "rockstud"], ["Roman Stud", "roman stud"], ["VLogo", "vlogo"],
+    ["Rockstud", "rockstud"], ["Roman Stud", "roman stud", "roman studded"], ["VLogo", "vlogo"],
     ["Loco", "loco"], ["One Stud", "one stud"], ["VSling", "vsling"], ["Escape", "escape"],
   ],
   "Dolce & Gabbana": [

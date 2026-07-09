@@ -1,5 +1,17 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-09 (where-to-buy trust hub + scoped eBay pull; earlier same day: brand-alias fix + promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-09 (where-to-buy trust hub + scoped eBay pull; same day: TLC mis-map re-triage, brand-alias fix + promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — TLC mis-map re-triage, unscoped: 259 rows moved + matcher hardened (2026-07-09, on `main`, applied to prod)
+
+**Follow-up to the "Timeless" fix (`c21cae1`): recomputed EVERY TLC price_history row against the dictionary, hand-verified every flagged group, moved only verified mis-maps.**
+- 🔤 **Root cause of the over-flagging was slug lossiness, two ways:** URL slugs flatten punctuation to spaces ("d-lite" → "d lite") AND drop it between digits ("2.55" → "255", "24/24" → "2424"). Token matching in `model-normalize.ts` is now separator-tolerant (space/hyphen/dot/slash interchangeable, optional between digit parts only, word-bounded). This killed ~270 false flags (Lady D-Lite 56, Reissue/24-24 digit groups) at the source — it also makes the LIVE ingest recognize these titles from now on.
+- 🚨 **The owner-reported "Reissue ← Chanel 25 (31 rows)" group was itself a matcher artifact:** those titles are vintage "chanel-255-…" (2.55) slugs that substring-matched "chanel 25" pre-fix. DB probe confirms: all `chanel-255-*` sit correctly on Reissue; real `chanel-25-*` hobos already sit on Chanel 25. Nothing needed moving there. The real Reissue mis-maps were **13 Wallet-on-Chain rows** (found after adding a WOC veto to the Reissue def — "2.55 WOC" titles are WOCs, not flaps).
+- 🧹 **Moved 259 verified rows** (price_history → `discovered_listing`, preserve-then-delete, TLC 14,163 → 13,904): mostly non-bags that name-matched bag styles (Rockstud flats/jackets 32, Marmont belts 28, Kelly Dog bracelets/belts 25, Reva flats 25, VLogo 18, Horsebit apparel 16, Constance belts/bracelets 8, season-code confusions "25B/22A/25K…" → Vanity/Coco Handle/Duma, PST 2, Be Dior 2, HAC 1…). 6 rows deliberately KEPT (verified real or ambiguous: "petite mallee" typo, "rose ballerina" colour tripping the shoe token, belt Pochette Métis, Diorama pouch, Moon Cutout hobo).
+- 📖 **Dictionary fixes from the verification pass:** `c22` → Chanel 22, `roman studded` → Roman Stud, `double sense` → Double Sens (TLC misspelling), `lock it` → Lockit, BAG_OVERRIDES + `multi pochette` (SLG gate was eating Multi Pochette Accessoires), `teen pouch`, `bumbag`.
+- 🛡️ **Script upgrades (`clean-timeless-mismap.ts`):** `--all` (unscoped sweep), `--report <json>` (per-group titles for spot-checking), `--groups-file <json>` allowlist — REQUIRED with `--all --write`, so unverified groups can never bulk-move.
+- ⬜ **YOUR TURN / notes:** (a) the 259 moved rows are in `discovered_listing` with `style_guess` where recomputable — the next promotion pass re-places the real bags (WOC 13, Vanity/Coco Handle/Duma, Be Dior, HAC, Lockit). (b) Non-bag rows (belts/flats/bracelets) stay banked as evidence; they'll never promote (SLG-gated) — that's correct. (c) Matching is stricter now: if a future capture looks under-matched, check the new word-boundary behavior first.
 
 ---
 
