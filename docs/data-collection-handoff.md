@@ -468,12 +468,20 @@ Madison Avenue Couture below; most other partners are buyer-side) or down-weight
 **Merchant sweep #2 (2026-07-09, owner asked "can we list Atlanta Luxury Bags? who else?").** Two
 research agents: ALB deep-dive + a ~20-merchant sweep of everything NOT already on this board.
 Verdicts (all evidence fetched 2026-07-09 unless noted):
-- 🎯 **Dallas Designer Handbags — APPLY (the one strong new find).** Awin merchant **91683**
-  ("DallasDesignerHandbags LLC"), **5% / 30-day cookie**, US; our Awin publisher account (2945769)
-  already exists so it's one in-dashboard application. Shopify products.json showed **≥7,500 products**
-  (cap hit; includes sold/archived), LV/Chanel/Hermès depth, Entrupy + in-house authentication.
-  Awin-hosted → product-feed path = licensed images (second feed after TLC; `getVariantImages` picks
-  up any feed writing `listing_image` automatically).
+- 🎯 **Dallas Designer Handbags — APPLY, but wire NOTHING until their Awin status goes green.**
+  Awin merchant **91683** ("DallasDesignerHandbags LLC"), **5% / 15-day cookie** (dashboard; the
+  public profile's 30-day claim was wrong), US; our Awin publisher account (2945769) already exists.
+  Shopify products.json showed **≥7,500 products** (cap hit; includes sold/archived); Awin ShopWindow
+  feed = **1,446 products, last updated 5/15/2026** (~2 months stale). LV/Chanel/Hermès depth,
+  Entrupy + in-house authentication. Feed path = licensed images (second feed after TLC;
+  `getVariantImages` picks up any feed writing `listing_image` automatically).
+  **⚠️ In-dashboard caveats (seen logged-in 2026-07-09): Link status OFFLINE + Payment Level
+  "Exposure Level 5 — insufficient prepayment funds due to unpaid prepayment requests"; avg payment
+  time n/a; program launched 8/18/2025.** Translation: clicks may not track and commissions may not
+  pay out while they're unfunded. Application filed = free queue position; the GATE for any code/feed
+  work is Link status = online + exposure level recovered. Re-check the merchant profile before wiring.
+  Status: application teed up in-session 2026-07-09 (modal: promotion type = Content); final
+  checkbox + Join click = owner's (permission layer treats program-joins as her outreach).
 - ❌ **Atlanta Luxury Bags — SKIP as a listed merchant (for now).** Real Shopify store (est. 2018 as
   The Gold ATM, ATL showroom, Entrupy + in-house auth) but: **no affiliate program or feed exists**
   (GoAffPro portal unattached; nothing on CJ/Awin/Impact/ShareASale; on-site "affiliate request form"
