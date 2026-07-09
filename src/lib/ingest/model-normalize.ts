@@ -88,6 +88,16 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/\bmcm\b/i, "MCM"],
   [/ferragamo/i, "Salvatore Ferragamo"],
   [/khaite/i, "Khaite"],
+  // Round-2 houses (2026-07-09, token-frequency evidence from titled backlog rows).
+  [/versace/i, "Versace"],
+  [/marc\s*jacobs/i, "Marc Jacobs"],
+  [/stella\s*mccartney/i, "Stella McCartney"],
+  [/jimmy\s*choo/i, "Jimmy Choo"],
+  [/moynat/i, "Moynat"],
+  [/ala[iï]a/i, "Alaïa"],
+  [/delvaux/i, "Delvaux"],
+  [/alexander\s*wang/i, "Alexander Wang"],
+  [/judith\s*leiber|^judith$/i, "Judith Leiber"],
   // Catalog brands previously missing here entirely — their feed rows never brand-matched.
   [/mulberry/i, "Mulberry"],
   [/mcqueen/i, "Alexander McQueen"],           // Alexander McQueen, McQ
@@ -339,6 +349,35 @@ const MODELS: Record<string, ModelDef[]> = {
   "Miu Miu": [
     ["Wander", "wander"], ["Arcadie", "arcadie"], ["Aventure", "aventure"], ["Ivy", "ivy"],
     ["Coffer", "coffer"], ["Miu Miu Pocket", "miu miu pocket"], ["Bow", "bow bag"], ["Dahlia", "dahlia"],
+  ],
+  Versace: [
+    ["La Medusa", "la medusa", "medusa"], ["Virtus", "virtus"], ["Greca Goddess", "greca goddess", "greca"],
+  ],
+  "Marc Jacobs": [
+    ["The Tote Bag", "the tote"], ["Snapshot", "snapshot"], ["The Traveler", "traveler"],
+    ["The Sack", "the sack"], ["The Teddy", "teddy"],
+  ],
+  "Stella McCartney": [
+    ["Falabella", "falabella"], ["Ryder", "ryder"],
+  ],
+  "Jimmy Choo": [
+    ["Bon Bon", "bon bon"], ["Varenne", "varenne"], ["Callie", "callie"], ["Candy", "candy"],
+  ],
+  Moynat: [
+    ["Réjane", "rejane", "réjane"], ["Gabrielle", "gabrielle"],
+  ],
+  "Alaïa": [
+    ["Le Teckel", "teckel"], ["Le Click", "le click"], ["Le Coeur", "le coeur"], ["Louise", "louise"],
+  ],
+  Delvaux: [
+    ["Brillant", "brillant"], ["Tempête", "tempete", "tempête"], ["Pin", "pin"],
+    ["Lingot", "lingot"], ["Cool Box", "cool box"],
+  ],
+  "Alexander Wang": [
+    ["Rocco", "rocco"], ["Rockie", "rockie"], ["Attica", "attica"], ["Roxy", "roxy"], ["Marti", "marti"],
+  ],
+  "Judith Leiber": [
+    ["Minaudière", "minaudiere", "minaudi"],
   ],
   Bulgari: [
     ["Serpenti Forever", "serpenti"],
