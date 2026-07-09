@@ -19,7 +19,7 @@ const SLG_TOKENS = [
   "pouch", "pochette accessoires", "pochette accessories", "key pouch", "key case", "agenda", "passport",
   "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
-  "bag charm", "phone holder", "airpod", "earring", "necklace", "brooch", "cuff",
+  "bag charm", "phone holder", "phone case", "airpod", "earring", "necklace", "brooch", "cuff",
   "belt", "watch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
   "dress", "blazer", "sweater", "jumper", "jeans", "skirt", "hoodie", "sweatshirt",
   "t-shirt", "t shirt", "tshirt", "tee", "shirt", "jacket", "coat", "pants", "trousers",
@@ -123,7 +123,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
     ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"], ["Trendy CC", "trendy cc"],
     ["Urban Spirit", "urban spirit"],
-    ["Classic Flap", "classic flap", "double flap", "single flap", "timeless", "rectangular flap", "square flap", "mini flap"],
+    ["Classic Flap", "classic flap", "double flap", "single flap", "rectangular flap", "square flap", "mini flap"],
     ["Wallet on Chain", "wallet on chain", "woc"],
     ["Camera Bag", "camera"], ["Diana", "diana"], ["Cerf Tote", "cerf"],
     ["Grand Shopping Tote", "grand shopping", "gst"], ["Petite Shopping Tote", "petite shopping", "pst"],
@@ -133,6 +133,15 @@ const MODELS: Record<string, ModelDef[]> = {
     // Classic Flap (size label carries Mini); Kelly Flap = the vintage Chanel Kelly.
     ["Kelly Flap", "kelly flap"], ["Urban Essentials", "urban essentials"],
     ["Pearl Crush", "pearl crush"], ["Uniform", "uniform"],
+    // "Timeless" is TLC/reseller shorthand for Chanel's whole classic CC-turnlock LINE
+    // (clutches, totes, shoppers, pochettes, phone cases), not just the flap bag — bare
+    // "timeless" put a $966 handcuff clutch on the Classic Flap hero (2026-07-09). LAST
+    // so every named model above wins first; requires a flap signal ("timeless" alone is
+    // ambiguous: TLC's "Timeless CC shoulder bag" is usually a shopper), and shape-vetoed
+    // so flap-adjacent non-flaps ("flap clutch") still stay out.
+    ["Classic Flap", "timeless&flap",
+      "!clutch", "!tote", "!pochette", "!phone", "!handcuff", "!bucket", "!hobo",
+      "!backpack", "!bowler", "!boston", "!duffel", "!duffle", "!briefcase", "!top handle"],
   ],
   "Louis Vuitton": [
     ["Neverfull", "neverfull"], ["Speedy", "speedy"], ["Alma", "alma"], ["Capucines", "capucines"],
@@ -418,7 +427,16 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
   const defs = MODELS[canonicalBrand(brand)];
   if (!defs) return null;
   for (const [canonical, ...tokens] of defs) {
-    if (tokens.some((t) => has(hay, t))) return canonical;
+    // "!token" = veto: the def only matches when NO veto token is present. "a&b" =
+    // co-occurrence: every part must be present (any position). Together they let a
+    // loose line-name token ("timeless") claim a model without swallowing other
+    // silhouettes that share the line name.
+    const positive = tokens.filter((t) => !t.startsWith("!"));
+    const vetoes = tokens.filter((t) => t.startsWith("!")).map((t) => t.slice(1));
+    const hit = positive.some((t) =>
+      t.includes("&") ? t.split("&").every((p) => has(hay, p)) : has(hay, t),
+    );
+    if (hit && !vetoes.some((t) => has(hay, t))) return canonical;
   }
   return null;
 }
