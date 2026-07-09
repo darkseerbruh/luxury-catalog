@@ -1,7 +1,14 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-09 (brand-alias fix + dictionary extension + big promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-09 (where-to-buy trust hub + scoped eBay pull; earlier same day: brand-alias fix + promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
 ---
+
+## TL;DR — /where-to-buy trust hub SHIPPED + scoped eBay pull: ranked styles 269 → 304 (2026-07-09, on `main`)
+
+**Two owner-greenlit builds in one session (the "is eBay trustworthy" chat).**
+- 🛡️ **`/where-to-buy` — the venue trust hub** (sister to `/rankings`; spec `docs/ux/where-to-buy-spec.md`). Protection matrix (authentication / returns / fake remedy / payment) × 10 venues, **price-aware toggle** (eBay+Poshmark physically inspect only from $500 — at $300 the checkmark people picture does not exist), per-venue profile pages with **every cell sourced to the venue's own policy + date checked (all 2026-07-09)**, and the signature **"Buying here anyway?"** gap-to-remedy section (we don't judge, we equip). Registry `src/lib/where-to-buy.ts` (16 tests), JSON-LD + sitemap, bag-page WhereToBuy links in. **Found + fixed two stale facts in `platforms.ts`:** Fashionphile returns are 15 days (we said 30); TRR **handbags are final sale** (we said "some items").
+- 📉 **eBay scoped pull (the 49 one-source styles): 497 exact-price sold rows loaded, 0 unresolved → 304 styles now rank** (was 269 this morning, 151 at the 7/08 source-gate ship). Dual engine: Firecrawl sold-search (masked-flag per listing) + Apify **auction-only** runs (~$3.10; bid-settled finals cannot be masked). **Probe result for the owner's "we never know the sold price" concern: 18% of on-target eBay solds are best-offer masked (n=698)** — bad up-tier (one Bottega style: 14/15), nearly clean mid-tier. Policy locked in preferences.md: masked rows are counted, never loaded into a median.
+- ⬜ **YOUR TURN (nothing blocking):** (a) eyeball `/where-to-buy` after your next `vercel --prod` promote — venue tier labels are my take, veto any that read wrong; (b) three open decisions from the chat: Poshmark as a third mid-tier source (proven path, cheap), the TRR designer-scoped weekly refresh (recurring Apify spend), and the Apify Starter downgrade reminder ($29/mo renews; the two eBay runs cost ~$3.10 of it); (c) Firecrawl free tier is near its monthly edge (one transient insufficient-credits error mid-sweep) — if next month's re-verify sweeps matter, consider the paid tier.
 
 ## TL;DR — Alias fix + dictionary extension: 764 → 993 styles, 30 → 45 houses (2026-07-09, on `main`, applied to prod)
 

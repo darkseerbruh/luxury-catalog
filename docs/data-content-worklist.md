@@ -287,7 +287,29 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths + wire a capped weekly
   refresh schedule (owner-gated recurring spend). Remind owner she can downgrade Apify→Free
   after the big sweeps if she doesn't want the $29/mo to renew.
-- ⬜ **Still owner-gated (task part 1)**: FULL eBay pull burns Firecrawl credits.
+- ✅ **eBay SCOPED pull — DONE 2026-07-09 (owner greenlit "option A" + the trust-hub chat).**
+  Target = the 49 one-source styles (n≥20, median present, 1 source; all single-variant so
+  zero pickVariant risk). TWO engines in one pass: (1) Firecrawl MCP sold-search scrapes
+  (46 unique queries, ~9 cr each on stealth ≈ ~415 cr — search pages now cost 9 cr, not the
+  1-2 cr of the 7/02 run; NOTE one transient "insufficient credits" error mid-run, the free
+  tier is near its monthly edge) with per-listing **best-offer masked flag**; (2) Apify
+  `automation-lab/ebay-sold-scraper` **auction-only** runs (1,033 items ≈ ~$3.10, Bronze
+  $0.003/listing) = bid-settled finals that CANNOT be masked. Builder
+  `sources/ebay-sold-sweep.ts` (exact-price-only policy: masked rows counted, never loaded;
+  AG floor $500 for tier 1-3, $25 mid-tier; junk/collab/fragrance excludes; mixed-pile
+  auction rows attributed per-title, ambiguous → dropped 667, never guessed).
+  **RESULT: 497 sold rows loaded, 0 unresolved → ranked styles 269 → 304** (≥2-source
+  styles 497→555). **PROBE (the owner's masked-price question, measured): 18% of on-target
+  eBay solds are best-offer masked overall (n=698, 2026-07-09)** — luxury skews far worse
+  (Bottega Bang Bang 14/15 masked) and mid-tier is nearly clean (MK Bedford 0/23, Le Pliage
+  1/32). Policy line now in preferences.md (exact-only, supersedes the 6/26 blanket skip).
+  Big winners: Félicie Pochette 42 solds, Fleming 32, Mercer 29, Le Pliage 28, Pochette
+  Accessoires 26, Soft Margaux 24. Zero-yield: the Chanel Blazy current-line names
+  (Souplissimo/Coco Base — eBay doesn't have them; Coco Base query = perfume noise, filtered).
+  ⬜ FOLLOW-UPS: (a) the 667 unattributed auction rows were dropped, not banked — a future
+  pass could route them to `discovered_listing`; (b) Poshmark as third mid-tier source
+  (proven browser path, owner not yet asked); (c) eBay item-specifics enrichment for
+  U-DEALS-MIDTIER stays open (live listings only, metered).
 
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
 - ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").

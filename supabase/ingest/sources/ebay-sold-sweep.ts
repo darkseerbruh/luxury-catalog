@@ -26,8 +26,14 @@ import * as path from "node:path";
 import { writeObservations } from "../lib/landing";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 
-interface RawItem { t: string; p: number; s: boolean; d: string; id: string }
+interface RawItem { t: string; p: number; s: boolean; d: string; id: string; auction?: boolean }
 interface RawFile { key?: string; brand: string; style: string; items: RawItem[] }
+
+/** Apify ebay-sold-scraper dataset row (auction-only runs; mixed queries). */
+interface ApifyItem {
+  itemId: string; title: string; soldPrice: number; soldDate: string;
+  listingType?: string; bidsCount?: number | null;
+}
 
 /** Per-key rules: which catalog style the rows belong to + filters. */
 interface Rule {
@@ -40,7 +46,8 @@ interface Rule {
 }
 
 const JUNK = ["replica", "dust bag only", "box only", "strap only", "insert", "organizer",
-  "lot of", "charm", "keychain", "key chain", "wallet only", "for parts", "read desc"];
+  "lot of", "charm", "keychain", "key chain", "wallet only", "for parts", "read desc",
+  "perfume", "parfum", "eau de", "fragrance", "cologne", "spray"];
 const LV_COLLAB = ["murakami", "x tm", "takashi"];
 
 /** $500 = the AG inspection floor for tier 1-3 brands (verified 2026-07-09). */
@@ -237,7 +244,35 @@ const RULES: Record<string, Rule> = {
   },
 };
 
-const MONTHS: Record<string, string> = { Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12" };
+/** Brand tokens for attributing mixed-query (Apify) rows. Any one must appear. */
+function brandTokens(brand: string): string[] {
+  const b = brand.toLowerCase();
+  const extra: Record<string, string[]> = {
+    "louis vuitton": ["louis vuitton", "lv "],
+    "saint laurent": ["saint laurent", "ysl"],
+    "bottega veneta": ["bottega"],
+    "michael kors": ["michael kors", "mk "],
+  };
+  return extra[b] ?? [b];
+}
+
+/**
+ * Attribute one mixed-pile title to exactly ONE rule. Ambiguous or unmatched
+ * rows are dropped (counted) — never guessed onto a style.
+ */
+function attribute(title: string): string | null {
+  const t = title.toLowerCase();
+  const hits: string[] = [];
+  for (const [key, rule] of Object.entries(RULES)) {
+    if (!brandTokens(rule.brand).some((b) => t.includes(b))) continue;
+    if (rule.exclude.some((x) => t.includes(x))) continue;
+    if (!rule.requireGroups.every((g) => g.some((tok) => t.includes(tok)))) continue;
+    hits.push(key);
+  }
+  return hits.length === 1 ? hits[0] : null;
+}
+
+const MONTHS: Record<string, string> ={ Jan: "01", Feb: "02", Mar: "03", Apr: "04", May: "05", Jun: "06", Jul: "07", Aug: "08", Sep: "09", Oct: "10", Nov: "11", Dec: "12" };
 
 function parseSoldDate(d: string): string | null {
   const m = d.match(/([A-Z][a-z]{2})\s+(\d{1,2}),\s+(\d{4})/);
@@ -250,18 +285,35 @@ function main() {
   const rawDir = path.join(process.cwd(), "data/ingest/_raw/ebay-sweep");
   const files = fs.readdirSync(rawDir).filter((f) => f.endsWith(".json"));
 
-  // batch1.json holds 5 keyed targets; per-key files hold one each.
+  // batch1.json holds 5 keyed targets; per-key files hold one each; apify-*.json
+  // are mixed-query auction piles attributed per-title (ambiguous rows dropped).
   const rawByKey: Record<string, RawFile> = {};
+  let unattributed = 0;
+  const add = (key: string, items: RawItem[]) => {
+    const cur = (rawByKey[key] ??= { brand: RULES[key]?.brand ?? "", style: "", items: [] });
+    const seenIds = new Set(cur.items.map((i) => i.id));
+    for (const it of items) if (!seenIds.has(it.id)) { cur.items.push(it); seenIds.add(it.id); }
+  };
   for (const f of files) {
     const parsed = JSON.parse(fs.readFileSync(path.join(rawDir, f), "utf8"));
     if (f === "batch1.json") {
       for (const [key, v] of Object.entries(parsed as Record<string, { brand: string; items: RawItem[] }>)) {
-        rawByKey[key] = { brand: v.brand, style: "", items: v.items };
+        add(key, v.items);
+      }
+    } else if (f.startsWith("apify-")) {
+      for (const a of (parsed.items ?? []) as ApifyItem[]) {
+        const key = attribute(a.title);
+        if (!key) { unattributed++; continue; }
+        add(key, [{
+          t: a.title, p: a.soldPrice, s: false, d: `Sold ${a.soldDate}`,
+          id: a.itemId, auction: a.listingType === "Auction",
+        }]);
       }
     } else if (parsed.key) {
-      rawByKey[parsed.key] = parsed;
+      add(parsed.key, parsed.items ?? []);
     }
   }
+  if (unattributed) console.log(`(apify: ${unattributed} mixed-pile rows unattributed — dropped, never guessed)`);
 
   const obs: PriceObservation[] = [];
   const stats = { seen: 0, masked: 0, junk: 0, offToken: 0, belowFloor: 0, badDate: 0, kept: 0 };
@@ -293,10 +345,11 @@ function main() {
         observed_on: observed,
         source_url: `https://www.ebay.com/itm/${it.id}`,
         confidence: it.p >= AG_FLOOR ? "high" : "medium",
-        notes:
-          it.p >= AG_FLOOR
-            ? "eBay sold sweep 2026-07-09; >=$500 = Authenticity Guarantee band; exact price (best-offer masked rows excluded)"
-            : "eBay sold sweep 2026-07-09; below AG band; exact price (best-offer masked rows excluded)",
+        notes: it.auction
+          ? "eBay sold sweep 2026-07-09; auction final (bid-settled, unmaskable)"
+          : it.p >= AG_FLOOR
+          ? "eBay sold sweep 2026-07-09; >=$500 = Authenticity Guarantee band; exact price (best-offer masked rows excluded)"
+          : "eBay sold sweep 2026-07-09; below AG band; exact price (best-offer masked rows excluded)",
       });
       stats.kept++; ps.kept++;
     }
