@@ -15,7 +15,16 @@
  *   npx tsx supabase/ingest/clean-timeless-mismap.ts                    # report only
  *   npx tsx supabase/ingest/clean-timeless-mismap.ts --write            # apply
  *   npx tsx supabase/ingest/clean-timeless-mismap.ts --brand Chanel     # scope to one brand
+ *   npx tsx supabase/ingest/clean-timeless-mismap.ts --all              # drop the "timeless" scope
+ *   npx tsx supabase/ingest/clean-timeless-mismap.ts --report out.json  # dump per-group samples
+ *   ... --all --groups-file verified.json --write                       # move ONLY listed groups
+ *
+ * --groups-file = a JSON array of group keys exactly as printed in the report
+ * ("<Brand> <Style>  <-  <recomputed>"). With --all it is REQUIRED for --write:
+ * an unscoped recompute mixes real mis-maps with dictionary gaps, so every group
+ * must be spot-checked against real listing titles before it may move.
  */
+import { readFileSync, writeFileSync } from "node:fs";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { createClient } from "@supabase/supabase-js";
@@ -77,8 +86,17 @@ async function fetchAllTlcRows(): Promise<PhRow[]> {
 
 async function main(): Promise<void> {
   const write = process.argv.includes("--write");
+  const all = process.argv.includes("--all");
   const brandIdx = process.argv.indexOf("--brand");
   const brandFilter = brandIdx >= 0 ? process.argv[brandIdx + 1] : null;
+  const reportIdx = process.argv.indexOf("--report");
+  const reportPath = reportIdx >= 0 ? process.argv[reportIdx + 1] : null;
+  const groupsIdx = process.argv.indexOf("--groups-file");
+  const verifiedGroups: Set<string> | null =
+    groupsIdx >= 0 ? new Set(JSON.parse(readFileSync(process.argv[groupsIdx + 1], "utf8")) as string[]) : null;
+  if (write && all && !verifiedGroups) {
+    throw new Error("--all --write requires --groups-file: never bulk-move groups you have not spot-checked.");
+  }
 
   const rows = await fetchAllTlcRows();
   console.log(`[timeless-mismap] scanning ${rows.length} "${PLATFORM}" price_history row(s)`);
@@ -123,10 +141,11 @@ async function main(): Promise<void> {
       unparsable++;
       continue;
     }
-    // Scope = today's incident: rows that exist because bare "timeless" matched.
-    // Slug reconstruction is lossy ("d-lite" -> "d lite"), so a general
-    // recompute-everything sweep over-flags — keep this surgical.
-    if (!title.includes("timeless")) continue;
+    // Default scope = the original incident: rows that exist because bare "timeless"
+    // matched. --all recomputes everything — token matching is separator-tolerant now
+    // (slug "d lite" hits "d-lite"), but an unscoped flag list still mixes real
+    // mis-maps with dictionary gaps, so --all writes are gated on --groups-file.
+    if (!all && !title.includes("timeless")) continue;
     const recomputed = canonicalModel(meta.brand, title);
     if (!sameModel(meta.style, recomputed)) {
       mismapped.push({ ...r, title, styleName: meta.style, brandName: meta.brand, recomputed });
@@ -134,21 +153,53 @@ async function main(): Promise<void> {
   }
 
   // Report: what sits where it shouldn't, grouped by (style it's on -> what it really is).
-  const byGroup = new Map<string, number>();
+  const groupKey = (m: (typeof mismapped)[number]) =>
+    `${m.brandName} ${m.styleName}  <-  ${m.recomputed ?? "(no model: SLG/unknown)"}`;
+  const byGroup = new Map<string, typeof mismapped>();
   for (const m of mismapped) {
-    const k = `${m.brandName} ${m.styleName}  <-  ${m.recomputed ?? "(no model: SLG/unknown)"}`;
-    byGroup.set(k, (byGroup.get(k) ?? 0) + 1);
+    const k = groupKey(m);
+    byGroup.set(k, [...(byGroup.get(k) ?? []), m]);
   }
+  const sorted = [...byGroup.entries()].sort((a, b) => b[1].length - a[1].length);
   console.log(`[timeless-mismap] ${mismapped.length} mis-mapped row(s), ${unparsable} unparsable URL(s) skipped`);
-  for (const [k, n] of [...byGroup.entries()].sort((a, b) => b[1] - a[1])) console.log(`  ${n}\t${k}`);
+  for (const [k, ms] of sorted) console.log(`  ${ms.length}\t${k}`);
   if (mismapped.length > 0) {
     console.log("  examples:");
     for (const m of mismapped.slice(0, 8)) console.log(`    #${m.price_id} [${m.styleName}] "${m.title}"`);
+  }
+  if (reportPath) {
+    // Full per-group dump (every title + URL) for the manual spot-check pass.
+    writeFileSync(
+      reportPath,
+      JSON.stringify(
+        sorted.map(([k, ms]) => ({
+          group: k,
+          rows: ms.length,
+          samples: ms.map((m) => ({ price_id: m.price_id, title: m.title, source_url: m.source_url })),
+        })),
+        null,
+        2,
+      ),
+    );
+    console.log(`[timeless-mismap] wrote per-group report -> ${reportPath}`);
   }
 
   if (!write) {
     console.log("[timeless-mismap] DRY RUN — pass --write to move these to discovered_listing.");
     return;
+  }
+  if (verifiedGroups) {
+    const before = mismapped.length;
+    for (let i = mismapped.length - 1; i >= 0; i--) {
+      if (!verifiedGroups.has(groupKey(mismapped[i]))) mismapped.splice(i, 1);
+    }
+    const unknown = [...verifiedGroups].filter((g) => !byGroup.has(g));
+    if (unknown.length) {
+      throw new Error(
+        `--groups-file names group(s) not flagged in this run (already moved, or the dictionary changed?): ${unknown.join(" | ")}`,
+      );
+    }
+    console.log(`[timeless-mismap] --groups-file: moving ${mismapped.length} of ${before} flagged row(s) (verified groups only).`);
   }
 
   // Preserve as raw evidence first, then delete. Upsert dedupes on the
