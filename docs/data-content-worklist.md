@@ -381,6 +381,14 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   load:prices), distinct from the SCOPED `ebay-sold-sweep.ts` (drops non-target rows — kept
   only 9/718 here, wrong tool for breadth). ⬜ Optional: Firecrawl BIN-sold breadth on the
   owner's allowance. eBay stays MANUAL (no cron).
+- ✅ **eBay coverage EXTENDED 2026-07-10** (autonomous continuation): 2nd auction pull for
+  premium brands (Chloé/Valentino/Givenchy/Burberry/The Row/Miu Miu/McQueen/MJ/Jacquemus/
+  Delvaux/Mulberry/Loewe) → 266 comps, 233 onto pages; 3rd pull for MID-TIER (Coach/Kate
+  Spade/Longchamp/MK/Tory Burch, floor=$25, auction-only) → 257 comps, 145 onto pages.
+  Hardened `ebay-sold-apify.ts` with a JUNK filter (replica/parts/strap-only/perfume). eBay
+  total 2,876 → **3,918 rows** (+1,042 this session); multi-source styles ≥2:611 / ≥3:355.
+  ⬜ Remaining eBay lever = the U-DEALS-MIDTIER item-specifics (colour+material) enrichment
+  for the deals badge — that needs the metered Firecrawl item-page pass, not the search API.
 - ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
   `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
