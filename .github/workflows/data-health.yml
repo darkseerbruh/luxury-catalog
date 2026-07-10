@@ -1,0 +1,122 @@
+name: Daily data health
+
+# The data health & completeness routine (owner-locked 2026-07-10): scores
+# freshness, capture sanity, ranking floor, attribute coverage, backlog growth,
+# contamination sentinels, summary staleness, and the per-source cadence audit;
+# commits a dated report; opens/closes deduped `data-health` issues on reds;
+# feeds findings to docs/data-content-worklist.md. The routine graduates itself
+# to weekly (Mondays) after 7 straight green daily runs — the cadence lives in
+# reports/data-health/state.json (a workflow can't edit its own cron without a
+# PAT), so the cron stays daily and the gate below skips non-Monday runs while
+# weekly. A red on a weekly run demotes it back to daily. Manual dispatch
+# always runs. Logic: scripts/data-health.ts + src/lib/data-health-core.ts.
+
+on:
+  schedule:
+    # Daily 10:47 UTC — after TLC (08:23) and the 09:17 Fashionphile 3-hourly
+    # run, off the :00 mark. Cadence itself is governed by state.json, not here.
+    - cron: "47 10 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-health
+  cancel-in-progress: false
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: cadence
+        name: Cadence gate (weekly mode skips non-target days; dispatch always runs)
+        run: |
+          run=true
+          if [ "${{ github.event_name }}" = "schedule" ] && [ -f reports/data-health/state.json ]; then
+            cadence=$(jq -r '.cadence // "daily"' reports/data-health/state.json)
+            dow=$(jq -r '.weeklyDow // 1' reports/data-health/state.json)
+            if [ "$cadence" = "weekly" ] && [ "$(date -u +%u)" != "$dow" ]; then
+              run=false
+              echo "Weekly cadence: skipping (today is not day $dow)."
+            fi
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      - if: steps.cadence.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - if: steps.cadence.outputs.run == 'true'
+        run: npm ci
+
+      - if: steps.cadence.outputs.run == 'true'
+        name: Run health check (writes report + state + worklist, runs safe auto-fixes)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npx tsx scripts/data-health.ts --write
+
+      - if: steps.cadence.outputs.run == 'true'
+        name: Open/close data-health issues (deduped by exact title + label)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          state=reports/data-health/state.json
+          today=$(jq -r '.lastRun' "$state")
+          gh label create data-health --force \
+            --description "Opened by the daily data-health run on RED checks" \
+            --color B60205 >/dev/null 2>&1 || true
+
+          open_json=$(gh issue list --label data-health --state open --json title,number --limit 100)
+
+          # One issue per red check, deterministic title; comment instead of duplicating.
+          jq -c '.redFindings[]' "$state" | while read -r finding; do
+            title=$(echo "$finding" | jq -r '.title')
+            body=$(echo "$finding" | jq -r '.body')
+            existing=$(echo "$open_json" | jq -r --arg t "$title" '.[] | select(.title == $t) | .number' | head -1)
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body "Still red on ${today}."$'\n\n'"$body"
+              echo "Commented on existing #$existing ($title)"
+            else
+              gh issue create --title "$title" --label data-health --body "$body"
+              echo "Opened issue: $title"
+            fi
+          done
+
+          # Close recovered issues: open data-health issues whose check id is no
+          # longer red today. Only touches our label + exact title format.
+          echo "$open_json" | jq -r '.[] | "\(.number)\t\(.title)"' | while IFS=$'\t' read -r num title; do
+            id=$(echo "$title" | sed -n 's/^Data health: \(.*\) is RED$/\1/p')
+            [ -z "$id" ] && continue
+            still_red=$(jq -r --arg id "$id" '.redFindings[] | select(.id == $id) | .id' "$state" | head -1)
+            if [ -z "$still_red" ]; then
+              gh issue close "$num" --comment "Recovered on ${today} — see reports/data-health/${today}.md."
+              echo "Closed recovered #$num ($title)"
+            fi
+          done
+
+      - if: steps.cadence.outputs.run == 'true'
+        name: Commit report + worklist (rebase-retry against racing pushes)
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/data-health docs/data-content-worklist.md
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(data-health): report $(date -u +%F)"
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            git pull --rebase
+          done
+          git push
