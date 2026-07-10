@@ -41,17 +41,22 @@ interface Flags {
   write: boolean;
   platform: string | null;
   snapshot: string | null;
+  ageDays: number | null;
   maxRetireFrac: number;
   force: boolean;
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { write: false, platform: null, snapshot: null, maxRetireFrac: 0.5, force: false };
+  const flags: Flags = { write: false, platform: null, snapshot: null, ageDays: null, maxRetireFrac: 0.5, force: false };
   for (const a of argv) {
     if (a === "--write") flags.write = true;
     else if (a === "--force") flags.force = true;
     else if (a.startsWith("--platform=")) flags.platform = a.slice("--platform=".length).trim() || null;
     else if (a.startsWith("--snapshot=")) flags.snapshot = a.slice("--snapshot=".length).trim() || null;
+    else if (a.startsWith("--age-days=")) {
+      const n = Number(a.slice("--age-days=".length));
+      if (Number.isFinite(n) && n > 0) flags.ageDays = Math.floor(n);
+    }
     else if (a.startsWith("--max-retire-frac=")) {
       const n = Number(a.slice("--max-retire-frac=".length));
       if (Number.isFinite(n) && n > 0 && n <= 1) flags.maxRetireFrac = n;
@@ -114,6 +119,90 @@ async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
   return all;
 }
 
+type DatedRow = { platform: string | null; listing_ref: string | null; observed_on: string | null };
+
+/** Page every still-shown listed row for a platform, WITH its observed_on date. */
+async function fetchDatedRows(platform: string): Promise<DatedRow[]> {
+  const all: DatedRow[] = [];
+  const PAGE = 1000;
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabaseAdmin
+      .from("price_history")
+      .select("platform, listing_ref, observed_on")
+      .eq("price_type", "listed")
+      .or(NOT_RETIRED)
+      .ilike("platform", `%${platform}%`)
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as DatedRow[];
+    all.push(...rows);
+    if (rows.length < PAGE) break;
+  }
+  return all;
+}
+
+/**
+ * Age-based reconcile for CAPPED sources (TheRealReal: 120/category, so one sweep
+ * never sees the whole live catalogue and snapshot-diff can't tell sold from
+ * unseen). Retire listings whose LATEST observation is older than the cutoff; the
+ * scheduled refresh keeps re-observing live listings, so only truly-gone ones age
+ * out. SAFETY: abort if nothing was seen inside the window (the refresh isn't
+ * running — don't retire the whole catalogue).
+ */
+async function ageReconcile(platform: string, ageDays: number, write: boolean, force: boolean): Promise<void> {
+  const rows = await fetchDatedRows(platform);
+  const today = new Date();
+  const cutoff = new Date(today.getTime() - ageDays * 86_400_000).toISOString().slice(0, 10);
+  const todayStr = today.toISOString().slice(0, 10);
+
+  // Latest observed_on per listing_ref.
+  const lastSeen = new Map<string, string>();
+  const platformOf = new Map<string, string>();
+  for (const r of rows) {
+    if (!r.listing_ref || !r.observed_on) continue;
+    const prev = lastSeen.get(r.listing_ref);
+    if (!prev || r.observed_on > prev) lastSeen.set(r.listing_ref, r.observed_on);
+    if (r.platform) platformOf.set(r.listing_ref, r.platform);
+  }
+
+  const refs = [...lastSeen.keys()];
+  const seenRecently = refs.filter((ref) => (lastSeen.get(ref) as string) >= cutoff).length;
+  const goneRefs = refs.filter((ref) => (lastSeen.get(ref) as string) < cutoff);
+
+  console.log(`\nReconcile resale listings (AGE mode) — ${write ? "WRITE" : "DRY RUN"}`);
+  console.log(`  platform match:  "${platform}"`);
+  console.log(`  age cutoff:      ${cutoff} (older than ${ageDays}d)`);
+  console.log(`  distinct live:   ${refs.length}`);
+  console.log(`  seen since cutoff: ${seenRecently}`);
+  console.log(`  would retire:    ${goneRefs.length}`);
+
+  if (seenRecently === 0 && !force) {
+    console.error("\nABORT: no listings seen within the age window — the refresh isn't running. Refusing to retire the whole catalogue (--force to override).");
+    process.exit(1);
+  }
+  if (goneRefs.length === 0) {
+    console.log("\nNothing to retire (every live listing was seen within the window).");
+    return;
+  }
+  if (!write) {
+    console.log(`\nDRY RUN: ${goneRefs.length} listing(s) would be marked sold. Re-run with --write to apply.`);
+    return;
+  }
+
+  const byPlatform = new Map<string, string[]>();
+  for (const ref of goneRefs) {
+    const p = platformOf.get(ref) ?? platform;
+    (byPlatform.get(p) ?? byPlatform.set(p, []).get(p)!).push(ref);
+  }
+  let total = 0;
+  for (const [p, refsForP] of byPlatform) {
+    const n = await retire(p, refsForP, todayStr);
+    console.log(`  ${p}: marked ${n} row(s) sold (delisted_on=${todayStr}).`);
+    total += n;
+  }
+  console.log(`\nDone. Retired ${total} listing row(s).`);
+}
+
 /** Stamp a platform's vanished listings sold, in chunked IN() updates. */
 async function retire(platform: string, refs: string[], delistedOn: string): Promise<number> {
   let updated = 0;
@@ -136,12 +225,18 @@ async function retire(platform: string, refs: string[], delistedOn: string): Pro
 
 async function main() {
   const flags = parseFlags(process.argv.slice(2));
-  if (!flags.platform || !flags.snapshot) {
-    console.error("Usage: reconcile:sold -- --platform=<name> --snapshot=<path-to-live.json> [--write] [--force] [--max-retire-frac=0.5]");
+  if (!flags.platform || (!flags.snapshot && flags.ageDays == null)) {
+    console.error("Usage: reconcile:sold -- --platform=<name> (--snapshot=<path> | --age-days=<N>) [--write] [--force] [--max-retire-frac=0.5]");
     process.exit(2);
   }
 
-  const liveRefs = readLiveRefs(flags.snapshot);
+  // Age mode: for capped sources where one sweep can't see the whole live set.
+  if (flags.ageDays != null) {
+    await ageReconcile(flags.platform, flags.ageDays, flags.write, flags.force);
+    return;
+  }
+
+  const liveRefs = readLiveRefs(flags.snapshot as string);
   const rows = await fetchAvailableRows(flags.platform);
   const today = new Date().toISOString().slice(0, 10);
 
