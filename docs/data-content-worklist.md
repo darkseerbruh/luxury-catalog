@@ -17,6 +17,9 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   Wave 2018, Vanity 2020, Serpenti Forever 2011) via `apply-style-depth.ts`. Drafts archived
   at `supabase/ingest/data/style-depth-batch1.json`. Bold stripped (detail page renders plain text).
 - ⬜ **Remaining ~214 new styles** — next batches by comp count after the top-15 pattern proves out.
+- ⬜ **10 styles promoted 2026-07-10 (TRR sweep backlog)** — bare (name + comps only), add to the depth queue:
+  LV Cartouchière, Iéna, Évasion, Alizé, Surène, Randonnée, Uzès, Vivacité, Odyssée; Hermès Sac à Dépêches.
+  All real vintage/heritage models — archivist-sourceable (intro years + one-line descriptions).
 - ✅ **Category-bucket audit** — DONE 2026-07-10. Review list at `docs/style-bucket-audit.md`:
   7 archivist-confirmed category/motif buckets + 5 token-flagged needs-review + Chanel Urban
   Essentials seasonal. Strongest merge candidate = the 3 Gucci GG-Supreme logo entries. NO merges
