@@ -304,16 +304,17 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     mess. Fix = a reviewed `merge-style-dupes` pass first (pipeline rule: style dups need spot-check),
     THEN wire targets. Its live FP feed is thin (~33 bags) so 20 may need the dedup + a couple real
     adds (The Story, T-Bar, Padlock Tote already exist as styles).
-  - ⚠️ **Miu Miu 17 — blocked by an FP-adapter size bug** (root-caused 2026-07-10). Already has Beau,
-    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3 unpriced variants
-    (Wander [Small] v1400, Aventure [Regular] v1402, Aventure [Medium] v1403) DO have in-band FP
-    listings, but `sources/fashionphile.ts --raw` lands those rows with **`size_label: undefined`**
-    (style resolves to "Wander"/"Aventure" but the size is dropped), so load collapses every size onto
-    one variant (Mini/priced) and the others never price. Real fix = make the FP adapter carry the
-    matched target's `size_label` (or detect size from the handle) for these multi-size Miu Miu
-    targets; it's a small adapter change + test, NOT a data pass. Same latent bug likely mis-sizes
-    other multi-size FP targets — worth a general fix. Do it in a code lane, not concurrent with the
-    ingest session already editing `model-normalize.ts`.
+  - ✅ **Miu Miu → 20 (DONE 2026-07-10, FP-adapter size bug FIXED)**. Root cause: `sources/fashionphile.ts`
+    matched targets with `Array.find` (FIRST match). The inline size-less generics (`Wander` require
+    `["wander"]`, `Aventure` require `["aventure"]`, no size-excludes) sit BEFORE the appended
+    sweep-targets, so every sized handle (`small-wander`, `regular-aventure`, `medium-aventure`)
+    collapsed onto the generic "Standard" bucket and the sized variants never priced. Fix = new
+    exported `selectTarget()` picks the MOST SPECIFIC match (total require-token length) instead of the
+    first, so `small-wander` (12-char anchor) beats `wander` (6). General across all brands; regression
+    test `src/lib/__tests__/fashionphile-select-target.test.ts` (Miu Miu buckets + Hermès Birkin/Kelly,
+    LV Neverfull/Montsouris spot-checks). Recaptured → mapped → loaded: Wander [Small] v1400 (n3),
+    Aventure [Regular] v1402 (n3), Aventure [Medium] v1403 (n1) now priced. `audit-coverage` confirms
+    Miu Miu **priced_variants=20**. Full suite green (753 tests).
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
