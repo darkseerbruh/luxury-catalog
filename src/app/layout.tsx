@@ -85,34 +85,45 @@ export default async function RootLayout({
         <div className="flex flex-1 flex-col">{children}</div>
         <FirstAlertNudge />
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-            <div className="col-span-2 sm:col-span-1">
+          <div className="mx-auto max-w-5xl">
+            <div className="max-w-xs">
               <p className="font-serif text-foreground">Luxury Catalog</p>
-              <p className="mt-2 max-w-xs text-muted">
+              <p className="mt-2 text-muted">
                 Production history, authentication markers, and resale prices for designer handbags.
               </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs uppercase tracking-wide text-muted/70">Shop</p>
-              <Link href="/shop" className="hover:text-foreground">Shop the market</Link>
-              <Link href="/deals" className="hover:text-foreground">Deals</Link>
-              {covetedReady && (
-                <Link href="/coveted" className="hover:text-foreground">Most coveted bags</Link>
-              )}
-              <Link href="/browse" className="hover:text-foreground">Browse</Link>
-              <Link href="/search" className="hover:text-foreground">Search</Link>
+            {/* Grouped by intent so the overlap reads clearly: "Shop the market"
+                is the four ways INTO bags for sale (the grid, its best-priced
+                slice, name search, category browse); "The reference" is the
+                authority layer (rankings, venue trust, identify, articles);
+                "Explore" is the lighter, community surfaces. */}
+            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-xs uppercase tracking-wide text-muted/70">Shop the market</p>
+                <Link href="/shop" className="hover:text-foreground">Search the market</Link>
+                <Link href="/deals" className="hover:text-foreground">Deals</Link>
+                <Link href="/browse" className="hover:text-foreground">Browse by style</Link>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p className="text-xs uppercase tracking-wide text-muted/70">The reference</p>
+                <Link href="/rankings" className="hover:text-foreground">The LC Index</Link>
+                <Link href="/where-to-buy" className="hover:text-foreground">Where to buy</Link>
+                <Link href="/identify" className="hover:text-foreground">Spot the fake</Link>
+                <Link href="/articles" className="hover:text-foreground">Articles</Link>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p className="text-xs uppercase tracking-wide text-muted/70">Explore</p>
+                <Link href="/quiz" className="hover:text-foreground">Style quiz</Link>
+                <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
+                {covetedReady && (
+                  <Link href="/coveted" className="hover:text-foreground">Most coveted bags</Link>
+                )}
+                <Link href="/found" className="hover:text-foreground">Log a find</Link>
+              </div>
+              {/* "You" = personal, auth-gated surfaces (client-resolved so the
+                  layout stays cookieless). Signed out: Account links instead. */}
+              <FooterAccountLinks />
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs uppercase tracking-wide text-muted/70">Discover</p>
-              <Link href="/identify" className="hover:text-foreground">Identify</Link>
-              <Link href="/quiz" className="hover:text-foreground">Style read</Link>
-              <Link href="/articles" className="hover:text-foreground">Articles</Link>
-              <Link href="/coveted-closets" className="hover:text-foreground">Coveted closets</Link>
-              <Link href="/found" className="hover:text-foreground">Log a find</Link>
-            </div>
-            {/* "You" = personal, auth-gated surfaces (client-resolved so the
-                layout stays cookieless). Signed out: Account links instead. */}
-            <FooterAccountLinks />
           </div>
           {/* Newsletter opt-in — capture only for now; unsubscribe + double
               opt-in ship with the first Resend send, so no dead links here. */}

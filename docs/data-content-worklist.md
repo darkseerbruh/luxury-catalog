@@ -8,12 +8,50 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## PAGE-DEPTH: descriptions + intro years on new styles (started 2026-07-10)
+*The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
+year_introduced ~0%. Thin pages rank + convert worse. Descriptions must be SOURCED (factuality
+bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (review-gated).*
+- ✅ **Top-15 new styles by comp count** — DONE 2026-07-10. Archivist sourced, spot-checked,
+  applied 15 descriptions + 5 cleanly-sourced years (Kelly To Go 2020, Soft Trunk 2019, New
+  Wave 2018, Vanity 2020, Serpenti Forever 2011) via `apply-style-depth.ts`. Drafts archived
+  at `supabase/ingest/data/style-depth-batch1.json`. Bold stripped (detail page renders plain text).
+- ✅ **Batch 2 (ranks 16-45, 30 styles)** — DONE 2026-07-10. 30 descriptions + 4 years live
+  (Lockit 1958, La Medusa 2021, Falabella 2009, Dior Vibe 2022). Coverage 30% → 34%, years 8 → 17.
+  Drafts at `supabase/ingest/data/style-depth-batch2.json`. Found Chanel Uniform (1056) = NOT a
+  retail model (staff-uniform program), flagged for removal in style-bucket-audit.md.
+- ✅ **Batch 3 (final ≥20-comp tranche, 29 styles)** — DONE 2026-07-10. 29 descriptions + 5 years
+  (Diorever 2016, Snapshot 2018, Réjane 1903, LV Biker 2025, Chloé Nile 2016). Drafts at
+  `supabase/ingest/data/style-depth-batch3.json`. Accents restored on apply (Ebène/Hermès/Réjane).
+- ✅ **≥20-comp set COMPLETE** — 74 sourced descriptions across 3 batches; coverage 30% → 37%,
+  years 8 → 22. Every fact archivist-sourced + spot-checked; unsourced years held null.
+- ⬜ **10 styles promoted 2026-07-10 (TRR sweep backlog)** — bare (name + comps only), fold into the
+  thin-tail depth pass: LV Cartouchière, Iéna, Évasion, Alizé, Surène, Randonnée, Uzès, Vivacité,
+  Odyssée; Hermès Sac à Dépêches. All real vintage/heritage models — archivist-sourceable.
+- ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
+  more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
+  Same method: archivist batch → `apply-style-depth.ts`.
+- ✅ **Category-bucket audit** — DONE 2026-07-10. Review list at `docs/style-bucket-audit.md`:
+  7 archivist-confirmed category/motif buckets + 5 token-flagged needs-review + Chanel Urban
+  Essentials seasonal. Strongest merge candidate = the 3 Gucci GG-Supreme logo entries. NO merges
+  applied (needs human spot-check per pipeline rule). Superseded detail below:
+- 🗂️ (audit detail) archivist flagged 7 of the top 15 as category/motif descriptors,
+  NOT single models: Gucci Belt Bag, Prada Triangle, Gucci Neo Vintage, Gucci Emblem, Celine
+  Macadam, Gucci Retro Interlocking G, Chanel Pearl Crush (design detail); + Chanel Urban
+  Essentials is seasonal (no permanent name). The 3 Gucci GG-Supreme logo entries (Neo Vintage /
+  Emblem / Retro Interlocking G) overlap and may be collapsible. NEEDS REVIEW before merge — per
+  [[catalog_promotion_pipeline]] style dups are NOT bulk-mergeable (silhouette buckets are
+  intentional). Producing the full-catalog audit list next.
+
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
-- ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
-  also searched ×1. Goyard price data + a Goyard authentication article both already
-  exist, so this is a **search-match gap** (the query did not surface a result), not a
-  data-capture gap. Fix in the search/index layer: confirm "goyard" maps to the brand
-  + its styles in on-site search. Logged by `article-engine-weekly` 2026-07-07.
+- ✅ **"goyard"** — RESOLVED (verified 2026-07-10). The 2026-06-28 miss predates the
+  2026-07-02 Goyard sweep; Goyard now has a brand row + 33 styles + 52 variants, and
+  `legacySearch` (the `searchCatalog` fallback the live `/search` uses) matches brand
+  name via `ilike`, so "goyard"/"Goyard"/"goyard tote" all resolve. `searched_not_found`
+  holds no goyard row. Verified against prod with the anon client. No code change needed.
+  *(Latent, out of scope: `hybrid-search.ts` bm25 brand/style-name match only scans an
+  arbitrary 60-row window; brand search is covered in practice because `searchCatalog`
+  runs alongside and merges. Worth tightening if under-match ever recurs.)*
 - ⬜ **"alma" ×3** (to 2026-07-02) — LV Alma demand with no dedicated article. Needs an
   Alma resale price pull (Fashionphile asking + eBay sold, with n) before the article
   backlog item (`docs/article-backlog.md`) can be written to the data bar.
@@ -53,7 +91,7 @@ Queue (priority order; tick with counts + date):
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
 
 
-- ⬜ CONTENT FOLLOW-UP: refresh stale chart components against current comps (NeverfullSizeChart still shows June 26 numbers $1,245/$1,185 vs current $1,565 sample; decide per-component whether to refresh or date-label). Rule 6.3 retrofits for older articles as touched.
+- ✅ CONTENT FOLLOW-UP DONE 2026-07-10: refreshed the three charts carrying stale June-26 comps against current deduped medians (live asking, USD, dedupe by `listing_ref`). NeverfullSizeChart: MM $1,245→$1,515 (n=345), PM $1,185→$1,583 (n=36); "cost about the same" thesis holds (within ~5%). IconicPricesChart + EntryBagsChart (shared the stale $1,245/$911): all bars re-pulled — Marmont small $911→$1,095 (n=183), Speedy 30 $1,623→$1,375 (n=148), Chanel Flap med $6,000→$6,205 (n=614), Kelly 32 $12,410→$12,345 (n=37), Birkin 30 $18,000→$20,335 (n=133). Date labels moved June→July 2026; `launch-articles.ts` STALE_FIGURES hints refreshed. All figures stamped with n + 2026-07-10.
 - ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope DECIDED 2026-07-02: yes eventually, NOT now (owner). Revisit on her green light; tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
@@ -285,6 +323,22 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   ~$7 (within Starter prepaid). Method is the standing TRR capture (memory
   trr_capture_sessions). Each category caps ~120 (no pagination), so deeper coverage needs
   designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths for deeper coverage.
+- ✅ **"Do it all" cleanup batch 2026-07-10**: (1) normalized split platform names
+  (TheRealReal→The RealReal, ebay→eBay, poshmark→Poshmark); (2) re-ran promotion pass;
+  (3) deep TRR via paginating actor `piotrv1001/the-realreal-listings-scraper` (+454 net-new
+  bags; it paginates ~7 pages/URL vs lulzasaur's 120 hard cap); (4) added 4 brands + models
+  (Tumi/Proenza Schouler/Mansur Gavriel/Furla) → promoted Metropolis/Bucket Bag/PS1; (5)
+  applied migration 0038 via management API (region/condition_detail/enrichment now on
+  discovered_listing — the CI push had a tracking mismatch; direct DDL fixed it). Result:
+  styles 994, brands 49, price_history 95,447, ≥2-source styles 582 / ≥3 296.
+- ✅ **eBay deeper pull — DONE 2026-07-10** (owner raised the Apify limit). Broad
+  auction-only sold sweep via `automation-lab/ebay-sold-scraper` (13 tier-1-3 brands,
+  minPrice=500) → **718 realized sold comps, 676 onto catalog pages** + 42 banked, dated by
+  actual sold date. Auction finals can't be best-offer masked = zero masked-row risk.
+  Restored `ebay-sold-apify.ts` as the BROAD catch-all adapter (routes every row via
+  load:prices), distinct from the SCOPED `ebay-sold-sweep.ts` (drops non-target rows — kept
+  only 9/718 here, wrong tool for breadth). ⬜ Optional: Firecrawl BIN-sold breadth on the
+  owner's allowance. eBay stays MANUAL (no cron).
 - ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
   `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile

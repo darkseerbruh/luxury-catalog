@@ -22,7 +22,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Skip; add when traffic is material | Risks missing the early baseline entirely; the Coach auth article already draws 21 entries/week | Do not choose |
 - **Moves:** `article_viewed` moves the GEO/content-channel acquisition read (no other event captures editorial engagement). `bags_compared` moves the Cross-Shopper intent signal and decision-depth read (buyer affiliate, lane 1). `attribute_object_viewed` moves the Collector/Sofia depth funnel read.
 - **Confidence:** Deterministic gap, not a judgment call. The events are wired and firing; the pulse just does not ask for them. Fix is a four-line addition to `analytics-pulse.ts`.
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 — all three (`article_viewed`, `attribute_object_viewed`, `bags_compared`) verified present in the pulse `journeyEvents` array (`scripts/analytics-pulse.ts:205-208`); no further change needed.
 
 ---
 
@@ -37,7 +37,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Do nothing; keep deferring | No trigger, no call; the strategy assumption stays unchecked indefinitely | Do not choose |
 - **Moves:** GEO/AI-referral is the acquisition spine feeding all five revenue lanes. If Bet 1 breaks, the traffic ramp in `monetization-projections.md` compresses toward the conservative case (~$7K yr-1 take-home vs. ~$32K base), and the strategy doc needs a revised acquisition thesis.
 - **Confidence:** Too thin to call the bet broken or confirmed today (n=246, 9 days, mostly first-party). My read: the absence of any organic referrer at day 9 is within the expected indexing delay -- but a six-week watch deadline is the right discipline. The 2026-06-24 model explicitly says "recalibrate the moment you have 4-6 weeks of real PostHog data."
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 (owner) — hard check-in set for 2026-08-10: if non-direct traffic is still under 10% of weekly visitors, treat Bet 1 (GEO) as broken and open a strategy-revision decision.
 
 ---
 
@@ -52,7 +52,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Leave it | Perpetuates a misleading zero on every pulse read | Do not choose |
 - **Moves:** Taxonomy hygiene; frees a pulse slot for one of the three new events above. No direct revenue-lane move, but accurate instrumentation protects every downstream decision.
 - **Confidence:** Deterministic. The event is unwired and has no call site. This is a cleanup, not a judgment call.
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 — `styleViewed` already gone from `events.ts` and the pulse `journeyEvents`; removed the last lingering reference (`scripts/setup-posthog.mjs` "Depth actions" tile). Taxonomy clean.
 
 ---
 
