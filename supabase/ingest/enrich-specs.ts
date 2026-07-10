@@ -6,7 +6,10 @@
  * era×condition matrix + attribute grading on the bag page. Cheap model + strict
  * "only what's stated" prompt. Dry-run by default; --write to persist.
  *
- *   npx tsx supabase/ingest/enrich-specs.ts [--write] [--limit=N]
+ *   npx tsx supabase/ingest/enrich-specs.ts [--write] [--limit=N] [--platform=eBay]
+ *     --platform=X  target ONE platform's rows missing a colorway (the deals-basis gap:
+ *                   isConfidentBasis needs material+color); else the default
+ *                   production_year-null "not yet spec-parsed" gate across all platforms.
  *
  * Needs .env.local with SUPABASE_SERVICE_ROLE_KEY + ANTHROPIC_API_KEY, migrations
  * 0022 + 0023 applied, and resale rows captured (notes/condition_detail loaded).
@@ -14,7 +17,7 @@
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "../seed/lib/client";
-import { buildSpecPrompt, parseSpecResponse, EMPTY_SPEC } from "../../src/lib/ingest/spec-extract";
+import { buildSpecPrompt, parseSpecResponse, EMPTY_SPEC, type ItemSpec } from "../../src/lib/ingest/spec-extract";
 
 const MODEL = "claude-haiku-4-5-20251001"; // cheap, high-volume extraction
 
@@ -22,6 +25,7 @@ async function main() {
   const write = process.argv.includes("--write");
   const limitArg = process.argv.find((a) => a.startsWith("--limit="));
   const limit = limitArg ? Number(limitArg.slice("--limit=".length)) || 50 : 50;
+  const platform = process.argv.find((a) => a.startsWith("--platform="))?.slice("--platform=".length);
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -29,14 +33,17 @@ async function main() {
     process.exit(1);
   }
 
-  // Source text = listing title (notes) + condition write-up; target = rows not
-  // yet spec-parsed (production_year still null).
-  const { data, error } = await supabaseAdmin
+  // Source text = listing title (notes) + condition write-up. Target selection:
+  //  - --platform: that platform's rows still MISSING a colorway (fills the deals basis
+  //    gap without re-touching already-specced rows).
+  //  - default: rows not yet spec-parsed (production_year null), any platform.
+  let query = supabaseAdmin
     .from("price_history")
     .select("price_id, notes, condition_detail")
-    .is("production_year", null)
     .or("notes.not.is.null,condition_detail.not.is.null")
     .limit(limit);
+  query = platform ? query.eq("platform", platform).is("colorway", null) : query.is("production_year", null);
+  const { data, error } = await query;
   if (error) throw error;
   const rows = (data ?? []) as { price_id: number; notes: string | null; condition_detail: string | null }[];
   console.log(`Found ${rows.length} row(s) to spec-parse${write ? "" : " (DRY RUN)"}.`);
@@ -58,19 +65,25 @@ async function main() {
       console.warn(`  price_id ${row.price_id}: unparseable response, skipping`);
       continue;
     }
-    // Skip rows where the model found nothing real — don't churn no-op updates.
-    if (JSON.stringify(spec) === JSON.stringify(EMPTY_SPEC)) {
+    // Only write the fields the model actually found — NEVER null-wipe an existing
+    // structured value (a row can be selected for a missing colorway yet already carry a
+    // good material from FP/TRR; a blind update(spec) would blank it).
+    const patch: Partial<ItemSpec> = {};
+    for (const k of Object.keys(EMPTY_SPEC) as (keyof ItemSpec)[]) {
+      if (spec[k] != null) (patch as Record<string, unknown>)[k] = spec[k];
+    }
+    if (Object.keys(patch).length === 0) {
       console.log(`  price_id ${row.price_id}: nothing extractable`);
       continue;
     }
     if (write) {
       const { error: upErr } = await supabaseAdmin
         .from("price_history")
-        .update(spec)
+        .update(patch)
         .eq("price_id", row.price_id);
       if (upErr) throw upErr;
     } else {
-      console.log(`  price_id ${row.price_id}:`, JSON.stringify(spec));
+      console.log(`  price_id ${row.price_id}:`, JSON.stringify(patch));
     }
     done++;
   }
