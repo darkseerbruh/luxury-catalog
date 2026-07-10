@@ -1,27 +1,49 @@
 /**
- * Re-triage The Luxury Closet price_history rows whose listing title no longer
- * resolves to the style they sit on. Root cause (2026-07-09): bare "timeless" in
- * the Chanel dictionary filed TLC's whole "Timeless" classic line (handcuff
+ * Re-triage price_history rows whose listing title no longer resolves to the
+ * style they sit on. Original incident (2026-07-09): bare "timeless" in the
+ * Chanel dictionary filed TLC's whole "Timeless" classic line (handcuff
  * clutches, shopping totes, pochette phone cases) under Classic Flap, so wrong
- * bags won the affiliate hero/card photo and polluted the comps.
+ * bags won the affiliate hero/card photo and polluted the comps. The same
+ * preserve-then-delete pass also cleans other platforms' ingest mis-maps
+ * (e.g. The RealReal titles landing on the wrong Chanel style).
  *
- * For each TLC row we rebuild the title from the source_url slug, recompute
- * canonicalModel with the FIXED dictionary, and compare to the row's style:
+ * For each row on the platform we rebuild the title from the source_url slug,
+ * recompute canonicalModel with the current dictionary, and compare to the
+ * row's style:
  *   match      -> keep
  *   mismatch   -> preserve as evidence in discovered_listing (style_guess = the
  *                 recomputed model, promotion pass re-places it), then delete the
  *                 price_history row.
  *
- *   npx tsx supabase/ingest/clean-timeless-mismap.ts                    # report only
+ *   npx tsx supabase/ingest/clean-timeless-mismap.ts                    # report only (TLC)
  *   npx tsx supabase/ingest/clean-timeless-mismap.ts --write            # apply
  *   npx tsx supabase/ingest/clean-timeless-mismap.ts --brand Chanel     # scope to one brand
+ *   npx tsx supabase/ingest/clean-timeless-mismap.ts --all              # drop the "timeless" scope
+ *   npx tsx supabase/ingest/clean-timeless-mismap.ts --report out.json  # dump per-group samples
+ *   ... --platform "The RealReal" --all --brand Chanel                  # sweep another platform
+ *   ... --all --groups-file verified.json --write                       # move ONLY listed groups
+ *
+ * --platform defaults to "The Luxury Closet". On any other platform the
+ * "timeless" default scope doesn't apply, so pass --all (which gates --write
+ * on --groups-file). Slug->title parsing is platform-aware: TLC ends slugs
+ * with a "-p<digits>" product id, The RealReal with a random 5-char token.
+ *
+ * --groups-file = a JSON array whose entries are either a group key exactly as
+ * printed in the report ("<Brand> <Style>  <-  <recomputed>") or, for a group
+ * where some rows verified as correctly placed, an object
+ * { "group": "<key>", "exclude_ids": [<price_id>, ...] } — excluded rows stay.
+ * With --all it is REQUIRED for --write: an unscoped recompute mixes real
+ * mis-maps with dictionary gaps, so every group must be spot-checked against
+ * real listing titles before it may move.
  */
+import { readFileSync, writeFileSync } from "node:fs";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { createClient } from "@supabase/supabase-js";
 import { canonicalModel } from "../../src/lib/ingest/model-normalize";
 
-const PLATFORM = "The Luxury Closet";
+const platformIdx = process.argv.indexOf("--platform");
+const PLATFORM = platformIdx >= 0 ? process.argv[platformIdx + 1] : "The Luxury Closet";
 
 const sb = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,11 +51,17 @@ const sb = createClient(
   { auth: { persistSession: false } },
 );
 
-/** ".../women/chanel-timeless-handcuff-...-clutch-p1320677" -> "chanel timeless handcuff ... clutch" */
+/**
+ * TLC:  ".../women/chanel-timeless-handcuff-...-clutch-p1320677" -> "chanel timeless handcuff ... clutch"
+ * TRR:  ".../shoulder-bags/chanel-tweed-...-double-flap-r4yqm"   -> "chanel tweed ... double flap"
+ * TRR's trailing token is a random 5-char uniquifier, not a word — strip it only
+ * on TRR so a real 5-letter last word ("small", "chain") survives on other platforms.
+ */
 function titleFromUrl(url: string | null): string | null {
   if (!url) return null;
   const seg = url.split("?")[0].replace(/\/+$/, "").split("/").pop() ?? "";
-  const slug = seg.replace(/-p\d+$/i, "");
+  let slug = seg.replace(/-p\d+$/i, "");
+  if (PLATFORM === "The RealReal") slug = slug.replace(/-[a-z0-9]{5}$/i, "");
   if (!slug) return null;
   return slug.replace(/-/g, " ").trim() || null;
 }
@@ -56,7 +84,7 @@ interface PhRow {
   listing_status: string | null;
 }
 
-async function fetchAllTlcRows(): Promise<PhRow[]> {
+async function fetchAllPlatformRows(): Promise<PhRow[]> {
   // PostgREST caps every response at 1000 rows regardless of .limit() — page it.
   const out: PhRow[] = [];
   const PAGE = 1000;
@@ -77,10 +105,33 @@ async function fetchAllTlcRows(): Promise<PhRow[]> {
 
 async function main(): Promise<void> {
   const write = process.argv.includes("--write");
+  const all = process.argv.includes("--all");
   const brandIdx = process.argv.indexOf("--brand");
   const brandFilter = brandIdx >= 0 ? process.argv[brandIdx + 1] : null;
+  const reportIdx = process.argv.indexOf("--report");
+  const reportPath = reportIdx >= 0 ? process.argv[reportIdx + 1] : null;
+  const groupsIdx = process.argv.indexOf("--groups-file");
+  // group key -> price_ids verified as correctly placed (they stay even though the group moves)
+  let verifiedGroups: Map<string, Set<number>> | null = null;
+  if (groupsIdx >= 0) {
+    const entries = JSON.parse(readFileSync(process.argv[groupsIdx + 1], "utf8")) as (
+      | string
+      | { group: string; exclude_ids?: number[] }
+    )[];
+    verifiedGroups = new Map(
+      entries.map((e) =>
+        typeof e === "string" ? [e, new Set<number>()] : [e.group, new Set(e.exclude_ids ?? [])],
+      ),
+    );
+  }
+  if (write && all && !verifiedGroups) {
+    throw new Error("--all --write requires --groups-file: never bulk-move groups you have not spot-checked.");
+  }
+  if (PLATFORM !== "The Luxury Closet" && !all) {
+    throw new Error(`the "timeless" default scope is TLC-only — pass --all when using --platform "${PLATFORM}".`);
+  }
 
-  const rows = await fetchAllTlcRows();
+  const rows = await fetchAllPlatformRows();
   console.log(`[timeless-mismap] scanning ${rows.length} "${PLATFORM}" price_history row(s)`);
 
   // variant -> (style name, brand name)
@@ -123,10 +174,11 @@ async function main(): Promise<void> {
       unparsable++;
       continue;
     }
-    // Scope = today's incident: rows that exist because bare "timeless" matched.
-    // Slug reconstruction is lossy ("d-lite" -> "d lite"), so a general
-    // recompute-everything sweep over-flags — keep this surgical.
-    if (!title.includes("timeless")) continue;
+    // Default scope = the original incident: rows that exist because bare "timeless"
+    // matched. --all recomputes everything — token matching is separator-tolerant now
+    // (slug "d lite" hits "d-lite"), but an unscoped flag list still mixes real
+    // mis-maps with dictionary gaps, so --all writes are gated on --groups-file.
+    if (!all && !title.includes("timeless")) continue;
     const recomputed = canonicalModel(meta.brand, title);
     if (!sameModel(meta.style, recomputed)) {
       mismapped.push({ ...r, title, styleName: meta.style, brandName: meta.brand, recomputed });
@@ -134,18 +186,53 @@ async function main(): Promise<void> {
   }
 
   // Report: what sits where it shouldn't, grouped by (style it's on -> what it really is).
-  const byGroup = new Map<string, number>();
+  const groupKey = (m: (typeof mismapped)[number]) =>
+    `${m.brandName} ${m.styleName}  <-  ${m.recomputed ?? "(no model: SLG/unknown)"}`;
+  const byGroup = new Map<string, typeof mismapped>();
   for (const m of mismapped) {
-    const k = `${m.brandName} ${m.styleName}  <-  ${m.recomputed ?? "(no model: SLG/unknown)"}`;
-    byGroup.set(k, (byGroup.get(k) ?? 0) + 1);
+    const k = groupKey(m);
+    byGroup.set(k, [...(byGroup.get(k) ?? []), m]);
   }
+  const sorted = [...byGroup.entries()].sort((a, b) => b[1].length - a[1].length);
   console.log(`[timeless-mismap] ${mismapped.length} mis-mapped row(s), ${unparsable} unparsable URL(s) skipped`);
-  for (const [k, n] of [...byGroup.entries()].sort((a, b) => b[1] - a[1])) console.log(`  ${n}\t${k}`);
+  for (const [k, ms] of sorted) console.log(`  ${ms.length}\t${k}`);
   if (mismapped.length > 0) {
     console.log("  examples:");
     for (const m of mismapped.slice(0, 8)) console.log(`    #${m.price_id} [${m.styleName}] "${m.title}"`);
   }
+  if (reportPath) {
+    // Full per-group dump (every title + URL) for the manual spot-check pass.
+    writeFileSync(
+      reportPath,
+      JSON.stringify(
+        sorted.map(([k, ms]) => ({
+          group: k,
+          rows: ms.length,
+          samples: ms.map((m) => ({ price_id: m.price_id, title: m.title, source_url: m.source_url })),
+        })),
+        null,
+        2,
+      ),
+    );
+    console.log(`[timeless-mismap] wrote per-group report -> ${reportPath}`);
+  }
 
+  if (verifiedGroups) {
+    const before = mismapped.length;
+    for (let i = mismapped.length - 1; i >= 0; i--) {
+      const excluded = verifiedGroups.get(groupKey(mismapped[i]));
+      if (!excluded || excluded.has(mismapped[i].price_id)) mismapped.splice(i, 1);
+    }
+    const unknown = [...verifiedGroups.keys()].filter((g) => !byGroup.has(g));
+    if (unknown.length) {
+      throw new Error(
+        `--groups-file names group(s) not flagged in this run (already moved, or the dictionary changed?): ${unknown.join(" | ")}`,
+      );
+    }
+    console.log(
+      `[timeless-mismap] --groups-file: ${write ? "moving" : "would move"} ${mismapped.length} of ${before} flagged row(s) (verified groups only).`,
+    );
+  }
   if (!write) {
     console.log("[timeless-mismap] DRY RUN — pass --write to move these to discovered_listing.");
     return;

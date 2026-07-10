@@ -20,7 +20,7 @@ const SLG_TOKENS = [
   "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
   "bag charm", "phone holder", "phone case", "airpod", "earring", "necklace", "brooch", "cuff",
-  "belt", "watch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
+  "belt", "watch", "wristwatch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
   "dress", "blazer", "sweater", "jumper", "jeans", "skirt", "hoodie", "sweatshirt",
   "t-shirt", "t shirt", "tshirt", "tee", "shirt", "jacket", "coat", "pants", "trousers",
   "shorts", "cardigan", "vest", "gown", "blouse", "jumpsuit", "romper", "heels",
@@ -34,19 +34,48 @@ const BAG_OVERRIDES = [
   "wallet on chain", "woc", "chain wallet", "wallet to go", "to go wallet",
   "easy pouch", "the pouch", "mini pouch", "belt bag", "bum bag", "fanny pack",
   "waist bag", "vanity",
+  // LV Multi Pochette Accessoires is a bag (own dictionary def), but its full name
+  // contains the "pochette accessoires/accessories" SLG token — override first.
+  "multi pochette",
+  // BV The Pouch's Teen size, and TLC's unspaced "bumbag" (both are ranked bags).
+  "teen pouch", "bumbag",
 ];
 
 const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+/** Space, hyphen, dot and slash are interchangeable separators: URL-slug titles come
+ *  back with every separator flattened to a space ("d-lite" -> "d lite") or dropped
+ *  entirely between digits ("2.55" -> "255", "24/24" -> "2424"), so a literal token
+ *  match under-recognizes exactly the models whose names carry punctuation. The
+ *  separator is optional only between digit parts — never between words, so "all-in"
+ *  ~ "all in" but not "allin". Word-bounded so it can't fire inside "carryall" or
+ *  "chanel 255". Compiled once per token (module-lifetime cache). */
+const tokenReCache = new Map<string, RegExp>();
+function tokenRegex(token: string, plural: boolean): RegExp {
+  const key = plural ? `${token}|s?` : token;
+  let re = tokenReCache.get(key);
+  if (!re) {
+    const parts = token.split(/[\s./-]+/).filter(Boolean);
+    const body = parts
+      .map((p, i) => {
+        if (i === parts.length - 1) return esc(p);
+        const sep = /^\d+$/.test(p) && /^\d+$/.test(parts[i + 1]) ? "[\\s./-]*" : "[\\s./-]+";
+        return esc(p) + sep;
+      })
+      .join("");
+    re = new RegExp(`\\b${body}${plural ? "s?" : ""}\\b`);
+    tokenReCache.set(key, re);
+  }
+  return re;
+}
+
 function has(hay: string, token: string): boolean {
-  if (token.includes(" ")) return hay.includes(token);
-  return new RegExp(`\\b${esc(token)}\\b`).test(hay);
+  return tokenRegex(token, false).test(hay);
 }
 
 /** SLG match, plural-tolerant (so "loafers"/"mules"/"sneakers" are caught, not just singular). */
 function hasSlg(hay: string, token: string): boolean {
-  if (token.includes(" ")) return hay.includes(token);
-  return new RegExp(`\\b${esc(token)}s?\\b`).test(hay);
+  return tokenRegex(token, true).test(hay);
 }
 
 /**
@@ -118,10 +147,19 @@ type ModelDef = [canonical: string, ...tokens: string[]];
 
 const MODELS: Record<string, ModelDef[]> = {
   Chanel: [
-    ["Reissue", "reissue", "2.55"], ["Boy", "boy"],
-    ["Chanel 19", "19 flap", "chanel 19"], ["Chanel 22", "chanel 22", "22 bag"], ["Chanel 25", "chanel 25", "25 bag"],
+    // WOC veto: "2.55 wallet on chain" is a Wallet on Chain (its own LC-Index style),
+    // not the Reissue flap — without it the 2.55 token claims every reissue-style WOC.
+    // Same on Boy / 19 / Trendy CC: a "boy woc" is a WOC wearing the line's styling and
+    // a "coco boy camera" is a Camera Bag — the line token must not swallow the shape
+    // (2026-07-09 audit: 21 Boy WOCs, 7 19 WOCs, 5 Trendy WOCs, 4 Boy cameras
+    // fronted/priced as the wrong model; a red camera case was the Boy page hero).
+    ["Reissue", "reissue", "2.55", "!wallet on chain", "!woc"],
+    ["Boy", "boy", "!wallet on chain", "!woc", "!camera"],
+    ["Chanel 19", "19 flap", "chanel 19", "!wallet on chain", "!woc"],
+    ["Chanel 22", "chanel 22", "22 bag", "c22"], ["Chanel 25", "chanel 25", "25 bag"],
     ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
-    ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"], ["Trendy CC", "trendy cc"],
+    ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"],
+    ["Trendy CC", "trendy cc", "!wallet on chain", "!woc"],
     ["Urban Spirit", "urban spirit"],
     ["Classic Flap", "classic flap", "double flap", "single flap", "rectangular flap", "square flap", "mini flap"],
     ["Wallet on Chain", "wallet on chain", "woc"],
@@ -148,7 +186,11 @@ const MODELS: Record<string, ModelDef[]> = {
     ["OnTheGo", "onthego", "on the go"], ["Pochette Métis", "pochette metis", "métis", "metis"],
     ["Twist", "twist"], ["Coussin", "coussin"], ["Dauphine", "dauphine"], ["Keepall", "keepall"],
     ["Bumbag", "bumbag", "bum bag"], ["NéoNoé", "neonoe", "néonoé", "neo noe"], ["Noé", "noe"],
-    ["Petite Malle", "petite malle"], ["Boulogne", "boulogne"], ["Multi Pochette", "multi pochette", "multi-pochette"],
+    // New Wave veto (2026-07-09 round-3 audit): the "New Wave Multi-Pochette" (12 TLC
+    // rows) is a quilted-calfskin New Wave line bag, not the monogram Multi Pochette
+    // Accessoires — without the veto the earlier token swallows it.
+    ["Petite Malle", "petite malle"], ["Boulogne", "boulogne"],
+    ["Multi Pochette", "multi pochette", "multi-pochette", "!new wave"],
     ["Montaigne", "montaigne"], ["Favorite", "favorite"], ["Félicie", "felicie", "félicie"],
     ["Graceful", "graceful"], ["Delightful", "delightful"], ["Bagatelle", "bagatelle"],
     ["Petit Sac Plat", "petit sac plat"], ["Bella", "bella"], ["Diane", "diane"],
@@ -176,7 +218,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Soft Trunk", "soft trunk"], ["Fold Me Pouch", "fold me"], ["Pochette Marly", "marly"],
     ["Sully", "sully"], ["Evora", "evora"], ["Girolata", "girolata"], ["Hampstead", "hampstead"],
     ["Nolita", "nolita"], ["Verona", "verona"], ["Madeleine", "madeleine"], ["Buci", "buci"],
-    ["Sac Plat", "sac plat"], ["Lockit", "lockit"], ["Locky BB", "locky"], ["Rivoli", "rivoli"],
+    ["Sac Plat", "sac plat"], ["Lockit", "lockit", "lock it"], ["Locky BB", "locky"], ["Rivoli", "rivoli"],
     ["Saintonge", "saintonge"], ["Spontini", "spontini"], ["New Wave", "new wave"],
     ["Multipli-Cité", "multipli-cite", "multipli cite"], ["Broadway", "broadway"], ["Belmont", "belmont"],
     ["Brera", "brera"], ["Duomo", "duomo"], ["Ravello", "ravello"], ["South Bank", "south bank"],
@@ -210,8 +252,17 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Daniel", "daniel"], ["Flore", "flore"], ["Mirage", "mirage"],
   ],
   Gucci: [
-    ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont"], ["Jackie 1961", "jackie"],
-    ["Horsebit 1955", "horsebit"], ["Ophidia", "ophidia"], ["Bamboo 1947", "bamboo"],
+    // Belt-bag veto (2026-07-09 round-3 audit): "gg marmont … belt bag" / "ophidia …
+    // belt bag" are BELT BAGS wearing the line (20 TLC rows priced $518-1,066 with the
+    // Belt Bag cohort, vs $1.5k+ Marmont shoulder bags). Shape beats line whenever the
+    // shape is its own ranked style (Chanel Boy-WOC precedent); chain wallets still
+    // roll into the parent line because no standalone style exists for them.
+    ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont", "!belt bag"], ["Jackie 1961", "jackie"],
+    ["Horsebit 1955", "horsebit"], ["Ophidia", "ophidia", "!belt bag"],
+    // Diana veto (2026-07-09 round-3 audit): the Diana's signature IS its bamboo handle,
+    // so "bamboo diana" titles (36 TLC rows, every one a Diana tote) must not be swallowed
+    // by the Bamboo 1947 token that happens to be checked first.
+    ["Bamboo 1947", "bamboo", "!diana"],
     ["Soho Disco", "soho"], ["Diana", "diana"], ["Attache", "attache"], ["Blondie", "blondie"],
     ["Boston", "boston"], ["Princy", "princy"], ["Jolie", "jolie"], ["Queen Margaret", "queen margaret"],
     ["Zumi", "zumi"], ["Sylvie", "sylvie"], ["Padlock", "padlock"], ["Bree", "bree"], ["Aphrodite", "aphrodite"],
@@ -231,14 +282,20 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Steeple", "steeple"], ["Kaba", "kaba"], ["Jige", "jige"], ["Bride-a-Brac", "bride-a-brac", "bride a brac"],
     ["24/24", "24/24", "24 24"], ["Della Cavalleria", "della cavalleria"], ["In-The-Loop", "in-the-loop", "in the loop"],
     ["Geta", "geta"], ["Toolbox", "toolbox"], ["Trim", "trim"], ["Verrou", "verrou"],
-    ["Plume", "plume"], ["Victoria", "victoria"], ["Double Sens", "double sens"], ["Massai", "massai"],
+    ["Plume", "plume"], ["Victoria", "victoria"], ["Double Sens", "double sens", "double sense"], ["Massai", "massai"],
     ["Berline", "berline"], ["Fourre-Tout", "fourre-tout", "fourre tout"], ["Haut à Courroies", "haut à courroies", "haut a courroies"],
     // Residue-audit additions (2026-07-09)
     ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
   ],
   Celine: [
-    ["Luggage", "luggage"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen", "soft 16"],
-    ["Triomphe", "triomphe"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
+    // Phantom veto (2026-07-09 round-3 audit): the Phantom is its own model (catalog
+    // style), but every "phantom luggage" title (12 TLC rows) was filed under Luggage
+    // because that token is checked first.
+    ["Luggage", "luggage", "!phantom"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen", "soft 16"],
+    // Cabas veto (2026-07-09 round-3 audit): "triomphe cabas" / "cuir triomphe … cabas"
+    // titles (12 TLC rows) are Cabas totes wearing the Triomphe canvas/finish — identical
+    // titles already sit correctly on Cabas. Shape beats line.
+    ["Triomphe", "triomphe", "!cabas"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
     ["Classic Box", "classic box", "box bag", "classic"], ["Sangle", "sangle"], ["Conti", "conti"],
     ["Trio", "trio"], ["Tabou", "tabou"], ["Besace", "besace"],
     ["Trapeze", "trapeze"], ["Nino", "nino"], ["Phantom", "phantom"], ["Boogie", "boogie"],
@@ -288,6 +345,10 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Sunshine Shopper", "sunshine"], ["C'mon", "c'mon", "cmon"], ["First", "first"],
     ["By the Way", "by the way"], ["Fendigraphy", "fendigraphy"],
     ["Kan I", "kan i"], ["Kan U", "kan u"], ["Dotcom", "dotcom"], ["2Jours", "2jours"],
+    // Selleria is a CONSTRUCTION line (hand-stitched cuoio romano), not a model —
+    // verified 2026-07-09: all 31 "selleria peekaboo/baguette" TLC rows are real
+    // Peekaboos/Baguettes and correctly keep the shape model above. Keep this def
+    // LAST-ish so it only catches shape-less vintage Selleria pieces (Adele, Anna, Linda).
     ["Runaway", "runaway"], ["Selleria", "selleria"], ["Origami", "origami"],
     // Residue-audit additions (2026-07-09)
     ["Spy", "spy"],
@@ -315,7 +376,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["First", "first"], ["Town", "town"],
   ],
   Valentino: [
-    ["Rockstud", "rockstud"], ["Roman Stud", "roman stud"], ["VLogo", "vlogo"],
+    ["Rockstud", "rockstud"], ["Roman Stud", "roman stud", "roman studded"], ["VLogo", "vlogo"],
     ["Loco", "loco"], ["One Stud", "one stud"], ["VSling", "vsling"], ["Escape", "escape"],
   ],
   "Dolce & Gabbana": [
