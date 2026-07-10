@@ -16,7 +16,13 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   applied 15 descriptions + 5 cleanly-sourced years (Kelly To Go 2020, Soft Trunk 2019, New
   Wave 2018, Vanity 2020, Serpenti Forever 2011) via `apply-style-depth.ts`. Drafts archived
   at `supabase/ingest/data/style-depth-batch1.json`. Bold stripped (detail page renders plain text).
-- ⬜ **Remaining ~214 new styles** — next batches by comp count after the top-15 pattern proves out.
+- ✅ **Batch 2 (ranks 16-45, 30 styles)** — DONE 2026-07-10. 30 descriptions + 4 years live
+  (Lockit 1958, La Medusa 2021, Falabella 2009, Dior Vibe 2022). Coverage 30% → 34%, years 8 → 17.
+  Drafts at `supabase/ingest/data/style-depth-batch2.json`. Found Chanel Uniform (1056) = NOT a
+  retail model (staff-uniform program), flagged for removal in style-bucket-audit.md.
+- ⬜ **Batch 3 (ranks 46-59, ~14 styles, ≥20 comps)** — finishes the real-traffic set. Then STOP:
+  the ~76 styles under 10 comps are a thin tail where a sourced description costs more than the
+  traffic returns; defer until they accrue comps or on explicit request.
 - ✅ **Category-bucket audit** — DONE 2026-07-10. Review list at `docs/style-bucket-audit.md`:
   7 archivist-confirmed category/motif buckets + 5 token-flagged needs-review + Chanel Urban
   Essentials seasonal. Strongest merge candidate = the 3 Gucci GG-Supreme logo entries. NO merges
