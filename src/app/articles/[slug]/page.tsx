@@ -38,6 +38,7 @@ import { askVsSoldGapChartRegistry } from "./AskVsSoldGapChart";
 import { midTierHoldsValueChartRegistry } from "./MidTierHoldsValueChart";
 import { searchVsPriceChartRegistry } from "./SearchVsPriceChart";
 import { chanelHermesHoldChartRegistry } from "./ChanelHermesHoldChart";
+import { almaSizeChartRegistry } from "./AlmaSizeChart";
 import { AuthorCard } from "./AuthorCard";
 import { TrustBadges } from "@/components/TrustBadges";
 
@@ -70,6 +71,7 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...midTierHoldsValueChartRegistry,
   ...searchVsPriceChartRegistry,
   ...chanelHermesHoldChartRegistry,
+  ...almaSizeChartRegistry,
 };
 
 export const dynamic = "force-dynamic";

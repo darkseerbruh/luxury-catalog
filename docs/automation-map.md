@@ -13,6 +13,7 @@ the cross-feed rules in §2 are binding on every scheduled run.*
 | **Analyst + implementer** (three lenses: analyst · marketer · UX reviewer, §7; monthly persona walk) | `npm run analytics:pulse` | `analyst-standard.md` (§6 implementer, §7 lenses) | `analyst-daily-scan` + `analyst-weekly-brief` (Mon, implements ≤3 `Class: AUTO`) | `analyst-decisions.md` | `Class: OWNER` decisions |
 | **Archivist pull** | seasonal-archive worklist | archive conventions | `archivist-monthly-pull` (1st + 15th) | `research-drafts/seasonal-archive/` | none (doc-only, sourced) |
 | **Market data → site** | Firecrawl/FP captures | `capture-runbook.md` | GitHub Actions (daily/monthly) | DB `price_history` | none (pages live-query) |
+| **Dictionary gap** (growth lever: unnamed `discovered_listing` → real catalog pages) | DB `discovered_listing` backlog | `priority-reseller-capture-runbook.md` + `normalize-discovered`/`aggregate-aliases` | `dictionary-gap-report` (Wed) | `docs/dictionary-gap-report.md` | Add the proposed models to `model-normalize.ts` (report-only run; never auto-edits the dictionary) |
 | **Content freshness** | quarterly re-review | `freshness-runbook.md` | `quarterly-content-freshness-review` | freshness report | ALL number changes (by design) |
 | **Market report** (monthly "State of the Resale Market") | DB `price_history` | factuality protocol (n-gated in `market-report-core.ts`) | `market-report-monthly` (1st): `npx tsx scripts/market-report.ts --write` | `docs/research-drafts/market-reports/` | ALL publishes (draft-only by design) |
 

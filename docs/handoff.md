@@ -1,5 +1,14 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], eBay coverage extended + mid-tier deals-basis unlocked, platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Mid-tier DEALS blocker cleared + eBay coverage extended (2026-07-10, on `main`)
+
+**The eBay realized-comp coverage widened, and the colour+material blocker that kept mid-tier bags off the deals surface is now solved with data (no new spend on the metered Firecrawl item-page scrape).**
+- 💰 **eBay coverage extended:** 2nd auction pull (premium: Chloé/Valentino/Givenchy/Burberry/The Row/Miu Miu/McQueen/MJ/Jacquemus… → 233 onto pages) + 3rd (mid-tier: Coach/Kate Spade/Longchamp/MK/Tory Burch, floor $25 → 145 onto pages). `ebay-sold-apify.ts` gained a JUNK/replica filter. eBay 2,876 → **3,918 rows**; multi-source styles 569 → **611**.
+- 🎨 **Deals-basis unlock (the U-DEALS-MIDTIER ask):** `isConfidentBasis` needs comps with material+colour. Backfilled them from eBay TITLES via `enrich-specs.ts --platform=eBay` (Haiku, guardrailed "only what's stated", **non-null-only writes so structured values are never wiped**). eBay colorway 3 → 689, material → 1,149; **290 mid-tier LIVE listings now deals-ready** (Coach 188, KS 35, Longchamp 27, MK 35, TB 5). Naive regex title-colour parsing was deliberately NOT used (repo's own "wrong backfill is worse than null" rule).
+- ⬜ **YOUR TURN (a product decision, not code):** the deals SURFACE also wants those eBay live rows kept FRESH, but the locked eBay policy says live asks are *lower-trust* than solds and eBay stays *manual/no-cron*. So enabling an eBay-live-driven mid-tier deals surface (with a clear lower-trust label) + a refresh cadence is your call. Say **"eBay live deals: yes"** to wire a bounded refresh; else the 290 deals-ready rows stand as-is on `/shop?deals=1`.
 
 ---
 
