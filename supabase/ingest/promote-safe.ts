@@ -8,13 +8,18 @@
  * and stamps discovered_listing.promoted_variant_id. No new style rows = minimal catalog
  * pollution risk (the path the handoff recommended running first).
  *
- *   npx tsx supabase/ingest/promote-safe.ts [--min=N] [--write] [--create-new]
+ *   npx tsx supabase/ingest/promote-safe.ts [--min=N] [--write] [--create-new] [--exclude=...]
  *     --min=N        cluster-size threshold (default 20)
  *     --write        actually persist (else dry-run plan)
  *     --create-new   also CREATE a curated style when the cluster resolves to a
  *                    confident canonical bag model that has no style yet (bag-gated
  *                    via canonicalModel — never forks a raw marketplace title). Off
  *                    by default so the plain run stays new-style-free.
+ *     --exclude=A::B,C::D   operator veto for clusters the auto-gate resolves wrong
+ *                    (e.g. a seasonal runway flap that canon-maps onto an icon).
+ *                    "Brand::Model" keys, matched accent/case-insensitively against
+ *                    the (brand, style-it-would-land-on); excluded rows stay in
+ *                    discovered_listing for the next, better-informed pass.
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
 import { norm } from "../../src/lib/image-import-core";
@@ -24,6 +29,16 @@ import { promotableClusters, type DiscoveredRow, type DiscoveredCluster } from "
 const MIN = Number((process.argv.find((a) => a.startsWith("--min=")) || "--min=20").split("=")[1]);
 const WRITE = process.argv.includes("--write");
 const CREATE_NEW = process.argv.includes("--create-new");
+// Operator veto for specific clusters the auto-gate resolves wrong (e.g. a seasonal
+// runway flap that canon-maps onto an icon style). Comma-separated "Brand::Model"
+// keys, matched accent/case-insensitively against the CANONICAL (brand, model) the
+// cluster would promote into. Mirrors clean-timeless-mismap's --groups-file veto.
+const excludeKey = (brand: string, model: string) => `${norm(brand)}|${norm(model)}`;
+const EXCLUDE = new Set(
+  ((process.argv.find((a) => a.startsWith("--exclude=")) || "--exclude=").split("=")[1] || "")
+    .split(",").map((s) => s.trim()).filter(Boolean)
+    .map((s) => { const [b, m] = s.split("::"); return excludeKey(b ?? "", m ?? ""); }),
+);
 
 /** discovered_listing row as selected below (DiscoveredRow + the extra capture columns). */
 type DiscoveredFullRow = DiscoveredRow & {
@@ -106,7 +121,7 @@ async function main() {
     (byKey.get(k) ?? byKey.set(k, []).get(k))!.push(r);
   }
 
-  let promotableExisting = 0, needNewStyle = 0, willCreate = 0, rowsToRepoint = 0;
+  let promotableExisting = 0, needNewStyle = 0, willCreate = 0, rowsToRepoint = 0, excluded = 0;
   // styleId is null for a cluster we will CREATE (resolved in the write phase); styleName
   // is the clean canonical name to create it under.
   const plan: { brand: string; style: string; styleName: string; size: string; styleId: number | null; create: boolean; count: number; cluster: DiscoveredCluster }[] = [];
@@ -116,6 +131,14 @@ async function main() {
     const styleId = styleByKey.get(`${bId}|${norm(c.styleGuess)}`) ?? null;
     let create = false;
     let styleName = c.styleGuess;
+    // Operator veto: skip a cluster whose resolved (brand, style-it-lands-on) is excluded.
+    // Check against both the existing style name and the canonical create name.
+    const canonName = canonicalModel(c.brandGuess, c.styleGuess) ?? c.styleGuess;
+    if (EXCLUDE.has(excludeKey(canonicalBrand(c.brandGuess), styleId != null ? c.styleGuess : canonName))) {
+      excluded++;
+      console.log(`  ⊘ excluded: ${canonicalBrand(c.brandGuess)} ${styleId != null ? c.styleGuess : canonName} ${c.sizeLabel || "Standard"} (${(byKey.get(`${bId}|${norm(c.styleGuess)}|${sizeKey(c.sizeLabel)}`) ?? []).length} rows stay in discovered)`);
+      continue;
+    }
     if (styleId == null) {
       // No existing style. Only create when the cluster resolves to a CONFIDENT canonical
       // bag model (bag-gated) AND --create-new is set — never fork a raw title.
@@ -134,6 +157,7 @@ async function main() {
   console.log(`\nClusters mapping to EXISTING style (safe to promote): ${promotableExisting}`);
   console.log(`Clusters that would CREATE a new canonical style: ${willCreate}${CREATE_NEW ? "" : " (pass --create-new to enable)"}`);
   console.log(`Clusters skipped — no brand / no confident canonical model: ${needNewStyle}`);
+  if (EXCLUDE.size) console.log(`Clusters vetoed via --exclude: ${excluded}`);
   console.log(`Asking rows that would re-point into price_history: ${rowsToRepoint}\n`);
   plan.sort((a, b) => b.count - a.count).slice(0, 80).forEach((p) =>
     console.log(`  ${p.create ? "NEW " : "    "}${p.brand} ${p.styleName} ${p.size}  (style ${p.styleId ?? "create"})  → ${p.count} rows`));

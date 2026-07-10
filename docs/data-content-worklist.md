@@ -25,6 +25,9 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   `supabase/ingest/data/style-depth-batch3.json`. Accents restored on apply (Ebène/Hermès/Réjane).
 - ✅ **≥20-comp set COMPLETE** — 74 sourced descriptions across 3 batches; coverage 30% → 37%,
   years 8 → 22. Every fact archivist-sourced + spot-checked; unsourced years held null.
+- ⬜ **10 styles promoted 2026-07-10 (TRR sweep backlog)** — bare (name + comps only), fold into the
+  thin-tail depth pass: LV Cartouchière, Iéna, Évasion, Alizé, Surène, Randonnée, Uzès, Vivacité,
+  Odyssée; Hermès Sac à Dépêches. All real vintage/heritage models — archivist-sourceable.
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.

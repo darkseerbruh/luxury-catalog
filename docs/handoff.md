@@ -1,5 +1,16 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (page-depth descriptions + migration 0038 applied, alias-promote lane; same day: unified market surface + UX fixes; TRR all-brands mis-map sweep — 981 verified rows re-triaged). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (TRR all-brands mis-map sweep — 981 rows re-triaged — then a promotion pass creating 10 new styles; same day: page-depth descriptions + migration 0038, unified market surface + UX fixes, TRR Chanel sweep, merchant sweep #2 / DDH application). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Promotion pass off the swept backlog: 10 new styles + 138 comps re-pointed (2026-07-10, on `main`)
+
+**Ran `promote-safe` on the 41k-row discovered backlog after the sweep. Every created style hand-verified against its cluster's titles (pipeline rule: no blind bulk-create).**
+- 🆕 **10 new curated styles** (all real, correctly-named bags with sane asking-comp medians): LV Cartouchière ($635/n17), Iéna (PM $1,250 / MM $1,195), Évasion ($795/n14), Alizé ($1,095/n13), Surène (MM $2,095 / BB $1,135), Randonnée (PM $680 / GM $625 / Standard $845), Uzès ($1,095), Vivacité ($1,950), Odyssée ($2,995), Hermès Sac à Dépêches ($4,995/n7). 14 variants, 133 asking rows re-pointed into price_history; +5 real jumbo/medium Classic Flap comps into the existing icon style (v873).
+- 🛠️ **New `--exclude=Brand::Model` veto on `promote-safe`** (mirrors the mismap groups-file): skips clusters the auto-gate resolves wrong. Used it to hold back **Chanel Classic Flap "Mini"** — 6 seasonal *Hollywood Boulevard mini flap w/ star coin purse* novelty rows that `canonicalModel` maps onto the Classic Flap icon (the exact seasonal-on-icon pollution the owner flagged). They stay in discovered for a seasonal-aware pass.
+- 📖 **Dictionary: Le Grand Bambino split from Le Bambino** (Grand Chiquito precedent) — matches the catalog, which already had both styles.
+- ⚠️ **Size precision caveat:** numbered LV clusters (Cartouchière 22/26/17) bucketed to one "Standard" variant because the size token wasn't parsed — style is right, size mixed; fine for now, a size-parse pass would split them.
+- ⬜ **YOUR TURN / next:** (a) the 10 new pages are BARE (name + comps only) — they join the PAGE-DEPTH queue in `docs/data-content-worklist.md` (sourced descriptions + intro years via the archivist); (b) Jacquemus discovered rows are messy (raw-title `style_guess`, one style_guess = "unmatched-model") — a normalization pass would promote the Bambino/Grand-Bambino colorways properly.
 
 ---
 
