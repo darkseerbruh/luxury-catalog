@@ -1,0 +1,68 @@
+[
+ {
+  "style_id": 1272,
+  "description": "The Cartouchière is a vintage Louis Vuitton crossbody in Monogram coated canvas, with Vachetta leather trim, a buckle-closed front flap and gold-tone hardware. The strap is adjustable, so it can be worn on the shoulder or across the body, and it was made in a few sizes. Its name comes from the French for a cartridge belt, nodding to a military bandolier. Louis Vuitton stopped making it long ago, so it now turns up mainly on the resale market.",
+  "year_introduced": null,
+  "note": "Vintage single model; collector/reseller accounts date it to around 1980, but no clean house record, so year left null. Sizes appear as PM/MM/GM in sources rather than the 17/22/26 in the hint."
+ },
+ {
+  "style_id": 1273,
+  "description": "The Évasion is a vintage Louis Vuitton travel bag, a soft Boston/duffel shape in Monogram coated canvas with Vachetta leather trim and handles. It closes with a zip top and typically comes with a padlock and, on some examples, a detachable shoulder strap. It sat in Louis Vuitton's sportier travel line rather than the everyday handbag range. It is discontinued and now lives on the resale market.",
+  "year_introduced": null,
+  "note": "Vintage travel/sports model; debut year not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1274,
+  "description": "The Iéna is a Louis Vuitton tote in Damier Ebène coated canvas, with flat leather handles, a zip top and a front exterior pocket. It was made in PM and larger sizes as an everyday shoulder-carry tote. Louis Vuitton has since discontinued it, so it is now found mostly secondhand.",
+  "year_introduced": null,
+  "note": "Discontinued Damier tote; debut year not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1275,
+  "description": "The Alizé, also marked \"24 Heures,\" is a vintage Louis Vuitton soft-sided travel bag in Monogram coated canvas with Vachetta leather corners and handles. Larger versions carry two separate zipped compartments, each with its own padlock, so it works as a short-trip weekender. It belongs to Louis Vuitton's older soft-luggage range and is no longer produced, so it turns up mainly on resale.",
+  "year_introduced": null,
+  "note": "Vintage soft luggage; debut year not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1276,
+  "description": "The Surène is a Louis Vuitton hobo in Monogram Empreinte, the house's tonal embossed-leather version of the Monogram, with a soft slouchy body, a single shoulder strap and a front twist- or buckle-style closure. Louis Vuitton launched it in 2018 and released the smaller BB size shortly after, alongside the MM. It is a leather everyday bag rather than one of the canvas classics.",
+  "year_introduced": 2018,
+  "note": null
+ },
+ {
+  "style_id": 1277,
+  "description": "The Sac à Dépêches is Hermès's structured briefcase, a rigid trapezoidal case with a single rolled top handle, two leather sangles that loop over a turn-lock clasp, and a padlock on a leather clochette. Designed by Robert Dumas in 1928 as a document or dispatch bag, it is the design that fed into the later Kelly, which is why collectors call it the Birkin's or Kelly's older brother. It is still made, in sizes from a small crossbody up to the roughly 36 to 41 cm briefcases, and unlike the Birkin and Kelly it is not a quota bag.",
+  "year_introduced": 1928,
+  "note": "1928 origin is well corroborated across Hermès heritage guides; kept as the design's debut. Line spans many sizes and modern Kelly Dépêches variants."
+ },
+ {
+  "style_id": 1278,
+  "description": "The Randonnée is a vintage Louis Vuitton drawstring bucket bag in Monogram coated canvas with Vachetta leather trim. It cinches shut with a drawstring and has an adjustable strap, so larger versions can be worn as a sling or backpack as well as on the shoulder. It also appeared in Epi leather. Louis Vuitton no longer makes it, so it is a resale-market bag now.",
+  "year_introduced": null,
+  "note": "Vintage bucket/backpack; debut year not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1279,
+  "description": "The Uzès is a vintage Louis Vuitton shoulder bag in Damier Ebène coated canvas, with flat leather handles, an open top and front exterior flap pockets fastened with buckles. It has a structured, slightly expandable body meant for everyday shoulder carry. Louis Vuitton has discontinued it, so it now appears mainly secondhand.",
+  "year_introduced": null,
+  "note": "Discontinued Damier shoulder bag; debut year not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1280,
+  "description": "The Viva-Cité is a vintage Louis Vuitton crossbody in Monogram coated canvas with Vachetta leather trim, a zip top, a front flap pocket and an adjustable shoulder strap, made in PM, MM and GM. It dates to the early-to-mid 2000s as a compact everyday shoulder bag and is now discontinued and sold mostly secondhand. Note that Louis Vuitton later reused the Vivacité name on a newer bag, so the vintage Viva-Cité and the modern piece are different designs.",
+  "year_introduced": null,
+  "note": "NAME COLLISION: the hint's vintage Monogram crossbody is the ~2004 Viva-Cité; LV reissued 'Vivacité' on a separate modern bag. Vintage debut year (reseller ~2004) not cleanly sourced, so left null."
+ },
+ {
+  "style_id": 1281,
+  "description": "The Odyssée is a Louis Vuitton messenger from the house's men's range, made in Monogram and Monogram Eclipse coated canvas with a flap closure and an adjustable strap for shoulder or crossbody wear. It comes in PM and MM, with the MM reading as the fuller true messenger and the PM as a more compact everyday size. It is a canvas utility bag rather than a structured leather piece.",
+  "year_introduced": null,
+  "note": "Men's-line messenger; debut year not cleanly sourced, so left null. LV also uses 'Odyssée' on some women's pieces, so confirm the specific bag by canvas and shape."
+ },
+ {
+  "style_id": 1282,
+  "description": "The Bea is a Saint Laurent north-south leather tote from the Le 5 à 7 family, a tall, softly structured shopper in grained calfskin or deerskin, closed by a leather tab stamped with the Cassandre monogram and lined in tonal suede. Saint Laurent introduced it for Fall/Winter 2023 under Anthony Vaccarello, and it remains a current everyday-to-work bag rather than a resale-only piece.",
+  "year_introduced": 2023,
+  "note": null
+ }
+]
