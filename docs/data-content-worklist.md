@@ -8,6 +8,18 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## PAGE-DEPTH: descriptions + intro years on new styles (started 2026-07-10)
+*The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
+year_introduced ~0%. Thin pages rank + convert worse. Descriptions must be SOURCED (factuality
+bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (review-gated).*
+- 🔄 **Top-15 new styles by comp count** — archivist sourcing descriptions + years
+  (Gucci Belt Bag, Bulgari Serpenti Forever, Prada Triangle, Hermès Kelly To Go…), spot-check,
+  apply. IN PROGRESS this chat (`ops/alias-promote-0709`, 2026-07-10). Do not double-run.
+- ⬜ **Remaining ~214 new styles** — next batches by comp count after the top-15 pattern proves out.
+- ⬜ **Category-bucket audit** — some new "styles" (Gucci Belt Bag / Neo Vintage / Emblem /
+  Retro Interlocking G) may be line/motif descriptors, not single models; archivist flags them
+  for possible merge/rename.
+
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
 - ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
   also searched ×1. Goyard price data + a Goyard authentication article both already
