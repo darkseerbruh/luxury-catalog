@@ -465,6 +465,53 @@ Madison Avenue Couture below; most other partners are buyer-side) or down-weight
 - **Avoid:** "replica handbag" affiliate programs (counterfeit — violates authenticity mission +
   trade-dress/legal risk). **Cudoni** is defunct (closed 2023).
 
+**Merchant sweep #2 (2026-07-09, owner asked "can we list Atlanta Luxury Bags? who else?").** Two
+research agents: ALB deep-dive + a ~20-merchant sweep of everything NOT already on this board.
+Verdicts (all evidence fetched 2026-07-09 unless noted):
+- 🎯 **Dallas Designer Handbags — APPLY, but wire NOTHING until their Awin status goes green.**
+  Awin merchant **91683** ("DallasDesignerHandbags LLC"), **5% / 15-day cookie** (dashboard; the
+  public profile's 30-day claim was wrong), US; our Awin publisher account (2945769) already exists.
+  Shopify products.json showed **≥7,500 products** (cap hit; includes sold/archived); Awin ShopWindow
+  feed = **1,446 products, last updated 5/15/2026** (~2 months stale). LV/Chanel/Hermès depth,
+  Entrupy + in-house authentication. Feed path = licensed images (second feed after TLC;
+  `getVariantImages` picks up any feed writing `listing_image` automatically).
+  **⚠️ In-dashboard caveats (seen logged-in 2026-07-09): Link status OFFLINE + Payment Level
+  "Exposure Level 5 — insufficient prepayment funds due to unpaid prepayment requests"; avg payment
+  time n/a; program launched 8/18/2025.** Translation: clicks may not track and commissions may not
+  pay out while they're unfunded. Application filed = free queue position; the GATE for any code/feed
+  work is Link status = online + exposure level recovered. Re-check the merchant profile before wiring.
+  Status: 🟡 **APPLIED 2026-07-09** (owner clicked Join; Awin confirmed "request to join has been
+  sent to the advertiser"; promotion type = Content). On approval: re-check Link status + exposure
+  level BEFORE any feed/link wiring (the gate above).
+- ❌ **Atlanta Luxury Bags — SKIP as a listed merchant (for now).** Real Shopify store (est. 2018 as
+  The Gold ATM, ATL showroom, Entrupy + in-house auth) but: **no affiliate program or feed exists**
+  (GoAffPro portal unattached; nothing on CJ/Awin/Impact/ShareASale; on-site "affiliate request form"
+  is an empty contact form), only **~302 live listings** (376 published, products.json 2026-07-09;
+  ~20% sold-out), and mixed ONLINE-buyer trust (Yelp 4.0/26 w/ no-returns complaint, Trustpilot 2.7
+  n=4, split Reddit) vs their strong in-store rep. Coverage impact ≈ nil next to TLC. Revisit only as
+  direct outreach (sales@atlantaluxurybags.com) if we later want an ATL/Southeast angle. Note: their
+  products.json leaks internal margin tags ("Margin 40+" etc.) — data curiosity, not a rights grant.
+- 🟡 **Farfetch Pre-Owned — evaluate at outreach time.** Official programme (farfetch.com/pag1987.aspx,
+  30-day cookie, apply via affiliates@farfetch.com); commission %s only from third-party directories
+  (7–13%, unverified). Big infra, but pre-owned is a subset of a mostly-new marketplace. Outward email
+  → owner's move, batch with the next outreach round.
+- 🟡 **Luxe Du Jour — direct-outreach candidate, no feed.** In-house "Luxe Babe" program: **15% /
+  30-day, 5k-follower minimum** (ldj.com/pages/luxe-babe-ldj). ~2,071 Shopify products, Hermès/Chanel
+  heavy. Highest rate found, but influencer-rail (no network, no feed → links only, no images). Gate:
+  our socials must be non-empty first (same gate as ShopMy).
+- ❌ **LUX LAIR — off-direction.** CJ, 7%/30-day, ≥10k products — mechanically easy on our existing CJ
+  rail, but inventory is primarily **off-price NEW** apparel/shoes, not resale. Conflicts with "the
+  trustworthy resource for luxury resale." Park unless we ever want a new-retail price anchor.
+- ❌ **WGACA — avoid despite a live program** (eAccountable OPM, ~4%, AOV ~$1,400 per 2023 FMTC post).
+  Lost **Chanel v. WGACA** (willful trademark infringement; remedies opinion 2025-06-26) — direct
+  association risk for a trust-positioned site.
+- ❌ **No affiliate program found (2026-07-09):** Yoogi's Closet (wholesale reseller program only),
+  Ann's Fabulous Finds (~2.1k products), Couture USA (~1k), **Keeks (≥7.5k products — flag for a
+  future direct-outreach batch)**, Privé Porter, Sotheby's buy-now bags, Bagista, Love that Bag etc,
+  Only Authentics, Mercari, Depop, Boca Raton Pawn/Diamond Banc. Poshmark's "Posh Affiliate" pays in
+  platform credit (not real affiliate). Lampoo = EU/clothing-skewed (FlexOffers ~6%), low priority.
+  LXRandCo was **acquired by Fashionphile (Nov 2023)** → covered by that lane. Bella Bag likely defunct.
+
 **Product feeds = licensed images (the real photo pipeline; researched 2026-06-24).** This is how we
 get **real product images compliantly** — the locked image rule's "licensed affiliate galleries." CJ,
 Awin, and Impact all provide **product data feeds** (images + price + description + deep link, refreshed

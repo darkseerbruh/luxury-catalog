@@ -9,20 +9,18 @@ name: Firecrawl capture (TheRealReal)
 # (price + colour/material/hardware/year) -> load into price_history -> refresh the
 # per-variant summary. This builds the price-over-time history AND keeps listings fresh.
 #
-# PILOT scope (validate-first): a small style set on a daily schedule so we can watch
-# real Firecrawl credit burn on the free tier before committing to a paid plan. Tune
-# TARGETS / cadence as the budget is confirmed.
+# MANUAL-ONLY now (2026-07-09): the daily 1-style pilot was SUPERSEDED by
+# trr-refresh.yml, which sweeps TheRealReal's whole handbag catalogue every 2 days via
+# the Apify actor (residential proxy, no Firecrawl credit) and reconciles sold. This
+# workflow is kept dispatchable for a targeted single-style Firecrawl capture when the
+# Apify path is not the right tool (e.g. a one-off deep detail pull).
 #
 # SECRETS (repo -> Settings -> Secrets and variables -> Actions):
-#   FIRECRAWL_API_KEY        (NEW — the capture engine; the Vercel copy powers the app, not CI)
+#   FIRECRAWL_API_KEY        (the capture engine; the Vercel copy powers the app, not CI)
 #   SUPABASE_SERVICE_ROLE_KEY (already set on this repo)
 # Supabase URL is public (NEXT_PUBLIC_*), inlined as a fallback like market-refresh.yml.
 
 on:
-  schedule:
-    # Daily, off the hour. FREE-TIER pilot: limit=10 ≈ ~30 credits/run ≈ ~900/mo, under the
-    # 1k free cap so it runs continuously without hitting the wall. Bump up on a paid plan.
-    - cron: "23 6 * * *"
   workflow_dispatch:
     inputs:
       target:

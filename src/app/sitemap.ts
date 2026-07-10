@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getSitemapTargets } from "@/lib/queries";
 import { getPublishedPostSitemapTargets } from "@/lib/posts";
 import { SITE_URL } from "@/lib/geo";
+import { VENUES } from "@/lib/where-to-buy";
 
 // Programmatic SEO/GEO: one entry per bag variant + brand, so search engines and
 // AI crawlers can discover the whole catalog (docs/marketing-plan.md, Tier 1).
@@ -26,7 +27,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // The LC Index — a citable ranked asset; recomputed monthly (docs/ux/lc-index-spec.md).
     { url: `${SITE_URL}/rankings`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/rankings/how-we-rank`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    // Where to Buy — the venue trust hub (docs/ux/where-to-buy-spec.md).
+    { url: `${SITE_URL}/where-to-buy`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
   ];
+
+  // One entry per venue profile — each is the direct answer to an "is X legit" query.
+  const venueRoutes: MetadataRoute.Sitemap = VENUES.map((v) => ({
+    url: `${SITE_URL}/where-to-buy/${v.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+  staticRoutes.push(...venueRoutes);
 
   const { variantIds, brandIds } = await getSitemapTargets();
   const posts = await getPublishedPostSitemapTargets();

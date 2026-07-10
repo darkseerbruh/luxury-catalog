@@ -354,10 +354,12 @@ async function fetchListingImages(refs: string[]): Promise<Map<string, string>> 
   return out;
 }
 
-/** A live for-sale listing to stand in as the bag-page hero when we hold no
- * first-party photo. The cheapest in-stock listing that carries a photo, with a
- * tracked buy link. Framed on the page as "available now", never as our own
- * editorial shot. Resilient: null when there's no photographed live listing. */
+/** The live listing BEHIND the bag's already-chosen face image. One source of
+ * truth: getVariantImages picks the face every surface shows (best spec match,
+ * price-sane); the hero just resolves which live listing owns that photo so the
+ * header links to buy it. By construction the hero can never show a different
+ * bag than the brand card (owner call 2026-07-09). Resilient: null when the
+ * image isn't a live affiliate photo (placeholder/community/sold-out). */
 export interface HeroListing {
   imageUrl: string;
   buyUrl: string;
@@ -365,34 +367,40 @@ export interface HeroListing {
   platformLabel: string;
 }
 
-export async function getHeroListing(variantId: number): Promise<HeroListing | null> {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId)) return null;
+export async function getHeroListing(variantId: number, faceImageUrl: string | null): Promise<HeroListing | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId) || !faceImageUrl) return null;
   try {
-    const { data } = await getSupabase()
+    const sb = getSupabase();
+    // Which listing owns this photo?
+    const { data: imgRows } = await sb
+      .from("listing_image")
+      .select("platform, listing_ref")
+      .eq("image_url", faceImageUrl)
+      .limit(5);
+    const owners = (imgRows ?? []) as { platform: string | null; listing_ref: string }[];
+    if (owners.length === 0) return null;
+
+    // Its live ask on THIS variant (cheapest observation = the current best ask we hold).
+    const { data } = await sb
       .from("price_history")
       .select("sale_price, platform, source_url, listing_ref")
       .eq("variant_id", variantId)
       .eq("price_type", "listed")
       .or("listing_status.is.null,listing_status.eq.available")
       .not("sale_price", "is", null)
-      .not("listing_ref", "is", null)
+      .in("listing_ref", owners.map((o) => o.listing_ref))
       .order("sale_price", { ascending: true })
-      .limit(8);
-    const rows = (data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[];
-    if (rows.length === 0) return null;
-    const images = await fetchListingImages(rows.map((r) => r.listing_ref));
-    for (const r of rows) {
-      const img = images.get(r.listing_ref);
-      if (img && r.source_url) {
-        return {
-          imageUrl: img,
-          buyUrl: affiliateListingUrl(r.source_url, r.platform),
-          price: Math.round(r.sale_price),
-          platformLabel: platformLabel(r.platform),
-        };
-      }
-    }
-    return null;
+      .limit(5);
+    const row = ((data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[]).find(
+      (r) => r.source_url && owners.some((o) => o.listing_ref === r.listing_ref && (o.platform ?? "") === (r.platform ?? "")),
+    );
+    if (!row) return null;
+    return {
+      imageUrl: faceImageUrl,
+      buyUrl: affiliateListingUrl(row.source_url as string, row.platform),
+      price: Math.round(row.sale_price),
+      platformLabel: platformLabel(row.platform),
+    };
   } catch {
     return null;
   }

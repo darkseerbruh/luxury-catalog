@@ -24,7 +24,7 @@
  * The grouping/threshold core (groupDiscovered / promotableClusters) is a PURE
  * exported function, unit-tested against in-memory fixtures (no DB).
  */
-import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
+import { norm } from "../../src/lib/image-import-core";
 import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -41,12 +41,13 @@ const LUXURY_HOUSES = new Set(
     "hermès", "hermes", "chanel", "louis vuitton", "dior", "christian dior", "gucci",
     "bottega veneta", "celine", "céline", "saint laurent", "prada", "fendi", "loewe",
     "goyard", "the row", "chloé", "chloe", "balenciaga", "valentino", "delvaux", "moynat",
+    "loro piana", "bulgari", "alaïa", "alaia", "versace",
   ].map((s) => norm(s)),
 );
 // Numbered House Standing tiers ("1" highest → "5"); see docs/ux/tier-formula-spec.md.
 // A NEW brand is born with a provisional tier (luxury house → "2", else "4"); the
 // house-standing backfill re-tiers it precisely once it has recorded prices.
-function tierForNewBrand(name: string): "2" | "4" {
+export function tierForNewBrand(name: string): "2" | "4" {
   return LUXURY_HOUSES.has(norm(name)) ? "2" : "4";
 }
 
@@ -101,8 +102,8 @@ function keyPart(s: string | null | undefined): string {
  * clusters, sorted by count desc (then brand/style/size for stable output).
  *
  * - Already-promoted rows (promoted_variant_id set) are excluded — they're done.
- * - Brand is normalized through normalizeDesigner first ("Hermes" → "Hermès") so
- *   accent variants don't split a cluster.
+ * - Brand is normalized through canonicalBrand first ("Hermes" → "Hermès",
+ *   "Christian Dior" → "Dior") so accent/sub-brand variants don't split a cluster.
  * - Rows missing a brand AND a style guess are skipped (nothing to promote on).
  * - Price range ignores null/non-positive prices.
  */
@@ -115,15 +116,15 @@ export function groupDiscovered(rows: DiscoveredRow[]): DiscoveredCluster[] {
     const style = (row.style_guess ?? "").trim();
     if (!brand && !style) continue;
 
-    const canonicalBrand = brand ? normalizeDesigner(brand) : "";
+    const canonBrand = brand ? canonicalBrand(brand) : "";
     const size = row.size_label?.trim() || null;
-    const key = `${keyPart(canonicalBrand)}|${keyPart(style)}|${keyPart(size)}`;
+    const key = `${keyPart(canonBrand)}|${keyPart(style)}|${keyPart(size)}`;
 
     let cluster = groups.get(key);
     if (!cluster) {
       cluster = {
         key,
-        brandGuess: canonicalBrand,
+        brandGuess: canonBrand,
         styleGuess: style,
         sizeLabel: size,
         count: 0,
@@ -317,7 +318,7 @@ function rowsByClusterKey(rows: DiscoveredRow[]): Map<string, number[]> {
     const brand = (r.brand_guess ?? "").trim();
     const style = (r.style_guess ?? "").trim();
     if (!brand && !style) continue;
-    const key = `${keyPart(brand ? normalizeDesigner(brand) : "")}|${keyPart(style)}|${keyPart(r.size_label?.trim() || null)}`;
+    const key = `${keyPart(brand ? canonicalBrand(brand) : "")}|${keyPart(style)}|${keyPart(r.size_label?.trim() || null)}`;
     if (r.discovered_id == null) continue;
     (out.get(key) ?? out.set(key, []).get(key)!).push(r.discovered_id);
   }
@@ -335,7 +336,7 @@ async function persistPromotions(
   // Preload brands once; find-or-create keeps the cache warm across clusters.
   const { data: brandRows } = await supabase.from("brand").select("brand_id, name");
   const brandByNorm = new Map<string, number>(
-    ((brandRows ?? []) as { brand_id: number; name: string }[]).map((b) => [norm(normalizeDesigner(b.name)), b.brand_id]),
+    ((brandRows ?? []) as { brand_id: number; name: string }[]).map((b) => [norm(canonicalBrand(b.name)), b.brand_id]),
   );
 
   for (const c of clusters) {
@@ -349,7 +350,7 @@ async function persistPromotions(
       continue;
     }
     const brandName = canonicalBrand(c.brandGuess) || c.brandGuess;
-    const brandKey = norm(normalizeDesigner(brandName));
+    const brandKey = norm(canonicalBrand(brandName));
 
     // 1) brand (find-or-create; new brands get a tier, existing keep theirs)
     let brandId = c.matchedBrandId ?? brandByNorm.get(brandKey) ?? null;

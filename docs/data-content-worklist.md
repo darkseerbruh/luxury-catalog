@@ -275,9 +275,53 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   style-level merge (re-point variants+price_history, delete), not a token collapse.
 - ⬜ **NEW-STYLE editorial**: the 51 new styles are bare style+variant+price (no hero image /
   description / spectrum placement yet) — layer content later per full-spectrum goal.
-- ⬜ **Still owner-gated (task part 1)**: FULL TheRealReal pull needs a logged-in Claude-in-Chrome
-  session (bot-blocked to fetch); FULL eBay pull burns Firecrawl credits. 10k TRR rows already
-  banked were mined by this pass. Broad re-capture stays hers.
+- ✅ **TheRealReal FRESH pull — DONE 2026-07-09 via cloud Apify actor** (the durable fix;
+  browser capture kept getting kicked + the Chrome classifier was flaky). Actor
+  `lulzasaur/therealreal-scraper` (residential proxy, bypasses PerimeterX). Adapter
+  `supabase/ingest/sources/trr-apify.ts`. THREE passes 2026-07-09 (600 + 349 + 1,445 across
+  women's + men's bag subcategories) → **819 distinct fresh curated price rows** (49 realized
+  SOLD comps after dedup) + ~1.2k banked; TRR total 8,350 rows; multi-source styles ≥2:497
+  ≥3:254. Owner upgraded Apify FREE→Starter ($29/mo, pay-as-you-go) to unblock; sweep cost
+  ~$7 (within Starter prepaid). Method is the standing TRR capture (memory
+  trr_capture_sessions). Each category caps ~120 (no pagination), so deeper coverage needs
+  designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths for deeper coverage.
+- ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
+  `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
+  handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
+  snapshot (matches the loader's listing_ref exactly, verified against a live sample) →
+  `trr-apify.ts` maps → `load:prices therealreal --write` → `reconcile:sold --platform=RealReal
+  --write` → `summary:refresh`. ~$4-5/run, ~$60/mo. Retired the old daily 1-style Firecrawl
+  pilot (`firecrawl-capture.yml` now manual-only). APIFY_TOKEN secret added + **job PROVEN in
+  write mode 2026-07-09** (run 29065252223). **Retirement is AGE-based, not snapshot-diff:** the
+  test run exposed that TRR's ~120/category cap means one sweep sees ~840 live while the DB
+  showed 7,841 "live" (~7,050 unseen since Jun 23-24 = stale) — snapshot-diff would false-retire
+  90% (50% guard aborted, correctly). New `reconcile:sold --age-days=14` retires listings not
+  re-observed in 14d (existing `observed_on`, no migration; aborts if 0 seen in-window). First
+  run **retired 7,693 stale TRR rows; available 8,584 → 1,332.** Fashionphile every-3h; TLC daily;
+  eBay stays manual (permanent sold comps).
+- ✅ **eBay SCOPED pull — DONE 2026-07-09 (owner greenlit "option A" + the trust-hub chat).**
+  Target = the 49 one-source styles (n≥20, median present, 1 source; all single-variant so
+  zero pickVariant risk). TWO engines in one pass: (1) Firecrawl MCP sold-search scrapes
+  (46 unique queries, ~9 cr each on stealth ≈ ~415 cr — search pages now cost 9 cr, not the
+  1-2 cr of the 7/02 run; NOTE one transient "insufficient credits" error mid-run, the free
+  tier is near its monthly edge) with per-listing **best-offer masked flag**; (2) Apify
+  `automation-lab/ebay-sold-scraper` **auction-only** runs (1,033 items ≈ ~$3.10, Bronze
+  $0.003/listing) = bid-settled finals that CANNOT be masked. Builder
+  `sources/ebay-sold-sweep.ts` (exact-price-only policy: masked rows counted, never loaded;
+  AG floor $500 for tier 1-3, $25 mid-tier; junk/collab/fragrance excludes; mixed-pile
+  auction rows attributed per-title, ambiguous → dropped 667, never guessed).
+  **RESULT: 497 sold rows loaded, 0 unresolved → ranked styles 269 → 304** (≥2-source
+  styles 497→555). **PROBE (the owner's masked-price question, measured): 18% of on-target
+  eBay solds are best-offer masked overall (n=698, 2026-07-09)** — luxury skews far worse
+  (Bottega Bang Bang 14/15 masked) and mid-tier is nearly clean (MK Bedford 0/23, Le Pliage
+  1/32). Policy line now in preferences.md (exact-only, supersedes the 6/26 blanket skip).
+  Big winners: Félicie Pochette 42 solds, Fleming 32, Mercer 29, Le Pliage 28, Pochette
+  Accessoires 26, Soft Margaux 24. Zero-yield: the Chanel Blazy current-line names
+  (Souplissimo/Coco Base — eBay doesn't have them; Coco Base query = perfume noise, filtered).
+  ⬜ FOLLOW-UPS: (a) the 667 unattributed auction rows were dropped, not banked — a future
+  pass could route them to `discovered_listing`; (b) Poshmark as third mid-tier source
+  (proven browser path, owner not yet asked); (c) eBay item-specifics enrichment for
+  U-DEALS-MIDTIER stays open (live listings only, metered).
 
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
 - ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").

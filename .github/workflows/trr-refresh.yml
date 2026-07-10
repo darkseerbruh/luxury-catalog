@@ -1,0 +1,87 @@
+name: Refresh market listings (The RealReal)
+
+# Hands-off "drop sold bags off the Shop" job for TheRealReal, the sister of
+# market-refresh.yml (Fashionphile). TRR is PerimeterX-blocked to plain fetch, so
+# this refresh runs the cloud Apify actor `lulzasaur/therealreal-scraper` over TRR's
+# handbag categories (residential proxy, no browser), loads the live listings, and
+# retires the ones our catalogue still shows that the fresh sweep no longer sees.
+#
+# CADENCE: every 2 days. TRR's live inventory is smaller and churns slower than
+# Fashionphile's (which runs every 3h), so 2 days keeps a sold bag from lingering
+# more than ~48h without over-spending. Tune the cron below.
+#
+# COST: the actor is pay-per-result (~$0.005/listing). A full handbag sweep is
+# ~800-960 listings, so ~$4-5/run, ~$60/mo at this cadence (owner-greenlit 2026-07-09).
+#
+# INTEGRITY: retirement is AGE-based, not snapshot-diff. TRR caps ~120/category, so one
+# sweep never sees the whole live catalogue and a snapshot diff would falsely retire
+# everything it didn't capture. Instead the load stamps today's observed_on on every
+# live listing seen, and reconcile --age-days=14 retires only listings not re-observed
+# in 14 days (7 refreshes at this cadence). SAFETY: reconcile aborts if it saw ZERO
+# listings inside the window (the refresh isn't running — never nuke the catalogue).
+#
+# SECRETS: SUPABASE_SERVICE_ROLE_KEY (already set) + APIFY_TOKEN (ADD THIS in repo
+# Settings -> Secrets -> Actions; it's the token from the Apify console). The Supabase
+# URL is public (NEXT_PUBLIC_*), inlined as a fallback below.
+#
+# Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
+
+on:
+  schedule:
+    # Every 2 days, 04:31 UTC. Tune up/down here.
+    - cron: "31 4 */2 * *"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Apply changes? false = dry run (fetch + report only, no DB writes)"
+        required: false
+        default: "true"
+
+# Never let two TRR refreshes overlap (they touch the same listings).
+concurrency:
+  group: trr-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Fetch TRR live inventory via Apify (writes raw + reconcile snapshot)
+        run: npx tsx supabase/ingest/sources/apify-trr-refresh.ts
+
+      - name: Map + load the live listings
+        run: |
+          npx tsx supabase/ingest/sources/trr-apify.ts trr-apify-live
+          if [ "$WRITE" = "true" ]; then
+            npx tsx supabase/ingest/load-prices.ts therealreal --write
+          else
+            npx tsx supabase/ingest/load-prices.ts therealreal
+          fi
+
+      - name: Retire listings not seen in 14 days (age-based; TRR is capped)
+        run: |
+          if [ "$WRITE" = "true" ]; then
+            npm run reconcile:sold -- --platform=RealReal --age-days=14 --write
+          else
+            npm run reconcile:sold -- --platform=RealReal --age-days=14
+          fi
+
+      - name: Refresh price summaries
+        if: ${{ env.WRITE == 'true' }}
+        run: npm run summary:refresh
