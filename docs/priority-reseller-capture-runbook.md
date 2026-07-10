@@ -30,6 +30,7 @@ lowest spend that covers it. Companion to [data-collection-handoff.md](data-coll
 | **The Luxury Closet** | CJ product feed (advertiser 5312449) | $0 | daily diff + `reconcile:sold` | ✅ wired (`ingest-tlc.yml`, daily) |
 | **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`couture-usa-refresh.yml`, daily) |
 | **Ann's Fabulous Finds** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`anns-refresh.yml`, daily) |
+| **myGemma** | Shopify `/collections/handbags` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`mygemma-refresh.yml`, daily) |
 | **Vestiaire** | Firecrawl (`vestiaire.ts` adapter) | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (needs crawl feed) |
 | **Rebag** | CJ product feed once approved (mirror TLC) | $0 when live | daily diff + `reconcile:sold` | 🔧 gated on Rebag CJ approval (advertiser 5749848, pending) |
 
@@ -86,6 +87,21 @@ grade tag in the feed so condition stays null (never guessed). **Regex gotcha (l
 bag-type filter needs a trailing `s?` — Ann's type is the plural "Handbags", which `\bhandbag\b`
 misses. Verified 2026-07-10: a 2-page sample gave 156 named (Hermès / Chanel / LV / Gucci…) + 65
 discovered rows, prices $550-$33,000, 0 invalid.
+
+### myGemma (free Shopify feed, automated via `mygemma-refresh.yml`)
+```
+npx tsx supabase/ingest/sources/mygemma-crawl.ts handbags
+npx tsx supabase/ingest/sources/mygemma.ts --raw
+npm run load:prices -- mygemma --write
+npm run load:prices -- mygemma-discovered --discovered-only --write
+npm run reconcile:sold -- --platform=myGemma --snapshot=data/ingest/_raw/mygemma-live.json --write
+npm run summary:refresh
+```
+Crawls `/collections/handbags` (the root is sneaker-heavy). **Richest free source:** brand from
+`vendor`, model via canonicalModel, colour from title, AND a full condition GRADE
+(`Condition Type_<X>`) + WRITE-UP (`Condition Description_…` → `condition_detail`). Was a *paid*
+Firecrawl source in the registry; the open collection feed makes it free. Verified 2026-07-10: a
+2-page sample gave 364 named (8 houses, condition on all, detail on 332/364) + 136 discovered, 0 invalid.
 
 ### TheRealReal (Apify, automated via `trr-refresh.yml`)
 Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:
