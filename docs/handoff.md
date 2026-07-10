@@ -1,5 +1,16 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (unified market surface + UX fixes shipped, UX-improvements lane; earlier same day: TRR all-brands mis-map sweep — 981 verified rows re-triaged). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (page-depth descriptions + migration 0038 applied, alias-promote lane; same day: unified market surface + UX fixes; TRR all-brands mis-map sweep — 981 verified rows re-triaged). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Page-depth: 74 sourced style descriptions + migration 0038 (2026-07-10, on `main`, applied to prod)
+
+**The 229 styles promoted 2026-07-09/10 landed name-only (descriptions had dropped to 30%). Backfilled the real-traffic set with SOURCED depth, no fabrication.** Method is now durable: `page_depth_method` memory + `docs/data-content-worklist.md` PAGE-DEPTH section.
+- 📝 **74 style descriptions + 14 debut years live on prod** across 3 archivist batches covering the ENTIRE ≥20-comp set (every new style with real traffic). Coverage 30% → **37%**, years 8 → **22**. Every fact archivist-sourced + spot-checked; unsourced years held null (Marc Jacobs Tote ~2020, Chelsea "1998", Brea ~2010 stay in prose, not the field — new factuality rule #8).
+- 🛠️ **New tooling:** `supabase/ingest/apply-style-depth.ts` (review-gated: writes only spot-checked JSON drafts, never generates prose). Drafts archived at `supabase/ingest/data/style-depth-batch{1,2,3}.json`. Detail page renders description as PLAIN TEXT, so bold stripped + accents kept.
+- 🗂️ **Catalog-integrity find:** the ingest tokenizer created CATEGORY/MOTIF "styles" that aren't single models. Review list at `docs/style-bucket-audit.md`: strongest calls = fold the 3 overlapping Gucci GG-Supreme entries (Neo Vintage / Emblem / Retro Interlocking G) + **remove "Chanel Uniform" (1056)** — it's the staff-uniform program, not a retail bag. NO auto-merges (style dups need spot-check).
+- 🗄️ **Migration 0038 APPLIED** (owner-triggered the Action; verified `region`/`condition_detail`/`enrichment` columns now exist on `discovered_listing`). Future promotions carry region + condition detail instead of dropping them.
+- ⬜ **YOUR TURN:** (a) optional — review `docs/style-bucket-audit.md` and say whether to merge the Gucci GG-Supreme trio + remove Chanel Uniform (one script run once you decide). (b) The thin tail (~76 new styles < 10 comps) is DEFERRED by design — same method (archivist → apply-style-depth.ts) if you ever want them.
 
 ---
 
