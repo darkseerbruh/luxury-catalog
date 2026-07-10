@@ -197,11 +197,16 @@ export default async function ShopPage({
         </div>
       )}
 
+      {/* Rail owns the layout: filters live in a left sidebar (desktop) / bottom
+          tray (mobile), and the server-rendered results pass through as children
+          into the right column. One place for every control, results stay server-side. */}
       <ShopControls
         facets={result.facets}
         current={{ brand, sort: sortValue, deals: deals === "1", min, max, color, material, hardware, condition, feet }}
-      />
-
+        resultCount={result.totalProducts}
+        totalListings={result.totalListings}
+        query={query}
+      >
       {pinned && (
         <section>
           <p className="mb-3 text-[11px] uppercase tracking-[0.2em] text-gold">From our videos</p>
@@ -237,11 +242,7 @@ export default async function ShopPage({
         </div>
       ) : (
         <>
-          <p className="text-sm text-muted">
-            {result.totalProducts.toLocaleString()} bags · {result.totalListings.toLocaleString()}{" "}
-            listings{query ? ` for “${query}”` : ""}
-          </p>
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {result.products.map((p) => {
               const imageUrl = tileImage.get(p.key) ?? null;
               // NO deal chip on these tiles (owner ruled 2026-07-08): a tile fronts
@@ -347,6 +348,7 @@ export default async function ShopPage({
           </div>
         </section>
       )}
+      </ShopControls>
 
       <p className="max-w-prose text-xs text-muted/70">
         &ldquo;From&rdquo; is the lowest current listing. Open a bag to compare every offer,
