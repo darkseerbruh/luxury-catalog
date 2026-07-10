@@ -303,7 +303,7 @@ export function scoreSnapshotAge(latestMonth: string | null, today: string): Che
     status,
     value: latestMonth == null ? "none yet" : `latest ${latestMonth.slice(0, 7)}`,
     plainEnglish: plain,
-    action: status === "green" ? "" : "Check the lc-index-snapshot cron (needs CRON_SECRET) and run it for the missing month.",
+    action: status === "green" ? "" : "The monthly cron fires on the 1st (CRON_SECRET verified set in Vercel prod, 2026-07-10); to backfill now, curl /api/cron/lc-index-snapshot with the Bearer secret.",
   };
 }
 
