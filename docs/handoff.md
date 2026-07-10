@@ -3,7 +3,12 @@
 
 ---
 
-## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09, on `main`, DEPLOYED to prod)
+## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09/10, on `main`, DEPLOYED to prod)
+
+**Round 4 (2026-07-10, owner calls locked): one face per bag everywhere + clean header, commits `9c7da14` + `a36e027`, deployed:**
+- `getHeroListing(variantId, faceImageUrl)` now resolves the live listing BEHIND the face `getVariantImages` chose (identity by construction — it no longer re-picks with its own scoring pass).
+- Bag-page header: NO marketplace caption/price band; contain-fit on white (cover-crop was cutting studio shots at the clasp); image stays quietly CJ-linked (rights tether + click revenue). Platform context lives in the for-sale rail below.
+- Pre-existing bug found + fixed: the multi-card candidate pool was silently truncated to 1,000 rows (PostgREST cap) — real Chanel-page pool is 5,856 rows; now paginated via `fetchAllRows` + chunked `listing_image` reads. Verified live: bag/513 hero == brand-card Boy image (p1310692), no "Available now" text.
 
 **Round 3 (same day, owner report: Boy page fronted by a camera case, then a zip pouch), commit `2cd866b`, deployed:**
 - Dictionary: WOC + camera vetoes on Boy / Chanel 19 / Trendy CC (line token must not swallow the shape); 46 verified rows re-triaged via the `--groups-file` flow.
