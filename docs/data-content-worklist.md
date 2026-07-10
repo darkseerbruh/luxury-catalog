@@ -9,11 +9,14 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
-- ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
-  also searched ×1. Goyard price data + a Goyard authentication article both already
-  exist, so this is a **search-match gap** (the query did not surface a result), not a
-  data-capture gap. Fix in the search/index layer: confirm "goyard" maps to the brand
-  + its styles in on-site search. Logged by `article-engine-weekly` 2026-07-07.
+- ✅ **"goyard"** — RESOLVED (verified 2026-07-10). The 2026-06-28 miss predates the
+  2026-07-02 Goyard sweep; Goyard now has a brand row + 33 styles + 52 variants, and
+  `legacySearch` (the `searchCatalog` fallback the live `/search` uses) matches brand
+  name via `ilike`, so "goyard"/"Goyard"/"goyard tote" all resolve. `searched_not_found`
+  holds no goyard row. Verified against prod with the anon client. No code change needed.
+  *(Latent, out of scope: `hybrid-search.ts` bm25 brand/style-name match only scans an
+  arbitrary 60-row window; brand search is covered in practice because `searchCatalog`
+  runs alongside and merges. Worth tightening if under-match ever recurs.)*
 - ⬜ **"alma" ×3** (to 2026-07-02) — LV Alma demand with no dedicated article. Needs an
   Alma resale price pull (Fashionphile asking + eBay sold, with n) before the article
   backlog item (`docs/article-backlog.md`) can be written to the data bar.
@@ -53,7 +56,7 @@ Queue (priority order; tick with counts + date):
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
 
 
-- ⬜ CONTENT FOLLOW-UP: refresh stale chart components against current comps (NeverfullSizeChart still shows June 26 numbers $1,245/$1,185 vs current $1,565 sample; decide per-component whether to refresh or date-label). Rule 6.3 retrofits for older articles as touched.
+- ✅ CONTENT FOLLOW-UP DONE 2026-07-10: refreshed the three charts carrying stale June-26 comps against current deduped medians (live asking, USD, dedupe by `listing_ref`). NeverfullSizeChart: MM $1,245→$1,515 (n=345), PM $1,185→$1,583 (n=36); "cost about the same" thesis holds (within ~5%). IconicPricesChart + EntryBagsChart (shared the stale $1,245/$911): all bars re-pulled — Marmont small $911→$1,095 (n=183), Speedy 30 $1,623→$1,375 (n=148), Chanel Flap med $6,000→$6,205 (n=614), Kelly 32 $12,410→$12,345 (n=37), Birkin 30 $18,000→$20,335 (n=133). Date labels moved June→July 2026; `launch-articles.ts` STALE_FIGURES hints refreshed. All figures stamped with n + 2026-07-10.
 - ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope DECIDED 2026-07-02: yes eventually, NOT now (owner). Revisit on her green light; tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
@@ -366,3 +369,28 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   styles (Marlo, Slouchy Banana, etc.) kept untouched. Per-brand medians steady (The Row $1,895).
   GUARD added to `load-handbag-breadth.ts`: it now SKIPS any style that already exists, so it can
   only ADD new long-tail styles and can never clobber per-size data again.
+
+### ✅ DONE 2026-07-09/10 — collapsed type-1 verbose-junk style dupes (load-handbag-breadth residue)
+- **What:** the older `load-handbag-breadth` pass left ~90 full-sentence one-off `style` rows
+  (e.g. Hermès "Hermes Black Togo Leather Gold Hardware Birkin 35 Bag", LV "Louis Vuitton Monogram
+  Canvas Looping GM Bag") sitting alongside the clean canonical style. Folded them in.
+- **Script:** `supabase/ingest/merge-style-dupes.ts` (dry-run default, `--write`, idempotent).
+  Clusters `style` on `(brand_id, canonicalModel())` past the 1000-row cap; merges ONLY verbose
+  titles (≥4 words + a material/colour/year/brand/"Bag" token) into their SINGLE clean canonical
+  sibling; re-points variants + `price_history` (dedup on `platform|listing_ref|price_type|observed_on`),
+  find-or-creates the target size-variant, deletes the emptied junk style. Verified via
+  `supabase/ingest/verify-merge-snapshot.ts`.
+- **Result (--write):** 87 styles merged. style −87 · price_history −8 (only exact-key dups; **0
+  unique observations lost**) · style_index_signals −26. tsc+lint green. Committed `bb9097c`, landed on main.
+- **PROTECTED, never merged** (explicit denylist + short-name silhouette-qualifier guard — the
+  2026-06-30 collision must not repeat): Gucci Ophidia/Soho silhouettes, Celine Triomphe
+  Oval/Boston/Shoulder, Valentino Rockstud Spike/Tote, Coach Pillow Tabby, Chanel CC Filigree /
+  Top Handle Vanity Case, GG Marmont Chain/Bucket, etc.
+- **Ambiguous dup pairs resolved by OFFICIAL HOUSE NAME** (`supabase/ingest/merge-style-pairs.ts`,
+  `--write` 2026-07-10): Hermès "In The Loop" → **"In-The-Loop"** (hermes.com styling); Burberry
+  "Knight Bag" + "The Knight" → renamed **"The Knight Bag"** (Burberry FW23 launch PR). ph preserved.
+- ⬜ **HELD for a future reviewed pass (~130 rows):** the shorter material+size names are a MIX and
+  need the same style-name review as round 1 before any `--write` — (a) pure size/material rows that
+  are really just variants of the clean model (e.g. "Togo Birkin 35", "Monogram Speedy 30") SHOULD
+  fold in; (b) genuine sub-models MUST stay separate (Kelly Pochette, Speedy Soft, Musette Tango/Salsa,
+  Boîte Chapeau Souple, Félicie Pochette). Retire/park `load-handbag-breadth.ts` as the junk source.
