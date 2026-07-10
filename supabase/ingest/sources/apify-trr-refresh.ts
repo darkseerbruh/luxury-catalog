@@ -2,17 +2,16 @@
  * The RealReal — headless live refresh via the Apify API (no browser, cron-safe).
  *
  * Runs the `lulzasaur/therealreal-scraper` actor over TRR's handbag categories,
- * waits for it, and writes TWO files:
- *   1. data/ingest/_raw/trr-apify-live.json  — the raw actor array (adapter input
- *      for `trr-apify.ts` → load:prices therealreal).
- *   2. data/ingest/_raw/trr-live-refs.json   — a plain listing_ref array computed
- *      as (sku ?? url) PER RECORD, i.e. exactly what the loader stores as
- *      price_history.listing_ref. reconcile:sold reads this as the authoritative
- *      "still for sale" set. Writing refs explicitly (not the flat actor record)
- *      is deliberate: reconcile's entry reducer only finds sku inside the raw-dump
- *      {product:{variants:[{sku}]}} shape, so a flat record would silently reduce
- *      to url and make every sku-keyed live listing look sold. This file removes
- *      that trap.
+ * waits for it, and writes the raw actor array to
+ * data/ingest/_raw/trr-apify-live.json (adapter input for `trr-apify.ts` →
+ * load:prices therealreal). The load stamps today's observed_on on every live
+ * listing it sees, which is the "last seen" signal reconcile:sold --age-days uses.
+ *
+ * NOTE: retirement is AGE-based, not snapshot-diff — TRR caps ~120/category, so one
+ * sweep never sees the whole live catalogue and a snapshot diff would falsely retire
+ * everything it didn't happen to capture. Age mode only retires listings not
+ * re-observed within the window, which is robust to the cap. (A trr-live-refs.json is
+ * still written below as an audit artifact of what was live this sweep.)
  *
  * Needs APIFY_TOKEN in the env (GitHub Actions secret). Pay-per-result actor
  * (~$0.005/listing); a full handbag sweep is ~800-960 results (~$4-5).

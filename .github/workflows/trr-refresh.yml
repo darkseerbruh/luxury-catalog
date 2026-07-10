@@ -13,11 +13,12 @@ name: Refresh market listings (The RealReal)
 # COST: the actor is pay-per-result (~$0.005/listing). A full handbag sweep is
 # ~800-960 listings, so ~$4-5/run, ~$60/mo at this cadence (owner-greenlit 2026-07-09).
 #
-# INTEGRITY: the fetch writes trr-live-refs.json (listing_ref = sku ?? url per record,
-# exactly the loader's key) as the reconcile snapshot, so reconcile compares like for
-# like. reconcile also SKIPS retirement if the snapshot would drop >50% of TRR's live
-# rows (a broken sweep never mass-retires). The category list mirrors the bag-only
-# universe our TRR rows came from, so the live set is comprehensive for what's stored.
+# INTEGRITY: retirement is AGE-based, not snapshot-diff. TRR caps ~120/category, so one
+# sweep never sees the whole live catalogue and a snapshot diff would falsely retire
+# everything it didn't capture. Instead the load stamps today's observed_on on every
+# live listing seen, and reconcile --age-days=14 retires only listings not re-observed
+# in 14 days (7 refreshes at this cadence). SAFETY: reconcile aborts if it saw ZERO
+# listings inside the window (the refresh isn't running — never nuke the catalogue).
 #
 # SECRETS: SUPABASE_SERVICE_ROLE_KEY (already set) + APIFY_TOKEN (ADD THIS in repo
 # Settings -> Secrets -> Actions; it's the token from the Apify console). The Supabase
@@ -73,13 +74,12 @@ jobs:
             npx tsx supabase/ingest/load-prices.ts therealreal
           fi
 
-      - name: Retire sold / pulled listings
+      - name: Retire listings not seen in 14 days (age-based; TRR is capped)
         run: |
-          SNAP=data/ingest/_raw/trr-live-refs.json
           if [ "$WRITE" = "true" ]; then
-            npm run reconcile:sold -- --platform=RealReal --snapshot="$SNAP" --write
+            npm run reconcile:sold -- --platform=RealReal --age-days=14 --write
           else
-            npm run reconcile:sold -- --platform=RealReal --snapshot="$SNAP"
+            npm run reconcile:sold -- --platform=RealReal --age-days=14
           fi
 
       - name: Refresh price summaries
