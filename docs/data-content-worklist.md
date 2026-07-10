@@ -297,13 +297,16 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     Carinu ($485/n4), Le Turismo ($925/n12), Le Grand Panier ($370/n2), Le Bambidou ($625/n3), Le
     Sac Rond ($710/n5), Le Petit Filet ($655/n2). No new styles, no reshaping — ADD-only. Now MEETS
     the bar.
-  - ⚠️ **Alexander McQueen 14 — needs DEDUP, not targets** (found 2026-07-10). The style table has
-    REDUNDANT McQueen rows: Knuckle (597 "The Knuckle" / 666 "Knuckle" / 878 "Knuckle Clutch"), Peak
-    (670 "Peak" / 880 "The Peak"), Manta (601 "Manta" / 669 "De Manta"), Bow (599 "The Bow Tote" /
-    673 "The Bow"); + The Jewelled Satchel (598) has 0 variants. Adding targets would deepen the dup
-    mess. Fix = a reviewed `merge-style-dupes` pass first (pipeline rule: style dups need spot-check),
-    THEN wire targets. Its live FP feed is thin (~33 bags) so 20 may need the dedup + a couple real
-    adds (The Story, T-Bar, Padlock Tote already exist as styles).
+  - ✅ **Alexander McQueen DEDUP DONE 2026-07-10** (owner-approved, `merge-mcqueen-dups.ts`). Merged 5
+    short-name duplicate style rows into their 4 real bags (name-guarded, 10 ph rows re-pointed, 0
+    dropped): #666 "Knuckle" + #878 "Knuckle Clutch" → #597 "The Knuckle"; #670 "Peak" → #880 "The
+    Peak"; #673 "The Bow" → #599 "The Bow Tote"; #669 "De Manta" → #601 "Manta". McQueen 17 → 12 real
+    styles. NOTE this LOWERS the priced-variant count (integrity, not coverage) — McQueen is honestly
+    small and stays under the /data ≥20 bar with the honest "bags we track" scoping.
+    STILL OPEN (needs re-triage, NOT a merge): the **Skull catch-all (#600)** holds 42 MIXED listings
+    (padlock totes + chain crossbodies + belt bags) that belong on #668 Padlock / #665 Skull Chain /
+    their own styles — split it in a later pass. #598 "The Jewelled Satchel" is a real model with 0
+    data (leave).
   - ⚠️ **Miu Miu 17 — blocked by an FP-adapter size bug** (root-caused 2026-07-10). Already has Beau,
     Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3 unpriced variants
     (Wander [Small] v1400, Aventure [Regular] v1402, Aventure [Medium] v1403) DO have in-band FP
