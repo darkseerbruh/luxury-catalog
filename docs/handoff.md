@@ -3,6 +3,15 @@
 
 ---
 
+## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09, on `main`, DEPLOYED to prod)
+
+**Owner flagged the Classic Flap page/card fronted by wrong bags twice (handcuff clutch $966, then a green micro mini + a charm edition). Two fixes, both live:**
+- **Data (`c21cae1`):** bare "timeless" no longer blanket-maps to Classic Flap (`timeless&flap` + shape vetoes in `model-normalize.ts`); 44 mis-mapped TLC rows moved to `discovered_listing`.
+- **Picker (`4a546a9`):** `scoreListingFace` in `listings-core.ts` (colour +4, size +2/-2, hardware +1, novelty editions -3) now drives BOTH `getAffiliateListingImages` (best match, ties newest) and `getHeroListing` (cheapest within best-matching tier). Verified live: bag/199 hero = black lambskin flap $2,600; brand card = black lambskin medium double flap.
+- **Deploy note:** `vercel deploy --prod` from a worktree needs `vercel link --yes --project luxury-catalog` FIRST — a bare `link --yes` creates a junk project named after the folder (one named `luxury-catalog-heropick` may still exist in the dashboard; deleting it needs the interactive prompt).
+
+---
+
 ## TL;DR — TLC mis-map re-triage, unscoped: 259 rows moved + matcher hardened (2026-07-09, on `main`, applied to prod)
 
 **Follow-up to the "Timeless" fix (`c21cae1`): recomputed EVERY TLC price_history row against the dictionary, hand-verified every flagged group, moved only verified mis-maps.**
