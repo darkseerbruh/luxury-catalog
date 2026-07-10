@@ -322,6 +322,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Downtown", "downtown"], ["Roady", "roady"], ["Betty", "betty"], ["Puffer", "puffer"],
     // Residue-audit additions (2026-07-09)
     ["Triquilt", "triquilt"], ["Shopping Tote", "shopping tote"], ["Le 37", "le 37"],
+    // TRR sweep addition (2026-07-10)
+    ["Voltaire", "voltaire"],
     ["Rive Gauche", "rive gauche"], ["Uptown", "uptown"], ["Bea", "bea tote"], ["Joe Backpack", "joe backpack"],
     ["Nolita", "nolita"], ["Becky", "becky"], ["Le Monogramme", "le monogramme"],
     ["Belle de Jour", "belle de jour"],
@@ -510,6 +512,12 @@ const MODELS: Record<string, ModelDef[]> = {
   "Alexander McQueen": [
     ["Skull Box Clutch", "skull box"], ["Skull", "skull"],
   ],
+  "Mansur Gavriel": [
+    ["Bucket Bag", "bucket bag"],
+  ],
+  "Proenza Schouler": [
+    ["PS1", "ps1"],
+  ],
 };
 
 /**
@@ -525,7 +533,7 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
   const hay = fold((rawName ?? "").toLowerCase())
     .replace(/&amp;/g, "&")
     .replace(
-      /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
+      /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
       "",
     );
   if (!hay) return null;
