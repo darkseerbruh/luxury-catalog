@@ -140,6 +140,11 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/off[\s-]*white/i, "Off-White"],
   [/longchamp/i, "Longchamp"],
   [/telfar/i, "Telfar"],
+  // Backlog demand 2026-07-10 (banked no_brand listings, full-spectrum scope).
+  [/tumi/i, "Tumi"],
+  [/proenza\s*schouler/i, "Proenza Schouler"],
+  [/mansur\s*gavriel/i, "Mansur Gavriel"],
+  [/furla/i, "Furla"],
 ];
 
 /** Resolve any raw brand/sub-brand/collab string to a canonical brand. */
@@ -517,6 +522,19 @@ const MODELS: Record<string, ModelDef[]> = {
   ],
   "Proenza Schouler": [
     ["PS1", "ps1"],
+  ],
+  Tumi: [
+    ["Voyageur", "voyageur"], ["Alpha", "alpha"], ["Harrison", "harrison"], ["19 Degree", "19 degree"],
+    ["Georgica", "georgica"], ["Sinclair", "sinclair"], ["Devoe", "devoe"], ["Calais", "calais"],
+  ],
+  "Proenza Schouler": [
+    ["PS1", "ps1"], ["PS11", "ps11"], ["PS1 Keepall", "ps1 keepall"],
+  ],
+  "Mansur Gavriel": [
+    ["Bucket Bag", "bucket bag"], ["Sun Bag", "sun bag"], ["Lady Bag", "lady bag"],
+  ],
+  Furla: [
+    ["Metropolis", "metropolis"], ["1927", "1927"], ["Miastella", "miastella"], ["Sofia", "sofia"],
   ],
 };
 

@@ -1,5 +1,5 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (TRR Chanel mis-map sweep — round-3 residue cleared). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (TRR Chanel mis-map sweep + merchant sweep #2 / DDH application). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
 ---
 
@@ -12,6 +12,13 @@
 - ⬜ **YOUR TURN / next:** (a) the 213 rows sit in `discovered_listing` (`style_guess` where recomputable) — next promotion pass re-places the real bags; (b) **non-Chanel TRR sweep queued (task chip):** all-brands dry-run flags ~1,028 more rows / 195 groups (Jypsière 92, GG Marmont 60, Coach Tabby 53, Celine Cabas 43…) — same verified flow, per-brand; (c) Rectangular Mini / Classic Flap comps read cleaner now (the mini's median was carrying medium/jumbo prices).
 
 ---
+
+## TL;DR — Merchant sweep #2: Dallas Designer Handbags applied, ALB skipped (2026-07-09, docs on `main`)
+
+**Owner asked "can we list Atlanta Luxury Bags? who else?" → two-agent sweep of ~20 merchants; full verdicts + evidence in `docs/data-collection-handoff.md` §11** (commits `896194f`/`c2f8bd2`/`d44448a`).
+- 🟡 **Dallas Designer Handbags APPLIED 2026-07-09** (Awin merchant 91683, 5% / 15-day cookie, ShopWindow feed 1,446 products): owner clicked Join; Awin confirmed "request sent to the advertiser." **GATE: wire NOTHING until their Link status = online AND the "Exposure Level 5" unfunded-payments flag clears** (both red in the logged-in dashboard 2026-07-09). On approval + green gate: wire the Awin feed TLC-style (`listing_image` auto-flows through `getVariantImages`).
+- ❌ **Atlanta Luxury Bags skipped** (no affiliate rail or feed, ~302 live listings, mixed online-buyer reviews). ❌ **WGACA avoided** (lost Chanel v. WGACA, willful infringement). 🅿️ Parked: Farfetch Pre-Owned (email application, hers) + Luxe Du Jour (15%, gated on live socials, no feed). Keeks (≥7.5k products, no program) flagged for a future direct-outreach batch.
+- **Your turn: none pending.** Watch arielle@luxurycatalog.com (Workspace) for the DDH approval email.
 
 ## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09/10, on `main`, DEPLOYED to prod)
 
@@ -349,7 +356,7 @@ Built a faceless social content engine plus two features, merged same day. **Con
 - ✅ **Impact.com brand intro recovered + fixed:** the 3 A/B/C drafts (recovered from the dead 06-30 chat's transcript) live at `docs/research-drafts/impact-partner-intro.md`, openings corrected to "Luxury Catalog". `/privacy` already named Impact; `/disclosure` now names the networks (Impact, CJ, Awin, Skimlinks, EPN) and links `/privacy`. **Her turn: pick A/B/C and paste into the impact.com profile.**
 - **Owner decision, still open — TRR daily Firecrawl cron (`firecrawl-capture.yml`, 06:23 UTC):** new evidence 2026-07-05: that day's run landed **10 observations for 11 credits** (the search-page path still yields rows; not pure 403 waste). So the call is spend policy, not a dead pipe: keep (~11 credits/day for a trickle of TRR asks) vs pause. My take: pause and rely on the monthly recapture unless she's reading TRR asks weekly.
 - **Social lane:** the @goldst.ai trend-series enumeration (Apify, 57 videos) died mid-pull; redo when wanted. The Aug 14 2026 "auspicious launch day" candidate lives only in a dead chat — record it as the target if she confirms.
-- **Known her-turn items still standing:** re-film the watermarked diaper reel; paste the TikTok bio URL; record kit 1; supply the 2 Chanel model names (stills manifest); confirm/kill the Miu Miu hold. **Affiliate (07-05):** publish social content BEFORE applying to ShopMy (IG/TikTok both 0 posts = likely rejection; ShopMy is the route back to Fashionphile+TRR+Rebag); reapply to Skimlinks after ~2026-09-25 (90-day lockout); apply to Amazon Associates ~2-4 weeks pre-launch (180-day/3-sale rule); watch for Redeluxe approval reply.
+- **Known her-turn items still standing:** re-film the watermarked diaper reel; record kit 1; supply the 2 Chanel model names (stills manifest — two Signature-carousel bags shown with generic labels until she names the exact models). ~~paste the TikTok bio URL~~ DONE 2026-07-10; ~~confirm/kill the Miu Miu hold~~ RELEASED 2026-07-10 (catalog-of-all). **Affiliate (07-05):** publish social content BEFORE applying to ShopMy (IG/TikTok both 0 posts = likely rejection; ShopMy is the route back to Fashionphile+TRR+Rebag); reapply to Skimlinks after ~2026-09-25 (90-day lockout); apply to Amazon Associates ~2-4 weeks pre-launch (180-day/3-sale rule); watch for Redeluxe approval reply.
 
 ## TL;DR — Parallel-chat collisions FIXED: one landing script + edit blocking (2026-07-05, on `main`)
 
@@ -381,7 +388,7 @@ Built a faceless social content engine plus two features, merged same day. **Con
 
 1. **Record kit 1 + kit 2.** Articles live, search keys pin (`chanel 2026` / `lv nine`), scripts teleprompter-ready in Notion. Nothing on the data side blocks recording.
 2. **Diaper kit — one Notion step left (2026-07-06).** Article is now LIVE + figures re-verified (`/articles/luxury-diaper-bags-honestly-ranked`, post #35); the search key `luxury diaper bags` is wired and the `/search` pin QA gate passes. REMAINING (needs your Notion access, no MCP in the automated session): on the diaper kit row, set Search Key = `luxury diaper bags`, Destination = the article URL, and change any Take that still ends "Link in bio" to "Just search luxury diaper bags on luxurycatalog.com."
-3. **Miu Miu City kit:** still ON HOLD pending your demand-number re-confirmation.
+3. **Miu Miu City kit:** HOLD RELEASED 2026-07-10 — owner call "catalog of ALL luxury bags, no house held out on demand." The kit is greenlit; no demand re-check needed. (Prefs locked: no house sits out on low demand.)
    *(Migration 0041 for the Trim axis: DONE 2026-07-05, no longer your action.)*
 
 ## Open items carried from archived recaps (still live)

@@ -173,7 +173,6 @@ const DASHBOARDS = [
         query: trends({
           days: 30,
           series: [
-            event("style_viewed", "Style viewed"),
             event("variant_viewed", "Bag viewed"),
             event("price_history_viewed", "Price history"),
             event("auth_section_engaged", "Authentication opened"),

@@ -12,16 +12,24 @@ from data we already hold, framed as **our index, not a verdict**.
 
 Separate from **Most Wanted** (the community's ranking, by reviews). This is the *market's*.
 
-## The formula (v1)
+## The formula (v3, de-tiered 2026-07-10)
 
-Rank blends four measured signals into one score, then sorts all styles by it.
+Rank blends three measured signals into one score, then sorts all styles by it.
 
 | Signal | Source (today) | Weight | Direction |
 |---|---|---|---|
-| **Price standing** | `variant_price_summary` resale median, rolled to style | 40% | higher price → higher |
-| **Trade volume** | count of `price_history` observations for the style | 25% | more traded → higher |
-| **Scarcity** | count of *live* listings (`price_history` where `listing_status != 'sold'`) | 20% | fewer live → higher |
-| **House standing** | `brand.tier` (ultra-luxury / luxury / premium / thrift) | 15% | higher tier → higher |
+| **Price standing** | `variant_price_summary` resale median, rolled to style | 47% | higher price → higher |
+| **Trade volume** | count of `price_history` observations for the style | 29% | more traded → higher |
+| **Scarcity** | count of *live* listings (`price_history` where `listing_status != 'sold'`) | 24% | fewer live → higher |
+
+**Dropped the house-tier input (was 15%).** Brand tier is now House Standing, itself
+resale-derived (median + ceiling + volume, `docs/ux/tier-formula-spec.md`), so feeding it
+back in double-counted price/trade the index already holds, and it only moved already-ranked
+(well-sampled) styles since thin styles are unranked by the n-gate anyway. The two indices
+stay independent: **the LC Index ranks the bag, House Standing ranks the house**, shown side
+by side. The old 15% was renormalised proportionally over the surviving three. A future
+non-price house signal (real demand: searches / saves / views) can reintroduce a house input
+as genuinely new information once that data exists post-launch.
 
 Rules that keep it honest:
 - Each signal becomes a **percentile across all styles** first, so they combine on one 0–100 scale.
