@@ -325,6 +325,17 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     LV Neverfull/Montsouris spot-checks). Recaptured → mapped → loaded: Wander [Small] v1400 (n3),
     Aventure [Regular] v1402 (n3), Aventure [Medium] v1403 (n1) now priced. `audit-coverage` confirms
     Miu Miu **priced_variants=20**. Full suite green (753 tests).
+    - ⬜ **FOLLOW-UP (data lane, NOT the adapter — audited 2026-07-10, left untouched by design):** two
+      pre-existing Miu Miu variant-taxonomy issues the fix surfaced but must NOT be auto-swept.
+      (1) *Stranded pre-fix rows*: the size-less Standard buckets still hold the OLD collapsed rows
+      (Wander Std v1047 22/28 FP rows carry a size token; Aventure Std v1049 35/39; Arcadie Std v1048 13/22).
+      They mildly contaminate those medians until re-pointed to the sized variants. (2) *Duplicate variants
+      across scaffold generations*: ∅-vs-Standard-vs-size twins (Ivy v1117/v1401, Beau v1118/v1406, Coffer
+      v1119/v1850, Wander/Aventure/Arcadie Standard-vs-sized). A `selectTarget`-driven auto re-point is
+      UNSAFE: "matelasse" is a MATERIAL in Coffer/Bucket handles, so those rows mis-resolve to the
+      **Matelassé** STYLE (its excludes only cover wander/arcadie/aventure). Fix path = (a) tighten the
+      Matelassé target excludes (add coffer/bucket/beau/ivy…) as a small tested adapter change, THEN
+      (b) a SAME-STYLE-ONLY variant dedup with review. Thin non-representative brand, low urgency.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
