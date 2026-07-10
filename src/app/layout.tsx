@@ -100,9 +100,8 @@ export default async function RootLayout({
             <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
               <div className="flex flex-col gap-2">
                 <p className="text-xs uppercase tracking-wide text-muted/70">Shop the market</p>
-                <Link href="/shop" className="hover:text-foreground">Everything for sale</Link>
+                <Link href="/shop" className="hover:text-foreground">Search the market</Link>
                 <Link href="/deals" className="hover:text-foreground">Deals</Link>
-                <Link href="/search" className="hover:text-foreground">Search</Link>
                 <Link href="/browse" className="hover:text-foreground">Browse by style</Link>
               </div>
               <div className="flex flex-col gap-2">

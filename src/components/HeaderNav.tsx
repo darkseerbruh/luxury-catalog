@@ -248,7 +248,7 @@ export default function HeaderNav({
                   onSubmitQuery={(term) => {
                     const t = term.trim();
                     if (t) {
-                      router.push(`/search?q=${encodeURIComponent(t)}`);
+                      router.push(`/shop?q=${encodeURIComponent(t)}`);
                       setSearchOpen(false);
                     }
                   }}
@@ -357,13 +357,13 @@ export default function HeaderNav({
                 onNavigate={close}
                 onViewAll={(term) => {
                   const t = term.trim();
-                  router.push(t ? `/search?q=${encodeURIComponent(t)}` : "/search");
+                  router.push(t ? `/shop?q=${encodeURIComponent(t)}` : "/shop");
                   close();
                 }}
                 onSubmitQuery={(term) => {
                   const t = term.trim();
                   if (t) {
-                    router.push(`/search?q=${encodeURIComponent(t)}`);
+                    router.push(`/shop?q=${encodeURIComponent(t)}`);
                     close();
                   }
                 }}

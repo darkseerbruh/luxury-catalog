@@ -50,7 +50,7 @@ export function HomeHero({
         ))}
       </h1>
       <Form
-        action="/search"
+        action="/shop"
         onSubmit={() => engage("submit")}
         className="mx-auto mt-6 flex max-w-md items-center gap-2"
       >

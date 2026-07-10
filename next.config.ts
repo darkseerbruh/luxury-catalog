@@ -82,6 +82,17 @@ const nextConfig: NextConfig = {
       { source: "/posts", destination: "/articles", permanent: true },
       { source: "/posts/:path*", destination: "/articles/:path*", permanent: true },
       { source: "/profile/posts", destination: "/profile/articles", permanent: true },
+      // Search is now the market: `/shop` is one surface (search + filters + deals).
+      // A config redirect issues a clean HTTP 307 before render (the page-level
+      // redirect on the force-dynamic route degraded to a 1s meta-refresh). The `q`
+      // query string is preserved automatically, so `/search?q=birkin` → `/shop?q=birkin`.
+      // Temporary (307): `/search` may return as its own surface later. Spec:
+      // docs/ux/unified-market-spec.md.
+      { source: "/search", destination: "/shop", permanent: false },
+      // Deals is the "deals only, best deal first" preset of the same market.
+      // Config redirect (clean 307) beats the page-level one, which degraded to a
+      // 1s meta-refresh on the streaming route.
+      { source: "/deals", destination: "/shop?deals=1&sort=best-deal", permanent: false },
     ];
   },
   async rewrites() {
