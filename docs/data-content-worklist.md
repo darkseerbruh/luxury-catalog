@@ -284,9 +284,17 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   ≥3:254. Owner upgraded Apify FREE→Starter ($29/mo, pay-as-you-go) to unblock; sweep cost
   ~$7 (within Starter prepaid). Method is the standing TRR capture (memory
   trr_capture_sessions). Each category caps ~120 (no pagination), so deeper coverage needs
-  designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths + wire a capped weekly
-  refresh schedule (owner-gated recurring spend). Remind owner she can downgrade Apify→Free
-  after the big sweeps if she doesn't want the $29/mo to renew.
+  designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths for deeper coverage.
+- ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
+  `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
+  handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
+  snapshot (matches the loader's listing_ref exactly, verified against a live sample) →
+  `trr-apify.ts` maps → `load:prices therealreal --write` → `reconcile:sold --platform=RealReal
+  --write` (50%-abort guard intact) → `summary:refresh`. ~$4-5/run, ~$60/mo. Retired the old
+  daily 1-style Firecrawl pilot (`firecrawl-capture.yml` now manual-only). **⚠️ OWNER ACTION
+  (one-time, blocks the first run): add `APIFY_TOKEN` in repo Settings → Secrets → Actions**
+  (Claude can't set GitHub secrets). Fashionphile stays every-3h; TLC daily; eBay stays manual
+  (its value is permanent sold comps, not live listings).
 - ✅ **eBay SCOPED pull — DONE 2026-07-09 (owner greenlit "option A" + the trust-hub chat).**
   Target = the 49 one-source styles (n≥20, median present, 1 source; all single-variant so
   zero pickVariant risk). TWO engines in one pass: (1) Firecrawl MCP sold-search scrapes
