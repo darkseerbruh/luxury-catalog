@@ -302,10 +302,14 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     Peak"; #673 "The Bow" → #599 "The Bow Tote"; #669 "De Manta" → #601 "Manta". McQueen 17 → 12 real
     styles. NOTE this LOWERS the priced-variant count (integrity, not coverage) — McQueen is honestly
     small and stays under the /data ≥20 bar with the honest "bags we track" scoping.
-    STILL OPEN (needs re-triage, NOT a merge): the **Skull catch-all (#600)** holds 42 MIXED listings
-    (padlock totes + chain crossbodies + belt bags) that belong on #668 Padlock / #665 Skull Chain /
-    their own styles — split it in a later pass. #598 "The Jewelled Satchel" is a real model with 0
-    data (leave).
+    ✅ **Skull catch-all #600 RE-TRIAGED 2026-07-10** (owner-approved, `retriage-mcqueen-skull.ts`,
+    row-level, dry-run first, name-guarded). Of its 42 rows: moved 25 to their real models (11 →
+    #668 Padlock $585, 10 → #665 Skull Chain $755, 4 → #667 Skull Box Clutch $610), DELETED 4 non-bags
+    mis-ingested onto a bag style (a jersey tank top, a phone cover, 2 velvet smoking slippers), and
+    LEFT 13 genuinely-generic skull-motif bags on #600 (Skull Shoulder/Crossbody/Minaudière/Clutch/
+    Evening/belt bags, median $455) — an honest bucket, not a fake single model. Also deleted the
+    empty dup #879 "Skull Padlock Tote" (0 prices, same bag as #668). McQueen now 11 real styles.
+    #598 "The Jewelled Satchel" is a real model with 0 data (leave).
   - ✅ **Miu Miu → 20 (DONE 2026-07-10, FP-adapter size bug FIXED)**. Root cause: `sources/fashionphile.ts`
     matched targets with `Array.find` (FIRST match). The inline size-less generics (`Wander` require
     `["wander"]`, `Aventure` require `["aventure"]`, no size-excludes) sit BEFORE the appended
