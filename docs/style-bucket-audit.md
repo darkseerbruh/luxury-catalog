@@ -47,6 +47,14 @@ name alone is not proof. Review each against its listings:
 - Celine Frame Bag (1184), Chanel Uniform (1056), Gucci Day Backpack (1087),
   Louis Vuitton Bucket (1068), Saint Laurent Shopping Tote (1058).
 
+## Batch-3 descriptor flags (2026-07-10)
+
+More names that are lines/multi-variant, not single models (kept + described at line altitude):
+Prada Canapa (hemp-canvas line), Balenciaga Town (a size in the Motorcycle line),
+Versace Virtus (Barocco-V hardware line), Saint Laurent Uptown (tote + pouch), and the LV names
+reused across eras: Bosphore, Marelle, Monceau, Rivoli, Greenwich. Lower priority than the
+Chanel Uniform removal candidate; review if consolidating.
+
 ## Recommended handling (owner call)
 
 1. **Keep + describe** (done for the top 15): an honest "this is a category, check the shape"
