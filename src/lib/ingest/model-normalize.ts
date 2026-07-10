@@ -487,7 +487,12 @@ const MODELS: Record<string, ModelDef[]> = {
  * known model matches. `brand` may be a raw/sub-brand string — it's canonicalized here.
  */
 export function canonicalModel(brand: string, rawName: string | null | undefined): string | null {
-  const hay = fold((rawName ?? "").toLowerCase()).replace(/&amp;/g, "&");
+  // Everything after " w/ " / " with " is a bundled extra, not the item ("herbag zip
+  // 31 w/ pouch", "lindy 26 w/ twilly scarf") — it must neither trip the SLG gate nor
+  // donate a model word, so cut it before matching.
+  const hay = fold((rawName ?? "").toLowerCase())
+    .replace(/&amp;/g, "&")
+    .split(/\s(?:w\/?|with)\s/)[0];
   if (!hay) return null;
   const isBagOverride = BAG_OVERRIDES.some((t) => hay.includes(t));
   if (!isBagOverride && SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;
