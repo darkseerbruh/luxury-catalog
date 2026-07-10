@@ -9,11 +9,14 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
-- ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
-  also searched ×1. Goyard price data + a Goyard authentication article both already
-  exist, so this is a **search-match gap** (the query did not surface a result), not a
-  data-capture gap. Fix in the search/index layer: confirm "goyard" maps to the brand
-  + its styles in on-site search. Logged by `article-engine-weekly` 2026-07-07.
+- ✅ **"goyard"** — RESOLVED (verified 2026-07-10). The 2026-06-28 miss predates the
+  2026-07-02 Goyard sweep; Goyard now has a brand row + 33 styles + 52 variants, and
+  `legacySearch` (the `searchCatalog` fallback the live `/search` uses) matches brand
+  name via `ilike`, so "goyard"/"Goyard"/"goyard tote" all resolve. `searched_not_found`
+  holds no goyard row. Verified against prod with the anon client. No code change needed.
+  *(Latent, out of scope: `hybrid-search.ts` bm25 brand/style-name match only scans an
+  arbitrary 60-row window; brand search is covered in practice because `searchCatalog`
+  runs alongside and merges. Worth tightening if under-match ever recurs.)*
 - ⬜ **"alma" ×3** (to 2026-07-02) — LV Alma demand with no dedicated article. Needs an
   Alma resale price pull (Fashionphile asking + eBay sold, with n) before the article
   backlog item (`docs/article-backlog.md`) can be written to the data bar.
@@ -53,7 +56,7 @@ Queue (priority order; tick with counts + date):
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
 
 
-- ⬜ CONTENT FOLLOW-UP: refresh stale chart components against current comps (NeverfullSizeChart still shows June 26 numbers $1,245/$1,185 vs current $1,565 sample; decide per-component whether to refresh or date-label). Rule 6.3 retrofits for older articles as touched.
+- ✅ CONTENT FOLLOW-UP DONE 2026-07-10: refreshed the three charts carrying stale June-26 comps against current deduped medians (live asking, USD, dedupe by `listing_ref`). NeverfullSizeChart: MM $1,245→$1,515 (n=345), PM $1,185→$1,583 (n=36); "cost about the same" thesis holds (within ~5%). IconicPricesChart + EntryBagsChart (shared the stale $1,245/$911): all bars re-pulled — Marmont small $911→$1,095 (n=183), Speedy 30 $1,623→$1,375 (n=148), Chanel Flap med $6,000→$6,205 (n=614), Kelly 32 $12,410→$12,345 (n=37), Birkin 30 $18,000→$20,335 (n=133). Date labels moved June→July 2026; `launch-articles.ts` STALE_FIGURES hints refreshed. All figures stamped with n + 2026-07-10.
 - ⬜ FOLLOW-UPS: Neverfull GM label reconcile (hand-managed variant labels vs sweep convention); SLG scope DECIDED 2026-07-02: yes eventually, NOT now (owner). Revisit on her green light; tail clusters <10 listings untargeted; monthly re-capture now covers ALL sweep targets automatically (same TARGETS path).
 
 ## LV gap-series capture + day-one articles (2026-07-02) — DONE
