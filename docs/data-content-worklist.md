@@ -287,7 +287,19 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths + wire a capped weekly
   refresh schedule (owner-gated recurring spend). Remind owner she can downgrade Apify→Free
   after the big sweeps if she doesn't want the $29/mo to renew.
-- ⬜ **Still owner-gated (task part 1)**: FULL eBay pull burns Firecrawl credits.
+- ✅ **"Do it all" cleanup batch 2026-07-10**: (1) normalized split platform names
+  (TheRealReal→The RealReal, ebay→eBay, poshmark→Poshmark); (2) re-ran promotion pass;
+  (3) deep TRR via paginating actor `piotrv1001/the-realreal-listings-scraper` (+454 net-new
+  bags; it paginates ~7 pages/URL vs lulzasaur's 120 hard cap); (4) added 4 brands + models
+  (Tumi/Proenza Schouler/Mansur Gavriel/Furla) → promoted Metropolis/Bucket Bag/PS1; (5)
+  applied migration 0038 via management API (region/condition_detail/enrichment now on
+  discovered_listing — the CI push had a tracking mismatch; direct DDL fixed it). Result:
+  styles 994, brands 49, price_history 95,447, ≥2-source styles 582 / ≥3 296.
+- ⬜ **eBay deeper pull — adapter built, capture BLOCKED**: `ebay-sold-apify.ts` (Apify
+  `automation-lab/ebay-sold-scraper`, auction-only + $500 AG floor, masked-safe per
+  ebay_data_policy) is ready, but the Apify account hit its **monthly usage hard limit** this
+  cycle (TRR sweeps consumed it). Run `ebay-sold-apify.ts` + `load:prices ebay --write` once
+  the owner raises the Apify usage limit or it resets. eBay stays MANUAL (no cron).
 
 ### Handbag-breadth capture — IN PROGRESS (2026-06-30, data/handbag-breadth worktree)
 - ✅ PROVEN: data exists + free. The Row = 134 live Fashionphile handbags (product_type "Bags").
