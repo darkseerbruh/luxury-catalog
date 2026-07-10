@@ -23,6 +23,7 @@
 import fs from "fs";
 import path from "path";
 import { writeObservations } from "../lib/landing";
+import { isTrrHandbagListing } from "../../../src/lib/ingest/trr";
 import type { PriceObservation, PriceType, SaleCondition } from "../../../src/lib/ingest/types";
 
 interface ApifyTrrRecord {
@@ -85,6 +86,10 @@ export function recordToObservation(rec: ApifyTrrRecord, observedOn: string): Pr
   const price = typeof rec.price === "number" && Number.isFinite(rec.price) ? rec.price : NaN;
   if (!Number.isFinite(price) || price <= 0) return null;
   if (!rec.brand?.trim() || !rec.title?.trim() || !rec.url?.trim()) return null;
+  // Skip non-handbag categories (apparel/shoes/jewelry/watches/accessories): a broad
+  // brand search returns them, but they can never promote to a bag style — they'd only
+  // bloat discovered_listing. Bags + carried pouches (WOC/vanity/belt bag) are kept.
+  if (!isTrrHandbagListing(rec.url, rec.title)) return null;
 
   return {
     brand: rec.brand.trim(),
