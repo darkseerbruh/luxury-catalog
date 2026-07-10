@@ -292,14 +292,22 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
 - ✅ **COVERAGE VERIFIED + refreshed 2026-07-10** (priced-handbag-variant counts):
   - **MEET the ≥20 bar now** (from the 2026-07-02 sweep + 2026-07-08 promotion): The Row **47**,
     Goyard **50**, Valentino **32**. These 3 are done.
-  - **CLOSE, real capture work remains** — their live FP feeds carry untracked HANDBAG models
-    (refreshed 149 FP rows today, but new variant count needs the TARGETS+scaffold path, not `--raw`
-    which skips unmatched): **Miu Miu 17** (untracked in feed: Beau top-handle, Coffer hobo, Softy);
-    **Alexander McQueen 14** (The Peak, T-Bar, The Story, Padlock Zip-Around Tote, Jeweled Satchel,
-    De Manta); **Jacquemus 14** (Le Carinu, Le Turismo, Le Grand Panier, Le Bambidou, Le Bambinou,
-    Le Petit Câlino, La Pochette Rond Carré). Next step = add dict entries + `sweep-targets` +
-    `scaffold-from-spec` per brand, then re-map/load (each model verified real via the FP product
-    name). Do it in a clean lane (not concurrent with an ingest session editing model-normalize.ts).
+  - ✅ **Jacquemus → 20 (DONE 2026-07-10)**: 6 existing-but-unpriced styles had no sweep-target, so
+    their FP listings never loaded. Added targets + scaffolded Standard variants + loaded FP: Le
+    Carinu ($485/n4), Le Turismo ($925/n12), Le Grand Panier ($370/n2), Le Bambidou ($625/n3), Le
+    Sac Rond ($710/n5), Le Petit Filet ($655/n2). No new styles, no reshaping — ADD-only. Now MEETS
+    the bar.
+  - ⚠️ **Alexander McQueen 14 — needs DEDUP, not targets** (found 2026-07-10). The style table has
+    REDUNDANT McQueen rows: Knuckle (597 "The Knuckle" / 666 "Knuckle" / 878 "Knuckle Clutch"), Peak
+    (670 "Peak" / 880 "The Peak"), Manta (601 "Manta" / 669 "De Manta"), Bow (599 "The Bow Tote" /
+    673 "The Bow"); + The Jewelled Satchel (598) has 0 variants. Adding targets would deepen the dup
+    mess. Fix = a reviewed `merge-style-dupes` pass first (pipeline rule: style dups need spot-check),
+    THEN wire targets. Its live FP feed is thin (~33 bags) so 20 may need the dedup + a couple real
+    adds (The Story, T-Bar, Padlock Tote already exist as styles).
+  - ⚠️ **Miu Miu 17 — close, gap is unpriced size-variants** (found 2026-07-10). Already has Beau,
+    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3-variant gap is
+    UNPRICED sizes (Wander ×1, Aventure ×2) whose FP rows fell out-of-band, not missing models. Fix =
+    widen those targets' price bands / size-match, re-load. Low-risk but fiddly; not a clean add.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
