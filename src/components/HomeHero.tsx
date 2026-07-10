@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Form from "next/form";
 import { track, EVENTS } from "@/lib/analytics/events";
 import { HOME_HEADLINE_FLAG, type HomeHeadlineVariant } from "@/lib/experiments/home-headline";
 
@@ -48,9 +49,8 @@ export function HomeHero({
           </span>
         ))}
       </h1>
-      <form
+      <Form
         action="/search"
-        method="GET"
         onSubmit={() => engage("submit")}
         className="mx-auto mt-6 flex max-w-md items-center gap-2"
       >
@@ -67,7 +67,7 @@ export function HomeHero({
         >
           Search
         </button>
-      </form>
+      </Form>
     </section>
   );
 }

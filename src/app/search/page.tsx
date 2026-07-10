@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Form from "next/form";
 import { searchCatalog, getVariantImages } from "@/lib/queries";
 import { hybridSearch } from "@/lib/hybrid-search";
 import { findPriorityStyles, pinStylesFirst, priorityChipLabels } from "@/lib/search-priority";
@@ -93,22 +94,27 @@ export default async function SearchPage({
           socialKey={pinned ? socialHit?.key : undefined}
         />
       )}
-      <form method="GET" className="mx-auto flex w-full max-w-md items-center gap-2">
+      {/* next/form → client-side navigation, so /search/loading.tsx shows a
+          skeleton the instant she submits (no dead click while the dynamic page
+          renders). min-w-0 on the input + shrink-0 on the button let the row
+          shrink to the viewport instead of overflowing off both sides on
+          mobile (the input's intrinsic size was pushing the page wider). */}
+      <Form action="/search" className="mx-auto flex w-full max-w-md items-center gap-2">
         <input
           name="q"
           type="search"
           defaultValue={query}
           placeholder="Search — e.g. “structured black bag under 10 inches wide”"
           autoFocus
-          className="flex-1 rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
+          className="min-w-0 flex-1 truncate rounded-full border border-border bg-surface px-5 py-3 text-foreground placeholder:text-muted focus:border-gold focus:outline-none"
         />
         <button
           type="submit"
-          className="rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
+          className="shrink-0 rounded-full bg-gold px-5 py-3 font-medium text-bg transition-colors hover:bg-gold-soft"
         >
           Search
         </button>
-      </form>
+      </Form>
 
       <div className="mx-auto mt-10 w-full max-w-2xl">
         {!query && (

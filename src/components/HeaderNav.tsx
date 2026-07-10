@@ -78,7 +78,7 @@ function SearchIcon({ className = "" }: { className?: string }) {
  * Header navigation (IA rework 2026-06-30).
  *
  * Desktop primary row, left to right: **Authentication** (Learn/Check/Verify),
- * **Style Read**, **Articles** (the Journal), **Profile**, and the **Search**
+ * **Style Quiz**, **Articles** (the Journal), **Profile**, and the **Search**
  * field pinned rightmost. Search reveals a shortcuts dropdown (Deals + brands by
  * tier + All brands) on hover — it absorbs the old Shop and Brands menus. Discover
  * is dissolved (Identify moved under Authentication). Mobile: a hamburger panel
@@ -147,12 +147,12 @@ export default function HeaderNav({
           </div>
         </div>
 
-        {/* Style Read — plain link */}
+        {/* Style Quiz — plain link */}
         <Link
           href="/quiz"
           className={`${pillBase} ${isActive("/quiz") ? pillActive : ""}`}
         >
-          Style Read
+          Style Quiz
         </Link>
 
         {/* Articles (the Journal) — clickable + department menu */}
@@ -380,9 +380,9 @@ export default function HeaderNav({
               </Link>
             ))}
 
-            {/* Style Read */}
+            {/* Style Quiz */}
             <Link href="/quiz" onClick={close} className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
-              Style Read
+              Style Quiz
             </Link>
 
             {/* Articles */}

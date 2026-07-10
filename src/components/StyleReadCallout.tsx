@@ -51,10 +51,10 @@ export function StyleReadCallout({
     <section className="border-b border-border bg-gold/5 px-5 py-12">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 sm:flex-row sm:gap-12">
         <div className="max-w-md text-center sm:flex-1 sm:text-left">
-          <p className="text-sm uppercase tracking-widest text-gold">Style read</p>
+          <p className="text-sm uppercase tracking-widest text-gold">Style quiz</p>
           <h2 className="mt-2 font-serif text-2xl text-foreground sm:text-3xl">{headline}</h2>
           <p className="mt-3 text-muted">
-            A two-minute style read. We hand you the words for your taste, then match
+            A two-minute style quiz. We hand you the words for your taste, then match
             you to bags. <span className="text-foreground">No account needed.</span>
           </p>
           <Link

@@ -168,7 +168,7 @@ export default async function ShopPage({
                       />
                     </div>
                     <div className="flex flex-1 flex-col px-3 py-3">
-                      <p className="truncate font-serif text-foreground">{bagLabel(p)}</p>
+                      <p className="font-serif text-foreground">{bagLabel(p)}</p>
                       {ranks[p.styleId] != null && (
                         <IndexRankLink
                           rank={ranks[p.styleId]}

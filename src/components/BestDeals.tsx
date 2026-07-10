@@ -42,7 +42,7 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
             <li key={d.variantId} className="rounded-2xl border border-border bg-surface p-4">
               <Link
                 href={`/bag/${d.variantId}`}
-                className="block truncate font-serif text-sm text-foreground transition-colors hover:text-gold"
+                className="block font-serif text-sm text-foreground transition-colors hover:text-gold"
               >
                 {name}
               </Link>
