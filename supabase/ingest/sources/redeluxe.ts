@@ -36,8 +36,9 @@ interface RawDumpEntry {
 
 // Redeluxe's product_type / tags mark bags; drop accessories so SLGs/shoes/jewellery
 // never enter the pipeline. Bag-ish types pass, an accessory word anywhere vetoes.
-const BAG_TYPE = /\b(bag|handbag|tote|clutch|crossbody|cross body|shoulder|satchel|hobo|backpack|bucket|saddle|boston|top handle|minaudiere|vanity)\b/i;
-const NOT_BAG = /\b(wallet|card holder|cardholder|belt|scarf|shoe|sneaker|boot|sandal|pump|loafer|sunglass|necklace|earring|bracelet|ring|watch|charm|keychain|perfume|shawl|twilly)\b/i;
+// Trailing `s?` matches plural product_types ("Handbags"): \bhandbag\b would miss the "s".
+const BAG_TYPE = /\b(bag|handbag|tote|clutch|crossbody|cross body|shoulder|satchel|hobo|backpack|bucket|saddle|boston|top handle|minaudiere|vanity)s?\b/i;
+const NOT_BAG = /\b(wallet|card holder|cardholder|belt|scarf|shoe|sneaker|boot|sandal|pump|loafer|sunglass|necklace|earring|bracelet|ring|watch|charm|keychain|perfume|shawl|twilly)s?\b/i;
 
 function isBag(p: RawDumpEntry["product"]): boolean {
   const type = (p.product_type ?? "").toLowerCase();

@@ -64,6 +64,19 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   MM $1,090/n43. The data bar is met; the remaining work is WRITING the article (moves to the
   article-engine lane, `docs/article-backlog.md`), not a capture. Page-depth note: style 434's
   description is a 49-char stub + no year_introduced — worth a depth pass (core icon, high demand).
+  ✅ **ARTICLE PUBLISHED 2026-07-10** (owner said "just post it") — post **#38**, slug
+  `louis-vuitton-alma-what-its-worth`, topic→Alma(434), `status=published`, via `seed-alma-article.ts`
+  (idempotent, body-canon guard). Copywriter-drafted (voice canon), data bar deduped by listing_ref:
+  BB $1,565/n197, PM $895/n179, Mini $1,381/n130, GM $1,033/n18, MM $928/n16, Nano $1,695/n9; framed
+  asking-not-sold + estimate-not-appraisal; body renderer-clean (0 em dashes / stray tokens). Also
+  fixed the page-depth gap: Alma page (434) now has a real sourced description + year_introduced=1934.
+  Draft archived `docs/research-drafts/lv-alma-value-draft.md`. OPEN (revise on-site if wanted, DB body
+  is canon): the "Mini" size (n=130) is a market label, not an official LV Alma size (LV = Nano/BB/PM/
+  MM/GM). ✅ **CHART WIRED 2026-07-10**: `AlmaSizeChart` (`[diagram: alma-size-chart]`, registered in
+  `articles/[slug]/page.tsx`) replaced the inline median bullets in the body — 6 sizes, small-vs-large
+  colored to show "size tracks desire", deduped/dated/asking-framed. Article renders `force-dynamic`
+  so the published body is live now; the NEW chart component needs the next prod `vercel --prod`
+  promote (hers) to appear.
 
 ## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
@@ -325,6 +338,21 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     LV Neverfull/Montsouris spot-checks). Recaptured → mapped → loaded: Wander [Small] v1400 (n3),
     Aventure [Regular] v1402 (n3), Aventure [Medium] v1403 (n1) now priced. `audit-coverage` confirms
     Miu Miu **priced_variants=20**. Full suite green (753 tests).
+    - ⬜ **FOLLOW-UP (data lane, NOT the adapter — audited 2026-07-10, left untouched by design):** two
+      pre-existing Miu Miu variant-taxonomy issues the fix surfaced but must NOT be auto-swept.
+      (1) *Stranded pre-fix rows*: the size-less Standard buckets still hold the OLD collapsed rows
+      (Wander Std v1047 22/28 FP rows carry a size token; Aventure Std v1049 35/39; Arcadie Std v1048 13/22).
+      They mildly contaminate those medians until re-pointed to the sized variants. (2) *Duplicate variants
+      across scaffold generations*: ∅-vs-Standard-vs-size twins (Ivy v1117/v1401, Beau v1118/v1406, Coffer
+      v1119/v1850, Wander/Aventure/Arcadie Standard-vs-sized). A `selectTarget`-driven auto re-point is
+      UNSAFE: "matelasse" is a MATERIAL in Coffer/Bucket handles, so those rows mis-resolve to the
+      **Matelassé** STYLE. ✅ **(a) DONE 2026-07-10**: tightened the Matelassé target excludes
+      (added coffer/bucket/softy/beau/ivy/sandal/pouch) + regression tests — matelassé Coffer/Bucket/
+      sandals/pouches now fall through instead of polluting; genuine matelassé bags (10) unchanged.
+      This stops FUTURE contamination only. ⬜ **(b) STILL OPEN (data lane):** the existing DB rows
+      already mislabeled onto Matelassé v1050 (+ the stranded Wander/Aventure/Arcadie Standard rows +
+      the ∅/Standard/size duplicate variants) need a SAME-STYLE-ONLY re-point/dedup with review — never
+      an auto-sweep. Thin non-representative brand, low urgency.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
