@@ -97,6 +97,10 @@ export const FAMILY_PREFIX = "f:";
 
 export interface ShopFilters {
   brand?: string;
+  /** Restrict the grid to these styles — how a text search narrows the market.
+   *  Undefined = no text query (show the whole market). Empty array = a query that
+   *  matched nothing, so the grid is intentionally empty. */
+  styleIds?: number[];
   dealsOnly?: boolean;
   minPrice?: number;
   maxPrice?: number;
@@ -746,7 +750,13 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       protectiveFeet: protectiveFeetFacet,
     };
 
-    // Product-level filters (brand/price/deals) on top of the listing-level spec filters.
+    // Product-level filters (search/brand/price/deals) on top of the listing-level spec filters.
+    // Text search narrows to the matched styleId set (resolved by the same search engine
+    // /search uses), so the market grid, the query, and every facet compose on one surface.
+    if (filters.styleIds != null) {
+      const wanted = new Set(filters.styleIds);
+      products = products.filter((p) => wanted.has(p.styleId));
+    }
     if (filters.brand) products = products.filter((p) => p.brandName === filters.brand);
     if (filters.minPrice != null) products = products.filter((p) => p.fromPrice >= filters.minPrice!);
     if (filters.maxPrice != null) products = products.filter((p) => p.fromPrice <= filters.maxPrice!);

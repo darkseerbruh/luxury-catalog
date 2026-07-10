@@ -110,7 +110,7 @@ export default async function ProfilePage() {
           href="/quiz"
           className="rounded-full border border-border px-5 py-2.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
         >
-          Style read
+          Style quiz
         </Link>
         <Link
           href="/recap"

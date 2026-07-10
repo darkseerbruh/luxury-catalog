@@ -27,6 +27,17 @@ and are the strongest merge candidate — they likely describe the same coated-c
   Regime B, seasonal Chanel has no official permanent name (canonical id = style code + season).
   Keep as a display label; do not treat as a permanent model.
 
+## Batch-2 finds (2026-07-10) — removal candidate + more descriptors
+
+- **Chanel Uniform** (1056) — STRONGEST removal candidate. The archivist confirmed this is
+  NOT a retail model: it's Chanel's boutique/staff uniform program, and those pieces leak onto
+  resale. "Uniform" is a sourcing note, not a bag name. Review for removal or relabel; its
+  comps may belong to real flap/tote styles.
+- **Gucci Dome** (1078) — shape descriptor, not a named Gucci model.
+- **Descriptor/line names (kept, described at line altitude):** Saint Laurent Rive Gauche (1061),
+  Saint Laurent Shopping Tote (1058), Louis Vuitton Bucket (1068), Louis Vuitton Easy Pouch On
+  Strap (1060), Louis Vuitton S Lock (1066), Louis Vuitton Marais (1074, name reused across eras).
+
 ## Token-flagged, NEEDS REVIEW (generic name, but may be legit)
 
 Auto-flagged by exact generic-name match; NOT confirmed. Note the false positive that proves
@@ -35,6 +46,14 @@ name alone is not proof. Review each against its listings:
 
 - Celine Frame Bag (1184), Chanel Uniform (1056), Gucci Day Backpack (1087),
   Louis Vuitton Bucket (1068), Saint Laurent Shopping Tote (1058).
+
+## Batch-3 descriptor flags (2026-07-10)
+
+More names that are lines/multi-variant, not single models (kept + described at line altitude):
+Prada Canapa (hemp-canvas line), Balenciaga Town (a size in the Motorcycle line),
+Versace Virtus (Barocco-V hardware line), Saint Laurent Uptown (tote + pouch), and the LV names
+reused across eras: Bosphore, Marelle, Monceau, Rivoli, Greenwich. Lower priority than the
+Chanel Uniform removal candidate; review if consolidating.
 
 ## Recommended handling (owner call)
 
