@@ -246,3 +246,97 @@ export function bestBand(bands: DealBand[]): DealBand | null {
 export function isConfidentBasis(fv: FairValue): boolean {
   return !fv.variantLevel && fv.dimsUsed.includes("material") && fv.dimsUsed.includes("color");
 }
+
+/* ------------------------------------------------------------------------------------
+ * Which live listing should FRONT a variant (hero photo / card photo)?
+ * ---------------------------------------------------------------------------------- */
+
+/** The variant spec the listing photo should look like. Nulls = unknown dimension. */
+export interface FrontSpec {
+  colorway: string | null;
+  sizeLabel: string | null;
+  hardwareColor: string | null;
+}
+
+const SIZE_WORDS = ["micro", "mini", "small", "medium", "jumbo", "maxi", "large"];
+
+/** Novelty/embellishment listings (charms, sequins, graffiti…) make honest comps but a
+ *  misleading FACE for the style — the icon card shouldn't lead with a limited edition. */
+const NOVELTY_TOKENS = [
+  "charm", "brooch", "embellish", "sequin", "graffiti", "crystal", "strass",
+  "patch", "sticker", "pearl", "camellia", "valentine", "lucky",
+];
+
+/**
+ * Score how well a live listing's title/slug matches the variant it would front.
+ * Pure text heuristic over reseller slugs ("chanel-black-caviar-double-flap-…"):
+ *  +4 colorway word match (the dominant visual signal)
+ *  +2 wanted size word present · -2 a DIFFERENT size word present (mediums are often
+ *     unlabeled, so a conflicting "maxi"/"mini" is the real tell)
+ *  +1 hardware match ("gold"/"ghw")
+ *  -3 novelty/embellishment token (don't front an icon with a charm-covered limited)
+ * Used to pick the photo that stands in for a variant; comps/pricing never use this.
+ */
+export function scoreListingFace(titleOrSlug: string, spec: FrontSpec): number {
+  const hay = (titleOrSlug ?? "").toLowerCase().replace(/[-_/]+/g, " ");
+  let score = 0;
+
+  const colorWords = (spec.colorway ?? "")
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter((w) => w.length >= 3);
+  if (colorWords.length > 0 && colorWords.some((w) => hay.includes(w))) score += 4;
+
+  // Size only judges when the variant HAS a size on record — otherwise a title's
+  // "jumbo" is information we can't contradict, not a conflict.
+  const wantedSizes = SIZE_WORDS.filter((s) => (spec.sizeLabel ?? "").toLowerCase().includes(s));
+  if (wantedSizes.length > 0) {
+    const presentSizes = SIZE_WORDS.filter((s) => new RegExp(`\\b${s}\\b`).test(hay));
+    if (wantedSizes.some((s) => presentSizes.includes(s))) score += 2;
+    if (presentSizes.some((s) => !wantedSizes.includes(s))) score -= 2;
+  }
+
+  const hw = (spec.hardwareColor ?? "").toLowerCase();
+  if (hw) {
+    const hwHit =
+      (hw.includes("gold") && (/\bgold\b/.test(hay) || /\bghw\b/.test(hay))) ||
+      (hw.includes("silver") && (/\bsilver\b/.test(hay) || /\bshw\b/.test(hay))) ||
+      (hw.length >= 4 && hay.includes(hw));
+    if (hwHit) score += 1;
+  }
+
+  if (NOVELTY_TOKENS.some((t) => hay.includes(t))) score -= 3;
+  return score;
+}
+
+/** Last URL path segment as a readable title ("…/chanel-black-flap-p123" → "chanel black flap"). */
+export function slugTitleFromUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  const seg = url.split("?")[0].replace(/\/+$/, "").split("/").pop() ?? "";
+  return seg.replace(/-p\d+$/i, "").replace(/[-_]+/g, " ").trim();
+}
+
+/** Median of a price list (empty → null). */
+export function medianPrice(prices: number[]): number | null {
+  const ps = prices.filter((p) => Number.isFinite(p) && p > 0).sort((a, b) => a - b);
+  if (ps.length === 0) return null;
+  const mid = Math.floor(ps.length / 2);
+  return ps.length % 2 ? ps[mid] : (ps[mid - 1] + ps[mid]) / 2;
+}
+
+/**
+ * Low-price-outlier penalty for FACE picking. Line accessories that resellers title
+ * as the bag ("boy mini crossbody" zip case, "timeless handcuff clutch") carry no
+ * shape word to veto on, but they all sit FAR below the variant's live-ask median —
+ * that price gap is the honest tell (2026-07-09: $966 clutch vs ~$5k flaps, $2.3k
+ * zip case vs ~$4k+ Boys). Only the low side is penalized: an expensive rare piece
+ * is still the right bag. Needs a real distribution — no penalty under 5 asks.
+ * Threshold 0.65: Boy Mini live asks (2026-07-09, n≈250) put the accessory band at
+ * $599–2.3k vs a $3.7k median, and real mini flaps start ~$2.8k — 0.65 splits them.
+ */
+export function faceLowPricePenalty(price: number, livePrices: number[]): number {
+  if (livePrices.length < 5) return 0;
+  const med = medianPrice(livePrices);
+  if (med == null || !Number.isFinite(price) || price <= 0) return 0;
+  return price < med * 0.65 ? -3 : 0;
+}

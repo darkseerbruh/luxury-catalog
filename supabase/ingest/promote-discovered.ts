@@ -41,7 +41,7 @@ const LUXURY_HOUSES = new Set(
     "hermès", "hermes", "chanel", "louis vuitton", "dior", "christian dior", "gucci",
     "bottega veneta", "celine", "céline", "saint laurent", "prada", "fendi", "loewe",
     "goyard", "the row", "chloé", "chloe", "balenciaga", "valentino", "delvaux", "moynat",
-    "loro piana", "bulgari",
+    "loro piana", "bulgari", "alaïa", "alaia", "versace",
   ].map((s) => norm(s)),
 );
 // Numbered House Standing tiers ("1" highest → "5"); see docs/ux/tier-formula-spec.md.
