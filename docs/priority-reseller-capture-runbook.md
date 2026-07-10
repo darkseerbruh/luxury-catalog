@@ -3,32 +3,36 @@
 **Goal:** daily-fresh "what's for sale" and "what sold" for the prioritized resellers, at the
 lowest spend that covers it. Companion to [data-collection-handoff.md](data-collection-handoff.md) §0.
 
-## The principle (why this is cheap)
+> Reconciled 2026-07-10: TheRealReal + eBay-sold capture run on **committed cloud-Apify
+> actors** (not Firecrawl). Apify is a real part of this pipeline, on **paid Starter**. An
+> earlier draft of this doc called Apify "not wired"; that was stale. See the capture TL;DR in
+> `docs/handoff.md`.
 
-- **"Sold" is derived, not scraped.** One daily for-sale snapshot per source; when a
-  `listing_ref` stops appearing, `reconcile-sold.ts` stamps `status=sold` + `delisted_on`.
-  You never pay to scrape sold from the consignment resellers.
-- **Route by source, don't put it all on one tool.** Free Shopify feeds where they exist,
-  Firecrawl for the bot-walled sites. **Apify is NOT wired into this pipeline** and is not
-  required for it (it has only ever been an ad-hoc TRR bulk tool).
-- **eBay is a separate animal** (peer-to-peer marketplace, realized-sold, counterfeit-noisy),
-  so it runs as its own weekly sold-sweep, not the nightly snapshot. See below.
+## The principle (why this stays cheap)
 
-## Nightly lanes (for-sale snapshot -> derive sold)
+- **"Sold" from consignment resellers is derived, not scraped.** One daily for-sale snapshot
+  per source; when a `listing_ref` stops appearing, `reconcile-sold.ts` stamps `status=sold`
+  + `delisted_on`. No extra scrape for sold on those sources.
+- **Route by source.** Free Shopify feeds where they exist; Apify cloud actors for the
+  bot-walled / session-dropping sites (TheRealReal) and for eBay realized-sold; Firecrawl for
+  the rest.
+- **eBay is a separate animal** (peer-to-peer, realized-sold, counterfeit-noisy), captured
+  **auction-only via Apify** so best-offer masking can't occur. See below.
+
+## Lanes
 
 | Reseller | Tool | Cost | Sold via | Status |
 |---|---|---|---|---|
 | **Fashionphile** | Shopify `products.json` (direct) | $0 | `market-refresh.yml` (every 3h) | ✅ wired |
+| **TheRealReal** | **Apify** (`trr-apify.ts`) | Apify CU (~$60/mo w/ eBay in the standing refresh) | daily diff + `reconcile:sold` | ✅ wired (`trr-refresh.yml`, 2-day) |
+| **eBay (sold)** | **Apify** (`ebay-sold-apify.ts`, auction-only) | Apify CU | realized comps at capture | ✅ wired |
 | **Redeluxe** ⭐ | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
 | **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
-| **TheRealReal** | Firecrawl (`firecrawl-trr.ts`) | Firecrawl credits | daily diff + `reconcile:sold` | ✅ wired (`firecrawl-capture.yml`) |
 | **Vestiaire** | Firecrawl (`vestiaire.ts` adapter) | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (needs crawl feed) |
 | **Rebag** | Firecrawl | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
 | **The Luxury Closet** | Firecrawl or CJ feed (affiliate live, CID 5312449) | Firecrawl credits / $0 if feed | daily diff + `reconcile:sold` | 🔧 build-next |
 
-### Nightly sequence (exact commands, per source)
-
-Fashionphile (free, already automated):
+### Fashionphile (free, automated)
 ```
 npx tsx supabase/ingest/sources/fashionphile-crawl.ts handbags
 npx tsx supabase/ingest/sources/fashionphile.ts --raw
@@ -36,66 +40,45 @@ npm run load:prices -- --write
 npm run reconcile:sold -- --platform=fashionphile --snapshot=data/ingest/_raw/fashionphile-live.json --write
 npm run summary:refresh
 ```
-
-TheRealReal (Firecrawl, already automated via `firecrawl-capture.yml`):
-```
-npx tsx supabase/ingest/sources/firecrawl-trr.ts <target> --limit=<N>
-npm run load:prices -- therealreal --write
-npm run reconcile:sold -- --platform=therealreal --snapshot=<fresh-crawl.json> --write
-npm run summary:refresh
-```
-
 `reconcile:sold` safety: skips a platform if the snapshot is empty or would retire more than
-`--max-retire-frac` (default 0.5) of its live rows, so a broken crawl never mass-retires a
-catalogue.
+`--max-retire-frac` (default 0.5) of its live rows, so a broken crawl never mass-retires a catalogue.
 
-## eBay weekly sold-sweep lane (separate on purpose)
+### TheRealReal (Apify, automated via `trr-refresh.yml`)
+Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:
+TRR drops the login + bot-blocks). Standing 2-day refresh, age-based retirement.
 
-eBay is your realized-*sold* source (auction finals + many sellers), but it is
-counterfeit-noisy and its sold data has masking landmines, so it runs **weekly**, not daily,
-and stays scoped to hero/T1.
+### eBay realized-sold (Apify, auction-only)
+`ebay-sold-apify.ts` (broad catch-all) + `ebay-sold-sweep.ts` (scoped second-sourcing). Runs
+tier-1/3 brand queries **auction-only** so bid-settled finals can't be best-offer masked, with
+a **$500 AG floor**. This is the primary eBay-sold engine (718 realized comps captured, 676 on
+pages as of 2026-07-10).
 
-- **Workflow:** `firecrawl-ebay.yml`, weekly cron + manual dispatch.
+## eBay `--sold` Firecrawl mode = manual fallback only
+
+`firecrawl-ebay.ts --sold` (added 2026-07-10) is a **dispatch-only backup** for when Apify is
+capped, not the primary. It is weaker than the Apify path (it includes Buy-It-Now, where
+best-offer masking lives, and only heuristically drops masked rows). Prefer `ebay-sold-apify.ts`.
+
 - **Command:** `npx tsx supabase/ingest/sources/firecrawl-ebay.ts all --sold --limit=15`
-  (the `--sold` mode hits eBay's `LH_Sold=1&LH_Complete=1` filter and stamps `price_type: sold`).
-- **Guardrails (built in):**
-  - 🚫 **Masked best-offer dropped.** When a sold page shows "best offer accepted," the accepted
-    amount is hidden and the only exposed number is the pre-offer ask, so the row is skipped
-    (never loaded). Conservative: drops when unsure.
-  - 📉 **Per-target price floors/ceilings** already guard counterfeit noise (e.g. Birkin
-    `minPrice 6000`, Chanel `2500`); tier-1/3 floors sit at or above the $500 policy line.
-  - ⚠️ **Hermès is low-trust** on eBay regardless (counterfeit density); treat as directional.
-  - ⏳ **Live-capture-only for descriptions:** eBay purges ended-listing detail, so sold rows
-    can't be back-enriched. Capture on cadence, don't let it lapse.
-
-### Status: report-only until one CI run is verified
-
-The `--sold` mode cannot be run locally (Firecrawl key is CI-only), so the **scheduled runs
-write nothing** (`WRITE=false` on schedule): they capture to a landing snapshot and print row
-counts + credit burn. This mirrors the repo's validate-first pilot pattern.
-
-**To promote the lane to writing** after reviewing the first weekly report:
-1. Open the Actions run, confirm the landing snapshot has clean numeric sold prices (not masked
-   ranges) and sane counts.
-2. Refinement to land before trusting the numbers long-term: parse the eBay **sold date** into
-   `observed_on` (today it falls back to ingest date). Until then, sold rows carry the capture
-   date, which is fine for a "sold in the last N days" read but not for exact sold-date history.
-3. Flip the weekly schedule to write: set the workflow's schedule `WRITE` to `true`
-   (or dispatch it manually with `write=true`), then it runs `load:prices -- ebay --write`.
+  (hits `LH_Sold=1&LH_Complete=1`, stamps `price_type: sold`, drops rows showing "best offer accepted").
+- **No schedule** (dispatch-only, `firecrawl-ebay.yml`) to avoid a redundant Firecrawl credit
+  burn against the Apify path.
+- **Refinement if ever promoted:** parse the eBay sold date into `observed_on` (today it falls
+  back to ingest date, fine for a "sold in the last N days" read, not exact sold-date history).
 
 ## Cost + plan implication
 
-- **Free** for Fashionphile + any other Shopify feed (Redeluxe, Couture USA).
-- **Firecrawl** carries TRR + the build-next resellers + the eBay weekly lane. Per the measured
-  budget in data-collection-handoff.md (2026-06-28), broad daily coverage fits the **~$83
-  Standard** plan when we parse ourselves and detail-scrape only new listings.
-- **Apify is not required** for the committed daily pipeline. Keep it only as a TRR bulk
-  fallback for when Firecrawl gets captcha-walled; scope any TRR Apify run to hero/T1 +
-  new-listings so it fits a raised Starter cap rather than the $199 Scale plan.
+- **Free** for Fashionphile + any other Shopify feed (Redeluxe, Couture USA build-next).
+- **Apify (paid Starter)** carries TheRealReal + eBay-sold; standing spend ~$60/mo, well inside
+  Starter with a raised cap.
+- **Firecrawl** carries the build-next Firecrawl resellers (Vestiaire/Rebag/TLC) + the eBay
+  manual fallback.
+- **On an Apify spike:** raise the Starter cap + diagnose the burn (Insights). Don't jump to
+  Scale ($199/mo) unless sustained usage is ~$180+/mo.
 
 ## Owner-gated unblocks (spend / secrets, not code)
 
-- **Firecrawl plan:** confirm the plan supports the daily credit budget (Standard tier per the
-  measured math). `FIRECRAWL_API_KEY` is a GH Actions secret (CI-only, not local).
-- **Apify cap:** only if you keep a TRR Apify fallback; raise the Starter cap, don't jump to Scale
-  on a spike (see the billing analysis). One measured TRR-only run sizes it exactly.
+- **Apify:** on paid Starter with a raised cap (done). Keep it while `trr-refresh` is live;
+  don't downgrade to Free.
+- **Firecrawl:** `FIRECRAWL_API_KEY` is a GH Actions secret (CI-only, not local); Standard-tier
+  upgrade stays her call, gated on a real breadth need.

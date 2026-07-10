@@ -346,6 +346,9 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Recurring capture has two jobs at once:** build price-over-time history AND keep current listings fresh/accurate (a vanished `listing_ref` = sold/pulled → mark it + days-on-market). One scheduled pass, both outcomes.
 - **Automating capture needs three owner inputs:** `FIRECRAWL_API_KEY` in Vercel env, a credit-budget/cadence ceiling, and a go-ahead to switch the standing nightly job on. (Firecrawl `monitor` or a Vercel Cron route.)
 - **Firecrawl stays on the free tier until we hit the wall (locked 2026-06-28: "let's stay free until we hit the wall").** Upgrading to Standard is her call, gated on the pilot proving itself plus a real breadth need (more styles, Vestiaire/Rebag, TRR sold-retirement — which waits for paid).
+- **Daily for-sale + sold routes by source (2026-07-10):** Apify cloud actors run TheRealReal + eBay-sold (`trr-apify.ts` + `trr-refresh.yml`; `ebay-sold-apify.ts`); free Shopify feeds (Fashionphile) + Firecrawl carry the rest; **"sold" for consignment resellers is derived** (`reconcile-sold.ts`), not scraped. Canonical: `docs/priority-reseller-capture-runbook.md`.
+- **On an Apify usage spike, raise the Starter cap + diagnose the burn (Insights); don't jump to Scale ($199/mo) for a spike.** Scale only pays off at sustained ~$180+/mo (her standing TRR refresh is ~$60/mo, well inside Starter).
+- **eBay realized-*sold* = the Apify auction-only path** (`ebay-sold-apify.ts`; auction finals can't be best-offer masked, $500 AG floor). The Firecrawl `firecrawl-ebay.ts --sold` mode is a **manual dispatch-only fallback** for when Apify is capped, not the primary.
 
 ## Brand voice & tone (locked) — canonical: `docs/voice-and-tone.md`
 - **A fresh, internet-native voice** — explicitly *not* legacy-luxury hush (serif, "timeless elegance") and *not* discount breathlessness ("SCORE designer for LESS!!").
