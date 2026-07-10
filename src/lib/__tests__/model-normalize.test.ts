@@ -54,6 +54,13 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Louis Vuitton", "néonoé mm")).toBe("NéoNoé");
   });
 
+  it("model word beats hardware token (Blondie/Horsebit Chain, 2026-07-10)", () => {
+    expect(canonicalModel("Gucci", "interlocking g horsebit blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "bamboo blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "chain-link horsebit chain large")).toBe("Maxi Horsebit Chain");
+    expect(canonicalModel("Gucci", "horsebit accent leather loafers")).toBeNull();
+  });
+
   it("ignores bundled extras after w/ or with (TRR sweep, 2026-07-10)", () => {
     // The bundled pouch/scarf must not trip the SLG gate on a real bag...
     expect(canonicalModel("Hermès", "toile gm & vache hunter herbag zip 31 w/ pouch")).toBe("Herbag");

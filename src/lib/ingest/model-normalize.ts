@@ -264,11 +264,15 @@ const MODELS: Record<string, ModelDef[]> = {
     // shape is its own ranked style (Chanel Boy-WOC precedent); chain wallets still
     // roll into the parent line because no standalone style exists for them.
     ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont", "!belt bag"], ["Jackie 1961", "jackie"],
-    ["Horsebit 1955", "horsebit"], ["Ophidia", "ophidia", "!belt bag"],
+    // Blondie veto (2026-07-10 TRR sweep): TRR titles its Blondies "interlocking g
+    // horsebit blondie" / "bamboo blondie" — the model word wins over the hardware
+    // token (Diana precedent). Horsebit Chain is its own model, checked first.
+    ["Maxi Horsebit Chain", "horsebit chain"],
+    ["Horsebit 1955", "horsebit", "!blondie"], ["Ophidia", "ophidia", "!belt bag"],
     // Diana veto (2026-07-09 round-3 audit): the Diana's signature IS its bamboo handle,
     // so "bamboo diana" titles (36 TLC rows, every one a Diana tote) must not be swallowed
     // by the Bamboo 1947 token that happens to be checked first.
-    ["Bamboo 1947", "bamboo", "!diana"],
+    ["Bamboo 1947", "bamboo", "!diana", "!blondie"],
     ["Soho Disco", "soho"], ["Diana", "diana"], ["Attache", "attache"], ["Blondie", "blondie"],
     ["Boston", "boston"], ["Princy", "princy"], ["Jolie", "jolie"], ["Queen Margaret", "queen margaret"],
     ["Zumi", "zumi"], ["Sylvie", "sylvie"], ["Padlock", "padlock"], ["Bree", "bree"], ["Aphrodite", "aphrodite"],
