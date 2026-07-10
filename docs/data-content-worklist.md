@@ -292,14 +292,28 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
 - ✅ **COVERAGE VERIFIED + refreshed 2026-07-10** (priced-handbag-variant counts):
   - **MEET the ≥20 bar now** (from the 2026-07-02 sweep + 2026-07-08 promotion): The Row **47**,
     Goyard **50**, Valentino **32**. These 3 are done.
-  - **CLOSE, real capture work remains** — their live FP feeds carry untracked HANDBAG models
-    (refreshed 149 FP rows today, but new variant count needs the TARGETS+scaffold path, not `--raw`
-    which skips unmatched): **Miu Miu 17** (untracked in feed: Beau top-handle, Coffer hobo, Softy);
-    **Alexander McQueen 14** (The Peak, T-Bar, The Story, Padlock Zip-Around Tote, Jeweled Satchel,
-    De Manta); **Jacquemus 14** (Le Carinu, Le Turismo, Le Grand Panier, Le Bambidou, Le Bambinou,
-    Le Petit Câlino, La Pochette Rond Carré). Next step = add dict entries + `sweep-targets` +
-    `scaffold-from-spec` per brand, then re-map/load (each model verified real via the FP product
-    name). Do it in a clean lane (not concurrent with an ingest session editing model-normalize.ts).
+  - ✅ **Jacquemus → 20 (DONE 2026-07-10)**: 6 existing-but-unpriced styles had no sweep-target, so
+    their FP listings never loaded. Added targets + scaffolded Standard variants + loaded FP: Le
+    Carinu ($485/n4), Le Turismo ($925/n12), Le Grand Panier ($370/n2), Le Bambidou ($625/n3), Le
+    Sac Rond ($710/n5), Le Petit Filet ($655/n2). No new styles, no reshaping — ADD-only. Now MEETS
+    the bar.
+  - ⚠️ **Alexander McQueen 14 — needs DEDUP, not targets** (found 2026-07-10). The style table has
+    REDUNDANT McQueen rows: Knuckle (597 "The Knuckle" / 666 "Knuckle" / 878 "Knuckle Clutch"), Peak
+    (670 "Peak" / 880 "The Peak"), Manta (601 "Manta" / 669 "De Manta"), Bow (599 "The Bow Tote" /
+    673 "The Bow"); + The Jewelled Satchel (598) has 0 variants. Adding targets would deepen the dup
+    mess. Fix = a reviewed `merge-style-dupes` pass first (pipeline rule: style dups need spot-check),
+    THEN wire targets. Its live FP feed is thin (~33 bags) so 20 may need the dedup + a couple real
+    adds (The Story, T-Bar, Padlock Tote already exist as styles).
+  - ⚠️ **Miu Miu 17 — blocked by an FP-adapter size bug** (root-caused 2026-07-10). Already has Beau,
+    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3 unpriced variants
+    (Wander [Small] v1400, Aventure [Regular] v1402, Aventure [Medium] v1403) DO have in-band FP
+    listings, but `sources/fashionphile.ts --raw` lands those rows with **`size_label: undefined`**
+    (style resolves to "Wander"/"Aventure" but the size is dropped), so load collapses every size onto
+    one variant (Mini/priced) and the others never price. Real fix = make the FP adapter carry the
+    matched target's `size_label` (or detect size from the handle) for these multi-size Miu Miu
+    targets; it's a small adapter change + test, NOT a data pass. Same latent bug likely mis-sizes
+    other multi-size FP targets — worth a general fix. Do it in a code lane, not concurrent with the
+    ingest session already editing `model-normalize.ts`.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
@@ -367,6 +381,14 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   load:prices), distinct from the SCOPED `ebay-sold-sweep.ts` (drops non-target rows — kept
   only 9/718 here, wrong tool for breadth). ⬜ Optional: Firecrawl BIN-sold breadth on the
   owner's allowance. eBay stays MANUAL (no cron).
+- ✅ **eBay coverage EXTENDED 2026-07-10** (autonomous continuation): 2nd auction pull for
+  premium brands (Chloé/Valentino/Givenchy/Burberry/The Row/Miu Miu/McQueen/MJ/Jacquemus/
+  Delvaux/Mulberry/Loewe) → 266 comps, 233 onto pages; 3rd pull for MID-TIER (Coach/Kate
+  Spade/Longchamp/MK/Tory Burch, floor=$25, auction-only) → 257 comps, 145 onto pages.
+  Hardened `ebay-sold-apify.ts` with a JUNK filter (replica/parts/strap-only/perfume). eBay
+  total 2,876 → **3,918 rows** (+1,042 this session); multi-source styles ≥2:611 / ≥3:355.
+  ⬜ Remaining eBay lever = the U-DEALS-MIDTIER item-specifics (colour+material) enrichment
+  for the deals badge — that needs the metered Firecrawl item-page pass, not the search API.
 - ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
   `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile

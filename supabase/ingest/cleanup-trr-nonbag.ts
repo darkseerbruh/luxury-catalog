@@ -1,239 +1,109 @@
 /**
- * Un-promote + de-contaminate TheRealReal NON-bag listings.
+ * One-time cleanup: purge already-banked NON-handbag TRR rows from discovered_listing.
  *
- * TRR's Apify capture (sources/trr-apify.ts) is multi-brand AND multi-category, so a
- * "Triomphe" belt / hoodie / wallet, a "Sylvie" shoe, an "Alma" bag-strap etc. share a
- * brand+model token with a real bag. The clustered promoter (promote-safe.ts) groups on
- * (brand_guess, style_guess) and the bag gate (canonicalModel) passes "Triomphe" because
- * a Triomphe *bag* exists — so the garment/accessory got promoted onto the bag's variant
- * and its (much cheaper) asking price was written into price_history, deflating the bag's
- * comps. See [[trr_mismap_sweep_method]] for the sibling title-based sweep.
+ * Before the ingest category filter (src/lib/ingest/trr.ts `isTrrHandbagListing`), the
+ * TRR catch-all adapters banked every row a broad brand search returned — including that
+ * house's apparel / shoes / jewelry / watches / accessories. Those can never promote to a
+ * bag style (the SLG/apparel gate refuses them a model), so they sit unpromotable and
+ * bloat the promotion scan. This removes the backlog the same way the filter now prevents
+ * new ones: by the TRR product-URL department, keeping bags + carried pouches (WOC /
+ * vanity / belt bag). Only UNPROMOTED rows (promoted_variant_id IS NULL) are ever deleted.
  *
- * The reliable non-bag signal is TRR's URL department path, not the title — the new
- * isTrrHandbagListing() helper reads it (false for /clothing|shoes|accessories|jewelry|
- * watches|home|kids/). This pass:
- *   1. finds every TRR price_history row whose source_url is a non-bag department  → DELETE
- *      (preserving any row that has no discovered_listing backup first, so nothing is lost),
- *   2. finds every promoted (promoted_variant_id set) TRR discovered_listing row that is a
- *      non-bag → UN-PROMOTE (promoted_variant_id/promoted_at → null, unresolved_reason
- *      'non_bag') so it can never re-seed a bag's comps,
- *   3. refreshes variant_price_summary and prints the affected variants before/after.
- *
- * Historical price observations are permanent data points ([[feedback_historical_price_data]]),
- * so a deleted price_history row is always preserved in discovered_listing as raw evidence
- * first — the un-promoted rows ARE that archive; the few price rows that reached the catalog
- * via direct load-matching (no discovered backup) are banked before deletion.
- *
- *   npx tsx supabase/ingest/cleanup-trr-nonbag.ts            # DRY RUN (report only)
- *   npx tsx supabase/ingest/cleanup-trr-nonbag.ts --write    # apply
+ *   npx tsx supabase/ingest/cleanup-trr-nonbag.ts            # dry run (report only)
+ *   npx tsx supabase/ingest/cleanup-trr-nonbag.ts --write    # delete the non-bag rows
  */
-import { supabaseAdmin as db } from "../seed/lib/client";
+import { supabaseAdmin } from "../seed/lib/client";
 import { isTrrHandbagListing } from "../../src/lib/ingest/trr";
 
-const PLATFORM = "The RealReal";
-const WRITE = process.argv.includes("--write");
-
-interface PhRow {
-  price_id: number;
-  variant_id: number;
-  source_url: string | null;
-  listing_ref: string | null;
-  sale_price: number | null;
-  currency: string | null;
-  price_type: string | null;
-  condition: string | null;
-  colorway: string | null;
-  material: string | null;
-  hardware_color: string | null;
-  production_year: number | null;
-  season: string | null;
-  observed_on: string | null;
-  notes: string | null;
-}
-interface DiscRow {
+interface Row {
   discovered_id: number;
-  source_url: string | null;
+  source_url: string;
+  raw_name: string | null;
   promoted_variant_id: number | null;
 }
 
-interface SummaryRow {
-  variant_id: number;
-  resale_low: number | null;
-  resale_median: number | null;
-  resale_high: number | null;
-  last_sold_price: number | null;
-  sample_size: number | null;
-  currency: string | null;
-}
-interface VariantMeta {
-  variant_id: number;
-  size_label: string | null;
-  style: { name: string | null; brand: { name: string | null } | null } | null;
-}
+const PAGE = 1000;
 
-/** Page past the PostgREST 1000-row cap ([[postgrest_row_cap]]). */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase query builder is chained inside `apply`
-type QueryBuilder = any;
-async function pageAll<T>(table: string, cols: string, apply: (q: QueryBuilder) => QueryBuilder): Promise<T[]> {
-  const out: T[] = [];
-  for (let from = 0; ; from += 1000) {
-    const { data, error } = await apply(db.from(table).select(cols).range(from, from + 999));
-    if (error) throw new Error(`${table} read failed: ${error.message}`);
-    out.push(...((data ?? []) as T[]));
-    if (!data || data.length < 1000) break;
+/** Department token from a TRR product URL, for the dropped-by-category report. */
+function dept(url: string): string {
+  try {
+    const p = new URL(url).pathname.toLowerCase().split("/").filter(Boolean);
+    const i = p.indexOf("products");
+    if (i < 0) return "?";
+    // Jewelry is gender-less (/products/jewelry/…); everything else is /products/<gender>/<dept>/.
+    return ["women", "men", "kids"].includes(p[i + 1]) ? p[i + 2] ?? "?" : p[i + 1] ?? "?";
+  } catch {
+    return "?";
   }
-  return out;
-}
-
-/** Stable per-listing id when a price row carries no listing_ref: the TRR URL slug. */
-function refFromUrl(url: string | null): string | null {
-  if (!url) return null;
-  const seg = url.split("?")[0].replace(/\/+$/, "").split("/").pop();
-  return seg || null;
-}
-
-async function summaries(variantIds: number[]): Promise<Map<number, SummaryRow>> {
-  const map = new Map<number, SummaryRow>();
-  for (let i = 0; i < variantIds.length; i += 500) {
-    const { data } = await db
-      .from("variant_price_summary")
-      .select("variant_id, resale_low, resale_median, resale_high, last_sold_price, sample_size, currency")
-      .in("variant_id", variantIds.slice(i, i + 500));
-    for (const r of (data ?? []) as SummaryRow[]) map.set(r.variant_id, r);
-  }
-  return map;
 }
 
 async function main() {
-  console.log(`cleanup-trr-nonbag: ${WRITE ? "WRITE" : "DRY RUN"}\n`);
+  const write = process.argv.includes("--write");
 
-  // 1) price_history contamination — authoritative scan by URL department path.
-  const ph = await pageAll<PhRow>(
-    "price_history",
-    "price_id, variant_id, source_url, listing_ref, sale_price, currency, price_type, condition, colorway, material, hardware_color, production_year, season, observed_on, notes",
-    (q) => q.eq("platform", PLATFORM),
-  );
-  const phNonBag = ph.filter((r) => !isTrrHandbagListing(r.source_url));
-  const affectedVariants = [...new Set(phNonBag.map((r) => r.variant_id))].sort((a, b) => a - b);
+  const drop: Row[] = [];
+  let scanned = 0;
+  let promotedNonBag = 0;
+  const byDept: Record<string, number> = {};
 
-  // 2) promoted discovered_listing rows that are non-bags → to un-promote.
-  const promoted = await pageAll<DiscRow>(
-    "discovered_listing",
-    "discovered_id, source_url, promoted_variant_id",
-    (q) => q.eq("platform", PLATFORM).not("promoted_variant_id", "is", null),
-  );
-  const nonBagPromoted = promoted.filter((r) => !isTrrHandbagListing(r.source_url));
-
-  // Variant → style/brand names for the report.
-  const { data: vRows } = await db
-    .from("variant")
-    .select("variant_id, size_label, style:style_id(name, brand:brand_id(name))")
-    .in("variant_id", affectedVariants.length ? affectedVariants : [-1]);
-  const vName = new Map<number, string>();
-  for (const v of (vRows ?? []) as unknown as VariantMeta[]) {
-    vName.set(v.variant_id, `${v.style?.brand?.name ?? "?"} ${v.style?.name ?? "?"} [${v.size_label ?? "-"}]`);
+  // Keyset pagination on discovered_id (not offset): the table is written concurrently
+  // by other ingest sessions, and offset windows skip rows when the set shifts under you.
+  // A monotonic id cursor visits every existing row exactly once regardless of inserts.
+  for (let cursor = 0; ; ) {
+    const { data, error } = await supabaseAdmin
+      .from("discovered_listing")
+      .select("discovered_id, source_url, raw_name, promoted_variant_id")
+      .eq("platform", "The RealReal")
+      .gt("discovered_id", cursor)
+      .order("discovered_id", { ascending: true })
+      .limit(PAGE);
+    if (error) throw error;
+    const rows = (data ?? []) as Row[];
+    if (rows.length === 0) break;
+    cursor = rows[rows.length - 1].discovered_id;
+    scanned += rows.length;
+    for (const r of rows) {
+      if (isTrrHandbagListing(r.source_url, r.raw_name)) continue;
+      if (r.promoted_variant_id != null) {
+        // A non-bag row that somehow already promoted — leave it, just flag it.
+        promotedNonBag++;
+        continue;
+      }
+      drop.push(r);
+      const d = dept(r.source_url);
+      byDept[d] = (byDept[d] ?? 0) + 1;
+    }
+    if (rows.length < PAGE) break;
   }
 
-  // Which contaminated price rows have NO discovered_listing backup → must preserve before delete.
-  const allDiscUrls = new Set(
-    (await pageAll<{ source_url: string | null }>("discovered_listing", "source_url", (q) => q.eq("platform", PLATFORM)))
-      .map((r) => r.source_url),
-  );
-  const orphans = phNonBag.filter((r) => !allDiscUrls.has(r.source_url));
+  console.log(`Scanned ${scanned} TRR discovered_listing row(s).`);
+  console.log(`Non-handbag, unpromoted -> DROP: ${drop.length}`);
+  console.log(`  by department:`, Object.entries(byDept).sort((a, b) => b[1] - a[1]));
+  if (promotedNonBag) console.log(`  (${promotedNonBag} non-bag rows already promoted — left in place, review manually)`);
+  console.log(`  sample:`);
+  for (const r of drop.slice(0, 10)) console.log(`    ${r.raw_name ?? "(no name)"}  ::  ${r.source_url}`);
 
-  // --- REPORT ---
-  console.log(`price_history: ${ph.length} TRR rows; ${phNonBag.length} are NON-bag contamination across ${affectedVariants.length} variant(s).`);
-  const perVar = new Map<number, number>();
-  for (const r of phNonBag) perVar.set(r.variant_id, (perVar.get(r.variant_id) ?? 0) + 1);
-  for (const [v, n] of [...perVar.entries()].sort((a, b) => b[1] - a[1])) {
-    const total = ph.filter((r) => r.variant_id === v).length;
-    console.log(`   v${v}  ${vName.get(v) ?? "?"}  ${n}/${total} TRR rows are non-bag`);
+  if (!write) {
+    console.log(`\nDRY RUN — pass --write to delete the ${drop.length} row(s).`);
+    return;
   }
-  console.log(`\ndiscovered_listing: ${nonBagPromoted.length} non-bag rows already promoted onto a bag variant — ${WRITE ? "un-promoting" : "left in place"}.`);
-  console.log(`orphan price rows (no discovered_listing backup, will be preserved before delete): ${orphans.length}`);
-  if (orphans.length) for (const r of orphans) console.log(`   #${r.price_id} v${r.variant_id} ${r.source_url}`);
-
-  const before = await summaries(affectedVariants);
-
-  if (!WRITE) {
-    console.log(`\nDRY RUN — re-run with --write to delete ${phNonBag.length} price row(s), un-promote ${nonBagPromoted.length} discovered row(s), and refresh summaries.`);
+  if (drop.length === 0) {
+    console.log("Nothing to delete.");
     return;
   }
 
-  // --- WRITE ---
-  // (a) Preserve orphan price rows as raw evidence (un-promoted, non_bag) before deleting.
-  if (orphans.length) {
-    const seen = new Set<string>();
-    const preserve = orphans
-      .map((r) => ({
-        platform: PLATFORM,
-        listing_ref: r.listing_ref ?? refFromUrl(r.source_url) ?? `ph-${r.price_id}`,
-        source_url: r.source_url,
-        raw_name: r.notes,
-        price_type: r.price_type ?? "listed",
-        sale_price: r.sale_price,
-        currency: r.currency ?? "USD",
-        condition: r.condition,
-        colorway: r.colorway,
-        material: r.material,
-        hardware_color: r.hardware_color,
-        production_year: r.production_year,
-        season: r.season,
-        unresolved_reason: "non_bag",
-        observed_on: r.observed_on,
-      }))
-      .filter((d) => d.sale_price != null && d.observed_on)
-      .filter((d) => {
-        const k = `${d.listing_ref}|${d.observed_on}|${d.sale_price}`;
-        if (seen.has(k)) return false;
-        seen.add(k);
-        return true;
-      });
-    if (preserve.length) {
-      const { error } = await db.from("discovered_listing").upsert(preserve, {
-        onConflict: "platform,listing_ref,observed_on,sale_price",
-        ignoreDuplicates: true,
-      });
-      if (error) throw new Error(`preserve upsert failed: ${error.message}`);
-      console.log(`\npreserved ${preserve.length} orphan row(s) in discovered_listing (non_bag, un-promoted).`);
-    }
+  let deleted = 0;
+  const ids = drop.map((r) => r.discovered_id);
+  for (let i = 0; i < ids.length; i += PAGE) {
+    const chunk = ids.slice(i, i + PAGE);
+    const { error } = await supabaseAdmin.from("discovered_listing").delete().in("discovered_id", chunk);
+    if (error) throw error;
+    deleted += chunk.length;
+    console.log(`  deleted ${deleted}/${ids.length}`);
   }
-
-  // (b) Delete the contaminated price_history rows.
-  const ids = phNonBag.map((r) => r.price_id);
-  for (let i = 0; i < ids.length; i += 500) {
-    const { error } = await db.from("price_history").delete().in("price_id", ids.slice(i, i + 500));
-    if (error) throw new Error(`price_history delete failed: ${error.message}`);
-  }
-  console.log(`deleted ${ids.length} non-bag price_history row(s).`);
-
-  // (c) Un-promote the non-bag discovered rows so they can't re-seed comps.
-  const dids = nonBagPromoted.map((r) => r.discovered_id);
-  for (let i = 0; i < dids.length; i += 500) {
-    const { error } = await db
-      .from("discovered_listing")
-      .update({ promoted_variant_id: null, promoted_at: null, unresolved_reason: "non_bag" })
-      .in("discovered_id", dids.slice(i, i + 500));
-    if (error) throw new Error(`un-promote update failed: ${error.message}`);
-  }
-  console.log(`un-promoted ${dids.length} non-bag discovered_listing row(s).`);
-
-  // (d) Rebuild the summary MV and show the affected variants before/after.
-  const { error: rErr } = await db.rpc("refresh_variant_price_summary");
-  if (rErr) throw new Error(`refresh_variant_price_summary failed: ${rErr.message}`);
-  const after = await summaries(affectedVariants);
-  console.log("\nAffected variant price summaries (before → after):");
-  for (const v of affectedVariants) {
-    const b = before.get(v);
-    const a = after.get(v);
-    const fmt = (s: SummaryRow | undefined) =>
-      s ? `n=${s.sample_size} med=${s.resale_median ?? "-"} [${s.resale_low ?? "-"}–${s.resale_high ?? "-"}]` : "(no summary)";
-    console.log(`   v${v} ${vName.get(v) ?? "?"}\n       before: ${fmt(b)}\n       after:  ${fmt(a)}`);
-  }
-  console.log("\n✅ done.");
+  console.log(`Done. Deleted ${deleted} non-handbag TRR row(s) from discovered_listing.`);
 }
 
-main().then(() => process.exit(0)).catch((e) => {
-  console.error("cleanup-trr-nonbag failed:", e instanceof Error ? e.message : e);
+main().catch((e) => {
+  console.error(e);
   process.exit(1);
 });
