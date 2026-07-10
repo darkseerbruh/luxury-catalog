@@ -1,8 +1,10 @@
 /**
  * The LC Index — where a bag stands in the market.
  *
- * One blended score per style, built from four measured signals: price standing,
- * trade volume, scarcity, and house tier. See docs/ux/lc-index-spec.md.
+ * One blended score per style, built from three measured signals: price standing,
+ * trade volume, and scarcity. House tier is NOT an input (it is itself resale-
+ * derived, so it would double-count); the house's own standing is a separate index.
+ * See docs/ux/lc-index-spec.md.
  *
  * This file splits into a PURE core (computeLcIndex + helpers, fully unit-tested,
  * no I/O) and a thin DATA layer (loadStyleSignals + the cached getters) that reads
@@ -91,11 +93,16 @@ export function movementLabel(rank: number, previousRank: number | null | undefi
   return { dir: "flat", delta: 0, label: "Steady" };
 }
 
+// Three measured signals, no house-tier input. Tier (House Standing) is itself
+// resale-derived now (median + ceiling + volume), so feeding it back in would
+// double-count price/trade the index already holds. The LC Index ranks the BAG;
+// House Standing ranks the HOUSE; the two indices stay independent and are shown
+// side by side. Old weights (price .40 / trade .25 / scarcity .20 / tier .15) are
+// renormalised proportionally over the surviving three. See docs/ux/lc-index-spec.md.
 export const LC_INDEX_WEIGHTS = {
-  price: 0.4,
-  trade: 0.25,
-  scarcity: 0.2,
-  tier: 0.15,
+  price: 0.47,
+  trade: 0.29,
+  scarcity: 0.24,
 } as const;
 
 /**
@@ -119,20 +126,6 @@ export const LC_INDEX_MIN_N = 20;
  */
 export const LC_INDEX_MIN_SOURCES = 2;
 
-// Tier as a 0–100 standing signal, higher = stronger house. Handles both schemes:
-// legacy strings and the numbered tiers (Tier 1 highest → 100, Tier 5 → 0).
-const TIER_SCORE: Record<BrandTier, number> = {
-  thrift: 0,
-  mid: 33,
-  premium: 67,
-  "ultra-luxury": 100,
-  "5": 0,
-  "4": 25,
-  "3": 50,
-  "2": 75,
-  "1": 100,
-};
-
 /**
  * Percentile of `value` within `population` (both finite numbers): the share of
  * the population at or below `value`, as 0–100. The max of the set is 100; ties
@@ -142,11 +135,6 @@ export function percentileOf(value: number, population: number[]): number {
   if (population.length === 0) return 0;
   const atOrBelow = population.reduce((n, p) => (p <= value ? n + 1 : n), 0);
   return (atOrBelow / population.length) * 100;
-}
-
-function tierPercentile(tier: BrandTier | null): number {
-  if (!tier) return 0;
-  return TIER_SCORE[tier] ?? 0;
 }
 
 /**
@@ -238,7 +226,7 @@ export interface LcIndexData {
  * A style is ranked only if it has a resale median, at least LC_INDEX_MIN_N
  * recorded prices, AND at least LC_INDEX_MIN_SOURCES distinct platforms (so its
  * standing is not one merchant's asking price). Percentiles are computed WITHIN
- * the ranked set so the four signals share one 0–100 scale before the weighted blend.
+ * the ranked set so the three signals share one 0–100 scale before the weighted blend.
  */
 export function computeLcIndex(signals: StyleSignals[]): LcIndexData {
   const names: Record<number, { styleName: string; brandName: string }> = {};
@@ -258,15 +246,13 @@ export function computeLcIndex(signals: StyleSignals[]): LcIndexData {
     const tradePct = percentileOf(s.priceCount, trades);
     // Fewer live listings → scarcer → higher. Invert the live-count percentile.
     const scarcityPct = 100 - percentileOf(s.liveCount, lives);
-    const tierPct = tierPercentile(s.tier);
 
     const score =
       LC_INDEX_WEIGHTS.price * pricePct +
       LC_INDEX_WEIGHTS.trade * tradePct +
-      LC_INDEX_WEIGHTS.scarcity * scarcityPct +
-      LC_INDEX_WEIGHTS.tier * tierPct;
+      LC_INDEX_WEIGHTS.scarcity * scarcityPct;
 
-    // Lead = the bar with the biggest weighted contribution (tier is not a bar).
+    // Lead = the bar with the biggest weighted contribution.
     const contributions: Array<[Standing["lead"], number]> = [
       ["price", LC_INDEX_WEIGHTS.price * pricePct],
       ["trade", LC_INDEX_WEIGHTS.trade * tradePct],

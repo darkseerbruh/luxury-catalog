@@ -83,7 +83,7 @@ export default function StandingCard({ view }: { view: StandingView }) {
             </li>
             <li className="grid grid-cols-[18px_1fr] gap-2">
               <span className="text-center text-gold">⚖</span>
-              <span>Blended from price, trade volume, and scarcity, weighted by house tier.</span>
+              <span>Blended from price, trade volume, and scarcity.</span>
             </li>
             <li className="grid grid-cols-[18px_1fr] gap-2">
               <span className="text-center text-gold">◷</span>
