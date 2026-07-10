@@ -5,7 +5,7 @@
  * (+ a written grade explanation), Exterior Material, Hardware Color, Pattern, Style,
  * Features, plus measurements — see docs/data-collection-handoff §0e.
  *
- *   npx tsx supabase/ingest/sources/firecrawl-ebay.ts <targetKey> [--limit=N]
+ *   npx tsx supabase/ingest/sources/firecrawl-ebay.ts <targetKey> [--limit=N] [--sold]
  *   # then: npm run load:prices -- ebay --write && npm run summary:refresh
  *   # then (fills material/measurements/etc from the stored text): npm run enrich:descriptions -- --platform=ebay --write
  *
@@ -14,8 +14,14 @@
  * item-specifics text as a PII-scrubbed reference for the cheap Haiku pass to mine the
  * bleed-prone fields — far cheaper than Firecrawl's 5-credit json extract.
  *
- * LIVE only: eBay purges descriptions once a listing ends, so this captures price_type
- * 'listed'. Our existing 1,641 eBay rows are SOLD and can't be back-enriched.
+ * TWO MODES:
+ *  - default (live): eBay `_sop=12` live listings, price_type 'listed' (fresh asks + rich
+ *    item-specifics). eBay purges descriptions once a listing ends, so enrich while live.
+ *  - --sold: eBay `LH_Sold=1&LH_Complete=1` completed listings, price_type 'sold' (realized
+ *    comps for the weekly sold-sweep lane, see docs/priority-reseller-capture-runbook.md).
+ *    MASKED best-offer rows are dropped (accepted amount hidden; the exposed number is the
+ *    pre-offer ask, never the sale). observed_on falls back to the ingest date for now; the
+ *    sold-date parse is the refinement to land before trusting exact sold-date history.
  */
 import { scrape, sleep } from "../lib/firecrawl";
 import { writeObservations } from "../lib/landing";
@@ -119,9 +125,12 @@ function sizeOf(text: string, sizes: string[]): string | null {
   return null;
 }
 
-/** Capture one target's live listings into observations. Returns obs + credits spent. */
-async function captureTarget(target: EbayTarget, limit: number, today: string): Promise<{ obs: PriceObservation[]; credits: number; failed: number }> {
-  const searchUrl = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(target.query)}&_sop=12`;
+/** Capture one target's listings into observations. `sold` switches live asks -> sold comps. */
+async function captureTarget(target: EbayTarget, limit: number, today: string, sold: boolean): Promise<{ obs: PriceObservation[]; credits: number; failed: number }> {
+  // Live: newly-listed asks (_sop=12). Sold: completed+sold, most-recently-ended first (_sop=13).
+  const searchUrl = sold
+    ? `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(target.query)}&LH_Sold=1&LH_Complete=1&_sop=13`
+    : `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(target.query)}&_sop=12`;
   console.log(`  search: ${searchUrl}`);
   const search = await scrape(searchUrl, { formats: ["links"], waitFor: 4000 });
   let credits = search.creditsUsed;
@@ -147,6 +156,9 @@ async function captureTarget(target: EbayTarget, limit: number, today: string): 
       const page = await scrape(it.url, { formats: ["markdown"], onlyMainContent: true });
       credits += page.creditsUsed;
       const md = page.markdown ?? "";
+      // Masked best-offer (sold only): the accepted amount is hidden, so any number on the
+      // page is the pre-offer ask, not the sale. Never load it as a comp (eBay data policy).
+      if (sold && /best\s*offer\s*accepted/i.test(md)) continue;
       const price = parseEbayPrice(md, target.minPrice, target.maxPrice);
       if (!price) continue;
 
@@ -168,14 +180,14 @@ async function captureTarget(target: EbayTarget, limit: number, today: string): 
           listing_ref: it.id,
         },
         platform: "ebay",
-        price_type: "listed",
+        price_type: sold ? "sold" : "listed",
         sale_price: price,
         currency: "USD",
         condition: mapEbayCondition(grade),
         observed_on: today,
         source_url: it.url,
         confidence: "high",
-        notes: `Firecrawl eBay capture ${today}`,
+        notes: `Firecrawl eBay ${sold ? "sold-comp" : "live"} capture ${today}`,
         enrichment: {
           ...(sourceDescription ? { source_description: sourceDescription } : {}),
           ...(Object.values(descFacts).some((v) => v !== null && v !== false) ? { desc_facts: descFacts } : {}),
@@ -193,18 +205,20 @@ async function captureTarget(target: EbayTarget, limit: number, today: string): 
 async function main() {
   const key = process.argv[2];
   const limit = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("=")[1] ?? 25);
+  const sold = process.argv.includes("--sold");
   const keys = key === "all" ? Object.keys(TARGETS) : [key];
   if (!key || keys.some((k) => !TARGETS[k])) {
-    console.error(`usage: firecrawl-ebay.ts <targetKey|all> [--limit=N]. known: ${Object.keys(TARGETS).join(", ")}`);
+    console.error(`usage: firecrawl-ebay.ts <targetKey|all> [--limit=N] [--sold]. known: ${Object.keys(TARGETS).join(", ")}`);
     process.exit(1);
   }
 
   const today = new Date().toISOString().slice(0, 10);
+  console.log(`mode: ${sold ? "SOLD comps (LH_Sold+Complete, price_type=sold)" : "LIVE asks (price_type=listed)"}`);
   const all: PriceObservation[] = [];
   let credits = 0, failed = 0;
   for (const k of keys) {
     console.log(`target: ${k}`);
-    const r = await captureTarget(TARGETS[k], limit, today);
+    const r = await captureTarget(TARGETS[k], limit, today, sold);
     all.push(...r.obs);
     credits += r.credits;
     failed += r.failed;
