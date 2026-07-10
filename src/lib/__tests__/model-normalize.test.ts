@@ -66,7 +66,9 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Hermès", "toile gm & vache hunter herbag zip 31 w/ pouch")).toBe("Herbag");
     expect(canonicalModel("Hermès", "evercolor lindy 26 w twilly scarf")).toBe("Lindy");
     // ...and a model word after "w/" must not claim the row either.
-    expect(canonicalModel("Hermès", "silk scarf w/ kelly print")).toBeNull();
+    expect(canonicalModel("Hermès", "vanity case w/ kelly charm")).toBeNull();
+    // A bare " w " can also be slugged E/W (east/west) — that one is NOT an extra.
+    expect(canonicalModel("Saint Laurent", "leather e w shopping tote east west")).toBe("Shopping Tote");
   });
 
   it("resolves sub-brands / collabs / accents to one canonical brand", () => {

@@ -384,6 +384,15 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Bel Air", "bel air"], ["Everyday", "everyday"], ["Monaco", "monaco"], ["Crush", "crush bag"],
     // Residue-audit additions (2026-07-09)
     ["First", "first"], ["Town", "town"],
+    // TRR sweep addition (2026-07-10)
+    ["Velo", "velo"],
+  ],
+  // TRR sweep additions (2026-07-10): TRR titles name these verbatim ("leather le
+  // chiquito mini") but the brand had no dictionary block. Specific before general.
+  Jacquemus: [
+    ["Le Chiquito Noeud", "chiquito noeud"], ["Le Grand Chiquito", "grand chiquito"],
+    ["Le Chiquito", "chiquito"], ["Le Bambino", "bambino"], ["Le Bisou", "bisou"],
+    ["Le Petit Filet", "filet"],
   ],
   Valentino: [
     ["Rockstud", "rockstud"], ["Roman Stud", "roman stud", "roman studded"], ["VLogo", "vlogo"],
@@ -418,6 +427,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Saint Louis", "saint louis", "st louis", "st. louis"], ["Artois", "artois"], ["Anjou", "anjou"],
     ["Belvedère", "belvedere", "belvedère"], ["Bohème", "boheme", "bohème"], ["Saïgon", "saigon", "saïgon"],
     ["Sac Hardy", "hardy"], ["Rouette", "rouette"], ["Vendôme", "vendome", "vendôme"], ["Alpin", "alpin"],
+    ["Petit Flot", "petit flot"],
     ["Sénat", "senat", "sénat"], ["Bellechasse", "bellechasse"], ["Villette", "villette"],
     ["Grenelle", "grenelle"], ["Plumet", "plumet"], ["Cap-Vert", "cap-vert", "cap vert"],
   ],
@@ -479,10 +489,26 @@ const MODELS: Record<string, ModelDef[]> = {
   ],
   "The Row": [
     ["Margaux", "margaux"], ["Bindle", "bindle"], ["Half Moon", "half moon"], ["Park Tote", "park tote", "park"],
-    ["90s", "90s"], ["Banana", "banana"], ["Terrasse", "terrasse"], ["Ascot", "ascot"], ["Peggy", "peggy"],
+    ["90s", "90s", "90's", "90 s"], ["Banana", "banana"], ["Terrasse", "terrasse"], ["Ascot", "ascot"], ["Peggy", "peggy"],
     ["Sienna", "sienna"], ["Soft Margaux", "soft margaux"],
     // Residue-audit additions (2026-07-09)
     ["India", "india"],
+    // TRR sweep additions (2026-07-10)
+    ["Astra", "astra"], ["Marlo", "marlo"],
+  ],
+  // TRR sweep additions (2026-07-10): brands whose catalog styles carried verbatim
+  // TRR titles but had no dictionary block at all.
+  Mulberry: [
+    ["Alexa", "alexa"], ["Bayswater", "bayswater"],
+  ],
+  Telfar: [
+    ["Shopping Bag", "shopping bag", "shopping tote"],
+  ],
+  Longchamp: [
+    ["Le Pliage", "le pliage", "pliage"],
+  ],
+  "Alexander McQueen": [
+    ["Skull Box Clutch", "skull box"], ["Skull", "skull"],
   ],
 };
 
@@ -491,12 +517,17 @@ const MODELS: Record<string, ModelDef[]> = {
  * known model matches. `brand` may be a raw/sub-brand string — it's canonicalized here.
  */
 export function canonicalModel(brand: string, rawName: string | null | undefined): string | null {
-  // Everything after " w/ " / " with " is a bundled extra, not the item ("herbag zip
-  // 31 w/ pouch", "lindy 26 w/ twilly scarf") — it must neither trip the SLG gate nor
-  // donate a model word, so cut it before matching.
+  // A trailing " w/ <known extra>" is a bundled add-on, not the item ("herbag zip 31
+  // w/ pouch", "lindy 26 w/ twilly scarf") — it must neither trip the SLG gate nor
+  // donate a model word. Anchored to an extras vocabulary because a bare " w " is
+  // also the slug form of E/W ("e w shopping tote") where truncating would eat the
+  // model.
   const hay = fold((rawName ?? "").toLowerCase())
     .replace(/&amp;/g, "&")
-    .split(/\s(?:w\/?|with)\s/)[0];
+    .replace(
+      /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
+      "",
+    );
   if (!hay) return null;
   const isBagOverride = BAG_OVERRIDES.some((t) => hay.includes(t));
   if (!isBagOverride && SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;
