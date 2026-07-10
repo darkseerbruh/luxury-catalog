@@ -317,10 +317,14 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   applied migration 0038 via management API (region/condition_detail/enrichment now on
   discovered_listing — the CI push had a tracking mismatch; direct DDL fixed it). Result:
   styles 994, brands 49, price_history 95,447, ≥2-source styles 582 / ≥3 296.
-  ⚠ eBay deeper pull: the existing `ebay-sold-sweep.ts` is the canonical path (already ran
-  2026-07-09), but a FRESH run is BLOCKED this cycle — the Apify account hit its **monthly
-  usage hard limit** (TRR sweeps consumed it). Re-run `ebay-sold-sweep.ts` once the owner
-  raises the Apify usage limit / it resets. eBay stays MANUAL (no cron).
+- ✅ **eBay deeper pull — DONE 2026-07-10** (owner raised the Apify limit). Broad
+  auction-only sold sweep via `automation-lab/ebay-sold-scraper` (13 tier-1-3 brands,
+  minPrice=500) → **718 realized sold comps, 676 onto catalog pages** + 42 banked, dated by
+  actual sold date. Auction finals can't be best-offer masked = zero masked-row risk.
+  Restored `ebay-sold-apify.ts` as the BROAD catch-all adapter (routes every row via
+  load:prices), distinct from the SCOPED `ebay-sold-sweep.ts` (drops non-target rows — kept
+  only 9/718 here, wrong tool for breadth). ⬜ Optional: Firecrawl BIN-sold breadth on the
+  owner's allowance. eBay stays MANUAL (no cron).
 - ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
   `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
