@@ -77,6 +77,11 @@ the price floor "heavily worn" when condition was unknown. Tighter than plain "n
    proactively (n, date, source, what's inferred). The owner should never be the one to catch it.
 7. **When in doubt, omit or hedge.** A smaller true claim beats a bigger shaky one. Give the
    information its due weight; never round/stretch toward a better story.
+8. **Hard structured fields get a stricter bar than prose.** A value written to a typed field
+   (`year_introduced`, a price column) must be firmly sourced; a hedge in the surrounding prose does
+   NOT license a soft number in the field. Hold it null and hedge the era in text instead (e.g.
+   describe "around 2010" in the description but leave `year_introduced` null when the only source is
+   resale copy). A structured field reads as asserted fact; prose can carry the uncertainty.
 
 This complements `docs/voice-and-tone.md` §8 #4 (never-invent) and is the standing bar for the
 content strategy (`docs/content-strategy.md`), whose whole value rests on being citably true.
