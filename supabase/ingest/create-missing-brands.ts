@@ -12,7 +12,9 @@ import { tierForNewBrand } from "./promote-discovered";
 
 const WRITE = process.argv.includes("--write");
 
-const NEW_BRANDS = ["Bulgari", "MCM", "Khaite", "Salvatore Ferragamo", "Christian Louboutin", "Loro Piana"];
+const NEW_BRANDS = ["Bulgari", "MCM", "Khaite", "Salvatore Ferragamo", "Christian Louboutin", "Loro Piana",
+  // 2026-07-10 backlog demand (banked no_brand listings)
+  "Tumi", "Proenza Schouler", "Mansur Gavriel", "Furla"];
 
 async function main() {
   const { data: brands, error } = await db.from("brand").select("brand_id,name");
