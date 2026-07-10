@@ -322,3 +322,28 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   styles (Marlo, Slouchy Banana, etc.) kept untouched. Per-brand medians steady (The Row $1,895).
   GUARD added to `load-handbag-breadth.ts`: it now SKIPS any style that already exists, so it can
   only ADD new long-tail styles and can never clobber per-size data again.
+
+### ✅ DONE 2026-07-09/10 — collapsed type-1 verbose-junk style dupes (load-handbag-breadth residue)
+- **What:** the older `load-handbag-breadth` pass left ~90 full-sentence one-off `style` rows
+  (e.g. Hermès "Hermes Black Togo Leather Gold Hardware Birkin 35 Bag", LV "Louis Vuitton Monogram
+  Canvas Looping GM Bag") sitting alongside the clean canonical style. Folded them in.
+- **Script:** `supabase/ingest/merge-style-dupes.ts` (dry-run default, `--write`, idempotent).
+  Clusters `style` on `(brand_id, canonicalModel())` past the 1000-row cap; merges ONLY verbose
+  titles (≥4 words + a material/colour/year/brand/"Bag" token) into their SINGLE clean canonical
+  sibling; re-points variants + `price_history` (dedup on `platform|listing_ref|price_type|observed_on`),
+  find-or-creates the target size-variant, deletes the emptied junk style. Verified via
+  `supabase/ingest/verify-merge-snapshot.ts`.
+- **Result (--write):** 87 styles merged. style −87 · price_history −8 (only exact-key dups; **0
+  unique observations lost**) · style_index_signals −26. tsc+lint green. Committed `bb9097c`, landed on main.
+- **PROTECTED, never merged** (explicit denylist + short-name silhouette-qualifier guard — the
+  2026-06-30 collision must not repeat): Gucci Ophidia/Soho silhouettes, Celine Triomphe
+  Oval/Boston/Shoulder, Valentino Rockstud Spike/Tote, Coach Pillow Tabby, Chanel CC Filigree /
+  Top Handle Vanity Case, GG Marmont Chain/Bucket, etc.
+- **Ambiguous dup pairs resolved by OFFICIAL HOUSE NAME** (`supabase/ingest/merge-style-pairs.ts`,
+  `--write` 2026-07-10): Hermès "In The Loop" → **"In-The-Loop"** (hermes.com styling); Burberry
+  "Knight Bag" + "The Knight" → renamed **"The Knight Bag"** (Burberry FW23 launch PR). ph preserved.
+- ⬜ **HELD for a future reviewed pass (~130 rows):** the shorter material+size names are a MIX and
+  need the same style-name review as round 1 before any `--write` — (a) pure size/material rows that
+  are really just variants of the clean model (e.g. "Togo Birkin 35", "Monogram Speedy 30") SHOULD
+  fold in; (b) genuine sub-models MUST stay separate (Kelly Pochette, Speedy Soft, Musette Tango/Salsa,
+  Boîte Chapeau Souple, Félicie Pochette). Retire/park `load-handbag-breadth.ts` as the junk source.
