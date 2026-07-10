@@ -881,16 +881,31 @@ async function getAffiliateListingImages(
   const out = new Map<number, string>();
   if (variantIds.length === 0) return out;
   try {
-    // Live affiliate offers for these variants, newest first.
-    const { data: priceRows, error: pErr } = await sb
-      .from("price_history")
-      .select("variant_id, platform, listing_ref, listing_status, observed_on, source_url, sale_price")
-      .in("variant_id", variantIds)
-      .eq("price_type", "listed")
-      .not("listing_ref", "is", null)
-      .order("observed_on", { ascending: false })
-      .limit(5000);
-    if (pErr || !priceRows) return out;
+    // Live affiliate offers for these variants, newest first. PAGINATED: PostgREST
+    // caps every response at 1000 rows, so a multi-card page (brand catalog, grids)
+    // spanning variants with hundreds of observations each silently truncated the
+    // pool to the newest 1000 — the card could then resolve a DIFFERENT face than
+    // the bag page computed from its full single-variant pool (2026-07-09: the Boy
+    // card showed the zip case the bag hero had rejected).
+    const priceRows = await fetchAllRows<{
+      variant_id: number;
+      platform: string | null;
+      listing_ref: string | null;
+      listing_status: string | null;
+      source_url: string | null;
+      sale_price: number | null;
+    }>(
+      () =>
+        sb
+          .from("price_history")
+          .select("variant_id, platform, listing_ref, listing_status, observed_on, source_url, sale_price")
+          .in("variant_id", variantIds)
+          .eq("price_type", "listed")
+          .not("listing_ref", "is", null)
+          .order("observed_on", { ascending: false })
+          .order("price_id", { ascending: true }),
+      30000,
+    );
 
     // Ordered candidate (platform, listing_ref) keys per variant, newest first —
     // listing_image is keyed by BOTH, so match on the composite. Prices feed the
@@ -925,15 +940,22 @@ async function getAffiliateListingImages(
     }
     if (allRefs.size === 0) return out;
 
-    const { data: imgRows, error: iErr } = await sb
-      .from("listing_image")
-      .select("platform, listing_ref, image_url")
-      .in("listing_ref", [...allRefs]);
-    if (iErr || !imgRows) return out;
-
+    // Chunked: the ref set can exceed both the URL length limit and the 1000-row cap.
     const urlByKey = new Map<string, string>();
-    for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
-      if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
+    const refList = [...allRefs];
+    const CHUNK = 300;
+    const chunks: string[][] = [];
+    for (let i = 0; i < refList.length; i += CHUNK) chunks.push(refList.slice(i, i + CHUNK));
+    const imgResults = await Promise.all(
+      chunks.map((c) =>
+        sb.from("listing_image").select("platform, listing_ref, image_url").in("listing_ref", c),
+      ),
+    );
+    for (const { data: imgRows, error: iErr } of imgResults) {
+      if (iErr || !imgRows) continue;
+      for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
+        if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
+      }
     }
     // ONE face per bag, everywhere: same rule as getHeroListing (best spec score,
     // then cheapest, then stable ref) so the brand card, grids, and the bag-page
