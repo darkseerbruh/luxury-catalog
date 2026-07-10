@@ -398,8 +398,11 @@ const MODELS: Record<string, ModelDef[]> = {
   // chiquito mini") but the brand had no dictionary block. Specific before general.
   Jacquemus: [
     ["Le Chiquito Noeud", "chiquito noeud"], ["Le Grand Chiquito", "grand chiquito"],
-    ["Le Chiquito", "chiquito"], ["Le Bambino", "bambino"], ["Le Bisou", "bisou"],
-    ["Le Petit Filet", "filet"],
+    ["Le Chiquito", "chiquito"],
+    // Grand Bambino is a distinct, larger model (Grand Chiquito precedent) — veto keeps
+    // it out of the plain Bambino so the two don't cluster into one promoted style.
+    ["Le Grand Bambino", "grand bambino"], ["Le Bambino", "bambino", "!grand bambino"],
+    ["Le Bisou", "bisou"], ["Le Petit Filet", "filet"],
   ],
   Valentino: [
     ["Rockstud", "rockstud"], ["Roman Stud", "roman stud", "roman studded"], ["VLogo", "vlogo"],
