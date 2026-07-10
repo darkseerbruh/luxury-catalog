@@ -33,8 +33,9 @@ interface RawDumpEntry {
 
 // Couture USA's product_type is a clean category. Keep bag categories, drop footwear /
 // accessories so only handbags enter the pipeline.
-const BAG_TYPE = /\b(bag|tote|clutch|crossbody|shoulder|satchel|hobo|backpack|bucket|top handle|minaudiere|vanity|wristlet)\b/i;
-const NOT_BAG = /\b(sneaker|pump|heel|flat|sandal|wedge|boot|loafer|mule|espadrille|shoe|wallet|belt|scarf|sunglass|jewel|necklace|earring|bracelet|ring|watch|charm|hat|sole)\b/i;
+// Trailing `s?` matches plural product_types ("Handbags"): \bbag\b would miss the "s".
+const BAG_TYPE = /\b(bag|tote|clutch|crossbody|shoulder|satchel|hobo|backpack|bucket|top handle|minaudiere|vanity|wristlet)s?\b/i;
+const NOT_BAG = /\b(sneaker|pump|heel|flat|sandal|wedge|boot|loafer|mule|espadrille|shoe|wallet|belt|scarf|sunglass|jewel|necklace|earring|bracelet|ring|watch|charm|hat|sole)s?\b/i;
 
 function isBag(p: RawDumpEntry["product"]): boolean {
   const type = (p.product_type ?? "").toLowerCase();
