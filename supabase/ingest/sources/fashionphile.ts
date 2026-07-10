@@ -46,7 +46,7 @@ const RAW_DUMP = path.resolve(__dirname, "../../../data/ingest/_raw/fashionphile
 // Each target maps incoming Shopify product records to a known brand/style/size.
 // ---------------------------------------------------------------------------
 
-interface FashionphileTarget {
+export interface FashionphileTarget {
   brand: string;
   style: string;
   size_label: string;
@@ -65,7 +65,7 @@ interface FashionphileTarget {
   searchUrl: string;
 }
 
-const TARGETS: FashionphileTarget[] = [
+export const TARGETS: FashionphileTarget[] = [
   {
     brand: "Chanel",
     style: "Classic Flap",
@@ -2083,6 +2083,43 @@ function fpAttrsAndEnrichment(spec: ReturnType<typeof parseFashionphileProduct>)
 }
 
 /**
+ * Pick the best curated target for a product handle/title.
+ *
+ * A product can satisfy MORE THAN ONE target — a size-less generic (require
+ * `["wander"]`) and a size-anchored sibling (require `["miu-miu", "small-wander"]`)
+ * both match a "small-wander" handle. `Array.find` would return whichever appears
+ * first in TARGETS, and since the sweep-target files are appended AFTER the inline
+ * icon targets, the size-less generic won and every size collapsed onto one bucket
+ * ("Standard") — the sized variants never got priced.
+ *
+ * So instead of first-match, pick the MOST SPECIFIC match: the target whose required
+ * tokens are the most constraining (total required-token length). "small-wander"
+ * (a 12-char anchor) beats the 6-char "wander", so the row keeps its own size_label.
+ * Ties keep array order (the earlier target wins), preserving prior behaviour for
+ * equally-specific matches. Brand-scoped so a loose token can't cross brands
+ * (accent-/punctuation-insensitive: "Chloé"==="Chloe", "Hermès"==="hermes").
+ */
+export function selectTarget(
+  handle: string,
+  title: string,
+  targets: FashionphileTarget[] = TARGETS
+): FashionphileTarget | null {
+  const h = handle.toLowerCase();
+  const t2 = title.toLowerCase();
+  const productBrand = asciiBrandKey(guessBrandFromHandle(h));
+  let best: FashionphileTarget | null = null;
+  let bestScore = -1;
+  for (const t of targets) {
+    if (asciiBrandKey(t.brand) !== productBrand) continue;
+    if (!t.requireTokens.every((tok) => h.includes(tok) || t2.includes(tok))) continue;
+    if ((t.excludeTokens ?? []).some((tok) => h.includes(tok) || t2.includes(tok))) continue;
+    const score = t.requireTokens.reduce((n, tok) => n + tok.length, 0);
+    if (score > bestScore) { best = t; bestScore = score; }
+  }
+  return best;
+}
+
+/**
  * Map a raw Shopify product JSON record to a PriceObservation.
  * Returns null if the record can't be matched to a target or price is absent.
  */
@@ -2096,18 +2133,7 @@ function mapRawRecord(entry: RawDumpEntry, today: string): PriceObservation | nu
   const handle = (product.handle ?? "").toLowerCase();
   const title = (product.title ?? "").toLowerCase();
 
-  // BRAND GUARD: only match a target whose brand equals the product's own brand
-  // (derived from the handle slug). Without this, a brand's dump can match another
-  // brand's target when a loose requireToken appears as a substring — e.g. a
-  // Valentino "rockstud-spike-shoulder-bag" was matching a Celine target. Compare
-  // accent-/punctuation-insensitively so "Chloé"==="Chloe", "Hermès"==="hermes".
-  const productBrand = asciiBrandKey(guessBrandFromHandle(handle));
-  const target = TARGETS.find(
-    (t) =>
-      asciiBrandKey(t.brand) === productBrand &&
-      t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
-      !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
-  );
+  const target = selectTarget(handle, title);
   if (!target) {
     console.warn(`fashionphile: no target matched for handle "${product.handle}" — skipping`);
     return null;
@@ -2254,12 +2280,10 @@ function ingestCatchAllRemainder(): void {
   for (const e of raw) {
     const handle = (e.product.handle ?? "").toLowerCase();
     const title = (e.product.title ?? "").toLowerCase();
-    const hasTarget = TARGETS.some(
-      (t) =>
-        t.requireTokens.every((tok) => handle.includes(tok) || title.includes(tok)) &&
-        !(t.excludeTokens ?? []).some((tok) => handle.includes(tok) || title.includes(tok))
-    );
-    if (hasTarget) { curatedSkipped++; continue; } // curated rows come from --raw
+    // Use the SAME selector as --raw so the two paths stay in lockstep: a record
+    // curated by --raw must be skipped here (else it double-counts), and a record
+    // --raw drops (no brand-scoped target) must fall through to discovered.
+    if (selectTarget(handle, title)) { curatedSkipped++; continue; } // curated rows come from --raw
     const o = mapRawRecordCatchAll(e, today);
     if (o) obs.push(o); else dropped++;
   }
@@ -2338,7 +2362,11 @@ async function main() {
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// Only run as a script (not when imported by a test, which asserts against the
+// exported TARGETS + selectTarget).
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

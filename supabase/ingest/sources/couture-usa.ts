@@ -68,39 +68,47 @@ function colourFromTags(tags: string[] | undefined): string | null {
   return cols.length ? [...new Set(cols)].join("/") : null;
 }
 
-function toObservation(entry: RawDumpEntry, today: string): PriceObservation | null {
+/** The live-for-sale core of a bag listing, or null if it isn't a capturable live bag. */
+function liveBag(entry: RawDumpEntry): { p: RawDumpEntry["product"]; brand: string; price: number; listingRef: string | null } | null {
   const p = entry.product;
   if (!p.title || !entry.url || !isBag(p)) return null;
-
   const v = (p.variants ?? [])[0] ?? {};
   if (v.available !== true) return null;
   const price = Number.parseFloat(v.price ?? "");
   if (!Number.isFinite(price) || price <= 0) return null;
-
   const brand = canonicalBrand(p.vendor ?? "");
   if (!brand) return null;
-  const style = canonicalModel(brand, p.title);
-  if (!style) return null;
+  return { p, brand, price, listingRef: (v.sku ?? "").trim() || p.handle || null };
+}
 
-  return {
-    brand,
-    style,
+/**
+ * One live bag → a NAMED observation (canonicalModel resolved) OR a DISCOVERED one
+ * (unnamable: style = the raw title as evidence, loaded with --discovered-only so it's never
+ * loose-matched onto a curated variant). Nothing is thrown away.
+ */
+function buildRows(entry: RawDumpEntry, today: string): { named?: PriceObservation; discovered?: PriceObservation } {
+  const lb = liveBag(entry);
+  if (!lb) return {};
+  const base = {
+    brand: lb.brand,
     attrs: {
-      size_label: detectSizeLabel(p.title),
-      exterior_colorway: colourFromTags(p.tags),
+      size_label: detectSizeLabel(lb.p.title!),
+      exterior_colorway: colourFromTags(lb.p.tags),
       region: "US",
-      listing_ref: (v.sku ?? "").trim() || p.handle || null,
+      listing_ref: lb.listingRef,
     },
     platform: PLATFORM,
-    price_type: "listed",
-    sale_price: price,
+    price_type: "listed" as const,
+    sale_price: lb.price,
     currency: "USD",
-    condition: conditionFromTags(p.tags),
+    condition: conditionFromTags(lb.p.tags),
     observed_on: today,
-    source_url: entry.url,
-    confidence: "high",
-    notes: `Couture USA crawl ${today}`,
+    source_url: entry.url!,
+    confidence: "high" as const,
   };
+  const style = canonicalModel(lb.brand, lb.p.title);
+  if (style) return { named: { ...base, style, notes: `Couture USA crawl ${today}` } };
+  return { discovered: { ...base, style: lb.p.title!, notes: `Couture USA discovered ${today}` } };
 }
 
 function main() {
@@ -115,18 +123,19 @@ function main() {
   const dump: RawDumpEntry[] = JSON.parse(fs.readFileSync(RAW_DUMP, "utf8"));
   const today = new Date().toISOString().slice(0, 10);
 
-  let bags = 0, unnamed = 0;
-  const obs: PriceObservation[] = [];
+  const named: PriceObservation[] = [];
+  const discovered: PriceObservation[] = [];
   for (const entry of dump) {
-    if (entry.product?.title && isBag(entry.product)) bags++;
-    const o = toObservation(entry, today);
-    if (o) obs.push(o);
-    else if (entry.product && isBag(entry.product)) unnamed++;
+    const { named: n, discovered: d } = buildRows(entry, today);
+    if (n) named.push(n);
+    if (d) discovered.push(d);
   }
 
-  const res = writeObservations(SOURCE, obs);
-  console.log(`Couture USA: ${dump.length} listings, ${bags} bags, ${obs.length} named+available, ${unnamed} unnamed/unavailable`);
-  console.log(`landing: kept ${res.kept}, dropped ${res.dropped} -> ${res.file}`);
+  const res = writeObservations(SOURCE, named);
+  const disc = writeObservations(`${SOURCE}-discovered`, discovered);
+  console.log(`Couture USA: ${dump.length} listings -> ${named.length} named, ${discovered.length} discovered (unnamed live bags)`);
+  console.log(`  named landing: kept ${res.kept}, dropped ${res.dropped} -> ${res.file}`);
+  console.log(`  discovered landing: kept ${disc.kept}, dropped ${disc.dropped} -> ${disc.file}`);
 }
 
 main();

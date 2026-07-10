@@ -48,26 +48,28 @@ npm run summary:refresh
 npx tsx supabase/ingest/sources/redeluxe-crawl.ts
 npx tsx supabase/ingest/sources/redeluxe.ts --raw
 npm run load:prices -- redeluxe --write
+npm run load:prices -- redeluxe-discovered --discovered-only --write
 npm run reconcile:sold -- --platform=Redeluxe --snapshot=data/ingest/_raw/redeluxe-live.json --write
 npm run summary:refresh
 ```
-Keeps only bags it can name via `canonicalModel` (brand from `vendor`, condition from tags,
-size from the title). Unnamable bags are the **discovered-listing follow-up** (not yet wired),
-never a guessed name. Verified 2026-07-10: a 2-page sample gave 175 clean named rows (Hermès /
-Chanel / Dior / LV) with sane prices, 0 invalid.
+Named bags resolve via `canonicalModel` (brand from `vendor`, condition from tags, size from
+title). **Unnamable live bags are banked to `discovered_listing`** (style_guess = the raw title
+as evidence, `--discovered-only` so they never loose-match a curated variant), never a guessed
+name. Verified 2026-07-10: a 2-page sample gave 175 named + 45 discovered rows, 0 invalid.
 
 ### Couture USA (free Shopify feed, automated via `couture-usa-refresh.yml`)
 ```
 npx tsx supabase/ingest/sources/couture-usa-crawl.ts
 npx tsx supabase/ingest/sources/couture-usa.ts --raw
 npm run load:prices -- couture-usa --write
+npm run load:prices -- couture-usa-discovered --discovered-only --write
 npm run reconcile:sold -- --platform="Couture USA" --snapshot=data/ingest/_raw/couture-usa-live.json --write
 npm run summary:refresh
 ```
 Sells footwear too, so it gates on bag `product_type`s. Brand from `vendor`, condition from the
-grade tags (Like New / Excellent / Great / Very Good), colour from the `Color_*` tags. Verified
-2026-07-10: a 2-page sample gave 202 clean named rows across 10 houses (LV / Chanel / Gucci /
-YSL…), colour on 199/202, sane prices, 0 invalid.
+grade tags (Like New / Excellent / Great / Very Good), colour from the `Color_*` tags; unnamable
+live bags bank to `discovered_listing` like Redeluxe. Verified 2026-07-10: a 2-page sample gave
+202 named (across 10 houses, colour on 199/202) + 95 discovered rows, 0 invalid.
 
 ### TheRealReal (Apify, automated via `trr-refresh.yml`)
 Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:

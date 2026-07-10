@@ -55,5 +55,6 @@ jobs:
         if: env.WRITE == 'true'
         run: |
           npm run load:prices -- couture-usa --write
+          npm run load:prices -- couture-usa-discovered --discovered-only --write
           npm run reconcile:sold -- --platform="Couture USA" --snapshot=data/ingest/_raw/couture-usa-live.json --write
           npm run summary:refresh

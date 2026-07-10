@@ -183,18 +183,17 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 > credit budget (owner greenlight per §0c), eBay sold needs the browser session. Next free lever =
 > a Redeluxe/Couture USA open-Shopify-feed adapter (registry §0b) for a second free asking surface.
 
-**⬜ NEXT FREE UNIT — Redeluxe + Couture USA Shopify adapter (verified fetchable 2026-06-30):**
-- Feeds (200, no key, no Firecrawl): `https://redeluxe.com/products.json?limit=250&page=N` and
-  `https://www.coutureusa.com/products.json?limit=250&page=N`. Paginate like fashionphile-collection.ts.
-- Shape: Redeluxe `vendor`=brand ("Hermes"/"Dior"/"CHANEL"), `product_type`="Handbag", `tags` carry
-  condition ("excellent"), `title`=full descriptive name. Couture USA `vendor`=brand, structured tags
-  (`CH-brand-<X>`, `Color_<X>`, `Condition <X>`, material words like "Damier Ebene").
-- **SAFETY (do this, don't skip):** `load-prices` resolves brand→style with a FUZZY token-overlap
-  `scoreStyleMatch` (accepts any score>0). A catalog-ABSENT style (e.g. LV "Beaubourg") can mis-land on
-  a curated hero variant via a shared token (e.g. "Neverfull MM" via "mm"), corrupting a public median.
-  So the adapter must either (a) map title→style with a curated per-brand allow-list (like the FP
-  TARGETS), or (b) add a min-score threshold so weak matches route to `discovered_listing` not curated.
-  Do NOT do a raw vendor-feed → curated load without one of those guards.
+**✅ DONE 2026-07-10 — Redeluxe + Couture USA Shopify feed adapters (both wired daily):**
+- `redeluxe-crawl.ts`/`redeluxe.ts` + `redeluxe-refresh.yml` (daily); `couture-usa-crawl.ts`/
+  `couture-usa.ts` + `couture-usa-refresh.yml` (daily). Free, no key beyond the Supabase service role.
+- **SAFETY satisfied via guard (b):** only `canonicalModel` dictionary-hits go to the curated load
+  (same resolver TLC ships to prod); every unnamable live bag routes to `--discovered-only`, which
+  never loose-matches a curated variant. So the fuzzy `scoreStyleMatch` only ever runs on
+  dictionary-backed model names, not raw titles. Nothing thrown away (unnamable → discovered evidence).
+- Verified (2-page samples, 0 invalid): Redeluxe 175 named + 45 discovered; Couture USA 202 named
+  (10 houses, colour on 199/202) + 95 discovered.
+- ⬜ Follow-up: a few discovered rows carry the store name as brand ("REDELUXE") — harmless noise in
+  the evidence layer; a vendor-is-a-house guard could drop them. Rebag stays gated on its CJ approval.
 - Emit `platform:"Redeluxe"`/`"Couture USA"`, `price_type:"listed"`, `source_url` per listing, condition
   from tags. Then `load:prices <source> --write` → `summary:refresh` → run `clean-fp-contamination`-style
   brand check before trusting it.
@@ -307,16 +306,17 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     (padlock totes + chain crossbodies + belt bags) that belong on #668 Padlock / #665 Skull Chain /
     their own styles — split it in a later pass. #598 "The Jewelled Satchel" is a real model with 0
     data (leave).
-  - ⚠️ **Miu Miu 17 — blocked by an FP-adapter size bug** (root-caused 2026-07-10). Already has Beau,
-    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3 unpriced variants
-    (Wander [Small] v1400, Aventure [Regular] v1402, Aventure [Medium] v1403) DO have in-band FP
-    listings, but `sources/fashionphile.ts --raw` lands those rows with **`size_label: undefined`**
-    (style resolves to "Wander"/"Aventure" but the size is dropped), so load collapses every size onto
-    one variant (Mini/priced) and the others never price. Real fix = make the FP adapter carry the
-    matched target's `size_label` (or detect size from the handle) for these multi-size Miu Miu
-    targets; it's a small adapter change + test, NOT a data pass. Same latent bug likely mis-sizes
-    other multi-size FP targets — worth a general fix. Do it in a code lane, not concurrent with the
-    ingest session already editing `model-normalize.ts`.
+  - ✅ **Miu Miu → 20 (DONE 2026-07-10, FP-adapter size bug FIXED)**. Root cause: `sources/fashionphile.ts`
+    matched targets with `Array.find` (FIRST match). The inline size-less generics (`Wander` require
+    `["wander"]`, `Aventure` require `["aventure"]`, no size-excludes) sit BEFORE the appended
+    sweep-targets, so every sized handle (`small-wander`, `regular-aventure`, `medium-aventure`)
+    collapsed onto the generic "Standard" bucket and the sized variants never priced. Fix = new
+    exported `selectTarget()` picks the MOST SPECIFIC match (total require-token length) instead of the
+    first, so `small-wander` (12-char anchor) beats `wander` (6). General across all brands; regression
+    test `src/lib/__tests__/fashionphile-select-target.test.ts` (Miu Miu buckets + Hermès Birkin/Kelly,
+    LV Neverfull/Montsouris spot-checks). Recaptured → mapped → loaded: Wander [Small] v1400 (n3),
+    Aventure [Regular] v1402 (n3), Aventure [Medium] v1403 (n1) now priced. `audit-coverage` confirms
+    Miu Miu **priced_variants=20**. Full suite green (753 tests).
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
