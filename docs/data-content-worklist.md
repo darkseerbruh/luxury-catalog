@@ -345,10 +345,19 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
       **Matelassé** STYLE. ✅ **(a) DONE 2026-07-10**: tightened the Matelassé target excludes
       (added coffer/bucket/softy/beau/ivy/sandal/pouch) + regression tests — matelassé Coffer/Bucket/
       sandals/pouches now fall through instead of polluting; genuine matelassé bags (10) unchanged.
-      This stops FUTURE contamination only. ⬜ **(b) STILL OPEN (data lane):** the existing DB rows
-      already mislabeled onto Matelassé v1050 (+ the stranded Wander/Aventure/Arcadie Standard rows +
-      the ∅/Standard/size duplicate variants) need a SAME-STYLE-ONLY re-point/dedup with review — never
-      an auto-sweep. Thin non-representative brand, low urgency.
+      This stops FUTURE contamination only. ✅ **(b) DONE 2026-07-10** (`cleanup-miu-miu-fp-variants.ts`,
+      dry-run-first, reviewed, idempotent — mirrors merge-style-pairs re-point+dedup on
+      platform|listing_ref|price_type|observed_on). SAME-STYLE re-points: Wander Std v1047 → 15 Mini v1399
+      / 9 Small v1400 (Micro/plain stay); Aventure Std v1049 → 14 Regular v1402 / 5 Medium v1403
+      (mini/small/large stay); Arcadie folded to the single curated Large v1404 (Std v1048 + Small dup
+      v2295). Duplicate variants folded + deleted: Aventure Mini v2296→Std, Ivy ∅ v1117→Std v1401,
+      Beau ∅ v1118→Large v1406, Coffer ∅ v1119→Std v1850 (**6 dup variants removed**). Matelassé v1050
+      reviewed by explicit token: 7 coffer→Coffer v1850, 3 bucket→Bucket v1120, 2 sandals DELETED
+      (footwear, never valid comps), 7 pouches→discovered_listing (no Pouch style), 1 eBay "Arcadie
+      Matelassé" sold→Arcadie v1404; 50 genuine matelassé bags untouched. Totals: **111 rows re-pointed,
+      15 dup-drops, 2 deleted, 7 banked, 6 variants deleted**. `audit-coverage`: Miu Miu now
+      **priced_variants=12** (was an inflated 20 with twins), variant list clean — no ∅/Standard/size
+      twins. Thin non-representative brand: integrity, not coverage.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
