@@ -27,7 +27,7 @@
 import fs from "fs";
 import path from "path";
 import { writeObservations } from "../lib/landing";
-import { parseTrrDescription } from "../../../src/lib/ingest/trr";
+import { parseTrrDescription, isTrrHandbagListing } from "../../../src/lib/ingest/trr";
 import { mapTrrItemCondition } from "../../../src/lib/ingest/condition";
 import type { PriceObservation } from "../../../src/lib/ingest/types";
 
@@ -1263,6 +1263,9 @@ export function recordToCatchAllObservation(
   observedOn: string
 ): PriceObservation | null {
   if (typeof rec.price !== "number" || !Number.isFinite(rec.price) || rec.price <= 0) return null;
+  // Drop non-handbag categories (apparel/shoes/jewelry/watches/accessories) — a broad
+  // brand search returns them but they can never promote to a bag style.
+  if (!isTrrHandbagListing(rec.url, rec.name)) return null;
 
   const spec = parseTrrDescription(normalizeDesc(rec.desc ?? ""));
   return {
@@ -1310,6 +1313,9 @@ export function recordToObservation(
 ): PriceObservation | null {
   if (typeof rec.name !== "string" || !target.namePredicate(rec.name)) return null;
   if (typeof rec.price !== "number" || rec.price < target.minPrice || rec.price > target.maxPrice) return null;
+  // Defense-in-depth: a curated model token can still match a non-bag (a "GG Marmont
+  // Belt" under /accessories/belts) — the URL category is the ground truth.
+  if (!isTrrHandbagListing(rec.url, rec.name)) return null;
 
   const spec = parseTrrDescription(normalizeDesc(rec.desc ?? ""));
   return {

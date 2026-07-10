@@ -10,6 +10,7 @@
  * listing rather than blending. Pure + unit-tested; the fetch happens in the
  * browser (Claude-in-Chrome, same-origin) since TRR is bot-blocked to plain fetch.
  */
+import { titleHasBagOverride } from "./model-normalize";
 
 // Ordered MOST-SPECIFIC-FIRST: the parser returns the first entry that matches a
 // segment, so multi-word leathers must precede the generic "Leather"/"Canvas".
@@ -46,6 +47,69 @@ const COLORS = [
 ];
 
 const HARDWARE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)(?:[- ](?:Tone|Plated))?\s+Hardware/i;
+
+/**
+ * TRR files every product under a department in its URL path:
+ *   /products/women/handbags/shoulder-bags/<slug>   ← a bag  (KEEP)
+ *   /products/men/bags/messenger-bags/<slug>         ← a bag  (KEEP)
+ *   /products/women/clothing/tops/<slug>             ← apparel (DROP)
+ *   /products/women/shoes/sneakers/<slug>            ← shoes   (DROP)
+ *   /products/jewelry/bracelets/<slug>               ← jewelry, gender-less (DROP)
+ *   /products/women/accessories/belts/<slug>         ← belt/scarf/sunglasses (DROP)
+ *
+ * A broad brand keyword search (the Apify + JSON-LD catch-all adapters) returns that
+ * house's apparel / shoes / jewelry / watches / accessories alongside its bags. Those
+ * non-bag rows can never resolve to a bag style — canonicalModel's SLG/apparel gate
+ * (correctly) refuses them a model — so they sit unpromotable in discovered_listing
+ * forever and only bloat the promotion scan. We drop them at ingest by reading the
+ * category out of the URL path. Segments are exact path tokens (not substrings), so a
+ * product slug like "...-belt-bag-vel0m" never trips the "belts" token.
+ */
+const TRR_BAG_SEGMENTS = new Set(["handbags", "bags"]);
+const TRR_NON_BAG_SEGMENTS = new Set([
+  // apparel & footwear
+  "clothing", "shoes", "suiting-accessories", "sports",
+  // jewelry — TRR files it gender-less (/products/jewelry/rings/…), so match the
+  // department AND the type tokens in case the parent segment is absent.
+  "jewelry", "fine-jewelry", "body-jewelry",
+  "bracelet", "bracelets", "necklace", "necklaces", "earring", "earrings",
+  "ring", "rings", "brooch", "brooches", "pin", "pins", "cufflinks", "pendant", "pendants",
+  // watches
+  "watches",
+  // accessories (belts / scarves / sunglasses / straps / tech live here)
+  "accessories", "strap", "straps", "sunglasses", "scarf", "scarves",
+  "belts", "hats", "gloves", "technology", "tech",
+  // home & kids
+  "home", "decor-and-accessories", "pillows-and-throws", "bedding-and-bath",
+  "decor", "furniture", "art", "fine-art",
+  "kids", "girls", "boys", "baby",
+]);
+
+/** Lowercased path segments of a TRR product URL (empty on a bad/relative URL). */
+function trrPathSegments(url: string | null | undefined): string[] {
+  if (!url) return [];
+  try {
+    return new URL(url).pathname.toLowerCase().split("/").filter(Boolean);
+  } catch {
+    // Not absolute — best-effort split of whatever path-like string arrived.
+    return url.toLowerCase().split(/[?#]/)[0].split("/").filter(Boolean);
+  }
+}
+
+/**
+ * True when a TRR listing should be banked as a handbag. Conservative by design:
+ *   1. any handbag department segment ("handbags"/"bags") → KEEP,
+ *   2. else a clear non-bag department segment → DROP, UNLESS the title is a carried
+ *      pouch the catalog ranks (WOC / vanity / belt bag per BAG_OVERRIDES),
+ *   3. else (no department signal at all) → KEEP and let the downstream SLG/model gate
+ *      decide, so a malformed or category-less URL never silently drops a real bag.
+ */
+export function isTrrHandbagListing(url: string | null | undefined, title?: string | null): boolean {
+  const segs = trrPathSegments(url);
+  if (segs.some((s) => TRR_BAG_SEGMENTS.has(s))) return true;
+  if (segs.some((s) => TRR_NON_BAG_SEGMENTS.has(s))) return titleHasBagOverride(title);
+  return true;
+}
 
 export interface TrrSpec {
   color: string | null;

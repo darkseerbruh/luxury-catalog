@@ -79,6 +79,17 @@ function has(hay: string, token: string): boolean {
   return tokenRegex(token, false).test(hay);
 }
 
+/**
+ * True when a raw listing title names a carried pouch the catalog RANKS despite an
+ * SLG-ish token — WOC / chain wallet / vanity / belt bag / bum bag, per BAG_OVERRIDES.
+ * Used by the ingest category filters as the "keep" escape: a listing TRR files under a
+ * non-handbag department (e.g. accessories/wallets) is still banked when its title is
+ * one of these. Accent-blind, same fold as canonicalModel. */
+export function titleHasBagOverride(title: string | null | undefined): boolean {
+  const hay = fold((title ?? "").toLowerCase()).replace(/&amp;/g, "&");
+  return BAG_OVERRIDES.some((t) => hay.includes(t));
+}
+
 /** SLG match, plural-tolerant (so "loafers"/"mules"/"sneakers" are caught, not just singular). */
 function hasSlg(hay: string, token: string): boolean {
   return tokenRegex(token, true).test(hay);
