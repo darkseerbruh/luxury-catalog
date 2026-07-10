@@ -1,0 +1,99 @@
+{
+  "_comment": "COME-THRIFT-WITH-ME / 'class is in session' reel #2 (haul IMG_7921-7937). VO-over-b-roll. Run: node scripts/build-thrift-bed.mjs examples/thrift-class-2.json (builds input/thrift-class-2.mp4 + sidecars), then npm run make thrift-class-2.mp4 (NOTE the .mp4). Bed is TIMED to Arielle's actual 152s VO so each bag is on screen when she names it (Guess 14.5s, Steve Madden 21.2, Vera Bradley 28.4, BCBG 37.8, canvas/$4.99 59.7, Chanel dupe 72.4, china tag 97.8, mustard 105.6, landfill 123.7). Whisper mishears fixed via input/thrift-class-2.corrections.json. VO script + bag IDs + comps: examples/thrift-class-2.vo-script.md and examples/thrift-class-2.bags.md.",
+  "name": "thrift-class-2",
+  "vo": "input/thrift-class-2-vo.m4a",
+  "clipsDir": "input/clips",
+  "zoom": 0.03,
+  "bed": [
+    { "img": "IMG_7921", "start": 0.2, "duration": 3.5, "note": "INTRO 0-14.5: rack pan, hunting" },
+    { "img": "IMG_7936", "start": 0.3, "duration": 3.5, "note": "INTRO: good-bag preview (BCBG)" },
+    { "img": "IMG_7928", "start": 0.4, "duration": 3.5, "note": "INTRO: good-bag preview (Vera)" },
+    { "img": "IMG_7926", "start": 0.8, "duration": 4.0, "note": "INTRO: good-bag preview (Steve Madden)" },
+
+    { "img": "IMG_7921", "start": 2.5, "duration": 2.1, "note": "GUESS 14.5-21.2: Guess tote (triangle zip pull) [card: Resale ~$15-35]" },
+    { "img": "IMG_7921", "start": 0.2, "duration": 2.3, "note": "GUESS: rack + tote" },
+    { "img": "IMG_7921", "start": 2.6, "duration": 2.0, "note": "GUESS: tote" },
+
+    { "img": "IMG_7926", "start": 0.8, "duration": 3.5, "note": "STEVE MADDEN 21.2-28.4: floral exterior [card: Resale ~$10-22]" },
+    { "img": "IMG_7926", "start": 14.5, "duration": 3.5, "note": "STEVE MADDEN: name printed in the lining" },
+
+    { "img": "IMG_7928", "start": 0.4, "duration": 3.2, "note": "VERA BRADLEY 28.4-37.8: navy floral quilted [card: Resale ~$18-35]" },
+    { "img": "IMG_7928", "start": 4.0, "duration": 3.2, "note": "VERA BRADLEY: signature script in the print" },
+    { "img": "IMG_7928", "start": 7.0, "duration": 2.4, "note": "VERA BRADLEY: matching crossbody" },
+
+    { "img": "IMG_7936", "start": 0.3, "duration": 3.5, "note": "BCBG 37.8-59.7: camel dome, gold plate [card: Resale ~$18-35]" },
+    { "img": "IMG_7936", "start": 4.0, "duration": 3.5, "note": "BCBG: structured body" },
+    { "img": "IMG_7936", "start": 8.0, "duration": 3.5, "note": "BCBG: clean lining" },
+    { "img": "IMG_7921", "start": 0.5, "duration": 2.5, "note": "resale wrap: recap Guess" },
+    { "img": "IMG_7926", "start": 2.0, "duration": 2.5, "note": "resale wrap: recap Steve Madden" },
+    { "img": "IMG_7928", "start": 1.0, "duration": 2.5, "note": "resale wrap: recap Vera" },
+    { "img": "IMG_7936", "start": 0.3, "duration": 3.0, "note": "resale wrap: recap BCBG (not grails / $10-35 / Jul 2026 not appraisal)" },
+
+    { "img": "IMG_7929", "start": 0.5, "duration": 2.3, "note": "CANVAS 59.7-72.4: beige stripe tote ($4.99 beat)" },
+    { "img": "IMG_7930", "start": 0.3, "duration": 3.4, "note": "CANVAS: tote" },
+    { "img": "IMG_7929", "start": 0.3, "duration": 2.5, "note": "CANVAS: tote [auto card: $4.99 @62s]" },
+    { "img": "IMG_7930", "start": 0.5, "duration": 3.2, "note": "CANVAS: tote" },
+    { "img": "IMG_7929", "start": 0.3, "duration": 1.3, "note": "CANVAS: tote" },
+
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "CHANEL DUPE 72.4-97.8: blue fleece flap (Chanel ref pops on 'the real one')" },
+    { "img": "IMG_7933", "start": 0.3, "duration": 3.5, "note": "DUPE: gold turn-lock detail" },
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "DUPE: fleece flap" },
+    { "img": "IMG_7933", "start": 4.0, "duration": 3.0, "note": "DUPE: satin lining (bath-mat texture)" },
+    { "img": "IMG_7933", "start": 0.3, "duration": 3.5, "note": "DUPE: no maker's stamp inside" },
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "DUPE: flap" },
+    { "img": "IMG_7933", "start": 1.0, "duration": 3.5, "note": "DUPE: threads/interior" },
+    { "img": "IMG_7933", "start": 4.5, "duration": 3.0, "note": "DUPE: interior" },
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "DUPE: flap" },
+    { "img": "IMG_7933", "start": 0.3, "duration": 2.5, "note": "DUPE: detail" },
+
+    { "img": "IMG_7925", "start": 0.3, "duration": 2.2, "note": "WHITE CHINA TAG 97.8-105.6: made-in-China care tag (the tell)" },
+    { "img": "IMG_7923", "start": 0.5, "duration": 3.0, "note": "TAG: studded satchel, no maker's stamp" },
+    { "img": "IMG_7924", "start": 0.5, "duration": 2.5, "note": "TAG: interior" },
+
+    { "img": "IMG_7931", "start": 0.5, "duration": 2.5, "note": "MUSTARD 105.6-123.7: woven-PU Bottega-style dupe [card: Resale ~$0 on 'do not resell']" },
+    { "img": "IMG_7931", "start": 0.2, "duration": 2.8, "note": "MUSTARD: woven, no logo" },
+    { "img": "IMG_7931", "start": 0.5, "duration": 2.5, "note": "MUSTARD: plastic weave" },
+    { "img": "IMG_7932", "start": 0.2, "duration": 1.7, "note": "throw-away recap: fleece dupe" },
+    { "img": "IMG_7937", "start": 0.5, "duration": 3.0, "note": "throw-away recap: ostrich-emboss PU, no name" },
+    { "img": "IMG_7922", "start": 0.5, "duration": 3.0, "note": "throw-away recap: dark PU tote" },
+    { "img": "IMG_7931", "start": 0.3, "duration": 2.5, "note": "throw-away recap: mustard" },
+
+    { "img": "IMG_7934", "start": 0.3, "duration": 1.9, "note": "LANDFILL 123.7-136.2: nude patent croc dome (looks fine)" },
+    { "img": "IMG_7935", "start": 0.0, "duration": 1.3, "note": "LANDFILL: handle cracking/peeling (money shot on 'watch the handle')" },
+    { "img": "IMG_7934", "start": 0.3, "duration": 1.9, "note": "LANDFILL: nude croc" },
+    { "img": "IMG_7935", "start": 0.0, "duration": 1.3, "note": "LANDFILL: handle crack again" },
+    { "img": "IMG_7937", "start": 0.5, "duration": 3.0, "note": "LANDFILL: ostrich PU (Shein-tier)" },
+    { "img": "IMG_7922", "start": 0.5, "duration": 3.0, "note": "LANDFILL: dark PU tote" },
+
+    { "img": "IMG_7935", "start": 0.0, "duration": 1.3, "note": "COST-PER-WEAR 136.2-146.9: crack ($5 beat)" },
+    { "img": "IMG_7934", "start": 0.3, "duration": 1.9, "note": "CPW: nude croc" },
+    { "img": "IMG_7922", "start": 2.0, "duration": 3.0, "note": "CPW: dark PU" },
+    { "img": "IMG_7937", "start": 0.5, "duration": 2.5, "note": "CPW: ostrich PU" },
+    { "img": "IMG_7935", "start": 0.0, "duration": 1.3, "note": "CPW: crack" },
+
+    { "img": "IMG_7921", "start": 0.2, "duration": 2.3, "note": "CLOSE 146.9-152: rack pan (no grails)" },
+    { "img": "IMG_7936", "start": 0.3, "duration": 2.6, "note": "CLOSE: end on a good bag (BCBG)" },
+    { "img": "IMG_7936", "start": 4.5, "duration": 2.7, "note": "CLOSE: BCBG" }
+  ],
+
+  "headline": {
+    "title": "CLASS IS IN SESSION",
+    "subtitle": "what to actually buy at the thrift",
+    "cta": "luxurycatalog.com",
+    "ctaAt": "luxurycatalog"
+  },
+
+  "trim": { "startPhrase": "sit down" },
+
+  "cues": [
+    { "say": "the real one", "img": "chanel-255.jpg", "cutout": false, "label": "A real Chanel flap", "xPct": 72, "yPct": 33, "widthPct": 42, "hold": 3.5, "tilt": -3 }
+  ],
+
+  "callouts": [
+    { "say": "Guess tote", "text": "Resale ~$15-35", "hold": 2.6, "yPct": 60 },
+    { "say": "Steve Madden", "text": "Resale ~$10-22", "hold": 2.6, "yPct": 60 },
+    { "say": "Vera Bradley", "text": "Resale ~$18-35", "hold": 2.6, "yPct": 60 },
+    { "say": "BCBG", "text": "Resale ~$18-35", "hold": 2.6, "yPct": 60 },
+    { "say": "do not resell", "text": "Resale ~$0", "hold": 2.6, "yPct": 60 }
+  ]
+}

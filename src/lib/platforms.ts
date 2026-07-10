@@ -29,13 +29,13 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
   fashionphile: {
     key: "fashionphile", label: "Fashionphile", authenticates: "all",
     authNote: "Authenticates every item in-house",
-    returns: "30-day returns (refund or credit)",
+    returns: "15-day returns on eligible items",
     buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
   },
   therealreal: {
     key: "therealreal", label: "The RealReal", authenticates: "all",
     authNote: "Brand-authenticated by in-house experts",
-    returns: "Returns for site credit (some items final sale)",
+    returns: "Handbags are final sale",
     buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
   },
   vestiaire: {
@@ -55,6 +55,12 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
     authNote: "Specialist-vetted; lot condition reports",
     returns: "Final sale",
     buyerPremiumPct: 0.26, buyerProtectionPct: 0, typicalShippingUsd: 60,
+  },
+  theluxurycloset: {
+    key: "theluxurycloset", label: "The Luxury Closet", authenticates: "all",
+    authNote: "Seller-authenticated pre-owned luxury",
+    returns: "Per The Luxury Closet's return policy",
+    buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
   },
 };
 

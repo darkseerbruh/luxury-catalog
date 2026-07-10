@@ -47,7 +47,7 @@ export default function HomeStyleRead() {
       ) : (
         <div className="mx-auto flex max-w-xl flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-6 text-center sm:flex-row sm:text-left">
           <div className="flex-1">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-gold">Style read</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-gold">Style quiz</p>
             <p className="mt-1 font-serif text-xl text-foreground">See what your style says</p>
             <p className="mt-1 text-sm text-muted">Two minutes, and we tune the catalog to you.</p>
           </div>

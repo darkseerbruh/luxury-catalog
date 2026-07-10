@@ -11,15 +11,12 @@ import { track, EVENTS } from "@/lib/analytics/events";
 import { BagImage } from "@/components/BagImage";
 import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 import { CompareToggle, CompareTray } from "@/components/CompareControls";
+import { tierDisplay } from "@/lib/house-standing";
 
 type SortKey = "relevance" | "az" | "count";
 type Variant = StyleSearchResult["variants"][number];
 
-const TIER_LABEL: Record<string, string> = {
-  thrift: "thrift",
-  mid: "mid",
-  "ultra-luxury": "ultra luxury",
-};
+const tierLabel = (v: string) => tierDisplay(v).label;
 
 /** Attribute facets derived from the variants of the style results. */
 const VARIANT_FACETS: { key: string; label: string; get: (v: Variant) => string | null }[] = [
@@ -215,7 +212,7 @@ export default function SearchFilters({
         values={tierFacets}
         isActive={(v) => activeTiers.has(v)}
         onToggle={toggleTier}
-        display={(v) => TIER_LABEL[v] ?? v.replace("-", " ")}
+        display={(v) => tierLabel(v)}
       />
 
       <FacetGroup
@@ -258,7 +255,7 @@ export default function SearchFilters({
         <div className="mb-4 flex flex-wrap items-center gap-2">
           {[...activeTiers].map((value) => (
             <Chip key={`tier-${value}`} onClick={() => toggleTier(value)}>
-              {TIER_LABEL[value] ?? value.replace("-", " ")}
+              {tierLabel(value)}
             </Chip>
           ))}
           {[...activeBrands].map((value) => (
@@ -392,7 +389,7 @@ export default function SearchFilters({
             </span>
           </div>
           <p className="mt-1 text-xs uppercase tracking-wide text-muted/70">
-            {brand.tier.replace("-", " ")}
+            {tierLabel(brand.tier)}
           </p>
           {brand.styles.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">

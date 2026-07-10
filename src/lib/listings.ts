@@ -18,13 +18,13 @@
  */
 
 import { getSupabase } from "./supabase";
+import { affiliateListingUrl } from "./affiliate";
 import { PLATFORMS } from "./platforms";
 import { colorFamily, materialFamily } from "./listings-taxonomy";
 import { displaySizeLabel } from "./variant-label";
 import {
   rateListing,
   isConfidentBasis,
-  bestBand,
   type DealRating,
   type DealBand,
   type ItemSpec,
@@ -45,6 +45,9 @@ export interface Offer {
   hardwareColor: string | null;
   sourceUrl: string | null;
   observedOn: string | null;
+  /** Product photo for this listing (from listing_image), when the source feed
+   * carries one. Null for sources without photos, or pre-0047 migration. */
+  imageUrl: string | null;
   /** Null when the bag has too little recorded resale to rate honestly. */
   rating: DealRating | null;
 }
@@ -65,6 +68,11 @@ export interface ShopProduct {
   key: string;
   /** Representative variant to link to (the cheapest in-stock one). */
   variantId: number;
+  /** The group's style, for style-level image fallback on the grid. */
+  styleId: number;
+  /** Distinct listed variants (cheapest's first) — image candidates for the tile,
+   *  so one photo-less cheapest listing doesn't blank a tile whose siblings have photos. */
+  imageVariantIds: number[];
   brandName: string;
   styleName: string;
   sizeLabel: string | null;
@@ -74,7 +82,10 @@ export interface ShopProduct {
   fromPrice: number;
   currency: string | null;
   /** Deal verdict for the "from" price, only when its market value is a like-for-like
-   *  (leather + color) basis; null when we can't honestly assert one. */
+   *  (leather + color) basis; null when we can't honestly assert one. INTERNAL ranking
+   *  signal (deals-only filter, best-deal sort) — never rendered on the rollup tile:
+   *  the tile is a category representative, so a price verdict there would overclaim
+   *  (owner ruled 2026-07-08). Listing-level verdicts live on the bag page. */
   dealBand: DealBand | null;
 }
 
@@ -86,6 +97,10 @@ export const FAMILY_PREFIX = "f:";
 
 export interface ShopFilters {
   brand?: string;
+  /** Restrict the grid to these styles — how a text search narrows the market.
+   *  Undefined = no text query (show the whole market). Empty array = a query that
+   *  matched nothing, so the grid is intentionally empty. */
+  styleIds?: number[];
   dealsOnly?: boolean;
   minPrice?: number;
   maxPrice?: number;
@@ -319,8 +334,80 @@ function toOffer(r: PriceRow, comps: SpecComp[]): Offer {
     hardwareColor: r.spec.hardwareColor,
     sourceUrl: r.sourceUrl,
     observedOn: r.observedOn,
+    imageUrl: null,
     rating: rateListing(r.price, r.spec, comps),
   };
+}
+
+/** Photos for a set of listing_refs, keyed by ref. Resilient: returns an empty
+ * map if listing_image isn't migrated yet (0047) so the rail never breaks. */
+async function fetchListingImages(refs: string[]): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  const unique = [...new Set(refs.filter(Boolean))];
+  if (unique.length === 0) return out;
+  try {
+    const { data, error } = await getSupabase()
+      .from("listing_image")
+      .select("listing_ref, image_url")
+      .in("listing_ref", unique);
+    if (error || !data) return out;
+    for (const r of data as { listing_ref: string; image_url: string }[]) out.set(r.listing_ref, r.image_url);
+  } catch {
+    /* table missing pre-migration — render photo-less */
+  }
+  return out;
+}
+
+/** The live listing BEHIND the bag's already-chosen face image. One source of
+ * truth: getVariantImages picks the face every surface shows (best spec match,
+ * price-sane); the hero just resolves which live listing owns that photo so the
+ * header links to buy it. By construction the hero can never show a different
+ * bag than the brand card (owner call 2026-07-09). Resilient: null when the
+ * image isn't a live affiliate photo (placeholder/community/sold-out). */
+export interface HeroListing {
+  imageUrl: string;
+  buyUrl: string;
+  price: number;
+  platformLabel: string;
+}
+
+export async function getHeroListing(variantId: number, faceImageUrl: string | null): Promise<HeroListing | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId) || !faceImageUrl) return null;
+  try {
+    const sb = getSupabase();
+    // Which listing owns this photo?
+    const { data: imgRows } = await sb
+      .from("listing_image")
+      .select("platform, listing_ref")
+      .eq("image_url", faceImageUrl)
+      .limit(5);
+    const owners = (imgRows ?? []) as { platform: string | null; listing_ref: string }[];
+    if (owners.length === 0) return null;
+
+    // Its live ask on THIS variant (cheapest observation = the current best ask we hold).
+    const { data } = await sb
+      .from("price_history")
+      .select("sale_price, platform, source_url, listing_ref")
+      .eq("variant_id", variantId)
+      .eq("price_type", "listed")
+      .or("listing_status.is.null,listing_status.eq.available")
+      .not("sale_price", "is", null)
+      .in("listing_ref", owners.map((o) => o.listing_ref))
+      .order("sale_price", { ascending: true })
+      .limit(5);
+    const row = ((data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[]).find(
+      (r) => r.source_url && owners.some((o) => o.listing_ref === r.listing_ref && (o.platform ?? "") === (r.platform ?? "")),
+    );
+    if (!row) return null;
+    return {
+      imageUrl: faceImageUrl,
+      buyUrl: affiliateListingUrl(row.source_url as string, row.platform),
+      price: Math.round(row.sale_price),
+      platformLabel: platformLabel(row.platform),
+    };
+  } catch {
+    return null;
+  }
 }
 
 /** Order offers: rated deals first (great → above), unrated last; ties by price asc. */
@@ -375,7 +462,23 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
     }
 
     const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
-    const target = rows.find((r) => r.variantId === variantId);
+
+    // The style-wide query above is capped at 1000 rows by PostgREST, so for a
+    // style with many listings (e.g. after the TLC feed load) the TARGET
+    // variant's own rows can fall outside that window and vanish from `offers`.
+    // Fetch this variant's rows directly (its own listings comfortably fit under
+    // 1000) so its offers are always complete; the style pool stays for comps.
+    const { data: vData } = await getSupabase()
+      .from("price_history")
+      .select(buildSelect(STYLE_SELECT_NO_FEET))
+      .eq("variant_id", variantId)
+      .not("sale_price", "is", null)
+      .limit(1000);
+    const variantRows = ((vData as unknown as RawRow[]) ?? [])
+      .map(mapRow)
+      .filter((r): r is PriceRow => r !== null);
+
+    const target = variantRows.find((r) => r.variantId === variantId) ?? rows.find((r) => r.variantId === variantId);
     const sizeLabel = target?.sizeLabel ?? displaySizeLabel((v as { size_label: string | null }).size_label);
 
     // Comps: resale rows of the same style + size (size controlled here, spec by the core).
@@ -383,8 +486,12 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .filter((r) => !isRetail(r) && (sizeLabel == null || r.sizeLabel === sizeLabel))
       .map(specComp);
 
-    const offers = dedupeByListing(rows.filter((r) => r.variantId === variantId && isListed(r)))
-      .map((r) => toOffer(r, comps))
+    const listedRows = dedupeByListing(variantRows.filter((r) => isListed(r)));
+    const imagesByRef = await fetchListingImages(
+      listedRows.map((r) => r.listingRef).filter((x): x is string => !!x),
+    );
+    const offers = listedRows
+      .map((r) => ({ ...toOffer(r, comps), imageUrl: (r.listingRef && imagesByRef.get(r.listingRef)) || null }))
       .sort(compareOffers);
 
     return {
@@ -403,6 +510,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
 
 interface ProductGroup {
   key: string;
+  styleId: number;
   brandName: string;
   styleName: string;
   sizeLabel: string | null;
@@ -456,6 +564,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       if (!g) {
         g = {
           key,
+          styleId: r.styleId,
           brandName: r.brandName,
           styleName: r.styleName,
           sizeLabel: r.sizeLabel,
@@ -561,19 +670,31 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       const sellers = new Set(matching.map((r) => platformLabel(r.platform)));
       const colors = new Set(matching.map((r) => r.spec.colorway?.toLowerCase()).filter(Boolean));
 
-      // Rate EACH listing against its OWN spec's market value, and keep only verdicts on a
-      // like-for-like basis (leather + color) — a blended fallback would falsely call a
-      // cheap colorway a steal. The thumbnail then shows the best deal among the items
-      // behind it: if any one item is genuinely a great deal for its spec, badge the tile.
-      const confidentBands = matching
-        .map((r) => rateListing(r.price, r.spec, g.comps))
-        .filter((rt): rt is DealRating => rt != null && isConfidentBasis(rt.fairValue))
-        .map((rt) => rt.band);
-      const dealBand = bestBand(confidentBands);
+      // Rate the tile by the price the tile SHOWS: the cheapest listing against its own
+      // spec's market value, kept only on a like-for-like basis (leather + color). The
+      // old best-band-of-all-listings badge saturated — over 50+ listings, at least one
+      // always sits 10% under its bucket's median, so every tile read "Great deal" and
+      // the signal meant nothing (owner flagged it 2026-07-08). One listing, one verdict.
+      const cheapestRating = rateListing(cheapest.price, cheapest.spec, g.comps);
+      const dealBand =
+        cheapestRating != null && isConfidentBasis(cheapestRating.fairValue)
+          ? cheapestRating.band
+          : null;
+
+      // Image candidates: the cheapest listing's variant first (it's the price shown),
+      // then the group's other listed variants, newest observation first.
+      const imageVariantIds = [
+        cheapest.variantId,
+        ...[...matching]
+          .sort((a, b) => (b.observedOn ?? "").localeCompare(a.observedOn ?? ""))
+          .map((r) => r.variantId),
+      ].filter((v, i, arr) => arr.indexOf(v) === i).slice(0, 6);
 
       products.push({
         key: g.key,
         variantId: cheapest.variantId,
+        styleId: g.styleId,
+        imageVariantIds,
         brandName: g.brandName,
         styleName: g.styleName,
         sizeLabel: g.sizeLabel,
@@ -629,7 +750,13 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
       protectiveFeet: protectiveFeetFacet,
     };
 
-    // Product-level filters (brand/price/deals) on top of the listing-level spec filters.
+    // Product-level filters (search/brand/price/deals) on top of the listing-level spec filters.
+    // Text search narrows to the matched styleId set (resolved by the same search engine
+    // /search uses), so the market grid, the query, and every facet compose on one surface.
+    if (filters.styleIds != null) {
+      const wanted = new Set(filters.styleIds);
+      products = products.filter((p) => wanted.has(p.styleId));
+    }
     if (filters.brand) products = products.filter((p) => p.brandName === filters.brand);
     if (filters.minPrice != null) products = products.filter((p) => p.fromPrice >= filters.minPrice!);
     if (filters.maxPrice != null) products = products.filter((p) => p.fromPrice <= filters.maxPrice!);

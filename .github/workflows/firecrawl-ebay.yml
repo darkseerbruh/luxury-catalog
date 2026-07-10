@@ -1,17 +1,15 @@
-name: Firecrawl capture (eBay pilot)
+name: Firecrawl capture (eBay — manual fallback)
 
-# OWNER-GATED, dispatch-only (NO schedule) — eBay live-listing capture spends Firecrawl
-# credits, so it never runs on its own. Fire it from Actions -> this workflow -> "Run
-# workflow" once you've okayed the credit burn. eBay item pages 403 plain fetch but
-# Firecrawl defeats the block; eBay item-specifics are the richest source we have
-# (condition + written detail, material, hardware, pattern, measurements). See §0e.
+# DISPATCH-ONLY, owner-gated. The PRIMARY eBay realized-sold engine is Apify auction-only
+# (ebay-sold-apify.ts, best-offer masking can't occur). This Firecrawl path is a MANUAL
+# BACKUP for when Apify is capped: it does live asks by default, or --sold (LH_Sold+Complete)
+# as a weaker sold fallback (includes Buy-It-Now, so it only heuristically drops masked
+# best-offer rows). No schedule — fire from Actions -> Run workflow when you actually need it,
+# so it never burns Firecrawl credits redundantly against Apify. See
+# docs/priority-reseller-capture-runbook.md. eBay item pages 403 plain fetch; Firecrawl defeats it.
 #
-# Per item ≈ 1 markdown scrape (~1 credit). Default pilot: hero list, limit 15/style ≈
-# ~5 styles × 15 ≈ ~80 item scrapes + 5 searches ≈ ~90 credits. LIVE listings only
-# (eBay purges ended-listing descriptions). Watch real burn here before scaling.
-#
-# SECRETS: FIRECRAWL_API_KEY + SUPABASE_SERVICE_ROLE_KEY (set). ANTHROPIC_API_KEY is
-# optional — the LLM description pass is skipped if it's absent.
+# Per item ≈ 1 markdown scrape (~1 credit). SECRETS: FIRECRAWL_API_KEY + SUPABASE_SERVICE_ROLE_KEY
+# (set). ANTHROPIC_API_KEY optional — the LLM description pass is skipped if it's absent.
 
 on:
   workflow_dispatch:
@@ -24,10 +22,14 @@ on:
         description: "Max item scrapes per style (credit ceiling)"
         required: false
         default: "15"
+      sold:
+        description: "Capture SOLD comps (LH_Sold+Complete)? false = live asks"
+        required: false
+        default: "true"
       write:
         description: "Apply DB writes? false = capture + report only"
         required: false
-        default: "true"
+        default: "false"
 
 concurrency:
   group: firecrawl-ebay
@@ -44,7 +46,10 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       TARGET: ${{ github.event.inputs.target || 'all' }}
       LIMIT: ${{ github.event.inputs.limit || '15' }}
-      WRITE: ${{ github.event.inputs.write || 'true' }}
+      # Weekly sold-sweep: scheduled runs capture SOLD comps but WRITE nothing (report-only)
+      # until the --sold parse is verified. Manual dispatch honours both toggles.
+      SOLD: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.sold }}
+      WRITE: ${{ github.event_name == 'schedule' && 'false' || github.event.inputs.write }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -61,7 +66,7 @@ jobs:
           fi
 
       - name: Capture eBay via Firecrawl (writes landing snapshot)
-        run: npx tsx supabase/ingest/sources/firecrawl-ebay.ts "$TARGET" --limit="$LIMIT"
+        run: npx tsx supabase/ingest/sources/firecrawl-ebay.ts "$TARGET" --limit="$LIMIT" ${{ env.SOLD == 'true' && '--sold' || '' }}
 
       - name: Load prices + refresh summary
         if: env.WRITE == 'true'

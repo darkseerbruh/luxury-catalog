@@ -8,16 +8,37 @@
  * and stamps discovered_listing.promoted_variant_id. No new style rows = minimal catalog
  * pollution risk (the path the handoff recommended running first).
  *
- *   npx tsx supabase/ingest/promote-safe.ts [--min=N] [--write]
- *     --min=N   cluster-size threshold (default 20)
- *     --write   actually persist (else dry-run plan)
+ *   npx tsx supabase/ingest/promote-safe.ts [--min=N] [--write] [--create-new] [--exclude=...]
+ *     --min=N        cluster-size threshold (default 20)
+ *     --write        actually persist (else dry-run plan)
+ *     --create-new   also CREATE a curated style when the cluster resolves to a
+ *                    confident canonical bag model that has no style yet (bag-gated
+ *                    via canonicalModel — never forks a raw marketplace title). Off
+ *                    by default so the plain run stays new-style-free.
+ *     --exclude=A::B,C::D   operator veto for clusters the auto-gate resolves wrong
+ *                    (e.g. a seasonal runway flap that canon-maps onto an icon).
+ *                    "Brand::Model" keys, matched accent/case-insensitively against
+ *                    the (brand, style-it-would-land-on); excluded rows stay in
+ *                    discovered_listing for the next, better-informed pass.
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
-import { norm, normalizeDesigner } from "../../src/lib/image-import-core";
+import { norm } from "../../src/lib/image-import-core";
+import { canonicalModel, canonicalBrand } from "../../src/lib/ingest/model-normalize";
 import { promotableClusters, type DiscoveredRow, type DiscoveredCluster } from "./promote-discovered";
 
 const MIN = Number((process.argv.find((a) => a.startsWith("--min=")) || "--min=20").split("=")[1]);
 const WRITE = process.argv.includes("--write");
+const CREATE_NEW = process.argv.includes("--create-new");
+// Operator veto for specific clusters the auto-gate resolves wrong (e.g. a seasonal
+// runway flap that canon-maps onto an icon style). Comma-separated "Brand::Model"
+// keys, matched accent/case-insensitively against the CANONICAL (brand, model) the
+// cluster would promote into. Mirrors clean-timeless-mismap's --groups-file veto.
+const excludeKey = (brand: string, model: string) => `${norm(brand)}|${norm(model)}`;
+const EXCLUDE = new Set(
+  ((process.argv.find((a) => a.startsWith("--exclude=")) || "--exclude=").split("=")[1] || "")
+    .split(",").map((s) => s.trim()).filter(Boolean)
+    .map((s) => { const [b, m] = s.split("::"); return excludeKey(b ?? "", m ?? ""); }),
+);
 
 /** discovered_listing row as selected below (DiscoveredRow + the extra capture columns). */
 type DiscoveredFullRow = DiscoveredRow & {
@@ -87,7 +108,7 @@ async function main() {
   // index brands + styles
   const { data: brands } = await db.from("brand").select("brand_id,name");
   const brandByNorm = new Map<string, number>();
-  (brands ?? []).forEach((b: BrandRow) => brandByNorm.set(norm(normalizeDesigner(b.name)), b.brand_id));
+  (brands ?? []).forEach((b: BrandRow) => brandByNorm.set(norm(canonicalBrand(b.name)), b.brand_id));
   const { data: styles } = await db.from("style").select("style_id,brand_id,name");
   const styleByKey = new Map<string, number>(); // `${brand_id}|${normStyle}` -> style_id
   (styles ?? []).forEach((s: StyleRow) => styleByKey.set(`${s.brand_id}|${norm(s.name)}`, s.style_id));
@@ -95,46 +116,83 @@ async function main() {
   // group discovered rows by cluster key for re-pointing
   const byKey = new Map<string, DiscoveredFullRow[]>();
   for (const r of rows) {
-    const bId = brandByNorm.get(norm(normalizeDesigner(r.brand_guess)));
+    const bId = brandByNorm.get(norm(canonicalBrand(r.brand_guess ?? "")));
     const k = `${bId ?? "?"}|${norm(r.style_guess || "")}|${sizeKey(r.size_label)}`;
     (byKey.get(k) ?? byKey.set(k, []).get(k))!.push(r);
   }
 
-  let promotableExisting = 0, needNewStyle = 0, rowsToRepoint = 0;
-  const plan: { brand: string; style: string; size: string; styleId: number; count: number; cluster: DiscoveredCluster }[] = [];
+  let promotableExisting = 0, needNewStyle = 0, willCreate = 0, rowsToRepoint = 0, excluded = 0;
+  // styleId is null for a cluster we will CREATE (resolved in the write phase); styleName
+  // is the clean canonical name to create it under.
+  const plan: { brand: string; style: string; styleName: string; size: string; styleId: number | null; create: boolean; count: number; cluster: DiscoveredCluster }[] = [];
   for (const c of clusters) {
-    const bId = brandByNorm.get(norm(normalizeDesigner(c.brandGuess)));
+    const bId = brandByNorm.get(norm(canonicalBrand(c.brandGuess)));
     if (!bId) { needNewStyle++; continue; }
-    const styleId = styleByKey.get(`${bId}|${norm(c.styleGuess)}`);
-    if (!styleId) { needNewStyle++; continue; }
-    promotableExisting++;
+    const styleId = styleByKey.get(`${bId}|${norm(c.styleGuess)}`) ?? null;
+    let create = false;
+    let styleName = c.styleGuess;
+    // Operator veto: skip a cluster whose resolved (brand, style-it-lands-on) is excluded.
+    // Check against both the existing style name and the canonical create name.
+    const canonName = canonicalModel(c.brandGuess, c.styleGuess) ?? c.styleGuess;
+    if (EXCLUDE.has(excludeKey(canonicalBrand(c.brandGuess), styleId != null ? c.styleGuess : canonName))) {
+      excluded++;
+      console.log(`  ⊘ excluded: ${canonicalBrand(c.brandGuess)} ${styleId != null ? c.styleGuess : canonName} ${c.sizeLabel || "Standard"} (${(byKey.get(`${bId}|${norm(c.styleGuess)}|${sizeKey(c.sizeLabel)}`) ?? []).length} rows stay in discovered)`);
+      continue;
+    }
+    if (styleId == null) {
+      // No existing style. Only create when the cluster resolves to a CONFIDENT canonical
+      // bag model (bag-gated) AND --create-new is set — never fork a raw title.
+      const canon = canonicalModel(c.brandGuess, c.styleGuess);
+      if (CREATE_NEW && canon) { create = true; styleName = canon; willCreate++; }
+      else { needNewStyle++; continue; }
+    } else {
+      promotableExisting++;
+    }
     const k = `${bId}|${norm(c.styleGuess)}|${sizeKey(c.sizeLabel)}`;
     const members = byKey.get(k) ?? [];
     rowsToRepoint += members.length;
-    plan.push({ brand: c.brandGuess, style: c.styleGuess, size: c.sizeLabel || "Standard", styleId, count: members.length, cluster: c });
+    plan.push({ brand: c.brandGuess, style: c.styleGuess, styleName, size: c.sizeLabel || "Standard", styleId, create, count: members.length, cluster: c });
   }
 
   console.log(`\nClusters mapping to EXISTING style (safe to promote): ${promotableExisting}`);
-  console.log(`Clusters needing a NEW style (deferred to owner): ${needNewStyle}`);
+  console.log(`Clusters that would CREATE a new canonical style: ${willCreate}${CREATE_NEW ? "" : " (pass --create-new to enable)"}`);
+  console.log(`Clusters skipped — no brand / no confident canonical model: ${needNewStyle}`);
+  if (EXCLUDE.size) console.log(`Clusters vetoed via --exclude: ${excluded}`);
   console.log(`Asking rows that would re-point into price_history: ${rowsToRepoint}\n`);
-  plan.sort((a, b) => b.count - a.count).slice(0, 60).forEach((p) =>
-    console.log(`  ${p.brand} ${p.style} ${p.size}  (style ${p.styleId})  → ${p.count} rows`));
+  plan.sort((a, b) => b.count - a.count).slice(0, 80).forEach((p) =>
+    console.log(`  ${p.create ? "NEW " : "    "}${p.brand} ${p.styleName} ${p.size}  (style ${p.styleId ?? "create"})  → ${p.count} rows`));
 
   if (!WRITE) { console.log(`\nDRY RUN — re-run with --write to persist.`); return; }
 
   const today = new Date().toISOString().slice(0, 10);
-  let createdVariants = 0, insertedRows = 0, markedPromoted = 0;
+  let createdStyles = 0, createdVariants = 0, insertedRows = 0, markedPromoted = 0;
   for (const p of plan) {
     const sizeLabel = p.size;
+    // Resolve styleId: for a --create-new cluster, find-or-create the canonical style
+    // under its brand (idempotent: re-match by normalized name first so a re-run reuses it).
+    let styleId = p.styleId;
+    if (styleId == null) {
+      const bId = brandByNorm.get(norm(canonicalBrand(p.brand)));
+      if (!bId) { console.error(`skip create: no brand for ${p.brand}`); continue; }
+      const { data: existSt } = await db.from("style").select("style_id,name").eq("brand_id", bId);
+      styleId = ((existSt ?? []) as StyleRow[]).find((s) => norm(s.name) === norm(p.styleName))?.style_id ?? null;
+      if (styleId == null) {
+        const { data: ins, error } = await db.from("style").insert({ brand_id: bId, name: p.styleName }).select("style_id").single();
+        if (error || !ins) { console.error(`style create failed for ${p.brand} ${p.styleName}:`, error?.message); continue; }
+        const newId: number = ins.style_id; styleId = newId; createdStyles++;
+        styleByKey.set(`${bId}|${norm(p.styleName)}`, newId);
+        console.log(`  + created style ${p.brand} / ${p.styleName} (style ${newId})`);
+      }
+    }
     // find-or-create variant by (style_id, size_label)
-    const { data: existingVars } = await db.from("variant").select("variant_id,size_label").eq("style_id", p.styleId);
+    const { data: existingVars } = await db.from("variant").select("variant_id,size_label").eq("style_id", styleId);
     let variantId = (existingVars ?? []).find((v: VariantRow) => sizeKey(v.size_label) === sizeKey(sizeLabel))?.variant_id;
     if (!variantId) {
-      const { data: ins, error } = await db.from("variant").insert({ style_id: p.styleId, size_label: sizeLabel, market_availability: "resale" }).select("variant_id").single();
-      if (error) { console.error(`variant create failed for ${p.brand} ${p.style} ${sizeLabel}:`, error.message); continue; }
+      const { data: ins, error } = await db.from("variant").insert({ style_id: styleId, size_label: sizeLabel, market_availability: "resale" }).select("variant_id").single();
+      if (error) { console.error(`variant create failed for ${p.brand} ${p.styleName} ${sizeLabel}:`, error.message); continue; }
       variantId = ins!.variant_id; createdVariants++;
     }
-    const members = byKey.get(`${brandByNorm.get(norm(normalizeDesigner(p.brand)))}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
+    const members = byKey.get(`${brandByNorm.get(norm(canonicalBrand(p.brand)))}|${norm(p.style)}|${sizeKey(p.cluster.sizeLabel)}`) ?? [];
     // existing price_history listing_refs for this variant to dedup
     const { data: existRefs } = await db.from("price_history").select("listing_ref").eq("variant_id", variantId);
     const seen = new Set((existRefs ?? []).map((r: RefRow) => r.listing_ref));
@@ -163,7 +221,7 @@ async function main() {
     markedPromoted += ids.length;
     console.log(`  ✓ ${p.brand} ${p.style} ${sizeLabel} (v${variantId}): +${toInsert.length} prices, ${ids.length} marked`);
   }
-  console.log(`\nDone. variants created: ${createdVariants}, price rows inserted: ${insertedRows}, discovered marked: ${markedPromoted}`);
+  console.log(`\nDone. styles created: ${createdStyles}, variants created: ${createdVariants}, price rows inserted: ${insertedRows}, discovered marked: ${markedPromoted}`);
 }
 
 main().then(() => process.exit(0)).catch((e) => { console.error(e.message || e); process.exit(1); });

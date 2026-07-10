@@ -66,6 +66,10 @@ export const EVENTS = {
   correctionSubmitted: "correction_submitted",
   /** A user submitted a photo of a bag (UGC contribution). */
   photoSubmitted: "photo_submitted",
+  /** An open contribution slot was clicked from the "Have this in hand?" surface
+   *  (carries `slot` + `variant_id`) — the funnel-START signal for UGC. Completion
+   *  is measured directly from the review/vote/photo/wear rows it leads to. */
+  contributionSlotClicked: "contribution_slot_clicked",
   /** A user requested professional authentication — a marketplace-demand / lead signal. */
   authenticationRequested: "authentication_requested",
   /** A user raised their hand for the (not-yet-live) authentication service — fake-door demand. */
@@ -95,6 +99,10 @@ export const EVENTS = {
   reportViewed: "report_viewed",
   /** The collection report was exported (format: csv | print). */
   reportExported: "report_exported",
+  /** A camera identify scan started (kind: photo | video | live | haul; count). */
+  identifyScanStarted: "identify_scan_started",
+  /** A camera identify scan finished (matched, confidence, brand, refined, kind). */
+  identifyScanCompleted: "identify_scan_completed",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
@@ -105,7 +113,8 @@ export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
  */
 export interface CatalogEventProperties {
   brand?: string;
-  brand_tier?: "thrift" | "mid" | "premium" | "ultra-luxury";
+  // Legacy string tiers or the numbered House Standing tiers ("1"-"5").
+  brand_tier?: string;
   style?: string;
   silhouette?: string;
   material_category?: string;

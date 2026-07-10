@@ -1,0 +1,14 @@
+{
+  "_comment": "Per-clip caption fixes for thrift-class-2: Whisper mishears in Arielle's actual VO. Applied over luxury-lexicon.json. Fixes on-screen text AND re-lands the Guess + Vera Bradley resale cards (callouts match the corrected words).",
+  "classes in session": "class is in session",
+  "less than one": "Lesson one",
+  "guest tote": "Guess tote",
+  "zipper pole": "zipper pull",
+  "there are broadly": "Vera Bradley",
+  "camo bcbg": "camel BCBG",
+  "every coat": "every code",
+  "bath net": "bath mat",
+  "best potato impression": "best Bottega impression",
+  "no maker stamp": "no maker's stamp",
+  "nude crock": "nude croc"
+}

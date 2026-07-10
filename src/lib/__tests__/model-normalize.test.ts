@@ -10,10 +10,22 @@ describe("canonicalModel", () => {
   });
 
   it("excludes accessories / small leather goods (shares a model name)", () => {
-    expect(canonicalModel("Gucci", "Calfskin Mini Dionysus Chain Wallet")).toBeNull();
     expect(canonicalModel("Chanel", "Lambskin Classic Flap Card Holder")).toBeNull();
     expect(canonicalModel("Hermès", "Epsom Constance Slim Wallet")).toBeNull();
     expect(canonicalModel("Gucci", "GG Marmont Key Pouch")).toBeNull();
+    expect(canonicalModel("Celine", "Graphic Print Crew Neck T-Shirt")).toBeNull();
+    expect(canonicalModel("Saint Laurent", "Virgin Wool Blazer")).toBeNull();
+    expect(canonicalModel("Gucci", "GG Supreme Monogram Belt")).toBeNull();
+  });
+
+  it("treats chain-carry formats as bags (WOC precedent, 2026-07-09)", () => {
+    // The catalog ranks Wallet on Chain as a style; chain wallets/WOCs sold as
+    // handbags roll into their parent bag style instead of dead-ending as SLG.
+    expect(canonicalModel("Chanel", "Caviar Quilted Wallet on Chain WOC Black")).toBe("Wallet on Chain");
+    expect(canonicalModel("Gucci", "Calfskin Mini Dionysus Chain Wallet")).toBe("Dionysus");
+    expect(canonicalModel("Louis Vuitton", "Monogram Pochette Felicie Chain Wallet")).toBe("Félicie");
+    expect(canonicalModel("Hermès", "Epsom Kelly Wallet To Go Gold")).toBe("Kelly To Go");
+    expect(canonicalModel("Gucci", "Soft GG Supreme Monogram Web Belt Bag Black")).toBe("Belt Bag");
   });
 
   it("prefers the more-specific model when listed first", () => {
@@ -32,6 +44,44 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Louis Vuitton", "Monogram Shoulder Bag")).toBeNull();
   });
 
+  it("matches accent-blind in both directions (TRR sweep, 2026-07-10)", () => {
+    // ASCII slug title vs accented dictionary name...
+    expect(canonicalModel("Hermès", "clemence jypsiere 34")).toBe("Jypsière");
+    // ...and accented scraped title vs ASCII token, incl. a TRailing accent where a
+    // non-unicode \b could never match ("noé").
+    expect(canonicalModel("Hermès", "2025 Swift Mini Jypsière".toLowerCase())).toBe("Jypsière");
+    expect(canonicalModel("Louis Vuitton", "petit noé")).toBe("Noé");
+    expect(canonicalModel("Louis Vuitton", "néonoé mm")).toBe("NéoNoé");
+  });
+
+  it("model word beats hardware token (Blondie/Horsebit Chain, 2026-07-10)", () => {
+    expect(canonicalModel("Gucci", "interlocking g horsebit blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "bamboo blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "chain-link horsebit chain large")).toBe("Maxi Horsebit Chain");
+    expect(canonicalModel("Gucci", "horsebit accent leather loafers")).toBeNull();
+  });
+
+  it("matches SL Bea bare but not inside 'beaded' (promotion, 2026-07-10)", () => {
+    expect(canonicalModel("Saint Laurent", "Bea")).toBe("Bea");
+    expect(canonicalModel("Saint Laurent", "Signature Bea 2023")).toBe("Bea");
+    expect(canonicalModel("Saint Laurent", "Chiffon Silk Crepe Beaded Pochon Broderie Black")).toBeNull();
+  });
+
+  it("keeps Grand Bambino distinct from Bambino (promotion, 2026-07-10)", () => {
+    expect(canonicalModel("Jacquemus", "smooth calfskin le grand bambino black")).toBe("Le Grand Bambino");
+    expect(canonicalModel("Jacquemus", "smooth calfskin le bambino black")).toBe("Le Bambino");
+  });
+
+  it("ignores bundled extras after w/ or with (TRR sweep, 2026-07-10)", () => {
+    // The bundled pouch/scarf must not trip the SLG gate on a real bag...
+    expect(canonicalModel("Hermès", "toile gm & vache hunter herbag zip 31 w/ pouch")).toBe("Herbag");
+    expect(canonicalModel("Hermès", "evercolor lindy 26 w twilly scarf")).toBe("Lindy");
+    // ...and a model word after "w/" must not claim the row either.
+    expect(canonicalModel("Hermès", "vanity case w/ kelly charm")).toBeNull();
+    // A bare " w " can also be slugged E/W (east/west) — that one is NOT an extra.
+    expect(canonicalModel("Saint Laurent", "leather e w shopping tote east west")).toBe("Shopping Tote");
+  });
+
   it("resolves sub-brands / collabs / accents to one canonical brand", () => {
     expect(canonicalBrand("Christian Dior")).toBe("Dior");
     expect(canonicalBrand("DIOR MEN")).toBe("Dior");
@@ -39,6 +89,18 @@ describe("canonicalModel", () => {
     expect(canonicalBrand("Chanel Pharrell")).toBe("Chanel");
     expect(canonicalBrand("Hermes")).toBe("Hermès");
     expect(canonicalBrand("Balenciaga")).toBe("Balenciaga");
+    expect(canonicalBrand("Chloe")).toBe("Chloé");
+    expect(canonicalBrand("Valentino Garavani")).toBe("Valentino");
+  });
+
+  it("covers every catalog brand previously missing from the alias table", () => {
+    expect(canonicalBrand("Mulberry")).toBe("Mulberry");
+    expect(canonicalBrand("Alexander McQueen")).toBe("Alexander McQueen");
+    expect(canonicalBrand("Jacquemus")).toBe("Jacquemus");
+    expect(canonicalBrand("Off White")).toBe("Off-White");
+    expect(canonicalBrand("OFF-WHITE")).toBe("Off-White");
+    expect(canonicalBrand("Longchamp")).toBe("Longchamp");
+    expect(canonicalBrand("Telfar")).toBe("Telfar");
   });
 
   it("maps models through a sub-brand label", () => {

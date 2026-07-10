@@ -18,7 +18,7 @@ export default function TrackBagView({
 }: {
   variantId: number;
   brand: string;
-  brandTier: "thrift" | "mid" | "premium" | "ultra-luxury" | null;
+  brandTier: string | null;
   style: string;
   silhouette: string | null;
   hasPriceHistory: boolean;

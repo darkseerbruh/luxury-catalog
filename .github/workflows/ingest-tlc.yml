@@ -1,0 +1,81 @@
+name: Refresh TLC live listings (CJ feed)
+
+# Pulls The Luxury Closet's CJ product feed over SFTP, parses it, matches bags to
+# our catalog, and loads them into price_history so they surface in the bag-page
+# "For sale right now" rail. Runs on a schedule AND on demand (Actions tab -> this
+# workflow -> "Run workflow"). See docs/live-listings-feed-spec.md.
+#
+# SECRETS (owner adds under Settings -> Secrets and variables -> Actions):
+#   CJ_FEED_HOST = datatransfer.cj.com
+#   CJ_FEED_USER = 7997608
+#   CJ_FEED_PASS = <SFTP password from the CJ "SFTP Server Information" email>
+#   SUPABASE_SERVICE_ROLE_KEY is already set on this repo; the Supabase URL is
+#   public (NEXT_PUBLIC_*) and inlined as a fallback below.
+#
+# The adapter emits ONLY in-stock bags we can name, so the all-category feed never
+# pollutes the pipeline. Unmatched rows land in discovered_listing, not the rail.
+
+on:
+  schedule:
+    # Daily. TLC refreshes its feed several times a day; daily keeps prices current
+    # without flooding. Tune here.
+    - cron: "23 8 * * *"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Apply DB writes? false = fetch + parse + report only (dry run)"
+        required: false
+        default: "true"
+
+# Never let two refreshes overlap (they touch the same listings).
+concurrency:
+  group: ingest-tlc
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # CJ Product Feed GraphQL API token (the working transport; SFTP is dead).
+      CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Fail early if the CJ API token is missing
+        run: |
+          if [ -z "$CJ_API_TOKEN" ]; then
+            echo "::error::CJ_API_TOKEN not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+
+      - name: Pull + parse the TLC feed (writes landing snapshot)
+        run: npx tsx supabase/ingest/sources/tlc.ts
+
+      - name: Load matched listings into price_history
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- tlc --write
+          npm run load:tlc-images -- --write
+          npm run summary:refresh
+
+      - name: Capture unknown-model bags to discovered_listing (raw evidence layer)
+        if: env.WRITE == 'true'
+        run: npm run load:prices -- tlc-discovered --discovered-only --write
+
+      - name: Retire sold TLC listings (diff vs this run's live snapshot)
+        if: env.WRITE == 'true'
+        run: |
+          npm run reconcile:sold -- --platform="The Luxury Closet" --snapshot=data/ingest/_raw/tlc-live.json --write
+          npm run summary:refresh

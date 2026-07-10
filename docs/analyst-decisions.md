@@ -22,7 +22,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Skip; add when traffic is material | Risks missing the early baseline entirely; the Coach auth article already draws 21 entries/week | Do not choose |
 - **Moves:** `article_viewed` moves the GEO/content-channel acquisition read (no other event captures editorial engagement). `bags_compared` moves the Cross-Shopper intent signal and decision-depth read (buyer affiliate, lane 1). `attribute_object_viewed` moves the Collector/Sofia depth funnel read.
 - **Confidence:** Deterministic gap, not a judgment call. The events are wired and firing; the pulse just does not ask for them. Fix is a four-line addition to `analytics-pulse.ts`.
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 — all three (`article_viewed`, `attribute_object_viewed`, `bags_compared`) verified present in the pulse `journeyEvents` array (`scripts/analytics-pulse.ts:205-208`); no further change needed.
 
 ---
 
@@ -37,7 +37,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Do nothing; keep deferring | No trigger, no call; the strategy assumption stays unchecked indefinitely | Do not choose |
 - **Moves:** GEO/AI-referral is the acquisition spine feeding all five revenue lanes. If Bet 1 breaks, the traffic ramp in `monetization-projections.md` compresses toward the conservative case (~$7K yr-1 take-home vs. ~$32K base), and the strategy doc needs a revised acquisition thesis.
 - **Confidence:** Too thin to call the bet broken or confirmed today (n=246, 9 days, mostly first-party). My read: the absence of any organic referrer at day 9 is within the expected indexing delay -- but a six-week watch deadline is the right discipline. The 2026-06-24 model explicitly says "recalibrate the moment you have 4-6 weeks of real PostHog data."
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 (owner) — hard check-in set for 2026-08-10: if non-direct traffic is still under 10% of weekly visitors, treat Bet 1 (GEO) as broken and open a strategy-revision decision.
 
 ---
 
@@ -52,7 +52,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Leave it | Perpetuates a misleading zero on every pulse read | Do not choose |
 - **Moves:** Taxonomy hygiene; frees a pulse slot for one of the three new events above. No direct revenue-lane move, but accurate instrumentation protects every downstream decision.
 - **Confidence:** Deterministic. The event is unwired and has no call site. This is a cleanup, not a judgment call.
-- **Status:** OPEN
+- **Status:** DECIDED 2026-07-10 — `styleViewed` already gone from `events.ts` and the pulse `journeyEvents`; removed the last lingering reference (`scripts/setup-posthog.mjs` "Depth actions" tile). Taxonomy clean.
 
 ---
 
@@ -77,7 +77,9 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 - **Moves:** the rental-affiliate proxy (revenue stream #2).
 - **Confidence:** low-stakes, deterministic gap, not a judgment call.
 
-> **Baseline note (2026-06-29, updated weekly):** 30d = 249 visitors / 328 pageviews_7d. History starts ~2026-06-20; still mostly $direct (77% of 7d traffic). WoW comparison (246 this week vs. 3 the prior week) is not meaningful -- prior week = 1 day of data. No organic or AI-referral traffic visible yet. Strategy register: GEO bet unconfirmed (too early, watch deadline set at 2026-08-10 per Decision above); quiz n=2 (too thin); persona signatures -- top brands Chanel 20 / Hermes 16 / LV 5 / Coach 1 by variant_viewed, ultra-luxury skew consistent with Sofia/Diane personas but n=42 views is too thin to call distribution. Top entry pages (7d): `/` (147), Coach auth article (21), `/bag/199` (10), `/quiz` (10), `/shop` (8). Revisit the full strategy register once 200+ non-direct visitors have accumulated.
+> **Baseline note (2026-07-10, daily scan):** real_visitors 7d = 141 (+44% WoW vs 98), 30d = 386. Pre-launch mode, so counts are readiness not audience. First real non-direct traffic now present: $direct 118, ig 8, tiktok 4, facebook 4, chatgpt.com 1, cj.com 1 (7d) -- direct is down to ~84% and social + one AI referrer have appeared. Top entry pages (7d): `/` (32), `/signup` (13), `/social/instagram` (9), `/bag/589` (6), `/rankings` (5). Value proxies: `outbound_resale_clicked` all-time = 4 (last fired today 2026-07-10, so wired + live, not broken); `outbound_consign_clicked` still 0. Instrumentation: 19/40 events have fired ever; `bags_compared` + `attribute_object_viewed` (n=1) still effectively silent (see 2026-06-29 pulse-query decision). Quiz still n<3 (too thin). Top brands 30d: Chanel 23 / Hermes 18 / Coach 10 / Fendi 5 / LV 4 -- ultra-luxury skew holds but n too thin to call distribution. No section-3 urgent threshold tripped this scan. Full strategy-register walk deferred to Monday deep brief; revisit once 200+ non-direct visitors accumulate.
+>
+> *(Prior 2026-06-29 baseline: 30d 249 visitors, 77% $direct, no non-direct traffic; superseded above.)*
 
 ---
 

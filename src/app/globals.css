@@ -45,3 +45,16 @@ body {
     animation: none;
   }
 }
+
+/* iOS Safari auto-zooms the page when a focused input's font-size is under
+   16px, which throws the layout off-screen (owner reported it on the mobile
+   menu search). Guard EVERY text control on phones: never under 16px, larger
+   sizes untouched. !important on purpose — it must beat text-sm/text-xs
+   utilities on the element, today's and any future input's. */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}

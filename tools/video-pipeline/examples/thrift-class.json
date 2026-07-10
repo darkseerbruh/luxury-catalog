@@ -1,0 +1,59 @@
+{
+  "_comment": "COME-THRIFT-WITH-ME / 'class is in session' reel. VO-over-b-roll. Run: node scripts/build-thrift-bed.mjs examples/thrift-class.json (builds input/thrift-class.mp4 + sidecars), then npm run make thrift-class. Durations are clamped to each clip's real length and the bed loops to fill the voice, so tweak freely. See the header of build-thrift-bed.mjs.",
+  "name": "thrift-class",
+  "vo": "input/thrift-bags-vo.m4a",
+  "clipsDir": "input/clips",
+  "zoom": 0.03,
+  "bed": [
+    { "img": "IMG_7980", "start": 0.2, "duration": 2.3, "note": "INTRO: her in the car, Savers behind" },
+    { "img": "IMG_7950", "start": 0.4, "duration": 4.6, "note": "INTRO: rack pan" },
+    { "img": "IMG_7959", "start": 0.5, "duration": 5.0, "note": "INTRO->SEG1: Etienne Aigner black dome" },
+
+    { "img": "IMG_7957", "start": 0.8, "duration": 4.7, "note": "SEG1: navy Liz Claiborne (the $29.99 beat)" },
+    { "img": "IMG_7961", "start": 0.8, "duration": 6.0, "note": "SEG1: oxblood Liz Claiborne" },
+    { "img": "IMG_7953", "start": 0.3, "duration": 2.0, "note": "SEG1: Nine West camel dome" },
+    { "img": "IMG_7970", "start": 0.8, "duration": 4.2, "note": "SEG1: The Sak tan wallet" },
+    { "img": "IMG_7954", "start": 0.5, "duration": 2.3, "note": "SEG1: Steve Madden cognac backpack" },
+    { "img": "IMG_7955", "start": 1.0, "duration": 4.0, "note": "SEG1: Steve Madden pink canvas" },
+    { "img": "IMG_7951", "start": 1.5, "duration": 4.5, "note": "SEG1: Liz Claiborne yellow flap" },
+    { "img": "IMG_7968", "start": 0.5, "duration": 5.0, "note": "SEG1: Kenneth Cole Reaction" },
+    { "img": "IMG_7969", "start": 0.4, "duration": 2.5, "note": "SEG1: Steve Madden black" },
+    { "img": "IMG_7963", "start": 0.6, "duration": 4.0, "note": "SEG1: Anne Klein cream croc (the $18.99 beat)" },
+
+    { "img": "IMG_7966", "start": 1.5, "duration": 8.5, "note": "SEG2: black 2.55 dupe HERO (Chanel ref pops on 'the real one')" },
+    { "img": "IMG_7967", "start": 0.8, "duration": 3.0, "note": "SEG2: black 2.55 dupe interior" },
+    { "img": "IMG_7964", "start": 0.6, "duration": 4.4, "note": "SEG2: yellow chevron jelly dupe" },
+    { "img": "IMG_7958", "start": 1.2, "duration": 3.8, "note": "SEG2: black chain dupe" },
+    { "img": "IMG_7956", "start": 0.4, "duration": 3.0, "note": "SEG2: white croc structured dupe" },
+    { "img": "IMG_7971", "start": 0.6, "duration": 7.5, "note": "SEG2: Marc Jacobs fake (the $10.99 beat + interior pops on 'tells on itself')" },
+
+    { "img": "IMG_7962", "start": 2.2, "duration": 1.6, "note": "SEG3 landfill: peeling edge close-up" },
+    { "img": "IMG_7965", "start": 0.5, "duration": 3.8, "note": "SEG3 landfill: green puffy quilted dupe" },
+    { "img": "IMG_7962", "start": 0.3, "duration": 3.4, "note": "SEG3 landfill: wear, wider" },
+    { "img": "IMG_7965", "start": 0.6, "duration": 3.4, "note": "SEG3 landfill: green puffy again" },
+
+    { "img": "IMG_7950", "start": 0.5, "duration": 4.7, "note": "CLOSE: rack pan" },
+    { "img": "IMG_7959", "start": 5.5, "duration": 3.5, "note": "CLOSE: end on a good bag" },
+    { "img": "IMG_7980", "start": 0.3, "duration": 2.3, "note": "CLOSE: back to her in the car" }
+  ],
+
+  "headline": {
+    "title": "CLASS IS IN SESSION",
+    "subtitle": "what to actually buy at the thrift",
+    "cta": "luxurycatalog.com",
+    "ctaAt": "luxurycatalog"
+  },
+
+  "trim": { "startPhrase": "sit down" },
+
+  "cues": [
+    { "say": "the real one", "img": "chanel-255.jpg", "cutout": false, "label": "Real Chanel 2.55", "xPct": 72, "yPct": 33, "widthPct": 42, "hold": 3.5, "tilt": -3 },
+    { "say": "tells on itself", "img": "mj-inside.jpg", "cutout": false, "label": "No maker's stamp", "xPct": 70, "yPct": 34, "widthPct": 44, "hold": 3.5, "tilt": -3 }
+  ],
+
+  "callouts": [
+    { "say": "thirty bucks", "text": "$29.99 · Savers tag", "hold": 2.8, "yPct": 62 },
+    { "say": "nineteen dollars", "text": "$18.99 · Savers tag", "hold": 2.8, "yPct": 62 },
+    { "say": "eleven bucks", "text": "$10.99 · Savers tag", "hold": 2.8, "yPct": 62 }
+  ]
+}
