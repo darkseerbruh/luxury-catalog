@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
+import { scoreListingFace, slugTitleFromUrl, type FrontSpec } from "./listings-core";
 import { displaySizeLabel, variantShortLabel } from "./variant-label";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
@@ -865,13 +866,17 @@ export async function getStyleVariants(styleId: number): Promise<StyleVariantOpt
  * variant's for-sale `price_history` row by its (platform, listing_ref) key), for
  * the given variant ids. Source-agnostic: The Luxury Closet is the only feed
  * writing `listing_image` today, but any affiliate feed that populates it is picked
- * up here automatically. For each variant the NEWEST live listing that actually has
- * a photo wins. RESILIENT: returns {} on any error (e.g. pre-0047 listing_image
- * table) so callers keep the placeholder.
+ * up here automatically. For each variant the photographed live listing that BEST
+ * MATCHES the variant's spec wins (scoreListingFace on the slug: colorway, size,
+ * hardware, minus novelty editions), ties broken newest-first — a black/gold Medium
+ * Classic Flap should be fronted by a black medium, not whatever listed last
+ * (2026-07-09: the hero was a green micro mini). RESILIENT: returns {} on any error
+ * (e.g. pre-0047 listing_image table) so callers keep the placeholder.
  */
 async function getAffiliateListingImages(
   sb: ReturnType<typeof getSupabase>,
   variantIds: number[],
+  specs?: Map<number, FrontSpec>,
 ): Promise<Map<number, string>> {
   const out = new Map<number, string>();
   if (variantIds.length === 0) return out;
@@ -879,7 +884,7 @@ async function getAffiliateListingImages(
     // Live affiliate offers for these variants, newest first.
     const { data: priceRows, error: pErr } = await sb
       .from("price_history")
-      .select("variant_id, platform, listing_ref, listing_status, observed_on")
+      .select("variant_id, platform, listing_ref, listing_status, observed_on, source_url")
       .in("variant_id", variantIds)
       .eq("price_type", "listed")
       .not("listing_ref", "is", null)
@@ -889,18 +894,19 @@ async function getAffiliateListingImages(
 
     // Ordered candidate (platform, listing_ref) keys per variant, newest first —
     // listing_image is keyed by BOTH, so match on the composite.
-    const candidatesByVariant = new Map<number, string[]>();
+    const candidatesByVariant = new Map<number, { key: string; slug: string }[]>();
     const allRefs = new Set<string>();
     for (const r of priceRows as {
       variant_id: number;
       platform: string | null;
       listing_ref: string | null;
       listing_status: string | null;
+      source_url: string | null;
     }[]) {
       if (!r.listing_ref || r.listing_status === "sold") continue;
       const key = `${r.platform ?? ""}|${r.listing_ref}`;
       const list = candidatesByVariant.get(r.variant_id) ?? [];
-      if (!list.includes(key)) list.push(key);
+      if (!list.some((c) => c.key === key)) list.push({ key, slug: slugTitleFromUrl(r.source_url) });
       candidatesByVariant.set(r.variant_id, list);
       allRefs.add(r.listing_ref);
     }
@@ -916,15 +922,21 @@ async function getAffiliateListingImages(
     for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
       if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
     }
-    // Newest candidate listing that has a photo wins.
-    for (const [vid, keys] of candidatesByVariant) {
-      for (const key of keys) {
-        const url = urlByKey.get(key);
-        if (url) {
-          out.set(vid, url);
-          break;
+    // Best spec-matching photographed candidate wins; ties keep newest-first order.
+    for (const [vid, cands] of candidatesByVariant) {
+      const spec = specs?.get(vid);
+      let bestUrl: string | null = null;
+      let bestScore = -Infinity;
+      for (const c of cands) {
+        const url = urlByKey.get(c.key);
+        if (!url) continue;
+        const score = spec ? scoreListingFace(c.slug, spec) : 0;
+        if (score > bestScore) {
+          bestScore = score;
+          bestUrl = url;
         }
       }
+      if (bestUrl) out.set(vid, bestUrl);
     }
     return out;
   } catch {
@@ -945,12 +957,24 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
     const sb = getSupabase();
     const { data, error } = await sb
       .from("variant")
-      .select("variant_id, image_url")
+      .select("variant_id, image_url, exterior_colorway, size_label, hardware_color")
       .in("variant_id", ids);
     if (error) return {};
     const map: Record<number, string> = {};
-    for (const r of (data ?? []) as { variant_id: number; image_url: string | null }[]) {
+    const specs = new Map<number, FrontSpec>();
+    for (const r of (data ?? []) as {
+      variant_id: number;
+      image_url: string | null;
+      exterior_colorway: string | null;
+      size_label: string | null;
+      hardware_color: string | null;
+    }[]) {
       if (r.image_url) map[r.variant_id] = r.image_url;
+      specs.set(r.variant_id, {
+        colorway: r.exterior_colorway,
+        sizeLabel: r.size_label,
+        hardwareColor: r.hardware_color,
+      });
     }
 
     // Tier 2: a live affiliate listing photo (The Luxury Closet today; any feed
@@ -961,7 +985,7 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
     // Resilient: pre-0047 (no listing_image table) or any error leaves the placeholder.
     const missingAffiliate = ids.filter((id) => !map[id]);
     if (missingAffiliate.length > 0) {
-      const affiliate = await getAffiliateListingImages(sb, missingAffiliate);
+      const affiliate = await getAffiliateListingImages(sb, missingAffiliate, specs);
       for (const [vid, url] of affiliate) map[vid] = url;
     }
 

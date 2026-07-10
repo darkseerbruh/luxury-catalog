@@ -25,10 +25,13 @@ import { displaySizeLabel } from "./variant-label";
 import {
   rateListing,
   isConfidentBasis,
+  scoreListingFace,
+  slugTitleFromUrl,
   type DealRating,
   type DealBand,
   type ItemSpec,
   type SpecComp,
+  type FrontSpec,
 } from "./listings-core";
 
 const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
@@ -355,8 +358,11 @@ async function fetchListingImages(refs: string[]): Promise<Map<string, string>> 
 }
 
 /** A live for-sale listing to stand in as the bag-page hero when we hold no
- * first-party photo. The cheapest in-stock listing that carries a photo, with a
- * tracked buy link. Framed on the page as "available now", never as our own
+ * first-party photo. Among photographed in-stock listings, the one that best
+ * LOOKS LIKE the variant wins (scoreListingFace: colorway/size/hardware, minus
+ * novelty editions), cheapest within that top tier — a black/gold Medium page
+ * shouldn't be fronted by a green micro mini that happens to be cheapest
+ * (2026-07-09). Framed on the page as "available now", never as our own
  * editorial shot. Resilient: null when there's no photographed live listing. */
 export interface HeroListing {
   imageUrl: string;
@@ -368,31 +374,49 @@ export interface HeroListing {
 export async function getHeroListing(variantId: number): Promise<HeroListing | null> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId)) return null;
   try {
-    const { data } = await getSupabase()
-      .from("price_history")
-      .select("sale_price, platform, source_url, listing_ref")
-      .eq("variant_id", variantId)
-      .eq("price_type", "listed")
-      .or("listing_status.is.null,listing_status.eq.available")
-      .not("sale_price", "is", null)
-      .not("listing_ref", "is", null)
-      .order("sale_price", { ascending: true })
-      .limit(8);
+    const sb = getSupabase();
+    const [{ data }, { data: vRows }] = await Promise.all([
+      sb
+        .from("price_history")
+        .select("sale_price, platform, source_url, listing_ref")
+        .eq("variant_id", variantId)
+        .eq("price_type", "listed")
+        .or("listing_status.is.null,listing_status.eq.available")
+        .not("sale_price", "is", null)
+        .not("listing_ref", "is", null)
+        .order("sale_price", { ascending: true })
+        .limit(500),
+      sb
+        .from("variant")
+        .select("exterior_colorway, size_label, hardware_color")
+        .eq("variant_id", variantId)
+        .limit(1),
+    ]);
     const rows = (data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[];
     if (rows.length === 0) return null;
+    const v = (vRows ?? [])[0] as
+      | { exterior_colorway: string | null; size_label: string | null; hardware_color: string | null }
+      | undefined;
+    const spec: FrontSpec = {
+      colorway: v?.exterior_colorway ?? null,
+      sizeLabel: v?.size_label ?? null,
+      hardwareColor: v?.hardware_color ?? null,
+    };
     const images = await fetchListingImages(rows.map((r) => r.listing_ref));
-    for (const r of rows) {
-      const img = images.get(r.listing_ref);
-      if (img && r.source_url) {
-        return {
-          imageUrl: img,
-          buyUrl: affiliateListingUrl(r.source_url, r.platform),
-          price: Math.round(r.sale_price),
-          platformLabel: platformLabel(r.platform),
-        };
-      }
-    }
-    return null;
+    // Rows arrive cheapest-first; a stable sort by score keeps "cheapest within the
+    // best-matching tier".
+    const photographed = rows.filter((r) => images.get(r.listing_ref) && r.source_url);
+    if (photographed.length === 0) return null;
+    const scored = photographed
+      .map((r, i) => ({ r, i, score: scoreListingFace(slugTitleFromUrl(r.source_url), spec) }))
+      .sort((a, b) => b.score - a.score || a.i - b.i);
+    const best = scored[0].r;
+    return {
+      imageUrl: images.get(best.listing_ref) as string,
+      buyUrl: affiliateListingUrl(best.source_url as string, best.platform),
+      price: Math.round(best.sale_price),
+      platformLabel: platformLabel(best.platform),
+    };
   } catch {
     return null;
   }
