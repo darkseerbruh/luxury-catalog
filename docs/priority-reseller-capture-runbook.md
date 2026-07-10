@@ -28,7 +28,7 @@ lowest spend that covers it. Companion to [data-collection-handoff.md](data-coll
 | **eBay (sold)** | **Apify** (`ebay-sold-apify.ts`, auction-only) | Apify CU | realized comps at capture | ✅ wired |
 | **Redeluxe** ⭐ | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`redeluxe-refresh.yml`, daily) |
 | **The Luxury Closet** | CJ product feed (advertiser 5312449) | $0 | daily diff + `reconcile:sold` | ✅ wired (`ingest-tlc.yml`, daily) |
-| **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
+| **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`couture-usa-refresh.yml`, daily) |
 | **Vestiaire** | Firecrawl (`vestiaire.ts` adapter) | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (needs crawl feed) |
 | **Rebag** | CJ product feed once approved (mirror TLC) | $0 when live | daily diff + `reconcile:sold` | 🔧 gated on Rebag CJ approval (advertiser 5749848, pending) |
 
@@ -55,6 +55,19 @@ Keeps only bags it can name via `canonicalModel` (brand from `vendor`, condition
 size from the title). Unnamable bags are the **discovered-listing follow-up** (not yet wired),
 never a guessed name. Verified 2026-07-10: a 2-page sample gave 175 clean named rows (Hermès /
 Chanel / Dior / LV) with sane prices, 0 invalid.
+
+### Couture USA (free Shopify feed, automated via `couture-usa-refresh.yml`)
+```
+npx tsx supabase/ingest/sources/couture-usa-crawl.ts
+npx tsx supabase/ingest/sources/couture-usa.ts --raw
+npm run load:prices -- couture-usa --write
+npm run reconcile:sold -- --platform="Couture USA" --snapshot=data/ingest/_raw/couture-usa-live.json --write
+npm run summary:refresh
+```
+Sells footwear too, so it gates on bag `product_type`s. Brand from `vendor`, condition from the
+grade tags (Like New / Excellent / Great / Very Good), colour from the `Color_*` tags. Verified
+2026-07-10: a 2-page sample gave 202 clean named rows across 10 houses (LV / Chanel / Gucci /
+YSL…), colour on 199/202, sane prices, 0 invalid.
 
 ### TheRealReal (Apify, automated via `trr-refresh.yml`)
 Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:
