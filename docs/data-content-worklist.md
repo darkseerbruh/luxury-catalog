@@ -333,9 +333,13 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
       across scaffold generations*: ∅-vs-Standard-vs-size twins (Ivy v1117/v1401, Beau v1118/v1406, Coffer
       v1119/v1850, Wander/Aventure/Arcadie Standard-vs-sized). A `selectTarget`-driven auto re-point is
       UNSAFE: "matelasse" is a MATERIAL in Coffer/Bucket handles, so those rows mis-resolve to the
-      **Matelassé** STYLE (its excludes only cover wander/arcadie/aventure). Fix path = (a) tighten the
-      Matelassé target excludes (add coffer/bucket/beau/ivy…) as a small tested adapter change, THEN
-      (b) a SAME-STYLE-ONLY variant dedup with review. Thin non-representative brand, low urgency.
+      **Matelassé** STYLE. ✅ **(a) DONE 2026-07-10**: tightened the Matelassé target excludes
+      (added coffer/bucket/softy/beau/ivy/sandal/pouch) + regression tests — matelassé Coffer/Bucket/
+      sandals/pouches now fall through instead of polluting; genuine matelassé bags (10) unchanged.
+      This stops FUTURE contamination only. ⬜ **(b) STILL OPEN (data lane):** the existing DB rows
+      already mislabeled onto Matelassé v1050 (+ the stranded Wander/Aventure/Arcadie Standard rows +
+      the ∅/Standard/size duplicate variants) need a SAME-STYLE-ONLY re-point/dedup with review — never
+      an auto-sweep. Thin non-representative brand, low urgency.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
