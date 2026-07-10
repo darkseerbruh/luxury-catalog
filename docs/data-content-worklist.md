@@ -304,10 +304,16 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
     mess. Fix = a reviewed `merge-style-dupes` pass first (pipeline rule: style dups need spot-check),
     THEN wire targets. Its live FP feed is thin (~33 bags) so 20 may need the dedup + a couple real
     adds (The Story, T-Bar, Padlock Tote already exist as styles).
-  - ⚠️ **Miu Miu 17 — close, gap is unpriced size-variants** (found 2026-07-10). Already has Beau,
-    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3-variant gap is
-    UNPRICED sizes (Wander ×1, Aventure ×2) whose FP rows fell out-of-band, not missing models. Fix =
-    widen those targets' price bands / size-match, re-load. Low-risk but fiddly; not a clean add.
+  - ⚠️ **Miu Miu 17 — blocked by an FP-adapter size bug** (root-caused 2026-07-10). Already has Beau,
+    Coffer, Softy, Ivy, Wander, Arcadie, Aventure, Matelassé, Bucket, Bow Bag. The 3 unpriced variants
+    (Wander [Small] v1400, Aventure [Regular] v1402, Aventure [Medium] v1403) DO have in-band FP
+    listings, but `sources/fashionphile.ts --raw` lands those rows with **`size_label: undefined`**
+    (style resolves to "Wander"/"Aventure" but the size is dropped), so load collapses every size onto
+    one variant (Mini/priced) and the others never price. Real fix = make the FP adapter carry the
+    matched target's `size_label` (or detect size from the handle) for these multi-size Miu Miu
+    targets; it's a small adapter change + test, NOT a data pass. Same latent bug likely mis-sizes
+    other multi-size FP targets — worth a general fix. Do it in a code lane, not concurrent with the
+    ingest session already editing `model-normalize.ts`.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
