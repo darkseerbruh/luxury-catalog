@@ -1,7 +1,14 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-09 (where-to-buy trust hub + scoped eBay pull; same day: TLC mis-map re-triage, brand-alias fix + promotion batch). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (merchant sweep #2 + DDH application; prior same-week: style-face pickers, where-to-buy hub, TLC re-triage, alias fix). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
 ---
+
+## TL;DR — Merchant sweep #2: Dallas Designer Handbags applied, ALB skipped (2026-07-09, docs on `main`)
+
+**Owner asked "can we list Atlanta Luxury Bags? who else?" → two-agent sweep of ~20 merchants; full verdicts + evidence in `docs/data-collection-handoff.md` §11** (commits `896194f`/`c2f8bd2`/`d44448a`).
+- 🟡 **Dallas Designer Handbags APPLIED 2026-07-09** (Awin merchant 91683, 5% / 15-day cookie, ShopWindow feed 1,446 products): owner clicked Join; Awin confirmed "request sent to the advertiser." **GATE: wire NOTHING until their Link status = online AND the "Exposure Level 5" unfunded-payments flag clears** (both red in the logged-in dashboard 2026-07-09). On approval + green gate: wire the Awin feed TLC-style (`listing_image` auto-flows through `getVariantImages`).
+- ❌ **Atlanta Luxury Bags skipped** (no affiliate rail or feed, ~302 live listings, mixed online-buyer reviews). ❌ **WGACA avoided** (lost Chanel v. WGACA, willful infringement). 🅿️ Parked: Farfetch Pre-Owned (email application, hers) + Luxe Du Jour (15%, gated on live socials, no feed). Keeks (≥7.5k products, no program) flagged for a future direct-outreach batch.
+- **Your turn: none pending.** Watch arielle@luxurycatalog.com (Workspace) for the DDH approval email.
 
 ## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09/10, on `main`, DEPLOYED to prod)
 
