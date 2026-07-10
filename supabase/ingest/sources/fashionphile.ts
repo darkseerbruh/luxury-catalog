@@ -1877,11 +1877,14 @@ export const TARGETS: FashionphileTarget[] = [
     excludeTokens: ["wallet", "card", "coin"],
     minPrice: 1800, maxPrice: 4200,
     searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
-  // Matelassé quilted bags — "matelasse" is also a material word in Wander/Arcadie
-  // handles, so exclude those styles to keep this bucket the standalone Matelassé bags.
+  // Matelassé quilted bags — "matelasse" is a MATERIAL word carried by many other Miu
+  // Miu styles' handles, so this bucket must exclude every sibling style + non-bag/SLG
+  // token or it swallows them (e.g. a matelassé Coffer/Bucket would mis-resolve here).
+  // Ivy/Beau win on their own anchored targets already; the rest are excluded so a
+  // matelassé sibling falls through to discovered rather than polluting this median.
   { brand: "Miu Miu", style: "Matelassé", size_label: "Standard",
     requireTokens: ["matelasse"],
-    excludeTokens: ["wander", "arcadie", "aventure", "wallet", "card", "coin"],
+    excludeTokens: ["wander", "arcadie", "aventure", "coffer", "bucket", "softy", "beau", "ivy", "sandal", "wallet", "card", "coin", "pouch"],
     minPrice: 300, maxPrice: 2000,
     searchUrl: "https://www.fashionphile.com/collections/miu-miu/products.json" },
   // ── Burberry backbone — remaining styles (2026-06-30; Lola already captured above) ──

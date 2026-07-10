@@ -121,3 +121,33 @@ describe("selectTarget — sanity on the live TARGETS array", () => {
     expect(miuSized.length).toBeGreaterThan(0);
   });
 });
+
+describe("selectTarget — Miu Miu Matelassé is a BAG bucket, not the material", () => {
+  // "matelasse" is a material token carried by many Miu Miu styles' handles, so the
+  // Matelassé STYLE target must not swallow siblings / SLGs / non-bags (2026-07-10).
+  it("keeps a genuine matelassé bag on Matelassé", () => {
+    expect(pick("miu-miu-nappa-matelasse-turnlock-hobo-black-brown-1851996")).toEqual({
+      style: "Matelassé",
+      size: "Standard",
+    });
+    expect(pick("miu-miu-nappa-matelasse-dome-crossbody-black-1891463")?.style).toBe("Matelassé");
+  });
+
+  it("does NOT route a matelassé Coffer/Bucket onto Matelassé", () => {
+    // No Coffer/Bucket target exists, so these fall through (null) rather than polluting.
+    expect(pick("miu-miu-nappa-matelasse-coffer-bag-black-1234567")).toBeNull();
+    expect(pick("miu-miu-matelasse-bucket-bag-black-1234567")).toBeNull();
+  });
+
+  it("does NOT route a matelassé sandal (non-bag) or pouch (SLG) onto Matelassé", () => {
+    expect(pick("miu-miu-nappa-matelasse-sporty-sandals-39-black-1739956")).toBeNull();
+    expect(pick("miu-miu-nappa-matelasse-pouch-sand-coffee-1865452")).toBeNull();
+  });
+
+  it("routes a matelassé Ivy to its own anchored Ivy target, not Matelassé", () => {
+    expect(pick("miu-miu-nappa-matelasse-ivy-bag-black-1234567")).toEqual({
+      style: "Ivy",
+      size: "Standard",
+    });
+  });
+});
