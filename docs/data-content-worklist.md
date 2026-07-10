@@ -290,11 +290,15 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
   snapshot (matches the loader's listing_ref exactly, verified against a live sample) →
   `trr-apify.ts` maps → `load:prices therealreal --write` → `reconcile:sold --platform=RealReal
-  --write` (50%-abort guard intact) → `summary:refresh`. ~$4-5/run, ~$60/mo. Retired the old
-  daily 1-style Firecrawl pilot (`firecrawl-capture.yml` now manual-only). **⚠️ OWNER ACTION
-  (one-time, blocks the first run): add `APIFY_TOKEN` in repo Settings → Secrets → Actions**
-  (Claude can't set GitHub secrets). Fashionphile stays every-3h; TLC daily; eBay stays manual
-  (its value is permanent sold comps, not live listings).
+  --write` → `summary:refresh`. ~$4-5/run, ~$60/mo. Retired the old daily 1-style Firecrawl
+  pilot (`firecrawl-capture.yml` now manual-only). APIFY_TOKEN secret added + **job PROVEN in
+  write mode 2026-07-09** (run 29065252223). **Retirement is AGE-based, not snapshot-diff:** the
+  test run exposed that TRR's ~120/category cap means one sweep sees ~840 live while the DB
+  showed 7,841 "live" (~7,050 unseen since Jun 23-24 = stale) — snapshot-diff would false-retire
+  90% (50% guard aborted, correctly). New `reconcile:sold --age-days=14` retires listings not
+  re-observed in 14d (existing `observed_on`, no migration; aborts if 0 seen in-window). First
+  run **retired 7,693 stale TRR rows; available 8,584 → 1,332.** Fashionphile every-3h; TLC daily;
+  eBay stays manual (permanent sold comps).
 - ✅ **eBay SCOPED pull — DONE 2026-07-09 (owner greenlit "option A" + the trust-hub chat).**
   Target = the 49 one-source styles (n≥20, median present, 1 source; all single-variant so
   zero pickVariant risk). TWO engines in one pass: (1) Firecrawl MCP sold-search scrapes
