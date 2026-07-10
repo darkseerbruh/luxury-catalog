@@ -1,5 +1,17 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (TRR all-brands mis-map sweep — 981 verified rows re-triaged; earlier same day: TRR Chanel sweep, merchant sweep #2 / DDH application). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (unified market surface + UX fixes shipped, UX-improvements lane; earlier same day: TRR all-brands mis-map sweep — 981 verified rows re-triaged). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Unified market surface + UX fixes SHIPPED (2026-07-10, on `main`, deploying)
+
+**The `/shop` page is now one surface: search + browse + everything-for-sale + deals compose.** Grew out of the owner's nav-legibility question (Fragrantica screenshot) → "put it all in one place, done well." Spec: `docs/ux/unified-market-spec.md`. Two mockup artifacts drove the design (menu-options, then the unified-market page).
+- 🔎 **Search into the market grid:** `resolveMarketSearch` (`src/lib/market-search.ts`) reuses the SAME engine `/search` uses to resolve a query → matched styleIds; `getShopProducts` gained a `styleIds` filter, so the text box narrows the grid and every existing facet + the deals toggle compose. Matched styles with no live listing show in an "in the catalog, not for sale" strip; article hits + video pin + request-a-bag ported so `/search` parity holds.
+- 🔀 **`/search` + `/deals` are clean 307 config redirects into `/shop`** (`next.config.ts`), so the ~15 existing `/search?q=` links (identify, bag pages, era, social) keep working untouched. Home hero + nav search point straight at `/shop`.
+- 🎛️ **Left-rail filter layout:** `ShopControls` rewritten — sticky left rail (desktop) / bottom tray (mobile), deals toggle at top, sort + facets as counted option rows (selection carries a check, never colour alone), removable chips + clear-all. Server grid passes through as `children`; all URL-driven.
+- 🧵 **Earlier UX fixes in the same lane (commit `ae4fda2`):** route-level loading skeletons (`app/loading.tsx` + `shop`) + `next/form` client nav (no dead clicks); `/search` mobile-overflow fix (`min-w-0`); bag names wrap not truncate (shop grid, deals, coveted); footer regrouped (added LC Index + Where to buy); "Style read" → "Style quiz" sitewide.
+- ✅ **Landed to `main` via `land-to-main.sh` (merge `85610ac`); green gate: tsc, eslint, next build, 723 tests.** Vercel auto-deploys `main`.
+- ⬜ **YOUR TURN (nothing blocking):** eyeball live `/shop` on desktop + mobile — this container has no live DB (dummy build gate), so the real search-narrows-the-grid behavior is the one thing unverified. If a facet order or the rail width reads wrong, it's one component to adjust. Deferred by design: shape/carry filter (sparse variant-level data, hides until attribute-capture fills it).
 
 ---
 
