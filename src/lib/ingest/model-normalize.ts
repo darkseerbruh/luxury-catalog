@@ -517,12 +517,6 @@ const MODELS: Record<string, ModelDef[]> = {
   "Alexander McQueen": [
     ["Skull Box Clutch", "skull box"], ["Skull", "skull"],
   ],
-  "Mansur Gavriel": [
-    ["Bucket Bag", "bucket bag"],
-  ],
-  "Proenza Schouler": [
-    ["PS1", "ps1"],
-  ],
   Tumi: [
     ["Voyageur", "voyageur"], ["Alpha", "alpha"], ["Harrison", "harrison"], ["19 Degree", "19 degree"],
     ["Georgica", "georgica"], ["Sinclair", "sinclair"], ["Devoe", "devoe"], ["Calais", "calais"],
