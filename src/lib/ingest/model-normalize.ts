@@ -43,6 +43,12 @@ const BAG_OVERRIDES = [
 
 const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+/** Accent-fold ("Jypsière" -> "jypsiere"). Titles arrive both ways (slugs are ASCII,
+ *  scraped names keep the accents) and a non-unicode \b breaks on a trailing accented
+ *  char ("noé\b" can never match) — folding BOTH hay and token sides makes every
+ *  dictionary entry accent-blind instead of per-entry accent dupes. */
+const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+
 /** Space, hyphen, dot and slash are interchangeable separators: URL-slug titles come
  *  back with every separator flattened to a space ("d-lite" -> "d lite") or dropped
  *  entirely between digits ("2.55" -> "255", "24/24" -> "2424"), so a literal token
@@ -55,7 +61,7 @@ function tokenRegex(token: string, plural: boolean): RegExp {
   const key = plural ? `${token}|s?` : token;
   let re = tokenReCache.get(key);
   if (!re) {
-    const parts = token.split(/[\s./-]+/).filter(Boolean);
+    const parts = fold(token).split(/[\s./-]+/).filter(Boolean);
     const body = parts
       .map((p, i) => {
         if (i === parts.length - 1) return esc(p);
@@ -278,7 +284,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Kelly To Go", "kelly wallet to go", "kelly to go"], ["Constance To Go", "constance long to go", "constance to go"],
     ["Birkin", "birkin"], ["Kelly", "kelly"], ["Constance", "constance"], ["Evelyne", "evelyne"],
     ["Picotin Lock", "picotin"], ["Lindy", "lindy"], ["Bolide", "bolide"], ["Garden Party", "garden party", "neo garden"],
-    ["Herbag", "herbag"], ["Roulis", "roulis"], ["Jypsière", "jypsi"], ["Halzan", "halzan"],
+    ["Herbag", "herbag"], ["Roulis", "roulis"], ["Jypsière", "jypsi", "jypsiere"], ["Halzan", "halzan"],
     ["Steeple", "steeple"], ["Kaba", "kaba"], ["Jige", "jige"], ["Bride-a-Brac", "bride-a-brac", "bride a brac"],
     ["24/24", "24/24", "24 24"], ["Della Cavalleria", "della cavalleria"], ["In-The-Loop", "in-the-loop", "in the loop"],
     ["Geta", "geta"], ["Toolbox", "toolbox"], ["Trim", "trim"], ["Verrou", "verrou"],
@@ -481,7 +487,7 @@ const MODELS: Record<string, ModelDef[]> = {
  * known model matches. `brand` may be a raw/sub-brand string — it's canonicalized here.
  */
 export function canonicalModel(brand: string, rawName: string | null | undefined): string | null {
-  const hay = (rawName ?? "").toLowerCase().replace(/&amp;/g, "&");
+  const hay = fold((rawName ?? "").toLowerCase()).replace(/&amp;/g, "&");
   if (!hay) return null;
   const isBagOverride = BAG_OVERRIDES.some((t) => hay.includes(t));
   if (!isBagOverride && SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;

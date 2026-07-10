@@ -44,6 +44,16 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Louis Vuitton", "Monogram Shoulder Bag")).toBeNull();
   });
 
+  it("matches accent-blind in both directions (TRR sweep, 2026-07-10)", () => {
+    // ASCII slug title vs accented dictionary name...
+    expect(canonicalModel("Hermès", "clemence jypsiere 34")).toBe("Jypsière");
+    // ...and accented scraped title vs ASCII token, incl. a TRailing accent where a
+    // non-unicode \b could never match ("noé").
+    expect(canonicalModel("Hermès", "2025 Swift Mini Jypsière".toLowerCase())).toBe("Jypsière");
+    expect(canonicalModel("Louis Vuitton", "petit noé")).toBe("Noé");
+    expect(canonicalModel("Louis Vuitton", "néonoé mm")).toBe("NéoNoé");
+  });
+
   it("resolves sub-brands / collabs / accents to one canonical brand", () => {
     expect(canonicalBrand("Christian Dior")).toBe("Dior");
     expect(canonicalBrand("DIOR MEN")).toBe("Dior");

@@ -9,7 +9,12 @@
  *
  * For each row on the platform we rebuild the title from the source_url slug,
  * recompute canonicalModel with the current dictionary, and compare to the
- * row's style:
+ * row's style. Slugs can be LOSSIER than the real listing title (TRR slug
+ * "gucci-leather-shoulder-bag" for title "Leather Marmont Medium"), and some
+ * loaders keep that title in price_history.notes — so a slug mismatch gets a
+ * second chance: if the notes title resolves to the row's style, the row is
+ * correctly placed and stays. Loaders that store non-title junk in notes are
+ * harmless here (junk never resolves to the style).
  *   match      -> keep
  *   mismatch   -> preserve as evidence in discovered_listing (style_guess = the
  *                 recomputed model, promotion pass re-places it), then delete the
@@ -82,6 +87,7 @@ interface PhRow {
   season: string | null;
   observed_on: string | null;
   listing_status: string | null;
+  notes: string | null;
 }
 
 async function fetchAllPlatformRows(): Promise<PhRow[]> {
@@ -92,7 +98,7 @@ async function fetchAllPlatformRows(): Promise<PhRow[]> {
     const { data, error } = await sb
       .from("price_history")
       .select(
-        "price_id, variant_id, listing_ref, source_url, sale_price, currency, price_type, condition, colorway, material, hardware_color, production_year, season, observed_on, listing_status",
+        "price_id, variant_id, listing_ref, source_url, sale_price, currency, price_type, condition, colorway, material, hardware_color, production_year, season, observed_on, listing_status, notes",
       )
       .eq("platform", PLATFORM)
       .order("price_id", { ascending: true })
@@ -163,7 +169,13 @@ async function main(): Promise<void> {
     return a === b || a.includes(b) || b.includes(a);
   };
 
-  const mismapped: (PhRow & { title: string; styleName: string; brandName: string; recomputed: string | null })[] = [];
+  const mismapped: (PhRow & {
+    title: string;
+    notesTitle: string | null;
+    styleName: string;
+    brandName: string;
+    recomputed: string | null;
+  })[] = [];
   let unparsable = 0;
   for (const r of rows) {
     const meta = vMeta.get(r.variant_id);
@@ -174,15 +186,25 @@ async function main(): Promise<void> {
       unparsable++;
       continue;
     }
+    const notesTitle = r.notes?.trim().toLowerCase() || null;
     // Default scope = the original incident: rows that exist because bare "timeless"
     // matched. --all recomputes everything — token matching is separator-tolerant now
     // (slug "d lite" hits "d-lite"), but an unscoped flag list still mixes real
     // mis-maps with dictionary gaps, so --all writes are gated on --groups-file.
-    if (!all && !title.includes("timeless")) continue;
+    if (!all && !title.includes("timeless") && !notesTitle?.includes("timeless")) continue;
     const recomputed = canonicalModel(meta.brand, title);
-    if (!sameModel(meta.style, recomputed)) {
-      mismapped.push({ ...r, title, styleName: meta.style, brandName: meta.brand, recomputed });
-    }
+    if (sameModel(meta.style, recomputed)) continue;
+    // Slug mismatch — second chance on the real listing title if a loader kept it.
+    const recomputedNotes = notesTitle ? canonicalModel(meta.brand, notesTitle) : null;
+    if (recomputedNotes && sameModel(meta.style, recomputedNotes)) continue;
+    mismapped.push({
+      ...r,
+      title: notesTitle && recomputedNotes ? notesTitle : title,
+      notesTitle,
+      styleName: meta.style,
+      brandName: meta.brand,
+      recomputed: recomputedNotes ?? recomputed,
+    });
   }
 
   // Report: what sits where it shouldn't, grouped by (style it's on -> what it really is).
@@ -208,7 +230,7 @@ async function main(): Promise<void> {
         sorted.map(([k, ms]) => ({
           group: k,
           rows: ms.length,
-          samples: ms.map((m) => ({ price_id: m.price_id, title: m.title, source_url: m.source_url })),
+          samples: ms.map((m) => ({ price_id: m.price_id, title: m.title, notes: m.notesTitle, source_url: m.source_url })),
         })),
         null,
         2,
