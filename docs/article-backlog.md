@@ -12,7 +12,7 @@ Score = demand evidence (date/n) × revenue proximity × effort. H/M/L composite
 | Hermès color codes decoded | Hermès #1 brand 30d n=15 + "Hermès authentication" top-viewed ×2 (2026-07-06) + "birkin" ×2; archivist dataset done | What it's worth | Sofia/Diane | 1 | H | 🔴 published 2026-07-08 (DB #37, /articles/hermes-color-codes) |
 | Hermès leather guide (Togo/Clemence/Epsom/Swift) | same Hermès demand cluster (2026-07-07); split from the color-codes item; draft done in seasonal-archive/drafts | What it's worth | Sofia/Diane | 1 | H | ✅ ready (next run; ≤2/run cap hit this week) |
 | Which houses actually name their colors | archivist slate 2026-06-28 (3-tier thesis, draft done); lower direct search demand, differentiated GEO | Comparisons | Maya | 1 | M | ✅ ready |
-| LV Alma: what it is + what it costs on resale | search "alma" ×3 (to 2026-07-02); check an Alma value page/article exists first | What it's worth | Sofia | 1 | M | 💡 (needs price pull → see data-content-worklist) |
+| LV Alma: what it is + what it costs on resale | search "alma" ×3 | What it's worth | Sofia | 1 | M | 📝 DRAFT READY 2026-07-10 → docs/research-drafts/lv-alma-value-draft.md (data bar verified, deduped, voice-checked; owner review flag: "Mini" size taxonomy). Alma page (434) also got a real description + year 1934. |
 
 > **Cross-feed note (rule 3):** "goyard" is the only `search_not_found` on record
 > (2026-06-28) and was also searched ×1 — a search-surface/data gap, not an article.
