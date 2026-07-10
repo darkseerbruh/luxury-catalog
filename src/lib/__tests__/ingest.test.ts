@@ -12,7 +12,7 @@ import {
 import { allMsrpObservations } from "../ingest/msrp-data";
 import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
-import { parseTrrDescription } from "../ingest/trr";
+import { parseTrrDescription, isTrrHandbagListing } from "../ingest/trr";
 import { buildEnrichmentPrompt, parseEnrichmentResponse, buildDescriptionFactsPrompt, parseDescriptionFactsResponse } from "../ingest/enrich";
 import { buildSpecPrompt, parseSpecResponse } from "../ingest/spec-extract";
 import { mapConditionText, mapTrrItemCondition } from "../ingest/condition";
@@ -265,6 +265,38 @@ describe("TheRealReal description parser", () => {
     expect(spec.material).toBe("Epsom Leather");
     expect(spec.color).toBe("Craie");
     expect(spec.hardwareColor).toBe("gold");
+  });
+});
+
+describe("isTrrHandbagListing (department gate)", () => {
+  it("accepts handbag / bag / luggage department paths", () => {
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/handbags/satchels/balenciaga-motocross-town")).toBe(true);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/handbags/crossbody-bags/celine-calf-leather-classic-bag-medium-sevfd")).toBe(true);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/men/bags/messenger-bags/gucci-gg-messenger")).toBe(true);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/men/luggage/celine-trolley")).toBe(true);
+  });
+
+  it("rejects each non-bag department (the contamination source)", () => {
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/accessories/belts/celine-2020-triomphe-belt-ufdd7")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/men/clothing/outerwear/celine-triomphe-bomber-jacket-ur2qb")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/shoes/pumps/celine-triomphe-pump")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/jewelry/necklaces/celine-triomphe-necklace")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/watches/celine-watch")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/accessories/bag-accessories/louis-vuitton-alma-bb-strap-v46jc")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/home/celine-tray")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/kids/clothing/celine-tee")).toBe(false);
+  });
+
+  it("fails open for absent / unparseable URLs (never drops a real bag on a format change)", () => {
+    expect(isTrrHandbagListing(null)).toBe(true);
+    expect(isTrrHandbagListing(undefined)).toBe(true);
+    expect(isTrrHandbagListing("https://www.therealreal.com/")).toBe(true);
+    expect(isTrrHandbagListing("not a url")).toBe(true);
+  });
+
+  it("ignores query strings and fragments", () => {
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/accessories/wallets/celine-french-purse?utm=x#top")).toBe(false);
+    expect(isTrrHandbagListing("https://www.therealreal.com/products/women/handbags/totes/celine-luggage?ref=y")).toBe(true);
   });
 });
 

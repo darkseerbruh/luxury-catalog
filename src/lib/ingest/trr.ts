@@ -47,6 +47,31 @@ const COLORS = [
 
 const HARDWARE = /\b(Gold|Silver|Ruthenium|Rose Gold|Gunmetal|Palladium|Brass|Bronze)(?:[- ](?:Tone|Plated))?\s+Hardware/i;
 
+/**
+ * TheRealReal files every product under a department path segment in its product URL,
+ * e.g. `.../products/women/handbags/satchels/<slug>` (a bag) vs
+ *      `.../products/women/accessories/belts/<slug>` or `.../men/clothing/...` (NOT a bag).
+ * The Apify capture (sources/trr-apify.ts) is inherently multi-brand AND multi-category,
+ * so a "Triomphe" belt / hoodie / wallet shares a brand+model token with a real bag and,
+ * if promoted on that token, lands on the bag's variant — polluting its comps with a much
+ * cheaper garment/accessory. This guard is the department gate: false when the URL's path
+ * carries a known NON-bag department, true otherwise (handbags / bags / luggage / unknown).
+ *
+ * Fail-OPEN: an absent or unparseable URL returns true, so a TRR URL-format change never
+ * silently drops real bag listings — the department blocklist is the only reason to reject.
+ */
+const TRR_NON_BAG_DEPARTMENTS = new Set([
+  "clothing", "shoes", "accessories", "jewelry", "watches", "home", "kids",
+]);
+
+export function isTrrHandbagListing(sourceUrl: string | null | undefined): boolean {
+  if (!sourceUrl) return true;
+  const m = sourceUrl.match(/\/products\/(.+)$/i);
+  if (!m) return true;
+  const segs = m[1].split("?")[0].split("#")[0].split("/").filter(Boolean);
+  return !segs.some((s) => TRR_NON_BAG_DEPARTMENTS.has(s.toLowerCase()));
+}
+
 export interface TrrSpec {
   color: string | null;
   material: string | null;
