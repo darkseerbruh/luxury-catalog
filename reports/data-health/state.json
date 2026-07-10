@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "cadence": "daily",
+  "weeklyDow": 1,
+  "greenStreak": 0,
+  "lastRun": "2026-07-10",
+  "overall": "yellow",
+  "metrics": {
+    "freshness-fashionphile": 0.7757739583333333,
+    "freshness-therealreal": 0.7757739583333333,
+    "freshness-tlc": 0.7757739583333333,
+    "freshness-ebay": 0.7757739583333333,
+    "capture-rows": 25192,
+    "ranking-count": 311,
+    "ranking-near-floor": 43,
+    "coverage-condition": 29.046309032553875,
+    "coverage-condition-detail": 22.41592408747483,
+    "coverage-region": 48.89027971691301,
+    "coverage-production-year": 3.7253863559770832,
+    "coverage-hardware": 46.80275383948775,
+    "coverage-style-description": 38.6,
+    "coverage-style-year": 2.6,
+    "coverage-listing-images": 40.138682055100524,
+    "backlog-total": 41281,
+    "contamination-trr": 7,
+    "contamination-dupes": 11,
+    "summary-staleness": 0.060394722222222225,
+    "cadence-fashionphile": 2,
+    "cadence-therealreal": 16,
+    "cadence-tlc": 0
+  },
+  "rowsAddedHistory": [
+    25192
+  ],
+  "findings": {
+    "ranking-snapshot": {
+      "firstSeen": "2026-07-10",
+      "status": "yellow"
+    },
+    "contamination-trr": {
+      "firstSeen": "2026-07-10",
+      "status": "yellow"
+    },
+    "contamination-dupes": {
+      "firstSeen": "2026-07-10",
+      "status": "yellow"
+    }
+  },
+  "redFindings": []
+}
