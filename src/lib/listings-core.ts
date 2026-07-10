@@ -315,3 +315,28 @@ export function slugTitleFromUrl(url: string | null | undefined): string {
   const seg = url.split("?")[0].replace(/\/+$/, "").split("/").pop() ?? "";
   return seg.replace(/-p\d+$/i, "").replace(/[-_]+/g, " ").trim();
 }
+
+/** Median of a price list (empty → null). */
+export function medianPrice(prices: number[]): number | null {
+  const ps = prices.filter((p) => Number.isFinite(p) && p > 0).sort((a, b) => a - b);
+  if (ps.length === 0) return null;
+  const mid = Math.floor(ps.length / 2);
+  return ps.length % 2 ? ps[mid] : (ps[mid - 1] + ps[mid]) / 2;
+}
+
+/**
+ * Low-price-outlier penalty for FACE picking. Line accessories that resellers title
+ * as the bag ("boy mini crossbody" zip case, "timeless handcuff clutch") carry no
+ * shape word to veto on, but they all sit FAR below the variant's live-ask median —
+ * that price gap is the honest tell (2026-07-09: $966 clutch vs ~$5k flaps, $2.3k
+ * zip case vs ~$4k+ Boys). Only the low side is penalized: an expensive rare piece
+ * is still the right bag. Needs a real distribution — no penalty under 5 asks.
+ * Threshold 0.65: Boy Mini live asks (2026-07-09, n≈250) put the accessory band at
+ * $599–2.3k vs a $3.7k median, and real mini flaps start ~$2.8k — 0.65 splits them.
+ */
+export function faceLowPricePenalty(price: number, livePrices: number[]): number {
+  if (livePrices.length < 5) return 0;
+  const med = medianPrice(livePrices);
+  if (med == null || !Number.isFinite(price) || price <= 0) return 0;
+  return price < med * 0.65 ? -3 : 0;
+}

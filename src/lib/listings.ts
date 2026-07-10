@@ -27,6 +27,7 @@ import {
   isConfidentBasis,
   scoreListingFace,
   slugTitleFromUrl,
+  faceLowPricePenalty,
   type DealRating,
   type DealBand,
   type ItemSpec,
@@ -375,7 +376,7 @@ export async function getHeroListing(variantId: number): Promise<HeroListing | n
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId)) return null;
   try {
     const sb = getSupabase();
-    const [{ data }, { data: vRows }] = await Promise.all([
+    const [{ data }, { data: vRows }, { data: priceRows }] = await Promise.all([
       sb
         .from("price_history")
         .select("sale_price, platform, source_url, listing_ref")
@@ -391,6 +392,17 @@ export async function getHeroListing(variantId: number): Promise<HeroListing | n
         .select("exterior_colorway, size_label, hardware_color")
         .eq("variant_id", variantId)
         .limit(1),
+      // The full ask distribution for the outlier median — the candidate pool above is
+      // the cheapest 500, and a median of the cheap tail under-counts the outliers it
+      // exists to catch (how a $2.3k zip case survived a $3.7k-median Boy).
+      sb
+        .from("price_history")
+        .select("sale_price")
+        .eq("variant_id", variantId)
+        .eq("price_type", "listed")
+        .or("listing_status.is.null,listing_status.eq.available")
+        .not("sale_price", "is", null)
+        .limit(1000),
     ]);
     const rows = (data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[];
     if (rows.length === 0) return null;
@@ -404,11 +416,27 @@ export async function getHeroListing(variantId: number): Promise<HeroListing | n
     };
     const images = await fetchListingImages(rows.map((r) => r.listing_ref));
     // Rows arrive cheapest-first; a stable sort by score keeps "cheapest within the
-    // best-matching tier".
-    const photographed = rows.filter((r) => images.get(r.listing_ref) && r.source_url);
+    // best-matching tier". The low-price-outlier penalty keeps line accessories that
+    // TITLE like the bag ("boy mini crossbody" zip case) from winning on price alone.
+    const allPrices = ((priceRows ?? []) as { sale_price: number }[]).map((r) => Number(r.sale_price));
+    // One judgment per LISTING, at its cheapest observed ask — re-observations of the
+    // same product at drifted prices otherwise let an accessory-suspect listing dodge
+    // the outlier penalty on its higher observation.
+    const seenRefs = new Set<string>();
+    const photographed = rows.filter((r) => {
+      if (!images.get(r.listing_ref) || !r.source_url || seenRefs.has(r.listing_ref)) return false;
+      seenRefs.add(r.listing_ref);
+      return true;
+    });
     if (photographed.length === 0) return null;
     const scored = photographed
-      .map((r, i) => ({ r, i, score: scoreListingFace(slugTitleFromUrl(r.source_url), spec) }))
+      .map((r, i) => ({
+        r,
+        i,
+        score:
+          scoreListingFace(slugTitleFromUrl(r.source_url), spec) +
+          faceLowPricePenalty(r.sale_price, allPrices),
+      }))
       .sort((a, b) => b.score - a.score || a.i - b.i);
     const best = scored[0].r;
     return {

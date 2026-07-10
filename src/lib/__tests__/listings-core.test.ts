@@ -8,6 +8,7 @@ import {
   isConfidentBasis,
   scoreListingFace,
   slugTitleFromUrl,
+  faceLowPricePenalty,
   type SpecComp,
   type ItemSpec,
 } from "../listings-core";
@@ -255,5 +256,23 @@ describe("slugTitleFromUrl", () => {
       slugTitleFromUrl("https://theluxurycloset.com/us-en/women/chanel-green-micro-mini-classic-caviar-single-flap-p1318211"),
     ).toBe("chanel green micro mini classic caviar single flap");
     expect(slugTitleFromUrl(null)).toBe("");
+  });
+});
+
+describe("faceLowPricePenalty", () => {
+  // Boy Mini live asks (2026-07-09): zip cases ~$2.3k mixed with real Boys $4-6k.
+  const asks = [2260, 3400, 3900, 4200, 4800, 5200, 6100];
+
+  it("penalizes a far-below-median ask (accessory titled like the bag)", () => {
+    expect(faceLowPricePenalty(2260, asks)).toBe(-3);
+  });
+
+  it("leaves in-band and above-median asks alone", () => {
+    expect(faceLowPricePenalty(3900, asks)).toBe(0);
+    expect(faceLowPricePenalty(6100, asks)).toBe(0);
+  });
+
+  it("stays neutral without a real distribution (fewer than 5 asks)", () => {
+    expect(faceLowPricePenalty(500, [500, 5000])).toBe(0);
   });
 });

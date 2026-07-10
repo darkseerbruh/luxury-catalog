@@ -149,10 +149,17 @@ const MODELS: Record<string, ModelDef[]> = {
   Chanel: [
     // WOC veto: "2.55 wallet on chain" is a Wallet on Chain (its own LC-Index style),
     // not the Reissue flap — without it the 2.55 token claims every reissue-style WOC.
-    ["Reissue", "reissue", "2.55", "!wallet on chain", "!woc"], ["Boy", "boy"],
-    ["Chanel 19", "19 flap", "chanel 19"], ["Chanel 22", "chanel 22", "22 bag", "c22"], ["Chanel 25", "chanel 25", "25 bag"],
+    // Same on Boy / 19 / Trendy CC: a "boy woc" is a WOC wearing the line's styling and
+    // a "coco boy camera" is a Camera Bag — the line token must not swallow the shape
+    // (2026-07-09 audit: 21 Boy WOCs, 7 19 WOCs, 5 Trendy WOCs, 4 Boy cameras
+    // fronted/priced as the wrong model; a red camera case was the Boy page hero).
+    ["Reissue", "reissue", "2.55", "!wallet on chain", "!woc"],
+    ["Boy", "boy", "!wallet on chain", "!woc", "!camera"],
+    ["Chanel 19", "19 flap", "chanel 19", "!wallet on chain", "!woc"],
+    ["Chanel 22", "chanel 22", "22 bag", "c22"], ["Chanel 25", "chanel 25", "25 bag"],
     ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
-    ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"], ["Trendy CC", "trendy cc"],
+    ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"],
+    ["Trendy CC", "trendy cc", "!wallet on chain", "!woc"],
     ["Urban Spirit", "urban spirit"],
     ["Classic Flap", "classic flap", "double flap", "single flap", "rectangular flap", "square flap", "mini flap"],
     ["Wallet on Chain", "wallet on chain", "woc"],

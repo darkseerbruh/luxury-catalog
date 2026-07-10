@@ -84,3 +84,25 @@ describe("canonicalModel — separator-flattened slug titles", () => {
     expect(canonicalModel("Louis Vuitton", "louis vuitton all in bandouliere gm tote")).toBe("All-In");
   });
 });
+
+/**
+ * Line-token vs shape collisions (2026-07-09, second owner report): a red Coco Boy
+ * CAMERA case was fronting the Boy page. Titles below are real TLC slugs found
+ * sitting on Boy / Chanel 19 / Trendy CC variants.
+ */
+describe("canonicalModel — Chanel line tokens don't swallow the shape", () => {
+  it("routes WOCs styled after a line to Wallet on Chain", () => {
+    expect(canonicalModel("Chanel", "Chanel Metallic Grey Quilted Patent Leather Classic Boy WOC Bag")).toBe("Wallet on Chain");
+    expect(canonicalModel("Chanel", "Chanel 19 Orange Quilted Leather Wallet on Chain")).toBe("Wallet on Chain");
+    expect(canonicalModel("Chanel", "Chanel Trendy CC WOC Black Lambskin Leather")).toBe("Wallet on Chain");
+  });
+
+  it("routes Coco Boy camera cases to Camera Bag", () => {
+    expect(canonicalModel("Chanel", "Chanel Coco Boy Camera Bordeaux Lambskin Leather Shoulder Bag")).toBe("Camera Bag");
+  });
+
+  it("keeps real Boy bags on Boy", () => {
+    expect(canonicalModel("Chanel", "Chanel Light Blue Patent and Leather Medium Classic Boy Flap Bag")).toBe("Boy");
+    expect(canonicalModel("Chanel", "Chanel Black Quilted Lambskin Large Boy Bag Ruthenium Hardware")).toBe("Boy");
+  });
+});

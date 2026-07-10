@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
-import { scoreListingFace, slugTitleFromUrl, type FrontSpec } from "./listings-core";
+import { scoreListingFace, slugTitleFromUrl, faceLowPricePenalty, type FrontSpec } from "./listings-core";
 import { displaySizeLabel, variantShortLabel } from "./variant-label";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
@@ -884,7 +884,7 @@ async function getAffiliateListingImages(
     // Live affiliate offers for these variants, newest first.
     const { data: priceRows, error: pErr } = await sb
       .from("price_history")
-      .select("variant_id, platform, listing_ref, listing_status, observed_on, source_url")
+      .select("variant_id, platform, listing_ref, listing_status, observed_on, source_url, sale_price")
       .in("variant_id", variantIds)
       .eq("price_type", "listed")
       .not("listing_ref", "is", null)
@@ -893,8 +893,10 @@ async function getAffiliateListingImages(
     if (pErr || !priceRows) return out;
 
     // Ordered candidate (platform, listing_ref) keys per variant, newest first —
-    // listing_image is keyed by BOTH, so match on the composite.
-    const candidatesByVariant = new Map<number, { key: string; slug: string }[]>();
+    // listing_image is keyed by BOTH, so match on the composite. Prices feed the
+    // low-price-outlier penalty (accessories titled like the bag).
+    const candidatesByVariant = new Map<number, { key: string; slug: string; price: number }[]>();
+    const pricesByVariant = new Map<number, number[]>();
     const allRefs = new Set<string>();
     for (const r of priceRows as {
       variant_id: number;
@@ -902,11 +904,17 @@ async function getAffiliateListingImages(
       listing_ref: string | null;
       listing_status: string | null;
       source_url: string | null;
+      sale_price: number | null;
     }[]) {
       if (!r.listing_ref || r.listing_status === "sold") continue;
       const key = `${r.platform ?? ""}|${r.listing_ref}`;
       const list = candidatesByVariant.get(r.variant_id) ?? [];
-      if (!list.some((c) => c.key === key)) list.push({ key, slug: slugTitleFromUrl(r.source_url) });
+      if (!list.some((c) => c.key === key)) {
+        list.push({ key, slug: slugTitleFromUrl(r.source_url), price: Number(r.sale_price) || 0 });
+        const ps = pricesByVariant.get(r.variant_id) ?? [];
+        if (r.sale_price) ps.push(Number(r.sale_price));
+        pricesByVariant.set(r.variant_id, ps);
+      }
       candidatesByVariant.set(r.variant_id, list);
       allRefs.add(r.listing_ref);
     }
@@ -925,12 +933,14 @@ async function getAffiliateListingImages(
     // Best spec-matching photographed candidate wins; ties keep newest-first order.
     for (const [vid, cands] of candidatesByVariant) {
       const spec = specs?.get(vid);
+      const prices = pricesByVariant.get(vid) ?? [];
       let bestUrl: string | null = null;
       let bestScore = -Infinity;
       for (const c of cands) {
         const url = urlByKey.get(c.key);
         if (!url) continue;
-        const score = spec ? scoreListingFace(c.slug, spec) : 0;
+        const score =
+          (spec ? scoreListingFace(c.slug, spec) : 0) + faceLowPricePenalty(c.price, prices);
         if (score > bestScore) {
           bestScore = score;
           bestUrl = url;
