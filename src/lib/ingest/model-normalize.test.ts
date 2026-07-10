@@ -106,3 +106,71 @@ describe("canonicalModel — Chanel line tokens don't swallow the shape", () => 
     expect(canonicalModel("Chanel", "Chanel Black Quilted Lambskin Large Boy Bag Ruthenium Hardware")).toBe("Boy");
   });
 });
+
+/**
+ * Cross-model title collisions OUTSIDE Chanel (2026-07-09, round-3 audit): titles that
+ * carry TWO model names were filed under whichever token the dictionary checks first.
+ * Every title below is a real TLC/Fashionphile slug pulled from the mis-filed rows.
+ */
+describe("canonicalModel — non-Chanel cross-model collisions", () => {
+  it("routes 'bamboo diana' titles to Diana (the bamboo handle IS the Diana's signature)", () => {
+    expect(canonicalModel("Gucci", "gucci black leather small bamboo diana tote")).toBe("Diana");
+    expect(canonicalModel("Gucci", "gucci diana bamboo tote bag brown leather")).toBe("Diana");
+    expect(canonicalModel("Gucci", "gucci brown bamboo and coated canvas diana tote and shoulder bag")).toBe("Diana");
+  });
+
+  it("keeps Diana-less bamboo bags on Bamboo 1947", () => {
+    expect(canonicalModel("Gucci", "gucci bamboo 1947 small red leather top handle bag")).toBe("Bamboo 1947");
+  });
+
+  it("routes Marmont/Ophidia belt bags to Belt Bag (shape beats line when the shape is its own style)", () => {
+    expect(canonicalModel("Gucci", "gucci gg marmont mini red matelasse leather belt bag")).toBe("Belt Bag");
+    expect(canonicalModel("Gucci", "gucci ophidia brown coated canvas and leather flap gg belt bag")).toBe("Belt Bag");
+  });
+
+  it("keeps non-belt Marmont and Ophidia bags on their line styles", () => {
+    expect(canonicalModel("Gucci", "gucci gg marmont small black matelasse leather shoulder bag")).toBe("GG Marmont");
+    expect(canonicalModel("Gucci", "gucci ophidia gg supreme canvas small shoulder bag")).toBe("Ophidia");
+  });
+
+  it("keeps Selleria-construction Peekaboos/Baguettes on their shape model (Selleria is a construction, not a model)", () => {
+    expect(canonicalModel("Fendi", "fendi selleria peekaboo i see u medium")).toBe("Peekaboo");
+    expect(canonicalModel("Fendi", "fendi selleria baguette bag white calf leather size medium")).toBe("Baguette");
+    // shape-less vintage Selleria pieces still resolve to the Selleria line style
+    expect(canonicalModel("Fendi", "fendi beige selleria leather satchel")).toBe("Selleria");
+  });
+
+  it("SLG-gates wristwatches (word-bounded 'watch' missed 'wristwatch')", () => {
+    expect(
+      canonicalModel("Fendi", "fendi selleria 8100m mother of pearl dial stainless steel leather womens wristwatch 37 mm"),
+    ).toBeNull();
+  });
+
+  it("routes 'phantom luggage' titles to Phantom (its own model)", () => {
+    expect(canonicalModel("Celine", "celine phantom luggage medium black leather tote")).toBe("Phantom");
+    expect(canonicalModel("Celine", "celine luggage phantom grey python leather tote bag")).toBe("Phantom");
+    expect(canonicalModel("Celine", "celine black leather micro luggage tote")).toBe("Luggage");
+  });
+
+  it("routes Triomphe-canvas cabas totes to Cabas", () => {
+    expect(canonicalModel("Celine", "celine triomphe cabas tote bag tan pvc leather size medium")).toBe("Cabas");
+    expect(canonicalModel("Celine", "celine vertical cabas triomphe canvas leather shoulder bag tote bag brown dark brown")).toBe("Cabas");
+    expect(canonicalModel("Celine", "celine triomphe shoulder bag black calfskin leather")).toBe("Triomphe");
+  });
+
+  it("routes the New Wave Multi-Pochette to New Wave, not Multi Pochette Accessoires", () => {
+    expect(canonicalModel("Louis Vuitton", "louis vuitton black leather new wave multi pochette")).toBe("New Wave");
+    expect(
+      canonicalModel("Louis Vuitton", "louis vuitton multi pochette accessories khaki monogram canvas bag"),
+    ).toBe("Multi Pochette");
+  });
+
+  it("does not let 'cowboy' colourways trip the Chanel Boy token (Balenciaga-on-Boy brand mismap)", () => {
+    const title = "balenciaga vegetable tanned lambskin mini rodeo top handle handbag tan cowboy 1825943";
+    expect(canonicalModel("Chanel", title)).toBeNull();
+    expect(canonicalModel("Balenciaga", title)).toBe("Rodeo");
+    expect(
+      canonicalModel("Balenciaga", "balenciaga vegetable tanned lambskin mini bel air carry all bag tan cowboy 1785540"),
+    ).toBe("Bel Air");
+  });
+});

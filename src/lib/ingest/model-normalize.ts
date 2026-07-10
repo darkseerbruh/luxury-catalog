@@ -20,7 +20,7 @@ const SLG_TOKENS = [
   "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
   "bag charm", "phone holder", "phone case", "airpod", "earring", "necklace", "brooch", "cuff",
-  "belt", "watch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
+  "belt", "watch", "wristwatch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
   "dress", "blazer", "sweater", "jumper", "jeans", "skirt", "hoodie", "sweatshirt",
   "t-shirt", "t shirt", "tshirt", "tee", "shirt", "jacket", "coat", "pants", "trousers",
   "shorts", "cardigan", "vest", "gown", "blouse", "jumpsuit", "romper", "heels",
@@ -186,7 +186,11 @@ const MODELS: Record<string, ModelDef[]> = {
     ["OnTheGo", "onthego", "on the go"], ["Pochette Métis", "pochette metis", "métis", "metis"],
     ["Twist", "twist"], ["Coussin", "coussin"], ["Dauphine", "dauphine"], ["Keepall", "keepall"],
     ["Bumbag", "bumbag", "bum bag"], ["NéoNoé", "neonoe", "néonoé", "neo noe"], ["Noé", "noe"],
-    ["Petite Malle", "petite malle"], ["Boulogne", "boulogne"], ["Multi Pochette", "multi pochette", "multi-pochette"],
+    // New Wave veto (2026-07-09 round-3 audit): the "New Wave Multi-Pochette" (12 TLC
+    // rows) is a quilted-calfskin New Wave line bag, not the monogram Multi Pochette
+    // Accessoires — without the veto the earlier token swallows it.
+    ["Petite Malle", "petite malle"], ["Boulogne", "boulogne"],
+    ["Multi Pochette", "multi pochette", "multi-pochette", "!new wave"],
     ["Montaigne", "montaigne"], ["Favorite", "favorite"], ["Félicie", "felicie", "félicie"],
     ["Graceful", "graceful"], ["Delightful", "delightful"], ["Bagatelle", "bagatelle"],
     ["Petit Sac Plat", "petit sac plat"], ["Bella", "bella"], ["Diane", "diane"],
@@ -248,8 +252,17 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Daniel", "daniel"], ["Flore", "flore"], ["Mirage", "mirage"],
   ],
   Gucci: [
-    ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont"], ["Jackie 1961", "jackie"],
-    ["Horsebit 1955", "horsebit"], ["Ophidia", "ophidia"], ["Bamboo 1947", "bamboo"],
+    // Belt-bag veto (2026-07-09 round-3 audit): "gg marmont … belt bag" / "ophidia …
+    // belt bag" are BELT BAGS wearing the line (20 TLC rows priced $518-1,066 with the
+    // Belt Bag cohort, vs $1.5k+ Marmont shoulder bags). Shape beats line whenever the
+    // shape is its own ranked style (Chanel Boy-WOC precedent); chain wallets still
+    // roll into the parent line because no standalone style exists for them.
+    ["Dionysus", "dionysus"], ["GG Marmont", "gg marmont", "marmont", "!belt bag"], ["Jackie 1961", "jackie"],
+    ["Horsebit 1955", "horsebit"], ["Ophidia", "ophidia", "!belt bag"],
+    // Diana veto (2026-07-09 round-3 audit): the Diana's signature IS its bamboo handle,
+    // so "bamboo diana" titles (36 TLC rows, every one a Diana tote) must not be swallowed
+    // by the Bamboo 1947 token that happens to be checked first.
+    ["Bamboo 1947", "bamboo", "!diana"],
     ["Soho Disco", "soho"], ["Diana", "diana"], ["Attache", "attache"], ["Blondie", "blondie"],
     ["Boston", "boston"], ["Princy", "princy"], ["Jolie", "jolie"], ["Queen Margaret", "queen margaret"],
     ["Zumi", "zumi"], ["Sylvie", "sylvie"], ["Padlock", "padlock"], ["Bree", "bree"], ["Aphrodite", "aphrodite"],
@@ -275,8 +288,14 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
   ],
   Celine: [
-    ["Luggage", "luggage"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen", "soft 16"],
-    ["Triomphe", "triomphe"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
+    // Phantom veto (2026-07-09 round-3 audit): the Phantom is its own model (catalog
+    // style), but every "phantom luggage" title (12 TLC rows) was filed under Luggage
+    // because that token is checked first.
+    ["Luggage", "luggage", "!phantom"], ["Trotteur", "trotteur"], ["16 (Sixteen)", "16 bag", "sixteen", "soft 16"],
+    // Cabas veto (2026-07-09 round-3 audit): "triomphe cabas" / "cuir triomphe … cabas"
+    // titles (12 TLC rows) are Cabas totes wearing the Triomphe canvas/finish — identical
+    // titles already sit correctly on Cabas. Shape beats line.
+    ["Triomphe", "triomphe", "!cabas"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
     ["Classic Box", "classic box", "box bag", "classic"], ["Sangle", "sangle"], ["Conti", "conti"],
     ["Trio", "trio"], ["Tabou", "tabou"], ["Besace", "besace"],
     ["Trapeze", "trapeze"], ["Nino", "nino"], ["Phantom", "phantom"], ["Boogie", "boogie"],
@@ -326,6 +345,10 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Sunshine Shopper", "sunshine"], ["C'mon", "c'mon", "cmon"], ["First", "first"],
     ["By the Way", "by the way"], ["Fendigraphy", "fendigraphy"],
     ["Kan I", "kan i"], ["Kan U", "kan u"], ["Dotcom", "dotcom"], ["2Jours", "2jours"],
+    // Selleria is a CONSTRUCTION line (hand-stitched cuoio romano), not a model —
+    // verified 2026-07-09: all 31 "selleria peekaboo/baguette" TLC rows are real
+    // Peekaboos/Baguettes and correctly keep the shape model above. Keep this def
+    // LAST-ish so it only catches shape-less vintage Selleria pieces (Adele, Anna, Linda).
     ["Runaway", "runaway"], ["Selleria", "selleria"], ["Origami", "origami"],
     // Residue-audit additions (2026-07-09)
     ["Spy", "spy"],
