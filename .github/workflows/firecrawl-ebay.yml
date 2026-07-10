@@ -1,27 +1,17 @@
-name: Firecrawl capture (eBay sold-sweep)
+name: Firecrawl capture (eBay — manual fallback)
 
-# eBay is the realized-SOLD lane (see docs/priority-reseller-capture-runbook.md). It runs
-# WEEKLY (not nightly) and scoped to the hero list, because eBay sold data is
-# counterfeit-noisy and worth less fresh than the daily reseller snapshot.
+# DISPATCH-ONLY, owner-gated. The PRIMARY eBay realized-sold engine is Apify auction-only
+# (ebay-sold-apify.ts, best-offer masking can't occur). This Firecrawl path is a MANUAL
+# BACKUP for when Apify is capped: it does live asks by default, or --sold (LH_Sold+Complete)
+# as a weaker sold fallback (includes Buy-It-Now, so it only heuristically drops masked
+# best-offer rows). No schedule — fire from Actions -> Run workflow when you actually need it,
+# so it never burns Firecrawl credits redundantly against Apify. See
+# docs/priority-reseller-capture-runbook.md. eBay item pages 403 plain fetch; Firecrawl defeats it.
 #
-# SCHEDULED RUNS ARE REPORT-ONLY (WRITE=false): they capture a landing snapshot + print row
-# counts / credit burn, but write nothing. The --sold parse (LH_Sold+Complete, masked
-# best-offer dropped) has not had a live CI verification yet, so the first weekly reports
-# are for review. To PROMOTE the lane to writing: review a run's snapshot, then dispatch
-# manually with write=true (or flip the schedule WRITE below). Validate-first, like
-# firecrawl-capture.yml. eBay item pages 403 plain fetch; Firecrawl defeats the block.
-#
-# Per item ≈ 1 markdown scrape (~1 credit). Hero list, limit 15/style ≈ ~14 styles × 15 +
-# 14 searches ≈ a few hundred credits/week. Watch real burn in the run log.
-#
-# SECRETS: FIRECRAWL_API_KEY + SUPABASE_SERVICE_ROLE_KEY (set). ANTHROPIC_API_KEY is
-# optional — the LLM description pass is skipped if it's absent.
+# Per item ≈ 1 markdown scrape (~1 credit). SECRETS: FIRECRAWL_API_KEY + SUPABASE_SERVICE_ROLE_KEY
+# (set). ANTHROPIC_API_KEY optional — the LLM description pass is skipped if it's absent.
 
 on:
-  schedule:
-    # Weekly, Monday 07:37 UTC, off the hour. Report-only by default (WRITE forced false
-    # on schedule below) until the --sold parse is verified from a run's snapshot.
-    - cron: "37 7 * * 1"
   workflow_dispatch:
     inputs:
       target:

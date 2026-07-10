@@ -25,9 +25,14 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   `supabase/ingest/data/style-depth-batch3.json`. Accents restored on apply (Ebène/Hermès/Réjane).
 - ✅ **≥20-comp set COMPLETE** — 74 sourced descriptions across 3 batches; coverage 30% → 37%,
   years 8 → 22. Every fact archivist-sourced + spot-checked; unsourced years held null.
-- ⬜ **10 styles promoted 2026-07-10 (TRR sweep backlog)** — bare (name + comps only), fold into the
-  thin-tail depth pass: LV Cartouchière, Iéna, Évasion, Alizé, Surène, Randonnée, Uzès, Vivacité,
-  Odyssée; Hermès Sac à Dépêches. All real vintage/heritage models — archivist-sourceable.
+- ✅ **11 styles promoted 2026-07-10 (TRR sweep backlog)** — DONE 2026-07-10. Archivist-sourced,
+  spot-checked, applied 11 descriptions + 3 cleanly-sourced years (Surène 2018, Hermès Sac à
+  Dépêches 1928, SL Bea 2023) via `apply-style-depth.ts`. Drafts at
+  `supabase/ingest/data/style-depth-trr-backlog.json`. 8 vintage-LV years held null (no clean house
+  debut record — factuality bar). Flags carried in the JSON `note` fields: Vivacité (1280) is the
+  ~2004 vintage Viva-Cité, a NAME COLLISION with a later modern "Vivacité"; Odyssée (1281) name also
+  reused on women's pieces (confirm by canvas); Cartouchière sizes read PM/MM/GM in sources not
+  17/22/26.
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
@@ -52,9 +57,13 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   *(Latent, out of scope: `hybrid-search.ts` bm25 brand/style-name match only scans an
   arbitrary 60-row window; brand search is covered in practice because `searchCatalog`
   runs alongside and merges. Worth tightening if under-match ever recurs.)*
-- ⬜ **"alma" ×3** (to 2026-07-02) — LV Alma demand with no dedicated article. Needs an
-  Alma resale price pull (Fashionphile asking + eBay sold, with n) before the article
-  backlog item (`docs/article-backlog.md`) can be written to the data bar.
+- ✅ **"alma" ×3** — CAPTURE BLOCKER RESOLVED (verified 2026-07-10). LV Alma (style 434) already
+  has **1,563 price comps across 9 size variants** from the 2026-07-02 LV sweep: Fashionphile 1,212
+  (fixed-price = realized per [[fashionphile_fixed_price]]), TLC 219, TRR 131, eBay 1. Size medians
+  are article-ready — BB $1,636/n622, PM $950/n545, Mini $1,386/n241, Nano $1,595/n37, GM $995/n52,
+  MM $1,090/n43. The data bar is met; the remaining work is WRITING the article (moves to the
+  article-engine lane, `docs/article-backlog.md`), not a capture. Page-depth note: style 434's
+  description is a 49-char stub + no year_introduced — worth a depth pass (core icon, high demand).
 
 ## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
@@ -193,7 +202,14 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 ## Promotion / catalog
 - ✅ OWNER-GREENLIT 2026-06-26: promote-newstyle.ts created 16 new bag styles + 20 variants + 612 asking rows (Multi Pochette, GST, Chanel 25, Padlock, Camera Bag, Félicie, Graceful, Trendy CC, Noé, Trio, Loop, Artsy, Deauville, Sunset, Lady D-Lite, CarryAll); 8 apparel/junk clusters excluded by blocklist
   PLUS min=10 pass: +25 styles, +30 variants, +404 rows (Diane, Favorite, Boulogne, Delightful, Palermo, Tivoli, Reissue, Hop, Sylvie, Boston, Diorama, In-The-Loop, Jige, Trim, Jamie, Urban Spirit...). Strengthened blocklist excludes footwear/apparel/colour-soup. Total: 41 styles, 50 variants, ~1,016 rows.
-- ⬜ Resolve the 1 ambiguous Neverfull "MM" duplicate (v868) across canvases (manual).
+- ⬜ Resolve the ambiguous Neverfull "MM" duplicate (v868) across canvases (manual). DIAGNOSED
+  2026-07-10 (read-only, NOT executed — hand-managed icon + feeds shipped NeverfullSizeChart, so
+  left for a careful pass): style 218 has 4 MM variants. v218/v220/v221 are the CLEAN canvas-split
+  MMs (Monogram / Damier Ebène / Damier Azur, full curated attributes + retail + years). **v868 is a
+  null-attribute catch-all** (created 2026-06-26 by a sweep, market_availability="resale", ~400
+  mixed-canvas rows: Damier Ebène + Canvas Beige + Leather Black…). Fix = route v868's rows to the
+  right canvas MM by each row's material/colorway, then delete v868; then re-verify NeverfullSizeChart
+  MM (currently cited $1,515 / n=345) since its median shifts. Semi-destructive → owner-aware pass.
 
 ## Articles (write as DRAFTS, wire + chart + seed, gates green)
 - ✅ #15 what-a-coach-tabby-actually-sells-for (CoachResaleRealityChart) (2026-06-26)
@@ -273,11 +289,23 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
   **REVIEW the promoted style names before write** (parsing FP titles blind creates junk
   styles like "Chanel Chanel Lilac Quilted…"; group Soft Margaux 10/12/15 → one "Soft
   Margaux" style, etc.). Then `summary:refresh`.
-- ⬜ Thin houses to do (all <~20 variants): The Row, Goyard, Miu Miu, Off-White, Alexander
-  McQueen, Valentino, Jacquemus, Telfar.
-- ⬜ Acceptance: every house on the /data board has >=20 priced HANDBAG variants spanning its
-  real range, so the median is defensible. Until then /data keeps the honest "the bags we
-  track" scoping (never claim market-wide typical price).
+- ✅ **COVERAGE VERIFIED + refreshed 2026-07-10** (priced-handbag-variant counts):
+  - **MEET the ≥20 bar now** (from the 2026-07-02 sweep + 2026-07-08 promotion): The Row **47**,
+    Goyard **50**, Valentino **32**. These 3 are done.
+  - **CLOSE, real capture work remains** — their live FP feeds carry untracked HANDBAG models
+    (refreshed 149 FP rows today, but new variant count needs the TARGETS+scaffold path, not `--raw`
+    which skips unmatched): **Miu Miu 17** (untracked in feed: Beau top-handle, Coffer hobo, Softy);
+    **Alexander McQueen 14** (The Peak, T-Bar, The Story, Padlock Zip-Around Tote, Jeweled Satchel,
+    De Manta); **Jacquemus 14** (Le Carinu, Le Turismo, Le Grand Panier, Le Bambidou, Le Bambinou,
+    Le Petit Câlino, La Pochette Rond Carré). Next step = add dict entries + `sweep-targets` +
+    `scaffold-from-spec` per brand, then re-map/load (each model verified real via the FP product
+    name). Do it in a clean lane (not concurrent with an ingest session editing model-normalize.ts).
+  - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
+    brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
+    track" wording for these; do not pad to hit 20.
+- ⬜ Acceptance (unchanged): every house on the /data board has >=20 priced HANDBAG variants spanning
+  its real range, so the median is defensible; where a house's real catalog is smaller, /data keeps
+  the honest "the bags we track" scoping (never claim market-wide typical price).
 
 *NOTE: attributes (colour/hardware/material) are NOT part of this task — already dense on
 price_history from Fashionphile and now power the /data "Gold or silver / colors / leathers"
