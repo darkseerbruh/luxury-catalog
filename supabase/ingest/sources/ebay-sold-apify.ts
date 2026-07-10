@@ -33,6 +33,19 @@ interface EbaySoldRecord {
   url?: string | null;
 }
 
+/** Junk/parts/replica/collab-noise tokens — a title carrying one is not a sellable bag comp
+ *  (mirrors ebay-sold-sweep.ts; matters most for the low-floor mid-tier where noise is denser). */
+const JUNK = [
+  "replica", "inspired", "style bag", "dust bag only", "dustbag only", "box only", "strap only",
+  "insert", "organizer", "liner", "lot of", "charm", "keychain", "key chain", "key ring",
+  "wallet only", "for parts", "repair", "as-is", "read desc", "empty box", "receipt",
+  "perfume", "parfum", "eau de", "fragrance", "cologne", "spray", "keyring", "sticker", "print ad",
+];
+function isJunk(title: string): boolean {
+  const t = title.toLowerCase();
+  return JUNK.some((j) => t.includes(j));
+}
+
 /** eBay coarse condition → SaleCondition. Only "new" is certain; never fake a graded tier. */
 function mapCondition(c: string | null | undefined): SaleCondition | null {
   const s = (c ?? "").toLowerCase();
@@ -58,6 +71,7 @@ export function recordToObservation(rec: EbaySoldRecord, floor: number, fallback
   const price = typeof rec.soldPrice === "number" && Number.isFinite(rec.soldPrice) ? rec.soldPrice : NaN;
   if (!Number.isFinite(price) || price < floor) return null; // AG-floor guard
   if (!rec.title?.trim() || !rec.itemId) return null;
+  if (isJunk(rec.title)) return null; // parts/replica/collab-noise never enters a median
   const url = rec.url?.trim() || `https://www.ebay.com/itm/${rec.itemId}`;
 
   return {
