@@ -64,6 +64,14 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   MM $1,090/n43. The data bar is met; the remaining work is WRITING the article (moves to the
   article-engine lane, `docs/article-backlog.md`), not a capture. Page-depth note: style 434's
   description is a 49-char stub + no year_introduced — worth a depth pass (core icon, high demand).
+  ✅ **ARTICLE DRAFTED 2026-07-10** → `docs/research-drafts/lv-alma-value-draft.md` (copywriter, voice
+  canon applied, data bar re-pulled + deduped by listing_ref: BB $1,565/n197, PM $895/n179, Mini
+  $1,381/n130, GM $1,033/n18, MM $928/n16, Nano $1,695/n9). Framed asking-not-sold + estimate-not-
+  appraisal throughout. NOT published (owner review). Owner flag: the "Mini" variant (n=130) is a
+  market label, not an official LV Alma size (LV = Nano/BB/PM/MM/GM) — decide fold/keep/drop. Also
+  fixed the page-depth gap: Alma page (434) now has a real sourced description + year_introduced=1934.
+  NEXT (owner): read the draft → on approval, seed as a DRAFT article (seed-trend-articles.ts pattern,
+  status=draft-on-insert) + wire the size-median chart; publish stays hers.
 
 ## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
