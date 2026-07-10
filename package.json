@@ -23,6 +23,8 @@
     "load:tlc-images": "tsx supabase/ingest/load-tlc-images.ts",
     "ingest:fashionphile:raw": "tsx supabase/ingest/sources/fashionphile.ts --raw",
     "ingest:vestiaire": "tsx supabase/ingest/sources/vestiaire.ts",
+    "ingest:redeluxe:crawl": "tsx supabase/ingest/sources/redeluxe-crawl.ts",
+    "ingest:redeluxe": "tsx supabase/ingest/sources/redeluxe.ts --raw",
     "ingest:firecrawl-trr": "tsx supabase/ingest/sources/firecrawl-trr.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
     "reconcile:sold": "tsx supabase/ingest/reconcile-sold.ts",

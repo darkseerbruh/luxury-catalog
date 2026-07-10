@@ -289,11 +289,23 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
   **REVIEW the promoted style names before write** (parsing FP titles blind creates junk
   styles like "Chanel Chanel Lilac Quilted…"; group Soft Margaux 10/12/15 → one "Soft
   Margaux" style, etc.). Then `summary:refresh`.
-- ⬜ Thin houses to do (all <~20 variants): The Row, Goyard, Miu Miu, Off-White, Alexander
-  McQueen, Valentino, Jacquemus, Telfar.
-- ⬜ Acceptance: every house on the /data board has >=20 priced HANDBAG variants spanning its
-  real range, so the median is defensible. Until then /data keeps the honest "the bags we
-  track" scoping (never claim market-wide typical price).
+- ✅ **COVERAGE VERIFIED + refreshed 2026-07-10** (priced-handbag-variant counts):
+  - **MEET the ≥20 bar now** (from the 2026-07-02 sweep + 2026-07-08 promotion): The Row **47**,
+    Goyard **50**, Valentino **32**. These 3 are done.
+  - **CLOSE, real capture work remains** — their live FP feeds carry untracked HANDBAG models
+    (refreshed 149 FP rows today, but new variant count needs the TARGETS+scaffold path, not `--raw`
+    which skips unmatched): **Miu Miu 17** (untracked in feed: Beau top-handle, Coffer hobo, Softy);
+    **Alexander McQueen 14** (The Peak, T-Bar, The Story, Padlock Zip-Around Tote, Jeweled Satchel,
+    De Manta); **Jacquemus 14** (Le Carinu, Le Turismo, Le Grand Panier, Le Bambidou, Le Bambinou,
+    Le Petit Câlino, La Pochette Rond Carré). Next step = add dict entries + `sweep-targets` +
+    `scaffold-from-spec` per brand, then re-map/load (each model verified real via the FP product
+    name). Do it in a clean lane (not concurrent with an ingest session editing model-normalize.ts).
+  - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
+    brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
+    track" wording for these; do not pad to hit 20.
+- ⬜ Acceptance (unchanged): every house on the /data board has >=20 priced HANDBAG variants spanning
+  its real range, so the median is defensible; where a house's real catalog is smaller, /data keeps
+  the honest "the bags we track" scoping (never claim market-wide typical price).
 
 *NOTE: attributes (colour/hardware/material) are NOT part of this task — already dense on
 price_history from Fashionphile and now power the /data "Gold or silver / colors / leathers"
