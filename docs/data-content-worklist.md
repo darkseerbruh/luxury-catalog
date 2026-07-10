@@ -33,6 +33,15 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   ~2004 vintage Viva-Cité, a NAME COLLISION with a later modern "Vivacité"; Odyssée (1281) name also
   reused on women's pieces (confirm by canvas); Cartouchière sizes read PM/MM/GM in sources not
   17/22/26.
+- 🔄 **CORE-ICON gap (785 bare styles, discovered 2026-07-10)** — the big one. `probe-bare-styles.ts`
+  found 785 of 1000 styles carry a placeholder stub (`"Permanent collection (tier 1) — catalog
+  backbone."`, 49 chars, even has an em dash) or empty description. **559 have ≥10 comps, 370 have ≥20** —
+  these are the highest-traffic pages on the site (Chanel Boy 4,030 comps, LV Speedy 2,912, Hermès
+  Evelyne 1,833, Keepall 1,732, WOC 1,730, Gucci Ophidia 1,697) running NO real description. This
+  dwarfs the promoted-style gaps below. Method unchanged: archivist-sourced (factuality bar, plain
+  text, no em dash, year null unless cleanly sourced) → review → `apply-style-depth.ts`. Working top
+  tranche first (highest comps = highest ROI). Batch files: `data/style-depth-icons-batch*.json`.
+  - 🔄 **Batch 1 (top 25 by comps, ≥580)** — archivist sourcing (2026-07-10).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
