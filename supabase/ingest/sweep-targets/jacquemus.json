@@ -103,5 +103,77 @@
     "minPrice": 150,
     "maxPrice": 800,
     "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Carinu",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-carinu"
+    ],
+    "minPrice": 200,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Turismo",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "turismo"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1800,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Grand Panier",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "grand-panier"
+    ],
+    "minPrice": 150,
+    "maxPrice": 1000,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Bambidou",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "bambidou"
+    ],
+    "minPrice": 300,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Sac Rond",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-sac-rond"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
+  },
+  {
+    "brand": "Jacquemus",
+    "style": "Le Petit Filet",
+    "size_label": "Standard",
+    "requireTokens": [
+      "jacquemus",
+      "le-petit-filet"
+    ],
+    "minPrice": 250,
+    "maxPrice": 1200,
+    "searchUrl": "https://www.fashionphile.com/collections/jacquemus/products.json"
   }
 ]
