@@ -6,6 +6,8 @@ import {
   bestBand,
   bandLabel,
   isConfidentBasis,
+  scoreListingFace,
+  slugTitleFromUrl,
   type SpecComp,
   type ItemSpec,
 } from "../listings-core";
@@ -219,5 +221,39 @@ describe("isConfidentBasis", () => {
     expect(
       isConfidentBasis({ ...base, variantLevel: true, dimsUsed: [], dimsDropped: ["material", "color"] }),
     ).toBe(false);
+  });
+});
+
+describe("scoreListingFace", () => {
+  // Variant 199: the black / gold-hardware / Medium (M/L) Classic Flap.
+  const spec = { colorway: "black", sizeLabel: "Medium (M/L)", hardwareColor: "gold" };
+
+  it("ranks a spec-matching listing above off-spec ones (2026-07-09 hero regression)", () => {
+    const black = scoreListingFace("chanel black caviar quilted medium double flap bag gold", spec);
+    const greenMicro = scoreListingFace("chanel green micro mini classic caviar single flap", spec);
+    const pinkJumbo = scoreListingFace("chanel pink chevron patent leather jumbo classic single flap bag", spec);
+    expect(black).toBeGreaterThan(greenMicro);
+    expect(black).toBeGreaterThan(pinkJumbo);
+  });
+
+  it("penalizes novelty/embellished editions so they never front the icon card", () => {
+    const clean = scoreListingFace("chanel black leather classic double flap shoulder bag", spec);
+    const charms = scoreListingFace("chanel black leather lucky charms classic double flap bag", spec);
+    expect(clean).toBeGreaterThan(charms);
+  });
+
+  it("is neutral when the variant has no spec (all nulls score 0)", () => {
+    expect(
+      scoreListingFace("chanel red jumbo flap", { colorway: null, sizeLabel: null, hardwareColor: null }),
+    ).toBe(0);
+  });
+});
+
+describe("slugTitleFromUrl", () => {
+  it("extracts a readable title from a TLC product URL", () => {
+    expect(
+      slugTitleFromUrl("https://theluxurycloset.com/us-en/women/chanel-green-micro-mini-classic-caviar-single-flap-p1318211"),
+    ).toBe("chanel green micro mini classic caviar single flap");
+    expect(slugTitleFromUrl(null)).toBe("");
   });
 });
