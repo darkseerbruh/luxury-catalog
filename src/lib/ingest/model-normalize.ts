@@ -329,7 +329,9 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Triquilt", "triquilt"], ["Shopping Tote", "shopping tote"], ["Le 37", "le 37"],
     // TRR sweep addition (2026-07-10)
     ["Voltaire", "voltaire"],
-    ["Rive Gauche", "rive gauche"], ["Uptown", "uptown"], ["Bea", "bea tote"], ["Joe Backpack", "joe backpack"],
+    // "bea" is word-bounded so it can't fire inside "beaded"/"beach"/"beauty" — the SL
+    // Bea (a north-south tote) is listed both "Bea" bare and "Bea Tote".
+    ["Rive Gauche", "rive gauche"], ["Uptown", "uptown"], ["Bea", "bea"], ["Joe Backpack", "joe backpack"],
     ["Nolita", "nolita"], ["Becky", "becky"], ["Le Monogramme", "le monogramme"],
     ["Belle de Jour", "belle de jour"],
   ],

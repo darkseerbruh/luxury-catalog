@@ -61,6 +61,12 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Gucci", "horsebit accent leather loafers")).toBeNull();
   });
 
+  it("matches SL Bea bare but not inside 'beaded' (promotion, 2026-07-10)", () => {
+    expect(canonicalModel("Saint Laurent", "Bea")).toBe("Bea");
+    expect(canonicalModel("Saint Laurent", "Signature Bea 2023")).toBe("Bea");
+    expect(canonicalModel("Saint Laurent", "Chiffon Silk Crepe Beaded Pochon Broderie Black")).toBeNull();
+  });
+
   it("keeps Grand Bambino distinct from Bambino (promotion, 2026-07-10)", () => {
     expect(canonicalModel("Jacquemus", "smooth calfskin le grand bambino black")).toBe("Le Grand Bambino");
     expect(canonicalModel("Jacquemus", "smooth calfskin le bambino black")).toBe("Le Bambino");
