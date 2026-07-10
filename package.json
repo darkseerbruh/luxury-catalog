@@ -27,6 +27,8 @@
     "ingest:redeluxe": "tsx supabase/ingest/sources/redeluxe.ts --raw",
     "ingest:couture-usa:crawl": "tsx supabase/ingest/sources/couture-usa-crawl.ts",
     "ingest:couture-usa": "tsx supabase/ingest/sources/couture-usa.ts --raw",
+    "ingest:anns:crawl": "tsx supabase/ingest/sources/anns-crawl.ts",
+    "ingest:anns": "tsx supabase/ingest/sources/anns.ts --raw",
     "ingest:firecrawl-trr": "tsx supabase/ingest/sources/firecrawl-trr.ts",
     "load:prices": "tsx supabase/ingest/load-prices.ts",
     "reconcile:sold": "tsx supabase/ingest/reconcile-sold.ts",

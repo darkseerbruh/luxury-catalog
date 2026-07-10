@@ -29,6 +29,7 @@ lowest spend that covers it. Companion to [data-collection-handoff.md](data-coll
 | **Redeluxe** ⭐ | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`redeluxe-refresh.yml`, daily) |
 | **The Luxury Closet** | CJ product feed (advertiser 5312449) | $0 | daily diff + `reconcile:sold` | ✅ wired (`ingest-tlc.yml`, daily) |
 | **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`couture-usa-refresh.yml`, daily) |
+| **Ann's Fabulous Finds** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`anns-refresh.yml`, daily) |
 | **Vestiaire** | Firecrawl (`vestiaire.ts` adapter) | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (needs crawl feed) |
 | **Rebag** | CJ product feed once approved (mirror TLC) | $0 when live | daily diff + `reconcile:sold` | 🔧 gated on Rebag CJ approval (advertiser 5749848, pending) |
 
@@ -70,6 +71,21 @@ Sells footwear too, so it gates on bag `product_type`s. Brand from `vendor`, con
 grade tags (Like New / Excellent / Great / Very Good), colour from the `Color_*` tags; unnamable
 live bags bank to `discovered_listing` like Redeluxe. Verified 2026-07-10: a 2-page sample gave
 202 named (across 10 houses, colour on 199/202) + 95 discovered rows, 0 invalid.
+
+### Ann's Fabulous Finds (free Shopify feed, automated via `anns-refresh.yml`)
+```
+npx tsx supabase/ingest/sources/anns-crawl.ts
+npx tsx supabase/ingest/sources/anns.ts --raw
+npm run load:prices -- anns --write
+npm run load:prices -- anns-discovered --discovered-only --write
+npm run reconcile:sold -- --platform="Ann's Fabulous Finds" --snapshot=data/ingest/_raw/anns-live.json --write
+npm run summary:refresh
+```
+Gates on bag `product_type`s (sells shoes/jewellery too). Brand from `vendor` (real houses), no
+grade tag in the feed so condition stays null (never guessed). **Regex gotcha (learned here):** the
+bag-type filter needs a trailing `s?` — Ann's type is the plural "Handbags", which `\bhandbag\b`
+misses. Verified 2026-07-10: a 2-page sample gave 156 named (Hermès / Chanel / LV / Gucci…) + 65
+discovered rows, prices $550-$33,000, 0 invalid.
 
 ### TheRealReal (Apify, automated via `trr-refresh.yml`)
 Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:

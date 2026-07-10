@@ -3,6 +3,16 @@
 
 ---
 
+## TL;DR — TRR PROMOTED non-bag contamination cleaned: 48 price rows off 15 bag variants (2026-07-10, on `main`)
+
+**The mis-map sweeps re-triaged wrong TITLES on a style; this clears the other class — apparel/accessories that shared a model token with a real bag and got PROMOTED onto its variant, writing cheap asking prices into `price_history` and deflating the bag's comps.**
+- 🧹 **New `supabase/ingest/cleanup-trr-promoted-nonbag.ts`** (sibling to `cleanup-trr-nonbag.ts`, which only purges *unpromoted* non-bags and left the promoted ones "for review"). Deletes non-bag TRR price rows by URL department + un-promotes the source `discovered_listing` rows; preserves any orphan (no discovered backup) first. **Removed 48 rows across 15 variants** (Celine Triomphe 20, Hermès Constance 6, Gucci Sylvie 3-of-5…); false floors lifted (Hermès Bolide Mini resale-low $409→$4,631; Constance-18 $1,795→$2,677).
+- ⚠️ **Gotcha now in code + memory:** `isTrrHandbagListing(url, title)` MUST be called WITH the title — carried pouches the catalog ranks (WOC / vanity / belt bag) live under `/accessories/` but ARE bags. A title-blind first pass over-deleted 3 legit vanity pouches (Chanel Vanity Case, Celine Macadam); all 3 restored. See `trr_nonbag_dept_sweep` memory.
+- 🤝 **Reconciled with a parallel chat** that landed the canonical title-aware `isTrrHandbagListing` + its sibling script mid-session — adopted their helper, kept my promoted-contamination pass as the complement. Green gate: tsc, eslint, 735 tests, next build.
+- ⬜ **YOUR TURN:** none. Re-run is idempotent (reports 0). Note the sibling script *deletes* unpromoted apparel from `discovered_listing` (the other lane's call) rather than archiving it — flag me if you'd rather keep that raw data.
+
+---
+
 ## TL;DR — Apify-vs-Firecrawl cost review + priority-reseller runbook; reconciled with the cloud-Apify capture that landed the same day (2026-07-10, on `main`, merge `b759e9d`)
 
 **She hit the Apify usage cap and asked: buy Scale or add limits? Answer: raise the Starter cap, don't buy Scale — which she'd ALREADY done (paid Starter + cap raised; see the capture TL;DR below).** Mid-session a parallel chat landed the cloud-Apify capture engine, so my earlier "Apify isn't wired in" framing went stale; corrected here + in the runbook.

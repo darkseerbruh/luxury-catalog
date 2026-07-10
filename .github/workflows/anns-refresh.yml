@@ -1,0 +1,60 @@
+name: Refresh Ann's Fabulous Finds listings (Shopify feed)
+
+# Hands-off daily capture for Ann's Fabulous Finds (open-Shopify consignor, trusted since
+# 2008). FREE, no Firecrawl/Apify. Each run: crawl the whole feed -> map bags we can name
+# (canonicalModel, footwear/jewellery filtered out) -> load into price_history + bank
+# unnamable bags to discovered_listing -> retire sold -> refresh the per-variant summary.
+# See docs/priority-reseller-capture-runbook.md.
+#
+# SECRETS: only SUPABASE_SERVICE_ROLE_KEY (already set). Supabase URL is public
+# (NEXT_PUBLIC_*), inlined as a fallback — mirrors redeluxe-refresh.yml.
+
+on:
+  schedule:
+    # Daily, 07:05 UTC, off the hour and staggered from the other Shopify feeds.
+    - cron: "5 7 * * *"
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: "Crawl page cap (safety ceiling)"
+        required: false
+        default: "200"
+      write:
+        description: "Apply DB writes? false = crawl + report only (no load/reconcile)"
+        required: false
+        default: "true"
+
+concurrency:
+  group: anns-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      MAX_PAGES: ${{ github.event.inputs.max_pages || '200' }}
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Crawl Ann's live feed (writes raw dump + live snapshot)
+        run: npx tsx supabase/ingest/sources/anns-crawl.ts --max-pages="$MAX_PAGES"
+
+      - name: Map bags into landing observations
+        run: npx tsx supabase/ingest/sources/anns.ts --raw
+
+      - name: Load prices + bank discovered + retire sold + refresh summary
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- anns --write
+          npm run load:prices -- anns-discovered --discovered-only --write
+          npm run reconcile:sold -- --platform="Ann's Fabulous Finds" --snapshot=data/ingest/_raw/anns-live.json --write
+          npm run summary:refresh
