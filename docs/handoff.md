@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Priority-reseller capture runbook + eBay weekly sold-sweep lane (2026-07-10, on `main`, merge `b759e9d`, full gate green: tsc/lint/build/724 tests)
+
+**Answered "do I need Apify daily forever" (she hit the Apify usage cap): no.** The daily for-sale + sold pipeline routes by source, and Apify was never wired into it (only an ad-hoc TRR bulk tool). The $30-in-2-days burn was parallel ad-hoc runs, not a baseline.
+- 📓 **New blueprint:** `docs/priority-reseller-capture-runbook.md` — free Shopify feeds (Fashionphile, Redeluxe) + Firecrawl carry daily; **"sold" is derived** (a vanished `listing_ref` → `reconcile-sold.ts`), not scraped. Broad daily coverage fits the ~$83 Firecrawl Standard per the measured budget. Apify stays a TRR bulk fallback only.
+- 🛠️ **eBay `--sold` mode built** (`firecrawl-ebay.ts`): hits `LH_Sold=1&LH_Complete=1`, stamps `price_type=sold`, **drops masked best-offer rows**. Live-ask default unchanged.
+- 🗓️ **eBay weekly sold-sweep wired** (`firecrawl-ebay.yml`, Mon 07:37 UTC, hero list): **REPORT-ONLY** (writes nothing) until one CI run's snapshot is eyeballed, because the `--sold` parse can't be verified locally (Firecrawl key is CI-only).
+- ⬜ **YOUR TURN (2026-07-10):** (a) **Apify billing** — raise the Starter cap (~$50–75) to unblock; do NOT upgrade to Scale ($199/mo) on a spike. (b) After the first weekly eBay run lands, review its snapshot for clean numeric sold prices, then flip the lane to writes (dispatch with `write=true`). Refinement pending before trusting exact history: parse eBay sold-date into `observed_on` (today falls back to ingest date).
+- 🔧 **Build-next (my offer, not yet done):** nightly adapters for Redeluxe (free feed), Rebag, The Luxury Closet so the daily snapshot covers the full priority set, not just Fashionphile + TRR.
+
+---
+
 ## TL;DR — Founder-face b-roll bank + face-vs-faceless test staged (2026-07-07, on `main`)
 
 **Owner filmed 16 own-face desk clips (bag wall behind); built a reusable bank + a face-vs-faceless test.**
