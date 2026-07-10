@@ -25,14 +25,10 @@ import { displaySizeLabel } from "./variant-label";
 import {
   rateListing,
   isConfidentBasis,
-  scoreListingFace,
-  slugTitleFromUrl,
-  faceLowPricePenalty,
   type DealRating,
   type DealBand,
   type ItemSpec,
   type SpecComp,
-  type FrontSpec,
 } from "./listings-core";
 
 const RETAIL_PLATFORM_RX = /retail|boutique|msrp|in[-\s]?store|flagship/i;
@@ -358,13 +354,12 @@ async function fetchListingImages(refs: string[]): Promise<Map<string, string>> 
   return out;
 }
 
-/** A live for-sale listing to stand in as the bag-page hero when we hold no
- * first-party photo. Among photographed in-stock listings, the one that best
- * LOOKS LIKE the variant wins (scoreListingFace: colorway/size/hardware, minus
- * novelty editions), cheapest within that top tier — a black/gold Medium page
- * shouldn't be fronted by a green micro mini that happens to be cheapest
- * (2026-07-09). Framed on the page as "available now", never as our own
- * editorial shot. Resilient: null when there's no photographed live listing. */
+/** The live listing BEHIND the bag's already-chosen face image. One source of
+ * truth: getVariantImages picks the face every surface shows (best spec match,
+ * price-sane); the hero just resolves which live listing owns that photo so the
+ * header links to buy it. By construction the hero can never show a different
+ * bag than the brand card (owner call 2026-07-09). Resilient: null when the
+ * image isn't a live affiliate photo (placeholder/community/sold-out). */
 export interface HeroListing {
   imageUrl: string;
   buyUrl: string;
@@ -372,78 +367,39 @@ export interface HeroListing {
   platformLabel: string;
 }
 
-export async function getHeroListing(variantId: number): Promise<HeroListing | null> {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId)) return null;
+export async function getHeroListing(variantId: number, faceImageUrl: string | null): Promise<HeroListing | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !Number.isFinite(variantId) || !faceImageUrl) return null;
   try {
     const sb = getSupabase();
-    const [{ data }, { data: vRows }, { data: priceRows }] = await Promise.all([
-      sb
-        .from("price_history")
-        .select("sale_price, platform, source_url, listing_ref")
-        .eq("variant_id", variantId)
-        .eq("price_type", "listed")
-        .or("listing_status.is.null,listing_status.eq.available")
-        .not("sale_price", "is", null)
-        .not("listing_ref", "is", null)
-        .order("sale_price", { ascending: true })
-        .limit(500),
-      sb
-        .from("variant")
-        .select("exterior_colorway, size_label, hardware_color")
-        .eq("variant_id", variantId)
-        .limit(1),
-      // The full ask distribution for the outlier median — the candidate pool above is
-      // the cheapest 500, and a median of the cheap tail under-counts the outliers it
-      // exists to catch (how a $2.3k zip case survived a $3.7k-median Boy).
-      sb
-        .from("price_history")
-        .select("sale_price")
-        .eq("variant_id", variantId)
-        .eq("price_type", "listed")
-        .or("listing_status.is.null,listing_status.eq.available")
-        .not("sale_price", "is", null)
-        .limit(1000),
-    ]);
-    const rows = (data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[];
-    if (rows.length === 0) return null;
-    const v = (vRows ?? [])[0] as
-      | { exterior_colorway: string | null; size_label: string | null; hardware_color: string | null }
-      | undefined;
-    const spec: FrontSpec = {
-      colorway: v?.exterior_colorway ?? null,
-      sizeLabel: v?.size_label ?? null,
-      hardwareColor: v?.hardware_color ?? null,
-    };
-    const images = await fetchListingImages(rows.map((r) => r.listing_ref));
-    // Rows arrive cheapest-first; a stable sort by score keeps "cheapest within the
-    // best-matching tier". The low-price-outlier penalty keeps line accessories that
-    // TITLE like the bag ("boy mini crossbody" zip case) from winning on price alone.
-    const allPrices = ((priceRows ?? []) as { sale_price: number }[]).map((r) => Number(r.sale_price));
-    // One judgment per LISTING, at its cheapest observed ask — re-observations of the
-    // same product at drifted prices otherwise let an accessory-suspect listing dodge
-    // the outlier penalty on its higher observation.
-    const seenRefs = new Set<string>();
-    const photographed = rows.filter((r) => {
-      if (!images.get(r.listing_ref) || !r.source_url || seenRefs.has(r.listing_ref)) return false;
-      seenRefs.add(r.listing_ref);
-      return true;
-    });
-    if (photographed.length === 0) return null;
-    const scored = photographed
-      .map((r, i) => ({
-        r,
-        i,
-        score:
-          scoreListingFace(slugTitleFromUrl(r.source_url), spec) +
-          faceLowPricePenalty(r.sale_price, allPrices),
-      }))
-      .sort((a, b) => b.score - a.score || a.i - b.i);
-    const best = scored[0].r;
+    // Which listing owns this photo?
+    const { data: imgRows } = await sb
+      .from("listing_image")
+      .select("platform, listing_ref")
+      .eq("image_url", faceImageUrl)
+      .limit(5);
+    const owners = (imgRows ?? []) as { platform: string | null; listing_ref: string }[];
+    if (owners.length === 0) return null;
+
+    // Its live ask on THIS variant (cheapest observation = the current best ask we hold).
+    const { data } = await sb
+      .from("price_history")
+      .select("sale_price, platform, source_url, listing_ref")
+      .eq("variant_id", variantId)
+      .eq("price_type", "listed")
+      .or("listing_status.is.null,listing_status.eq.available")
+      .not("sale_price", "is", null)
+      .in("listing_ref", owners.map((o) => o.listing_ref))
+      .order("sale_price", { ascending: true })
+      .limit(5);
+    const row = ((data ?? []) as { sale_price: number; platform: string | null; source_url: string | null; listing_ref: string }[]).find(
+      (r) => r.source_url && owners.some((o) => o.listing_ref === r.listing_ref && (o.platform ?? "") === (r.platform ?? "")),
+    );
+    if (!row) return null;
     return {
-      imageUrl: images.get(best.listing_ref) as string,
-      buyUrl: affiliateListingUrl(best.source_url as string, best.platform),
-      price: Math.round(best.sale_price),
-      platformLabel: platformLabel(best.platform),
+      imageUrl: faceImageUrl,
+      buyUrl: affiliateListingUrl(row.source_url as string, row.platform),
+      price: Math.round(row.sale_price),
+      platformLabel: platformLabel(row.platform),
     };
   } catch {
     return null;

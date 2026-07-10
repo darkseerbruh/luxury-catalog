@@ -377,13 +377,12 @@ export default async function BagDetailPage({
         }
       : null;
   const heroImage = images[v.variantId] ?? null;
-  // When the only photo is an affiliate LISTING photo (no first-party / UGC
-  // shot), show it framed as "available now" + linked to buy, never as our own
-  // editorial hero. getVariantImages already surfaces the affiliate photo
-  // (theluxurycloset.com) catalog-wide; on the bag hero we upgrade it to a
-  // for-sale card. A genuine first-party photo stays a plain hero.
-  const heroIsAffiliate = !heroImage || heroImage.includes("theluxurycloset.com");
-  const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId) : null;
+  // When the face photo is an affiliate LISTING photo (no first-party / UGC
+  // shot), the hero quietly links to buy that exact listing — same image every
+  // surface shows, platform context lives in the rail below. A genuine
+  // first-party photo stays a plain unlinked hero.
+  const heroIsAffiliate = heroImage != null && heroImage.includes("theluxurycloset.com");
+  const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId, heroImage) : null;
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)
       ? heroImage
@@ -718,30 +717,26 @@ export default async function BagDetailPage({
           Kept compact (capped width, not full-bleed) so the value summary and
           variant selector stay above the fold. */}
       {heroListing ? (
-        /* No first-party photo: a real live listing stands in, clearly framed as
-           for-sale (linked to buy, "available now" caption) — never passed off as
-           our own editorial shot. Drops back to the placeholder if it sells. */
+        /* No first-party photo: a real live listing stands in. The header stays a
+           CLEAN image — no marketplace caption/price band (owner call 2026-07-09:
+           the "For sale right now" rail below carries the platform context). The
+           quiet link keeps the photo tethered to the live listing it promotes
+           (affiliate image rights) and still monetizes the click. contain-fit on
+           white: the 4/3 cover-crop was cutting studio shots off at the clasp. */
         <a
           href={heroListing.buyUrl}
           target="_blank"
           rel="noopener noreferrer nofollow sponsored"
-          className="group relative mx-auto block aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-border"
+          className="group relative mx-auto block aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-border bg-white"
         >
           <BagImage
             imageUrl={heroListing.imageUrl}
             brand={v.brand.name}
-            alt={`${v.brand.name} ${v.style.name} available at ${heroListing.platformLabel}`}
+            alt={`${v.brand.name} ${v.style.name}`}
             invite={false}
+            fit="contain"
             className="h-full w-full"
           />
-          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-bg/90 to-transparent px-3 py-2">
-            <span className="text-[11px] uppercase tracking-wide text-gold-soft">
-              Available now · {heroListing.platformLabel}
-            </span>
-            <span className="font-serif text-sm text-foreground group-hover:text-gold">
-              {formatPrice(heroListing.price, "USD")} →
-            </span>
-          </span>
         </a>
       ) : (
         <BagImage

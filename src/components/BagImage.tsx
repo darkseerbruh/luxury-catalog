@@ -17,6 +17,7 @@ export function BagImage({
   alt,
   className = "",
   invite = true,
+  fit = "cover",
 }: {
   imageUrl?: string | null;
   brand?: string | null;
@@ -30,6 +31,12 @@ export function BagImage({
    * empty state would be noise (taste quiz, admin review queue).
    */
   invite?: boolean;
+  /**
+   * "cover" crops to fill (grid tiles). "contain" shows the WHOLE bag — use on the
+   * bag-page hero, where a fixed-ratio crop was cutting studio shots off at the
+   * clasp; pair with a light background so the letterbox reads as studio white.
+   */
+  fit?: "cover" | "contain";
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -41,7 +48,7 @@ export function BagImage({
         alt={alt ?? (brand ? `${brand} bag` : "bag")}
         loading="lazy"
         onError={() => setFailed(true)}
-        className={`object-cover ${className}`}
+        className={`${fit === "contain" ? "object-contain" : "object-cover"} ${className}`}
       />
     );
   }

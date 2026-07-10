@@ -909,7 +909,12 @@ async function getAffiliateListingImages(
       if (!r.listing_ref || r.listing_status === "sold") continue;
       const key = `${r.platform ?? ""}|${r.listing_ref}`;
       const list = candidatesByVariant.get(r.variant_id) ?? [];
-      if (!list.some((c) => c.key === key)) {
+      const existing = list.find((c) => c.key === key);
+      if (existing) {
+        // Judge each listing at its CHEAPEST observed ask (same basis as
+        // getHeroListing) so both pickers resolve identically.
+        if (r.sale_price && Number(r.sale_price) < existing.price) existing.price = Number(r.sale_price);
+      } else {
         list.push({ key, slug: slugTitleFromUrl(r.source_url), price: Number(r.sale_price) || 0 });
         const ps = pricesByVariant.get(r.variant_id) ?? [];
         if (r.sale_price) ps.push(Number(r.sale_price));
@@ -930,23 +935,26 @@ async function getAffiliateListingImages(
     for (const im of imgRows as { platform: string | null; listing_ref: string; image_url: string }[]) {
       if (im.image_url) urlByKey.set(`${im.platform ?? ""}|${im.listing_ref}`, im.image_url);
     }
-    // Best spec-matching photographed candidate wins; ties keep newest-first order.
+    // ONE face per bag, everywhere: same rule as getHeroListing (best spec score,
+    // then cheapest, then stable ref) so the brand card, grids, and the bag-page
+    // hero all resolve to the SAME listing's photo (owner call 2026-07-09).
     for (const [vid, cands] of candidatesByVariant) {
       const spec = specs?.get(vid);
       const prices = pricesByVariant.get(vid) ?? [];
-      let bestUrl: string | null = null;
-      let bestScore = -Infinity;
-      for (const c of cands) {
-        const url = urlByKey.get(c.key);
-        if (!url) continue;
-        const score =
-          (spec ? scoreListingFace(c.slug, spec) : 0) + faceLowPricePenalty(c.price, prices);
-        if (score > bestScore) {
-          bestScore = score;
-          bestUrl = url;
-        }
-      }
-      if (bestUrl) out.set(vid, bestUrl);
+      const scored = cands
+        .map((c) => ({ c, url: urlByKey.get(c.key) }))
+        .filter((x): x is { c: (typeof cands)[number]; url: string } => !!x.url)
+        .map((x) => ({
+          ...x,
+          score: (spec ? scoreListingFace(x.c.slug, spec) : 0) + faceLowPricePenalty(x.c.price, prices),
+        }))
+        .sort(
+          (a, b) =>
+            b.score - a.score ||
+            (a.c.price || Infinity) - (b.c.price || Infinity) ||
+            a.c.key.localeCompare(b.c.key),
+        );
+      if (scored.length > 0) out.set(vid, scored[0].url);
     }
     return out;
   } catch {
