@@ -17,6 +17,8 @@ const NEW_BRANDS = [
   // Round 2 (2026-07-09): houses with titled backlog rows + nameable models.
   "Versace", "Marc Jacobs", "Stella McCartney", "Jimmy Choo", "Moynat", "Alaïa",
   "Delvaux", "Alexander Wang", "Judith Leiber",
+  // 2026-07-10 backlog demand (banked no_brand listings)
+  "Tumi", "Proenza Schouler", "Mansur Gavriel", "Furla",
 ];
 
 async function main() {

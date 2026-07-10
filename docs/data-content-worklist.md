@@ -320,6 +320,18 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   ~$7 (within Starter prepaid). Method is the standing TRR capture (memory
   trr_capture_sessions). Each category caps ~120 (no pagination), so deeper coverage needs
   designer-scoped shop URLs — ⬜ NEXT: test designer-scoped paths for deeper coverage.
+- ✅ **"Do it all" cleanup batch 2026-07-10**: (1) normalized split platform names
+  (TheRealReal→The RealReal, ebay→eBay, poshmark→Poshmark); (2) re-ran promotion pass;
+  (3) deep TRR via paginating actor `piotrv1001/the-realreal-listings-scraper` (+454 net-new
+  bags; it paginates ~7 pages/URL vs lulzasaur's 120 hard cap); (4) added 4 brands + models
+  (Tumi/Proenza Schouler/Mansur Gavriel/Furla) → promoted Metropolis/Bucket Bag/PS1; (5)
+  applied migration 0038 via management API (region/condition_detail/enrichment now on
+  discovered_listing — the CI push had a tracking mismatch; direct DDL fixed it). Result:
+  styles 994, brands 49, price_history 95,447, ≥2-source styles 582 / ≥3 296.
+  ⚠ eBay deeper pull: the existing `ebay-sold-sweep.ts` is the canonical path (already ran
+  2026-07-09), but a FRESH run is BLOCKED this cycle — the Apify account hit its **monthly
+  usage hard limit** (TRR sweeps consumed it). Re-run `ebay-sold-sweep.ts` once the owner
+  raises the Apify usage limit / it resets. eBay stays MANUAL (no cron).
 - ✅ **TRR live-refresh SCHEDULED — DONE 2026-07-09 (owner greenlit "yes" at 2-day cadence).**
   `trr-refresh.yml` cron `31 4 */2 * *`: `apify-trr-refresh.ts` runs the Apify actor over 8
   handbag categories (residential proxy, headless) → writes raw + a `sku ?? url` reconcile
