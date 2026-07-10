@@ -3,6 +3,16 @@
 
 ---
 
+## TL;DR — Fashionphile adapter size-bucketing fixed (Miu Miu → 20 priced variants) (2026-07-10, on `main`)
+
+**Two code-only FP-adapter bugs that mis-sized/mis-styled multi-size bags — fixed with regression tests; DB-row cleanup spun off to its own session.**
+- 🎯 **Most-specific target match** (`sources/fashionphile.ts` new exported `selectTarget()`): matching went from `Array.find` (FIRST match) to most-specific (total require-token length). A size-less inline generic (Miu Miu `Wander` `["wander"]`, `Aventure` `["aventure"]`) sat before the appended sweep-targets and collapsed every sized handle onto one "Standard" bucket. Now `small-wander` beats `wander`. General across all brands; other multi-size styles were already size-anchored so unaffected. **Miu Miu reached 20 priced variants.**
+- 🧵 **Matelassé target tightened**: `"matelasse"` is a MATERIAL token, so the Matelassé STYLE target was swallowing matelassé Coffer/Bucket (other styles), sandals (non-bag), pouches (SLG). Added excludes coffer/bucket/softy/beau/ivy/sandal/pouch → live dump 16→10 rows, all genuine bags.
+- ✅ Regression tests `src/lib/__tests__/fashionphile-select-target.test.ts` (22 cases inc. Hermès/LV spot-checks); green gate 757 tests. Commits `b2f6f83`, `3aeceb8` (+ worklist `e922cc4`).
+- ⬜ **YOUR TURN:** none. A **chip is running in its own session** for the DB-only follow-up (stranded Wander/Aventure/Arcadie Standard rows + duplicate ∅/Standard/size variants + existing Matelassé-mislabeled rows) — SAME-STYLE-ONLY re-point/dedup, reviewed. McQueen Skull #600 re-triage was handled by a parallel chat (stood down to avoid collision).
+
+---
+
 ## TL;DR — TRR PROMOTED non-bag contamination cleaned: 48 price rows off 15 bag variants (2026-07-10, on `main`)
 
 **The mis-map sweeps re-triaged wrong TITLES on a style; this clears the other class — apparel/accessories that shared a model token with a real bag and got PROMOTED onto its variant, writing cheap asking prices into `price_history` and deflating the bag's comps.**
