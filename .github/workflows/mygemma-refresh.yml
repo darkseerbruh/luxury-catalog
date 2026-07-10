@@ -1,0 +1,61 @@
+name: Refresh myGemma handbag listings (Shopify feed)
+
+# Hands-off daily capture for myGemma (open-Shopify reseller). FREE, no Firecrawl/Apify —
+# the registry had it as a Firecrawl source, but /collections/handbags/products.json is open.
+# Each run: crawl the handbags collection -> map bags we can name (canonicalModel) with
+# condition GRADE + WRITE-UP -> load into price_history + bank unnamable bags to
+# discovered_listing -> retire sold -> refresh the per-variant summary. See
+# docs/priority-reseller-capture-runbook.md.
+#
+# SECRETS: only SUPABASE_SERVICE_ROLE_KEY (already set). Supabase URL is public
+# (NEXT_PUBLIC_*), inlined as a fallback — mirrors redeluxe-refresh.yml.
+
+on:
+  schedule:
+    # Daily, 07:17 UTC, off the hour and staggered from the other Shopify feeds.
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: "Crawl page cap (safety ceiling)"
+        required: false
+        default: "200"
+      write:
+        description: "Apply DB writes? false = crawl + report only (no load/reconcile)"
+        required: false
+        default: "true"
+
+concurrency:
+  group: mygemma-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      MAX_PAGES: ${{ github.event.inputs.max_pages || '200' }}
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Crawl myGemma handbags collection (writes raw dump + live snapshot)
+        run: npx tsx supabase/ingest/sources/mygemma-crawl.ts handbags --max-pages="$MAX_PAGES"
+
+      - name: Map bags into landing observations
+        run: npx tsx supabase/ingest/sources/mygemma.ts --raw
+
+      - name: Load prices + bank discovered + retire sold + refresh summary
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- mygemma --write
+          npm run load:prices -- mygemma-discovered --discovered-only --write
+          npm run reconcile:sold -- --platform=myGemma --snapshot=data/ingest/_raw/mygemma-live.json --write
+          npm run summary:refresh
