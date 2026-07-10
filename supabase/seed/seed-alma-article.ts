@@ -40,14 +40,9 @@ Read this as an estimate of where the market is pricing each size, not an apprai
 
 ## The Alma on resale, by size
 
-Median asking price, deduped by listing, our catalog as of 2026-07-10:
+Median asking price by size, deduped by listing, our catalog as of 2026-07-10 (asking, not sold):
 
-- **BB:** median **$1,565** (n=197, range $395 to $5,795, asking, 2026-07-10)
-- **PM:** median **$895** (n=179, range $383 to $3,995, asking, 2026-07-10)
-- **Mini:** median **$1,381** (n=130, asking, 2026-07-10)
-- **GM:** median **$1,033** (n=18, asking, 2026-07-10)
-- **MM:** median **$928** (n=16, asking, 2026-07-10)
-- **Nano:** median **$1,695** (n=9, asking, 2026-07-10)
+[diagram: alma-size-chart]
 
 Here is the shape of it. The **BB** and the smaller sizes sit at the top of the asking range, the small, most-photographed shapes carry the want premium. The **PM** and **MM** are the value sizes, the everyday shapes asking the least per bag. And the big vintage totes, the **GM** and **MM**, ask surprisingly little, often less than the palm-sized BB above them.
 
