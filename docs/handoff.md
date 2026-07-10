@@ -1,5 +1,15 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], eBay coverage extended + mid-tier deals-basis unlocked, platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], eBay coverage extended + mid-tier deals-basis unlocked, platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps; McQueen dedup+re-triage, Jacquemus coverage, LV Alma article published). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — McQueen catalog cleanup + Jacquemus coverage + LV Alma article PUBLISHED (2026-07-10, on `main`)
+
+**Catalog-integrity + content lane. All landed, green gate each time.**
+- 🧹 **Alexander McQueen 17 → 11 real styles.** (a) DEDUP: merged 5 short-name duplicate style rows into their 4 real bags (`merge-mcqueen-dups.ts`, explicit **name-guarded** pairs, dry-run first; 10 ph rows re-pointed) — Knuckle/Knuckle Clutch→The Knuckle, Peak→The Peak, The Bow→The Bow Tote, De Manta→Manta. (b) RE-TRIAGE: split the Skull `#600` catch-all (`retriage-mcqueen-skull.ts`, row-level) — moved 25 rows to their real models (11 Padlock, 10 Skull Chain, 4 Skull Box Clutch), deleted 4 non-bags mis-ingested onto a bag style (tank top, phone cover, 2 slippers), left 13 generic skull-motif bags on `#600`, deleted empty dup `#879`. **Technique note:** `merge-style-dupes.ts` only auto-merges VERBOSE junk names (≥4 words); SHORT near-synonym dups need a hand-rolled name-guarded pair list like these two scripts.
+- 📊 **/data house-pricing coverage:** verified 5 of 8 thin houses now MEET the ≥20-priced-variant bar (The Row 47, Goyard 50, Valentino 32, **Jacquemus wired 14→20** via 6 existing-but-untargeted styles, Miu Miu 20 via the FP size-bug fix that landed in a parallel lane). Off-White/Telfar are micro-catalog (bar unreachable, honest scoping stays).
+- 📝 **LV Alma value article PUBLISHED** (owner said "just post it") — post **#38** `louis-vuitton-alma-what-its-worth`, `status=published`, topic→Alma(434). Copywriter-drafted (voice canon), data bar deduped by listing_ref (BB $1,565/n197, PM $895/n179, GM $1,033, MM $928, Nano $1,695, Mini $1,381), framed asking-not-sold + estimate-not-appraisal. Also fixed the Alma page depth (real description + year 1934) and wired `AlmaSizeChart` (`[diagram: alma-size-chart]`). Draft archived `docs/research-drafts/lv-alma-value-draft.md`.
+- ⬜ **YOUR TURN:** (a) the Alma **chart is new code** — it surfaces on the next prod build (auto if Vercel auto-deploys `main`, else a `vercel --prod` promote is yours); the article body is already live (`force-dynamic`). (b) Optional: the Alma **"Mini" size** (n=130) is a market label, not an official LV size — edit on-site to fold/drop if you want (DB body is canon now). (c) Two background tasks I spun off finished: apparel-ingest filter (landed) and FP size-bug (landed, Miu Miu→20).
 
 ---
 
@@ -9,6 +19,16 @@
 - 💰 **eBay coverage extended:** 2nd auction pull (premium: Chloé/Valentino/Givenchy/Burberry/The Row/Miu Miu/McQueen/MJ/Jacquemus… → 233 onto pages) + 3rd (mid-tier: Coach/Kate Spade/Longchamp/MK/Tory Burch, floor $25 → 145 onto pages). `ebay-sold-apify.ts` gained a JUNK/replica filter. eBay 2,876 → **3,918 rows**; multi-source styles 569 → **611**.
 - 🎨 **Deals-basis unlock (the U-DEALS-MIDTIER ask):** `isConfidentBasis` needs comps with material+colour. Backfilled them from eBay TITLES via `enrich-specs.ts --platform=eBay` (Haiku, guardrailed "only what's stated", **non-null-only writes so structured values are never wiped**). eBay colorway 3 → 689, material → 1,149; **290 mid-tier LIVE listings now deals-ready** (Coach 188, KS 35, Longchamp 27, MK 35, TB 5). Naive regex title-colour parsing was deliberately NOT used (repo's own "wrong backfill is worse than null" rule).
 - ⬜ **YOUR TURN (a product decision, not code):** the deals SURFACE also wants those eBay live rows kept FRESH, but the locked eBay policy says live asks are *lower-trust* than solds and eBay stays *manual/no-cron*. So enabling an eBay-live-driven mid-tier deals surface (with a clear lower-trust label) + a refresh cadence is your call. Say **"eBay live deals: yes"** to wire a bounded refresh; else the 290 deals-ready rows stand as-is on `/shop?deals=1`.
+
+---
+
+## TL;DR — Fashionphile adapter size-bucketing fixed (Miu Miu → 20 priced variants) (2026-07-10, on `main`)
+
+**Two code-only FP-adapter bugs that mis-sized/mis-styled multi-size bags — fixed with regression tests; DB-row cleanup spun off to its own session.**
+- 🎯 **Most-specific target match** (`sources/fashionphile.ts` new exported `selectTarget()`): matching went from `Array.find` (FIRST match) to most-specific (total require-token length). A size-less inline generic (Miu Miu `Wander` `["wander"]`, `Aventure` `["aventure"]`) sat before the appended sweep-targets and collapsed every sized handle onto one "Standard" bucket. Now `small-wander` beats `wander`. General across all brands; other multi-size styles were already size-anchored so unaffected. **Miu Miu reached 20 priced variants.**
+- 🧵 **Matelassé target tightened**: `"matelasse"` is a MATERIAL token, so the Matelassé STYLE target was swallowing matelassé Coffer/Bucket (other styles), sandals (non-bag), pouches (SLG). Added excludes coffer/bucket/softy/beau/ivy/sandal/pouch → live dump 16→10 rows, all genuine bags.
+- ✅ Regression tests `src/lib/__tests__/fashionphile-select-target.test.ts` (22 cases inc. Hermès/LV spot-checks); green gate 757 tests. Commits `b2f6f83`, `3aeceb8` (+ worklist `e922cc4`).
+- ⬜ **YOUR TURN:** none. A **chip is running in its own session** for the DB-only follow-up (stranded Wander/Aventure/Arcadie Standard rows + duplicate ∅/Standard/size variants + existing Matelassé-mislabeled rows) — SAME-STYLE-ONLY re-point/dedup, reviewed. McQueen Skull #600 re-triage was handled by a parallel chat (stood down to avoid collision).
 
 ---
 
