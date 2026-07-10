@@ -12,13 +12,18 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 *The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
 year_introduced ~0%. Thin pages rank + convert worse. Descriptions must be SOURCED (factuality
 bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (review-gated).*
-- 🔄 **Top-15 new styles by comp count** — archivist sourcing descriptions + years
-  (Gucci Belt Bag, Bulgari Serpenti Forever, Prada Triangle, Hermès Kelly To Go…), spot-check,
-  apply. IN PROGRESS this chat (`ops/alias-promote-0709`, 2026-07-10). Do not double-run.
+- ✅ **Top-15 new styles by comp count** — DONE 2026-07-10. Archivist sourced, spot-checked,
+  applied 15 descriptions + 5 cleanly-sourced years (Kelly To Go 2020, Soft Trunk 2019, New
+  Wave 2018, Vanity 2020, Serpenti Forever 2011) via `apply-style-depth.ts`. Drafts archived
+  at `supabase/ingest/data/style-depth-batch1.json`. Bold stripped (detail page renders plain text).
 - ⬜ **Remaining ~214 new styles** — next batches by comp count after the top-15 pattern proves out.
-- ⬜ **Category-bucket audit** — some new "styles" (Gucci Belt Bag / Neo Vintage / Emblem /
-  Retro Interlocking G) may be line/motif descriptors, not single models; archivist flags them
-  for possible merge/rename.
+- 🔄 **Category-bucket audit** — archivist flagged 7 of the top 15 as category/motif descriptors,
+  NOT single models: Gucci Belt Bag, Prada Triangle, Gucci Neo Vintage, Gucci Emblem, Celine
+  Macadam, Gucci Retro Interlocking G, Chanel Pearl Crush (design detail); + Chanel Urban
+  Essentials is seasonal (no permanent name). The 3 Gucci GG-Supreme logo entries (Neo Vintage /
+  Emblem / Retro Interlocking G) overlap and may be collapsible. NEEDS REVIEW before merge — per
+  [[catalog_promotion_pipeline]] style dups are NOT bulk-mergeable (silhouette buckets are
+  intentional). Producing the full-catalog audit list next.
 
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
 - ⬜ **"goyard"** — the only `search_not_found` on record (PostHog, 2026-06-28) and
