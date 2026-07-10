@@ -26,11 +26,11 @@ lowest spend that covers it. Companion to [data-collection-handoff.md](data-coll
 | **Fashionphile** | Shopify `products.json` (direct) | $0 | `market-refresh.yml` (every 3h) | ✅ wired |
 | **TheRealReal** | **Apify** (`trr-apify.ts`) | Apify CU (~$60/mo w/ eBay in the standing refresh) | daily diff + `reconcile:sold` | ✅ wired (`trr-refresh.yml`, 2-day) |
 | **eBay (sold)** | **Apify** (`ebay-sold-apify.ts`, auction-only) | Apify CU | realized comps at capture | ✅ wired |
-| **Redeluxe** ⭐ | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
+| **Redeluxe** ⭐ | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | ✅ wired (`redeluxe-refresh.yml`, daily) |
+| **The Luxury Closet** | CJ product feed (advertiser 5312449) | $0 | daily diff + `reconcile:sold` | ✅ wired (`ingest-tlc.yml`, daily) |
 | **Couture USA** | Shopify `products.json` (direct) | $0 | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
 | **Vestiaire** | Firecrawl (`vestiaire.ts` adapter) | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (needs crawl feed) |
-| **Rebag** | Firecrawl | Firecrawl credits | daily diff + `reconcile:sold` | 🔧 build-next (adapter) |
-| **The Luxury Closet** | Firecrawl or CJ feed (affiliate live, CID 5312449) | Firecrawl credits / $0 if feed | daily diff + `reconcile:sold` | 🔧 build-next |
+| **Rebag** | CJ product feed once approved (mirror TLC) | $0 when live | daily diff + `reconcile:sold` | 🔧 gated on Rebag CJ approval (advertiser 5749848, pending) |
 
 ### Fashionphile (free, automated)
 ```
@@ -42,6 +42,19 @@ npm run summary:refresh
 ```
 `reconcile:sold` safety: skips a platform if the snapshot is empty or would retire more than
 `--max-retire-frac` (default 0.5) of its live rows, so a broken crawl never mass-retires a catalogue.
+
+### Redeluxe (free Shopify feed, automated via `redeluxe-refresh.yml`)
+```
+npx tsx supabase/ingest/sources/redeluxe-crawl.ts
+npx tsx supabase/ingest/sources/redeluxe.ts --raw
+npm run load:prices -- redeluxe --write
+npm run reconcile:sold -- --platform=Redeluxe --snapshot=data/ingest/_raw/redeluxe-live.json --write
+npm run summary:refresh
+```
+Keeps only bags it can name via `canonicalModel` (brand from `vendor`, condition from tags,
+size from the title). Unnamable bags are the **discovered-listing follow-up** (not yet wired),
+never a guessed name. Verified 2026-07-10: a 2-page sample gave 175 clean named rows (Hermès /
+Chanel / Dior / LV) with sane prices, 0 invalid.
 
 ### TheRealReal (Apify, automated via `trr-refresh.yml`)
 Cloud actor via `trr-apify.ts` / `apify-trr-refresh.ts` (the browser/Firecrawl path was flaky:

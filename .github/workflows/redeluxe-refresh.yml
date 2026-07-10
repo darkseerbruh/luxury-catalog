@@ -1,0 +1,62 @@
+name: Refresh Redeluxe live listings (Shopify feed)
+
+# Hands-off daily capture for Redeluxe (flagship reseller + creator partner). Redeluxe
+# runs on Shopify, so /products.json answers plain fetches — FREE, no Firecrawl/Apify.
+# Each run: crawl the whole live feed -> map bags we can name (canonicalModel) into
+# PriceObservations -> load into price_history -> retire listings the crawl no longer sees
+# (sold/pulled) -> refresh the per-variant summary. Builds price history AND keeps the
+# "For sale right now" rail fresh. See docs/priority-reseller-capture-runbook.md.
+#
+# SECRETS: only SUPABASE_SERVICE_ROLE_KEY (already set). The Supabase URL is public
+# (NEXT_PUBLIC_*), inlined as a fallback below — mirrors market-refresh.yml.
+
+on:
+  schedule:
+    # Daily, 06:41 UTC, off the hour (Fashionphile runs 3-hourly; Redeluxe is smaller so
+    # once a day is plenty). Tune here.
+    - cron: "41 6 * * *"
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: "Crawl page cap (safety ceiling)"
+        required: false
+        default: "200"
+      write:
+        description: "Apply DB writes? false = crawl + report only (no load/reconcile)"
+        required: false
+        default: "true"
+
+concurrency:
+  group: redeluxe-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      MAX_PAGES: ${{ github.event.inputs.max_pages || '200' }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Crawl Redeluxe live feed (writes raw dump + live snapshot)
+        run: npx tsx supabase/ingest/sources/redeluxe-crawl.ts --max-pages="$MAX_PAGES"
+
+      - name: Map bags into landing observations
+        run: npx tsx supabase/ingest/sources/redeluxe.ts --raw
+
+      - name: Load prices + retire sold + refresh summary
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- redeluxe --write
+          npm run reconcile:sold -- --platform=Redeluxe --snapshot=data/ingest/_raw/redeluxe-live.json --write
+          npm run summary:refresh
