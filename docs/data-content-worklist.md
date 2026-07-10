@@ -72,7 +72,11 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   fixed the page-depth gap: Alma page (434) now has a real sourced description + year_introduced=1934.
   Draft archived `docs/research-drafts/lv-alma-value-draft.md`. OPEN (revise on-site if wanted, DB body
   is canon): the "Mini" size (n=130) is a market label, not an official LV Alma size (LV = Nano/BB/PM/
-  MM/GM). A size-median chart component was NOT wired (the medians render inline as bullets).
+  MM/GM). ✅ **CHART WIRED 2026-07-10**: `AlmaSizeChart` (`[diagram: alma-size-chart]`, registered in
+  `articles/[slug]/page.tsx`) replaced the inline median bullets in the body — 6 sizes, small-vs-large
+  colored to show "size tracks desire", deduped/dated/asking-framed. Article renders `force-dynamic`
+  so the published body is live now; the NEW chart component needs the next prod `vercel --prod`
+  promote (hers) to appear.
 
 ## FULL-CATALOG MODEL SWEEP (owner greenlit 2026-07-02) — ✅ DONE same day
 *Goal: every real handbag model per brand gets a canonical style + variants + Fashionphile
