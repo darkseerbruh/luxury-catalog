@@ -22,8 +22,8 @@ import { supabaseAdmin as db } from "./lib/client";
 // Stale literals from docs/article-freshness-report.md. A draft whose body still contains
 // one of these is held by default (the number drifted; the article states the old one).
 const STALE_FIGURES: { literal: string; was: string; now: string }[] = [
-  { literal: "$1,245", was: "Neverfull MM asking $1,245", now: "$1,500 (n=336)" },
-  { literal: "$911", was: "Gucci GG Marmont asking $911", now: "$1,095 (n=304)" },
+  { literal: "$1,245", was: "Neverfull MM asking $1,245", now: "$1,515 (n=345, 2026-07-10)" },
+  { literal: "$911", was: "Gucci GG Marmont asking $911", now: "$1,095 (n=183, 2026-07-10)" },
 ];
 
 function arg(name: string): string | undefined {

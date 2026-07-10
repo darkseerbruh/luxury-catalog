@@ -44,6 +44,33 @@ describe("canonicalModel", () => {
     expect(canonicalModel("Louis Vuitton", "Monogram Shoulder Bag")).toBeNull();
   });
 
+  it("matches accent-blind in both directions (TRR sweep, 2026-07-10)", () => {
+    // ASCII slug title vs accented dictionary name...
+    expect(canonicalModel("Hermès", "clemence jypsiere 34")).toBe("Jypsière");
+    // ...and accented scraped title vs ASCII token, incl. a TRailing accent where a
+    // non-unicode \b could never match ("noé").
+    expect(canonicalModel("Hermès", "2025 Swift Mini Jypsière".toLowerCase())).toBe("Jypsière");
+    expect(canonicalModel("Louis Vuitton", "petit noé")).toBe("Noé");
+    expect(canonicalModel("Louis Vuitton", "néonoé mm")).toBe("NéoNoé");
+  });
+
+  it("model word beats hardware token (Blondie/Horsebit Chain, 2026-07-10)", () => {
+    expect(canonicalModel("Gucci", "interlocking g horsebit blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "bamboo blondie medium")).toBe("Blondie");
+    expect(canonicalModel("Gucci", "chain-link horsebit chain large")).toBe("Maxi Horsebit Chain");
+    expect(canonicalModel("Gucci", "horsebit accent leather loafers")).toBeNull();
+  });
+
+  it("ignores bundled extras after w/ or with (TRR sweep, 2026-07-10)", () => {
+    // The bundled pouch/scarf must not trip the SLG gate on a real bag...
+    expect(canonicalModel("Hermès", "toile gm & vache hunter herbag zip 31 w/ pouch")).toBe("Herbag");
+    expect(canonicalModel("Hermès", "evercolor lindy 26 w twilly scarf")).toBe("Lindy");
+    // ...and a model word after "w/" must not claim the row either.
+    expect(canonicalModel("Hermès", "vanity case w/ kelly charm")).toBeNull();
+    // A bare " w " can also be slugged E/W (east/west) — that one is NOT an extra.
+    expect(canonicalModel("Saint Laurent", "leather e w shopping tote east west")).toBe("Shopping Tote");
+  });
+
   it("resolves sub-brands / collabs / accents to one canonical brand", () => {
     expect(canonicalBrand("Christian Dior")).toBe("Dior");
     expect(canonicalBrand("DIOR MEN")).toBe("Dior");

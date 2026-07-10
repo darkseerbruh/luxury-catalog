@@ -3,9 +3,9 @@ import Link from "next/link";
 import { LC_INDEX_WEIGHTS, LC_INDEX_MIN_N } from "@/lib/lc-index";
 
 export const metadata: Metadata = {
-  title: "How we rank — the LC Index method",
+  title: "How we rank: the LC Index method",
   description:
-    "The LC Index blends four measured market signals into one rank: resale price, trade volume, scarcity, and house tier. Here is exactly how, and what it does not claim.",
+    "The LC Index blends three measured market signals into one rank: resale price, trade volume, and scarcity. Here is exactly how, and what it does not claim.",
 };
 
 const SIGNALS: { label: string; weight: number; body: string }[] = [
@@ -24,11 +24,6 @@ const SIGNALS: { label: string; weight: number; body: string }[] = [
     weight: LC_INDEX_WEIGHTS.scarcity,
     body: "How few are listed for sale right now. Fewer live listings ranks higher. This one can read low even for a famous bag, which is the honest point.",
   },
-  {
-    label: "House standing",
-    weight: LC_INDEX_WEIGHTS.tier,
-    body: "The tier of the house that makes it, on our four-tier scale (Ultra-luxury, Luxury, Premium, Contemporary). A light thumb on the scale, not the story.",
-  },
 ];
 
 export default function HowWeRankPage() {
@@ -38,8 +33,15 @@ export default function HowWeRankPage() {
       <h1 className="font-serif text-3xl text-foreground">How we rank</h1>
 
       <p className="mt-4 text-sm leading-relaxed text-muted">
-        One number for where a bag stands in the market, built from four measured signals. Here is
+        One number for where a bag stands in the market, built from three measured signals. Here is
         the recipe, in the open.
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted">
+        This ranks the bag. Where its <em>house</em> stands is a separate read, on its own page:{" "}
+        <Link href="/how-we-tier" className="text-gold-soft underline underline-offset-2">
+          how we tier houses
+        </Link>
+        .
       </p>
 
       <section className="mt-8 flex flex-col gap-3">
