@@ -8,6 +8,27 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## PAGE-DEPTH: descriptions + intro years on new styles (started 2026-07-10)
+*The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
+year_introduced ~0%. Thin pages rank + convert worse. Descriptions must be SOURCED (factuality
+bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (review-gated).*
+- ✅ **Top-15 new styles by comp count** — DONE 2026-07-10. Archivist sourced, spot-checked,
+  applied 15 descriptions + 5 cleanly-sourced years (Kelly To Go 2020, Soft Trunk 2019, New
+  Wave 2018, Vanity 2020, Serpenti Forever 2011) via `apply-style-depth.ts`. Drafts archived
+  at `supabase/ingest/data/style-depth-batch1.json`. Bold stripped (detail page renders plain text).
+- ⬜ **Remaining ~214 new styles** — next batches by comp count after the top-15 pattern proves out.
+- ✅ **Category-bucket audit** — DONE 2026-07-10. Review list at `docs/style-bucket-audit.md`:
+  7 archivist-confirmed category/motif buckets + 5 token-flagged needs-review + Chanel Urban
+  Essentials seasonal. Strongest merge candidate = the 3 Gucci GG-Supreme logo entries. NO merges
+  applied (needs human spot-check per pipeline rule). Superseded detail below:
+- 🗂️ (audit detail) archivist flagged 7 of the top 15 as category/motif descriptors,
+  NOT single models: Gucci Belt Bag, Prada Triangle, Gucci Neo Vintage, Gucci Emblem, Celine
+  Macadam, Gucci Retro Interlocking G, Chanel Pearl Crush (design detail); + Chanel Urban
+  Essentials is seasonal (no permanent name). The 3 Gucci GG-Supreme logo entries (Neo Vintage /
+  Emblem / Retro Interlocking G) overlap and may be collapsible. NEEDS REVIEW before merge — per
+  [[catalog_promotion_pipeline]] style dups are NOT bulk-mergeable (silhouette buckets are
+  intentional). Producing the full-catalog audit list next.
+
 ## SEARCH-GAP POINTERS (from article-engine cross-feed rule 3)
 - ✅ **"goyard"** — RESOLVED (verified 2026-07-10). The 2026-06-28 miss predates the
   2026-07-02 Goyard sweep; Goyard now has a brand row + 33 styles + 52 variants, and
