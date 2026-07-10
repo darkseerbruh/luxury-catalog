@@ -1,5 +1,5 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (durable multi-source capture + backlog promotion, catalog-promote lane: TRR+eBay on cloud Apify, platforms normalized, migration 0038, +4 brands; also same day: unified market surface + UX fixes; TRR all-brands mis-map sweep). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
 
 ---
 
@@ -12,6 +12,29 @@
 - 🧹 **Cleanup batch (2026-07-10):** platform names de-split (`TheRealReal`→`The RealReal`, `ebay`→`eBay`); +4 brands (Tumi/Proenza Schouler/Mansur Gavriel/Furla) + models; **migration 0038 applied** (region/condition_detail/enrichment on `discovered_listing` — CI push had a tracking mismatch, applied the DDL directly via the management API + verified).
 - 💳 **Apify is now PAID Starter** (owner upgraded + raised the usage limit). Keep it while the `trr-refresh` cron is live; don't downgrade to Free. Standing spend ~$60/mo TRR refresh + small on-demand pulls.
 - ⬜ **YOUR TURN (nothing blocking):** optionally widen eBay via Firecrawl Buy-It-Now on your allowance; the ~40k still-banked `discovered_listing` rows keep promoting as the dictionary grows.
+
+---
+
+## TL;DR — Promotion pass off the swept backlog: 11 new styles + 154 comps re-pointed (2026-07-10, on `main`)
+
+**Ran `promote-safe` on the 41k-row discovered backlog after the sweep. Every created style hand-verified against its cluster's titles (pipeline rule: no blind bulk-create).**
+- 🆕 **11 new curated styles** (all real, correctly-named bags with sane asking-comp medians): LV Cartouchière ($635/n17), Iéna (PM $1,250 / MM $1,195), Évasion ($795/n14), Alizé ($1,095/n13), Surène (MM $2,095 / BB $1,135), Randonnée (PM $680 / GM $625 / Standard $845), Uzès ($1,095), Vivacité ($1,950), Odyssée ($2,995), Hermès Sac à Dépêches ($4,995/n7), SL Bea ($2,940/n16). 15 variants, 149 asking rows re-pointed into price_history; +5 real jumbo/medium Classic Flap comps into the existing icon style (v873).
+- 🔚 **Promotion vein now worked out:** after this, every remaining ≥5-row discovered cluster is non-bag (t-shirts, blazers, sneakers, sunglasses, wallets, belt kits) the SLG/apparel gate correctly refuses to give a bag style — no more clean dictionary-gap promotions here. SL Bea was the last real-bag gap (token broadened "bea tote" → word-bounded "bea").
+- 🛠️ **New `--exclude=Brand::Model` veto on `promote-safe`** (mirrors the mismap groups-file): skips clusters the auto-gate resolves wrong. Used it to hold back **Chanel Classic Flap "Mini"** — 6 seasonal *Hollywood Boulevard mini flap w/ star coin purse* novelty rows that `canonicalModel` maps onto the Classic Flap icon (the exact seasonal-on-icon pollution the owner flagged). They stay in discovered for a seasonal-aware pass.
+- 📖 **Dictionary: Le Grand Bambino split from Le Bambino** (Grand Chiquito precedent) — matches the catalog, which already had both styles.
+- ⚠️ **Size precision caveat:** numbered LV clusters (Cartouchière 22/26/17) bucketed to one "Standard" variant because the size token wasn't parsed — style is right, size mixed; fine for now, a size-parse pass would split them.
+- ⬜ **YOUR TURN / next:** (a) the 10 new pages are BARE (name + comps only) — they join the PAGE-DEPTH queue in `docs/data-content-worklist.md` (sourced descriptions + intro years via the archivist); (b) Jacquemus discovered rows are messy (raw-title `style_guess`, one style_guess = "unmatched-model") — a normalization pass would promote the Bambino/Grand-Bambino colorways properly.
+
+---
+
+## TL;DR — Page-depth: 74 sourced style descriptions + migration 0038 (2026-07-10, on `main`, applied to prod)
+
+**The 229 styles promoted 2026-07-09/10 landed name-only (descriptions had dropped to 30%). Backfilled the real-traffic set with SOURCED depth, no fabrication.** Method is now durable: `page_depth_method` memory + `docs/data-content-worklist.md` PAGE-DEPTH section.
+- 📝 **74 style descriptions + 14 debut years live on prod** across 3 archivist batches covering the ENTIRE ≥20-comp set (every new style with real traffic). Coverage 30% → **37%**, years 8 → **22**. Every fact archivist-sourced + spot-checked; unsourced years held null (Marc Jacobs Tote ~2020, Chelsea "1998", Brea ~2010 stay in prose, not the field — new factuality rule #8).
+- 🛠️ **New tooling:** `supabase/ingest/apply-style-depth.ts` (review-gated: writes only spot-checked JSON drafts, never generates prose). Drafts archived at `supabase/ingest/data/style-depth-batch{1,2,3}.json`. Detail page renders description as PLAIN TEXT, so bold stripped + accents kept.
+- 🗂️ **Catalog-integrity find:** the ingest tokenizer created CATEGORY/MOTIF "styles" that aren't single models. Review list at `docs/style-bucket-audit.md`: strongest calls = fold the 3 overlapping Gucci GG-Supreme entries (Neo Vintage / Emblem / Retro Interlocking G) + **remove "Chanel Uniform" (1056)** — it's the staff-uniform program, not a retail bag. NO auto-merges (style dups need spot-check).
+- 🗄️ **Migration 0038 APPLIED** (owner-triggered the Action; verified `region`/`condition_detail`/`enrichment` columns now exist on `discovered_listing`). Future promotions carry region + condition detail instead of dropping them.
+- ⬜ **YOUR TURN:** (a) optional — review `docs/style-bucket-audit.md` and say whether to merge the Gucci GG-Supreme trio + remove Chanel Uniform (one script run once you decide). (b) The thin tail (~76 new styles < 10 comps) is DEFERRED by design — same method (archivist → apply-style-depth.ts) if you ever want them.
 
 ---
 
@@ -47,6 +70,16 @@
 - 🧹 **Moved 213 verified rows** (price_history → `discovered_listing`, preserve-then-delete; TRR 9,020 → 8,807), incl. all 6 flagged Boy rows (#2362 unparsable "chanel-uk0xx", NY tweed classic double flap → Classic Flap guess, filigree flap, chain-around hobo, O-case, patent 3 bag). Big buckets: seasonal flaps/totes/SLGs stacked on title-verbatim styles (Mini Square Flap 21, Fuchsia Coin Purse 18, Chesterfield 13) + 20 medium/jumbo classic double flaps priced into the **Rectangular Mini** page + TRR "timeless" line items on Classic Flap.
 - ✋ **48 flagged rows deliberately KEPT** (title matches the style it sits on): Boy WOC 7 / Boy camera 2 / boy card holders 2 (Boy-line items stay), Travel Ligne Tote 12, Deauville 4, Reissue WOC 3, mini-square + rectangular-mini word-order variants, "be cc tote", "mini kelly handle bag". Verification rule: a "(no model)" recompute is a dictionary GAP, not proof of mis-map — every group's titles were checked against the style name before moving.
 - ⬜ **YOUR TURN / next:** (a) the 213 rows sit in `discovered_listing` (`style_guess` where recomputable) — next promotion pass re-places the real bags; (b) **non-Chanel TRR sweep — DONE same day** (see the all-brands TL;DR above); (c) Rectangular Mini / Classic Flap comps read cleaner now (the mini's median was carrying medium/jumbo prices).
+
+---
+
+## TL;DR — Style-dup cleanup: 89 redundant style rows collapsed (2026-07-09/10, on `main`)
+
+**The `load-handbag-breadth` residue (full-sentence one-off style names) folded into their clean canonical siblings; intentional silhouette buckets protected.**
+- 🧹 **`supabase/ingest/merge-style-dupes.ts`** (dry-run default, `--write`, idempotent) clusters `style` on `(brand_id, canonicalModel())` past the 1000-row cap, merges ONLY verbose junk (≥4 words + material/colour/year/brand/"Bag" token) into the SINGLE clean sibling; re-points variants + `price_history` (dedup on `platform|listing_ref|price_type|observed_on`), deletes the emptied style. **Result: 87 merged, style −87, price_history −8 (only exact-key dups, 0 unique lost), signals −26.** `bb9097c`.
+- 🛡️ **PROTECTED, never merged** (denylist + short-name silhouette-qualifier guard, so the 2026-06-30 collision can't repeat): Gucci Ophidia/Soho, Celine Triomphe Oval/Boston/Shoulder, Valentino Rockstud Spike/Tote, Coach Pillow Tabby, Chanel CC Filigree / Top Handle Vanity Case, GG Marmont Chain/Bucket.
+- 🏷️ **Ambiguous pairs resolved by OFFICIAL HOUSE NAME** (`merge-style-pairs.ts`): Hermès "In The Loop" → **"In-The-Loop"** (hermes.com); Burberry "Knight Bag" + "The Knight" → renamed **"The Knight Bag"** (FW23 launch PR). `c887d87`.
+- ⬜ **YOUR TURN / next:** the ~130 shorter material+size rows are HELD for a reviewed pass — a MIX of pure size/material rows that SHOULD fold in (e.g. "Togo Birkin 35", "Monogram Speedy 30") and genuine sub-models that MUST stay (Kelly Pochette, Speedy Soft, Musette Tango/Salsa, Boîte Chapeau Souple). Needs round-1-style name review before `--write`. Logged in `docs/data-content-worklist.md`.
 
 ---
 
@@ -117,7 +150,8 @@
 - 🏗️ **Built + RAN the discovered→catalogue promotion.** `promote-discovered --write` was a stub; implemented idempotent find-or-create brand→style→variant + re-point, bag-gated (`canonicalModel`), new brands get a tier. Ran `normalize:discovered --write` (3,383 titles → canonical models) then `promote:discovered --write`: **+2 brands, +32 styles, +164 variants**, 4,143 discovered rows re-pointed. Then triggered `ingest-tlc` → **1,439 live offers placed on the new variants**. New standing Action `catalog-promote.yml` (weekly dry-run report; manual `write=true` persists).
 - 🏅 **Brand tiers = our own formula now (House Standing), numbered Tier 1→5.** Replaces the industry Ultra-luxury/Luxury/Premium/Contemporary scheme. Score = resale median 55% + p90 ceiling 25% + trade volume 20% → percentile blend → cutoffs 90/75/55/30, n-gate ≥30. Spec `docs/ux/tier-formula-spec.md`, pure core `src/lib/house-standing.ts` (6 tests), report `npm run house-standing`, explainer page `/how-we-tier` (live). Migration `0052` APPLIED + backfill run: all **30 brands set to Tier 1-5**. Tier 1 = Hermès, Chanel; Tier 5 = Coach, MK, Tory Burch, etc.
 - 🩹 **Caught + fixed a live regression the backfill caused:** `/brands`, the nav mega-menu, and the homepage brand section rendered ZERO brands (grouping keyed old string tiers). Re-keyed `BRAND_TIERS`/`BRAND_TIER_RANK` to Tier 1-5; verified `/brands` shows 30 brands under Tier 1-5 headings on prod. Commit `36232be`.
-- ⬜ **YOUR TURN (all optional, nothing blocking):** (a) tier **weights (55/25/20) + band cutoffs are v1** — tune if the placement feels off (one edit in `house-standing.ts`, rerun the backfill). (b) **Circularity to revisit:** the LC Index still takes house tier as a 15% input, and tier is now derived from resale price too. (c) Contemporary houses (Tory Burch, Michael Kors, D&G) are now IN the catalog at Tier 4-5 per the full-spectrum call. (d) The `catalog-promote` Action defaults to dry-run; run it with `write=true` to promote the next backlog batch.
+- ✅ **Circularity RESOLVED (2026-07-10, commit `35b2f56`):** dropped the house-tier input from the LC Index (was 15%); it now ranks the bag on price 47 / trade 29 / scarcity 24 only. The two indices are independent: LC Index ranks the bag, House Standing ranks the house. Live on prod.
+- ⬜ **YOUR TURN (all optional, nothing blocking):** (a) tier **weights (55/25/20) + band cutoffs are v1** — tune if the placement feels off (one edit in `house-standing.ts`, rerun the backfill). (b) Contemporary houses (Tory Burch, Michael Kors, D&G) are now IN the catalog at Tier 4-5 per the full-spectrum call. (c) The `catalog-promote` Action defaults to dry-run; run it with `write=true` to promote the next backlog batch — **note a live chat ("Pull full TRR + eBay… promote the discovered backlog") is already actively running this, so it's covered.**
 
 ---
 
