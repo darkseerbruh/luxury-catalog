@@ -534,3 +534,10 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   are really just variants of the clean model (e.g. "Togo Birkin 35", "Monogram Speedy 30") SHOULD
   fold in; (b) genuine sub-models MUST stay separate (Kelly Pochette, Speedy Soft, Musette Tango/Salsa,
   Boîte Chapeau Souple, Félicie Pochette). Retire/park `load-handbag-breadth.ts` as the junk source.
+
+<!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
+## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
+- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: Check the lc-index-snapshot cron (needs CRON_SECRET) and run it for the missing month. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+- ⬜ [dh:contamination-trr] 7 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in. Action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+- ⬜ [dh:contamination-dupes] 11 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+<!-- data-health:end -->
