@@ -1,5 +1,17 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (unified market surface + UX fixes shipped, UX-improvements lane; earlier same day: TRR all-brands mis-map sweep — 981 verified rows re-triaged). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-10 (durable multi-source capture + backlog promotion, catalog-promote lane: TRR+eBay on cloud Apify, platforms normalized, migration 0038, +4 brands; also same day: unified market surface + UX fixes; TRR all-brands mis-map sweep). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Durable multi-source capture + backlog promotion (2026-07-08→10, on `main`)
+
+**Solved the "capture the WHOLE catalogue" directive durably and grew the market surface: dictionary + promotion hardened, TheRealReal + eBay capture moved to cloud Apify actors (bot-block + session-drop proof), catalog now ~994 styles / ~95k price rows / ~569 styles with 2+ sources.**
+- 🧠 **Promotion engine:** `model-normalize.ts` dictionary expanded (evidence-verified real models only); `promote-safe.ts --create-new` resolves a cluster to its canonical model and CREATES the clean style when truly new (bag-gated, never forks a raw title) AND lands the comps; `promote-discovered.ts` junk-fork fallback removed. Thousands of banked listings rolled onto pages across passes.
+- 🏬 **TheRealReal capture = cloud Apify, not our browser** (TRR kicks the login constantly + the Chrome classifier was flaky). Adapter `sources/trr-apify.ts`. Breadth actor `lulzasaur/therealreal-scraper` (120/category) for the standing 2-day refresh; **depth actor `piotrv1001/…` paginates ~2k/URL**. ~2,400+ handbags captured over the sweeps.
+- 💰 **eBay deeper pull DONE:** `automation-lab/ebay-sold-scraper` auction-only + $500 AG floor → **718 realized sold comps, 676 onto pages** (auction finals can't be best-offer masked). New BROAD `sources/ebay-sold-apify.ts` (catch-all) complements the SCOPED `ebay-sold-sweep.ts`.
+- 🧹 **Cleanup batch (2026-07-10):** platform names de-split (`TheRealReal`→`The RealReal`, `ebay`→`eBay`); +4 brands (Tumi/Proenza Schouler/Mansur Gavriel/Furla) + models; **migration 0038 applied** (region/condition_detail/enrichment on `discovered_listing` — CI push had a tracking mismatch, applied the DDL directly via the management API + verified).
+- 💳 **Apify is now PAID Starter** (owner upgraded + raised the usage limit). Keep it while the `trr-refresh` cron is live; don't downgrade to Free. Standing spend ~$60/mo TRR refresh + small on-demand pulls.
+- ⬜ **YOUR TURN (nothing blocking):** optionally widen eBay via Firecrawl Buy-It-Now on your allowance; the ~40k still-banked `discovered_listing` rows keep promoting as the dictionary grows.
 
 ---
 
