@@ -29,7 +29,9 @@
 - 💳 **Billing call (stands):** on an Apify spike, raise the Starter cap + diagnose the burn (Insights); don't jump to Scale ($199/mo) unless sustained ~$180+/mo. Her ~$60/mo standing TRR refresh sits well inside Starter.
 - 📓 **New blueprint:** `docs/priority-reseller-capture-runbook.md` — per-source routing map + cost per lane, CORRECTED to match the cloud-Apify reality (Apify = TRR + eBay-sold engine; free feeds + Firecrawl for the rest).
 - 🛠️ **Firecrawl eBay `--sold` FALLBACK built** (`firecrawl-ebay.ts --sold`, dispatch-only): a manual backup for when Apify is capped. **Secondary to `ebay-sold-apify.ts`**, which is cleaner (auction-only = no masking). Weekly schedule dropped to avoid a redundant Firecrawl credit burn.
-- ⬜ **YOUR TURN:** nothing blocking (Apify already paid + cap raised). Optional: I can still build the free Redeluxe/Rebag/TLC nightly adapters to widen the daily for-sale snapshot.
+- 🟢 **FREE-SOURCE SPRINT (2026-07-10, all landed + verified):** built 4 new free Shopify feed lanes on the same pattern (crawl → `canonicalModel` named + **discovered-bank the unnamable** via `--discovered-only` → `reconcile:sold` → daily workflow): **Redeluxe** (175/2pg), **Couture USA** (208, +footwear filter + colour tags), **Ann's Fabulous Finds** (156), **myGemma** (364, richest: condition GRADE + write-up; was a *paid* Firecrawl source). Now **6 free lanes** (+ Fashionphile + TLC). Plural-`product_type` regex bug caught + fixed across all. Rejected: ShopWorn (dropship/niche), Yoogi's (empty), Rebag (no open feed → its CJ feed once approved). Canonical: `docs/priority-reseller-capture-runbook.md`.
+- 🔁 **Dictionary-gap engine scheduled** (`dictionary-gap-report`, Wed 9am, in `automation-map.md`): weekly ranked "missing models" report from the `discovered_listing` backlog → `docs/dictionary-gap-report.md`; report-only, adding models stays her gate.
+- ⬜ **YOUR TURN:** (a) hit **"Run now"** on the `dictionary-gap-report` scheduled task once to pre-approve its tools (then hands-off). (b) Rebag stays gated on its CJ approval; Vestiaire/1stDibs need a Firecrawl budget (your spend call).
 
 ---
 
