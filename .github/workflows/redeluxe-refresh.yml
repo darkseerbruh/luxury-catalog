@@ -58,5 +58,6 @@ jobs:
         if: env.WRITE == 'true'
         run: |
           npm run load:prices -- redeluxe --write
+          npm run load:prices -- redeluxe-discovered --discovered-only --write
           npm run reconcile:sold -- --platform=Redeluxe --snapshot=data/ingest/_raw/redeluxe-live.json --write
           npm run summary:refresh
