@@ -13,6 +13,16 @@
 
 ---
 
+## TL;DR — Style-dup cleanup: 89 redundant style rows collapsed (2026-07-09/10, on `main`)
+
+**The `load-handbag-breadth` residue (full-sentence one-off style names) folded into their clean canonical siblings; intentional silhouette buckets protected.**
+- 🧹 **`supabase/ingest/merge-style-dupes.ts`** (dry-run default, `--write`, idempotent) clusters `style` on `(brand_id, canonicalModel())` past the 1000-row cap, merges ONLY verbose junk (≥4 words + material/colour/year/brand/"Bag" token) into the SINGLE clean sibling; re-points variants + `price_history` (dedup on `platform|listing_ref|price_type|observed_on`), deletes the emptied style. **Result: 87 merged, style −87, price_history −8 (only exact-key dups, 0 unique lost), signals −26.** `bb9097c`.
+- 🛡️ **PROTECTED, never merged** (denylist + short-name silhouette-qualifier guard, so the 2026-06-30 collision can't repeat): Gucci Ophidia/Soho, Celine Triomphe Oval/Boston/Shoulder, Valentino Rockstud Spike/Tote, Coach Pillow Tabby, Chanel CC Filigree / Top Handle Vanity Case, GG Marmont Chain/Bucket.
+- 🏷️ **Ambiguous pairs resolved by OFFICIAL HOUSE NAME** (`merge-style-pairs.ts`): Hermès "In The Loop" → **"In-The-Loop"** (hermes.com); Burberry "Knight Bag" + "The Knight" → renamed **"The Knight Bag"** (FW23 launch PR). `c887d87`.
+- ⬜ **YOUR TURN / next:** the ~130 shorter material+size rows are HELD for a reviewed pass — a MIX of pure size/material rows that SHOULD fold in (e.g. "Togo Birkin 35", "Monogram Speedy 30") and genuine sub-models that MUST stay (Kelly Pochette, Speedy Soft, Musette Tango/Salsa, Boîte Chapeau Souple). Needs round-1-style name review before `--write`. Logged in `docs/data-content-worklist.md`.
+
+---
+
 ## TL;DR — Merchant sweep #2: Dallas Designer Handbags applied, ALB skipped (2026-07-09, docs on `main`)
 
 **Owner asked "can we list Atlanta Luxury Bags? who else?" → two-agent sweep of ~20 merchants; full verdicts + evidence in `docs/data-collection-handoff.md` §11** (commits `896194f`/`c2f8bd2`/`d44448a`).
