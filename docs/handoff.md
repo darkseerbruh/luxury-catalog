@@ -5,6 +5,11 @@
 
 ## TL;DR — Style faces now match the variant spec: hero + card pickers (2026-07-09, on `main`, DEPLOYED to prod)
 
+**Round 3 (same day, owner report: Boy page fronted by a camera case, then a zip pouch), commit `2cd866b`, deployed:**
+- Dictionary: WOC + camera vetoes on Boy / Chanel 19 / Trendy CC (line token must not swallow the shape); 46 verified rows re-triaged via the `--groups-file` flow.
+- Picker: `faceLowPricePenalty` (-3 under 0.65x the variant's FULL live-ask median, hero candidates deduped per listing at cheapest ask) — catches accessories whose titles carry no shape word (the "boy mini crossbody" zip case). Verified live: bag/513 hero = studded black Boy flap $2,628.
+- Known residue for a future pass: cross-model collisions OUTSIDE Chanel (audit 2026-07-09: Gucci "bamboo diana" 18 rows, Marmont/Ophidia belt bags, Fendi Selleria, Celine Cabas/Phantom); 1 Balenciaga row sitting on Chanel Boy (brand-level, single row).
+
 **Owner flagged the Classic Flap page/card fronted by wrong bags twice (handcuff clutch $966, then a green micro mini + a charm edition). Two fixes, both live:**
 - **Data (`c21cae1`):** bare "timeless" no longer blanket-maps to Classic Flap (`timeless&flap` + shape vetoes in `model-normalize.ts`); 44 mis-mapped TLC rows moved to `discovered_listing`.
 - **Picker (`4a546a9`):** `scoreListingFace` in `listings-core.ts` (colour +4, size +2/-2, hardware +1, novelty editions -3) now drives BOTH `getAffiliateListingImages` (best match, ties newest) and `getHeroListing` (cheapest within best-matching tier). Verified live: bag/199 hero = black lambskin flap $2,600; brand card = black lambskin medium double flap.
