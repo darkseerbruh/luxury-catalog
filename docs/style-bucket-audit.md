@@ -67,13 +67,17 @@ No merge is safe to automate. This doc is the queue for a review pass.
 
 ## DUPLICATE-STYLE flags (found during icon page-depth pass, 2026-07-10)
 
+### ✅ RESOLVED — 3 pairs MERGED 2026-07-10 (owner-approved, `merge-icon-dups.ts`)
+Verified same-bag by identical listing source_urls on each pair, name-guarded merge, 824 ph rows
+re-pointed, 0 collisions, 3 loser styles deleted, summary refreshed:
+- **537 "Reissue" → 423 "2.55 Reissue"** (Chanel; 423 now 10 vars / 1,295 comps).
+- **992 "Palm Springs" → 709 "Palm Springs Backpack"** (LV; 709 now 4 vars / 246 comps).
+- **518 "Multi Pochette" → 444 "Multi Pochette Accessoires"** (LV; 444 now 5 vars / 295 comps).
+
+*(historical detail, now resolved:)*
 - **Chanel "Reissue" (style 537, 597 comps / 5 variants) is almost certainly the same bag as
   "2.55 Reissue" (style 423, 698 comps / 5 variants).** The archivist sourced both to the 2005
-  Lagerfeld 50th-anniversary re-edition of the 1955 2.55. Candidate for a reviewed style-level
-  merge (re-point 537's variants + price_history into 423, then delete 537). NOT auto-merged
-  (per [[catalog_promotion_pipeline]] style dups need human spot-check; confirm the two rows'
-  listings share the Mademoiselle-lock all-metal-chain look before merging). Both carry a correct
-  description now, so the pages are fine in the meantime.
+  Lagerfeld 50th-anniversary re-edition of the 1955 2.55.
 - **Two more CATEGORY names (kept + described honestly, low priority):** Chanel "Camera Bag"
   (style 522, 303 comps) and Chanel "Clutch with Chain" (style 749, 268 comps) are silhouettes/
   SLG-adjacent categories, not single dated models. Their descriptions now say so; leave as
@@ -85,10 +89,4 @@ No merge is safe to automate. This doc is the queue for a review pass.
 - **Celine "Cabas" (489):** listings mix the plain minimalist Cabas tote (dominant) with some Cabas
   Phantom (winged Luggage variant). Described as the plain Cabas; a future split could separate the
   Phantom if it accrues its own comps.
-- **LV Palm Springs DUPLICATE:** "Palm Springs" (style 992, 124 comps) and "Palm Springs Backpack"
-  (style 709, 122 comps) are the SAME Cruise-2016 Monogram backpack line. Candidate for a reviewed
-  merge (re-point one into the other, delete the empty). Both described now, so pages are fine
-  meanwhile. NOT auto-merged (human spot-check per [[catalog_promotion_pipeline]]).
-- **LV Multi Pochette DUPLICATE:** "Multi Pochette" (style 518, 103 comps) and "Multi Pochette
-  Accessoires" (style 444, 192 comps) are the SAME 2019 modular bag. Candidate for a reviewed merge.
-  Both described now. NOT auto-merged.
+- **LV Palm Springs + LV Multi Pochette dups: MERGED (see RESOLVED block above).**
