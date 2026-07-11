@@ -29,6 +29,7 @@ import * as dotenv from "dotenv";
 
 import { fetchAllRows } from "../src/lib/supabase";
 import { isTrrHandbagListing } from "../src/lib/ingest/trr";
+import { classifyListingAttachment } from "../src/lib/ingest/model-normalize";
 import {
   SOURCES,
   emptyState,
@@ -45,6 +46,7 @@ import {
   scoreCoverageDelta,
   scoreDuplicates,
   scoreFreshness,
+  scoreMisattachment,
   scoreRankedCount,
   scoreRowsAdded,
   scoreSnapshotAge,
@@ -296,6 +298,45 @@ async function main() {
   const trrSample = [...trrPh, ...trrDisc];
   const trrFails = trrSample.filter((r) => r.source_url && !isTrrHandbagListing(r.source_url, r.raw_name ?? null)).length;
   checks.push(scoreContamination(trrFails, trrSample.length));
+
+  // F1b. Deals-rail misattachment: recent rows whose title is a foreign object (accessory
+  // or a different-model bag) sitting on a REAL bag variant — what put wrong items on the
+  // "Priced well today" rail (owner report 2026-07-11). Classified by the SAME shared
+  // model classifier the rail guard + discrepancy detector use. Deduped by listing_ref so
+  // a re-crawled row can't inflate the sentinel.
+  type BrandEmbed = { name: string | null };
+  type StyleEmbed = { name: string | null; brand: BrandEmbed | BrandEmbed[] | null };
+  type VariantEmbed = { style: StyleEmbed | StyleEmbed[] | null };
+  type AttachRow = { notes: string | null; listing_ref: string | null; variant: VariantEmbed | VariantEmbed[] | null };
+  const first = <T>(rel: T | T[] | null | undefined): T | null => (Array.isArray(rel) ? rel[0] : rel) ?? null;
+  const attachRows = await fetchAllRows<AttachRow>(
+    () =>
+      sb
+        .from("price_history")
+        .select("notes, listing_ref, variant:variant_id(style:style_id(name, brand:brand_id(name)))")
+        .gte("date_recorded", weekAgo)
+        .not("notes", "is", null)
+        .order("price_id", { ascending: true }),
+    60000,
+  );
+  const accRefs = new Set<string>();
+  const wmRefs = new Set<string>();
+  let accNoRef = 0;
+  let wmNoRef = 0;
+  for (const r of attachRows) {
+    const style = first(first(r.variant)?.style);
+    if (!style) continue;
+    const brand = first(style.brand)?.name ?? "";
+    const cls = classifyListingAttachment(brand, style.name ?? "", r.notes);
+    if (cls === "accessory") {
+      if (r.listing_ref) accRefs.add(r.listing_ref);
+      else accNoRef++;
+    } else if (cls === "wrong_model") {
+      if (r.listing_ref) wmRefs.add(r.listing_ref);
+      else wmNoRef++;
+    }
+  }
+  checks.push(scoreMisattachment(accRefs.size + accNoRef, wmRefs.size + wmNoRef, attachRows.length));
 
   type DupRow = { platform: string | null; listing_ref: string | null; price_type: string | null; observed_on: string | null };
   const recent = await fetchAllRows<DupRow>(

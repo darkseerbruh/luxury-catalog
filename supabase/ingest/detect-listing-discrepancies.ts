@@ -32,7 +32,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { supabaseAdmin as db } from "../seed/lib/client";
-import { isNonBagAccessory, titleNamesDifferentStyle, canonicalModel } from "../../src/lib/ingest/model-normalize";
+import { classifyListingAttachment } from "../../src/lib/ingest/model-normalize";
 
 const WRITE = process.argv.includes("--write");
 // wrong-model catches (title resolves to a different KNOWN model than the style) are
@@ -155,7 +155,6 @@ async function main() {
     variant_id: number;
     brand: string;
     style: string;
-    styleIsAccessory: boolean;
     cleanResale: number[];
     rows: { row: PhRow; price: number; foreign: Tier | null }[];
   }
@@ -175,28 +174,16 @@ async function main() {
 
     let g = groups.get(r.variant_id);
     if (!g) {
-      // A style that is ITSELF an accessory (LV Pochette Accessoires, Dior Caro Pouch,
-      // Goyard Toiletry Pouch…) is not a bag we're de-contaminating — its accessory
-      // listings correctly belong. Skip the whole group so we never re-point them.
-      const styleIsAccessory =
-        isNonBagAccessory(styleName) ||
-        /(pochette|clutch|wallet|pouch|toiletry|cosmetic|card\s?holder|coin|key\s?pouch|bride.?a.?brac)/i.test(norm(styleName));
-      g = { variant_id: r.variant_id, brand, style: styleName, styleIsAccessory, cleanResale: [], rows: [] };
+      g = { variant_id: r.variant_id, brand, style: styleName, cleanResale: [], rows: [] };
       groups.set(r.variant_id, g);
     }
 
-    // Same-model rescue: if the title resolves to the SAME canonical model as the style,
-    // it IS the correct bag — a colour/type word merely tripped a token ("Faye Bracelet
-    // Bag", "Shopping Bag Ballerina"). Never flag those.
-    const titleModel = canonicalModel(brand, r.notes);
-    const styleModel = canonicalModel(brand, styleName);
-    const sameModel = titleModel != null && styleModel != null && titleModel === styleModel;
-
-    let foreign: Tier | null = null;
-    if (!g.styleIsAccessory && !sameModel) {
-      if (isNonBagAccessory(r.notes)) foreign = "accessory";
-      else if (titleNamesDifferentStyle(brand, styleName, r.notes)) foreign = "wrong-model";
-    }
+    // Single source of truth (shared with the deals rail + the data-health check): decides
+    // accessory / wrong-model / belongs, including the accessory-STYLE skip (Pochette
+    // Accessoires, Caro Pouch, Bride-à-Brac) and the same-model rescue ("Faye Bracelet
+    // Bag", "Shopping Bag Ballerina").
+    const cls = classifyListingAttachment(brand, styleName, r.notes);
+    const foreign: Tier | null = cls === "accessory" ? "accessory" : cls === "wrong_model" ? "wrong-model" : null;
     g.rows.push({ row: r, price, foreign });
     if (!foreign) g.cleanResale.push(price); // median is the CLEAN bag population only
   }

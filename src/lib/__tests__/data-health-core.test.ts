@@ -17,6 +17,7 @@ import {
   scoreBacklogGrowth,
   scoreCadenceAudit,
   scoreContamination,
+  scoreMisattachment,
   scoreCoverageDelta,
   scoreDuplicates,
   scoreFreshness,
@@ -137,6 +138,15 @@ describe("contamination sentinels", () => {
     expect(scoreDuplicates(0).status).toBe("green");
     expect(scoreDuplicates(1).status).toBe("yellow");
     expect(scoreDuplicates(101).status).toBe("red");
+  });
+  it("misattachment scores on the precise accessory signal, not noisy wrong-model", () => {
+    expect(scoreMisattachment(0, 0, 5000).status).toBe("green");
+    expect(scoreMisattachment(1, 0, 5000).status).toBe("yellow");
+    expect(scoreMisattachment(16, 0, 5000).status).toBe("red");
+    // wrong-model is review context only (dictionary ordering still misfires), so a
+    // wrong-model spike alone must NOT flag the routine red/yellow.
+    expect(scoreMisattachment(0, 200, 5000).status).toBe("green");
+    expect(scoreMisattachment(0, 200, 5000).metric).toBe(0);
   });
 });
 

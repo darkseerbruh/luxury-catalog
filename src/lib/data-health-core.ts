@@ -380,6 +380,40 @@ export function scoreContamination(failCount: number, sampleSize: number): Check
   };
 }
 
+/**
+ * F1b. Deals-rail misattachment: accessories / wrong-model bags that landed on a REAL
+ * bag variant in the last 7 days. These are what topped the "Priced well today" rail
+ * under a bag's name and linked out to the wrong object (owner report 2026-07-11). The
+ * DB layer classifies recent rows with classifyListingAttachment() — the SAME shared
+ * model classifier the rail guard + discrepancy detector use — so this check is trained
+ * by exactly the real examples that surfaced (card holders on Boy, camera bags on Boy).
+ */
+export function scoreMisattachment(accessoryCount: number, wrongModelCount: number, sampleSize: number): CheckResult {
+  // Status is driven by the ACCESSORY count only — it is the high-precision signal (a
+  // card holder / pouch / shoe on a bag variant is unambiguous). wrong-model is reported
+  // as review context but does NOT drive status yet: the canonicalModel dictionary's
+  // line-vs-model ordering still misfires on some titles (e.g. "Ava Triomphe" → Triomphe),
+  // so letting it flag would cry wolf. Fold it into scoring once that ordering is fixed.
+  let status: CheckStatus = "green";
+  if (accessoryCount > 15) status = "red";
+  else if (accessoryCount > 0) status = "yellow";
+  return {
+    id: "contamination-misattach",
+    label: "Foreign items on bag variants (last 7 days)",
+    status,
+    value: `${accessoryCount} accessory + ${wrongModelCount} wrong-model (review) of ${sampleSize} recent bag-variant rows`,
+    metric: accessoryCount,
+    plainEnglish:
+      status === "green"
+        ? ""
+        : `${accessoryCount} accessories (card holders, pouches, shoes) landed on a real bag's variant in the last week, which is exactly what put wrong items on the deals rail; ${wrongModelCount} more look like a different-model bag and want a manual review.`,
+    action:
+      status === "green"
+        ? ""
+        : "Run supabase/ingest/detect-listing-discrepancies.ts (dry run to review, --write to re-point the accessories, --tag to label), and check why the ingest match let them onto a bag variant.",
+  };
+}
+
 /** F2. Same-day duplicate observations of one listing (dedupe-key violations). */
 export function scoreDuplicates(dupCount: number): CheckResult {
   let status: CheckStatus = "green";

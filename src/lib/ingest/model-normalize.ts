@@ -660,6 +660,44 @@ export function titleNamesDifferentStyle(
   return titleModel !== styleModel;
 }
 
+/** Style names that are THEMSELVES accessories (a catalog entry for a pouch / clutch /
+ *  wallet line), so their accessory listings correctly belong and are never contamination.
+ *  Accent-folded before test. */
+const ACCESSORY_STYLE_RX =
+  /(pochette|clutch|wallet|pouch|toiletry|cosmetic|card\s?holder|coin|key\s?pouch|bride.?a.?brac)/;
+
+export type ListingAttachment = "bag" | "accessory" | "wrong_model";
+
+/**
+ * THE single source of truth for "does this listing belong on the bag variant it's
+ * attached to." The deals rail, the shop, the discrepancy detector, and the data-health
+ * check all call this so the answer is decided in exactly one place (owner report
+ * 2026-07-11). Returns:
+ *   'bag'         — belongs (a real bag of the style, OR a listing on an accessory-style)
+ *   'accessory'   — a non-bag SLG / shoe / jewelry mis-filed on a real bag
+ *   'wrong_model' — a real bag whose title names a different known model than the style
+ */
+export function classifyListingAttachment(
+  brand: string,
+  styleName: string | null | undefined,
+  rawName: string | null | undefined,
+): ListingAttachment {
+  // A style that is itself an accessory (Pochette Accessoires, Caro Pouch, Bride-à-Brac):
+  // its accessory listings belong there, so nothing on it is contamination.
+  const sn = fold((styleName ?? "").toLowerCase());
+  if (isNonBagAccessory(styleName) || ACCESSORY_STYLE_RX.test(sn)) return "bag";
+
+  // Same-model rescue: the title resolves to the SAME model as the style, so it IS the
+  // correct bag and a colour/type word merely tripped a token ("Faye Bracelet Bag").
+  const titleModel = canonicalModel(brand, rawName);
+  const styleModel = canonicalModel(brand, styleName);
+  if (titleModel != null && styleModel != null && titleModel === styleModel) return "bag";
+
+  if (isNonBagAccessory(rawName)) return "accessory";
+  if (titleNamesDifferentStyle(brand, styleName, rawName)) return "wrong_model";
+  return "bag";
+}
+
 /** Top-tier permanent icons per house (the rest of the dictionary = "named line"). */
 const ICONS: Record<string, Set<string>> = {
   Chanel: new Set(["Classic Flap", "Reissue", "Boy", "Chanel 19", "Chanel 22", "Chanel 25", "Wallet on Chain"]),
