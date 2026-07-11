@@ -33,6 +33,43 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   ~2004 vintage Viva-Cité, a NAME COLLISION with a later modern "Vivacité"; Odyssée (1281) name also
   reused on women's pieces (confirm by canvas); Cartouchière sizes read PM/MM/GM in sources not
   17/22/26.
+- 🔄 **CORE-ICON gap (785 bare styles, discovered 2026-07-10)** — the big one. `probe-bare-styles.ts`
+  found 785 of 1000 styles carry a placeholder stub (`"Permanent collection (tier 1) — catalog
+  backbone."`, 49 chars, even has an em dash) or empty description. **559 have ≥10 comps, 370 have ≥20** —
+  these are the highest-traffic pages on the site (Chanel Boy 4,030 comps, LV Speedy 2,912, Hermès
+  Evelyne 1,833, Keepall 1,732, WOC 1,730, Gucci Ophidia 1,697) running NO real description. This
+  dwarfs the promoted-style gaps below. Method unchanged: archivist-sourced (factuality bar, plain
+  text, no em dash, year null unless cleanly sourced) → review → `apply-style-depth.ts`. Working top
+  tranche first (highest comps = highest ROI). Batch files: `data/style-depth-icons-batch*.json`.
+  - ✅ **Batch 1 (top 25 by comps, ≥580)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Boy 2011, Speedy 1930, Evelyne 1978, Keepall 1930, Ophidia 2018, Chanel 19 2019, Horsebit 1955→2020,
+    Book Tote 2018, OnTheGo 2019, Constance 1959, Gabrielle 2017, Loulou 2017, Luggage 2010, Jackie 1961→2020,
+    Capucines 2013, 2.55 Reissue 2005, Lindy 2007). 7 years held null (WOC, Vanity Case, Pochette Métis,
+    Herbag, Bumbag, Blondie, Kate — disputed/undocumented debut). 0 em dashes. Drafts
+    `data/style-depth-icons-batch1.json`. Verified persisted (stub gone).
+  - ✅ **Batch 2 (ranks 26-50, ≥361)** — DONE 2026-07-10. 25 descriptions + 20 sourced years live
+    (Loewe Puzzle 2014, Bolide 1923, Sac de Jour 2013, Antigona 2011, Deauville 2012, Twist 2015,
+    NéoNoé 2017, Coussin 2021, Chanel 22/25 2022/2025, Bamboo 1947/Diana 1991, Rockstud 2010,
+    Pochette Accessoires 1992, Le 5 à 7 2021, Belt 2015). 5 held null (Lou, City, Saint-Louis, Soho
+    Disco, Jet Set). **Flagged style 537 'Reissue' = probable dup of 423 '2.55 Reissue'** →
+    `docs/style-bucket-audit.md` for human-gated merge (both described, not auto-merged).
+  - ✅ **Batch 3 (ranks 51-75, ≥217)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Andiamo 2024, Niki 2018, Petite Malle 2014, Bayswater 2003, Noé 1932, Hourglass 2019, Rogue 2016,
+    Jypsière 2008, Diorama 2015, Montsouris 1994, Le Pliage 1993, Dauphine 2019, Trendy CC 2014,
+    Marcie 2010, Arco 2019, Ava 2020, College 2015, Félicie 2016). 7 held null incl. 2 category names
+    (Chanel Camera Bag 522, Clutch with Chain 749 — honestly described as categories, added to
+    style-bucket-audit.md).
+  - ✅ **Batch 4 (ranks 76-100, ≥143)** — DONE 2026-07-10. 25 descriptions + 17 sourced years live
+    (30 Montaigne 2019, Hamilton 2009, Phantom 2011, Le Cagole 2022, Multi Pochette 2019, Papillon 1966,
+    Bobby 2020, Caro 2021, Dior Toujours 2023, Telfar 2014, Roulis 2011, Fendi First 2021, Fendigraphy
+    2022, Le Chiquito 2018, BV Hop 2024, Graceful 2017). 8 held null (incl. Lady D-Joy/D-Lite, Loewe
+    Hammock source-conflict, Prada Re-Edition line). Hand-fix: **#489 rewritten** to the plain Celine
+    Cabas tote (source URLs showed listings are mostly plain Cabas, not the Phantom the archivist drafted).
+    Chanel trade-names GST(519)/Business Affinity(432) flagged in style-bucket-audit.md.
+  - 🔄 **Batch 5 (ranks 101-125, ≥110)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 6+ (ranks 126-559, <110 comps)** — queued; same method, highest-comps first. Full ranked
+    list from `probe-bare-styles.ts` (559 bare styles ≥10 comps). Value front-loaded; the low-comp tail
+    is a candidate for the same DEFERRED treatment as the <10-comp tail once the head is covered.
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
@@ -353,10 +390,19 @@ clean FREE source — do NOT bulk-load Vestiaire, it mis-sizes onto variant 1):*
       **Matelassé** STYLE. ✅ **(a) DONE 2026-07-10**: tightened the Matelassé target excludes
       (added coffer/bucket/softy/beau/ivy/sandal/pouch) + regression tests — matelassé Coffer/Bucket/
       sandals/pouches now fall through instead of polluting; genuine matelassé bags (10) unchanged.
-      This stops FUTURE contamination only. ⬜ **(b) STILL OPEN (data lane):** the existing DB rows
-      already mislabeled onto Matelassé v1050 (+ the stranded Wander/Aventure/Arcadie Standard rows +
-      the ∅/Standard/size duplicate variants) need a SAME-STYLE-ONLY re-point/dedup with review — never
-      an auto-sweep. Thin non-representative brand, low urgency.
+      This stops FUTURE contamination only. ✅ **(b) DONE 2026-07-10** (`cleanup-miu-miu-fp-variants.ts`,
+      dry-run-first, reviewed, idempotent — mirrors merge-style-pairs re-point+dedup on
+      platform|listing_ref|price_type|observed_on). SAME-STYLE re-points: Wander Std v1047 → 15 Mini v1399
+      / 9 Small v1400 (Micro/plain stay); Aventure Std v1049 → 14 Regular v1402 / 5 Medium v1403
+      (mini/small/large stay); Arcadie folded to the single curated Large v1404 (Std v1048 + Small dup
+      v2295). Duplicate variants folded + deleted: Aventure Mini v2296→Std, Ivy ∅ v1117→Std v1401,
+      Beau ∅ v1118→Large v1406, Coffer ∅ v1119→Std v1850 (**6 dup variants removed**). Matelassé v1050
+      reviewed by explicit token: 7 coffer→Coffer v1850, 3 bucket→Bucket v1120, 2 sandals DELETED
+      (footwear, never valid comps), 7 pouches→discovered_listing (no Pouch style), 1 eBay "Arcadie
+      Matelassé" sold→Arcadie v1404; 50 genuine matelassé bags untouched. Totals: **111 rows re-pointed,
+      15 dup-drops, 2 deleted, 7 banked, 6 variants deleted**. `audit-coverage`: Miu Miu now
+      **priced_variants=12** (was an inflated 20 with twins), variant list clean — no ∅/Standard/size
+      twins. Thin non-representative brand: integrity, not coverage.
   - **Micro-catalog — bar NOT reachable, keep honest scoping**: Off-White **3**, Telfar **4** (the
     brands simply do not make ~20 distinct resale-traded handbag models). /data keeps "the bags we
     track" wording for these; do not pad to hit 20.
@@ -538,3 +584,10 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
   are really just variants of the clean model (e.g. "Togo Birkin 35", "Monogram Speedy 30") SHOULD
   fold in; (b) genuine sub-models MUST stay separate (Kelly Pochette, Speedy Soft, Musette Tango/Salsa,
   Boîte Chapeau Souple, Félicie Pochette). Retire/park `load-handbag-breadth.ts` as the junk source.
+
+<!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
+## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
+- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: Check the lc-index-snapshot cron (needs CRON_SECRET) and run it for the missing month. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+- ⬜ [dh:contamination-trr] 7 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in. Action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+- ⬜ [dh:contamination-dupes] 11 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-07-10, last seen 2026-07-10, yellow)
+<!-- data-health:end -->

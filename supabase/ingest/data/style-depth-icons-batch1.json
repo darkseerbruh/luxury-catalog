@@ -1,0 +1,139 @@
+[
+  {
+    "style_id": 424,
+    "description": "The Chanel Boy is a structured shoulder flap bag introduced by Karl Lagerfeld for the Fall/Winter 2011 collection, named after Coco Chanel's love Boy Capel. It trades the house's soft curves for a boxier, more androgynous silhouette, with a wide quilted or embossed body and a heavy chain-and-leather strap. Its signature is the boy-style push-lock clasp on the front, a chunky rectangular latch that replaced the classic CC turn-lock. It quickly became one of Chanel's core permanent lines alongside the Classic Flap.",
+    "year_introduced": 2011
+  },
+  {
+    "style_id": 433,
+    "description": "The Louis Vuitton Speedy is a soft, rounded duffle-shaped handbag with a zip-top closure, rolled leather handles, and a hanging padlock, first created in the 1930s as a scaled-down city version of the Keepall travel bag. Originally called the Express, it was renamed Speedy to reflect the era's fascination with speed and modern travel. It is most recognized in Monogram and Damier coated canvas, with the compact Speedy 25 among the best-known sizes. It remains one of Louis Vuitton's most enduring and recognizable everyday bags.",
+    "year_introduced": 1930
+  },
+  {
+    "style_id": 412,
+    "description": "The Hermes Evelyne is a soft, unstructured shoulder bag introduced in 1978 and named after Evelyne Bertrand, then head of the house's equestrian department, who designed it to carry horse grooming tools. Its defining feature is the large perforated H on the front, originally punched to let damp brushes air out. Made in supple leathers like Clemence and Togo with a single long adjustable strap and an open or clasped top, it stayed inside the Hermes equestrian world before becoming a casual everyday favorite. It is one of the more accessible entry points into the house's bag range.",
+    "year_introduced": 1978
+  },
+  {
+    "style_id": 440,
+    "description": "The Louis Vuitton Keepall is the house's classic soft-sided travel duffle, introduced in the 1930s and crafted first in canvas and leather, later in Monogram coated canvas. It has a cylindrical body, a full-length zip top, rolled leather handles, and a hanging padlock, built for the new age of car and air travel when lighter luggage was needed. The Bandouliere versions add a removable shoulder strap. It remains an icon of Louis Vuitton luggage and a staple of the men's and travel lines.",
+    "year_introduced": 1930
+  },
+  {
+    "style_id": 427,
+    "description": "The Chanel Wallet on Chain, universally shortened to WOC, is a slim rectangular flap that combines a wallet and an evening bag on a long gilt-and-leather chain strap. It carries the house's signature diamond or chevron quilting and a front CC or Mademoiselle turn-lock closure, opening to card slots and compartments inside. Worn crossbody or held as a clutch, it is one of the most accessible ways into the Chanel flap family. The exact introduction date is not cleanly documented, with sources placing it between the late 1990s and early 2000s.",
+    "year_introduced": null,
+    "note": "Launch year held null: sources disagree (Etoile Luxury cites 1997, others say early 2000s)."
+  },
+  {
+    "style_id": 430,
+    "description": "The Chanel Vanity Case is a small structured top-handle bag descended from the boxy cosmetic and travel cases Gabrielle Chanel carried decades ago, reissued in various quilted leather forms across modern collections. It has a firm rounded or rectangular body, a top handle or chain, and often a mirror inside, blending a beauty-case shape with everyday carry. Versions range from tiny round vanities to larger vertical cases, most in the house's signature quilted lambskin or caviar. It appears as both a recurring named style and seasonal variants.",
+    "year_introduced": null,
+    "note": "Year held null: recurs as both a named style and many seasonal variants with no single documented debut. Name also spans several sizes (round, vertical, classic)."
+  },
+  {
+    "style_id": 448,
+    "description": "The Gucci Ophidia is a line introduced by Alessandro Michele for the Cruise 2018 collection, drawing on the house's 1970s archive. It is defined by the green-red-green Web stripe running across a soft, often domed body in GG Supreme canvas, paired with an antiqued round Double G logo. The line spans shoulder bags, camera bags, totes, and backpacks, all carrying a retro travel-luggage feel. It became one of Michele's signature everyday Gucci families.",
+    "year_introduced": 2018
+  },
+  {
+    "style_id": 414,
+    "description": "The Hermes Picotin is an open-top bucket bag introduced in 2002, its name taken from the picotin, an old French measure of oats fed to horses, a nod to the house's equestrian roots. It has a simple unlined body that slouches with use, two top handles, and a base that widens for structure. The padlock and clochette that give the current Picotin Lock its name were added in 2008, cinching the handles together. Made in leathers like Clemence and Togo, it is prized as a low-key, hardware-light everyday Hermes.",
+    "year_introduced": 2002,
+    "note": "Picotin line debuted 2002; the padlock hardware defining the 'Picotin Lock' name was added in 2008."
+  },
+  {
+    "style_id": 425,
+    "description": "The Chanel 19 is a large, soft flap bag introduced in 2019, its name marking the year, and designed jointly by Karl Lagerfeld and Virginie Viard as one of Lagerfeld's final creations. It has an oversized diamond quilt, a slouchy relaxed body, and a mixed chain-and-leather strap, often shown across gold, silver, and ruthenium hardware on a single bag. The front closure is a large interlocking double-C turn-lock. Conceived as a more casual counterpart to the structured Classic Flap and Boy, it became a fast permanent icon.",
+    "year_introduced": 2019
+  },
+  {
+    "style_id": 447,
+    "description": "The Gucci Horsebit 1955 is a shoulder and top-handle bag reintroduced by Alessandro Michele in 2020, reviving a style the house first made in 1955. Its defining feature is the horsebit, the metal snaffle-and-ring hardware drawn from Gucci's equestrian heritage, set on a clean structured flap. It appears in smooth leather and GG Supreme canvas, often accented with the green-red Web. The design revisits one of Gucci's oldest hardware signatures for a modern audience.",
+    "year_introduced": 2020,
+    "note": "The '1955' references the original archival year; the current Horsebit 1955 line was reintroduced by Michele in 2020."
+  },
+  {
+    "style_id": 454,
+    "description": "The Dior Book Tote is a large, flat, open-top tote introduced by Maria Grazia Chiuri in 2018 as a runway accessory that became a permanent bestseller. It has an unlined single-compartment body and two flat top handles, built to carry like an oversized book bag. Its signature is the allover embroidery, from the house's Oblique monogram and Toile de Jouy to floral and destination motifs, with the Christian Dior name worked into the design. It is defined more by its embroidered canvas surface than by any hardware or closure.",
+    "year_introduced": 2018
+  },
+  {
+    "style_id": 437,
+    "description": "The Louis Vuitton OnTheGo is a large structured tote introduced for the Spring/Summer 2019 collection. It has an open top, two rolled top handles, flat side straps, and a boxy squared base built to stand on its own, often shown in the reverse Monogram Giant canvas that pairs two scales of the print. Inside it is roomy and workday-ready, with a removable pouch on some versions. The GM size debuted first, followed by the smaller MM, and it quickly became one of the house's core modern totes.",
+    "year_introduced": 2019
+  },
+  {
+    "style_id": 438,
+    "description": "The Louis Vuitton Pochette Metis is a compact structured crossbody with a boxy top-handle silhouette, a front flap, and the house's S-lock closure over an accordion interior of card slots and zip pockets. Most recognized in Monogram and Monogram Empreinte embossed leather, it works as a small everyday bag on a long adjustable strap. It became a breakout hit in the mid-2010s and has been a frequently sold-out style since. A single introduction year is not cleanly settled.",
+    "year_introduced": null,
+    "note": "Year held null: sources disagree (2012 vs 2013)."
+  },
+  {
+    "style_id": 411,
+    "description": "The Hermes Constance is a structured shoulder and crossbody flap introduced in 1959, designed by house draftswoman Catherine Chaillet, who named it after her daughter born the same year. Its signature is the large H-shaped clasp on the front flap, worn on a long strap that can be doubled to shorten it. Made in leathers such as Box, Epsom, and Swift, it is one of Hermes' most collectible bags after the Birkin and Kelly. Its clean lines and bold H closure have kept it in demand for decades.",
+    "year_introduced": 1959
+  },
+  {
+    "style_id": 426,
+    "description": "The Chanel Gabrielle is a hobo-shaped bag introduced in 2017 and named after Gabrielle Coco Chanel. It has a distinctive two-part body, a structured quilted base topped by a softer upper, that gives it a rounded, slouchy shape, and it hangs from a mixed gold-and-silver chain strap. The front closes with a CC logo. Positioned as a hands-free everyday style, it was a permanent line before being discontinued in 2023.",
+    "year_introduced": 2017
+  },
+  {
+    "style_id": 417,
+    "description": "The Hermes Herbag is a lightweight two-material bag pairing a canvas body with leather trim and a top flap, descended from a vintage Herbag of the late twentieth century that itself echoed the shape of the early Haut a Courroies. The modern Herbag Zip, reissued in 2009, uses a removable canvas body, a front toggle-and-buckle closure, and a saddle-like flap over a zip interior. It is one of the more casual and travel-friendly Hermes shapes. The year of the original Herbag is not cleanly documented.",
+    "year_introduced": null,
+    "note": "Original Herbag debut year undocumented (resale archives cite 1980s-90s stock); the modern Herbag Zip was reissued in 2009."
+  },
+  {
+    "style_id": 460,
+    "description": "The Saint Laurent Loulou is a soft quilted shoulder bag introduced by Anthony Vaccarello in 2017, as part of his spring/summer 2018 collection, and named after Yves Saint Laurent's muse Loulou de la Falaise. It is defined by the oversized Y-quilting on supple leather and the large metal YSL Cassandre monogram on the front flap, hung from a chain-and-leather strap. The puckered chevron stitching gives it a plush, pillowy look. It became one of the house's most recognizable modern bags.",
+    "year_introduced": 2017
+  },
+  {
+    "style_id": 445,
+    "description": "The Louis Vuitton Bumbag is a belt bag worn at the waist or crossbody, with a curved zip-top body, an adjustable buckled strap, and a front pocket, most recognized in Monogram coated canvas and Empreinte leather. It brought the house's classic prints to the streetwear-driven waist-bag trend. Roomy enough for daily essentials, it can be worn high on the waist or slung across the chest. A precise introduction year is not cleanly documented.",
+    "year_introduced": null,
+    "note": "Year held null: no clean primary source; commonly cited around 2017 but unverified."
+  },
+  {
+    "style_id": 484,
+    "description": "The Celine Luggage is a structured top-handle tote introduced by Phoebe Philo in 2010, in her debut era at the house, and it became one of the defining It-bags of the decade. Its signature is the face-like front, a central zip nose flanked by two wing panels and rounded top handles that read like ears. Often made in smooth calfskin with contrasting color blocking, it has a firm trapezoidal body. The Luggage helped set the minimalist, architectural tone of Philo-era Celine.",
+    "year_introduced": 2010,
+    "note": "Celine also makes a related open-top Luggage Phantom variant; this describes the original zip-front Luggage tote."
+  },
+  {
+    "style_id": 446,
+    "description": "The Gucci Jackie 1961 is a reissue introduced by Alessandro Michele in 2020 of the house's hobo-shaped shoulder bag from the 1950s and 60s, nicknamed for Jacqueline Kennedy, who was often photographed carrying it. It has a soft crescent body that tucks under the arm and its signature piston closure, a sliding metal hook clasp, on the front. It comes in smooth leather and GG Supreme canvas across several sizes. The 1961 in the name marks the archival year the reissue references.",
+    "year_introduced": 2020,
+    "note": "The original Jackie dates to the 1950s-60s; Michele's 'Jackie 1961' reissue launched in 2020."
+  },
+  {
+    "style_id": 436,
+    "description": "The Louis Vuitton Capucines is a structured top-handle bag introduced in 2013, named after Rue Neuve des Capucines, where Louis Vuitton opened his first store in 1854. It is defined by the LV initials on the front, where the letters can flip to sit in front of or behind the leather flap, and by its refined Taurillon leather body. Rounded top handles and a removable strap let it work as a handheld or shoulder bag. It sits at the more elevated, understated end of the Louis Vuitton bag range.",
+    "year_introduced": 2013
+  },
+  {
+    "style_id": 423,
+    "description": "The Chanel 2.55 Reissue is Karl Lagerfeld's faithful re-edition, launched in 2005 for the fiftieth anniversary of the original 2.55, which Gabrielle Chanel created in February 1955 and which gave the line its name. It restores the bag's earliest details: the rectangular Mademoiselle turn-lock rather than the CC clasp, the all-metal woven chain without leather laced through it, and the diamond-quilted flap. The burgundy interior and back slip pocket nod to Coco's own history. It is prized by collectors as the closest thing to the 1955 original.",
+    "year_introduced": 2005,
+    "note": "Year reflects the 2005 Reissue re-edition; the original 2.55 dates to February 1955."
+  },
+  {
+    "style_id": 416,
+    "description": "The Hermes Lindy is a soft, slouchy dual-compartment bag introduced in the spring of 2007, designed by Frederic Vidal under the creative direction of Jean-Paul Gaultier. It has a rounded body with two sets of handles and a domed silhouette that collapses softly when set down, closing with a central strap and lock over a two-pocket interior. Made in supple leathers like Clemence and Swift, it is one of Hermes' more relaxed, everyday shapes. Its unusual double-humped form makes it instantly recognizable.",
+    "year_introduced": 2007
+  },
+  {
+    "style_id": 453,
+    "description": "The Gucci Blondie is a line built around the round interlocking G medallion, a logo the house first used in the early 1970s and revived on this bag in recent collections. It appears as shoulder bags, top-handles, and camera bags in leather and GG canvas, with the circular gold emblem set as the centerpiece hardware or closure. The look is clean and retro, leaning on the archival logo rather than heavy embellishment. A single introduction year is not cleanly settled.",
+    "year_introduced": null,
+    "note": "Year held null: the round GG logo dates to the early 1970s; the modern Blondie relaunch is variously tied to circa 2022 and to Gucci's Cruise 2025 presentation."
+  },
+  {
+    "style_id": 462,
+    "description": "The Saint Laurent Kate is a sleek rectangular flap bag defined by the large metal YSL Cassandre monogram on the front, which doubles as the closure, on a slim chain shoulder strap. It comes in smooth and quilted leather, often with a hanging tassel drawn through the logo, in small and medium sizes. Clean and evening-ready, it is one of the house's signature chain bags. Its exact introduction year is not cleanly documented, with the design evolving from the house's earlier chain-and-monogram bags.",
+    "year_introduced": null,
+    "note": "Year held null: lineage traces to Slimane-era chain/monogram bags and was carried forward under Vaccarello; no clean debut-year source."
+  }
+]
