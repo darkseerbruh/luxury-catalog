@@ -66,10 +66,15 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     Hammock source-conflict, Prada Re-Edition line). Hand-fix: **#489 rewritten** to the plain Celine
     Cabas tote (source URLs showed listings are mostly plain Cabas, not the Phantom the archivist drafted).
     Chanel trade-names GST(519)/Business Affinity(432) flagged in style-bucket-audit.md.
-  - 🔄 **Batch 5 (ranks 101-125, ≥110)** — archivist sourcing (2026-07-10).
-  - ⬜ **Batches 6+ (ranks 126-559, <110 comps)** — queued; same method, highest-comps first. Full ranked
-    list from `probe-bare-styles.ts` (559 bare styles ≥10 comps). Value front-loaded; the low-comp tail
-    is a candidate for the same DEFERRED treatment as the <10-comp tail once the head is covered.
+  - ✅ **Batch 5 (ranks 101-125, ≥110)** — DONE 2026-07-10. 25 descriptions + 7 sourced years live
+    (Sac Plat 1968, YSL Sunset 2016, GG Padlock 2016, Loewe Goya 2023, Chloé Paddington 2005, Palm
+    Springs 2016 ×2). 18 held null (mostly The Row/Goyard/MK lines that don't publish years, + variant
+    rows). **Flagged LV Palm Springs dup (992 = 709)** → style-bucket-audit.md for a reviewed merge.
+  - 🔄 **Batch 6 (ranks 126-150, ≥86)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 7+ (ranks 151-559, <86 comps)** — DEFERRED once batch 6 lands, per the value-front-loaded
+    rule (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
+    lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
+    `probe-bare-styles.ts`; method unchanged (archivist batch → `apply-style-depth.ts`).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.

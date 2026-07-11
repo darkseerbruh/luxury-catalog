@@ -1,0 +1,152 @@
+[
+ {
+  "style_id": 714,
+  "description": "The Sac Plat is Louis Vuitton's flat, open-top tote, first created as a beach bag in 1968 and reworked many times since. It is a tall, slim rectangular shape with long flat top handles and an unstructured body, most often in Monogram or Damier coated canvas with natural cowhide-leather trim. Later versions add a zip pocket and a removable strap, but the silhouette stays true to the original packable design meant to slip into luggage.",
+  "year_introduced": 1968,
+  "note": null
+ },
+ {
+  "style_id": 500,
+  "description": "The Pillow Tabby is the padded, puffy version of Coach's Tabby, a boxy shoulder bag whose design draws on a 1970s Coach archive style. It keeps the Tabby's front turn-lock closure spelling out the Coach name and its short top handle with optional strap, but is rendered in soft, quilted nappa leather with a plush, pillowed body. It is a variant of the Tabby line rather than a separate model.",
+  "year_introduced": null,
+  "note": "Variant of the Tabby (Tabby line relaunched 2020); a clean debut year for the Pillow version was not sourced."
+ },
+ {
+  "style_id": 510,
+  "description": "The Puzzle Edge is a construction variant of Loewe's Puzzle bag, Jonathan Anderson's signature cuboid crossbody. Where the original Puzzle sews distinct panels of leather onto the base to build its geometric, foldable box shape, the Edge version forms the same puzzle pattern from pieces of leather folded and sewn at the seams for a cleaner, more sculptural edge. It shares the Puzzle's top zip, top handle, and detachable strap.",
+  "year_introduced": null,
+  "note": "Construction variant of the Puzzle (which debuted on the FW2015 runway); Edge-specific debut year not cleanly sourced."
+ },
+ {
+  "style_id": 989,
+  "description": "Lockme is a Louis Vuitton line of soft grained-calfskin bags defined by a twist-lock closure engraved with the LV initials. The line spans several shapes, including the Lockme Ever tote, a bucket, and small shoulder styles, all in supple full-grain leather rather than coated canvas, carried by hand or on an adjustable strap. It reads as one of the house's more understated, leather-forward everyday lines.",
+  "year_introduced": null,
+  "note": "Line/family rather than a single model; introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 530,
+  "description": "The Sunset is Saint Laurent's structured flap shoulder bag, released in 2016 under Anthony Vaccarello. It has a clean, rectangular front flap topped by the metal YSL Cassandre monogram, a magnetic closure, and a sliding chain-and-leather strap for shoulder or crossbody wear, in smooth or grained calfskin. It comes in sizes from small to medium and sits among the house's core everyday flap bags.",
+  "year_introduced": 2016,
+  "note": null
+ },
+ {
+  "style_id": 521,
+  "description": "The GG Padlock is Gucci's flap shoulder bag introduced in 2016 under Alessandro Michele. It is named for the small engraved padlock-and-key closure at the front, set on a body most often in GG Supreme canvas with contrasting leather trim and carried on a sliding chain-and-leather strap. A commercial hit of Michele's early tenure, it comes in several sizes from mini to medium.",
+  "year_introduced": 2016,
+  "note": null
+ },
+ {
+  "style_id": 508,
+  "description": "The Goya is Loewe's structured box bag, introduced by Jonathan Anderson for spring/summer 2023 as the house's take on a clean, framed evening bag. It has a rectangular hard-framed body with a metal clasp closure, a short top handle, and a removable chain or leather strap, in smooth calfskin. It reads as one of Anderson's most pared-back, timeless Loewe silhouettes.",
+  "year_introduced": 2023,
+  "note": null
+ },
+ {
+  "style_id": 507,
+  "description": "The Gate is Loewe's saddle-inspired crossbody by Jonathan Anderson, a rounded flap bag whose defining detail is a knotted leather strap that wraps and cinches across the front. Built in smooth calfskin, it has a curved, equestrian-influenced body worn crossbody or on the shoulder, and later grew into a family that includes a bumbag and top-handle versions.",
+  "year_introduced": null,
+  "note": "Debut year conflicts across sources (Vogue cites a spring 2017 debut; two L'Officiel pieces cite the SS2018 runway); held null."
+ },
+ {
+  "style_id": 742,
+  "description": "The Top Handle Vanity Case is Chanel's structured cosmetic-box bag fitted with a short top handle and a chain strap. It is a small, boxy quilted case in caviar or lambskin with a top zip closure and the CC logo, descended from the house's classic vanity cases and reissued across many seasons. Because Chanel identifies its seasonal bags by a style code and season rather than a single official model name, we treat this as a recurring silhouette and hold the introduction year unset.",
+  "year_introduced": null,
+  "note": "Chanel seasonal silhouette (Regime B); no single official model name or debut date. Year held null."
+ },
+ {
+  "style_id": 996,
+  "description": "The Boite Chapeau is Louis Vuitton's hat-box bag, a round, structured design inspired by the house's late 19th-century hat boxes. The classic version is a rigid drum shape in Monogram canvas with leather trim and a top handle, while the softer Boite Chapeau Souple reworks it as a collapsible crossbody on an adjustable strap. It translates LV's trunk-and-travel heritage into a compact handbag.",
+  "year_introduced": null,
+  "note": "Heritage shape derived from 19th-century hat boxes; the soft Souple handbag version launched 2017. No single debut year applies, so held null."
+ },
+ {
+  "style_id": 495,
+  "description": "The Arque is Prada's curved shoulder bag, named for its arched, sinuous silhouette. It has a softly crescent body that tucks under the arm, a leather top extension, and a detachable adjustable strap, offered in brushed leather and the house's Re-Nylon. A recent addition to Prada's lineup, it became one of the brand's talked-about 'it' shapes.",
+  "year_introduced": null,
+  "note": "Recent Prada release; a clean debut year was not sourced."
+ },
+ {
+  "style_id": 959,
+  "description": "The Mercer is a Michael Kors bag line built in the brand's structured Saffiano leather. Its best-known form is a boxy tote with accordion side gussets, a central zip compartment, and top handles with an optional strap, though the name also covers messenger and crossbody versions. It sits in the Michael Kors accessible-luxury range alongside the Selma.",
+  "year_introduced": null,
+  "note": "Line/family (tote, messenger, crossbody), not a single model; introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 861,
+  "description": "The Paddington is Chloe's slouchy leather shoulder bag, launched in 2005 under Phoebe Philo and one of the definitive It bags of the mid-2000s. It is an east-west, soft-bodied bag with rounded handles and a heavy engraved padlock hanging from a leather strap across the front, worn in the crook of the arm or on the shoulder. Its logo-free, hardware-forward look made it a status bag of the era.",
+  "year_introduced": 2005,
+  "note": null
+ },
+ {
+  "style_id": 535,
+  "description": "The Favorite is a Louis Vuitton clutch-style crossbody, a slim rectangular flap bag with a curved base and a chain-and-stud closure. Usually in Monogram or Damier coated canvas, it can be carried by hand, on a golden chain, or on a removable leather strap for crossbody wear, and comes in PM and MM sizes. It reads as a compact evening-into-day piece.",
+  "year_introduced": null,
+  "note": "Introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 992,
+  "description": "Palm Springs is Louis Vuitton's backpack line, introduced for the Cruise 2016 collection and a major It bag of the late 2010s. Built in Monogram coated canvas with colored leather trim and gold hardware, it has a rounded body, a front pocket, a top zip, and two adjustable straps, offered in sizes from the tiny Mini up to full size. The Mini in particular became a social-media phenomenon.",
+  "year_introduced": 2016,
+  "note": "Same LV backpack line as style_id 709 (Palm Springs Backpack); likely duplicate entries."
+ },
+ {
+  "style_id": 609,
+  "description": "The Soft Margaux is the unstructured version of The Row's Margaux, a minimalist top-handle bag from the label. It has a softly slouched body in suede or grained calfskin with belted, gusseted side panels, double rolled handles, and an interior toggle closure, offered in sizes such as 10, 12, 15, and 17. It is prized for its quiet, logo-free luxury.",
+  "year_introduced": null,
+  "note": "Soft variant of the Margaux; The Row does not publish debut years, so held null."
+ },
+ {
+  "style_id": 708,
+  "description": "The Odeon is a Louis Vuitton crossbody bag in Monogram coated canvas with natural vachetta-leather trim, named after the Odeon quarter of Paris. It is a soft, rounded shoulder-to-crossbody shape with a front slip pocket, a top zip closure, and a long adjustable leather strap, offered in PM and MM sizes. It reads as a practical, everyday city bag.",
+  "year_introduced": null,
+  "note": "Introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 958,
+  "description": "The Selma is a Michael Kors satchel in structured Saffiano leather, one of the brand's signature accessible-luxury bags. It has a boxy, trapezoidal top-zip body with a short top handle and a removable crossbody strap, often with gold-tone hardware or pyramid studs, in a range of sizes. It sits alongside the Mercer in the Michael Kors lineup.",
+  "year_introduced": null,
+  "note": "Introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 960,
+  "description": "The Fleming is a Tory Burch quilted shoulder bag defined by its diamond stitching and a bevelled Double T logo on the front flap. It has a soft, structured body carried on an adjustable chain-and-leather strap, in leather with tonal or contrast quilting, and spans convertible shoulder and crossbody sizes. It is one of the brand's core quilted lines.",
+  "year_introduced": null,
+  "note": "Line/family; introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 576,
+  "description": "The Banner is a Burberry tote and shoulder bag, a structured trapezoidal shape carried by two short top handles with an optional strap. It appears in two-tone grained leather and in the house's signature check trim, with gold-tone hardware and a belted front detail. It sits among Burberry's leather everyday bags.",
+  "year_introduced": null,
+  "note": "Introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 561,
+  "description": "The Artois is Goyard's structured tote, a more secure, boxy take on the house's classic Saint Louis. Built in the signature hand-painted Goyardine chevron canvas with leather trim, it is defined by four leather bottom corners and a zip-top closure, worn on the shoulder. It offers the Saint Louis look with a firmer shape and a closed top.",
+  "year_introduced": null,
+  "note": "Goyard does not publish debut years, so held null."
+ },
+ {
+  "style_id": 991,
+  "description": "The Pallas is a Louis Vuitton bag in Monogram coated canvas trimmed with contrasting colored calf leather. It has a front flap secured by an LV-engraved turn-lock, rolled leather top handles, and a removable strap for shoulder or crossbody wear, and appears in flap-bag and chain-strap versions. It reads as a colorful, hardware-accented take on the Monogram.",
+  "year_introduced": null,
+  "note": "Introduction year not cleanly sourced."
+ },
+ {
+  "style_id": 829,
+  "description": "The Loulou Puffer is the padded version of Saint Laurent's Loulou, rendered in soft nappa lambskin, with a quilted canvas version as well, using chevron quilt overstitching. It keeps the Loulou's YSL Cassandre logo and its sliding chain strap for shoulder or crossbody wear, but has a plush, pillowed body that reads more casual than the original. It is a variant of the Loulou line.",
+  "year_introduced": null,
+  "note": "Puffer variant of the Loulou; a clean debut year was not sourced."
+ },
+ {
+  "style_id": 722,
+  "description": "The Saumur is a Louis Vuitton saddle-shaped crossbody, an archival design named after the town of Saumur in France's Loire Valley. The vintage version is a unisex Monogram-canvas bag with two compartments joined by a central buckle strap and an adjustable shoulder strap, later reimagined as the compact Saumur BB with a leather top handle. Reseller histories place its original release around the 1980s.",
+  "year_introduced": null,
+  "note": "Origin cited as roughly the 1980s by reseller history (approximate); held null."
+ },
+ {
+  "style_id": 709,
+  "description": "The Palm Springs Backpack is Louis Vuitton's Monogram backpack line, introduced for the Cruise 2016 collection. In Monogram coated canvas with colored leather trim and gold hardware, it has a rounded body, a front pocket, a top zip, and adjustable shoulder straps, offered from the viral Mini up to full size. The Mini became one of the most photographed bags of its moment.",
+  "year_introduced": 2016,
+  "note": "Same LV line as style_id 992 (Palm Springs); likely duplicate entries."
+ }
+]
