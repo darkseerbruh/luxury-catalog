@@ -41,7 +41,15 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   dwarfs the promoted-style gaps below. Method unchanged: archivist-sourced (factuality bar, plain
   text, no em dash, year null unless cleanly sourced) → review → `apply-style-depth.ts`. Working top
   tranche first (highest comps = highest ROI). Batch files: `data/style-depth-icons-batch*.json`.
-  - 🔄 **Batch 1 (top 25 by comps, ≥580)** — archivist sourcing (2026-07-10).
+  - ✅ **Batch 1 (top 25 by comps, ≥580)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Boy 2011, Speedy 1930, Evelyne 1978, Keepall 1930, Ophidia 2018, Chanel 19 2019, Horsebit 1955→2020,
+    Book Tote 2018, OnTheGo 2019, Constance 1959, Gabrielle 2017, Loulou 2017, Luggage 2010, Jackie 1961→2020,
+    Capucines 2013, 2.55 Reissue 2005, Lindy 2007). 7 years held null (WOC, Vanity Case, Pochette Métis,
+    Herbag, Bumbag, Blondie, Kate — disputed/undocumented debut). 0 em dashes. Drafts
+    `data/style-depth-icons-batch1.json`. Verified persisted (stub gone).
+  - 🔄 **Batch 2 (ranks 26-50, ≥361)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 3+ (ranks 51-559, <345 comps)** — queued; same method, highest-comps first. Full ranked
+    list from `probe-bare-styles.ts` (559 bare styles ≥10 comps).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
