@@ -55,14 +55,14 @@ export function BagImage({
 
   return (
     <div
-      className={`@container relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-surface-raised to-surface ${className}`}
+      className={`@container relative flex flex-col items-center justify-center gap-2 overflow-hidden bg-gradient-to-br from-surface-raised to-surface ${className}`}
     >
-      <HandbagGlyph className="h-1/2 w-1/2 text-gold/25" />
-      {/* The invite chip and wordmark only fit on roomy tiles (bag-page hero,
-          large cards). On small grid thumbnails they crammed and clipped, so
-          they're container-query-gated to the tile's own rendered width. */}
+      <HandbagGlyph className="h-2/5 w-2/5 text-gold/25" />
+      {/* The invite sits BELOW the glyph (centered), not in a top corner, so it never
+          collides with the tile's top-right Compare control. Container-query-gated to the
+          tile's own rendered width, since it crams + clips on small thumbnails. */}
       {invite && (
-        <span className="pointer-events-none absolute left-1/2 top-2 hidden -translate-x-1/2 whitespace-nowrap rounded-full border border-gold/30 bg-bg/70 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-gold-soft/90 @[9rem]:inline-block">
+        <span className="pointer-events-none hidden whitespace-nowrap rounded-full border border-gold/30 bg-bg/70 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-gold-soft/90 @[9rem]:inline-block">
           + Add a photo
         </span>
       )}
