@@ -30,7 +30,6 @@ const ROUTES: { label: string; test: RegExp; targetId: number; targetName: strin
   { label: "PADLOCK-TOTE", test: /padlock|zip around tote/i, targetId: 668, targetName: "Padlock" },
 ];
 
-const sizeKey = (s: string | null) => (s ?? "").trim().toLowerCase() || " ";
 interface VariantRow { variant_id: number; size_label: string | null }
 interface PhRow { price_id: number; notes: string | null; source_url: string | null; platform: string | null; listing_ref: string | null; price_type: string | null; observed_on: string | null }
 
