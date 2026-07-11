@@ -82,6 +82,16 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     (name-guarded, dry-run first, 824 ph rows re-pointed, 0 collisions, summary refreshed):
     537 "Reissue"→423 "2.55 Reissue" (now 1,295 comps), 992 "Palm Springs"→709 "Palm Springs Backpack"
     (246), 518 "Multi Pochette"→444 "Multi Pochette Accessoires" (295). Catalog styles 851→848.
+  - ✅ **15 verbose-junk duplicate styles AUTO-MERGED 2026-07-10** via the sanctioned
+    `merge-style-dupes.ts` (TYPE-1 only; intentional silhouette buckets held back). Full-sentence
+    breadth-load dups folded into clean canonicals (Classic Flap, Constance, Cartouchière, Saumur,
+    Brea, Hampstead, New Wave, Pearl Crush, WOC, Urban Essentials, Kelly/Constance To Go, etc.).
+    172 ph rows re-pointed, 20 variants + 15 styles deleted, summary refreshed. Catalog 848→833.
+    (DB-only op, no file diff; recorded here for the trail.)
+  - ✅ **Gucci GG-Supreme trio REVIEWED → KEEP SEPARATE** (not merged). Spot-check of listing URLs
+    showed Neo Vintage / GG Emblem / Retro Interlocking G are 3 distinct named lines, not one bag;
+    all already carry honest "this is a line, not one bag" descriptions. Flag closed in
+    `docs/style-bucket-audit.md`.
   - ⬜ **Tail DEFERRED (ranks 151-559, ~409 styles, all <86 comps)** — per the value-front-loaded rule
     (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
     lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
