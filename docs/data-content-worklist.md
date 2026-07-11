@@ -312,6 +312,17 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - ✅ "Most searched vs most expensive" LIVE draft post #20 (SearchVsPriceChart): Kelly/Birkin top both; Flap least-searched yet 3rd priciest (2026-06-26)
 - ✅ "Dior Saddle is back" LIVE draft post (dior-saddle-resale-price), reuses ask-vs-sold-gap chart (2026-06-26)
 - ✅ "The asking-price illusion" LIVE draft post #17 (AskVsSoldGapChart) (2026-06-26)
+- ⬜ **"What every resale site actually pays you" — article + paired social (added 2026-07-11).**
+  Drives to the new `/where-to-sell` net-payout estimator (habit loop → highest-intent on-ramp to
+  consignor referral revenue once Awin advertisers approve). Angle: same $2,000 bag nets a different
+  amount at every venue, and the highest-% option is NOT the hands-off one (Facebook 100% local /
+  Mercari 90% / eBay ~85-91% marginal / consignors 60-85% but they do the work + they price it).
+  Data anchor: `src/lib/where-to-sell.ts` (each venue's published rate, dated 2026-07-11) — pull
+  numbers from `estimateNet`, do NOT restate fees from memory. Voice: full voice-and-tone gate, no
+  em dashes, frame net as "our estimate off published rates" not a verdict; consignment "pays only
+  once it sells." CTA links `/where-to-sell`. Consider a `WhereToSellNetChart` (net-at-$2k bar per
+  venue) reusing the async chart pattern. Social cut: one slide/hook = "you didn't overpay, you
+  under-sold" → the estimator (faceless Hero tier per social-content-tiers).
 
 ## Trends
 - ✅ 7-set Google Trends pull recorded (`docs/research-drafts/trends-keyword-pull.md`) (2026-06-26)

@@ -29,6 +29,8 @@ interface Props {
   mode: "nav" | "closet";
   /** Closet mode: called when a bag (and colour) is chosen. */
   onSelect?: (sel: BagFinderSelection) => void;
+  /** Override the input placeholder (else a mode-appropriate default). */
+  placeholder?: string;
   /** Show the "can't find it? ask us to add it" request flow (default true). */
   allowRequest?: boolean;
   /** Optional: Enter on the field submits the raw query (e.g. nav → full /search). */
@@ -54,6 +56,7 @@ const HINT = "   (start typing →)";
 export function BagFinder({
   mode,
   onSelect,
+  placeholder,
   allowRequest = true,
   onSubmitQuery,
   onNavigate,
@@ -164,7 +167,8 @@ export function BagFinder({
             }
           }}
           placeholder={
-            mode === "nav" ? `Chanel flap, black caviar${HINT}` : `Which bag are you adding?${HINT}`
+            placeholder ??
+            (mode === "nav" ? `Chanel flap, black caviar${HINT}` : `Which bag are you adding?${HINT}`)
           }
           aria-label="Find a bag"
           className="w-full rounded-full border border-gold bg-surface py-2 pl-10 pr-4 text-base text-foreground placeholder:text-muted focus:outline-none sm:text-sm"

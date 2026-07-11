@@ -46,10 +46,15 @@ The tiers are framed as that trade, never a verdict:
 
 1. **`/where-to-sell`** — the hub.
    - **Payout matrix**: venues × (what they take · how fast · effort · who prices it).
-   - **Net-payout estimator (signature move)**: one value input ("what's your bag worth?")
-     → each consignment/marketplace venue shows *what you'd net* after its published
-     commission/fee, ranked. Buyout venues show "instant quote" and route to the median
-     rather than a fabricated multiple (see factuality note). Nobody surfaces this.
+   - **Net-payout estimator (signature move)**: TWO ways in, both on the page — (a) search
+     your bag (reuses the site-wide `BagFinder`; picking a style resolves a typical resale
+     value server-side via `getStyleResaleEstimate`, deduped by listing_ref, framed as an
+     asking-price estimate with its n), or (b) type a dollar value. Either fills the fee math;
+     each consignment/marketplace venue shows *what you'd net* after its published commission,
+     ranked. Buyout venues show "instant quote" and route to the median rather than a fabricated
+     multiple (see factuality note). Nobody surfaces this.
+   - **Matrix "what they take" column** states the venue's cut (commission %), e.g. "They take
+     ~30%", not the inverse keep %. The estimator table keeps the "you keep" framing.
    - Venue cards grouped by sell model: **They sell it for you** (consignment/buyout) ·
      **You list it yourself** (marketplaces) · **You sell it direct** (p2p).
    - "Our take" tier per venue, framed as the trade it makes, never a verdict.
