@@ -108,10 +108,13 @@ Queue (priority order; tick with counts + date):
   never wiped). Result: eBay colorway 3 → 689, material → 1,149; **488 eBay rows now carry
   BOTH material+colour** (the `isConfidentBasis` requirement), incl. clean Coach comps
   (Tabby/Chalk/Pebble Leather, Swinger/Candy Pink…). So eBay-sourced mid-tier styles can now
-  compute like-for-like fair value = deal badges. ⬜ REMAINING: the deals SURFACE also needs
-  FRESH LIVE mid-tier inventory (the sold/expired rows can't badge as "for sale"); a live
-  mid-tier eBay capture cadence is the last piece. ~1,355 eBay rows stay colour-null (titles
-  state no colour — held null, never guessed).
+  compute like-for-like fair value = deal badges. ✅ FRESH-LIVE PIECE WIRED (2026-07-10):
+  `.github/workflows/ebay-midtier-refresh.yml` (weekly) → `apify-ebay-refresh.ts` (Apify
+  `memo23/ebay-search-scraper-ppe`, mode=active — eBay blocks ACTIVE scraping harder than
+  sold, this actor gets past it) → `ebay-sold-apify.ts --live` (price_type listed) →
+  load → best-effort colour/material enrich → `reconcile:sold --platform=eBay --age-days=21`
+  (AGE-based retire, aborts on zero-in-window) → summary. ~$0.75/run, ~$3/mo. ~1,355 eBay
+  rows stay colour-null (titles state no colour — held null, never guessed).
 - ✅ U4 DONE 2026-07-02: price_history 57,165 (+14,818 today), styles 761, variants 1,388. FINISH LINE A: ~substantially closed for the 24 FP-carried brands (LV 80.5% / Chanel 96.3% of live listings, bags-only scope); Coach + 3 thrift brands now have eBay live-ask coverage; thin premium brands have a Vestiaire second source. Remaining A items: SLG expansion (decided: later, owner-gated), Vestiaire remainder (Darling/Fendigraphy/First/Loco/Bow), eBay item-specifics enrichment (metered).
 - ✅ U5 DONE 2026-07-02: Loewe brand-site prototype PROVEN (Firecrawl, 1 credit, no bot-block on loewe.com). Runbook: scrape /women/bags with links format; line names = URL path segment (/bags/puzzle/), model+size+material in product slug; diff path segments vs catalog style names; ~34 pages for full Loewe (~34 credits). FOUND + created 8 current-line styles resale doesn't surface yet: Scarf Bag/Backpack, Amazona 180, Cala, Bilbao Bucket, Braid Basket, Punch Hole Hobo, Hammock Flip (16 variants, zz-loewe-current-line.json). B rollout per big house = a later session; big-house sites (LV/Chanel/Gucci) likely harder than Loewe, test before assuming.
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
