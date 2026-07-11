@@ -21,6 +21,13 @@ These were researched and confirmed as descriptors spanning many shapes, not sin
 **The 3 Gucci GG-Supreme logo entries (Neo Vintage / Emblem / Retro Interlocking G) overlap**
 and are the strongest merge candidate — they likely describe the same coated-canvas logo world.
 
+> ✅ **REVIEWED 2026-07-10 → KEEP SEPARATE (do NOT merge).** Spot-checked the listing source_urls
+> on each: they are three DISTINCT named Gucci lines, not one bag. Neo Vintage = the archival GG
+> Supreme + Web shoulder/belt line; GG Emblem = a Double-G emblem tote/chain capsule; Retro
+> Interlocking G = a buckle-hardware backpack/messenger family. Merging would erase real house
+> distinctions (exactly the silhouette-bucket risk the pipeline rule warns about). All three already
+> carry honest "this is a Gucci line, not one bag" descriptions. Flag closed.
+
 ## Seasonal (no permanent name)
 
 - **Chanel Urban Essentials** (1052) — Blazy-era seasonal; per `brand-naming-research.md`
