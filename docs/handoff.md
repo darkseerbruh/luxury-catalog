@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Where to Sell hub SHIPPED (2026-07-11, on `main`)
+
+**Sister feature to `/where-to-buy`, the sell-side surface that spec scoped as "later".** Same sourced-and-dated pattern, seller economics instead of buyer protection. All green (tsc/lint/14 new tests), verified in-browser.
+- 🏷️ **What shipped:** `/where-to-sell` hub + `/where-to-sell/[slug]` for 9 venues, grouped by sell model — **They sell it for you** (Fashionphile, The RealReal, Rebag, The Luxury Closet) · **You list it yourself** (eBay, Vestiaire, Poshmark, Mercari) · **You sell it direct** (Facebook Marketplace).
+- ⚡ **Signature move:** a net-payout estimator (`estimateNet` in `src/lib/where-to-sell.ts`). Enter the bag's value → what you'd keep at each venue, ranked, off each venue's PUBLISHED commission/fee. Consignment/marketplace = computed (band, marginal, or flat shapes; TLC's flat $30 subtracted). Buyout = "instant quote," never a fabricated %, routed to the median. Links to `/search` (the habit loop).
+- 📎 **Sourcing bar honored:** every fee/payout/effort/acceptance cell carries the venue's own URL + `checkedAt: 2026-07-11` (9 venues re-verified fresh this session via parallel research). Price-control on marketplaces renders "structural, no policy cited" rather than faking a source. Monthly re-verify sweep, same as where-to-buy.
+- 🔌 **Wired:** nav (`layout.tsx`, after Where to buy), `sitemap.ts` (hub + 9 profiles), FAQ/ItemList JSON-LD, cross-links both ways with `/where-to-buy`. Spec: `docs/ux/where-to-sell-spec.md`.
+- 📈 **Metrics:** GEO/SEO on "how much does X pay / what fee does X take" queries; the estimator is the highest-intent entry to consignor **referral** monetization once Awin advertiser programs approve (no fabricated affiliate links in v1).
+- ⬜ **YOUR TURN:** nothing required. New routes go live on the next prod build (auto if Vercel auto-deploys `main`, else a `vercel --prod` promote is yours). Later: wire consignor referral links when Awin approves.
+
+---
+
 ## TL;DR — Data health routine SHIPPED + first live run (2026-07-10, on `main`, workflow proven)
 
 **New standing engine: a daily data-health scorecard now watches the whole data layer.** Owner-locked: daily → graduates to weekly after 7 straight greens (red demotes back), report + deduped GitHub issue on red, findings feed the worklist, safe auto-fixes only.

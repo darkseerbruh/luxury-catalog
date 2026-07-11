@@ -108,6 +108,7 @@ export default async function RootLayout({
                 <p className="text-xs uppercase tracking-wide text-muted/70">The reference</p>
                 <Link href="/rankings" className="hover:text-foreground">The LC Index</Link>
                 <Link href="/where-to-buy" className="hover:text-foreground">Where to buy</Link>
+                <Link href="/where-to-sell" className="hover:text-foreground">Where to sell</Link>
                 <Link href="/identify" className="hover:text-foreground">Spot the fake</Link>
                 <Link href="/articles" className="hover:text-foreground">Articles</Link>
               </div>
