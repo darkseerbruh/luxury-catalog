@@ -138,11 +138,13 @@ export const VENUES: VenueProfile[] = [
     },
     returns: {
       windowDays: null,
-      detail: "Handbags are final sale. No returns on the category we cover.",
+      detail:
+        "Handbags are final sale as a category, at any price. The one exception is a bag The RealReal itself described incorrectly, which routes through customer service.",
       fact: {
-        claim: "Handbags, swimwear, luggage, beauty, and items discounted 40% or more are final sale.",
-        sourceUrl: "https://www.therealreal.com/faq/buyer",
-        checkedAt: CHECKED,
+        claim:
+          "Handbags, swimwear, luggage, beauty, items sold at 40% off or more, and items listed As Is are final sale and not eligible for return; the sole exception is an item The RealReal identifies as incorrectly described.",
+        sourceUrl: "https://www.therealreal.com/returns",
+        checkedAt: "2026-07-11",
       },
     },
     fakeRemedy: {
