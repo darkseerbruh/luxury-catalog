@@ -3,6 +3,7 @@ import { getSupabase, fetchAllRows } from "./supabase";
 import { CACHE_MARKET } from "./cache";
 import { displaySizeLabel } from "./variant-label";
 import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
+import { listingQualifier } from "./deal-descriptor";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -52,6 +53,13 @@ export interface Deal {
   brandName: string;
   styleName: string;
   sizeLabel: string | null;
+  /**
+   * Honest short qualifier for what the shown listing ACTUALLY is when it differs from the
+   * plain style name — e.g. "Micro Mini" for a micro-mini flap grouped under Classic Flap,
+   * "Clutch" for a Gabrielle clutch. Derived from the listing's title + source-url slug so
+   * the card never mislabels the item (owner report 2026-07-11). Null when it adds nothing.
+   */
+  qualifier: string | null;
   /** Lowest current asking listing for the variant, in `currency`. */
   currentPrice: number;
   /** Recorded resale median for the variant, in `currency`. */
@@ -158,7 +166,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
     type Group = {
       variantId: number;
       resalePrices: number[];
-      listed: { price: number; currency: string | null; platform: string | null; sourceUrl: string | null }[];
+      listed: { price: number; currency: string | null; platform: string | null; sourceUrl: string | null; notes: string | null }[];
       brandName: string;
       styleName: string;
       sizeLabel: string | null;
@@ -207,7 +215,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       // Resale population for the median = listed + sold + auction (+ legacy nulls).
       g.resalePrices.push(price);
       if (row.price_type === "listed") {
-        g.listed.push({ price, currency: row.currency, platform: row.platform, sourceUrl: row.source_url });
+        g.listed.push({ price, currency: row.currency, platform: row.platform, sourceUrl: row.source_url, notes: row.notes });
       }
     }
 
@@ -248,6 +256,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
         brandName: g.brandName,
         styleName: g.styleName,
         sizeLabel: g.sizeLabel,
+        qualifier: listingQualifier(g.styleName, best.notes, best.sourceUrl),
         currentPrice: Math.round(best.price),
         medianPrice: Math.round(med),
         currency: best.currency ?? g.currency,

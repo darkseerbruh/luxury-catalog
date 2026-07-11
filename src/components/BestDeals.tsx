@@ -45,6 +45,7 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
                 className="block font-serif text-sm text-foreground transition-colors hover:text-gold"
               >
                 {name}
+                {d.qualifier && <span className="text-muted">{" · "}{d.qualifier}</span>}
               </Link>
 
               <p className="mt-1 flex items-baseline gap-2">

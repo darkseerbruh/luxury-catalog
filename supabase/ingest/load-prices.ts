@@ -25,6 +25,7 @@ import {
   type VariantAttrs,
 } from "../../src/lib/image-import-core";
 import type { PriceObservation } from "../../src/lib/ingest/types";
+import { classifyListingAttachment } from "../../src/lib/ingest/model-normalize";
 
 interface Flags {
   source?: string;
@@ -122,7 +123,7 @@ function toRow(o: PriceObservation, variantId: number) {
  */
 function toDiscovered(
   o: PriceObservation,
-  reason: "no_brand" | "no_style" | "no_variant" | "catch_all",
+  reason: "no_brand" | "no_style" | "no_variant" | "catch_all" | "non_bag",
   matchedBrandId: number | null,
   matchedStyleId: number | null
 ) {
@@ -194,6 +195,17 @@ async function main() {
     const style = pickStyle(stylesCache.get(brand.brand_id)!, o.style);
     if (!style) {
       discovered.push(toDiscovered(o, "no_style", brand.brand_id, null));
+      continue;
+    }
+    // Accessory guard (owner report 2026-07-11): a non-bag SLG / accessory whose title
+    // slipped the fuzzy brand+style match would otherwise land on a real bag's variant and
+    // poison its comps + top the deals rail under the bag's name. Route it to
+    // discovered_listing instead. High-precision ACCESSORY verdict only — wrong-model stays
+    // (dictionary ordering still misfires) and is caught by the data-health sentinel.
+    // classifyListingAttachment returns 'bag' for accessory STYLES, so a real pouch on a
+    // Pochette-Accessoires style still places correctly.
+    if (classifyListingAttachment(o.brand, style.name, o.notes) === "accessory") {
+      discovered.push(toDiscovered(o, "non_bag", brand.brand_id, style.style_id));
       continue;
     }
     if (!variantsCache.has(style.style_id)) variantsCache.set(style.style_id, await loadVariantsForStyle(style.style_id));
