@@ -19,8 +19,6 @@ function formatPrice(amount: number, currency: string | null): string {
   return `${symbol}${amount.toLocaleString()}`;
 }
 
-const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
-
 export default function BestDeals({ deals }: { deals: Deal[] }) {
   if (deals.length < MIN_DEALS_TO_RENDER) return null;
 
@@ -34,9 +32,6 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
       <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {deals.map((d) => {
           const name = [d.brandName, d.styleName].filter(Boolean).join(" ");
-          const span = d.highPrice - d.lowPrice || 1;
-          const markerPct = clamp(((d.currentPrice - d.lowPrice) / span) * 100, 3, 97);
-          const medianPct = clamp(((d.medianPrice - d.lowPrice) / span) * 100, 3, 97);
 
           return (
             <li key={d.variantId} className="rounded-2xl border border-border bg-surface p-4">
@@ -59,24 +54,10 @@ export default function BestDeals({ deals }: { deals: Deal[] }) {
                 )}
               </p>
 
-              <div
-                className="relative mt-3 h-1.5 rounded-full bg-border"
-                role="img"
-                aria-label={`Listed at ${formatPrice(d.currentPrice, d.currency)}, against a recorded median of ${formatPrice(d.medianPrice, d.currency)} (range ${formatPrice(d.lowPrice, d.currency)} to ${formatPrice(d.highPrice, d.currency)})`}
-              >
-                <span
-                  className="absolute top-1/2 h-3.5 w-0.5 -translate-y-1/2 bg-muted/70"
-                  style={{ left: `${medianPct}%` }}
-                />
-                <span
-                  className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-soft ring-2 ring-bg"
-                  style={{ left: `${markerPct}%` }}
-                />
-              </div>
-              <div className="mt-1.5 flex justify-between text-[10px]">
-                <span className="text-gold-soft">this listing</span>
-                <span className="text-muted">median {formatPrice(d.medianPrice, d.currency)}</span>
-              </div>
+              <p className="mt-2 text-sm">
+                <span className="font-medium text-gold-soft">{d.pctUnder}% below median</span>
+                <span className="text-muted"> · median {formatPrice(d.medianPrice, d.currency)}</span>
+              </p>
 
               <DealBuyButton
                 variantId={d.variantId}
