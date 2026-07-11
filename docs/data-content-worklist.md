@@ -47,8 +47,14 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     Capucines 2013, 2.55 Reissue 2005, Lindy 2007). 7 years held null (WOC, Vanity Case, Pochette Métis,
     Herbag, Bumbag, Blondie, Kate — disputed/undocumented debut). 0 em dashes. Drafts
     `data/style-depth-icons-batch1.json`. Verified persisted (stub gone).
-  - 🔄 **Batch 2 (ranks 26-50, ≥361)** — archivist sourcing (2026-07-10).
-  - ⬜ **Batches 3+ (ranks 51-559, <345 comps)** — queued; same method, highest-comps first. Full ranked
+  - ✅ **Batch 2 (ranks 26-50, ≥361)** — DONE 2026-07-10. 25 descriptions + 20 sourced years live
+    (Loewe Puzzle 2014, Bolide 1923, Sac de Jour 2013, Antigona 2011, Deauville 2012, Twist 2015,
+    NéoNoé 2017, Coussin 2021, Chanel 22/25 2022/2025, Bamboo 1947/Diana 1991, Rockstud 2010,
+    Pochette Accessoires 1992, Le 5 à 7 2021, Belt 2015). 5 held null (Lou, City, Saint-Louis, Soho
+    Disco, Jet Set). **Flagged style 537 'Reissue' = probable dup of 423 '2.55 Reissue'** →
+    `docs/style-bucket-audit.md` for human-gated merge (both described, not auto-merged).
+  - 🔄 **Batch 3 (ranks 51-75, ≥217)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 4+ (ranks 76-559, <217 comps)** — queued; same method, highest-comps first. Full ranked
     list from `probe-bare-styles.ts` (559 bare styles ≥10 comps).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
