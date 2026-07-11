@@ -24,18 +24,32 @@ export function slugText(url: string | null | undefined): string {
     .trim();
 }
 
-/** Notable size tokens → display form. Ordered longest-first so "micro mini" wins over
- *  "mini". Generic "medium"/"standard" are intentionally omitted (they add no signal). */
-const SIZES: [test: RegExp, display: string][] = [
-  [/\bmicro mini\b/, "Micro Mini"],
-  [/\bnano\b/, "Nano"],
-  [/\bmini\b/, "Mini"],
-  [/\bsmall\b/, "Small"],
-  [/\bmedium large\b|\bm\/l\b/, "Medium Large"],
-  [/\bjumbo\b/, "Jumbo"],
-  [/\bmaxi\b/, "Maxi"],
-  [/\blarge\b/, "Large"],
+/** Size table: matcher → normalized bucket key (for like-for-like comps) + display form.
+ *  Ordered longest/most-specific first so "micro mini" wins over "mini". "medium"/"m/l"
+ *  ARE bucketed (needed for the size-aware median) but omitted from the display qualifier
+ *  since a plain "Medium" adds little to the card. */
+const SIZE_TABLE: [test: RegExp, bucket: string, display: string | null][] = [
+  [/\bmicro mini\b/, "micro", "Micro Mini"],
+  [/\bmicro\b/, "micro", "Micro"],
+  [/\bnano\b/, "nano", "Nano"],
+  [/\bmini\b/, "mini", "Mini"],
+  [/\bsmall\b/, "small", "Small"],
+  [/\bmedium large\b|\bm\/l\b|\bmedium\/large\b/, "medium", null],
+  [/\bjumbo\b/, "jumbo", "Jumbo"],
+  [/\bmaxi\b/, "maxi", "Maxi"],
+  [/\blarge\b/, "large", "Large"],
+  [/\bmedium\b/, "medium", null],
 ];
+
+/**
+ * Normalized size bucket for a listing, from its title + source-url slug, or null when no
+ * size is stated. Used by the deals rail to compare a listing only against SAME-SIZE comps
+ * (a micro-mini flap must not be graded against a medium-flap median).
+ */
+export function parseSizeBucket(notes: string | null | undefined, sourceUrl: string | null | undefined): string | null {
+  const hay = fold(`${notes ?? ""} ${slugText(sourceUrl)}`);
+  return SIZE_TABLE.find(([re]) => re.test(hay))?.[1] ?? null;
+}
 
 /** Distinct TYPE words that change what the item IS (not flap sub-shapes, which stay under
  *  the flap style). Each maps a matcher to a display word. */
@@ -66,7 +80,7 @@ export function listingQualifier(
   if (!hay) return null;
   const style = fold(styleName ?? "");
 
-  const size = SIZES.find(([re]) => re.test(hay))?.[1] ?? null;
+  const size = SIZE_TABLE.find(([re, , display]) => display && re.test(hay))?.[2] ?? null;
   const type = TYPES.find(([re, display]) => re.test(hay) && !style.includes(fold(display)))?.[1] ?? null;
 
   // Suppress a size we already imply, and a type word already in the style name.

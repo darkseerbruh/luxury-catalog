@@ -3,7 +3,7 @@ import { getSupabase, fetchAllRows } from "./supabase";
 import { CACHE_MARKET } from "./cache";
 import { displaySizeLabel } from "./variant-label";
 import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
-import { listingQualifier } from "./deal-descriptor";
+import { listingQualifier, parseSizeBucket } from "./deal-descriptor";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -14,6 +14,14 @@ export const MIN_DEALS_TO_RENDER = 3;
  * dropped. Real underpriced listings rarely exceed ~50% off; 70% is a conservative guard.
  */
 const MAX_DEAL_PCT_UNDER = 70;
+
+/**
+ * When a listing states a size, grade it only against same-size comps — but only if there
+ * are at least this many, so the median + verdict aren't built on a handful of rows. Below
+ * it, we skip the deal rather than show a shaky like-for-like read (e.g. the v199 micro
+ * bucket has n=3). A sizeless listing falls back to the whole-variant population.
+ */
+const MIN_SIZE_COMPS = 5;
 
 /**
  * "Today's deals" — current resale listings priced BELOW their variant's recorded
@@ -165,7 +173,10 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
     // current asking prices we hunt deals in).
     type Group = {
       variantId: number;
-      resalePrices: number[];
+      /** Resale prices tagged with the listing's parsed size bucket, so the median can be
+       *  scoped to SAME-SIZE comps (a catalog "variant" often mixes sizes — v199 Classic
+       *  Flap holds micro→jumbo in one row). `bucket` is null when the row states no size. */
+      resale: { price: number; bucket: string | null }[];
       listed: { price: number; currency: string | null; platform: string | null; sourceUrl: string | null; notes: string | null }[];
       brandName: string;
       styleName: string;
@@ -189,7 +200,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
         const style = variant ? (Array.isArray(variant.style) ? variant.style[0] : variant.style) : null;
         g = {
           variantId: row.variant_id,
-          resalePrices: [],
+          resale: [],
           listed: [],
           brandName: style ? embeddedName(style.brand) : "",
           styleName: style?.name ?? "",
@@ -212,8 +223,9 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
         continue;
       }
 
-      // Resale population for the median = listed + sold + auction (+ legacy nulls).
-      g.resalePrices.push(price);
+      // Resale population for the median = listed + sold + auction (+ legacy nulls), each
+      // tagged with its size bucket so the median can be scoped to the same size.
+      g.resale.push({ price, bucket: parseSizeBucket(row.notes, row.source_url) });
       if (row.price_type === "listed") {
         g.listed.push({ price, currency: row.currency, platform: row.platform, sourceUrl: row.source_url, notes: row.notes });
       }
@@ -221,17 +233,30 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
 
     const deals: Deal[] = [];
     for (const g of groups.values()) {
-      // Need a current listing AND enough resale history for a meaningful median.
-      if (g.listed.length === 0 || g.resalePrices.length < 2) continue;
-
-      const med = median(g.resalePrices);
-      if (med <= 0) continue;
-
-      const sorted = g.resalePrices.slice().sort((a, b) => a - b);
-      const sampleSize = sorted.length;
+      if (g.listed.length === 0 || g.resale.length < 2) continue;
 
       // The best (lowest) current listing is the strongest deal for the variant.
       const best = g.listed.reduce((lo, c) => (c.price < lo.price ? c : lo), g.listed[0]);
+
+      // SIZE-COHERENT median (owner report 2026-07-11): a catalog "variant" often mixes
+      // sizes (v199 Classic Flap = micro→jumbo in one row), so grading the listing against
+      // the whole variant makes a $1,938 micro-mini read "71% under" a medium-flap median.
+      // Grade it only against SAME-SIZE comps. When the listing states a size, require
+      // enough same-size comps to grade honestly, else skip (better no deal than a false
+      // one). When it states no size, fall back to the whole-variant population.
+      const bestBucket = parseSizeBucket(best.notes, best.sourceUrl);
+      const pop = bestBucket
+        ? g.resale.filter((r) => r.bucket === bestBucket).map((r) => r.price)
+        : g.resale.map((r) => r.price);
+      if (bestBucket && pop.length < MIN_SIZE_COMPS) continue; // too few like-for-like comps
+      if (pop.length < 2) continue;
+
+      const med = median(pop);
+      if (med <= 0) continue;
+
+      const sorted = pop.slice().sort((a, b) => a - b);
+      const sampleSize = sorted.length;
+
       if (best.price >= med) continue; // only listings BELOW median are "deals"
 
       const pctUnder = Math.round(((med - best.price) / med) * 100);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { listingQualifier, slugText } from "../deal-descriptor";
+import { listingQualifier, parseSizeBucket, slugText } from "../deal-descriptor";
 
 describe("slugText", () => {
   it("extracts human words from a reseller slug, dropping the product id", () => {
@@ -44,5 +44,18 @@ describe("listingQualifier", () => {
 
   it("does not repeat a type word already in the style name", () => {
     expect(listingQualifier("Camera Bag", "Chanel Camera Bag Black", null)).toBeNull();
+  });
+});
+
+describe("parseSizeBucket", () => {
+  it("buckets sizes for like-for-like comps (micro-mini != medium)", () => {
+    expect(parseSizeBucket("", "https://x.com/chanel-micro-mini-single-flap-p1318211")).toBe("micro");
+    expect(parseSizeBucket("Medium (M/L) Classic Flap", null)).toBe("medium");
+    expect(parseSizeBucket("Chanel Jumbo Classic Flap", null)).toBe("jumbo");
+    expect(parseSizeBucket("gabrielle clutch large", null)).toBe("large");
+  });
+  it("returns null when no size is stated (falls back to whole-variant median)", () => {
+    expect(parseSizeBucket("Chanel Classic Flap Caviar Black", null)).toBeNull();
+    expect(parseSizeBucket(null, null)).toBeNull();
   });
 });
