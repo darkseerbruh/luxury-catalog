@@ -59,9 +59,17 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     Marcie 2010, Arco 2019, Ava 2020, College 2015, Félicie 2016). 7 held null incl. 2 category names
     (Chanel Camera Bag 522, Clutch with Chain 749 — honestly described as categories, added to
     style-bucket-audit.md).
-  - 🔄 **Batch 4 (ranks 76-100, ≥143)** — archivist sourcing (2026-07-10).
-  - ⬜ **Batches 5+ (ranks 101-559, <143 comps)** — queued; same method, highest-comps first. Full ranked
-    list from `probe-bare-styles.ts` (559 bare styles ≥10 comps).
+  - ✅ **Batch 4 (ranks 76-100, ≥143)** — DONE 2026-07-10. 25 descriptions + 17 sourced years live
+    (30 Montaigne 2019, Hamilton 2009, Phantom 2011, Le Cagole 2022, Multi Pochette 2019, Papillon 1966,
+    Bobby 2020, Caro 2021, Dior Toujours 2023, Telfar 2014, Roulis 2011, Fendi First 2021, Fendigraphy
+    2022, Le Chiquito 2018, BV Hop 2024, Graceful 2017). 8 held null (incl. Lady D-Joy/D-Lite, Loewe
+    Hammock source-conflict, Prada Re-Edition line). Hand-fix: **#489 rewritten** to the plain Celine
+    Cabas tote (source URLs showed listings are mostly plain Cabas, not the Phantom the archivist drafted).
+    Chanel trade-names GST(519)/Business Affinity(432) flagged in style-bucket-audit.md.
+  - 🔄 **Batch 5 (ranks 101-125, ≥110)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 6+ (ranks 126-559, <110 comps)** — queued; same method, highest-comps first. Full ranked
+    list from `probe-bare-styles.ts` (559 bare styles ≥10 comps). Value front-loaded; the low-comp tail
+    is a candidate for the same DEFERRED treatment as the <10-comp tail once the head is covered.
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.

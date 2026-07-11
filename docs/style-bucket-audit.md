@@ -78,3 +78,10 @@ No merge is safe to automate. This doc is the queue for a review pass.
   (style 522, 303 comps) and Chanel "Clutch with Chain" (style 749, 268 comps) are silhouettes/
   SLG-adjacent categories, not single dated models. Their descriptions now say so; leave as
   category-level pages unless consolidating.
+- **Chanel TRADE-NAMES (community names, not official Chanel model names):** GST / Grand Shopping
+  Tote (519) and Business Affinity (432). Kept + described (with the trade-name caveat in-text) since
+  buyers search these terms; do not present as official house names. Per `brand-naming-research`
+  Chanel identifies seasonal bags by style code, not model name.
+- **Celine "Cabas" (489):** listings mix the plain minimalist Cabas tote (dominant) with some Cabas
+  Phantom (winged Luggage variant). Described as the plain Cabas; a future split could separate the
+  Phantom if it accrues its own comps.
