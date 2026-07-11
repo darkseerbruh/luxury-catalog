@@ -310,6 +310,11 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
 - **The "No X, just Y" reversal (AI tell, locked 2026-07-11).** Never frame a value prop
   as *"No judgment, just the receipts," "not a sales pitch, just the truth."* The
   contrived contrast is an AI-slop tell. Say the positive thing directly and let it stand.
+- **Filler "actually" (AI tell, locked 2026-07-11).** Cut *actually* used for emphasis
+  (*"what each venue actually protects," "where to actually buy"*). It almost never adds
+  meaning and reads as machine hedging. Delete it and the sentence gets stronger. (Keep it
+  only when it draws a true contrast with a stated expectation, e.g. "we said X; it's
+  actually Y.")
 - **Em dashes (—).** Hard rule: don't use them. They're an AI-slop tell and they
   blur sentence logic. Use a period, comma, colon, or parentheses instead, and
   pick the one that fits the thought:
