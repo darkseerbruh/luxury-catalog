@@ -11,6 +11,8 @@ import {
   type SellVenueProfile,
   type EffortLevel,
 } from "@/lib/where-to-sell";
+import { getStyleResaleEstimate } from "@/lib/queries";
+import { BagValuePicker } from "./BagValuePicker";
 import { SITE_URL } from "@/lib/geo";
 
 export const metadata: Metadata = {
@@ -54,10 +56,16 @@ function tierChip(v: SellVenueProfile) {
 export default async function WhereToSellPage({
   searchParams,
 }: {
-  searchParams: Promise<{ value?: string }>;
+  searchParams: Promise<{ value?: string; bag?: string }>;
 }) {
-  const { value } = await searchParams;
-  const sale = parseValue(value);
+  const { value, bag } = await searchParams;
+
+  // A picked bag (styleId) resolves to a typical resale value server-side; a manual
+  // value is the fallback. The bag lookup wins when it resolves.
+  const bagId = Number(bag);
+  const picked = Number.isFinite(bagId) && bagId > 0 ? await getStyleResaleEstimate(bagId) : null;
+  const sale = picked ? picked.value : parseValue(value);
+  const bagUnpriced = Boolean(bag) && !picked;
   const ranked = rankByNet(sale);
 
   const itemListJsonLd = {
@@ -101,16 +109,20 @@ export default async function WhereToSellPage({
       <section className="mb-8 rounded-2xl border border-gold/30 bg-surface p-4 sm:p-5">
         <h2 className="font-serif text-xl text-foreground">What would you actually keep?</h2>
         <p className="mt-1 text-xs leading-relaxed text-muted">
-          Enter your bag&apos;s estimated resale value. We&apos;ll do the fee math from each
-          venue&apos;s published rates. Not sure of the number?{" "}
-          <Link href="/search" className="text-gold-soft underline underline-offset-2 hover:text-gold">
-            Look it up first
-          </Link>
-          .
+          Two ways to start: search your bag and we&apos;ll pull a typical resale value, or type a
+          number if you already know it. Either one fills the fee math below.
         </p>
-        <form method="get" className="mt-3 flex flex-wrap items-center gap-2">
-          <label htmlFor="value" className="text-sm text-muted">
-            Bag value
+
+        {/* Path 1: search a bag, we resolve its value. */}
+        <div className="mt-3">
+          <p className="mb-1.5 text-[11px] uppercase tracking-wide text-muted/80">Search your bag</p>
+          <BagValuePicker />
+        </div>
+
+        {/* Path 2: type a value. */}
+        <form method="get" className="mt-4 flex flex-wrap items-center gap-2">
+          <label htmlFor="value" className="text-[11px] uppercase tracking-wide text-muted/80">
+            Or enter a value
           </label>
           <div className="flex items-center rounded-lg border border-border bg-background px-2">
             <span className="text-sm text-muted">$</span>
@@ -132,6 +144,22 @@ export default async function WhereToSellPage({
             See what you keep
           </button>
         </form>
+
+        {picked && (
+          <p className="mt-3 rounded-lg border border-gold/30 bg-background/50 px-3 py-2 text-xs leading-relaxed text-muted">
+            Based on the <span className="text-foreground">{picked.label}</span>: a typical resale of{" "}
+            <span className="text-foreground">{usd(picked.value)}</span>. Our estimate from{" "}
+            {picked.n.toLocaleString("en-US")} recent {picked.n === 1 ? "listing" : "listings"},
+            asking prices, not a sold average. Tweak the number above if yours differs by size or
+            condition.
+          </p>
+        )}
+        {bagUnpriced && (
+          <p className="mt-3 rounded-lg border border-border bg-background/50 px-3 py-2 text-xs leading-relaxed text-muted">
+            We don&apos;t have enough price data on that bag yet to estimate a value. Enter a number
+            above and the fee math still works.
+          </p>
+        )}
 
         <div className="mt-4 overflow-x-auto rounded-xl border border-border">
           <table className="w-full min-w-[520px] text-sm">
@@ -226,9 +254,11 @@ export default async function WhereToSellPage({
                         <div className="mt-1">{tierChip(v)}</div>
                       </td>
                       <td className="px-3 py-3 text-xs text-muted">
-                        {est1500.kind === "net"
-                          ? `You keep ~${est1500.keepPct}%`
-                          : "Instant quote"}
+                        {est1500.kind !== "net"
+                          ? "Instant quote"
+                          : 100 - est1500.keepPct === 0
+                          ? "Nothing on local"
+                          : `They take ~${100 - est1500.keepPct}%`}
                       </td>
                       <td className="px-3 py-3 text-xs text-muted">
                         {v.payoutSpeed.instant ? "Can be instant" : "After it sells"}
