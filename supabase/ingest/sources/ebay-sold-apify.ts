@@ -31,6 +31,10 @@ interface EbaySoldRecord {
   itemId?: string | null;
   title?: string | null;
   url?: string | null;
+  // Live-actor (khadinakbar) field aliases — normalized here so one adapter reads both.
+  price?: number | null;
+  itemUrl?: string | null;
+  isSold?: boolean | null;
 }
 
 /** Junk/parts/replica/collab-noise tokens — a title carrying one is not a sellable bag comp
@@ -67,12 +71,15 @@ export function soldDateIso(s: string | null | undefined): string | null {
   return null;
 }
 
-export function recordToObservation(rec: EbaySoldRecord, floor: number, fallbackDate: string): PriceObservation | null {
-  const price = typeof rec.soldPrice === "number" && Number.isFinite(rec.soldPrice) ? rec.soldPrice : NaN;
+export function recordToObservation(rec: EbaySoldRecord, floor: number, fallbackDate: string, live = false): PriceObservation | null {
+  const raw = rec.soldPrice ?? rec.price;
+  const price = typeof raw === "number" && Number.isFinite(raw) ? raw : NaN;
   if (!Number.isFinite(price) || price < floor) return null; // AG-floor guard
   if (!rec.title?.trim() || !rec.itemId) return null;
   if (isJunk(rec.title)) return null; // parts/replica/collab-noise never enters a median
-  const url = rec.url?.trim() || `https://www.ebay.com/itm/${rec.itemId}`;
+  // In live mode a "sold" row would be stale noise — only keep active listings.
+  if (live && rec.isSold === true) return null;
+  const url = (rec.url ?? rec.itemUrl)?.trim() || `https://www.ebay.com/itm/${rec.itemId}`;
 
   return {
     brand: canonicalBrand(rec.title.trim()),
@@ -84,11 +91,13 @@ export function recordToObservation(rec: EbaySoldRecord, floor: number, fallback
       listing_ref: String(rec.itemId).trim(),
     },
     platform: "eBay",
-    price_type: "sold",
+    // Live = a current asking listing (loader stamps listing_status 'available' +
+    // today's observed_on, which the age-based reconcile uses as "last seen").
+    price_type: live ? "listed" : "sold",
     sale_price: price,
     currency: "USD",
     condition: mapCondition(rec.condition),
-    observed_on: soldDateIso(rec.soldDate) || fallbackDate,
+    observed_on: live ? fallbackDate : (soldDateIso(rec.soldDate) || fallbackDate),
     source_url: url,
     confidence: "medium",
     notes: rec.title.trim(),
@@ -98,10 +107,11 @@ export function recordToObservation(rec: EbaySoldRecord, floor: number, fallback
 
 function main() {
   const args = process.argv.slice(2);
-  const floor = Number((args.find((a) => a.startsWith("--floor=")) || "--floor=500").split("=")[1]);
+  const live = args.includes("--live");
+  const floor = Number((args.find((a) => a.startsWith("--floor=")) || `--floor=${live ? 25 : 500}`).split("=")[1]);
   const fallbackDate = args.find((a) => a.startsWith("--date="))?.slice("--date=".length) || new Date().toISOString().slice(0, 10);
   const rawKey = args.find((a) => !a.startsWith("--"));
-  if (!rawKey) { console.error("Usage: tsx ebay-sold-apify.ts <rawKey> [--floor=500] [--date=YYYY-MM-DD]"); process.exit(1); }
+  if (!rawKey) { console.error("Usage: tsx ebay-sold-apify.ts <rawKey> [--live] [--floor=N] [--date=YYYY-MM-DD]"); process.exit(1); }
 
   const file = path.resolve(__dirname, "../../../data/ingest/_raw", `${rawKey}.json`);
   const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
@@ -109,11 +119,11 @@ function main() {
   const obs: PriceObservation[] = [];
   let belowFloor = 0;
   for (const rec of records) {
-    const o = recordToObservation(rec, floor, fallbackDate);
-    if (o) obs.push(o); else if ((rec.soldPrice ?? 0) < floor) belowFloor++;
+    const o = recordToObservation(rec, floor, fallbackDate, live);
+    if (o) obs.push(o); else if (((rec.soldPrice ?? rec.price) ?? 0) < floor) belowFloor++;
   }
   const { file: out, kept, dropped } = writeObservations("ebay", obs);
-  console.log(`ebay-sold-apify: ${records.length} record(s) -> ${kept} sold obs (${dropped} invalid, ${belowFloor} below $${floor}).`);
+  console.log(`ebay-sold-apify: ${records.length} record(s) -> ${kept} ${live ? "LIVE (listed)" : "sold"} obs (${dropped} invalid, ${belowFloor} below $${floor}).`);
   console.log(`Wrote ${out}. Next: npm run load:prices -- ebay --write`);
 }
 

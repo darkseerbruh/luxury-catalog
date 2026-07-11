@@ -1,0 +1,95 @@
+name: Refresh mid-tier live listings (eBay)
+
+# Keeps the mid-tier deals surface FRESH. Coach / Kate Spade / Longchamp / Michael Kors /
+# Tory Burch carry ZERO authenticated-reseller inventory (Fashionphile has none), so eBay
+# is their only live source and the only way /shop?deals=1 can badge a mid-tier "priced
+# below our estimate" find. Sister of trr-refresh.yml (TRR) and market-refresh.yml (FP).
+#
+# WHAT IT DOES each run:
+#   1. Pull active eBay listings per brand via Apify (memo23/ebay-search-scraper-ppe — eBay
+#      blocks ACTIVE scraping harder than sold, and this actor gets past it reliably).
+#   2. Load them as `listed`/`available`, stamping today's observed_on = "last seen".
+#   3. Best-effort colour/material enrich (the deals basis needs like-for-like specs).
+#   4. Retire live rows not re-observed in 21 days (AGE-based, see INTEGRITY).
+#
+# CADENCE: weekly. Mid-tier eBay churns slower than the luxury resellers and the surface
+# only needs listings that are still live within a week or two. ~250 listings/run at
+# ~$0.003 each ≈ ~$0.75/run, ~$3/mo (owner-greenlit 2026-07-10).
+#
+# INTEGRITY: retirement is AGE-based, not snapshot-diff. An eBay search sees only the newest
+# ~N per brand, so a diff would falsely retire live listings it didn't page to. Age mode
+# retires only eBay `available` rows not re-observed within 21 days (3 weekly refreshes), and
+# reconcile ABORTS if it saw ZERO listings in-window (the refresh isn't running — never nuke
+# the surface). A 50% max-retire guard is on by default.
+#
+# SECRETS: SUPABASE_SERVICE_ROLE_KEY + APIFY_TOKEN (both already set for the TRR job).
+# ANTHROPIC_API_KEY is optional — the colour/material enrich step is best-effort and skips
+# cleanly when it's absent.
+#
+# Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
+
+on:
+  schedule:
+    # Weekly, Mondays 05:11 UTC. Tune here.
+    - cron: "11 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Apply changes? false = dry run (fetch + report only, no DB writes)"
+        required: false
+        default: "true"
+
+# Never let two eBay refreshes overlap (they touch the same listings).
+concurrency:
+  group: ebay-midtier-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Fetch mid-tier eBay live inventory via Apify
+        run: npx tsx supabase/ingest/sources/apify-ebay-refresh.ts --per=60
+
+      - name: Map + load the live listings
+        run: |
+          npx tsx supabase/ingest/sources/ebay-sold-apify.ts ebay-live-midtier --live
+          if [ "$WRITE" = "true" ]; then
+            npx tsx supabase/ingest/load-prices.ts ebay --write
+          else
+            npx tsx supabase/ingest/load-prices.ts ebay
+          fi
+
+      - name: Enrich colour/material on the new eBay rows (best-effort; needs ANTHROPIC_API_KEY)
+        if: ${{ env.WRITE == 'true' && env.ANTHROPIC_API_KEY != '' }}
+        continue-on-error: true
+        run: npx tsx supabase/ingest/enrich-specs.ts --platform=eBay --write --limit=300
+
+      - name: Retire listings not seen in 21 days (age-based; eBay search is capped)
+        run: |
+          if [ "$WRITE" = "true" ]; then
+            npm run reconcile:sold -- --platform=eBay --age-days=21 --write
+          else
+            npm run reconcile:sold -- --platform=eBay --age-days=21
+          fi
+
+      - name: Refresh the per-variant price summary
+        if: ${{ env.WRITE == 'true' }}
+        run: npm run summary:refresh
