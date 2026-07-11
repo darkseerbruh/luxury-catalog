@@ -13,7 +13,7 @@ import { SITE_URL } from "@/lib/geo";
 export const metadata: Metadata = {
   title: "Where to buy a preloved bag: what each venue protects",
   description:
-    "What each resale venue actually protects: authentication, returns, payment, and what to do yourself when it doesn't. Sourced from each venue's own published policies.",
+    "What each resale venue protects: authentication, returns, payment, and what to do yourself when it doesn't. Sourced from each venue's own published policies.",
 };
 
 export const revalidate = 3600;
@@ -71,7 +71,7 @@ export default async function WhereToBuyPage() {
     "@type": "ItemList",
     name: "Where to buy a preloved bag",
     description:
-      "Resale venues compared by what actually protects the buyer: authentication, returns, and payment protection, from each venue's own published policies.",
+      "Resale venues compared by what protects the buyer: authentication, returns, and payment protection, from each venue's own published policies.",
     numberOfItems: VENUES.length,
     itemListElement: VENUES.map((v, i) => ({
       "@type": "ListItem",
@@ -89,9 +89,9 @@ export default async function WhereToBuyPage() {
       />
       <header className="mb-6">
         <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Where to buy</p>
-        <h1 className="font-serif text-3xl text-foreground">Where to actually buy a preloved bag</h1>
+        <h1 className="font-serif text-3xl text-foreground">Where to buy a preloved bag, and what to check</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          Every venue protects you differently. Here&apos;s what each one actually covers, so you
+          Every venue protects you differently. Here&apos;s what each one covers, so you
           can shop wherever you like and know exactly what you&apos;re walking into. Every claim
           links to the venue&apos;s own published policy, dated the day we checked it.
         </p>
