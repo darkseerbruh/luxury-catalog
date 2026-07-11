@@ -414,6 +414,34 @@ export function scoreMisattachment(accessoryCount: number, wrongModelCount: numb
   };
 }
 
+/**
+ * F1c. Size mis-routing: recent rows whose OWN size (parsed from title + slug) disagrees
+ * with the size of the variant they landed on (owner report 2026-07-11 — micro/mini
+ * listings were dumped onto a style's Medium variant, unpopulating the size pages + the
+ * size selector and skewing the deals rail). supabase/ingest/resize-variants.ts re-points
+ * the backlog and load-prices now guards new rows; this watches for regression.
+ */
+export function scoreSizeMismatch(mismatchCount: number, sampleSize: number): CheckResult {
+  let status: CheckStatus = "green";
+  if (mismatchCount > 40) status = "red";
+  else if (mismatchCount > 0) status = "yellow";
+  return {
+    id: "contamination-size",
+    label: "Size-mismatched rows on a variant (last 7 days)",
+    status,
+    value: `${mismatchCount} of ${sampleSize} recent sized rows sit on a different-size variant`,
+    metric: mismatchCount,
+    plainEnglish:
+      status === "green"
+        ? ""
+        : `${mismatchCount} listings captured in the last week state a size that differs from the variant they landed on (e.g. a mini on the Medium page), which unpopulates the size selector and skews same-size pricing.`,
+    action:
+      status === "green"
+        ? ""
+        : "Run supabase/ingest/resize-variants.ts (dry run, then --write) to re-point them, and check the load-prices size guard.",
+  };
+}
+
 /** F2. Same-day duplicate observations of one listing (dedupe-key violations). */
 export function scoreDuplicates(dupCount: number): CheckResult {
   let status: CheckStatus = "green";

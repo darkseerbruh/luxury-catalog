@@ -26,6 +26,7 @@ import {
 } from "../../src/lib/image-import-core";
 import type { PriceObservation } from "../../src/lib/ingest/types";
 import { classifyListingAttachment } from "../../src/lib/ingest/model-normalize";
+import { parseSizeBucket } from "../../src/lib/deal-descriptor";
 
 interface Flags {
   source?: string;
@@ -216,6 +217,26 @@ async function main() {
     });
     if (!variant) {
       discovered.push(toDiscovered(o, "no_variant", brand.brand_id, style.style_id));
+      continue;
+    }
+    // Size-coherence guard (owner report 2026-07-11): pickVariant falls back to the first
+    // variant when a row carries no structured size, which dumped micro/mini listings onto
+    // a style's "main" (Medium) variant. If the listing's OWN size (parsed from title +
+    // slug) disagrees with the picked variant, re-route to the correct-size sibling; if
+    // there's no unambiguous sibling, bank it rather than mis-size a bag's comps.
+    const rowBucket = parseSizeBucket(o.notes, o.source_url);
+    if (rowBucket && parseSizeBucket(variant.size_label, null) !== rowBucket) {
+      const siblings = variantsCache
+        .get(style.style_id)!
+        .filter((v) => parseSizeBucket(v.size_label, null) === rowBucket);
+      // Any same-size sibling is size-coherent (a Mini-Square listing on the Mini-Rectangular
+      // page is still the right SIZE, which is what pricing + the selector key on); placing it
+      // keeps the size page populated. Only when NO sibling of that size exists do we bank it.
+      if (siblings.length >= 1) {
+        rows.push(toRow(o, siblings[0].variant_id));
+      } else {
+        discovered.push(toDiscovered(o, "no_variant", brand.brand_id, style.style_id));
+      }
       continue;
     }
     rows.push(toRow(o, variant.variant_id));

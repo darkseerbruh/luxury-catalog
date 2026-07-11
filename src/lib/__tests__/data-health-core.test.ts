@@ -18,6 +18,7 @@ import {
   scoreCadenceAudit,
   scoreContamination,
   scoreMisattachment,
+  scoreSizeMismatch,
   scoreCoverageDelta,
   scoreDuplicates,
   scoreFreshness,
@@ -138,6 +139,11 @@ describe("contamination sentinels", () => {
     expect(scoreDuplicates(0).status).toBe("green");
     expect(scoreDuplicates(1).status).toBe("yellow");
     expect(scoreDuplicates(101).status).toBe("red");
+  });
+  it("size-mismatch thresholds", () => {
+    expect(scoreSizeMismatch(0, 5000).status).toBe("green");
+    expect(scoreSizeMismatch(1, 5000).status).toBe("yellow");
+    expect(scoreSizeMismatch(41, 5000).status).toBe("red");
   });
   it("misattachment scores on the precise accessory signal, not noisy wrong-model", () => {
     expect(scoreMisattachment(0, 0, 5000).status).toBe("green");

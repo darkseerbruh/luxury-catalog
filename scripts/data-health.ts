@@ -30,6 +30,7 @@ import * as dotenv from "dotenv";
 import { fetchAllRows } from "../src/lib/supabase";
 import { isTrrHandbagListing } from "../src/lib/ingest/trr";
 import { classifyListingAttachment } from "../src/lib/ingest/model-normalize";
+import { parseSizeBucket } from "../src/lib/deal-descriptor";
 import {
   SOURCES,
   emptyState,
@@ -47,6 +48,7 @@ import {
   scoreDuplicates,
   scoreFreshness,
   scoreMisattachment,
+  scoreSizeMismatch,
   scoreRankedCount,
   scoreRowsAdded,
   scoreSnapshotAge,
@@ -306,14 +308,19 @@ async function main() {
   // a re-crawled row can't inflate the sentinel.
   type BrandEmbed = { name: string | null };
   type StyleEmbed = { name: string | null; brand: BrandEmbed | BrandEmbed[] | null };
-  type VariantEmbed = { style: StyleEmbed | StyleEmbed[] | null };
-  type AttachRow = { notes: string | null; listing_ref: string | null; variant: VariantEmbed | VariantEmbed[] | null };
+  type VariantEmbed = { size_label: string | null; style: StyleEmbed | StyleEmbed[] | null };
+  type AttachRow = {
+    notes: string | null;
+    source_url: string | null;
+    listing_ref: string | null;
+    variant: VariantEmbed | VariantEmbed[] | null;
+  };
   const first = <T>(rel: T | T[] | null | undefined): T | null => (Array.isArray(rel) ? rel[0] : rel) ?? null;
   const attachRows = await fetchAllRows<AttachRow>(
     () =>
       sb
         .from("price_history")
-        .select("notes, listing_ref, variant:variant_id(style:style_id(name, brand:brand_id(name)))")
+        .select("notes, source_url, listing_ref, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))")
         .gte("date_recorded", weekAgo)
         .not("notes", "is", null)
         .order("price_id", { ascending: true }),
@@ -321,10 +328,13 @@ async function main() {
   );
   const accRefs = new Set<string>();
   const wmRefs = new Set<string>();
+  const sizeRefs = new Set<string>();
   let accNoRef = 0;
   let wmNoRef = 0;
+  let sizeNoRef = 0;
   for (const r of attachRows) {
-    const style = first(first(r.variant)?.style);
+    const variant = first(r.variant);
+    const style = first(variant?.style);
     if (!style) continue;
     const brand = first(style.brand)?.name ?? "";
     const cls = classifyListingAttachment(brand, style.name ?? "", r.notes);
@@ -335,8 +345,16 @@ async function main() {
       if (r.listing_ref) wmRefs.add(r.listing_ref);
       else wmNoRef++;
     }
+    // Size mis-routing: the listing states a size that differs from its variant's size.
+    const rowBucket = parseSizeBucket(r.notes, r.source_url);
+    const varBucket = parseSizeBucket(variant?.size_label, null);
+    if (cls === "bag" && rowBucket && varBucket && rowBucket !== varBucket) {
+      if (r.listing_ref) sizeRefs.add(r.listing_ref);
+      else sizeNoRef++;
+    }
   }
   checks.push(scoreMisattachment(accRefs.size + accNoRef, wmRefs.size + wmNoRef, attachRows.length));
+  checks.push(scoreSizeMismatch(sizeRefs.size + sizeNoRef, attachRows.length));
 
   type DupRow = { platform: string | null; listing_ref: string | null; price_type: string | null; observed_on: string | null };
   const recent = await fetchAllRows<DupRow>(
