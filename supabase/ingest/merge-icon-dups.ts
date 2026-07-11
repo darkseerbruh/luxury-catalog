@@ -25,10 +25,12 @@ const WRITE = process.argv.includes("--write");
 
 // loserId "loserName" -> targetId "targetName". Verified 2026-07-10 against the listing
 // source_urls on each style (both rows name the same product).
+// Round 2 (2026-07-10): tail duplicates found during the page-depth tail pass, verified
+// same-bag by identical listing source_urls. (Round-1 icon pairs already merged + deleted.)
 const PAIRS: { junkId: number; junkName: string; targetId: number; targetName: string }[] = [
-  { junkId: 537, junkName: "Reissue", targetId: 423, targetName: "2.55 Reissue" },
-  { junkId: 992, junkName: "Palm Springs", targetId: 709, targetName: "Palm Springs Backpack" },
-  { junkId: 518, junkName: "Multi Pochette", targetId: 444, targetName: "Multi Pochette Accessoires" },
+  { junkId: 802, junkName: "Fendi First", targetId: 479, targetName: "First" },
+  { junkId: 529, junkName: "Monogram Artsy MM", targetId: 716, targetName: "Artsy" },
+  { junkId: 544, junkName: "LV Monogram Pochette Accessoires", targetId: 690, targetName: "Pochette Accessoires" },
 ];
 
 const sizeKey = (s: string | null) => (s ?? "").trim().toLowerCase() || " ";

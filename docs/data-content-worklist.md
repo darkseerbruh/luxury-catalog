@@ -92,10 +92,17 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     showed Neo Vintage / GG Emblem / Retro Interlocking G are 3 distinct named lines, not one bag;
     all already carry honest "this is a line, not one bag" descriptions. Flag closed in
     `docs/style-bucket-audit.md`.
-  - ⬜ **Tail DEFERRED (ranks 151-559, ~409 styles, all <86 comps)** — per the value-front-loaded rule
-    (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
-    lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
-    `probe-bare-styles.ts`; method unchanged (archivist batch of 25 → validate → `apply-style-depth.ts`).
+  - ✅ **3 more tail duplicates MERGED 2026-07-10** (found sourcing the tail) via `merge-icon-dups.ts`
+    round 2: 802 "Fendi First"→479 "First", 529 "Monogram Artsy MM"→716 "Artsy", 544 "LV Monogram
+    Pochette Accessoires"→690 "Pochette Accessoires". 73 ph rows re-pointed, summary refreshed.
+  - ⚠️ **Tail DESCRIPTIONS blocked + DEFERRED (ranks 151-559, ~400 styles, all <86 comps).** Attempted
+    batches 7-8 (ranks 151-200): the archivist stalled 3x in a row (Firecrawl stream watchdog, 600s no
+    progress) and wrote no file — a transient technical blocker on the description path (batches 1-6 with
+    the same setup all succeeded). Combined with the value-front-loaded rule (these are 20-30-comp pages),
+    the tail stays DEFERRED, same treatment as the <10-comp tail. Resume when Firecrawl is healthy:
+    `probe-bare-styles.ts` for the ranked list, archivist batch of ~15 (leaner prompt: few searches, no
+    deep-dig) → validate → `apply-style-depth.ts`. Watch for more verbose-dup/SLG names to merge instead
+    of describe.
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
