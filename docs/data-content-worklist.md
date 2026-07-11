@@ -77,9 +77,11 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     **Flagged LV Multi Pochette dup (518 = 444)** → style-bucket-audit.md.
   - ✅ **HEAD COMPLETE (top 150 by comps, all ≥86) — 150 icon pages now carry sourced descriptions +
     ~154 sourced years.** Coverage jumped from the placeholder stub on the site's highest-traffic pages.
-    4 duplicate style-pairs surfaced + flagged for reviewed merge (Chanel Reissue 537=423, LV Palm
-    Springs 992=709, LV Multi Pochette 518=444) plus category/trade-name flags, all in
-    `docs/style-bucket-audit.md`.
+    Category/trade-name flags in `docs/style-bucket-audit.md`.
+  - ✅ **3 duplicate style-pairs MERGED 2026-07-10 (owner-approved)** via `merge-icon-dups.ts`
+    (name-guarded, dry-run first, 824 ph rows re-pointed, 0 collisions, summary refreshed):
+    537 "Reissue"→423 "2.55 Reissue" (now 1,295 comps), 992 "Palm Springs"→709 "Palm Springs Backpack"
+    (246), 518 "Multi Pochette"→444 "Multi Pochette Accessoires" (295). Catalog styles 851→848.
   - ⬜ **Tail DEFERRED (ranks 151-559, ~409 styles, all <86 comps)** — per the value-front-loaded rule
     (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
     lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
