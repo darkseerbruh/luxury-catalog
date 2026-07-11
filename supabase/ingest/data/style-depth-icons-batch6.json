@@ -1,0 +1,152 @@
+[
+  {
+    "style_id": 493,
+    "description": "The Cleo is Prada's sleek shoulder bag with a slim, elongated and gently curved body that hugs the side, a hidden magnetic closure under the front panel, and a single flat shoulder strap. It is most recognizable in brushed leather with a polished enamel triangle logo, giving it a minimal, retro-futurist line. Introduced in 2021, it is one of the bags that anchored Prada's recent design revival.",
+    "year_introduced": 2021,
+    "note": null
+  },
+  {
+    "style_id": 481,
+    "description": "The By the Way is Fendi's take on the Boston bag, a structured barrel-shaped satchel with a rounded double-zip top, two short rolled top handles, and a long detachable shoulder strap. It carries the Fendi logo plaque at the base of the handles and is often finished in the house's Selleria saddle-stitched leather. Introduced in 2014, it was positioned as an everyday day-to-night bag.",
+    "year_introduced": 2014,
+    "note": null
+  },
+  {
+    "style_id": 937,
+    "description": "The Trapeze is Celine's structured top-handle bag defined by its trapezoid silhouette with flared side wings, a flap front with a metal tab closure, and a removable shoulder strap. It is usually built in a mix of smooth and suede or contrasting color-blocked leathers. Designed by Phoebe Philo and introduced in 2011, it was one of the bags that defined her minimalist era at the house.",
+    "year_introduced": 2011,
+    "note": null
+  },
+  {
+    "style_id": 739,
+    "description": "The Kelly Shopper is a Chanel top-handle shopping tote with a structured flap, a front turn-lock, a top handle, and a detachable chain strap, quilted in the house's diamond pattern. Resellers describe it as a modern reimagining of the vintage Chanel Kelly, most visible in the 23K (2023) collection. Kelly Shopper is a trade and community label, not an official Chanel model name, because Chanel identifies its seasonal bags by style code and season rather than a name.",
+    "year_introduced": null,
+    "note": "Seasonal Chanel; 'Kelly Shopper' is a reseller/community name (Regime B), not an official model name. Recent 23K (2023) version documented, but no clean single debut year for the record."
+  },
+  {
+    "style_id": 675,
+    "description": "VLogo Signature is Valentino Garavani's line of bags and small leather goods unified by the sculptural V-shaped VLogo used as the front hardware and closure. It spans several silhouettes, from structured top-handle and chain shoulder bags to wallets on chain, usually in smooth or grained calfskin with gold-tone or antique-finish logo hardware. It is a modern signature line rather than a single dated model.",
+    "year_introduced": null,
+    "note": "Line/collection, not a single dated model. Described honestly as a signature line."
+  },
+  {
+    "style_id": 716,
+    "description": "The Artsy is Louis Vuitton's slouchy hobo, a single-shoulder bag with an open top and a distinctive sculptural braided leather handle that arches over the bag. It is most recognizable in Monogram or Empreinte leather with an interior hanging name tag and metal feet on the base. Introduced in 2010, it was offered in PM, MM, and GM sizes as an unstructured everyday bag.",
+    "year_introduced": 2010,
+    "note": null
+  },
+  {
+    "style_id": 496,
+    "description": "The Symbole is Prada's structured bag built around the house's triangular logo motif, made in a top-handle and shoulder form with short handles and a boxy, geometric silhouette. It is best known in the jacquard version woven with a repeating triangle pattern, as well as in smooth leather. Introduced in 2022, it is one of Prada's newer logo-forward designs.",
+    "year_introduced": 2022,
+    "note": null
+  },
+  {
+    "style_id": 518,
+    "description": "The Multi Pochette Accessoires is Louis Vuitton's modular bag built from two detachable zip pouches of different sizes worn together, plus a round coin purse, all clipped to a bright, interchangeable shoulder strap. It is most recognizable in Monogram canvas with a colored strap and lining. Launched in 2019, it quickly became a social-media favorite.",
+    "year_introduced": 2019,
+    "note": "Likely a DUPLICATE of style 444 (Multi Pochette Accessoires). Same product; flag for merge review."
+  },
+  {
+    "style_id": 540,
+    "description": "The Sylvie is Gucci's structured shoulder bag defined by the House Web stripe running across the front and a gold chain-and-buckle closure looped through the center. It is usually made in smooth leather with a top handle and an optional chain or leather strap. Designed under Alessandro Michele and introduced in 2016, it references Gucci's 1970s equestrian heritage.",
+    "year_introduced": 2016,
+    "note": null
+  },
+  {
+    "style_id": 580,
+    "description": "The Faye is Chloe's shoulder bag recognized by its circular ring hardware and the flat chain that loops through it at the front, over a soft rounded flap. It is typically made in smooth and suede calfskin with an understated, bohemian line. Introduced in 2015, it became one of the house's core post-Marcie icons.",
+    "year_introduced": 2015,
+    "note": null
+  },
+  {
+    "style_id": 990,
+    "description": "The Musette is a Louis Vuitton flap shoulder bag with a curved single strap and a press-stud flap, produced in variants including the Musette Tango and Musette Salsa. It is most recognizable in Monogram coated canvas with leather trim and gold-tone hardware. It is a vintage line from the house's late-1990s and 2000s catalog, now found mainly on the resale market.",
+    "year_introduced": null,
+    "note": "Vintage line (Musette Tango/Salsa). Exact debut year not cleanly sourced; held null."
+  },
+  {
+    "style_id": 694,
+    "description": "The Toiletry Pouch is a Louis Vuitton flat zip pouch, a small leather good originally made as a cosmetics case and offered in sizes such as 26, 19, and 15. It is most recognizable in Monogram or Damier canvas with leather trim and a single top zip, and in its original form it has no strap, though many owners add a chain to carry it as a clutch or mini bag. This is an SLG rather than a dedicated handbag model.",
+    "year_introduced": null,
+    "note": "SLG (toiletry pouch) commonly carried as a bag. Not a dated handbag model; year held null."
+  },
+  {
+    "style_id": 734,
+    "description": "The Medallion Tote is a Chanel day tote in diamond-quilted leather with a structured, slim silhouette, two top handles, and a round CC medallion charm hanging from the front, which gives the bag its name. It is often made in caviar calfskin that holds its shape over time. Medallion Tote is a trade and community name; Chanel identifies its seasonal bags by style code rather than an official model name.",
+    "year_introduced": null,
+    "note": "Community/trade name (Regime B). Rebag places its debut around 2006, but the estimate is not clean and vintage examples circulate; year held null."
+  },
+  {
+    "style_id": 737,
+    "description": "The Urban Essentials Shopping Bag is a Chanel tote shown in the Metiers d'Art 2026 collection, a quilted leather shopping bag with a contrasting grained calfskin top panel and top handles. It is a seasonal design rather than a permanent icon. Chanel identifies such bags by style code and season, so Urban Essentials is a collection label used by the house and resellers rather than a permanent model name.",
+    "year_introduced": null,
+    "note": "Seasonal (Metiers d'Art 2026 collection), no permanent model. Year held null."
+  },
+  {
+    "style_id": 612,
+    "description": "Le Bambino is Jacquemus's compact top-handle bag with a rounded, half-moon body, a short single top handle, a front flap closure, and a thin detachable shoulder strap, made in smooth leather. A slightly larger sibling to the tiny Le Chiquito, it helped define the micro-bag trend. Introduced in 2019, it became one of the brand's breakout It-bags.",
+    "year_introduced": 2019,
+    "note": null
+  },
+  {
+    "style_id": 543,
+    "description": "The In-The-Loop is an Hermes bag inspired by the house's tool and belt hardware, with a structured body, a zip-top closure, and a signature leather loop-and-buckle detail on the front, often paired with a wide adjustable strap. It is made in leathers such as Clemence and in mixed materials, and appears in forms from a belt bag to a small shoulder bag. Introduced in 2020.",
+    "year_introduced": 2020,
+    "note": null
+  },
+  {
+    "style_id": 723,
+    "description": "The Looping is a Louis Vuitton shoulder bag with a rounded half-moon body, a zip top, and a curved strap that tucks under the arm, made in Monogram coated canvas with gold-tone hardware. Originating in the late 1990s and offered in PM, MM, and GM sizes, it was reissued as a '90s-inspired design in Louis Vuitton's recent collections. It sits among the house's vintage everyday shoulder bags.",
+    "year_introduced": null,
+    "note": "Originated in the late 1990s (not cleanly dated) and recently reissued; year held null."
+  },
+  {
+    "style_id": 557,
+    "description": "The Jamie is Saint Laurent's soft, slouchy bag known for its all-over topstitched quilting in a grid pattern, a chain-and-leather shoulder strap, and an unstructured body. It is made in lambskin and comes in shoulder-bag and larger shopping forms. Introduced in 2018 under Anthony Vaccarello and reworked for later collections, it is a quieter, logo-light Saint Laurent design.",
+    "year_introduced": 2018,
+    "note": null
+  },
+  {
+    "style_id": 740,
+    "description": "The Souplissimo Maxi Flap is a Chanel flap bag from the house's Souplissimo line, built in an especially soft, lightweight construction with a large flap, the CC turn-lock, and an adjustable leather-and-chain strap. It appears in soft suede and grained calfskin. Souplissimo is a Chanel collection line rather than a permanent icon, and Chanel identifies its seasonal bags by style code and season rather than an official model name.",
+    "year_introduced": null,
+    "note": "Seasonal Souplissimo line (Regime B), not a permanent icon. Year held null."
+  },
+  {
+    "style_id": 963,
+    "description": "The Robinson is Tory Burch's structured line in saffiano leather, spanning totes, satchels, and crossbody bags with clean, boxy lines and the brand's Double-T logo hardware at the front. It is defined by its rigid, scratch-resistant saffiano finish and polished gold-tone accents. It is a long-running signature line rather than a single dated model.",
+    "year_introduced": null,
+    "note": "Saffiano line spanning several silhouettes, not a single dated model; described honestly."
+  },
+  {
+    "style_id": 560,
+    "description": "The Anjou is a Goyard reversible tote, a nod to the house's emblematic Saint Louis shopping tote but in a leather version lined with the printed Goyardine canvas, so it can be flipped to show either face. It has flat top handles, an open top, and comes in Mini, PM, and GM sizes. It is a modern addition to Goyard's tote range.",
+    "year_introduced": null,
+    "note": "Exact debut year not cleanly sourced; year held null."
+  },
+  {
+    "style_id": 608,
+    "description": "The Park Tote is The Row's minimalist open-top tote, an unstructured bag with tall slim top handles, a soft slouch, and no external hardware or logo, made in smooth or grained leather and also in suede. It reflects the brand's quiet-luxury design language of clean lines and understated materials. It emerged in the late 2010s and is offered in multiple sizes.",
+    "year_introduced": null,
+    "note": "Late-2010s; exact year not cleanly sourced, held null."
+  },
+  {
+    "style_id": 659,
+    "description": "The Ivy is Miu Miu's shopping tote, a soft nappa leather bag with an open top, slim shoulder straps, and the Miu Miu lettering logo across the front, with metal side details. It comes in small and larger sizes and in seasonal materials such as corduroy. It is a recent addition to Miu Miu's core bag lines.",
+    "year_introduced": null,
+    "note": "Recent line; exact launch year not cleanly sourced, held null."
+  },
+  {
+    "style_id": 744,
+    "description": "The Cosmetic Case is a Chanel vanity-style small leather good, a structured zip case in quilted leather originally made to hold cosmetics, now often carried as a mini bag with an added chain. It appears in caviar and lambskin with CC-logo hardware. This is an SLG and vanity category rather than a single dated handbag model, and Chanel identifies its seasonal pieces by style code rather than an official name.",
+    "year_introduced": null,
+    "note": "SLG/vanity category, not a dated model; year held null."
+  },
+  {
+    "style_id": 533,
+    "description": "The CarryAll is a Louis Vuitton shoulder bag with a soft, rounded body, a cinched top, a front pocket, and an adjustable strap, made in Monogram coated canvas with natural cowhide trim and gold-tone hardware. It is offered in sizes including BB, PM, MM, and East West. It is a modern take on a heritage name in the house's current lineup.",
+    "year_introduced": null,
+    "note": "Modern CarryAll widely dated to 2023 in reseller/social chatter but not cleanly sourced (and an older LV Carryall travel bag shares the name); year held null."
+  }
+]

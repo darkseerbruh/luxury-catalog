@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Data health routine SHIPPED + first live run (2026-07-10, on `main`, workflow proven)
+
+**New standing engine: a daily data-health scorecard now watches the whole data layer.** Owner-locked: daily → graduates to weekly after 7 straight greens (red demotes back), report + deduped GitHub issue on red, findings feed the worklist, safe auto-fixes only.
+- 🩺 **What it checks:** per-source freshness vs each cron's own promise, capture sanity (0-row day = red), LC-Index ranking-floor count, attribute-coverage deltas (condition/region/year/hardware/descriptions/images — delta-scored, drops flag, levels don't), discovered-backlog growth, contamination sentinels (TRR non-bag leak-back via `isTrrHandbagListing` + same-day dupes), summary-matview staleness (the ONLY auto-fix), and an owner-requested **cadence audit** (30-day listing lifetimes vs configured refresh interval; recommendations are estimates, cron changes stay yours).
+- 🔧 **Pieces:** `src/lib/data-health-core.ts` (pure, 37 tests) + `scripts/data-health.ts` (`npm run health:check`, `--write`) + `.github/workflows/data-health.yml` (10:47 UTC daily + manual). Registered in `automation-map.md`; findings section lives between markers at the end of `data-content-worklist.md`.
+- ✅ **Proven live:** dispatch run succeeded end-to-end; report + state committed (`5a25e8d`). First score: **YELLOW** — (1) no `lc_index_snapshot` exists yet, (2) 7 TRR non-bag leak-backs last week, (3) ~26 same-day duplicate rows. 311 styles clear the ranking floor. Cadence audit: TRR/FP cadences look right; TLC churns same-day (accepted loss at the daily floor).
+- ✅ **Snapshot yellow root-caused (correction, same day): CRON_SECRET is NOT missing** — verified set in Vercel prod (20 days old, `vercel env ls`). The snapshot cron (`0 7 1 * *`) simply hasn't had its first firing since the route shipped ~07-08; it auto-runs Aug 1 and the yellow self-clears. Optional early backfill (captures July so movement pills start Aug instead of Sep): any session with the secret curls `/api/cron/lc-index-snapshot` with `Authorization: Bearer $CRON_SECRET` (idempotent upsert). Pulling the secret needs an interactive session (`vercel env pull` dumps the whole prod env; auto-mode blocks it).
+- ⬜ **YOUR TURN (optional):** if you want July's Index baseline now rather than Aug 1, run the backfill curl above from an interactive chat, or just wait. The two data yellows (TRR leak-back, same-day dupes) are queued in the worklist for any working session.
+
+---
+
 ## TL;DR — McQueen catalog cleanup + Jacquemus coverage + LV Alma article PUBLISHED (2026-07-10, on `main`)
 
 **Catalog-integrity + content lane. All landed, green gate each time.**

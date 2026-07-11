@@ -1,0 +1,152 @@
+[
+ {
+  "style_id": 472,
+  "description": "The Andiamo is Bottega Veneta's structured top-handle bag under Matthieu Blazy, its name Italian for \"let's go.\" It is built in the house's signature Intrecciato weave with a roomy, boxy body, a knotted leather top handle, and a discreet metal clasp, offered with a detachable shoulder strap. It became one of the house's defining bags after its 2024 release, though Vogue traces its runway debut to Blazy's earlier spring/summer 2023 show.",
+  "year_introduced": 2024,
+  "note": "Release widely cited 2024; Vogue traces the runway debut to SS2023, so the year is approximate."
+ },
+ {
+  "style_id": 463,
+  "description": "The Niki is Saint Laurent's slouchy quilted shoulder bag, introduced in the spring/summer 2018 collection under Anthony Vaccarello. It has a soft, vintage-look crinkled leather body with tonal chevron and diamond quilting, a front flap with a concealed magnetic closure, and the metal YSL Cassandre logo, worn on an adjustable leather strap. It comes in sizes from mini to large and reads as a relaxed, everyday counterpoint to the structured LouLou.",
+  "year_introduced": 2018,
+  "note": "SS2018 per Vogue; some sources cite 2017."
+ },
+ {
+  "style_id": 443,
+  "description": "The Petite Malle, French for \"small trunk,\" is Louis Vuitton's miniature hard-trunk bag, introduced in 2014 by Nicolas Ghesquiere for his debut collection at the house. It is a rigid, boxy clutch modeled on LV's historic luggage trunks, complete with the S-lock clasp and trunk-style corners, carried on a removable leather-and-chain strap. Most often in Monogram or Epi leather, it translates the house's travel heritage into an evening bag.",
+  "year_introduced": 2014,
+  "note": null
+ },
+ {
+  "style_id": 522,
+  "description": "Camera Bag is a silhouette rather than a single Chanel model. It refers to Chanel's boxy, zip-top quilted crossbody bags, usually with a front flap pocket, CC or turn-lock detail, and often a leather zipper tassel, a shape most associated with the house's vintage lambskin and caviar pieces. Because Chanel has used this shape across many seasons without a single official model name or debut, we treat it as a category and hold the introduction year unset.",
+  "year_introduced": null,
+  "note": "Category/silhouette, not a single dated Chanel model; year held null."
+ },
+ {
+  "style_id": 487,
+  "description": "The Ava is Celine's compact shoulder bag, introduced in 2020 under Hedi Slimane as part of his pared-back, Parisian vision for the house. It has a soft, curved half-moon body carried on a single strap over the shoulder or in the hand, a flap closure, and understated hardware, first shown in Triomphe canvas and later in leather. It sits among Slimane's signature Celine designs alongside the Triomphe.",
+  "year_introduced": 2020,
+  "note": null
+ },
+ {
+  "style_id": 516,
+  "description": "The Bayswater is Mulberry's signature structured tote, introduced in 2003 and named after the London district. Designed under then-design director Nicholas Knightly, it is a roomy trapezoidal shoulder bag defined by its postman's-lock closure at the front, two rolled top handles, and heritage grained leather, and it became one of the original 2000s It bags. It has been reissued in many leathers and colors and remains the house's best-known design.",
+  "year_introduced": 2003,
+  "note": null
+ },
+ {
+  "style_id": 526,
+  "description": "The Noe is Louis Vuitton's original bucket bag, designed in 1932 by Gaston-Louis Vuitton at the request of a Champagne producer who needed to carry five bottles, four upright and one inverted in the center. It has a rounded, drawstring-cinched body with a reinforced base, most iconic in Monogram or Damier canvas with leather trim, and is worn on the shoulder. One of the house's oldest continuously produced designs, it comes in the full-size Noe and smaller versions.",
+  "year_introduced": 1932,
+  "note": null
+ },
+ {
+  "style_id": 749,
+  "description": "Clutch with Chain describes a category of small Chanel evening pieces rather than one model: a compact quilted flap pouch fitted with a fine chain strap so it can be carried by hand or on the shoulder. These small-leather-goods-adjacent styles recur across many Chanel seasons in lambskin and caviar with CC hardware, sitting closer to a chain wallet or mini pouch than a full flap bag. Because it is a recurring category without a single official name or debut year, we hold the introduction year unset.",
+  "year_introduced": null,
+  "note": "Category/SLG-adjacent, not a single dated model; year held null."
+ },
+ {
+  "style_id": 501,
+  "description": "The Brooklyn is one of Coach's modern shoulder bags, a clean-lined minimalist silhouette in natural grain leather with a magnetic snap closure and multiple carry options, described by the house as a modern take on Coach's first tote. It is offered in several sizes, with the smaller version adding a gold chain crossbody strap. A recent addition to the Coach lineup during the brand's ongoing revival, its exact introduction year is not cleanly documented, so we leave it unset.",
+  "year_introduced": null,
+  "note": "Recent Coach release; clean debut year not sourced, held null."
+ },
+ {
+  "style_id": 478,
+  "description": "The Sunshine, or Sunshine Shopper, is Fendi's open-top tote under Silvia Venturini Fendi, an unstructured trapezoidal shopper with two rigid tortoiseshell-look plexiglass handles and a hot-stamped FENDI ROMA logo on the front. It comes in leather, canvas, and embroidered versions across medium and larger sizes and reads as a bright, everyday day bag. We could not cleanly source its exact introduction year, so we leave it unset.",
+  "year_introduced": null,
+  "note": "Debut year not cleanly sourced; held null."
+ },
+ {
+  "style_id": 486,
+  "description": "The Classic Box, usually called the Box bag, is Celine's structured shoulder bag from the Phoebe Philo era, reviving a 1970s Celine box shape. It has a crisp, boxy flap body in smooth box calf leather, a signature twist-and-push metal clasp on the front, and a long adjustable strap for crossbody or shoulder wear. Pared back and logo-free, it was one of the defining Philo-era Celine designs and was wound down as the house discontinued those bags.",
+  "year_introduced": null,
+  "note": "Phoebe Philo era, revival of a 1970s Celine shape; clean debut year not sourced, held null."
+ },
+ {
+  "style_id": 567,
+  "description": "The Hourglass is Balenciaga's structured top-handle bag, introduced in 2019 under Demna, named for its sharply curved base that nips in at the sides. It has a rigid, architectural body with a squared flap, a large metal B logo on the front, and short top handles with an optional strap, most often in shiny box calf. Inspired by founder Cristobal Balenciaga's tailoring, it quickly became the house's signature modern bag.",
+  "year_introduced": 2019,
+  "note": null
+ },
+ {
+  "style_id": 498,
+  "description": "The Rogue is Coach's structured satchel, introduced on the brand's Fall 2016 runway under creative director Stuart Vevers. It is a boxy top-handle bag with winged sides, a turn-lock closure, a contrast-lined interior, and refined glovetanned leather, and it became a cult favorite early in Vevers's tenure. It has since been reissued in many colors, materials, and sizes.",
+  "year_introduced": 2016,
+  "note": null
+ },
+ {
+  "style_id": 523,
+  "description": "The Pochette Felicie is Louis Vuitton's envelope-style chain pouch, a slim flap bag with a spacious main compartment and two removable inner pockets, one zipped and one with card slots. It is carried on a removable gold-tone chain for shoulder or crossbody wear, most iconic in Monogram or Monogram Empreinte leather. Resale listings date it to 2016, which we record with lighter confidence.",
+  "year_introduced": 2016,
+  "note": "Year cited 2016 across resale listings (reference M61276); moderate confidence."
+ },
+ {
+  "style_id": 420,
+  "description": "The Jypsiere is Hermes's crossbody bag, introduced in fall 2008 by then-creative director Jean Paul Gaultier and often described as a slouchy, cross-body take on the Birkin. It has a soft, rounded body with a front flap, a Birkin-style turn-and-strap closure with a padlock, and a long adjustable shoulder strap for hands-free wear. Aimed at a younger clientele, it comes in several sizes and many Hermes leathers.",
+  "year_introduced": 2008,
+  "note": null
+ },
+ {
+  "style_id": 542,
+  "description": "The Diorama is Dior's structured flap bag, introduced by Raf Simons for the Cruise 2015 collection. It has a geometric, faceted body in cannage-quilted leather, a slide-lock closure with the DIOR lettering on the front, and a chain-and-leather strap for shoulder or crossbody wear. A modern, architectural design of the Simons era, it was later reinterpreted under Maria Grazia Chiuri.",
+  "year_introduced": 2015,
+  "note": null
+ },
+ {
+  "style_id": 686,
+  "description": "The Montsouris is Louis Vuitton's Monogram backpack, first created in 1994 and named after Parc Montsouris in southern Paris. It has a rounded, structured body in Monogram coated canvas with a front zip pocket, a drawstring-and-flap closure, and adjustable shoulder straps. Nicolas Ghesquiere reinterpreted it for a modern relaunch, keeping the original 1994 silhouette.",
+  "year_introduced": 1994,
+  "note": "Original design 1994; reissued in modern form by Ghesquiere."
+ },
+ {
+  "style_id": 515,
+  "description": "Le Pliage is Longchamp's foldable tote, created in 1993 by Philippe Cassegrain and inspired by origami, so the whole bag folds flat in a few steps. It pairs a lightweight nylon body with a Russian leather flap, a top snap, and short handles, and comes in many sizes and colors from the small pouch to the large travel tote. Affordable and hugely popular, it is Longchamp's signature design.",
+  "year_introduced": 1993,
+  "note": null
+ },
+ {
+  "style_id": 466,
+  "description": "The Cassandre Envelope is Saint Laurent's chain-strap envelope bag, a compact flap pouch with the house's chevron-quilted topstitching and the metal Cassandre YSL logo on the front. Shaped like a flat envelope with a sliding chain for shoulder or crossbody wear, it sits between a chain wallet and a small evening bag in the Vaccarello-era lineup. We could not cleanly source a single introduction year, so we leave it unset.",
+  "year_introduced": null,
+  "note": "Envelope chain bag/wallet line; clean debut year not sourced, held null."
+ },
+ {
+  "style_id": 441,
+  "description": "The Dauphine is Louis Vuitton's structured flap bag, updated by Nicolas Ghesquiere for the Cruise 2019 collection from an archival house name. It has a boxy body mixing Monogram and Damier canvas with smooth leather, a graphic LV metal clasp on the front, and a reversible leather-and-chain strap. It comes in sizes from Mini to MM and became one of LV's core modern leather-trimmed bags.",
+  "year_introduced": 2019,
+  "note": "Modern Dauphine reintroduced Cruise 2019 by Ghesquiere."
+ },
+ {
+  "style_id": 465,
+  "description": "The College is Saint Laurent's quilted flap bag, released as part of the house's 2015 pre-fall collection under Anthony Vaccarello. It has a structured envelope-style flap with mixed chevron and diamond matelasse quilting, the metal YSL Cassandre logo, a leather tassel zip pull, and a chain-and-leather strap. Offered in several sizes, with the medium the best known, it reads as a more classic, ladylike take on the house's chain bags.",
+  "year_introduced": 2015,
+  "note": "Pre-fall 2015 per eBay listing data."
+ },
+ {
+  "style_id": 525,
+  "description": "The Trendy CC is Chanel's top-handle flap bag, introduced in the Spring 2014 collection. It is a structured, diamond-quilted flap with a rigid top handle, a CC turn-lock closure, and a chain-and-leather shoulder strap, so it can be carried by hand or on the shoulder. First shown as a seasonal piece, it became a bestseller and comes in small, medium, and large sizes.",
+  "year_introduced": 2014,
+  "note": null
+ },
+ {
+  "style_id": 506,
+  "description": "The Flamenco is Loewe's soft knot bag, a slouchy pouch originally designed in the 1970s and resurrected from the house archive in 2010 by then-creative director Stuart Vevers. It has an unstructured nappa body with a drawstring top and its signature coiled leather knots at the sides, worn as a clutch or on a strap, and it is deliberately logo-free. Because its origin is dated to the 1970s decade rather than a clean year, we leave the introduction year unset.",
+  "year_introduced": null,
+  "note": "1970s origin, revived 2010 by Stuart Vevers; decade origin so year held null."
+ },
+ {
+  "style_id": 578,
+  "description": "The Marcie is Chloe's equestrian-inspired saddle bag, designed in 2010 by then-creative director Hannah MacGibbon. It has a softly structured, rounded flap body with topstitched seams, a horseshoe-shaped stitch detail on the front flap, and understated hardware, offered as a crossbody, satchel, and hobo. Warm and pared back, it became one of the house's enduring signatures alongside the Paddington and Drew.",
+  "year_introduced": 2010,
+  "note": null
+ },
+ {
+  "style_id": 473,
+  "description": "The Arco is Bottega Veneta's winged tote, introduced for Fall/Winter 2019 during Daniel Lee's tenure. It is built in the house's oversized maxi Intrecciato weave with a minimalist, softly triangular shape, a top-handle carry, and no visible logo. Part of Lee's acclaimed early lineup, it helped drive Bottega's late-2010s revival and comes in several sizes.",
+  "year_introduced": 2019,
+  "note": null
+ }
+]

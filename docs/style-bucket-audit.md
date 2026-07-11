@@ -64,3 +64,31 @@ Chanel Uniform removal candidate; review if consolidating.
 3. **Leave seasonal Chanel** as labels.
 
 No merge is safe to automate. This doc is the queue for a review pass.
+
+## DUPLICATE-STYLE flags (found during icon page-depth pass, 2026-07-10)
+
+- **Chanel "Reissue" (style 537, 597 comps / 5 variants) is almost certainly the same bag as
+  "2.55 Reissue" (style 423, 698 comps / 5 variants).** The archivist sourced both to the 2005
+  Lagerfeld 50th-anniversary re-edition of the 1955 2.55. Candidate for a reviewed style-level
+  merge (re-point 537's variants + price_history into 423, then delete 537). NOT auto-merged
+  (per [[catalog_promotion_pipeline]] style dups need human spot-check; confirm the two rows'
+  listings share the Mademoiselle-lock all-metal-chain look before merging). Both carry a correct
+  description now, so the pages are fine in the meantime.
+- **Two more CATEGORY names (kept + described honestly, low priority):** Chanel "Camera Bag"
+  (style 522, 303 comps) and Chanel "Clutch with Chain" (style 749, 268 comps) are silhouettes/
+  SLG-adjacent categories, not single dated models. Their descriptions now say so; leave as
+  category-level pages unless consolidating.
+- **Chanel TRADE-NAMES (community names, not official Chanel model names):** GST / Grand Shopping
+  Tote (519) and Business Affinity (432). Kept + described (with the trade-name caveat in-text) since
+  buyers search these terms; do not present as official house names. Per `brand-naming-research`
+  Chanel identifies seasonal bags by style code, not model name.
+- **Celine "Cabas" (489):** listings mix the plain minimalist Cabas tote (dominant) with some Cabas
+  Phantom (winged Luggage variant). Described as the plain Cabas; a future split could separate the
+  Phantom if it accrues its own comps.
+- **LV Palm Springs DUPLICATE:** "Palm Springs" (style 992, 124 comps) and "Palm Springs Backpack"
+  (style 709, 122 comps) are the SAME Cruise-2016 Monogram backpack line. Candidate for a reviewed
+  merge (re-point one into the other, delete the empty). Both described now, so pages are fine
+  meanwhile. NOT auto-merged (human spot-check per [[catalog_promotion_pipeline]]).
+- **LV Multi Pochette DUPLICATE:** "Multi Pochette" (style 518, 103 comps) and "Multi Pochette
+  Accessoires" (style 444, 192 comps) are the SAME 2019 modular bag. Candidate for a reviewed merge.
+  Both described now. NOT auto-merged.

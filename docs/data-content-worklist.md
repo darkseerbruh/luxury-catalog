@@ -33,6 +33,57 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
   ~2004 vintage Viva-Cité, a NAME COLLISION with a later modern "Vivacité"; Odyssée (1281) name also
   reused on women's pieces (confirm by canvas); Cartouchière sizes read PM/MM/GM in sources not
   17/22/26.
+- 🔄 **CORE-ICON gap (785 bare styles, discovered 2026-07-10)** — the big one. `probe-bare-styles.ts`
+  found 785 of 1000 styles carry a placeholder stub (`"Permanent collection (tier 1) — catalog
+  backbone."`, 49 chars, even has an em dash) or empty description. **559 have ≥10 comps, 370 have ≥20** —
+  these are the highest-traffic pages on the site (Chanel Boy 4,030 comps, LV Speedy 2,912, Hermès
+  Evelyne 1,833, Keepall 1,732, WOC 1,730, Gucci Ophidia 1,697) running NO real description. This
+  dwarfs the promoted-style gaps below. Method unchanged: archivist-sourced (factuality bar, plain
+  text, no em dash, year null unless cleanly sourced) → review → `apply-style-depth.ts`. Working top
+  tranche first (highest comps = highest ROI). Batch files: `data/style-depth-icons-batch*.json`.
+  - ✅ **Batch 1 (top 25 by comps, ≥580)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Boy 2011, Speedy 1930, Evelyne 1978, Keepall 1930, Ophidia 2018, Chanel 19 2019, Horsebit 1955→2020,
+    Book Tote 2018, OnTheGo 2019, Constance 1959, Gabrielle 2017, Loulou 2017, Luggage 2010, Jackie 1961→2020,
+    Capucines 2013, 2.55 Reissue 2005, Lindy 2007). 7 years held null (WOC, Vanity Case, Pochette Métis,
+    Herbag, Bumbag, Blondie, Kate — disputed/undocumented debut). 0 em dashes. Drafts
+    `data/style-depth-icons-batch1.json`. Verified persisted (stub gone).
+  - ✅ **Batch 2 (ranks 26-50, ≥361)** — DONE 2026-07-10. 25 descriptions + 20 sourced years live
+    (Loewe Puzzle 2014, Bolide 1923, Sac de Jour 2013, Antigona 2011, Deauville 2012, Twist 2015,
+    NéoNoé 2017, Coussin 2021, Chanel 22/25 2022/2025, Bamboo 1947/Diana 1991, Rockstud 2010,
+    Pochette Accessoires 1992, Le 5 à 7 2021, Belt 2015). 5 held null (Lou, City, Saint-Louis, Soho
+    Disco, Jet Set). **Flagged style 537 'Reissue' = probable dup of 423 '2.55 Reissue'** →
+    `docs/style-bucket-audit.md` for human-gated merge (both described, not auto-merged).
+  - ✅ **Batch 3 (ranks 51-75, ≥217)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Andiamo 2024, Niki 2018, Petite Malle 2014, Bayswater 2003, Noé 1932, Hourglass 2019, Rogue 2016,
+    Jypsière 2008, Diorama 2015, Montsouris 1994, Le Pliage 1993, Dauphine 2019, Trendy CC 2014,
+    Marcie 2010, Arco 2019, Ava 2020, College 2015, Félicie 2016). 7 held null incl. 2 category names
+    (Chanel Camera Bag 522, Clutch with Chain 749 — honestly described as categories, added to
+    style-bucket-audit.md).
+  - ✅ **Batch 4 (ranks 76-100, ≥143)** — DONE 2026-07-10. 25 descriptions + 17 sourced years live
+    (30 Montaigne 2019, Hamilton 2009, Phantom 2011, Le Cagole 2022, Multi Pochette 2019, Papillon 1966,
+    Bobby 2020, Caro 2021, Dior Toujours 2023, Telfar 2014, Roulis 2011, Fendi First 2021, Fendigraphy
+    2022, Le Chiquito 2018, BV Hop 2024, Graceful 2017). 8 held null (incl. Lady D-Joy/D-Lite, Loewe
+    Hammock source-conflict, Prada Re-Edition line). Hand-fix: **#489 rewritten** to the plain Celine
+    Cabas tote (source URLs showed listings are mostly plain Cabas, not the Phantom the archivist drafted).
+    Chanel trade-names GST(519)/Business Affinity(432) flagged in style-bucket-audit.md.
+  - ✅ **Batch 5 (ranks 101-125, ≥110)** — DONE 2026-07-10. 25 descriptions + 7 sourced years live
+    (Sac Plat 1968, YSL Sunset 2016, GG Padlock 2016, Loewe Goya 2023, Chloé Paddington 2005, Palm
+    Springs 2016 ×2). 18 held null (mostly The Row/Goyard/MK lines that don't publish years, + variant
+    rows). **Flagged LV Palm Springs dup (992 = 709)** → style-bucket-audit.md for a reviewed merge.
+  - ✅ **Batch 6 (ranks 126-150, ≥86)** — DONE 2026-07-10. 25 descriptions + 11 sourced years live
+    (Prada Cleo 2021/Symbole 2022, Fendi By the Way 2014, Celine Trapeze 2011, LV Artsy 2010/Multi
+    Pochette 2019, Gucci Sylvie 2016, Chloé Faye 2015, Jacquemus Le Bambino 2019, Hermès In-The-Loop
+    2020, YSL Jamie 2018). 14 held null (SLGs, Chanel Regime-B seasonal names, vintage LV lines).
+    **Flagged LV Multi Pochette dup (518 = 444)** → style-bucket-audit.md.
+  - ✅ **HEAD COMPLETE (top 150 by comps, all ≥86) — 150 icon pages now carry sourced descriptions +
+    ~154 sourced years.** Coverage jumped from the placeholder stub on the site's highest-traffic pages.
+    4 duplicate style-pairs surfaced + flagged for reviewed merge (Chanel Reissue 537=423, LV Palm
+    Springs 992=709, LV Multi Pochette 518=444) plus category/trade-name flags, all in
+    `docs/style-bucket-audit.md`.
+  - ⬜ **Tail DEFERRED (ranks 151-559, ~409 styles, all <86 comps)** — per the value-front-loaded rule
+    (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
+    lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
+    `probe-bare-styles.ts`; method unchanged (archivist batch of 25 → validate → `apply-style-depth.ts`).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.
@@ -108,10 +159,13 @@ Queue (priority order; tick with counts + date):
   never wiped). Result: eBay colorway 3 → 689, material → 1,149; **488 eBay rows now carry
   BOTH material+colour** (the `isConfidentBasis` requirement), incl. clean Coach comps
   (Tabby/Chalk/Pebble Leather, Swinger/Candy Pink…). So eBay-sourced mid-tier styles can now
-  compute like-for-like fair value = deal badges. ⬜ REMAINING: the deals SURFACE also needs
-  FRESH LIVE mid-tier inventory (the sold/expired rows can't badge as "for sale"); a live
-  mid-tier eBay capture cadence is the last piece. ~1,355 eBay rows stay colour-null (titles
-  state no colour — held null, never guessed).
+  compute like-for-like fair value = deal badges. ✅ FRESH-LIVE PIECE WIRED (2026-07-10):
+  `.github/workflows/ebay-midtier-refresh.yml` (weekly) → `apify-ebay-refresh.ts` (Apify
+  `memo23/ebay-search-scraper-ppe`, mode=active — eBay blocks ACTIVE scraping harder than
+  sold, this actor gets past it) → `ebay-sold-apify.ts --live` (price_type listed) →
+  load → best-effort colour/material enrich → `reconcile:sold --platform=eBay --age-days=21`
+  (AGE-based retire, aborts on zero-in-window) → summary. ~$0.75/run, ~$3/mo. ~1,355 eBay
+  rows stay colour-null (titles state no colour — held null, never guessed).
 - ✅ U4 DONE 2026-07-02: price_history 57,165 (+14,818 today), styles 761, variants 1,388. FINISH LINE A: ~substantially closed for the 24 FP-carried brands (LV 80.5% / Chanel 96.3% of live listings, bags-only scope); Coach + 3 thrift brands now have eBay live-ask coverage; thin premium brands have a Vestiaire second source. Remaining A items: SLG expansion (decided: later, owner-gated), Vestiaire remainder (Darling/Fendigraphy/First/Loco/Bow), eBay item-specifics enrichment (metered).
 - ✅ U5 DONE 2026-07-02: Loewe brand-site prototype PROVEN (Firecrawl, 1 credit, no bot-block on loewe.com). Runbook: scrape /women/bags with links format; line names = URL path segment (/bags/puzzle/), model+size+material in product slug; diff path segments vs catalog style names; ~34 pages for full Loewe (~34 credits). FOUND + created 8 current-line styles resale doesn't surface yet: Scarf Bag/Backpack, Amazona 180, Cala, Bilbao Bucket, Braid Basket, Punch Hole Hobo, Hammock Flip (16 variants, zz-loewe-current-line.json). B rollout per big house = a later session; big-house sites (LV/Chanel/Gucci) likely harder than Loewe, test before assuming.
 - ✅ U6 wrap in progress 2026-07-02 (gate + merge below)
@@ -262,7 +316,8 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - 🔄 AFFILIATE GATE (confirmed 2026-06-25): Skimlinks REJECTED ("site not suitable at this time", generic). Root cause across ALL networks = thin PUBLISHED content + low traffic; articles sat as drafts so reviewers saw a near-empty site.
   - ✅ PUBLISHED 6 data articles 2026-06-27 (owner said "publish"): #15 what-a-coach-tabby-actually-sells-for, #16 does-a-smaller-bag-cost-more, #17 asking-price-vs-sold-price, #18 dior-saddle-resale-price, #19 which-accessible-bags-hold-value, #20 most-searched-vs-most-expensive-bags. Via publish-articles.ts + publish-articles.yml (CI holds the service-role key; this env has none). Slug-scoped, idempotent, reversible (UI unpublish). Picked the fresh, drift-clean set (NOT #6/#8/#9/#14). Log: "published 6/6". The other 11 drafts stay owner-gated.
   - ✅ PUBLISHED the remaining 11 drafts 2026-06-27 (owner said "push all unpublished live"): #4–#14 (where-to-sell, authenticate-LV, birkin-vs-kelly, fake-marmont, neverfull-mm-or-pm, iconic-resale-costs, neverfull-vs-speedy, rent-or-buy, resale-red-flags, good-investment, marmont-vs-neverfull-vs-speedy). Via publish-articles.yml write=true. Log: "published 11/11". ALL 17 articles now live. Owner ruled prices are a dated snapshot (page already shows the publish date in the byline) — the #6/#8/#9/#14 drift figures stay as-published, no refresh required.
-  - ⬜ OWNER: reapply to Skimlinks + nudge Impact now that all 17 articles are live.
+  - ⬜ OWNER: nudge Impact now that all 17 articles are live. (Skimlinks DROPPED per owner
+    2026-07-10 — a rejected app can't reapply for months, ~2026-09-25 lockout; don't resurface it.)
 - ✅ LISTING FRESHNESS (owner: "listings sell every hour, monthly too long"): split medians (aggregate, monthly OK) from live listings (churn hourly). DID: (1) Fashionphile retire job daily→every 3h (headless); (2) ShopThisBag "view" links now rank reliable-live sources (Fashionphile→TRR) first so affiliate clicks avoid stale eBay/Poshmark rows. REAL hourly fix = affiliate product feeds (owner-gated on approvals); browser-gated eBay/Poshmark status can't refresh headless (2026-06-26).
 - ✅ SELF-UPDATING CHARTS: all 6 data-article charts refactored to async server components reading live via getMedians() with per-field baked fallback (n=0/DB down never renders empty): CoachResaleRealityChart, AskVsSoldGapChart (Dior Saddle row stays baked — id 574/575 unresolved), SizePriceCurveChart, MidTierHoldsValueChart, SearchVsPriceChart (asking-only; Birkin/Kelly stay baked as cross-size aggregates; Trends bars static). Dior Saddle post reuses ask-vs-sold-gap. Gates green, pushed (2026-06-26).
 - ✅ Drift check done → docs/article-freshness-report.md: #8/#9/#14 (Neverfull $1245→$1500, Marmont $911→$1095) + #6 (Birkin $18k→$19,995) STALE; Flap/Kelly/Tabby match. #10 can add Speedy sold $566. Owner updates figures before publishing those.
