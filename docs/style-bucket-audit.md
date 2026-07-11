@@ -85,3 +85,10 @@ No merge is safe to automate. This doc is the queue for a review pass.
 - **Celine "Cabas" (489):** listings mix the plain minimalist Cabas tote (dominant) with some Cabas
   Phantom (winged Luggage variant). Described as the plain Cabas; a future split could separate the
   Phantom if it accrues its own comps.
+- **LV Palm Springs DUPLICATE:** "Palm Springs" (style 992, 124 comps) and "Palm Springs Backpack"
+  (style 709, 122 comps) are the SAME Cruise-2016 Monogram backpack line. Candidate for a reviewed
+  merge (re-point one into the other, delete the empty). Both described now, so pages are fine
+  meanwhile. NOT auto-merged (human spot-check per [[catalog_promotion_pipeline]]).
+- **LV Multi Pochette DUPLICATE:** "Multi Pochette" (style 518, 103 comps) and "Multi Pochette
+  Accessoires" (style 444, 192 comps) are the SAME 2019 modular bag. Candidate for a reviewed merge.
+  Both described now. NOT auto-merged.
