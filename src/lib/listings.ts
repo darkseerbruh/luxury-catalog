@@ -22,6 +22,7 @@ import { affiliateListingUrl } from "./affiliate";
 import { PLATFORMS } from "./platforms";
 import { colorFamily, materialFamily } from "./listings-taxonomy";
 import { displaySizeLabel } from "./variant-label";
+import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
 import {
   rateListing,
   isConfidentBasis,
@@ -176,6 +177,8 @@ interface PriceRow {
   listingStatus: string | null;
   /** Style-level protective-feet flag (migration 0044). Undefined when unread. */
   hasProtectiveFeet?: boolean | null;
+  /** Raw marketplace title — reveals a mis-attached accessory/foreign model. */
+  notes: string | null;
   spec: ItemSpec;
 }
 
@@ -195,6 +198,7 @@ type RawRow = {
   material: string | null;
   hardware_color: string | null;
   production_year: number | null;
+  notes: string | null;
   variant:
     | RawVariant
     | RawVariant[]
@@ -225,7 +229,7 @@ const STYLE_SELECT_NO_FEET = "style:style_id(style_id, name, brand:brand_id(name
 const VARIANT_SELECT = (styleSelect: string) =>
   `variant:variant_id(size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), ${styleSelect})`;
 const buildSelect = (styleSelect: string) =>
-  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, " +
+  "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, notes, " +
   VARIANT_SELECT(styleSelect);
 
 const SELECT = buildSelect(STYLE_SELECT_WITH_FEET);
@@ -262,6 +266,7 @@ function mapRow(r: RawRow): PriceRow | null {
     listingRef: r.listing_ref ?? null,
     listingStatus: r.listing_status ?? null,
     hasProtectiveFeet: style ? style.has_protective_feet ?? null : null,
+    notes: r.notes ?? null,
     condition: r.condition,
     spec: {
       // Prefer the per-listing spec (migration 0022); fall back to the variant's own.
@@ -284,6 +289,17 @@ function isListed(r: PriceRow): boolean {
   // A live offer = a resale listing still for sale. 'sold' rows have been retired by
   // reconcile-sold.ts (the source no longer carries them); legacy rows are null = shown.
   return r.priceType === "listed" && r.listingStatus !== "sold";
+}
+
+/**
+ * A row mis-attached to this variant's style: its raw title is a non-bag accessory
+ * (card holder, iPad case, locket) or names a DIFFERENT model than the style. Dropped
+ * everywhere — comps, offers, tile price, deal band — so a cheap foreign object can't set
+ * a bag's "from" price or win a deal badge. Same classifier the homepage rail and the
+ * ingest gate use, so every deal surface agrees on what belongs.
+ */
+function isForeignListing(r: PriceRow): boolean {
+  return isNonBagAccessory(r.notes) || titleNamesDifferentStyle(r.brandName, r.styleName, r.notes);
 }
 
 /**
@@ -461,7 +477,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       };
     }
 
-    const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
+    const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null && !isForeignListing(r));
 
     // The style-wide query above is capped at 1000 rows by PostgREST, so for a
     // style with many listings (e.g. after the TLC feed load) the TARGET
@@ -476,7 +492,7 @@ export async function getListingsForVariant(variantId: number): Promise<VariantL
       .limit(1000);
     const variantRows = ((vData as unknown as RawRow[]) ?? [])
       .map(mapRow)
-      .filter((r): r is PriceRow => r !== null);
+      .filter((r): r is PriceRow => r !== null && !isForeignListing(r));
 
     const target = variantRows.find((r) => r.variantId === variantId) ?? rows.find((r) => r.variantId === variantId);
     const sizeLabel = target?.sizeLabel ?? displaySizeLabel((v as { size_label: string | null }).size_label);
@@ -553,7 +569,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
     const { data, error } = res;
     if (error || !data) return EMPTY;
 
-    const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null);
+    const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null && !isForeignListing(r));
 
     // Group into bags-at-a-size.
     const groups = new Map<string, ProductGroup>();

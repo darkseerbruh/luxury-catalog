@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 import { getSupabase, fetchAllRows } from "./supabase";
 import { CACHE_MARKET } from "./cache";
 import { displaySizeLabel } from "./variant-label";
+import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -113,6 +114,9 @@ type PriceRow = {
   source_url: string | null;
   observed_on: string | null;
   date_recorded: string | null;
+  /** Raw marketplace title of the listing — the ONLY field that reveals a mis-attached
+   *  accessory (card holder, iPad case) whose row otherwise wears the bag's style name. */
+  notes: string | null;
   variant: VariantJoin | VariantJoin[] | null;
 };
 
@@ -142,7 +146,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       getSupabase()
         .from("price_history")
         .select(
-          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
+          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, notes, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
         )
         .not("sale_price", "is", null),
     );
@@ -185,6 +189,19 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
           currency: row.currency,
         };
         groups.set(row.variant_id, g);
+      }
+
+      // Data-integrity guard: a row whose raw title is a non-bag accessory (card holder,
+      // iPad case, locket) or names a DIFFERENT model than this variant's style is a
+      // mis-attached foreign object. Left in it poisons the median AND — being cheap —
+      // becomes the "best" listing that tops the rail under the bag's name. Drop it from
+      // BOTH the median population and the current-listing pool. Same classifier the
+      // ingest gate and the discrepancy detector use, so all three surfaces agree.
+      if (
+        isNonBagAccessory(row.notes) ||
+        titleNamesDifferentStyle(g.brandName, g.styleName, row.notes)
+      ) {
+        continue;
       }
 
       // Resale population for the median = listed + sold + auction (+ legacy nulls).

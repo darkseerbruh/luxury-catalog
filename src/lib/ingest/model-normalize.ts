@@ -584,6 +584,82 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
   return null;
 }
 
+/** High-precision non-bag object tokens for the READ-TIME deal / discrepancy guard
+ *  only — NOT the ingest canonicalModel gate, so model resolution stays stable. These
+ *  are objects that get mis-attached to a bag variant and then WIN the deals rail
+ *  because they're cheap: tech cases, jewelry, trinkets. Multi-word (or unambiguous)
+ *  where a bare word would risk a real bag ("ring handle", "chain"). */
+const EXTRA_NONBAG_TOKENS = [
+  "ipad", "tablet case", "kindle", "e-reader", "ereader", "laptop sleeve", "laptop case",
+  "locket", "keychain", "key chain", "money clip", "luggage tag", "airpods case",
+];
+
+/** Real bag-shape / model HEAD nouns. Their presence RESCUES a title from the accessory
+ *  gate: a bag whose description merely contains an accessory-ish word as a colour, print,
+ *  or quilt style ("Rose Lipstick" Birkin, "Travel Stickers" Neverfull, "Jacket … Boy
+ *  Flap") is still a bag. Deliberately excludes bare "bag" (pouches get called "pouch
+ *  bag") — only strong shape words. Read-time / cleanup guard only. */
+const BAG_SHAPE_TOKENS = [
+  "flap", "tote", "birkin", "kelly", "neverfull", "speedy", "backpack", "satchel",
+  "hobo", "shopper", "boston", "bucket bag", "messenger", "drawstring bag", "bowling",
+  "duffle", "duffel", "top handle",
+  // Explicit bag claims: a title calling itself a handbag / crossbody / shoulder bag is a
+  // bag, even if it also lists an included pouch or wristlet (Coach titles do this a lot).
+  "handbag", "crossbody", "shoulder bag",
+];
+
+/** Same hay preprocessing canonicalModel uses (fold accents, decode &amp;, drop a
+ *  trailing bundled "w/ <extra>" so an add-on never trips the accessory gate). */
+function accessoryHay(rawName: string | null | undefined): string {
+  return fold((rawName ?? "").toLowerCase())
+    .replace(/&amp;/g, "&")
+    .replace(
+      /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
+      "",
+    );
+}
+
+/**
+ * True when a raw listing title is a non-bag accessory / SLG / tech case / trinket that
+ * should never sit under a handbag variant (card holder, key pouch, iPad case, locket…).
+ * Honors BAG_OVERRIDES so carried pouches the catalog ranks (WOC / vanity / belt bag /
+ * the pouch) stay bags. Reuses the SAME SLG token set as the ingest gate so the
+ * read-time guard and ingest agree, plus a few high-precision extras ingest omits.
+ */
+export function isNonBagAccessory(rawName: string | null | undefined): boolean {
+  const hay = accessoryHay(rawName);
+  if (!hay) return false;
+  if (BAG_OVERRIDES.some((t) => hay.includes(t))) return false;
+  const hasAccessoryToken =
+    SLG_TOKENS.some((t) => hasSlg(hay, t.trim())) ||
+    EXTRA_NONBAG_TOKENS.some((t) => hasSlg(hay, t.trim()));
+  if (!hasAccessoryToken) return false;
+  // Rescue: a strong bag-shape head noun means this is a BAG whose description merely
+  // contains an accessory-ish word as a colour / print / quilt style. Real accessories
+  // (card holder, camera case, "Boy Pouch") carry no such shape word.
+  if (BAG_SHAPE_TOKENS.some((t) => has(hay, t))) return false;
+  return true;
+}
+
+/**
+ * True when a raw listing title clearly names a DIFFERENT canonical model than the style
+ * it's attached to (e.g. our dictionary maps the title to "Camera Bag" but it sits under
+ * "Boy"). Only asserts when BOTH the title AND the attached style resolve to KNOWN,
+ * different models — returns false on any ambiguity (unknown title model, unmatched
+ * style), so it never fires on a bag our dictionary simply doesn't cover.
+ */
+export function titleNamesDifferentStyle(
+  brand: string,
+  attachedStyleName: string | null | undefined,
+  rawName: string | null | undefined,
+): boolean {
+  const titleModel = canonicalModel(brand, rawName);
+  if (!titleModel) return false;
+  const styleModel = canonicalModel(brand, attachedStyleName);
+  if (!styleModel) return false;
+  return titleModel !== styleModel;
+}
+
 /** Top-tier permanent icons per house (the rest of the dictionary = "named line"). */
 const ICONS: Record<string, Set<string>> = {
   Chanel: new Set(["Classic Flap", "Reissue", "Boy", "Chanel 19", "Chanel 22", "Chanel 25", "Wallet on Chain"]),
