@@ -81,6 +81,8 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 >
 > *(Prior 2026-06-29 baseline: 30d 249 visitors, 77% $direct, no non-direct traffic; superseded above.)*
 
+> **Baseline note (2026-07-11, daily scan):** real_visitors 7d = 172 (+107% WoW vs 83 prior 7d), 30d = 424; 21 internal excluded. Pre-launch, so counts are readiness not audience. Acquisition 7d: $direct 149 (~87%), ig 8, tiktok 3, facebook 4, chatgpt.com 1, cj.com 1 -- direct share ticked back up vs 7/10 (~84%), non-direct still tiny (n too thin to read the GEO bet; the 2026-08-10 check-in still governs). Top entry pages (7d): `/` (31), `/signup` (19, up from 13), `/social/instagram` (9), `/bag/589` (6), `/rankings` (5). Value proxies: `outbound_resale_clicked` all-time = 4 (last fired 2026-07-10, wired + live, not broken); `outbound_consign_clicked` still 0. Instrumentation: 20/40 events fired ever (+1 WoW); `attribute_object_viewed` (n=1) + `bags_compared` (n=3) still effectively silent (see 2026-06-29 pulse-query decision, now DECIDED). Quiz still n<3 (too thin: started 2, completed 1). `search_not_found` all-time = 1 (no gap cluster). Top brands 30d: Chanel 23 / Hermes 18 / Coach 10 / Fendi 5 / Gucci 4 / LV 4 -- ultra-luxury skew holds, n too thin to call distribution. No section-3 urgent threshold tripped this scan. Full three-lens + strategy-register walk deferred to Monday deep brief.
+
 ---
 
 ## Decided / archived

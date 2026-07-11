@@ -3,39 +3,52 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-10",
-  "overall": "yellow",
+  "lastRun": "2026-07-11",
+  "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.7757739583333333,
-    "freshness-therealreal": 0.7757739583333333,
-    "freshness-tlc": 0.7757739583333333,
-    "freshness-ebay": 0.7757739583333333,
-    "capture-rows": 25192,
-    "ranking-count": 311,
-    "ranking-near-floor": 43,
-    "coverage-condition": 29.046309032553875,
-    "coverage-condition-detail": 22.41592408747483,
-    "coverage-region": 48.89027971691301,
-    "coverage-production-year": 3.7253863559770832,
-    "coverage-hardware": 46.80275383948775,
-    "coverage-style-description": 38.6,
-    "coverage-style-year": 2.6,
-    "coverage-listing-images": 40.138682055100524,
-    "backlog-total": 41281,
+    "freshness-fashionphile": 1.609070949074074,
+    "freshness-therealreal": 0.6090709490740741,
+    "freshness-tlc": 0.6090709490740741,
+    "freshness-ebay": 0.6090709490740741,
+    "capture-rows": 25661,
+    "ranking-count": 331,
+    "ranking-near-floor": 48,
+    "coverage-condition": 29.269367718740277,
+    "coverage-condition-detail": 31.813703460434887,
+    "coverage-region": 46.94984449530133,
+    "coverage-production-year": 3.250090117278207,
+    "coverage-hardware": 41.0783894575359,
+    "coverage-style-description": 43.51378958120531,
+    "coverage-style-year": 11.440245148110316,
+    "coverage-listing-images": 26.408813025845895,
+    "backlog-total": 44854,
     "contamination-trr": 7,
-    "contamination-dupes": 11,
-    "summary-staleness": 0.060394722222222225,
+    "contamination-dupes": 3338,
+    "summary-staleness": 2.376501388888889,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 0
   },
   "rowsAddedHistory": [
-    25192
+    25192,
+    25661
   ],
   "findings": {
+    "freshness-fashionphile": {
+      "firstSeen": "2026-07-11",
+      "status": "yellow"
+    },
     "ranking-snapshot": {
       "firstSeen": "2026-07-10",
       "status": "yellow"
+    },
+    "coverage-hardware": {
+      "firstSeen": "2026-07-11",
+      "status": "red"
+    },
+    "coverage-listing-images": {
+      "firstSeen": "2026-07-11",
+      "status": "red"
     },
     "contamination-trr": {
       "firstSeen": "2026-07-10",
@@ -43,8 +56,24 @@
     },
     "contamination-dupes": {
       "firstSeen": "2026-07-10",
-      "status": "yellow"
+      "status": "red"
     }
   },
-  "redFindings": []
+  "redFindings": [
+    {
+      "id": "coverage-hardware",
+      "title": "Data health: coverage-hardware is RED",
+      "body": "Hardware-color coverage (all rows) fell from 46.8% to 41.1% since the last run.\n\nCurrent value: 41.1%\nSuggested action: Check the spec-extract vocab (src/lib/ingest/spec-extract.ts) against recent titles.\nReport: reports/data-health/2026-07-11.md"
+    },
+    {
+      "id": "coverage-listing-images",
+      "title": "Data health: coverage-listing-images is RED",
+      "body": "Listing photos (The Luxury Closet) fell from 40.1% to 26.4% since the last run.\n\nCurrent value: 26.4%\nSuggested action: Check the feed ingest's image upsert (listing_image) in the TLC action.\nReport: reports/data-health/2026-07-11.md"
+    },
+    {
+      "id": "contamination-dupes",
+      "title": "Data health: contamination-dupes is RED",
+      "body": "3338 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 3338 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-11.md"
+    }
+  ]
 }
