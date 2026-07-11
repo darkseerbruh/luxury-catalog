@@ -70,11 +70,20 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     (Sac Plat 1968, YSL Sunset 2016, GG Padlock 2016, Loewe Goya 2023, Chloé Paddington 2005, Palm
     Springs 2016 ×2). 18 held null (mostly The Row/Goyard/MK lines that don't publish years, + variant
     rows). **Flagged LV Palm Springs dup (992 = 709)** → style-bucket-audit.md for a reviewed merge.
-  - 🔄 **Batch 6 (ranks 126-150, ≥86)** — archivist sourcing (2026-07-10).
-  - ⬜ **Batches 7+ (ranks 151-559, <86 comps)** — DEFERRED once batch 6 lands, per the value-front-loaded
-    rule (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
+  - ✅ **Batch 6 (ranks 126-150, ≥86)** — DONE 2026-07-10. 25 descriptions + 11 sourced years live
+    (Prada Cleo 2021/Symbole 2022, Fendi By the Way 2014, Celine Trapeze 2011, LV Artsy 2010/Multi
+    Pochette 2019, Gucci Sylvie 2016, Chloé Faye 2015, Jacquemus Le Bambino 2019, Hermès In-The-Loop
+    2020, YSL Jamie 2018). 14 held null (SLGs, Chanel Regime-B seasonal names, vintage LV lines).
+    **Flagged LV Multi Pochette dup (518 = 444)** → style-bucket-audit.md.
+  - ✅ **HEAD COMPLETE (top 150 by comps, all ≥86) — 150 icon pages now carry sourced descriptions +
+    ~154 sourced years.** Coverage jumped from the placeholder stub on the site's highest-traffic pages.
+    4 duplicate style-pairs surfaced + flagged for reviewed merge (Chanel Reissue 537=423, LV Palm
+    Springs 992=709, LV Multi Pochette 518=444) plus category/trade-name flags, all in
+    `docs/style-bucket-audit.md`.
+  - ⬜ **Tail DEFERRED (ranks 151-559, ~409 styles, all <86 comps)** — per the value-front-loaded rule
+    (same treatment as the <10-comp tail): a sourced description costs more than the traffic these
     lower-comp pages return. Revisit on explicit request or as they accrue comps. Full ranked list from
-    `probe-bare-styles.ts`; method unchanged (archivist batch → `apply-style-depth.ts`).
+    `probe-bare-styles.ts`; method unchanged (archivist batch of 25 → validate → `apply-style-depth.ts`).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.
   Same method: archivist batch → `apply-style-depth.ts`.

@@ -89,3 +89,6 @@ No merge is safe to automate. This doc is the queue for a review pass.
   (style 709, 122 comps) are the SAME Cruise-2016 Monogram backpack line. Candidate for a reviewed
   merge (re-point one into the other, delete the empty). Both described now, so pages are fine
   meanwhile. NOT auto-merged (human spot-check per [[catalog_promotion_pipeline]]).
+- **LV Multi Pochette DUPLICATE:** "Multi Pochette" (style 518, 103 comps) and "Multi Pochette
+  Accessoires" (style 444, 192 comps) are the SAME 2019 modular bag. Candidate for a reviewed merge.
+  Both described now. NOT auto-merged.
