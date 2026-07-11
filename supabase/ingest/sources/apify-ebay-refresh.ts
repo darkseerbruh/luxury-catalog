@@ -46,7 +46,11 @@ interface LiveRecord {
 }
 
 async function runBrand(token: string, brand: string, per: number): Promise<Memo23Item[]> {
-  const startRes = await fetch(`https://api.apify.com/v2/acts/${ACTOR}/runs?token=${token}`, {
+  // COST GUARD: the actor's own `maxResults` is NOT a hard cap (a CI run with
+  // maxResults=60 still returned 1000/brand). Apify's PLATFORM-level `maxItems` query
+  // param IS the enforced cap for pay-per-result actors — it aborts the run at N pushed
+  // items, so we pay for at most `per` per brand. Keep BOTH (maxResults as a hint).
+  const startRes = await fetch(`https://api.apify.com/v2/acts/${ACTOR}/runs?token=${token}&maxItems=${per}`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ searchQuery: `${brand} handbag`, mode: "active", maxResults: per, detailedItems: false }),
