@@ -27,7 +27,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const venue = VENUES_BY_SLUG[slug];
   if (!venue) return {};
-  const title = `Is ${venue.label} safe for buying a bag? What actually protects you`;
+  const title = `Is ${venue.label} safe for buying a bag? What protects you`;
   const description = `${venue.label}: authentication, returns, and payment protection from its own published policies, dated. Plus how to cover the gaps yourself.`;
   const url = `${SITE_URL}/where-to-buy/${venue.slug}`;
   return {
