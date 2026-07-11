@@ -303,6 +303,13 @@ Same voice, dialed by register — not a separate brand for Gen Z vs. collectors
   credibility. Attribute, not assert.
 - **Movie-trailer cadences:** the portentous three-beat ("Know it. Want it. Then
   decide.") reads cheap. Vary the rhythm.
+- **The ", honestly" / ", truly" tack-on (AI tell, locked 2026-07-11).** Never append
+  *", honestly"* (or *", truly," ", really"*) to a headline to signal candor. It reads
+  as defensive and machine-written. Just make the claim plainly, or earn the candor with
+  a specific.
+- **The "No X, just Y" reversal (AI tell, locked 2026-07-11).** Never frame a value prop
+  as *"No judgment, just the receipts," "not a sales pitch, just the truth."* The
+  contrived contrast is an AI-slop tell. Say the positive thing directly and let it stand.
 - **Em dashes (—).** Hard rule: don't use them. They're an AI-slop tell and they
   blur sentence logic. Use a period, comma, colon, or parentheses instead, and
   pick the one that fits the thought:

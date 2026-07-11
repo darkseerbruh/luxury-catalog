@@ -11,7 +11,7 @@ import {
 import { SITE_URL } from "@/lib/geo";
 
 export const metadata: Metadata = {
-  title: "Where to buy a preloved bag, honestly",
+  title: "Where to buy a preloved bag: what each venue protects",
   description:
     "What each resale venue actually protects: authentication, returns, payment, and what to do yourself when it doesn't. Sourced from each venue's own published policies.",
 };
@@ -89,10 +89,11 @@ export default async function WhereToBuyPage() {
       />
       <header className="mb-6">
         <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Where to buy</p>
-        <h1 className="font-serif text-3xl text-foreground">Where to buy, honestly</h1>
+        <h1 className="font-serif text-3xl text-foreground">Where to actually buy a preloved bag</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          What each venue actually protects. No judgment, just the receipts: every claim
-          below links to the venue&apos;s own published policy, with the date we checked it.
+          Every venue protects you differently. Here&apos;s what each one actually covers, so you
+          can shop wherever you like and know exactly what you&apos;re walking into. Every claim
+          links to the venue&apos;s own published policy, dated the day we checked it.
         </p>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted/80">
           One thing to read closely: eBay and Poshmark only physically inspect bags priced
