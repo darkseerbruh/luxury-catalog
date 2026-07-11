@@ -96,8 +96,10 @@ track record = "on record as of <date>". Tier labels are opinion-framed by const
 
 ## Copy skeleton (voice-gated at build)
 
-- Hub H1: "Where to buy, honestly." Sub: "What each place actually protects, at your
-  price. No judgment, just the receipts."
+- Hub H1: "Where to buy a preloved bag, and what to check." Sub: "Every venue protects
+  you differently. Here's what each one covers, so you can shop wherever you like and
+  know exactly what you're walking into." (Kept in sync with the shipped page; the older
+  ", honestly" / "No judgment, just the receipts" copy was retired 2026-07-11 as AI tells.)
 - Tier labels (our take): **Protected** · **Know the gaps** · **You're on your own**.
 - Remedy section H2: "Buying here anyway?" Sub: "Fair. Here's how to cover the gaps
   yourself."
