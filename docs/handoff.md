@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Data health routine SHIPPED + first live run (2026-07-10, on `main`, workflow proven)
+
+**New standing engine: a daily data-health scorecard now watches the whole data layer.** Owner-locked: daily → graduates to weekly after 7 straight greens (red demotes back), report + deduped GitHub issue on red, findings feed the worklist, safe auto-fixes only.
+- 🩺 **What it checks:** per-source freshness vs each cron's own promise, capture sanity (0-row day = red), LC-Index ranking-floor count, attribute-coverage deltas (condition/region/year/hardware/descriptions/images — delta-scored, drops flag, levels don't), discovered-backlog growth, contamination sentinels (TRR non-bag leak-back via `isTrrHandbagListing` + same-day dupes), summary-matview staleness (the ONLY auto-fix), and an owner-requested **cadence audit** (30-day listing lifetimes vs configured refresh interval; recommendations are estimates, cron changes stay yours).
+- 🔧 **Pieces:** `src/lib/data-health-core.ts` (pure, 37 tests) + `scripts/data-health.ts` (`npm run health:check`, `--write`) + `.github/workflows/data-health.yml` (10:47 UTC daily + manual). Registered in `automation-map.md`; findings section lives between markers at the end of `data-content-worklist.md`.
+- ✅ **Proven live:** dispatch run succeeded end-to-end; report + state committed (`5a25e8d`). First score: **YELLOW** — (1) no `lc_index_snapshot` exists yet, (2) 7 TRR non-bag leak-backs last week, (3) ~26 same-day duplicate rows. 311 styles clear the ranking floor. Cadence audit: TRR/FP cadences look right; TLC churns same-day (accepted loss at the daily floor).
+- ✅ **Snapshot yellow root-caused (correction, same day): CRON_SECRET is NOT missing** — verified set in Vercel prod (20 days old, `vercel env ls`). The snapshot cron (`0 7 1 * *`) simply hasn't had its first firing since the route shipped ~07-08; it auto-runs Aug 1 and the yellow self-clears. Optional early backfill (captures July so movement pills start Aug instead of Sep): any session with the secret curls `/api/cron/lc-index-snapshot` with `Authorization: Bearer $CRON_SECRET` (idempotent upsert). Pulling the secret needs an interactive session (`vercel env pull` dumps the whole prod env; auto-mode blocks it).
+- ⬜ **YOUR TURN (optional):** if you want July's Index baseline now rather than Aug 1, run the backfill curl above from an interactive chat, or just wait. The two data yellows (TRR leak-back, same-day dupes) are queued in the worklist for any working session.
+
+---
+
 ## TL;DR — McQueen catalog cleanup + Jacquemus coverage + LV Alma article PUBLISHED (2026-07-10, on `main`)
 
 **Catalog-integrity + content lane. All landed, green gate each time.**
@@ -19,6 +30,16 @@
 - 💰 **eBay coverage extended:** 2nd auction pull (premium: Chloé/Valentino/Givenchy/Burberry/The Row/Miu Miu/McQueen/MJ/Jacquemus… → 233 onto pages) + 3rd (mid-tier: Coach/Kate Spade/Longchamp/MK/Tory Burch, floor $25 → 145 onto pages). `ebay-sold-apify.ts` gained a JUNK/replica filter. eBay 2,876 → **3,918 rows**; multi-source styles 569 → **611**.
 - 🎨 **Deals-basis unlock (the U-DEALS-MIDTIER ask):** `isConfidentBasis` needs comps with material+colour. Backfilled them from eBay TITLES via `enrich-specs.ts --platform=eBay` (Haiku, guardrailed "only what's stated", **non-null-only writes so structured values are never wiped**). eBay colorway 3 → 689, material → 1,149; **290 mid-tier LIVE listings now deals-ready** (Coach 188, KS 35, Longchamp 27, MK 35, TB 5). Naive regex title-colour parsing was deliberately NOT used (repo's own "wrong backfill is worse than null" rule).
 - ⬜ **YOUR TURN (a product decision, not code):** the deals SURFACE also wants those eBay live rows kept FRESH, but the locked eBay policy says live asks are *lower-trust* than solds and eBay stays *manual/no-cron*. So enabling an eBay-live-driven mid-tier deals surface (with a clear lower-trust label) + a refresh cadence is your call. Say **"eBay live deals: yes"** to wire a bounded refresh; else the 290 deals-ready rows stand as-is on `/shop?deals=1`.
+
+---
+
+## TL;DR — Fashionphile adapter size-bucketing fixed (Miu Miu → 20 priced variants) (2026-07-10, on `main`)
+
+**Two code-only FP-adapter bugs that mis-sized/mis-styled multi-size bags — fixed with regression tests; DB-row cleanup spun off to its own session.**
+- 🎯 **Most-specific target match** (`sources/fashionphile.ts` new exported `selectTarget()`): matching went from `Array.find` (FIRST match) to most-specific (total require-token length). A size-less inline generic (Miu Miu `Wander` `["wander"]`, `Aventure` `["aventure"]`) sat before the appended sweep-targets and collapsed every sized handle onto one "Standard" bucket. Now `small-wander` beats `wander`. General across all brands; other multi-size styles were already size-anchored so unaffected. **Miu Miu reached 20 priced variants.**
+- 🧵 **Matelassé target tightened**: `"matelasse"` is a MATERIAL token, so the Matelassé STYLE target was swallowing matelassé Coffer/Bucket (other styles), sandals (non-bag), pouches (SLG). Added excludes coffer/bucket/softy/beau/ivy/sandal/pouch → live dump 16→10 rows, all genuine bags.
+- ✅ Regression tests `src/lib/__tests__/fashionphile-select-target.test.ts` (22 cases inc. Hermès/LV spot-checks); green gate 757 tests. Commits `b2f6f83`, `3aeceb8` (+ worklist `e922cc4`).
+- ⬜ **YOUR TURN:** none. A **chip is running in its own session** for the DB-only follow-up (stranded Wander/Aventure/Arcadie Standard rows + duplicate ∅/Standard/size variants + existing Matelassé-mislabeled rows) — SAME-STYLE-ONLY re-point/dedup, reviewed. McQueen Skull #600 re-triage was handled by a parallel chat (stood down to avoid collision).
 
 ---
 
@@ -39,7 +60,9 @@
 - 💳 **Billing call (stands):** on an Apify spike, raise the Starter cap + diagnose the burn (Insights); don't jump to Scale ($199/mo) unless sustained ~$180+/mo. Her ~$60/mo standing TRR refresh sits well inside Starter.
 - 📓 **New blueprint:** `docs/priority-reseller-capture-runbook.md` — per-source routing map + cost per lane, CORRECTED to match the cloud-Apify reality (Apify = TRR + eBay-sold engine; free feeds + Firecrawl for the rest).
 - 🛠️ **Firecrawl eBay `--sold` FALLBACK built** (`firecrawl-ebay.ts --sold`, dispatch-only): a manual backup for when Apify is capped. **Secondary to `ebay-sold-apify.ts`**, which is cleaner (auction-only = no masking). Weekly schedule dropped to avoid a redundant Firecrawl credit burn.
-- ⬜ **YOUR TURN:** nothing blocking (Apify already paid + cap raised). Optional: I can still build the free Redeluxe/Rebag/TLC nightly adapters to widen the daily for-sale snapshot.
+- 🟢 **FREE-SOURCE SPRINT (2026-07-10, all landed + verified):** built 4 new free Shopify feed lanes on the same pattern (crawl → `canonicalModel` named + **discovered-bank the unnamable** via `--discovered-only` → `reconcile:sold` → daily workflow): **Redeluxe** (175/2pg), **Couture USA** (208, +footwear filter + colour tags), **Ann's Fabulous Finds** (156), **myGemma** (364, richest: condition GRADE + write-up; was a *paid* Firecrawl source). Now **6 free lanes** (+ Fashionphile + TLC). Plural-`product_type` regex bug caught + fixed across all. Rejected: ShopWorn (dropship/niche), Yoogi's (empty), Rebag (no open feed → its CJ feed once approved). Canonical: `docs/priority-reseller-capture-runbook.md`.
+- 🔁 **Dictionary-gap engine scheduled** (`dictionary-gap-report`, Wed 9am, in `automation-map.md`): weekly ranked "missing models" report from the `discovered_listing` backlog → `docs/dictionary-gap-report.md`; report-only, adding models stays her gate.
+- ⬜ **YOUR TURN:** (a) hit **"Run now"** on the `dictionary-gap-report` scheduled task once to pre-approve its tools (then hands-off). (b) Rebag stays gated on its CJ approval; Vestiaire/1stDibs need a Firecrawl budget (your spend call).
 
 ---
 
