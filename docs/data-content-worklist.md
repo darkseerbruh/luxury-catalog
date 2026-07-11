@@ -53,8 +53,14 @@ bar), not generated, so this runs via the archivist + `apply-style-depth.ts` (re
     Pochette Accessoires 1992, Le 5 à 7 2021, Belt 2015). 5 held null (Lou, City, Saint-Louis, Soho
     Disco, Jet Set). **Flagged style 537 'Reissue' = probable dup of 423 '2.55 Reissue'** →
     `docs/style-bucket-audit.md` for human-gated merge (both described, not auto-merged).
-  - 🔄 **Batch 3 (ranks 51-75, ≥217)** — archivist sourcing (2026-07-10).
-  - ⬜ **Batches 4+ (ranks 76-559, <217 comps)** — queued; same method, highest-comps first. Full ranked
+  - ✅ **Batch 3 (ranks 51-75, ≥217)** — DONE 2026-07-10. 25 descriptions + 18 sourced years live
+    (Andiamo 2024, Niki 2018, Petite Malle 2014, Bayswater 2003, Noé 1932, Hourglass 2019, Rogue 2016,
+    Jypsière 2008, Diorama 2015, Montsouris 1994, Le Pliage 1993, Dauphine 2019, Trendy CC 2014,
+    Marcie 2010, Arco 2019, Ava 2020, College 2015, Félicie 2016). 7 held null incl. 2 category names
+    (Chanel Camera Bag 522, Clutch with Chain 749 — honestly described as categories, added to
+    style-bucket-audit.md).
+  - 🔄 **Batch 4 (ranks 76-100, ≥143)** — archivist sourcing (2026-07-10).
+  - ⬜ **Batches 5+ (ranks 101-559, <143 comps)** — queued; same method, highest-comps first. Full ranked
     list from `probe-bare-styles.ts` (559 bare styles ≥10 comps).
 - ⬜ **Thin tail (~76 new styles < 10 comps)** — DEFERRED by design: a sourced description costs
   more than the near-zero traffic returns. Revisit when they accrue comps or on explicit request.

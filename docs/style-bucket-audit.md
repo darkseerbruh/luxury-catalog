@@ -74,3 +74,7 @@ No merge is safe to automate. This doc is the queue for a review pass.
   (per [[catalog_promotion_pipeline]] style dups need human spot-check; confirm the two rows'
   listings share the Mademoiselle-lock all-metal-chain look before merging). Both carry a correct
   description now, so the pages are fine in the meantime.
+- **Two more CATEGORY names (kept + described honestly, low priority):** Chanel "Camera Bag"
+  (style 522, 303 comps) and Chanel "Clutch with Chain" (style 749, 268 comps) are silhouettes/
+  SLG-adjacent categories, not single dated models. Their descriptions now say so; leave as
+  category-level pages unless consolidating.
