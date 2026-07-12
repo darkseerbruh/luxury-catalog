@@ -14,7 +14,9 @@ export type Dim = { key: string; label: string; get: (v: StyleVariantOption) => 
 export const DIMS: Dim[] = [
   { key: "size", label: "Size", get: (v) => v.sizeLabel },
   { key: "color", label: "Colour", get: (v) => v.exteriorColorway },
-  { key: "material", label: "Material", get: (v) => v.exteriorMaterial },
+  // Trim a trailing " Leather"/" Canvas" so chips read "Caviar", "Patent" (not "Caviar Leather")
+  // and stay consistent beside "Lambskin"/"Damier Ebene". The trimmed string is the match key too.
+  { key: "material", label: "Material", get: (v) => v.exteriorMaterial?.replace(/\s+(leather|canvas)$/i, "") ?? null },
   { key: "trim", label: "Trim", get: (v) => v.trimMaterial },
   { key: "hardware", label: "Hardware", get: (v) => v.hardwareColor },
   { key: "hardwareType", label: "Fittings", get: (v) => v.hardwareType },
