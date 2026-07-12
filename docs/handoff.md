@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Chanel flap-lines module + shop index + the 4 parked flap-followups closed (2026-07-11, on `main`)
+
+**Off "go" then "all": worked the four parked flap/shop threads to done.** All green (824 tests), landed each step.
+- 🧭 **Cross-line "four Chanel flap lines" module** (`FlapLines` + `flap-lines.ts`): on the Classic Flap, 2.55 Reissue, Boy, and Wallet on Chain pages (keyed by `style_family`, so it also fires on the mini pages under the Classic Flap line). Each line shows its tell (closure + structure), a "pick this if", intro year, and a representative median. Reissue/Boy are single-model size-runs so the sibling-family module can't render for them; this line-level module is the fix. Tells + years **archivist-sourced** (cited per line); WOC year held null. **Taxonomy locked:** a WOC is a bag and gets its own line; a fold wallet is an SLG and stays out (curated map, future lines = one-line add).
+- ⚡ **Precomputed shop index** (`listings.ts`): the ~120k-row → ~1.6k-group grouping is filter-independent, now memoized once per rows-cache generation (was re-grouped every request). Output identical; warm call 82ms. Durable next step (DB summary table + cron so cold instances skip the ~20s read) needs a migration → owner-gated.
+- 🔎 **"Missing sizes" thread = mostly a non-issue** (`docs/size-normalization-audit.md`, read-only): the "~3,400" premise doesn't hold. 72/981 styles bake size into the name but only **2** null-size variants have comps; the sole comp-bearing un-normalized clusters are Hermès Jypsière (274) + YSL Cassandre Envelope (217). Clusters mix distinct sub-models (Birkin vs Birkin Touch, Kelly vs Kelly Pochette), so normalization stays a reviewed per-family split, owner-gated.
+- 🎨 **Color Phase 2 scoped** (`docs/color-phase2-plan.md`): color data is clean (91% of listings have a colorway, ~38 families) and the selector auto-derives a color axis, so the UI is near-free. The work is a mass (style,size,color) variant expansion + re-point + index migration → owner-gated; doc has the rollup steps + a one-style pilot.
+- ✅ **Size-label A/B = settled:** format **B** ("Jumbo (Large) · 30 cm") is shipped AND locked in `preferences.md`; no change.
+- ⬜ **YOUR TURN:** (1) new code goes live on next prod build (auto if Vercel auto-deploys `main`, else `vercel --prod`). (2) To advance color/normalization: greenlight a one-family pilot and I'll build the dry-run + hand you the migration. (3) Flag the two mislabeled Chanel SLGs (style 171 Boy Wallet, 141 coin purse) — spawned as a separate task.
+
+---
+
 ## TL;DR — Brands UX overhaul + brand ranking + house→brand sweep + brand data fill (2026-07-11, on `main`)
 
 **Homepage brands module and `/brands` reworked, brand ranking is now a real surface, "house"→"brand" swept, every brand's origin + founding year filled.** All green (824 tests), landed each step.

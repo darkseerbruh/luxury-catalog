@@ -40,6 +40,12 @@ const refFromUrl = (url: string | null): string | null => {
   return seg || null;
 };
 
+// Supabase types an embedded to-one relation as an object OR a single-element array
+// depending on the schema view — normalize both to the brand name.
+type BrandEmbed = { name: string } | { name: string }[] | null;
+const brandName = (b: BrandEmbed): string | undefined =>
+  (Array.isArray(b) ? b[0]?.name : b?.name) || undefined;
+
 async function main() {
   // 0) Re-read styles + brand, confirm each still exists and still fails the bag test.
   const { data: styles } = await db
@@ -53,7 +59,7 @@ async function main() {
   const brandByStyle = new Map<number, string>();
   console.log("Targets:");
   for (const s of styles) {
-    const brand = (s as any).brand?.name ?? `brand#${s.brand_id}`;
+    const brand = brandName(s.brand as BrandEmbed) ?? `brand#${s.brand_id}`;
     brandByStyle.set(s.style_id, brand);
     const nonBag = isNonBagAccessory(s.name);
     console.log(`  style ${s.style_id}  [${brand}]  nonBag=${nonBag}  ${s.name}`);
