@@ -71,11 +71,11 @@ export function WhereToSellDiagram() {
         </svg>
 
         <div style={{ fontSize: 11, color: MUTED, marginTop: 12 }}>
-          Illustrative, not exact figures. Every route takes a cut, and the size of that cut changes over time, so check each platform&rsquo;s current seller terms before you sell.
+          This shows the tradeoff, not the fees. The exact cut each venue takes, sourced and refreshed monthly, is in the numbers below.
         </div>
       </div>
       <figcaption className="sr-only">
-        A tradeoff diagram for selling a handbag: Routes that take more of the work off your hands (instant buyout, then consignment) leave you with less of the sale, while routes where you do more (an authenticated marketplace, then selling it yourself) leave you with more. No fee figures are shown because they change over time.
+        A tradeoff diagram for selling a handbag: Routes that take more of the work off your hands (instant buyout, then consignment) leave you with less of the sale, while routes where you do more (an authenticated marketplace, then selling it yourself) leave you with more. The exact fee percentages are listed in the article body and refreshed monthly.
       </figcaption>
     </figure>
   );

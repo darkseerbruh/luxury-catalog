@@ -1,0 +1,74 @@
+name: Venue terms freshness (never-stale safety net)
+
+# The deterministic half of the venue-terms refresh engine (docs/venue-terms-refresh.md,
+# owner-directed 2026-07-11). Seller fees (/where-to-sell) and buyer protections
+# (/where-to-buy) are hard, dated facts; this runs monthly, writes a dated freshness
+# report, and opens/updates a `venue-terms` tracking issue when any cell is past the
+# 30-day re-verify cadence. The actual re-verify (fetch pages, update figures, open a PR)
+# is the scheduled cloud agent `venue-terms-refresh-monthly`; this exists so staleness is
+# ALWAYS visible even if that agent fails. Pure: no network, no DB, no secrets.
+
+on:
+  schedule:
+    # Monthly, 1st at 06:23 UTC (off the hour, before the busy morning captures).
+    - cron: "23 6 1 * *"
+  workflow_dispatch:
+    inputs:
+      cadence:
+        description: "Re-verify cadence in days"
+        required: false
+        default: "30"
+
+concurrency:
+  group: venue-terms-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CADENCE: ${{ github.event.inputs.cadence || '30' }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Write freshness report
+        run: npx tsx scripts/venue-terms-refresh.ts --report --cadence="$CADENCE" | tee /tmp/venue-terms.txt
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/venue-terms
+          if git diff --cached --quiet; then
+            echo "no report change"
+          else
+            git commit -m "chore(venue-terms): monthly freshness report"
+            git push origin HEAD:main || echo "push skipped (non-fast-forward)"
+          fi
+
+      - name: Open/update tracking issue when anything is due
+        run: |
+          if npx tsx scripts/venue-terms-refresh.ts --check --cadence="$CADENCE"; then
+            echo "nothing due"
+            exit 0
+          fi
+          title="Venue terms due for re-verification"
+          body="$(cat /tmp/venue-terms.txt)
+          See docs/venue-terms-refresh.md. The scheduled agent works this list; this issue is the visible backstop."
+          existing=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi

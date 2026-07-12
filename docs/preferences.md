@@ -24,6 +24,7 @@
 9. On a multi-hour/"run until done" task: do NOT stop to summarize, check in, or ask. Keep firing the next tool call off `docs/data-content-worklist.md`, committing after each unit. ONLY valid stops: worklist empty, hard technical blocker, or an outward-facing/irreversible op needs her. "Context is getting long" is NOT a stop reason; checkpoint to the worklist and continue. (Protocol below.)
 10. Data pulls are complete + multi-surface: when a target list of styles/bags exists, capture EVERY attribute (price/colour/material/hardware/year/condition/region) across EVERY available source in ONE pass, then load + summarize. Never fragment (names now, specs later); never ask permission to run a capture. (Standard + surface map + the one-pass runbook: `docs/data-collection-handoff.md` §0.)
 11. No walls of text anywhere on the site: never ship a block of 5+ uninterrupted sentences. Break every on-page narrative with formatting (lead line, short beats, lists) AND little non-logo iconography sprinkled through. (Detail in UX-copy section.)
+12. Close every substantive reply with a bottom 🧭 anchor block: **Goal** (this chat's end goal, her words) / **You just said** (one-line echo) / **Still open** (my unclosed asks, carried forward) / **Decisions to make** (new choices she owns). Flag direction changes inline (🔀 goal shifted, ➕ goal added). Skip only for one-line trivial exchanges.
 <!-- ENFORCED:end -->
 
 ## Autonomous run protocol (added 2026-06-26, after she flagged premature stopping)
@@ -103,7 +104,7 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Tax:** records / cost-basis export, **not** advice. Flag the collectibles caveat; defer to a CPA.
 - **Insurance:** refer (optional flat-fee), **not** act as an agent.
 - **Projections:** possibility curves from stated assumptions, **not** forecasts.
-- **Third-party fees / platform terms:** teach the durable framework + tell readers to verify current terms, **not** publish perishable fee percentages as fact. Owner is nervous about staleness + legal exposure on fee data. Default = qualitative ("a bigger cut," "the smallest fee"); if exact rates are ever shown, quarantine them in a dated "verify before you sell" box. Always add "general information, not financial advice." (Reporting public fees accurately is low legal risk; the real risk is going stale and looking wrong.)
+- **Third-party fees / platform terms:** publish the EXACT fee/term, sourced to the venue's own page + dated, **not** softened to qualitative or "verify current terms yourself." Hard numbers stay hard; the date is the honesty mechanism, kept current by the monthly venue-terms refresh engine (`docs/venue-terms-refresh.md`). The estimate-hedge is for resale VALUE only, never for published fees. (Reverses the earlier "don't publish perishable fees / general-information-not-advice" stance — owner 2026-07-11: "hard numbers are very important on seller fees and buyer choices, absolutely do not be soft.")
 - **Money features generally:** help users see and organize, **never** custody funds or guarantee returns.
 
 ## Who she is
