@@ -45,12 +45,13 @@ describe("groupColourways", () => {
     expect(out[0].colourName).toBe("Beige Clair");
   });
 
-  it("buckets an unnamed colourway under Standard so a model is never colour-less", () => {
+  it("drops unnamed colourways (no meaningless 'Standard' swatch; 'Not sure' covers them)", () => {
     const out = groupColourways([
       { variantId: 1, exteriorColorway: null, sizeLabel: null, hasImage: false },
       { variantId: 2, exteriorColorway: "  ", sizeLabel: null, hasImage: false },
+      { variantId: 3, exteriorColorway: "Black", sizeLabel: null, hasImage: false },
     ]);
-    expect(out).toEqual([{ colourName: "Standard", variantId: 1, sizeLabel: null }]);
+    expect(out).toEqual([{ colourName: "Black", variantId: 3, sizeLabel: null }]);
   });
 });
 

@@ -225,7 +225,15 @@ export function BagFinder({
           ) : (
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               {(maxModels ? models.slice(0, maxModels) : models).map((m) => (
-                <button key={m.styleId} type="button" onClick={() => openModel(m)} className={tile}>
+                // Nav: a click goes straight to the bag page (pick the colour there, on the
+                // variant selector). Closet: a click opens the colourways so the owner logs
+                // the exact colour they have. (Owner 2026-07-11: no colour step in search.)
+                <button
+                  key={m.styleId}
+                  type="button"
+                  onClick={() => (mode === "nav" ? choose(m, null) : openModel(m))}
+                  className={tile}
+                >
                   <div className="relative">
                     <BagImage
                       imageUrl={m.heroImage}

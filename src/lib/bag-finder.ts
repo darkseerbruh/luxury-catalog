@@ -57,7 +57,10 @@ export interface FinderIndexRow {
 
 /** Collapse a style's variants into distinct colourways. Representative variant
  * prefers one with an image so the swatch shows a real photo. A variant with no
- * named colourway buckets under "Standard" so a model is never colour-less. */
+ * named colourway is NOT a colour — it's the size/colour-unspecified catch-all, so
+ * it's dropped here and represented by the picker's "Not sure" option instead. (An
+ * earlier "Standard" fallback surfaced a meaningless "Standard" swatch beside real
+ * colours once a style gained per-colour variants.) */
 export function groupColourways(
   variants: {
     variantId: number;
@@ -71,7 +74,8 @@ export function groupColourways(
     { colourName: string; variantId: number; sizeLabel: string | null; hasImage: boolean }
   >();
   for (const v of variants) {
-    const colourName = (v.exteriorColorway ?? "").trim() || "Standard";
+    const colourName = (v.exteriorColorway ?? "").trim();
+    if (!colourName) continue;
     const cur = byColour.get(colourName.toLowerCase());
     if (!cur || (v.hasImage && !cur.hasImage)) {
       byColour.set(colourName.toLowerCase(), {
