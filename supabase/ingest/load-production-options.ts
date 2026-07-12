@@ -140,11 +140,27 @@ const LV_SPEEDY: Row[] = [
   { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte/Epi 'Noir'; canvas lines take no colour choice", sort_order: 1 },
 ];
 
+// LV Neverfull (style 218). Same LV canvas-primary model as the Speedy: the core canvases
+// (Monogram default, Damier Ebene/Azur, Empreinte leather) are the well-established Neverfull
+// lines; sizes PM/MM/GM are universal (MM most popular). Colour applies to Empreinte only.
+const LV_NEVERFULL: Row[] = [
+  { axis: "size", value: "PM", permanence: "permanent", note: "~29 cm", sort_order: 1 },
+  { axis: "size", value: "MM", permanence: "permanent", is_default: true, note: "~32 cm, the most popular", sort_order: 2 },
+  { axis: "size", value: "GM", permanence: "permanent", note: "~39 cm, the largest", sort_order: 3 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated canvas, vachetta trim", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim", sort_order: 2 },
+  { axis: "material", value: "Damier Azur", permanence: "permanent", note: "pale check, vachetta trim", sort_order: 3 },
+  { axis: "material", value: "Empreinte", permanence: "permanent", note: "embossed calfskin, the colour-bearing line", sort_order: 4 },
+  { axis: "material", value: "Vernis", permanence: "seasonal", note: "patent, limited", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
   { styleId: 423, name: "2.55 Reissue", rows: REISSUE },
   { styleId: 433, name: "Speedy", rows: LV_SPEEDY },
+  { styleId: 218, name: "Neverfull", rows: LV_NEVERFULL },
 ];
 
 async function main() {

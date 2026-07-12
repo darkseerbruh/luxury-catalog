@@ -12,7 +12,7 @@ import { colorFamily } from "../../src/lib/listings-taxonomy";
 
 const WRITE = process.argv.includes("--write");
 const REVERSE = process.argv.includes("--reverse");
-const STYLE_ID = 433;
+const STYLE_ID = Number((process.argv.find((a) => a.startsWith("--style=")) ?? "--style=433").split("=")[1]) || 433;
 const FLOOR = 5;
 const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
 

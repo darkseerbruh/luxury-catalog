@@ -14,7 +14,7 @@ import { supabaseAdmin as db } from "../seed/lib/client";
 
 const WRITE = process.argv.includes("--write");
 const REVERSE = process.argv.includes("--reverse");
-const STYLE_ID = 433; // LV Speedy
+const STYLE_ID = Number((process.argv.find((a) => a.startsWith("--style=")) ?? "--style=433").split("=")[1]) || 433;
 const FLOOR = 5;
 
 /** Specific LV canvas from a listing's text. Checks most-specific first (Azur before bare Damier). */
