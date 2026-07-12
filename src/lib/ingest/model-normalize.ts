@@ -41,6 +41,20 @@ const BAG_OVERRIDES = [
   "teen pouch", "bumbag",
 ];
 
+/** BAG_OVERRIDES membership, separator-insensitive. Scraped titles keep punctuation
+ *  ("multi-pochette") while slug titles flatten every separator to a space
+ *  ("multi pochette"), so a literal substring check under-matches exactly the override
+ *  names that carry punctuation — LV "Multi-Pochette" (a ranked bag) escaped the
+ *  "multi pochette" override, so isNonBagAccessory wrongly SLG-gated it and the read
+ *  guards dropped legit Multi Pochette listings (owner report 2026-07-11). Normalize both
+ *  sides to a single space before the includes() check so the override fires either way. */
+const sepFold = (s: string) => s.replace(/[\s./-]+/g, " ").trim();
+const BAG_OVERRIDES_SEP = BAG_OVERRIDES.map(sepFold);
+function hasBagOverride(hay: string): boolean {
+  const h = sepFold(hay);
+  return BAG_OVERRIDES_SEP.some((t) => h.includes(t));
+}
+
 const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** Accent-fold ("Jypsière" -> "jypsiere"). Titles arrive both ways (slugs are ASCII,
@@ -87,7 +101,7 @@ function has(hay: string, token: string): boolean {
  * one of these. Accent-blind, same fold as canonicalModel. */
 export function titleHasBagOverride(title: string | null | undefined): boolean {
   const hay = fold((title ?? "").toLowerCase()).replace(/&amp;/g, "&");
-  return BAG_OVERRIDES.some((t) => hay.includes(t));
+  return hasBagOverride(hay);
 }
 
 /** SLG match, plural-tolerant (so "loafers"/"mules"/"sneakers" are caught, not just singular). */
@@ -565,7 +579,7 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
       "",
     );
   if (!hay) return null;
-  const isBagOverride = BAG_OVERRIDES.some((t) => hay.includes(t));
+  const isBagOverride = hasBagOverride(hay);
   if (!isBagOverride && SLG_TOKENS.some((t) => hasSlg(hay, t.trim()))) return null;
   const defs = MODELS[canonicalBrand(brand)];
   if (!defs) return null;
@@ -640,7 +654,7 @@ function accessoryHay(rawName: string | null | undefined): string {
 export function isNonBagAccessory(rawName: string | null | undefined): boolean {
   const hay = accessoryHay(rawName);
   if (!hay) return false;
-  if (BAG_OVERRIDES.some((t) => hay.includes(t))) return false;
+  if (hasBagOverride(hay)) return false;
   const hasAccessoryToken =
     SLG_TOKENS.some((t) => hasSlg(hay, t.trim())) ||
     EXTRA_NONBAG_TOKENS.some((t) => hasSlg(hay, t.trim()));
