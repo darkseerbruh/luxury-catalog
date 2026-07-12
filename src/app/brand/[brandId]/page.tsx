@@ -210,13 +210,34 @@ export default async function BrandPage({
                   className="flex flex-col rounded-2xl border border-gold/30 bg-gold/5 p-5"
                 >
                   <div className="flex items-start gap-4">
-                    <BagImage
-                      imageUrl={lead ? images[lead.variantId] : null}
-                      brand={brand.name}
-                      className="h-20 w-20 shrink-0 rounded-xl"
-                    />
+                    {lead ? (
+                      <Link href={`/bag/${lead.variantId}`} className="shrink-0">
+                        <BagImage
+                          imageUrl={images[lead.variantId]}
+                          brand={brand.name}
+                          className="h-20 w-20 rounded-xl transition-opacity hover:opacity-80"
+                        />
+                      </Link>
+                    ) : (
+                      <BagImage
+                        imageUrl={null}
+                        brand={brand.name}
+                        className="h-20 w-20 shrink-0 rounded-xl"
+                      />
+                    )}
                     <div className="min-w-0">
-                      <h3 className="font-serif text-xl text-foreground">{style.name}</h3>
+                      <h3 className="font-serif text-xl text-foreground">
+                        {lead ? (
+                          <Link
+                            href={`/bag/${lead.variantId}`}
+                            className="transition-colors hover:text-gold-soft"
+                          >
+                            {style.name}
+                          </Link>
+                        ) : (
+                          style.name
+                        )}
+                      </h3>
                       <p className="mt-0.5 text-xs uppercase tracking-wide text-muted/70">
                         {[
                           style.silhouette,
