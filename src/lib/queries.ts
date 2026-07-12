@@ -592,6 +592,7 @@ export interface VariantDetail {
     priceType: string | null;
     observedOn: string | null;
     sourceUrl: string | null;
+    colorway: string | null;
   }[];
 }
 
@@ -662,7 +663,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       ),
       price_history(
         price_id, platform, condition, provenance_completeness,
-        sale_price, currency, date_recorded, price_type, observed_on, source_url
+        sale_price, currency, date_recorded, price_type, observed_on, source_url, colorway
       )
     `)
     .eq("variant_id", variantId)
@@ -834,6 +835,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       priceType: h.price_type ?? null,
       observedOn: h.observed_on ?? null,
       sourceUrl: h.source_url ?? null,
+      colorway: h.colorway ?? null,
     })),
   };
 }

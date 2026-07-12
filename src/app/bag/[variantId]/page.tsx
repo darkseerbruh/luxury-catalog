@@ -56,6 +56,7 @@ import FlapLines from "./FlapLines";
 import { getFlapLines } from "@/lib/flap-lines";
 import { getProductionOptions } from "@/lib/production-options";
 import ProductionRange from "./ProductionRange";
+import SeasonalShades from "./SeasonalShades";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
 import { translateProvenance } from "@/lib/provenance";
@@ -279,6 +280,21 @@ export default async function BagDetailPage({
   const isDataStub = v.priceHistory.length === 0;
   const producedColours = (productionAxes.find((a) => a.axis === "color")?.options ?? []).map((o) => o.value.toLowerCase());
   const colourProduced = v.exteriorColorway ? producedColours.includes(v.exteriorColorway.toLowerCase()) : false;
+
+  // Specific shades recorded within this colour family (sellers' descriptions, not house names).
+  const recordedShades = (() => {
+    if (!v.exteriorColorway) return [] as { name: string; count: number }[];
+    const counts = new Map<string, number>();
+    for (const h of v.priceHistory) {
+      const raw = (h.colorway ?? "").trim();
+      // Skip a shade identical to the family label (e.g. "Blue" under Blue) — no new detail.
+      if (!raw || raw.toLowerCase() === v.exteriorColorway.toLowerCase()) continue;
+      counts.set(raw.toLowerCase(), (counts.get(raw.toLowerCase()) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .map(([k, count]) => ({ name: k.replace(/\b\w/g, (c) => c.toUpperCase()), count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  })();
 
   // Articles for this bag, most specific first: style-tagged guides lead, then
   // brand-tagged guides not already shown. A bag inherits relevance from its
@@ -805,6 +821,11 @@ export default async function BagDetailPage({
       {/* "Made in" — the sourced production range (materials, construction) beyond the
           size/colour selector, so collectors see the full range even where we hold no listing. */}
       {productionAxes.length > 0 && <ProductionRange axes={productionAxes} />}
+
+      {/* Specific shades recorded within this colour family (sellers' words, not house names). */}
+      {v.exteriorColorway && recordedShades.length >= 2 && (
+        <SeasonalShades colourFamily={v.exteriorColorway} shades={recordedShades} />
+      )}
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
       <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
