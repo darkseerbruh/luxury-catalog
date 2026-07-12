@@ -30,6 +30,25 @@ Variant key moves from **(style, size)** to **(style, size, color)**. Each row k
 - **Color multiplicity:** the same physical bag seen under slightly different labels ("rouge" vs "red") must map to ONE family — `colorFamily` handles the common cases; spot-check the tail.
 - **Image coverage:** a color page wants a matching image; fall back to the style hero when a color has none.
 
+## Pilot: DONE on Chanel Classic Flap (2026-07-11)
+
+Ran the URL-preserving additive split on style #1 via `pilot-color-variants-classic-flap.ts`
+(dry-run-first, reversible with `--reverse`). Result, verified live:
+- **30 color variants** created across Small/Medium/Jumbo/Maxi (floor: >=15 comps/family), each
+  with its own indexable `/bag` URL; 3,499 listings re-pointed.
+- Each size variant kept its URL as the **null-color catch-all** (e.g. `/bag/199` = the Medium
+  base, 207 color-unknown comps). Cleared one stale parent color to avoid a case-collision chip.
+- The selector now shows a **Colour axis** (14 families); a color page (`/bag/2497` = Medium
+  Green, 81 comps) renders with the color in the title/spec and the **"Any green"** want control
+  live. The shop grid still groups by size (color collapses into one "Classic Flap Medium"), so
+  no grid regression.
+- **Gotcha fixed:** the split fetch must page ALL price_history rows ([[postgrest_row_cap]]); the
+  first dry-run under-counted (saw 1,000 of 2,531 Medium rows) until paginated.
+
+**To scale catalog-wide** (owner-gated): generalize the script to any style, add the uniqueness
+index migration on `(style_id, size_label, exterior_colorway)`, and decide the thin-content guard
+(canonical to the size base for color pages under the floor). Do it per-family, reviewed.
+
 ## Recommended first slice
 
 Pilot ONE iconic, high-comp style end-to-end (e.g. **Chanel Classic Flap** or **LV Neverfull**): rollup → create its color variants → verify the PDP color selector + per-color URLs + shop grouping, reviewed, before any catalog-wide run. Same "prove the pattern on one family, then scale" approach as the flap split.
