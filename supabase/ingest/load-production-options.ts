@@ -88,9 +88,38 @@ const BOY: Row[] = [
   { axis: "color", value: "Navy", permanence: "permanent", sort_order: 5 },
 ];
 
+// Chanel 2.55 Reissue (style 423). Facts from the prior flap-decoder archivist runs
+// (Mademoiselle rectangular lock, aged all-metal chain, 2005 reissue of the Feb 1955 original,
+// numeric size codes) + Chanel's house-wide permanent palette (archivist-confirmed same as the
+// Flap/Boy). Reissue's signature exterior is aged/distressed calfskin; it is diamond-quilted.
+const REISSUE: Row[] = [
+  { axis: "size", value: "224", permanence: "permanent", note: "small", sort_order: 1 },
+  { axis: "size", value: "225", permanence: "permanent", note: "~24 cm", sort_order: 2 },
+  { axis: "size", value: "226", permanence: "permanent", is_default: true, note: "~28 cm, most common", sort_order: 3 },
+  { axis: "size", value: "227", permanence: "permanent", note: "~28 cm, larger", sort_order: 4 },
+  { axis: "size", value: "228", permanence: "permanent", note: "maxi", sort_order: 5 },
+  { axis: "size", value: "Mini", permanence: "seasonal", sort_order: 6 },
+  { axis: "material", value: "Aged Calfskin", permanence: "permanent", is_default: true, note: "the Reissue's signature distressed leather", sort_order: 1 },
+  { axis: "material", value: "Caviar", permanence: "permanent", sort_order: 2 },
+  { axis: "material", value: "Lambskin", permanence: "permanent", sort_order: 3 },
+  { axis: "material", value: "Patent", permanence: "seasonal", sort_order: 4 },
+  { axis: "material", value: "Metallic", permanence: "seasonal", sort_order: 5 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "python etc., historic", sort_order: 6 },
+  { axis: "construction", value: "Diamond", permanence: "permanent", is_default: true, sort_order: 1 },
+  { axis: "hardware", value: "Aged gold", permanence: "permanent", is_default: true, note: "antiqued, with the Mademoiselle lock + aged all-metal chain", sort_order: 1 },
+  { axis: "hardware", value: "Aged ruthenium", permanence: "permanent", sort_order: 2 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", sort_order: 4 },
+  { axis: "color", value: "Navy", permanence: "permanent", sort_order: 5 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
+  { styleId: 423, name: "2.55 Reissue", rows: REISSUE },
 ];
 
 async function main() {

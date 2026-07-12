@@ -48,7 +48,15 @@ async function forward() {
   if (!families.length) { console.error("  ABORT: no production colour options — seed production_option first (load-production-options.ts)."); process.exit(1); }
   console.log(`  permanent colour families: ${families.join(", ")}`);
 
-  const bases = await sizeBases();
+  // Only seed colours onto sizes the PRODUCTION record lists — so junk/mis-parsed size bases
+  // ("55", a stray "Jumbo" on the Reissue) never spawn colour variants. If no production sizes
+  // are recorded, fall back to every real size base (backward-compatible).
+  const { data: sizeOpts } = await db.from("production_option").select("value").eq("style_id", STYLE_ID).eq("axis", "size");
+  const productionSizes = new Set(((sizeOpts ?? []) as any[]).map((r) => String(r.value).toLowerCase().trim()));
+  const allBases = await sizeBases();
+  const bases = productionSizes.size === 0 ? allBases : allBases.filter((b: any) => productionSizes.has(String(b.size_label).toLowerCase().trim()));
+  const skipped = allBases.filter((b: any) => !bases.includes(b)).map((b: any) => b.size_label);
+  if (skipped.length) console.log(`  skipping non-production size bases: ${skipped.join(", ")}`);
   let created = 0, moved = 0, stubs = 0;
   for (const base of bases) {
     const rows = await allPh(base.variant_id);
