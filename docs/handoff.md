@@ -15,6 +15,20 @@
 
 ---
 
+## TL;DR — Deals integrity + Chanel flap taxonomy + family module + shop UX (2026-07-11, on `main`)
+
+**Long session off the owner's "the deals module is showing garbage" report. All landed, green each time, verified live.**
+- 🎯 **Deals grade LIKE-FOR-LIKE now (spec-coherent):** a listing is graded only against comps sharing its **size + material family + single/double structure**, needing ≥5 or the deal is skipped (a "$2,715 Small Classic Flap 68% under" was a Mini Rectangular single flap vs double-flap comps). Card shows **"% below median", not the chart** (owner: chart = noise). Foreign items (accessory / wrong-model / size-mismatch) dropped via shared `classifyListingAttachment`; card shows the real descriptor (`listingQualifier`: "· Micro Mini", "· Clutch"). Code: `deals.ts`, `deal-descriptor.ts`, `listings.ts`.
+- 🧹 **Data cleanup (reversible, dry-run-first scripts):** ~105 accessories re-pointed off bag variants (`detect-listing-discrepancies.ts`), ~13.8k rows re-pointed to their correct-size variant (`resize-variants.ts`), ingest guards added in `load-prices.ts` (accessory + size coherence), + data-health sentinels `scoreMisattachment` / `scoreSizeMismatch`. Migration `0053` (`price_history.item_class`) written, **human-gated (owner applies)**.
+- 🏗️ **Chanel Classic Flap SPLIT into house-accurate styles** (`split-chanel-flaps.ts`): Classic Flap = doubles only (Small/Medium/Jumbo/Maxi); new styles **Mini Rectangular Flap #1284, Mini Square Flap #1285, Micro Mini Flap #1286, East-West Flap #1287** (disc 2010); Large→Jumbo, plain "Mini" split by title; `style_family='Chanel Flap'`.
+- 🧭 **Bag-page family module** (`FlapFamily`): siblings + single/double + status + median+n + "pick this if" + collapsed "why the names confuse everyone". **Size chips carry cm + alias** ("Jumbo (Large) · 30 cm") via `measuredSizeLabel`.
+- 📝 **Decoder article #39 PUBLISHED** `chanel-flap-names-decoded`, era-honest. Sourced verdict: the "dated shift" is Chanel's **2024-03-26** relabel of the Medium to "Classic 11.12 Handbag" (dropped "Medium"); the size-word mismatch is gradual drift; **style code A01112 is the reliable anchor**. Minis/East-West are technically seasonal, not true Classic Flaps.
+- 🛒 **/shop fixes:** Add-a-photo/Compare overlap; always-visible rail scrollbar (`.shop-scroll`); loading spinner on filter/sort (`useTransition`); **deterministic complete grid** (was silently 1000-row-capped → flaky 0/3/4/6 counts; now in-memory stale-while-revalidate full read).
+- 💡 **6 flap content ideas banked** in Notion Content Pipeline hopper (Spark), incl. the size-decoder GEO article. Nothing published.
+- ⬜ **YOUR TURN:** (1) new code (family module, cm labels, taxonomy split, shop reads) goes live on next prod build (auto if Vercel auto-deploys `main`, else `vercel --prod`). (2) Optional: apply migration `0053` via GitHub Actions → then `detect-listing-discrepancies.ts --tag`. (3) Publish/film the hopper content when ready. (4) Format tweak available: size labels shipped as "Jumbo (Large) · 30 cm" (B), not your "Large/Jumbo (30cm)" (A) — one-line switch. (5) Parked: color as its own variant/URL (Phase 2), the ~3,400 missing-size variants, precomputed shop index, family pattern for Reissue/Boy.
+
+---
+
 ## TL;DR — Where to Sell system SHIPPED end-to-end + venue-terms refresh engine (2026-07-11, on `main`)
 
 **Full sell-side surface + a never-stale refresh engine for the fee data.** Sister to `/where-to-buy`, seller economics instead of buyer protection. All green (824 tests), verified live.
