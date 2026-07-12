@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FAMILY_PREFIX, type ShopSort, type ShopFacets, type Facet, type GroupedFacet } from "@/lib/listings";
 import { track, EVENTS } from "@/lib/analytics/events";
@@ -33,6 +33,16 @@ export interface ShopCurrent {
 /** "f:Beige" → "All beige"; a specific value passes through. */
 function familyDisplay(v: string): string {
   return v.startsWith(FAMILY_PREFIX) ? `All ${v.slice(FAMILY_PREFIX.length).toLowerCase()}` : v;
+}
+
+function Spinner() {
+  return (
+    <span
+      aria-label="Updating results"
+      role="status"
+      className="inline-block h-3.5 w-3.5 shrink-0 animate-spin rounded-full border-2 border-gold/30 border-t-gold"
+    />
+  );
 }
 
 function Check() {
@@ -315,6 +325,11 @@ export default function ShopControls({
   const router = useRouter();
   const sp = useSearchParams();
   const [trayOpen, setTrayOpen] = useState(false);
+  // Every filter/sort click re-queries the server. Wrapping the navigation in a transition
+  // gives us `isPending`, which we surface immediately (spinner + dimmed results) so a click
+  // registers at once — the server read is fast now, but never zero, and silence made people
+  // click twice (owner report 2026-07-11).
+  const [isPending, startTransition] = useTransition();
 
   function update(patch: Record<string, string | null>) {
     const params = new URLSearchParams(sp.toString());
@@ -330,7 +345,7 @@ export default function ShopControls({
       });
     }
     const qs = params.toString();
-    router.push(qs ? `/shop?${qs}` : "/shop");
+    startTransition(() => router.push(qs ? `/shop?${qs}` : "/shop"));
   }
 
   const activeCount =
@@ -349,7 +364,7 @@ export default function ShopControls({
       params.delete(k);
     }
     const qs = params.toString();
-    router.push(qs ? `/shop?${qs}` : "/shop");
+    startTransition(() => router.push(qs ? `/shop?${qs}` : "/shop"));
   }
 
   const controls = (
@@ -420,7 +435,10 @@ export default function ShopControls({
     <div>
       {/* Mobile: sticky bar with count + a deals quick-toggle + the tray trigger. */}
       <div className="sticky top-0 z-20 -mx-5 mb-3 flex items-center justify-between gap-2 border-b border-border bg-bg/90 px-5 py-2.5 backdrop-blur lg:hidden">
-        <span className="text-sm text-muted">{countLine}</span>
+        <span className="flex items-center gap-2 text-sm text-muted">
+          {countLine}
+          {isPending && <Spinner />}
+        </span>
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -444,16 +462,30 @@ export default function ShopControls({
 
       {chips}
 
+      {/* Thin top progress bar — the first thing that moves on any filter/sort click. */}
+      {isPending && (
+        <div className="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden bg-gold/20">
+          <div className="h-full w-1/3 animate-[shop-slide_1s_ease-in-out_infinite] bg-gold" />
+        </div>
+      )}
+
       <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8 lg:items-start">
-        {/* Desktop rail */}
-        <aside className="sticky top-4 hidden max-h-[calc(100vh-2rem)] self-start overflow-y-auto rounded-2xl border border-border bg-surface p-4 lg:block">
+        {/* Desktop rail — scrollbar-gutter reserves space so the bar never covers the
+            options, and shop-scroll keeps it visible (not a scroll-only overlay). */}
+        <aside className="shop-scroll sticky top-4 hidden max-h-[calc(100vh-2rem)] self-start overflow-y-auto rounded-2xl border border-border bg-surface p-4 lg:block">
           {controls}
         </aside>
 
-        {/* Results column (server-rendered children). */}
-        <div className="min-w-0">
-          <p className="mb-4 hidden border-b border-border pb-3 text-sm text-muted lg:block">{countLine}</p>
-          {children}
+        {/* Results column (server-rendered children). Dimmed + un-clickable while a new
+            query is in flight, with a spinner, so a click is acknowledged instantly. */}
+        <div className="relative min-w-0">
+          <p className="mb-4 hidden items-center gap-2 border-b border-border pb-3 text-sm text-muted lg:flex">
+            {countLine}
+            {isPending && <Spinner />}
+          </p>
+          <div className={isPending ? "pointer-events-none opacity-50 transition-opacity" : "transition-opacity"}>
+            {children}
+          </div>
         </div>
       </div>
 
@@ -466,7 +498,7 @@ export default function ShopControls({
             onClick={() => setTrayOpen(false)}
             className="absolute inset-0 bg-bg/60 backdrop-blur-sm"
           />
-          <div className="relative max-h-[82vh] overflow-y-auto rounded-t-2xl border-t border-border bg-surface-raised p-5 pb-8">
+          <div className="shop-scroll relative max-h-[82vh] overflow-y-auto rounded-t-2xl border-t border-border bg-surface-raised p-5 pb-8">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-serif text-lg text-foreground">Filter &amp; sort</h2>
               <button

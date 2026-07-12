@@ -17,7 +17,8 @@
  * links carry the listing's own source_url and `affiliate.ts` adds attribution when set.
  */
 
-import { getSupabase } from "./supabase";
+import { getSupabase, fetchAllRows } from "./supabase";
+import { CACHE_MARKET } from "./cache";
 import { affiliateListingUrl } from "./affiliate";
 import { PLATFORMS } from "./platforms";
 import { colorFamily, materialFamily } from "./listings-taxonomy";
@@ -231,8 +232,6 @@ const VARIANT_SELECT = (styleSelect: string) =>
 const buildSelect = (styleSelect: string) =>
   "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, notes, " +
   VARIANT_SELECT(styleSelect);
-
-const SELECT = buildSelect(STYLE_SELECT_WITH_FEET);
 
 function one<T>(rel: T | T[] | null | undefined): T | null {
   return (Array.isArray(rel) ? rel[0] : rel) ?? null;
@@ -537,10 +536,88 @@ interface ProductGroup {
   hasProtectiveFeet: boolean | null;
 }
 
+/** Scalar price_history columns (no joins) — the SAME field set mapRow reads, minus the
+ *  variant embed, which we attach from the tiny metadata map. A per-row join over ~120k
+ *  rows took ~50s; splitting it (scalar rows + a ~2k-row variant map) drops it to ~13s. */
+const PH_SCALAR_SELECT =
+  "price_id, variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, listing_ref, listing_status, condition, colorway, material, hardware_color, production_year, notes";
+const VARIANT_META_WITH_FEET =
+  "variant_id, size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), " +
+  STYLE_SELECT_WITH_FEET;
+const VARIANT_META_NO_FEET =
+  "variant_id, size_label, exterior_colorway, hardware_color, exterior_material:exterior_material_id(name), " +
+  STYLE_SELECT_NO_FEET;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase builder narrows badly on a dynamic select string; fetchAllRows only needs .range()
+type Rangeable = any;
+
+/**
+ * The FULL, deterministic shop read (owner report 2026-07-11). PostgREST caps every
+ * response at 1000 rows regardless of `.limit()` ([[postgrest_row_cap]]), so the old
+ * `.limit(50000)` silently saw a DIFFERENT arbitrary 1000-row slice each request — the
+ * grid + counts flickered 0/3/4/6 and only ~4 of 1,649 bags ever showed. We page the whole
+ * table (ordered), split so the join stays cheap. The 76MB row set is over the 2MB
+ * `unstable_cache` limit, so we hold it in a MODULE-level in-memory cache instead: the ~13s
+ * read runs once per TTL per server instance, then every request (any filter combo) reuses
+ * the same complete, stable set and filters in JS — correct + fast once warm.
+ */
+async function loadShopRowsRaw(): Promise<{ rows: PriceRow[]; feetAvailable: boolean }> {
+  let feetAvailable = true;
+  let metaSelect = VARIANT_META_WITH_FEET;
+  const probe = await getSupabase().from("variant").select(VARIANT_META_WITH_FEET).limit(1);
+  if (probe.error) {
+    feetAvailable = false;
+    metaSelect = VARIANT_META_NO_FEET;
+  }
+  const meta = await fetchAllRows<{ variant_id: number }>(
+    () => getSupabase().from("variant").select(metaSelect).order("variant_id", { ascending: true }) as Rangeable,
+    200000,
+  );
+  const metaById = new Map<number, unknown>();
+  for (const m of meta) metaById.set(m.variant_id, m);
+
+  const scalar = await fetchAllRows<{ variant_id: number }>(
+    () =>
+      getSupabase()
+        .from("price_history")
+        .select(PH_SCALAR_SELECT)
+        .not("sale_price", "is", null)
+        .order("price_id", { ascending: true }) as Rangeable,
+    200000,
+  );
+
+  const rows: PriceRow[] = [];
+  for (const s of scalar) {
+    const raw = { ...s, variant: metaById.get(s.variant_id) ?? null } as unknown as RawRow;
+    const pr = mapRow(raw);
+    if (pr && !isForeignListing(pr)) rows.push(pr);
+  }
+  return { rows, feetAvailable };
+}
+
+let shopRowsCache: { rows: PriceRow[]; feetAvailable: boolean; at: number } | null = null;
+let shopRowsInflight: Promise<{ rows: PriceRow[]; feetAvailable: boolean }> | null = null;
+const SHOP_ROWS_TTL_MS = CACHE_MARKET * 1000;
+
+/** In-memory TTL cache for the full shop read (sidesteps the 2MB unstable_cache cap).
+ *  Concurrent requests during a cold read share ONE in-flight promise, so a cache miss
+ *  triggers a single DB read, not one per request. */
+async function loadShopRows(): Promise<{ rows: PriceRow[]; feetAvailable: boolean }> {
+  if (shopRowsCache && Date.now() - shopRowsCache.at < SHOP_ROWS_TTL_MS) return shopRowsCache;
+  if (!shopRowsInflight) {
+    shopRowsInflight = loadShopRowsRaw().finally(() => {
+      shopRowsInflight = null;
+    });
+  }
+  const fresh = await shopRowsInflight;
+  shopRowsCache = { ...fresh, at: Date.now() };
+  return shopRowsCache;
+}
+
 /**
  * The catalog-wide grid: bags-at-a-size with at least one live listing, each carrying a
  * "from" price, listing/seller counts and a best-in-stock deal band. Filtered + sorted
- * server-side from one resilient read. Always returns an (possibly empty) result.
+ * server-side from the cached full read. Always returns an (possibly empty) result.
  */
 export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Promise<ShopResult> {
   const emptyFacets: ShopFacets = { brands: [], colors: [], materials: [], hardware: [], conditions: [], protectiveFeet: [] };
@@ -548,28 +625,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return EMPTY;
 
   try {
-    // Prefer the select WITH the 0044 has_protective_feet column. If it's not
-    // migrated yet, PostgREST errors ("column does not exist") — retry WITHOUT
-    // it and drop the feet facet, so the rest of Shop keeps working (degrade
-    // gracefully, per the locked rule).
-    let feetAvailable = true;
-    let res = await getSupabase()
-      .from("price_history")
-      .select(SELECT)
-      .not("sale_price", "is", null)
-      .limit(50000);
-    if (res.error) {
-      feetAvailable = false;
-      res = await getSupabase()
-        .from("price_history")
-        .select(buildSelect(STYLE_SELECT_NO_FEET))
-        .not("sale_price", "is", null)
-        .limit(50000);
-    }
-    const { data, error } = res;
-    if (error || !data) return EMPTY;
-
-    const rows = (data as unknown as RawRow[]).map(mapRow).filter((r): r is PriceRow => r !== null && !isForeignListing(r));
+    const { rows, feetAvailable } = await loadShopRows();
 
     // Group into bags-at-a-size.
     const groups = new Map<string, ProductGroup>();

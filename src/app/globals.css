@@ -58,3 +58,37 @@ body {
     font-size: max(16px, 1em) !important;
   }
 }
+
+/* Shop filter rail scrollbar: always visible + never covering the options. A styled
+   ::-webkit-scrollbar is non-overlay (so it doesn't hover over content the way the OS
+   scroll-only overlay does), and scrollbar-gutter reserves the track space up front so
+   the options never shift or get clipped when it appears. Owner report 2026-07-11. */
+.shop-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--border) transparent;
+}
+.shop-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.shop-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.shop-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+.shop-scroll:hover::-webkit-scrollbar-thumb {
+  background: var(--muted);
+}
+
+/* Shop top progress bar sweep (indeterminate loading on a filter/sort click). */
+@keyframes shop-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[shop-slide_1s_ease-in-out_infinite\] {
+    animation: none;
+  }
+}
