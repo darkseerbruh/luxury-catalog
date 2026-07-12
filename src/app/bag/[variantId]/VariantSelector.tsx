@@ -22,6 +22,7 @@ import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 // Dimension logic (which details become chip rows, target resolution) lives in
 // src/lib/variant-dims.ts so it's unit-testable; this file is just the UI.
 import { resolveTarget, visibleDims } from "@/lib/variant-dims";
+import { measuredSizeLabel } from "@/lib/variant-label";
 
 export default function VariantSelector({
   styleName,
@@ -83,6 +84,9 @@ export default function VariantSelector({
                 {values.map((value) => {
                   const active = value === currentVal;
                   const target = active ? currentVariantId : resolveTarget(variants, current, dim, value);
+                  // Display only: size chips carry the measurement + boutique alias so
+                  // "Jumbo" reads "Jumbo (Large) · 30 cm". The raw `value` still keys matching.
+                  const label = dim.key === "size" ? measuredSizeLabel(value) ?? value : value;
                   if (target == null) {
                     return (
                       <span
@@ -90,7 +94,7 @@ export default function VariantSelector({
                         aria-disabled="true"
                         className="cursor-not-allowed rounded-full border border-border/50 px-4 py-2 text-sm text-muted/40 line-through"
                       >
-                        {value}
+                        {label}
                       </span>
                     );
                   }
@@ -100,7 +104,7 @@ export default function VariantSelector({
                       aria-current="true"
                       className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
                     >
-                      {value}
+                      {label}
                     </span>
                   ) : (
                     <Link
@@ -110,7 +114,7 @@ export default function VariantSelector({
                       scroll={false}
                       className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
                     >
-                      {value}
+                      {label}
                     </Link>
                   );
                 })}
