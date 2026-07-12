@@ -312,7 +312,8 @@ defeated, no Chrome session needed). eBay API + affiliate feeds dead (see §0a).
 - ✅ "Most searched vs most expensive" LIVE draft post #20 (SearchVsPriceChart): Kelly/Birkin top both; Flap least-searched yet 3rd priciest (2026-06-26)
 - ✅ "Dior Saddle is back" LIVE draft post (dior-saddle-resale-price), reuses ask-vs-sold-gap chart (2026-06-26)
 - ✅ "The asking-price illusion" LIVE draft post #17 (AskVsSoldGapChart) (2026-06-26)
-- ⬜ **"What every resale site actually pays you" — article + paired social (added 2026-07-11).**
+- 🟡 **"What every resale site actually pays you" — article DRAFT SEEDED 2026-07-11 (post #40, slug what-every-resale-site-actually-pays-you), owner publishes. Paired social still ⬜ (needs Metricool auth + social agent).**
+  Copywriter-drafted (voice canon), figures = our `where-to-sell.ts` registry (checkedAt 2026-07-11) quarantined in a dated box; $2,000 worked example = estimateNet output; visuals `[diagram: where-to-sell-tradeoff]` + new `[diagram: where-to-sell-estimator-cta]` (Link into the estimator). Seed: `supabase/seed/seed-where-to-sell-payouts.ts` (idempotent, status only on insert).
   Drives to the new `/where-to-sell` net-payout estimator (habit loop + on-site engagement; NOTE
   there is no sell-side affiliate revenue, so frame this as engagement/GEO, not monetization). Angle: same $2,000 bag nets a different
   amount at every venue, and the highest-% option is NOT the hands-off one (Facebook 100% local /
