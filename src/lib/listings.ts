@@ -638,9 +638,59 @@ async function loadShopRows(): Promise<{ rows: PriceRow[]; feetAvailable: boolea
 }
 
 /**
+ * The PRECOMPUTED shop index: the full row set grouped into bags-at-a-size. This grouping
+ * is filter-independent and the single biggest per-request cost (~120k rows collapse into
+ * ~1.6k groups + a dedupe pass), so we derive it ONCE per rows-cache generation and memoize
+ * it, keyed off the rows-cache `at` timestamp. Every request (any filter combo) then reuses
+ * the same grouped index and only runs the cheap filter + facet + sort pass. The grouped
+ * objects are treated as READ-ONLY downstream (filters build new arrays, never mutate a
+ * group), so sharing them across requests is safe. Refreshes exactly when the rows do.
+ */
+let shopGroupsCache: { groups: Map<string, ProductGroup>; feetAvailable: boolean; at: number } | null = null;
+
+async function loadShopGroups(): Promise<{ groups: Map<string, ProductGroup>; feetAvailable: boolean }> {
+  const { rows, feetAvailable } = await loadShopRows();
+  const at = shopRowsCache?.at ?? 0;
+  if (shopGroupsCache && shopGroupsCache.at === at) {
+    return { groups: shopGroupsCache.groups, feetAvailable: shopGroupsCache.feetAvailable };
+  }
+
+  const groups = new Map<string, ProductGroup>();
+  for (const r of rows) {
+    if (r.styleId === 0) continue;
+    const key = `${r.styleId}::${r.sizeLabel ?? ""}`;
+    let g = groups.get(key);
+    if (!g) {
+      g = {
+        key,
+        styleId: r.styleId,
+        brandName: r.brandName,
+        styleName: r.styleName,
+        sizeLabel: r.sizeLabel,
+        listed: [],
+        comps: [],
+        colors: new Set(),
+        hasProtectiveFeet: r.hasProtectiveFeet ?? null,
+      };
+      groups.set(key, g);
+    }
+    if (r.spec.colorway) g.colors.add(r.spec.colorway.toLowerCase());
+    if (isListed(r)) g.listed.push(r);
+    if (!isRetail(r)) g.comps.push(specComp(r));
+  }
+
+  // Collapse repeat crawl observations so each live listing counts once, at its most
+  // recent price — otherwise a bag re-seen across N crawls would inflate every count.
+  for (const g of groups.values()) g.listed = dedupeByListing(g.listed);
+
+  shopGroupsCache = { groups, feetAvailable, at };
+  return { groups, feetAvailable };
+}
+
+/**
  * The catalog-wide grid: bags-at-a-size with at least one live listing, each carrying a
  * "from" price, listing/seller counts and a best-in-stock deal band. Filtered + sorted
- * server-side from the cached full read. Always returns an (possibly empty) result.
+ * server-side from the precomputed index. Always returns an (possibly empty) result.
  */
 export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Promise<ShopResult> {
   const emptyFacets: ShopFacets = { brands: [], colors: [], materials: [], hardware: [], conditions: [], protectiveFeet: [] };
@@ -648,36 +698,7 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return EMPTY;
 
   try {
-    const { rows, feetAvailable } = await loadShopRows();
-
-    // Group into bags-at-a-size.
-    const groups = new Map<string, ProductGroup>();
-    for (const r of rows) {
-      if (r.styleId === 0) continue;
-      const key = `${r.styleId}::${r.sizeLabel ?? ""}`;
-      let g = groups.get(key);
-      if (!g) {
-        g = {
-          key,
-          styleId: r.styleId,
-          brandName: r.brandName,
-          styleName: r.styleName,
-          sizeLabel: r.sizeLabel,
-          listed: [],
-          comps: [],
-          colors: new Set(),
-          hasProtectiveFeet: r.hasProtectiveFeet ?? null,
-        };
-        groups.set(key, g);
-      }
-      if (r.spec.colorway) g.colors.add(r.spec.colorway.toLowerCase());
-      if (isListed(r)) g.listed.push(r);
-      if (!isRetail(r)) g.comps.push(specComp(r));
-    }
-
-    // Collapse repeat crawl observations so each live listing counts once, at its most
-    // recent price — otherwise a bag re-seen across N crawls would inflate every count.
-    for (const g of groups.values()) g.listed = dedupeByListing(g.listed);
+    const { groups, feetAvailable } = await loadShopGroups();
 
     // Facet accumulators (count distinct PRODUCTS carrying each value, over the unfiltered
     // set — like the brand facet). Spec facets count only over groups with live listings.
