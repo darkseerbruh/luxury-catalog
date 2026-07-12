@@ -11,12 +11,22 @@ import type { StyleVariantOption } from "@/lib/queries";
  */
 export type Dim = { key: string; label: string; get: (v: StyleVariantOption) => string | null };
 
+/** Collector-facing material label: prefer a parenthetical line name, else drop a trailing
+ *  " Leather"/" Canvas". "coated canvas (Monogram)" → "Monogram"; "Caviar Leather" → "Caviar". */
+export function cleanMaterialLabel(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const paren = raw.match(/\(([^)]+)\)\s*$/);
+  if (paren) return paren[1].trim();
+  return raw.replace(/\s+(leather|canvas)$/i, "").trim();
+}
+
 export const DIMS: Dim[] = [
   { key: "size", label: "Size", get: (v) => v.sizeLabel },
   { key: "color", label: "Colour", get: (v) => v.exteriorColorway },
-  // Trim a trailing " Leather"/" Canvas" so chips read "Caviar", "Patent" (not "Caviar Leather")
-  // and stay consistent beside "Lambskin"/"Damier Ebene". The trimmed string is the match key too.
-  { key: "material", label: "Material", get: (v) => v.exteriorMaterial?.replace(/\s+(leather|canvas)$/i, "") ?? null },
+  // Clean the material chip label: a parenthetical line wins ("coated canvas (Monogram)" →
+  // "Monogram"), else trim a trailing " Leather"/" Canvas" ("Caviar Leather" → "Caviar"), so
+  // chips read as the collector term. The cleaned string is the match key too.
+  { key: "material", label: "Material", get: (v) => cleanMaterialLabel(v.exteriorMaterial) },
   { key: "trim", label: "Trim", get: (v) => v.trimMaterial },
   { key: "hardware", label: "Hardware", get: (v) => v.hardwareColor },
   { key: "hardwareType", label: "Fittings", get: (v) => v.hardwareType },
