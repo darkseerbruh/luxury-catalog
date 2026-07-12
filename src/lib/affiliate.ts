@@ -216,11 +216,12 @@ export function buildResaleLinks(brand: string, style: string): ResaleLink[] {
 }
 
 /**
- * "Where to sell" consignment destinations — the highest-upside (consignor
- * referral) revenue stream. Mirrors the buy-side `PLATFORMS`: each entry points
- * at a reseller's sell/consign landing page and carries the same optional
- * affiliate attribution (per-platform param + wrap template), so with no env set
- * these are plain, never-broken sell links.
+ * "Where to sell" consignment destinations. NOTE: there is no sell-side affiliate
+ * program today (none of these resellers pay for referring sellers, as of 2026-07-11),
+ * so these are plain, useful outbound links and we earn nothing on them. The affiliate
+ * plumbing mirrors the buy side (per-platform param + wrap template) and is kept dormant
+ * on purpose: if a program ever lands, set the platform's code and it activates, including
+ * the commission disclosure (see sellLinksAffiliated). Mirrors the buy-side `PLATFORMS`.
  *
  * `mode` lets the UI present the buyout-vs-consignment fork honestly: a "buyout"
  * destination pays cash fast; a "consign" destination lists for more, later.
@@ -274,6 +275,18 @@ export function buildConsignmentLinks(brand: string, style: string): ConsignLink
     mode: p.mode,
     url: applyAffiliate(p.search(q), p),
   }));
+}
+
+/**
+ * Whether the sell/consign links currently carry REAL affiliate attribution (an env
+ * code is set for a consign platform, or a wrap template applies). There is no sell
+ * affiliate program today, so this returns false and the UI shows no sell-commission
+ * disclosure. The plumbing stays in place: set a consign platform's NEXT_PUBLIC_AFFILIATE_*
+ * code (or the wrap template) the day a program lands and the disclosure activates itself.
+ */
+export function sellLinksAffiliated(): boolean {
+  if (WRAP_TEMPLATE && WRAP_TEMPLATE.includes("{url}")) return true;
+  return CONSIGN_PLATFORMS.some((p) => Boolean(AFFILIATE_CODES[p.paramEnv]));
 }
 
 /**

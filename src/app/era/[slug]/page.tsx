@@ -18,7 +18,7 @@ export async function generateMetadata({
   const era = await getEra(slug);
   if (!era) return {};
   const title = `${era.name} handbags`;
-  const description = `Bags whose production began in the ${era.name}, ${era.bagCount} across ${era.houses.length} houses.`;
+  const description = `Bags whose production began in the ${era.name}, ${era.bagCount} across ${era.houses.length} brands.`;
   const url = `${SITE_URL}/era/${era.slug}`;
   return {
     title,

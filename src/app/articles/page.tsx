@@ -311,7 +311,7 @@ export default async function ArticlesPage({
             </>
           );
           return dimmed ? (
-            <span key={d.id} className={cls} aria-disabled title="No guides for this house yet">
+            <span key={d.id} className={cls} aria-disabled title="No guides for this brand yet">
               {inner}
             </span>
           ) : (
@@ -324,7 +324,7 @@ export default async function ArticlesPage({
 
       {houses.length > 0 && (
         <div className="mt-6">
-          <p className="mb-2.5 text-[10px] uppercase tracking-[0.2em] text-muted">Filter by house</p>
+          <p className="mb-2.5 text-[10px] uppercase tracking-[0.2em] text-muted">Filter by brand</p>
           <div className="flex flex-wrap gap-2">
             <Link
               href={href({ department: sp.department, q: q || undefined })}
@@ -437,9 +437,9 @@ export default async function ArticlesPage({
 
         {posts.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface/50 p-8 text-center text-muted">
-            No {activeDept.label.toLowerCase()} guides for this house yet.{" "}
+            No {activeDept.label.toLowerCase()} guides for this brand yet.{" "}
             <Link href={href({ department: activeDept.id })} className="text-gold hover:underline">
-              Clear the house filter
+              Clear the brand filter
             </Link>
             .
           </div>
@@ -470,7 +470,7 @@ export default async function ArticlesPage({
               href={href({})}
               className="inline-flex items-center gap-1.5 rounded-full border border-gold px-3 py-1.5 text-gold"
             >
-              {houses.find((h) => h.brandId === activeBrandId)?.name ?? "house"} <span className="opacity-70">&times;</span>
+              {houses.find((h) => h.brandId === activeBrandId)?.name ?? "brand"} <span className="opacity-70">&times;</span>
             </Link>
           </div>
         )}

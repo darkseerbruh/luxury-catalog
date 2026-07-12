@@ -143,13 +143,21 @@ export default async function BrandPage({
   // carry a year, fall back to the earliest-dated styles so the line still reads.
   const iconYearLabels = iconStyles
     .filter((x) => x.style.yearIntroduced != null)
-    .map((x) => ({ year: x.style.yearIntroduced as number, label: x.style.name }));
+    .map((x) => ({
+      year: x.style.yearIntroduced as number,
+      label: x.style.name,
+      href: x.style.variants[0] ? `/bag/${x.style.variants[0].variantId}` : null,
+    }));
   const fallbackYearLabels = liveStyles
     .filter((s) => s.yearIntroduced != null)
     .sort((a, b) => (a.yearIntroduced as number) - (b.yearIntroduced as number))
-    .map((s) => ({ year: s.yearIntroduced as number, label: s.name }));
-  const milestones = [
-    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "House founded" }] : []),
+    .map((s) => ({
+      year: s.yearIntroduced as number,
+      label: s.name,
+      href: s.variants[0] ? `/bag/${s.variants[0].variantId}` : null,
+    }));
+  const milestones: { year: number; label: string; href: string | null }[] = [
+    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "Brand founded", href: null }] : []),
     ...(iconYearLabels.length > 0 ? iconYearLabels : fallbackYearLabels),
   ]
     .sort((a, b) => a.year - b.year)
@@ -197,7 +205,7 @@ export default async function BrandPage({
         <section>
           <h2 className="font-serif text-2xl text-foreground">The icons</h2>
           <p className="mt-1 text-sm text-muted">
-            The bags that made the house, and where they came from.
+            The bags that made the brand, and where they came from.
           </p>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {iconStyles.map(({ style, story }, i) => {
@@ -210,13 +218,34 @@ export default async function BrandPage({
                   className="flex flex-col rounded-2xl border border-gold/30 bg-gold/5 p-5"
                 >
                   <div className="flex items-start gap-4">
-                    <BagImage
-                      imageUrl={lead ? images[lead.variantId] : null}
-                      brand={brand.name}
-                      className="h-20 w-20 shrink-0 rounded-xl"
-                    />
+                    {lead ? (
+                      <Link href={`/bag/${lead.variantId}`} className="shrink-0">
+                        <BagImage
+                          imageUrl={images[lead.variantId]}
+                          brand={brand.name}
+                          className="h-20 w-20 rounded-xl transition-opacity hover:opacity-80"
+                        />
+                      </Link>
+                    ) : (
+                      <BagImage
+                        imageUrl={null}
+                        brand={brand.name}
+                        className="h-20 w-20 shrink-0 rounded-xl"
+                      />
+                    )}
                     <div className="min-w-0">
-                      <h3 className="font-serif text-xl text-foreground">{style.name}</h3>
+                      <h3 className="font-serif text-xl text-foreground">
+                        {lead ? (
+                          <Link
+                            href={`/bag/${lead.variantId}`}
+                            className="transition-colors hover:text-gold-soft"
+                          >
+                            {style.name}
+                          </Link>
+                        ) : (
+                          style.name
+                        )}
+                      </h3>
                       <p className="mt-0.5 text-xs uppercase tracking-wide text-muted/70">
                         {[
                           style.silhouette,
@@ -262,7 +291,16 @@ export default async function BrandPage({
               <li key={`${m.year}-${m.label}`} className="flex min-w-0 shrink-0 items-center">
                 <div className="w-32 shrink-0">
                   <p className="font-serif text-lg text-gold-soft">{m.year}</p>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-muted">{m.label}</p>
+                  {m.href ? (
+                    <Link
+                      href={m.href}
+                      className="mt-0.5 block line-clamp-2 text-xs text-muted transition-colors hover:text-foreground"
+                    >
+                      {m.label}
+                    </Link>
+                  ) : (
+                    <p className="mt-0.5 line-clamp-2 text-xs text-muted">{m.label}</p>
+                  )}
                 </div>
                 {i < milestones.length - 1 && (
                   <span className="mx-1 h-px w-8 shrink-0 bg-border" aria-hidden />
@@ -441,6 +479,12 @@ export default async function BrandPage({
           {sellLinks.length > 0 && (
             <div className="mt-4">
               <p className="text-xs uppercase tracking-wide text-muted/70">Where to sell</p>
+              <Link
+                href="/where-to-sell"
+                className="mt-1 inline-block text-xs text-gold-soft underline underline-offset-2 hover:text-gold"
+              >
+                See what you&apos;d keep at each venue, from real published fees &rarr;
+              </Link>
               <div className="mt-2 flex flex-wrap gap-2">
                 {sellLinks.map((l) => (
                   <a
@@ -487,7 +531,7 @@ export default async function BrandPage({
       {/* Similar houses — lateral discovery across brands (Spotify "similar artists"). */}
       {similarHouses.length > 0 && (
         <section className="border-t border-border pt-8">
-          <h2 className="mb-4 font-serif text-xl text-foreground">Similar houses</h2>
+          <h2 className="mb-4 font-serif text-xl text-foreground">Similar brands</h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {similarHouses.map((b) => (
               <Link

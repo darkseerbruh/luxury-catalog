@@ -80,7 +80,7 @@ export default async function AttributeObjectPage({ view }: { view: AttributeObj
         <Stat value={view.bagCount.toString()} label={view.bagCount === 1 ? "bag" : "bags"} />
         <Stat
           value={view.houses.length.toString()}
-          label={view.houses.length === 1 ? "house" : "houses"}
+          label={view.houses.length === 1 ? "brand" : "brands"}
         />
       </section>
 

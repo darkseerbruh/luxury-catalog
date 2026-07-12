@@ -9,13 +9,13 @@ import {
 } from "@/lib/house-standing";
 
 export const metadata: Metadata = {
-  title: "How we tier houses: House Standing",
+  title: "How we tier brands: House Standing",
   description:
-    "How Luxury Catalog tiers handbag houses: House Standing, a measured resale-market score (price, ceiling, trade volume) cut into numbered tiers. Our standing, not a verdict.",
+    "How Luxury Catalog tiers handbag brands: House Standing, a measured resale-market score (price, ceiling, trade volume) cut into numbered tiers. Our standing, not a verdict.",
 };
 
 const SIGNALS: { label: string; weight: number; note: string }[] = [
-  { label: "Price standing", weight: HOUSE_STANDING_WEIGHTS.median, note: "the house's median resale price" },
+  { label: "Price standing", weight: HOUSE_STANDING_WEIGHTS.median, note: "the brand's median resale price" },
   { label: "Ceiling", weight: HOUSE_STANDING_WEIGHTS.ceiling, note: "what its top pieces reach" },
   { label: "Trade volume", weight: HOUSE_STANDING_WEIGHTS.trade, note: "how actively its bags change hands" },
 ];
@@ -48,7 +48,7 @@ export default function HowWeTierPage() {
         name: "How does Luxury Catalog tier handbag brands?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "By House Standing, a measured resale-market score blending a house's median resale price (55%), its ceiling (25%), and its trade volume (20%), cut into five numbered tiers (Tier 1 highest to Tier 5). It is our standing, not a verdict, and it is recomputed as the market moves.",
+          text: "By House Standing, a measured resale-market score blending a brand's median resale price (55%), its ceiling (25%), and its trade volume (20%), cut into five numbered tiers (Tier 1 highest to Tier 5). It is our standing, not a verdict, and it is recomputed as the market moves.",
         },
       },
     ],
@@ -59,14 +59,14 @@ export default function HowWeTierPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <p className="text-sm uppercase tracking-widest text-muted">Our method</p>
-      <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">How we tier houses</h1>
+      <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">How we tier brands</h1>
       <p className="mt-4 text-lg text-foreground">
-        One measured number decides where a house sits, not its reputation.
+        One measured number decides where a brand sits, not its reputation.
       </p>
       <p className="mt-2 text-muted">
         We call it <strong className="text-foreground">House Standing</strong>. It reads the resale
         market, the same data behind <Link href="/rankings" className="text-gold hover:underline">the LC Index</Link>,
-        and places every house on a five-tier spectrum. This is our standing, not a verdict.
+        and places every brand on a five-tier spectrum. This is our standing, not a verdict.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-foreground">What it measures</h2>
@@ -103,18 +103,18 @@ export default function HowWeTierPage() {
       <h2 className="mt-10 font-serif text-2xl text-foreground">How we keep it honest</h2>
       <ul className="mt-4 space-y-2 text-muted">
         <li>
-          ◆ Each signal is scored against every other house first, so the tiers reflect the market, not a hunch.
+          ◆ Each signal is scored against every other brand first, so the tiers reflect the market, not a hunch.
         </li>
         <li>
-          ◆ A house needs at least {HOUSE_STANDING_MIN_N} recorded resale prices to be placed. Below that it stays unplaced, never guessed.
+          ◆ A brand needs at least {HOUSE_STANDING_MIN_N} recorded resale prices to be placed. Below that it stays unplaced, never guessed.
         </li>
-        <li>◆ We recompute as the market moves, so a house can rise or fall.</li>
-        <li>◆ Numbers, not labels, on purpose. No house is a &ldquo;knock,&rdquo; and none is above the data.</li>
+        <li>◆ We recompute as the market moves, so a brand can rise or fall.</li>
+        <li>◆ Numbers, not labels, on purpose. No brand is a &ldquo;knock,&rdquo; and none is above the data.</li>
       </ul>
 
       <p className="mt-10 text-sm text-muted">
         Want to see it in motion? Browse <Link href="/rankings" className="text-gold hover:underline">the LC Index</Link> or
-        any <Link href="/search" className="text-gold hover:underline">bag&rsquo;s page</Link>, where a house&rsquo;s tier sits next to its name.
+        any <Link href="/search" className="text-gold hover:underline">bag&rsquo;s page</Link>, where a brand&rsquo;s tier sits next to its name.
       </p>
       <link rel="canonical" href={`${SITE_URL}/how-we-tier`} />
     </main>

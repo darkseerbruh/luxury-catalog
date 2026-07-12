@@ -174,7 +174,7 @@ const BRANDS: Record<string, BrandAuth> = {
         body: "The strips are even in width and the weave lies flat across corners and seams. Bubbling, lifting, gaps, or a puffy look are warning signs.",
         good: "even width, flat drape", bad: "puffy, lifting, gaps" },
       { name: "The debossed stamp", where: "interior leather", kind: "good-bad",
-        body: "BOTTEGA VENETA and MADE IN ITALY are delicately debossed into the leather and almost blend in. A sharp, printed-looking stamp is wrong, as is any loud external logo on a no-logo house.",
+        body: "BOTTEGA VENETA and MADE IN ITALY are delicately debossed into the leather and almost blend in. A sharp, printed-looking stamp is wrong, as is any loud external logo on a no-logo brand.",
         good: "soft, blended deboss", bad: "sharp, printed look" },
       { name: "Leather hand and scent", where: "the body", kind: "good-bad",
         body: "Butter-soft calfskin or lambskin, supple with a slightly matte finish and a real leather scent. A plasticky shine, a board-stiff hand, or a chemical smell are flags.",
@@ -214,7 +214,7 @@ const BRANDS: Record<string, BrandAuth> = {
   },
   "balenciaga-authentication": {
     house: "Balenciaga",
-    subhead: "One of the hardest houses to authenticate, with an exception to almost every rule.",
+    subhead: "One of the hardest brands to authenticate, with an exception to almost every rule.",
     sources: "Sourced chiefly from the Love that Bag reseller guide, checked June 2026; the post-2017 letter codes and the 2014 zip change are single-source and should be re-confirmed. Every marker here has documented exceptions, so weigh them together.",
     markers: [
       { name: "Lampo zip engraving", where: "back of each zip head", kind: "good-bad",

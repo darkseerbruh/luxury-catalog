@@ -51,7 +51,7 @@ export default function AboutPage() {
             <p className="mt-2">
               Luxury Catalog is built and run by Luxury Catalog, LLC, an
               independent company in the United States. We have no affiliation
-              with any fashion house, and nobody pays to change a fact on this
+              with any fashion brand, and nobody pays to change a fact on this
               site.
             </p>
           </div>

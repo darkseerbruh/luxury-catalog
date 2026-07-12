@@ -37,7 +37,7 @@ export default function BagDNA({
     yearStart != null ? (yearEnd != null ? `${yearStart}–${yearEnd}` : `${yearStart} to now`) : null;
   const dnaCards: (DnaCardProps | null)[] = [
     {
-      label: "House",
+      label: "Brand",
       value: brandName,
       meta: brandTier ? brandTier.replace("-", " ") : null,
       href: `/brand/${brandId}`,

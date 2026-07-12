@@ -463,7 +463,7 @@ export default function IdentifyPage() {
           <p className="text-center text-sm text-muted">
             No photo, or in a hurry?{" "}
             <Link href="/authentication" className="text-gold hover:underline">
-              Check the markers by house →
+              Check the markers by brand →
             </Link>
           </p>
         </div>

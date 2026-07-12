@@ -131,50 +131,34 @@ export default async function Home() {
       {/* Priced well today — full-width research section. */}
       {hasDeals && <BestDeals deals={deals} />}
 
-      {/* Brands */}
+      {/* Brands — a breadth flex, not the directory: every brand we cover, names
+          only, grouped by tier, in ~one screen. The full sortable directory
+          (A–Z, ranking, tier, origin, heritage) lives on /brands. */}
       <section id="brands" className="border-b border-border px-5 py-12">
         <h2 className="font-serif text-2xl text-foreground">Brands</h2>
-        <div className="mt-8 flex flex-col gap-10">
+        <p className="mt-2 text-sm text-muted">
+          Every brand we cover, grouped by House Standing tier.
+        </p>
+        <div className="mt-7 flex flex-col gap-6">
           {BRAND_TIERS.map((tier) => {
             const group = brands.filter((b) => b.tier === tier.key);
             if (group.length === 0) return null;
             return (
               <div key={tier.key}>
                 <p className="text-xs uppercase tracking-widest text-muted/70">{tier.label}</p>
-                <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-7 min-[360px]:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
+                <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">
                   {group.map((brand) => (
-                    <div key={brand.brandId}>
-                      <Link
-                        href={`/brand/${brand.brandId}`}
-                        className="font-serif text-lg text-foreground transition-colors hover:text-gold"
-                      >
-                        {brand.name}
-                      </Link>
-                      {brand.isLive ? (
-                        <ul className="mt-2 flex flex-col gap-1.5">
-                          {brand.topStyles.map((s) => (
-                            <li key={s.styleId}>
-                              <Link
-                                href={s.variantId ? `/bag/${s.variantId}` : `/brand/${brand.brandId}`}
-                                className="text-sm text-muted transition-colors hover:text-gold"
-                              >
-                                {s.name}
-                              </Link>
-                            </li>
-                          ))}
-                          <li>
-                            <Link
-                              href={`/brand/${brand.brandId}`}
-                              className="text-sm text-gold transition-colors hover:text-gold-soft"
-                            >
-                              View all {brand.name} →
-                            </Link>
-                          </li>
-                        </ul>
-                      ) : (
-                        <p className="mt-1 text-xs uppercase tracking-wide text-muted/60">Coming soon</p>
-                      )}
-                    </div>
+                    <Link
+                      key={brand.brandId}
+                      href={`/brand/${brand.brandId}`}
+                      className={
+                        brand.isLive
+                          ? "font-serif text-base text-foreground transition-colors hover:text-gold"
+                          : "font-serif text-base text-muted/50 transition-colors hover:text-muted"
+                      }
+                    >
+                      {brand.name}
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -185,7 +169,7 @@ export default async function Home() {
           href="/brands"
           className="mt-8 block rounded-full border border-border px-5 py-3 text-center text-sm font-medium text-gold transition-colors hover:border-gold hover:text-gold-soft"
         >
-          All brands
+          All brands, sortable →
         </Link>
       </section>
 

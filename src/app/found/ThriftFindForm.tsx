@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { logThriftFind } from "@/lib/actions";
-import { buildConsignmentLinks } from "@/lib/affiliate";
+import { buildConsignmentLinks, sellLinksAffiliated } from "@/lib/affiliate";
 import { track, EVENTS } from "@/lib/analytics/events";
 import AuthInterestButton from "@/components/AuthInterestButton";
 
@@ -42,9 +42,17 @@ export default function ThriftFindForm({
             <p className="font-serif text-base text-foreground">Flipping it?</p>
             <p className="mt-1 text-sm text-muted">
               Get a buyout quote (cash now) or consign it (listed for you, paid on
-              sale). Quotes and splits are set by each platform.
+              sale).
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/where-to-sell"
+              className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-gold/40 px-3 py-2 text-xs text-foreground transition-colors hover:border-gold"
+            >
+              <span>See what you&apos;d keep at each venue, from real published fees</span>
+              <span aria-hidden className="shrink-0 text-gold-soft">&rarr;</span>
+            </Link>
+            <p className="mt-3 text-[11px] uppercase tracking-wide text-muted/80">Or start a sale now</p>
+            <div className="mt-2 flex flex-wrap gap-2">
               {sellLinks.map((l) => (
                 <a
                   key={l.key}
@@ -66,10 +74,12 @@ export default function ThriftFindForm({
                 </a>
               ))}
             </div>
-            <p className="mt-3 text-xs text-muted/70">
-              Affiliate links — we may earn a commission, at no cost to you.{" "}
-              <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
-            </p>
+            {sellLinksAffiliated() && (
+              <p className="mt-3 text-xs text-muted/70">
+                These are affiliate links, so we may earn a commission at no cost to you.{" "}
+                <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
+              </p>
+            )}
           </div>
         )}
 
