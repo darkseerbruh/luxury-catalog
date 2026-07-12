@@ -599,11 +599,34 @@ let shopRowsCache: { rows: PriceRow[]; feetAvailable: boolean; at: number } | nu
 let shopRowsInflight: Promise<{ rows: PriceRow[]; feetAvailable: boolean }> | null = null;
 const SHOP_ROWS_TTL_MS = CACHE_MARKET * 1000;
 
-/** In-memory TTL cache for the full shop read (sidesteps the 2MB unstable_cache cap).
- *  Concurrent requests during a cold read share ONE in-flight promise, so a cache miss
- *  triggers a single DB read, not one per request. */
+/**
+ * In-memory STALE-WHILE-REVALIDATE cache for the full shop read (sidesteps the 2MB
+ * unstable_cache cap). Once warm, a request NEVER waits on the ~13s read: if the cache is
+ * stale, we serve the stale set immediately AND refresh in the background. Only the very
+ * first load on a fresh instance (empty cache) awaits. Concurrent requests share one
+ * in-flight promise, so a miss triggers a single DB read, not one per request.
+ */
 async function loadShopRows(): Promise<{ rows: PriceRow[]; feetAvailable: boolean }> {
-  if (shopRowsCache && Date.now() - shopRowsCache.at < SHOP_ROWS_TTL_MS) return shopRowsCache;
+  if (shopRowsCache) {
+    const stale = Date.now() - shopRowsCache.at >= SHOP_ROWS_TTL_MS;
+    if (stale && !shopRowsInflight) {
+      // Fire-and-forget refresh; keep serving the (stale) cache until it lands.
+      shopRowsInflight = loadShopRowsRaw()
+        .then((fresh) => {
+          shopRowsCache = { ...fresh, at: Date.now() };
+          return fresh;
+        })
+        .catch((e) => {
+          console.error("shop rows background refresh failed:", e);
+          return shopRowsCache as { rows: PriceRow[]; feetAvailable: boolean };
+        })
+        .finally(() => {
+          shopRowsInflight = null;
+        });
+    }
+    return shopRowsCache;
+  }
+  // Cold, empty cache — must populate before we can answer.
   if (!shopRowsInflight) {
     shopRowsInflight = loadShopRowsRaw().finally(() => {
       shopRowsInflight = null;
