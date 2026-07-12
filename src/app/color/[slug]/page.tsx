@@ -18,7 +18,7 @@ export async function generateMetadata({
   const color = await getColor(slug);
   if (!color) return {};
   const title = `${color.name} bags`;
-  const description = `Bags in our catalog in ${color.name}, ${color.bagCount} across ${color.houses.length} houses.`;
+  const description = `Bags in our catalog in ${color.name}, ${color.bagCount} across ${color.houses.length} brands.`;
   const url = `${SITE_URL}/color/${color.slug}`;
   return {
     title,

@@ -285,7 +285,7 @@ export default function ScanResult({
           <p className="text-muted">
             This one isn&rsquo;t in our catalog yet, so we have no recorded sales
             to price it from. It could be a bag we haven&rsquo;t covered, or a
-            print on a shape the house never made, which is a common fake tell.
+            print on a shape the brand never made, which is a common fake tell.
             We logged it so coverage grows where you shop. For a read on price,
             sold listings are the honest comp:
           </p>

@@ -18,7 +18,7 @@ export async function generateMetadata({
   const hw = await getHardware(slug);
   if (!hw) return {};
   const title = `${hw.name} hardware bags`;
-  const description = `Bags in our catalog finished with ${hw.name} hardware, ${hw.bagCount} across ${hw.houses.length} houses.`;
+  const description = `Bags in our catalog finished with ${hw.name} hardware, ${hw.bagCount} across ${hw.houses.length} brands.`;
   const url = `${SITE_URL}/hardware/${hw.slug}`;
   return {
     title,
