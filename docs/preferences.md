@@ -24,6 +24,7 @@
 9. On a multi-hour/"run until done" task: do NOT stop to summarize, check in, or ask. Keep firing the next tool call off `docs/data-content-worklist.md`, committing after each unit. ONLY valid stops: worklist empty, hard technical blocker, or an outward-facing/irreversible op needs her. "Context is getting long" is NOT a stop reason; checkpoint to the worklist and continue. (Protocol below.)
 10. Data pulls are complete + multi-surface: when a target list of styles/bags exists, capture EVERY attribute (price/colour/material/hardware/year/condition/region) across EVERY available source in ONE pass, then load + summarize. Never fragment (names now, specs later); never ask permission to run a capture. (Standard + surface map + the one-pass runbook: `docs/data-collection-handoff.md` §0.)
 11. No walls of text anywhere on the site: never ship a block of 5+ uninterrupted sentences. Break every on-page narrative with formatting (lead line, short beats, lists) AND little non-logo iconography sprinkled through. (Detail in UX-copy section.)
+12. Close every substantive reply with a bottom 🧭 anchor block: **Goal** (this chat's end goal, her words) / **You just said** (one-line echo) / **Still open** (my unclosed asks, carried forward) / **Decisions to make** (new choices she owns). Flag direction changes inline (🔀 goal shifted, ➕ goal added). Skip only for one-line trivial exchanges.
 <!-- ENFORCED:end -->
 
 ## Autonomous run protocol (added 2026-06-26, after she flagged premature stopping)
