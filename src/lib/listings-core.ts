@@ -256,9 +256,22 @@ export interface FrontSpec {
   colorway: string | null;
   sizeLabel: string | null;
   hardwareColor: string | null;
+  /** The target style's name, so the face scorer can veto a listing whose slug names a
+   *  DIFFERENT model (a Coco Handle / Reissue photo must never front a Classic Flap). */
+  styleName?: string | null;
 }
 
 const SIZE_WORDS = ["micro", "mini", "small", "medium", "jumbo", "maxi", "large"];
+
+/** Model-name fragments that, when present in a listing slug but NOT in the target style's
+ *  name, mean the listing is a DIFFERENT model mislabeled into the style (owner 2026-07-12:
+ *  a listing image that's the wrong bag is not acceptable). Chanel's look-alikes dominate
+ *  the mislabels; harmless for other brands (their slugs won't contain these). "2 55" covers
+ *  the slugified "2.55". */
+const CROSS_MODEL_TOKENS = [
+  "coco handle", "reissue", "2 55", "wallet on chain", "woc", "gabrielle",
+  "boy", "top handle", "kelly", "diana", "vanity",
+];
 
 /** Novelty/embellishment listings (charms, sequins, graffiti…) make honest comps but a
  *  misleading FACE for the style — the icon card shouldn't lead with a limited edition. */
@@ -288,12 +301,15 @@ export function scoreListingFace(titleOrSlug: string, spec: FrontSpec): number {
   if (colorWords.length > 0 && colorWords.some((w) => hay.includes(w))) score += 4;
 
   // Size only judges when the variant HAS a size on record — otherwise a title's
-  // "jumbo" is information we can't contradict, not a conflict.
+  // "jumbo" is information we can't contradict, not a conflict. A CONFLICTING size
+  // outweighs the colour match (owner 2026-07-12: a Medium page must not show a Jumbo
+  // photo just because the colour matched), so the wrong-size penalty is stronger than
+  // the +4 colour signal.
   const wantedSizes = SIZE_WORDS.filter((s) => (spec.sizeLabel ?? "").toLowerCase().includes(s));
   if (wantedSizes.length > 0) {
     const presentSizes = SIZE_WORDS.filter((s) => new RegExp(`\\b${s}\\b`).test(hay));
     if (wantedSizes.some((s) => presentSizes.includes(s))) score += 2;
-    if (presentSizes.some((s) => !wantedSizes.includes(s))) score -= 2;
+    if (presentSizes.some((s) => !wantedSizes.includes(s))) score -= 5;
   }
 
   const hw = (spec.hardwareColor ?? "").toLowerCase();
@@ -306,6 +322,12 @@ export function scoreListingFace(titleOrSlug: string, spec: FrontSpec): number {
   }
 
   if (NOVELTY_TOKENS.some((t) => hay.includes(t))) score -= 3;
+
+  // Cross-model veto: a slug naming a DIFFERENT model than the target style can never front
+  // it, no matter the colour match. Only tokens absent from the target style name count.
+  const styleHay = (spec.styleName ?? "").toLowerCase();
+  if (CROSS_MODEL_TOKENS.some((t) => hay.includes(t) && !styleHay.includes(t))) score -= 10;
+
   return score;
 }
 

@@ -1087,7 +1087,7 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
     const sb = getSupabase();
     const { data, error } = await sb
       .from("variant")
-      .select("variant_id, image_url, exterior_colorway, size_label, hardware_color")
+      .select("variant_id, image_url, exterior_colorway, size_label, hardware_color, style:style_id(name)")
       .in("variant_id", ids);
     if (error) return {};
     const map: Record<number, string> = {};
@@ -1098,12 +1098,15 @@ export async function getVariantImages(variantIds: number[]): Promise<Record<num
       exterior_colorway: string | null;
       size_label: string | null;
       hardware_color: string | null;
+      style: { name: string } | { name: string }[] | null;
     }[]) {
       if (r.image_url) map[r.variant_id] = r.image_url;
+      const style = Array.isArray(r.style) ? r.style[0] : r.style;
       specs.set(r.variant_id, {
         colorway: r.exterior_colorway,
         sizeLabel: r.size_label,
         hardwareColor: r.hardware_color,
+        styleName: style?.name ?? null,
       });
     }
 

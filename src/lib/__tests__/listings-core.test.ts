@@ -248,6 +248,28 @@ describe("scoreListingFace", () => {
       scoreListingFace("chanel red jumbo flap", { colorway: null, sizeLabel: null, hardwareColor: null }),
     ).toBe(0);
   });
+
+  it("vetoes a different-model listing even on a colour match (Coco Handle can't front a Classic Flap)", () => {
+    const s = { colorway: "black", sizeLabel: "Medium (M/L)", hardwareColor: "gold", styleName: "Classic Flap" };
+    const flap = scoreListingFace("chanel black caviar medium classic double flap gold", s);
+    const cocoHandle = scoreListingFace("chanel black caviar medium coco handle top handle bag gold", s);
+    const reissue = scoreListingFace("chanel black caviar 2 55 reissue flap gold", s);
+    expect(flap).toBeGreaterThan(0);
+    expect(cocoHandle).toBeLessThan(0);
+    expect(reissue).toBeLessThan(0);
+  });
+
+  it("a matching cross-model token in the target style name is NOT vetoed (Boy listing for the Boy style)", () => {
+    const s = { colorway: "black", sizeLabel: null, hardwareColor: null, styleName: "Boy" };
+    expect(scoreListingFace("chanel black caviar boy bag", s)).toBeGreaterThanOrEqual(0);
+  });
+
+  it("a conflicting size loses to a right/absent size even when both match the colour", () => {
+    const s = { colorway: "black", sizeLabel: "Medium (M/L)", hardwareColor: "gold" };
+    const noSize = scoreListingFace("chanel black caviar double flap gold", s);
+    const wrongSize = scoreListingFace("chanel black caviar jumbo double flap gold", s);
+    expect(noSize).toBeGreaterThan(wrongSize);
+  });
 });
 
 describe("slugTitleFromUrl", () => {
