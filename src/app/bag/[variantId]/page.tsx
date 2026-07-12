@@ -1485,7 +1485,7 @@ export default async function BagDetailPage({
               variant yet.{" "}
               {authGuideSlug ? (
                 <>
-                  The house-level markers still apply:{" "}
+                  The brand-level markers still apply:{" "}
                   <Link href={`/articles/${authGuideSlug}`} className="text-gold hover:underline">
                     check the {v.brand.name} guide →
                   </Link>

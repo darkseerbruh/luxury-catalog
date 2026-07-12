@@ -101,9 +101,9 @@ export default async function ListingCheck({ searchParams }: { searchParams: Pro
     // 2. The authenticity-card tell
     const isNoCard = NO_CARD_HOUSES.some((h) => brand.toLowerCase().includes(h));
     if (sp.card === "yes" && isNoCard) {
-      signals.push({ tone: "flag", title: "That house does not issue authenticity cards", body: `${brand} does not include an authenticity card, so a listing that brags about including one is waving a flag, not handing you a credential.` });
+      signals.push({ tone: "flag", title: "That brand does not issue authenticity cards", body: `${brand} does not include an authenticity card, so a listing that brags about including one is waving a flag, not handing you a credential.` });
     } else if (sp.card === "yes") {
-      signals.push({ tone: "note", title: "A card is reassuring, not proof", body: "Cards are copied and swapped between bags. If the house does issue one, its number should match the bag's serial, but a matching card is still necessary, not sufficient." });
+      signals.push({ tone: "note", title: "A card is reassuring, not proof", body: "Cards are copied and swapped between bags. If the brand does issue one, its number should match the bag's serial, but a matching card is still necessary, not sufficient." });
     }
 
     // 3. Detail photos

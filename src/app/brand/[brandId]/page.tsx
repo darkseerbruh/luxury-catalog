@@ -197,7 +197,7 @@ export default async function BrandPage({
         <section>
           <h2 className="font-serif text-2xl text-foreground">The icons</h2>
           <p className="mt-1 text-sm text-muted">
-            The bags that made the house, and where they came from.
+            The bags that made the brand, and where they came from.
           </p>
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {iconStyles.map(({ style, story }, i) => {
@@ -487,7 +487,7 @@ export default async function BrandPage({
       {/* Similar houses — lateral discovery across brands (Spotify "similar artists"). */}
       {similarHouses.length > 0 && (
         <section className="border-t border-border pt-8">
-          <h2 className="mb-4 font-serif text-xl text-foreground">Similar houses</h2>
+          <h2 className="mb-4 font-serif text-xl text-foreground">Similar brands</h2>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {similarHouses.map((b) => (
               <Link

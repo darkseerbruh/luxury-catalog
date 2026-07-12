@@ -10,7 +10,7 @@ import { SITE_URL } from "@/lib/geo";
 export const metadata: Metadata = {
   title: "The LC Index — where every bag stands in the market",
   description:
-    "The LC Index ranks handbag styles by market standing: a blend of resale price, trade volume, and scarcity, weighted by house tier. Our index, not a verdict.",
+    "The LC Index ranks handbag styles by market standing: a blend of resale price, trade volume, and scarcity, weighted by brand tier. Our index, not a verdict.",
 };
 
 // The index is cached in getLcIndex; the page itself revalidates hourly.
@@ -40,7 +40,7 @@ export default async function RankingsPage() {
           "@type": "ItemList",
           name: "The LC Index",
           description:
-            "Handbag styles ranked by market standing: resale price, trade volume, and scarcity, weighted by house tier.",
+            "Handbag styles ranked by market standing: resale price, trade volume, and scarcity, weighted by brand tier.",
           numberOfItems: rows.length,
           itemListOrder: "https://schema.org/ItemListOrderDescending",
           itemListElement: rows.map((r) => ({
@@ -65,7 +65,7 @@ export default async function RankingsPage() {
         <h1 className="font-serif text-3xl text-foreground">Where every bag stands</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
           One number for where a handbag sits in the whole market. Rank blends resale price,
-          trade volume, and scarcity, weighted by house tier, over{" "}
+          trade volume, and scarcity, weighted by brand tier, over{" "}
           <span className="text-foreground">recorded market prices</span>. Recomputed monthly.
         </p>
         <p className="mt-2 text-xs text-muted">

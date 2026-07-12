@@ -15,7 +15,7 @@ const BORDER = "#322c22";
 const HOLDS = [
   "Classic shapes that stay in the lineup for years",
   "Neutral colors (black, beige, brown)",
-  "Heritage houses with tightly managed production",
+  "Heritage brands with tightly managed production",
   "The full set: Box, dust bag, receipt",
   "Excellent, well-kept condition",
 ];
@@ -72,7 +72,7 @@ export function HoldsValueDiagram() {
         </div>
       </div>
       <figcaption className="sr-only">
-        What tends to hold value (classic shapes, neutral colors, heritage houses, the full set, great condition) versus what tends to fade (trend shapes, loud colors, heavy seasonal logos, flooded brands, wear and missing pieces). General patterns, not a guaranteed return.
+        What tends to hold value (classic shapes, neutral colors, heritage brands, the full set, great condition) versus what tends to fade (trend shapes, loud colors, heavy seasonal logos, flooded brands, wear and missing pieces). General patterns, not a guaranteed return.
       </figcaption>
     </figure>
   );

@@ -127,7 +127,7 @@ export default async function PersonaRouter() {
                 </div>
                 <div>
                   <p className="font-serif text-2xl text-gold">{pulse.houses.toLocaleString()}</p>
-                  <p className="text-[11px] text-muted">houses</p>
+                  <p className="text-[11px] text-muted">brands</p>
                 </div>
                 {pulse.earliestYear && (
                   <div>
