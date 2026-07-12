@@ -216,6 +216,7 @@ export const getBrandsOverview = unstable_cache(
  * bag-level LC Index. See docs/ux/tier-formula-spec.md. */
 export interface HouseStandingRead {
   brandId: number;
+  name: string;
   /** Composite 0-100 (1dp); null when below the n-gate (unplaced, never guessed). */
   score: number | null;
   /** Numbered band 1 (highest) → 5; null when unplaced. */
@@ -276,6 +277,7 @@ async function loadHouseStandings(): Promise<HouseStandingRead[]> {
     let rank = 0;
     return computeHouseStanding(signals).map((s) => ({
       brandId: s.brandId,
+      name: s.name,
       score: s.score,
       tier: s.tier,
       rank: s.score != null ? ++rank : null,

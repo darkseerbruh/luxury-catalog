@@ -20,7 +20,7 @@ export interface BrandRow {
   foundedYear: number | null;
 }
 
-type View = "az" | "ranking" | "tier" | "origin" | "heritage";
+export type View = "az" | "ranking" | "tier" | "origin" | "heritage";
 
 const VIEWS: { key: View; label: string }[] = [
   { key: "az", label: "A–Z" },
@@ -93,8 +93,14 @@ function GroupLabel({ children }: { children: ReactNode }) {
   return <p className="text-xs uppercase tracking-widest text-muted/70">{children}</p>;
 }
 
-export default function BrandsExplorer({ rows }: { rows: BrandRow[] }) {
-  const [view, setView] = useState<View>("az");
+export default function BrandsExplorer({
+  rows,
+  initialView = "az",
+}: {
+  rows: BrandRow[];
+  initialView?: View;
+}) {
+  const [view, setView] = useState<View>(initialView);
 
   return (
     <div className="mt-8">

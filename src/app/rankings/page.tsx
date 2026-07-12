@@ -4,7 +4,8 @@ import { BagImage } from "@/components/BagImage";
 import StandingGlyph from "@/components/StandingGlyph";
 import MovementPill from "@/components/MovementPill";
 import { getLcIndex, whyNote } from "@/lib/lc-index";
-import { getVariantImages } from "@/lib/queries";
+import { getVariantImages, getHouseStandings } from "@/lib/queries";
+import { tierDisplay } from "@/lib/house-standing";
 import { SITE_URL } from "@/lib/geo";
 
 export const metadata: Metadata = {
@@ -19,14 +20,22 @@ export const revalidate = 3600;
 /** How many ranked styles the page lists. */
 const PAGE_LIMIT = 100;
 
+/** How many brands the companion "Brands by standing" board shows (full leaderboard on /brands). */
+const BRAND_BOARD_LIMIT = 10;
+
 function fmtPrice(median: number | null): string {
   if (median == null) return "—";
   return `$${Math.round(median).toLocaleString()}`;
 }
 
 export default async function RankingsPage() {
-  const data = await getLcIndex();
+  const [data, standings] = await Promise.all([getLcIndex(), getHouseStandings()]);
   const rows = data.ranked.slice(0, PAGE_LIMIT);
+
+  // Companion brand leaderboard: the same read one level up (House Standing).
+  // Placed brands only, already in rank order; the board shows the top few.
+  const rankedBrands = standings.filter((s) => s.rank != null);
+  const brandBoard = rankedBrands.slice(0, BRAND_BOARD_LIMIT);
 
   const variantIds = rows.map((r) => r.repVariantId).filter((id): id is number => id != null);
   const images = variantIds.length > 0 ? await getVariantImages(variantIds) : {};
@@ -52,12 +61,39 @@ export default async function RankingsPage() {
         }
       : null;
 
+  // Second citable asset (GEO): the brand leaderboard, every placed brand in rank
+  // order. Its own ItemList so AI search can quote "top handbag brands by standing".
+  const brandItemListJsonLd =
+    rankedBrands.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "House Standing — handbag brands by resale standing",
+          description:
+            "Handbag brands ranked by House Standing: resale median, ceiling, and trade volume. Our standing, not a verdict.",
+          numberOfItems: rankedBrands.length,
+          itemListOrder: "https://schema.org/ItemListOrderDescending",
+          itemListElement: rankedBrands.map((b) => ({
+            "@type": "ListItem",
+            position: b.rank,
+            name: b.name,
+            url: `${SITE_URL}/brand/${b.brandId}`,
+          })),
+        }
+      : null;
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       {itemListJsonLd && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
+      {brandItemListJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(brandItemListJsonLd) }}
         />
       )}
       <header className="mb-6">
@@ -145,6 +181,56 @@ export default async function RankingsPage() {
             styles. A style needs enough recorded prices to be ranked.
           </p>
         </>
+      )}
+
+      {/* Companion board: the LC Index at the brand level (House Standing). Bags stay
+          the hero above; this is the secondary read, with its own citable ItemList. */}
+      {brandBoard.length > 0 && (
+        <section className="mt-14 border-t border-border pt-8">
+          <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Brands by standing</p>
+          <h2 className="font-serif text-2xl text-foreground">Where each brand stands</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+            The same read, one level up. House Standing blends a brand&rsquo;s resale median, its
+            ceiling, and how actively it trades. Our standing, not a verdict.{" "}
+            <Link href="/how-we-tier" className="text-gold-soft underline underline-offset-2">
+              How we tier
+            </Link>
+          </p>
+          <ol className="mt-5 border-t border-border">
+            {brandBoard.map((b) => {
+              const t = tierDisplay(b.tier == null ? null : String(b.tier));
+              return (
+                <li key={b.brandId} className="border-b border-border">
+                  <Link
+                    href={`/brand/${b.brandId}`}
+                    className="group flex items-baseline gap-4 px-1 py-3"
+                  >
+                    <span className="w-7 shrink-0 text-right font-serif text-xl text-gold-soft tabular-nums">
+                      {b.rank}
+                    </span>
+                    <span className="font-serif text-lg text-foreground group-hover:text-gold-soft">
+                      {b.name}
+                    </span>
+                    <span className="ml-auto flex items-baseline gap-3">
+                      {t.label && (
+                        <span className="text-[11px] uppercase tracking-wide text-muted/70">{t.label}</span>
+                      )}
+                      <span className="font-serif text-base text-foreground tabular-nums">
+                        {b.score?.toFixed(1)}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="mt-4 text-xs text-muted/60">
+            Showing the top {brandBoard.length} of {rankedBrands.length.toLocaleString()} ranked brands.{" "}
+            <Link href="/brands?view=ranking" className="text-gold-soft underline underline-offset-2">
+              See all brands
+            </Link>
+          </p>
+        </section>
       )}
     </main>
   );
