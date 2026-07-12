@@ -149,9 +149,10 @@ export default async function WhereToSellPage({
           <p className="mt-3 rounded-lg border border-gold/30 bg-background/50 px-3 py-2 text-xs leading-relaxed text-muted">
             Based on the <span className="text-foreground">{picked.label}</span>: a typical resale of{" "}
             <span className="text-foreground">{usd(picked.value)}</span>. Our estimate from{" "}
-            {picked.n.toLocaleString("en-US")} recent {picked.n === 1 ? "listing" : "listings"},
-            asking prices, not a sold average. Tweak the number above if yours differs by size or
-            condition.
+            {picked.n.toLocaleString("en-US")} recent{" "}
+            {picked.n === 1 ? "sale or fixed-price listing" : "sales and fixed-price listings"},
+            where the listing price is the sale price. Tweak the number above if yours differs by
+            size or condition.
           </p>
         )}
         {bagUnpriced && (
