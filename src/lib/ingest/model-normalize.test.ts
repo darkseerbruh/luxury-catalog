@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { canonicalModel } from "./model-normalize";
+import { canonicalModel, isNonBagAccessory } from "./model-normalize";
 
 /**
  * "Timeless" mis-mapping regression (2026-07-09): TLC labels Chanel's whole classic
@@ -172,5 +172,29 @@ describe("canonicalModel — non-Chanel cross-model collisions", () => {
     expect(
       canonicalModel("Balenciaga", "balenciaga vegetable tanned lambskin mini bel air carry all bag tan cowboy 1785540"),
     ).toBe("Bel Air");
+  });
+});
+
+/**
+ * SLG-vs-bag taxonomy (owner rule, 2026-07-11): a WOC / chain wallet is a bag and stays;
+ * a fold wallet or coin purse is an SLG. Regression for the "flap" rescue gap that let
+ * "Flap Coin Purse" (Chanel style 141) and "Boy Wallet" (style 171) read as bags — an
+ * unambiguous SLG object noun must beat the BAG_SHAPE_TOKENS rescue, without demoting a
+ * genuine Wallet on Chain.
+ */
+describe("isNonBagAccessory — strong SLG nouns beat the shape rescue", () => {
+  it("flags fold wallets / coin purses / card holders even with a bag-shape word", () => {
+    expect(isNonBagAccessory("Chanel Brown Quilted Patent Leather Boy Wallet")).toBe(true);
+    expect(isNonBagAccessory("Chanel Fuchsia Quilted Leather Chain CC Flap Coin Purse")).toBe(true);
+    expect(isNonBagAccessory("Top Handle Flap Coin Purse w/ Chain")).toBe(true);
+    expect(isNonBagAccessory("Chanel Classic Flap Card Holder")).toBe(true);
+    expect(isNonBagAccessory("Chanel Boy Card Holder")).toBe(true);
+  });
+
+  it("keeps Wallet on Chain / chain wallet and real flaps as bags", () => {
+    expect(isNonBagAccessory("Chanel Wallet on Chain")).toBe(false);
+    expect(isNonBagAccessory("Chanel 2.55 Reissue Chain Wallet")).toBe(false);
+    expect(isNonBagAccessory("Chanel Classic Flap Medium")).toBe(false);
+    expect(isNonBagAccessory("Chanel Boy Flap Bag")).toBe(false);
   });
 });

@@ -608,6 +608,17 @@ const BAG_SHAPE_TOKENS = [
   "handbag", "crossbody", "shoulder bag",
 ];
 
+/** Unambiguous SLG OBJECT nouns — a title naming one of these is a small leather good even
+ *  when it ALSO carries a bag-shape word ("Flap Coin Purse", "Boy Card Holder", "Classic
+ *  Flap Wallet"). These BEAT the BAG_SHAPE_TOKENS rescue below, but are still checked AFTER
+ *  BAG_OVERRIDES, so a Wallet on Chain / chain wallet (a ranked bag) stays a bag. Mirrors
+ *  the object set in detect-listing-discrepancies' STRONG_ACCESSORY_RX. Without this a
+ *  "Flap Coin Purse" reads as a bag on the "flap" token alone (owner taxonomy, 2026-07-11). */
+const STRONG_SLG_NOUNS = [
+  "coin purse", "coin case", "card holder", "cardholder", "card case", "card wallet",
+  "key pouch", "key case", "key holder", "wallet",
+];
+
 /** Same hay preprocessing canonicalModel uses (fold accents, decode &amp;, drop a
  *  trailing bundled "w/ <extra>" so an add-on never trips the accessory gate). */
 function accessoryHay(rawName: string | null | undefined): string {
@@ -634,6 +645,10 @@ export function isNonBagAccessory(rawName: string | null | undefined): boolean {
     SLG_TOKENS.some((t) => hasSlg(hay, t.trim())) ||
     EXTRA_NONBAG_TOKENS.some((t) => hasSlg(hay, t.trim()));
   if (!hasAccessoryToken) return false;
+  // Unambiguous SLG object noun (coin purse, card holder, wallet…) beats the shape rescue:
+  // a "Flap Coin Purse" / "Boy Card Holder" is an SLG even though it carries "flap"/"boy".
+  // BAG_OVERRIDES already ran above, so a Wallet on Chain never reaches here.
+  if (STRONG_SLG_NOUNS.some((t) => hasSlg(hay, t))) return true;
   // Rescue: a strong bag-shape head noun means this is a BAG whose description merely
   // contains an accessory-ish word as a colour / print / quilt style. Real accessories
   // (card holder, camera case, "Boy Pouch") carry no such shape word.
