@@ -50,6 +50,8 @@ import StandingCard from "@/components/StandingCard";
 import { getStyleStandingView, type BrandTier } from "@/lib/lc-index";
 import { tierDisplay } from "@/lib/house-standing";
 import VariantSelector from "./VariantSelector";
+import FlapFamily from "./FlapFamily";
+import { getStyleFamily } from "@/lib/flap-family";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
 import { translateProvenance } from "@/lib/provenance";
@@ -61,6 +63,7 @@ export const dynamic = "force-dynamic";
 // Dedupe the (heavy) detail fetch across generateMetadata + the page render.
 const getVariant = cache(getVariantDetail);
 const getVariants = cache(getStyleVariants);
+const getFamily = cache(getStyleFamily);
 
 export async function generateMetadata({
   params,
@@ -240,7 +243,7 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts] =
+  const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts, flapFamily] =
     await Promise.all([
       getResourcesForStyle(v.style.styleId, v.variantId),
       getVariants(v.style.styleId),
@@ -249,6 +252,7 @@ export default async function BagDetailPage({
       hasActiveAuthenticators(),
       listByStyle(v.style.styleId, 4),
       listByBrand(v.brand.brandId, 4),
+      getFamily(v.style.styleId),
     ]);
 
   // Articles for this bag, most specific first: style-tagged guides lead, then
@@ -755,6 +759,10 @@ export default async function BagDetailPage({
         currentVariantId={v.variantId}
         savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
+
+      {/* Family module: how this flap relates to its cousins (single/double + status +
+          median), so a shopper understands why look-alike flaps differ in price. */}
+      {flapFamily && <FlapFamily family={flapFamily} articleSlug="chanel-flap-names-decoded" />}
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
       <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
