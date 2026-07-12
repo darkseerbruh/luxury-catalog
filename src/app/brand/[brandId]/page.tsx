@@ -149,7 +149,7 @@ export default async function BrandPage({
     .sort((a, b) => (a.yearIntroduced as number) - (b.yearIntroduced as number))
     .map((s) => ({ year: s.yearIntroduced as number, label: s.name }));
   const milestones = [
-    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "House founded" }] : []),
+    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "Brand founded" }] : []),
     ...(iconYearLabels.length > 0 ? iconYearLabels : fallbackYearLabels),
   ]
     .sort((a, b) => a.year - b.year)
