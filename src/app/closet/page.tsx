@@ -264,9 +264,9 @@ export default async function ClosetPage() {
               </h2>
               {g.key === "have" && (
                 <p className="mb-3 text-sm text-muted">
-                  Thinking of parting with one? Open it for buyout &amp;
-                  consignment quotes under{" "}
-                  <span className="text-foreground">Where to sell</span>.
+                  Thinking of parting with one? Each bag&rsquo;s{" "}
+                  <span className="text-foreground">Where to sell</span> shows what you&rsquo;d
+                  keep at every venue, from real published fees.
                 </p>
               )}
               {g.key === "want" && (
