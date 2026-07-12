@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — SLG-vs-bag taxonomy sweep: 13 mis-catalogued SLGs retired + Multi-Pochette hyphen bug fixed (2026-07-11, on `main`)
+
+**Follow-up to the two Chanel SLG retires (styles 171/141). A full `style`-table scan flagged 20 more bag-catalogued styles reading as SLGs; owner made the taxonomy call on each.** All green (827 tests), landed (commit `d51e77c`, merge `631fa35`).
+- 🗑️ **Retired 13 confirmed SLGs** via `supabase/ingest/retire-slg-styles-2026-07-11.ts` (batch sibling of `retire-nonbag-styles.ts`, multi-brand `brand_guess` per style): LV wallets 180/183/177, LV Toiletry 694 / Cosmetic 688, Chanel Cosmetic Case 744, Goyard Vendôme 763 / Jouvence 764, LV Daily 905, SL Bill 929, Dior Caro Pouch 888, SL Uptown 932 / Gaby 933. **308 price observations preserved to `discovered_listing` (unresolved_reason='non_bag') before deletion — fully reversible.** 16 variants + 13 styles deleted, MV refreshed (timed out once under load, retried ok).
+- ✅ **Kept as bags (owner call):** 47/46/536/690 Pochette Accessoires, **59 Multi Pochette** (rescued by the fix below), **887 Dior Saddle Chain Pouch** (chain-carried), **950 Loewe Scarf Bag** (a real bag; `scarf` false positive). Two brief corrections: 46 is a *single* Multicolore pouch (not the Multi Pochette); only 59 was the bag to rescue.
+- 🐛 **Multi-Pochette hyphen bug fixed** (`src/lib/ingest/model-normalize.ts`): the `BAG_OVERRIDES` check was a literal substring match, so a hyphenated "Multi-Pochette" escaped the spaced "multi pochette" override → `isNonBagAccessory` wrongly SLG-gated the ranked LV bag and the deals/listings read guards dropped its listings. New `hasBagOverride()` normalizes separators (hyphen/dot/slash → space) on both sides; all 3 call sites route through it. Regression test added (hyphenated Multi-Pochette = bag vs single Multicolore Pochette = SLG).
+- 🧭 **Taxonomy rule logged** to `preferences.md` (scope section): judge each "pouch", never blanket-drop on the word.
+- ⬜ **YOUR TURN:** new code goes live on next prod build (auto if Vercel auto-deploys `main`, else `vercel --prod`). Nothing else pending — retirement + fix are done and verified.
+
+---
+
 ## TL;DR — Chanel flap-lines module + shop index + the 4 parked flap-followups closed (2026-07-11, on `main`)
 
 **Off "go" then "all": worked the four parked flap/shop threads to done.** All green (824 tests), landed each step.
