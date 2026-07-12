@@ -1,7 +1,7 @@
 import { getBrandsOverview, getHouseStandings } from "@/lib/queries";
 import BrandsExplorer, { type BrandRow, type View } from "./BrandsExplorer";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // reads searchParams (view) — genuinely per-request
 
 const VIEW_KEYS = ["az", "ranking", "tier", "origin", "heritage"] as const;
 

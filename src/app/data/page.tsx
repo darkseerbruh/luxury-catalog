@@ -3,7 +3,7 @@ import { getMarketPulse } from "@/lib/market-pulse";
 import FunFacts from "@/components/FunFacts";
 import AttributeFacts from "@/components/AttributeFacts";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public catalog page, cache 1h (was force-dynamic — see infra-limits)
 
 export const metadata: Metadata = {
   title: "The data behind every page",

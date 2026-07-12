@@ -5,7 +5,12 @@ import { getColorObject } from "@/lib/queries";
 import { SITE_URL } from "@/lib/geo";
 import AttributeObjectPage, { type AttributeObjectView } from "@/components/AttributeObjectPage";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public catalog page, cache 1h (was force-dynamic — see infra-limits)
+
+// On-demand ISR: render + cache each path on first visit (empty = none prerendered at build).
+export function generateStaticParams() {
+  return [];
+}
 
 const getColor = cache(getColorObject);
 
