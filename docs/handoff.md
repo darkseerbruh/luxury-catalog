@@ -3,6 +3,18 @@
 
 ---
 
+## TL;DR — Brands UX overhaul + brand ranking + house→brand sweep + brand data fill (2026-07-11, on `main`)
+
+**Homepage brands module and `/brands` reworked, brand ranking is now a real surface, "house"→"brand" swept, every brand's origin + founding year filled.** All green (824 tests), landed each step.
+- 🏠 **Homepage brands module = breadth flex** (was a full duplicate of `/brands`, many screens of scroll): every brand as a NAME only, tier-grouped, ~one screen (669px), "All brands, sortable →" to `/brands`. (`src/app/page.tsx`)
+- 🗂️ **`/brands` = sortable directory** with a client view switcher: **A–Z (default)** · Ranking · Tier · Origin · Heritage (`src/app/brands/BrandsExplorer.tsx`); `?view=` deep-links a view. Origin/Heritage use new `country_of_origin`/`founded_year` on `getBrandsOverview`.
+- 🏆 **Brand ranking 1→N is NEW** (`getHouseStandings` in `queries.ts`): the House Standing 0–100 score computed live on the read path (it was discarded after tier-bucketing), same pure formula (`house-standing.ts`). Shown on `/brands` Ranking view + a **companion board on `/rankings`** (top 10, bags stay hero) with its own ItemList JSON-LD (GEO). 38 of 49 brands placed; n<30 stay "Not yet ranked."
+- ✍️ **"house" → "brand" default:** swept ~55 incidental UI strings across 24 files + BagDNA "House"→"Brand" node + "House founded"→"Brand founded". KEPT: **House Standing** (feature name) + editorial `house-stories`/`bag-stories` voice (owner call). Pref (voice section) + memory logged.
+- 🌍 **Data fill:** all 49 brands now carry `country_of_origin` + `founded_year` (archivist-sourced, 35 filled this pass, 0 missing). Convention: commonly-attributed house nationality, not strict founding country.
+- ⬜ **YOUR TURN:** (1) all code is on `main` → next prod build ships it (auto if Vercel auto-deploys `main`, else `vercel --prod`); the data fill shows after the catalog cache refreshes. (2) OPEN: Balenciaga `country_of_origin` is **France** (house convention); flip to **Spain** (1919 founding country) if you prefer — a one-field DB edit.
+
+---
+
 ## TL;DR — Where to Sell system SHIPPED end-to-end + venue-terms refresh engine (2026-07-11, on `main`)
 
 **Full sell-side surface + a never-stale refresh engine for the fee data.** Sister to `/where-to-buy`, seller economics instead of buyer protection. All green (824 tests), verified live.
