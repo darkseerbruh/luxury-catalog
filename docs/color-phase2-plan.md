@@ -30,6 +30,30 @@ Variant key moves from **(style, size)** to **(style, size, color)**. Each row k
 - **Color multiplicity:** the same physical bag seen under slightly different labels ("rouge" vs "red") must map to ONE family — `colorFamily` handles the common cases; spot-check the tail.
 - **Image coverage:** a color page wants a matching image; fall back to the style hero when a color has none.
 
+## FOUNDATION SHIPPED 2026-07-12 → production-driven rebuild is next
+
+Owner approved: full colour scope (colour + material + construction), stub pages for
+produced-but-unlisted (own URL + "no photo yet" + UGC), archivist hard-confirm. Shipped:
+- Size chips in physical order (Small→Maxi); grey-out corrected to production-only semantics.
+- Colour pilot **reverted** (listing-derived was the wrong source).
+- **Production matrix** banked (`classic-flap-production-matrix.md`) — Maxi CONFIRMED current.
+- **Reseller decode + classifier** (`chanel-flap-reseller-decode.md`, `ingest/chanel-flap-classify.ts`)
+  — sweep found only 1 mislabel in 10.7k listings, so bad attribution wasn't the image problem.
+- **Face scorer** hardened: cross-model veto + stronger size penalty (a Coco Handle/Jumbo photo
+  can no longer front a black Medium Classic Flap).
+
+**Next build (the production-driven selector) — design + owner gates:**
+1. **Data model** — a per-style PRODUCTION OPTIONS record (sizes × colour families × materials ×
+   constructions the house made), sourced, SEPARATE from our listing variants. Likely a new table
+   + migration (OWNER-GATED) or a curated file to start. Options drive the selector; grey-out =
+   not in the record.
+2. **Produced-but-unlisted = stub page** (owner chose): own `/bag` URL, "made in this, no photo/price
+   yet, have one? add it" (GEO + UGC). Guard thin-content with canonical-to-the-size-base.
+3. **Reconcile** our listings onto the options; layer photo/price where we have them.
+4. **Material + construction axes** (caviar/lambskin/seasonal; diamond/chevron) from the record.
+5. **Wire the classifier into the ingest guard** so future mislabels never attach.
+6. Colour = permanent families first-class + seasonal as descriptor + season-code (no fake names).
+
 ## REVERTED 2026-07-12 — the model was backwards (options must be production-driven)
 
 Owner testing of the pilot surfaced that deriving colour options from LISTINGS is wrong:
