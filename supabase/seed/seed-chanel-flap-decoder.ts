@@ -26,7 +26,9 @@ Here's how the models relate, and why the price tends to follow the structure.
 
 ## The Classic Flap is the "11.12" (and here's the tell)
 
-The bag most people mean by "Chanel flap" is the **Classic Flap**. In Spring 2021 Chanel formally renamed it the **"11.12,"** after the original Medium's style code A01112.
+The bag most people mean by "Chanel flap" is the **Classic Flap**. Chanel revived the name **"11.12"** for it (a branding push from Spring 2021), after the original Medium's style code, A01112. It is not a new bag, it is a name Karl Lagerfeld's team used back in the 1980s.
+
+Here is the part that confuses people, and it is dated: on **March 26, 2024**, Chanel relabeled the Medium on its own website as the "Classic 11.12 Handbag" and dropped the word "Medium" entirely. The other sizes still read "Classic Flap." So the "11.12" you see now is the Medium under its archival code name, not a size change.
 
 Three things define it:
 
@@ -109,6 +111,8 @@ Not sure which one you're holding, or eyeing? Start with the lock and the flap c
 
 - Fashionphile, "The Ultimate Chanel Flap Guide"
 - Rebag, "Chanel 101: The Classic Flap / 11.12"
+- PurseBop, on Chanel's March 26, 2024 relabel of the Medium to "Classic 11.12 Handbag"
+- Chase Amie, "The Ultimate Chanel Classic Flap Guide" (boutique vs collector size words drift over the years)
 - Bragmybag, "Chanel Discontinued Bags"
 - Xupes and myGemma, Chanel size guides`;
 

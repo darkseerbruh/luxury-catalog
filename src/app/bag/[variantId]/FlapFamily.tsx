@@ -92,6 +92,24 @@ export default function FlapFamily({ family, articleSlug }: { family: FlapFamily
         })}
       </ul>
 
+      {/* Why the size names confuse everyone — collapsed by default so it never walls the
+          page; short sourced beats inside. */}
+      <details className="mt-4 border-t border-border/60 pt-3">
+        <summary className="cursor-pointer text-sm font-medium text-foreground marker:text-gold">
+          Why are the sizes named so many things?
+        </summary>
+        <div className="mt-2 flex flex-col gap-1.5 text-xs leading-relaxed text-muted">
+          <p>Two vocabularies that never fully matched:</p>
+          <ul className="ml-4 flex flex-col gap-1">
+            <li>Chanel&rsquo;s boutiques say Small, Medium, <strong>Large</strong>, Maxi.</li>
+            <li>The resale world says Small, Medium (or &ldquo;M/L&rdquo;), <strong>Jumbo</strong>, Maxi.</li>
+          </ul>
+          <p>So the &ldquo;Jumbo&rdquo; everyone says is Chanel&rsquo;s &ldquo;Large,&rdquo; and the ~25.5 cm &ldquo;Medium&rdquo; has also been called the &ldquo;M/L&rdquo; (Medium/Large) over the years.</p>
+          <p>It shifted again in <strong>March 2024</strong>: Chanel relabeled the Medium on its own site as the &ldquo;11.12&rdquo; (after its style code, A01112) and dropped the word &ldquo;Medium.&rdquo;</p>
+          <p>The reliable anchor is the measurement and the style code, not the size word. That&rsquo;s why we print the cm next to every size.</p>
+        </div>
+      </details>
+
       <p className="mt-3 text-xs text-muted/70">
         Medians are our read of recorded resale, not an appraisal. Structure and status move the price more than the look.
         {articleSlug && (

@@ -104,7 +104,7 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Tax:** records / cost-basis export, **not** advice. Flag the collectibles caveat; defer to a CPA.
 - **Insurance:** refer (optional flat-fee), **not** act as an agent.
 - **Projections:** possibility curves from stated assumptions, **not** forecasts.
-- **Third-party fees / platform terms:** teach the durable framework + tell readers to verify current terms, **not** publish perishable fee percentages as fact. Owner is nervous about staleness + legal exposure on fee data. Default = qualitative ("a bigger cut," "the smallest fee"); if exact rates are ever shown, quarantine them in a dated "verify before you sell" box. Always add "general information, not financial advice." (Reporting public fees accurately is low legal risk; the real risk is going stale and looking wrong.)
+- **Third-party fees / platform terms:** publish the EXACT fee/term, sourced to the venue's own page + dated, **not** softened to qualitative or "verify current terms yourself." Hard numbers stay hard; the date is the honesty mechanism, kept current by the monthly venue-terms refresh engine (`docs/venue-terms-refresh.md`). The estimate-hedge is for resale VALUE only, never for published fees. (Reverses the earlier "don't publish perishable fees / general-information-not-advice" stance — owner 2026-07-11: "hard numbers are very important on seller fees and buyer choices, absolutely do not be soft.")
 - **Money features generally:** help users see and organize, **never** custody funds or guarantee returns.
 
 ## Who she is

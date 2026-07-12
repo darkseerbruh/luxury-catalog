@@ -3,15 +3,17 @@
 
 ---
 
-## TL;DR — Where to Sell hub SHIPPED (2026-07-11, on `main`)
+## TL;DR — Where to Sell system SHIPPED end-to-end + venue-terms refresh engine (2026-07-11, on `main`)
 
-**Sister feature to `/where-to-buy`, the sell-side surface that spec scoped as "later".** Same sourced-and-dated pattern, seller economics instead of buyer protection. All green (tsc/lint/14 new tests), verified in-browser.
-- 🏷️ **What shipped:** `/where-to-sell` hub + `/where-to-sell/[slug]` for 9 venues, grouped by sell model — **They sell it for you** (Fashionphile, The RealReal, Rebag, The Luxury Closet) · **You list it yourself** (eBay, Vestiaire, Poshmark, Mercari) · **You sell it direct** (Facebook Marketplace).
-- ⚡ **Signature move:** a net-payout estimator (`estimateNet` in `src/lib/where-to-sell.ts`). Enter the bag's value → what you'd keep at each venue, ranked, off each venue's PUBLISHED commission/fee. Consignment/marketplace = computed (band, marginal, or flat shapes; TLC's flat $30 subtracted). Buyout = "instant quote," never a fabricated %, routed to the median. Links to `/search` (the habit loop).
-- 📎 **Sourcing bar honored:** every fee/payout/effort/acceptance cell carries the venue's own URL + `checkedAt: 2026-07-11` (9 venues re-verified fresh this session via parallel research). Price-control on marketplaces renders "structural, no policy cited" rather than faking a source. Monthly re-verify sweep, same as where-to-buy.
-- 🔌 **Wired:** nav (`layout.tsx`, after Where to buy), `sitemap.ts` (hub + 9 profiles), FAQ/ItemList JSON-LD, cross-links both ways with `/where-to-buy`. Spec: `docs/ux/where-to-sell-spec.md`.
-- 📈 **Metrics:** GEO/SEO on "how much does X pay / what fee does X take" queries, plus on-site **engagement** (the estimator keeps sellers here). NOTE (owner, 2026-07-11): there is NO sell-side affiliate revenue; these resellers do not pay for referring sellers. The outbound sell links are honest utility that earn nothing; the affiliate plumbing is kept dormant (`sellLinksAffiliated` in affiliate.ts) in case a program ever lands. Do not frame sell as a revenue stream.
-- ⬜ **YOUR TURN:** nothing required. New routes go live on the next prod build (auto if Vercel auto-deploys `main`, else a `vercel --prod` promote is yours).
+**Full sell-side surface + a never-stale refresh engine for the fee data.** Sister to `/where-to-buy`, seller economics instead of buyer protection. All green (824 tests), verified live.
+- 🏷️ **Hub + profiles:** `/where-to-sell` + `/where-to-sell/[slug]` for 9 venues by sell model — sells-for-you (Fashionphile, TRR, Rebag, TLC) · marketplace (eBay, Vestiaire, Poshmark, Mercari) · p2p (Facebook). Nav + sitemap + FAQ/ItemList JSON-LD + two-way cross-links with where-to-buy. Spec `docs/ux/where-to-sell-spec.md`.
+- ⚡ **Net-payout estimator (the signature):** `estimateNet` in `src/lib/where-to-sell.ts` (band/marginal/flat shapes; TLC's flat $30 + eBay's marginal fee handled). Two entry paths: **search your bag** (reuses `BagFinder` → `getStyleResaleEstimate`, value = median of REALIZED prices: fixed-price listed counts as the sale price, eBay uses its sold rows, deduped by listing_ref) OR **type a value**. Matrix "what they take" shows the cut taken (e.g. "They take ~30%").
+- 🔗 **Every sell surface routes into the estimator:** bag page (deep-linked `?bag=<styleId>`), identify result, thrift-find, closet, brand page, article CTA. Outbound buyout/consign links kept as honest utility.
+- 💸 **NO sell-side affiliate revenue (owner-confirmed 2026-07-11):** resellers don't pay for referring sellers. Plumbing kept dormant + self-activating (`sellLinksAffiliated` in affiliate.ts); disclosures gated on it so we never claim commission we don't earn. Sell = engagement/GEO, not revenue.
+- 📝 **Companion article DRAFT #40** `what-every-resale-site-actually-pays-you` (owner publishes). Hard numbers, dated, `[diagram: where-to-sell-tradeoff]` + `[diagram: where-to-sell-estimator-cta]`.
+- 🔄 **Venue-terms refresh engine (NEW, owner-directed):** seller fees + buyer protections are HARD dated facts, kept fresh monthly. `venue-terms-freshness.ts` (pure backbone, flags cells past a 30-day cadence) + `scripts/venue-terms-refresh.ts` (report) + `.github/workflows/venue-terms-refresh.yml` (monthly report + `venue-terms` issue) + scheduled agent `venue-terms-refresh-monthly` (re-verifies pages → PR she merges, never auto-merges a figure). Standard `docs/venue-terms-refresh.md`; in `automation-map.md`.
+- 📐 **Fee-copy rule reversed:** hard fees stated exact + dated, never softened (pref line updated; the old "don't publish perishable fees" stance is retired).
+- ⬜ **YOUR TURN:** (1) review + publish article #40 at `/articles/what-every-resale-site-actually-pays-you` (shows a "Draft, only you can see this" banner). (2) Click **Run now** on `venue-terms-refresh-monthly` in the Scheduled sidebar to pre-approve its web/gh tools before Aug 1. (3) Merge its monthly PR when it opens. (4) Routes go live on the next prod build (auto if Vercel auto-deploys `main`, else `vercel --prod`). (5) Optional: the paired social post (needs Metricool authorized + the social agent).
 
 ---
 
