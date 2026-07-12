@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import Link from "next/link";
 
 /**
  * "Where to sell" decision diagram for article #1 (the seller-lever piece).
@@ -80,6 +81,31 @@ export function WhereToSellDiagram() {
   );
 }
 
+/**
+ * In-article CTA into the /where-to-sell net-payout estimator. Registered as a
+ * "diagram" so a body line `[diagram: where-to-sell-estimator-cta]` renders it. The
+ * renderer supports no inline links, so this is how an article routes to the tool.
+ */
+export function WhereToSellEstimatorCTA() {
+  return (
+    <div className="my-2 rounded-2xl border border-gold/40 bg-surface p-5">
+      <p className="font-serif text-lg text-foreground">See what YOUR bag would net</p>
+      <p className="mt-1 text-sm leading-relaxed text-muted">
+        Enter a value or search your bag, and we&apos;ll do the fee math for every venue, ranked
+        by what lands in your pocket. Our estimate off each venue&apos;s published rates.
+      </p>
+      <Link
+        href="/where-to-sell"
+        className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-gold/20"
+      >
+        Run the numbers
+        <span aria-hidden>&rarr;</span>
+      </Link>
+    </div>
+  );
+}
+
 export const whereToSellDiagramRegistry: Record<string, ComponentType> = {
   "where-to-sell-tradeoff": WhereToSellDiagram,
+  "where-to-sell-estimator-cta": WhereToSellEstimatorCTA,
 };
