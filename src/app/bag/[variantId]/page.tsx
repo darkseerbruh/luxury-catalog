@@ -1508,8 +1508,14 @@ export default async function BagDetailPage({
       {/* Where to buy (affiliate resale search links — fallback when no live listings) */}
       <WhereToBuy variantId={v.variantId} brand={v.brand.name} style={v.style.name} />
 
-      {/* Where to sell — buyout vs. consignment fork (consignor-referral revenue). */}
-      <WhereToSell variantId={v.variantId} brand={v.brand.name} style={v.style.name} />
+      {/* Where to sell — routes into the sourced /where-to-sell estimator for this
+          bag, then the buyout vs. consignment outbound fork (referral revenue). */}
+      <WhereToSell
+        variantId={v.variantId}
+        styleId={v.style.styleId}
+        brand={v.brand.name}
+        style={v.style.name}
+      />
 
       {/* Reviews & ratings */}
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
