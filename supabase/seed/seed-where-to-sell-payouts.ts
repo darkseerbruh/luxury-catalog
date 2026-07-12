@@ -33,7 +33,7 @@ One more thing that changes the math: **when you get paid.**
 
 ## What each site leaves in your pocket
 
-These are each venue's own published rates, checked 2026-07-11. Platforms change their fees, so read this as a dated snapshot and verify current terms before you sell. General information, not financial advice.
+These are each venue's own published rates, current as of 2026-07-11. We re-check them monthly and update the date, so the numbers here are the real, current cut, not a rough guide.
 
 - **Facebook Marketplace**, local pickup: you keep **100 percent**, cash in hand. No fee, but also no buyer protection and no shipping safety net.
 - **Mercari:** keep **90 percent** (a flat 10 percent cut).
@@ -59,7 +59,7 @@ Say a bag sells for $2,000. Here's what you'd walk away with, venue by venue:
 - The RealReal: **$1,400**
 - The Luxury Closet: **$1,270**
 
-That's a $730 spread on the exact same bag. The convenient consignors sit at the bottom, and the do-it-yourself platforms sit at the top. Treat these as illustrative, since your real number moves with the final sale price and the current fee schedule.
+That's a $730 spread on the exact same bag. The convenient consignors sit at the bottom, and the do-it-yourself platforms sit at the top. Your exact dollar figure moves with the final sale price, but the cut each venue takes is fixed at the rates above.
 
 > The more the venue does for you, the more it keeps. Top dollar takes patience and effort. Fast cash costs margin. Keeping every dollar costs you the safety net.
 

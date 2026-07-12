@@ -100,7 +100,9 @@ Fact { claim, sourceUrl, checkedAt }               // EVERY factual cell carries
 For buyout, return `{ kind: "quote" }` (no number — honest).
 
 **Sourcing bar (non-negotiable, inherited):** a cell renders only with `sourceUrl +
-checkedAt`; unverified = "not yet verified", never a guess. Monthly re-verify sweep.
+checkedAt`; unverified = "not yet verified", never a guess. Kept fresh by the monthly
+venue-terms refresh engine (`docs/venue-terms-refresh.md`): fees are HARD facts, stated
+exact and dated, never softened. Never say "varies / check current terms" on the site.
 
 **Factuality note on buyout:** consignment/marketplace commissions are *published
 schedules* (sourceable, datable). Buyout amounts are *per-item quotes* Fashionphile/Rebag

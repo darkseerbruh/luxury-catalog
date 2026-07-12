@@ -63,8 +63,9 @@ Fact { claim, sourceUrl, checkedAt }             // EVERY factual cell carries b
 ```
 
 **Sourcing bar (non-negotiable):** a cell renders only with `sourceUrl + checkedAt`;
-unverified = renders "not yet verified", never a guess. Freshness: monthly re-verify
-sweep alongside the price re-capture cadence.
+unverified = renders "not yet verified", never a guess. Freshness: the monthly
+venue-terms refresh engine (`docs/venue-terms-refresh.md`) re-verifies every dated cell
+against its source and opens a PR with the diffs; facts stay HARD and dated, never softened.
 
 **Gap-to-remedy library** — `remedies` keyed by gap, composed per venue from its ✗ cells:
 
