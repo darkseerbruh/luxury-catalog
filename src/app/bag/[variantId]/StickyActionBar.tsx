@@ -9,6 +9,8 @@ import {
   removeFromWatchlist,
 } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
+import { useAuthState } from "@/components/AuthProvider";
+import { useVariantMe } from "@/lib/use-variant-me";
 
 /**
  * Mobile-first sticky bottom action bar (thumb zone) with the decision-point
@@ -31,12 +33,24 @@ export default function StickyActionBar({
   const [watching, setWatching] = useState(initialWatching);
   const [pending, startTransition] = useTransition();
 
+  // ISR-cached signed-out; correct to real auth + closet/watch after mount.
+  const { signedIn: authSignedIn, ready } = useAuthState();
+  const effectiveSignedIn = ready ? authSignedIn : signedIn;
+  const { data: me } = useVariantMe(variantId, ready && authSignedIn);
+  // Apply fetched closet/watch state once, during render (see BagActions note).
+  const [meApplied, setMeApplied] = useState(false);
+  if (me && !meApplied) {
+    setMeApplied(true);
+    setSaved(me.closetStatus === "want" || me.closetStatus === "have");
+    setWatching(me.watching);
+  }
+
   function jumpTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function toggleSave() {
-    if (!signedIn) return;
+    if (!effectiveSignedIn) return;
     startTransition(async () => {
       if (saved) {
         const res = await removeFromCloset(variantId);
@@ -52,7 +66,7 @@ export default function StickyActionBar({
   }
 
   function toggleWatch() {
-    if (!signedIn) return;
+    if (!effectiveSignedIn) return;
     startTransition(async () => {
       const res = watching ? await removeFromWatchlist(variantId) : await addToWatchlist(variantId);
       if (res.ok) {
@@ -68,7 +82,7 @@ export default function StickyActionBar({
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80 sm:hidden">
       <div className="mx-auto flex w-full max-w-3xl items-stretch">
-        {signedIn ? (
+        {effectiveSignedIn ? (
           <>
             <button
               type="button"
