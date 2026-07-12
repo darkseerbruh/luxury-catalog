@@ -2196,19 +2196,25 @@ export interface StyleResaleEstimate {
   styleId: number;
   /** "Brand Style" for display. */
   label: string;
-  /** Median deduped listed (asking) price across the style's variants, our estimate. */
+  /** Median deduped realized price across the style's variants, our estimate. */
   value: number;
-  /** Distinct listings behind the estimate. */
+  /** Distinct sales + fixed-price listings behind the estimate. */
   n: number;
 }
 
 /**
  * A single representative resale value for a whole style, for the /where-to-sell
- * estimator's bag picker. Pools DISTINCT listed observations across every variant
- * (deduped by (platform, listing_ref) so a re-scraped listing can't inflate the
- * pool) and takes the median. Listed asking, framed as an estimate, not sold. Returns
- * null when the style has no priced listings yet, so the caller falls back to manual
- * entry. Read-only; degrades to null on any failure.
+ * estimator's bag picker.
+ *
+ * Basis = REALIZED value, using the right source per venue type. Almost all of our
+ * resale sources (Fashionphile, The Luxury Closet, The RealReal, Vestiaire, etc.) are
+ * FIXED-PRICE, so their listed asking price is effectively the sale price and counts
+ * as realized. eBay is the one bidding site where an active ask is not a sale, so we
+ * take eBay's SOLD rows and drop its listed asks. The pool is therefore every
+ * fixed-price listed row plus every sold row. Deduped by (platform, listing_ref) so a
+ * re-scraped listing can't inflate it; median taken. Returns null when the style has
+ * no priced rows yet, so the caller falls back to manual entry. Degrades to null on
+ * any failure.
  */
 export async function getStyleResaleEstimate(styleId: number): Promise<StyleResaleEstimate | null> {
   if (!Number.isFinite(styleId) || !process.env.NEXT_PUBLIC_SUPABASE_URL) return null;
@@ -2227,26 +2233,29 @@ export async function getStyleResaleEstimate(styleId: number): Promise<StyleResa
 
     const rows = await fetchAllRows<{
       platform: string | null;
+      price_type: string | null;
       listing_ref: string | null;
-      listing_status: string | null;
       sale_price: number | null;
     }>(
       () =>
         sb
           .from("price_history")
-          .select("platform, listing_ref, listing_status, observed_on, sale_price")
+          .select("platform, price_type, listing_ref, observed_on, sale_price")
           .in("variant_id", variantIds)
-          .eq("price_type", "listed")
+          .in("price_type", ["listed", "sold"])
           .not("sale_price", "is", null)
           .order("observed_on", { ascending: false }),
       30000,
     );
 
-    // Dedupe by (platform, listing_ref), newest first, dropping retired rows.
+    // Dedupe by (platform, listing_ref), newest first. Realized-value rule: keep every
+    // sold row, and every listed row EXCEPT eBay's (a bidding site, so its ask is not
+    // a sale). Every other source is fixed-price, where listed asking = the sale price.
     const seen = new Set<string>();
     const prices: number[] = [];
     for (const r of rows) {
-      if (r.listing_status === "sold") continue;
+      const isEbay = (r.platform ?? "").toLowerCase().includes("ebay");
+      if (r.price_type === "listed" && isEbay) continue;
       const p = r.sale_price != null ? Number(r.sale_price) : NaN;
       if (!Number.isFinite(p) || p <= 0) continue;
       const key = r.listing_ref ? `${r.platform ?? ""}::${r.listing_ref}` : `anon::${prices.length}`;
