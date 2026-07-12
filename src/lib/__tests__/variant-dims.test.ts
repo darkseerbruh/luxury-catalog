@@ -90,7 +90,7 @@ describe("visibleDims", () => {
     expect(visibleDims([v(1, { sizeLabel: "MM" }), v(2, { sizeLabel: "MM" })])).toEqual([]);
   });
 
-  it("sorts purely numeric sizes ascending, keeps named sizes in catalogue order", () => {
+  it("sorts sizes smallest→largest: numeric ascending, named by physical rank", () => {
     const birkin = [
       v(1, { sizeLabel: "30" }),
       v(2, { sizeLabel: "35" }),
@@ -98,8 +98,18 @@ describe("visibleDims", () => {
       v(4, { sizeLabel: "40" }),
     ];
     expect(visibleDims(birkin)[0].values).toEqual(["25", "30", "35", "40"]);
-    // Named sizes are not alphabetized (PM before MM is correct for LV).
-    expect(visibleDims(neverfull)[0].values).toEqual(["PM", "MM", "GM", "BB"]);
+    // Named LV sizes read smallest→largest: BB < PM < MM < GM (owner 2026-07-11).
+    expect(visibleDims(neverfull)[0].values).toEqual(["BB", "PM", "MM", "GM"]);
+  });
+
+  it("orders Chanel flap sizes Small → Medium → Jumbo → Maxi, not insertion order", () => {
+    const flap = [
+      v(1, { sizeLabel: "Medium (M/L)" }),
+      v(2, { sizeLabel: "Maxi" }),
+      v(3, { sizeLabel: "Small" }),
+      v(4, { sizeLabel: "Jumbo" }),
+    ];
+    expect(visibleDims(flap)[0].values).toEqual(["Small", "Medium (M/L)", "Jumbo", "Maxi"]);
   });
 
   it("never offers the ingest catch-all 'Standard' beside real sizes", () => {

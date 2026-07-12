@@ -83,6 +83,10 @@ export default function VariantSelector({
               <div className="flex flex-wrap gap-2">
                 {values.map((value) => {
                   const active = value === currentVal;
+                  // NOTE: no grey-out here yet. Greying a value must mean "the house never made
+                  // it" (archivist production record), NOT "we have no listing" (owner 2026-07-11:
+                  // absence of a comp ≠ absence of the product). Wire isCombinationAvailable to the
+                  // production matrix once it exists; until then every captured value stays live.
                   const target = active ? currentVariantId : resolveTarget(variants, current, dim, value);
                   // Display only: size chips carry the measurement + boutique alias so
                   // "Jumbo" reads "Jumbo (Large) · 30 cm". The raw `value` still keys matching.
