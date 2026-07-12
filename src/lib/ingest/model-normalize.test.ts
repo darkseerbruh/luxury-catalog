@@ -78,6 +78,17 @@ describe("canonicalModel — separator-flattened slug titles", () => {
     ).toBe("Multi Pochette");
   });
 
+  it("resolves a HYPHENATED Multi-Pochette (separator-insensitive bag override)", () => {
+    // Scraped titles keep the hyphen; the "multi pochette" override is spaced. Both the
+    // model resolution and the SLG gate must treat "-" as a space so the ranked bag isn't
+    // dropped (owner report 2026-07-11, LV Multi-Pochette hyphen bug).
+    expect(canonicalModel("Louis Vuitton", "2021 Monogram Multi-Pochette Accessoires")).toBe("Multi Pochette");
+    expect(isNonBagAccessory("2021 Monogram Multi-Pochette Accessoires")).toBe(false);
+    // The single Multicolore Pochette Accessoires is NOT the Multi Pochette — it's an SLG.
+    expect(canonicalModel("Louis Vuitton", "Monogram Multicolore Pochette Accessoires")).toBeNull();
+    expect(isNonBagAccessory("Monogram Multicolore Pochette Accessoires")).toBe(true);
+  });
+
   it("keeps word boundaries so flexible separators can't fire inside words", () => {
     // "carry all in ..." must resolve to CarryAll, not have "all in" claim All-In.
     expect(canonicalModel("Louis Vuitton", "louis vuitton carry all mm monogram tote")).toBe("CarryAll");
