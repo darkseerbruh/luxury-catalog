@@ -54,8 +54,43 @@ const CLASSIC_FLAP: Row[] = [
   { axis: "color", value: "Navy", permanence: "permanent", note: "near-permanent, returns most years", sort_order: 5 },
 ];
 
+// Chanel Boy (style 424), archivist-sourced 2026-07-12 (Fashionphile/Baghunter/Rebag/SACLÀB).
+// Old vs New Medium are two real sizes; XL discontinued; Mini seasonal. Hardware is a real Boy
+// axis (ruthenium signature). Same "no official seasonal colour names" regime as the Flap.
+const BOY: Row[] = [
+  { axis: "size", value: "Small", permanence: "permanent", note: "~20 cm", sort_order: 1 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "'Old Medium', ~25 cm", sort_order: 2 },
+  { axis: "size", value: "New Medium", permanence: "permanent", is_default: true, note: "~28 cm, most common on the market", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~30 cm, scarce", sort_order: 4 },
+  { axis: "size", value: "XL", note: "discontinued, produced 2013-2014 only", sort_order: 5 },
+  { axis: "size", value: "Mini", permanence: "seasonal", sort_order: 6 },
+  { axis: "material", value: "Calfskin", permanence: "permanent", is_default: true, note: "launch leather, plain or glazed", sort_order: 1 },
+  { axis: "material", value: "Lambskin", permanence: "permanent", sort_order: 2 },
+  { axis: "material", value: "Caviar", permanence: "permanent", sort_order: 3 },
+  { axis: "material", value: "Patent", permanence: "seasonal", sort_order: 4 },
+  { axis: "material", value: "Tweed", permanence: "seasonal", sort_order: 5 },
+  { axis: "material", value: "Velvet", permanence: "seasonal", sort_order: 6 },
+  { axis: "material", value: "Sequin", permanence: "seasonal", sort_order: 7 },
+  { axis: "material", value: "Metallic", permanence: "seasonal", sort_order: 8 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "python / galuchat, historic", sort_order: 9 },
+  { axis: "construction", value: "Diamond", permanence: "permanent", is_default: true, sort_order: 1 },
+  { axis: "construction", value: "Chevron", permanence: "permanent", note: "standard Boy variant, same tier", sort_order: 2 },
+  { axis: "construction", value: "Plain", permanence: "seasonal", note: "smooth / unquilted", sort_order: 3 },
+  { axis: "hardware", value: "Ruthenium", permanence: "permanent", is_default: true, note: "the Boy's signature antiqued tone", sort_order: 1 },
+  { axis: "hardware", value: "Aged gold", permanence: "permanent", sort_order: 2 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", sort_order: 3 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", sort_order: 4 },
+  { axis: "hardware", value: "So Black", permanence: "seasonal", note: "black-on-black hardware, sought after", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor, with ruthenium or antique-gold", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", sort_order: 4 },
+  { axis: "color", value: "Navy", permanence: "permanent", sort_order: 5 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
+  { styleId: 424, name: "Boy", rows: BOY },
 ];
 
 async function main() {

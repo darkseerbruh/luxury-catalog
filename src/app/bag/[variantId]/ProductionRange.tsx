@@ -7,7 +7,7 @@ import type { ProductionAxis } from "@/lib/production-options";
  * claim about any single combination; an editorial read of the production record.
  */
 export default function ProductionRange({ axes }: { axes: ProductionAxis[] }) {
-  const shown = axes.filter((a) => a.axis === "material" || a.axis === "construction");
+  const shown = axes.filter((a) => a.axis === "material" || a.axis === "construction" || a.axis === "hardware");
   if (shown.length === 0) return null;
 
   return (
