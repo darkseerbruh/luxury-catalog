@@ -143,13 +143,21 @@ export default async function BrandPage({
   // carry a year, fall back to the earliest-dated styles so the line still reads.
   const iconYearLabels = iconStyles
     .filter((x) => x.style.yearIntroduced != null)
-    .map((x) => ({ year: x.style.yearIntroduced as number, label: x.style.name }));
+    .map((x) => ({
+      year: x.style.yearIntroduced as number,
+      label: x.style.name,
+      href: x.style.variants[0] ? `/bag/${x.style.variants[0].variantId}` : null,
+    }));
   const fallbackYearLabels = liveStyles
     .filter((s) => s.yearIntroduced != null)
     .sort((a, b) => (a.yearIntroduced as number) - (b.yearIntroduced as number))
-    .map((s) => ({ year: s.yearIntroduced as number, label: s.name }));
-  const milestones = [
-    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "House founded" }] : []),
+    .map((s) => ({
+      year: s.yearIntroduced as number,
+      label: s.name,
+      href: s.variants[0] ? `/bag/${s.variants[0].variantId}` : null,
+    }));
+  const milestones: { year: number; label: string; href: string | null }[] = [
+    ...(brand.foundedYear ? [{ year: brand.foundedYear, label: "House founded", href: null }] : []),
     ...(iconYearLabels.length > 0 ? iconYearLabels : fallbackYearLabels),
   ]
     .sort((a, b) => a.year - b.year)
@@ -283,7 +291,16 @@ export default async function BrandPage({
               <li key={`${m.year}-${m.label}`} className="flex min-w-0 shrink-0 items-center">
                 <div className="w-32 shrink-0">
                   <p className="font-serif text-lg text-gold-soft">{m.year}</p>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-muted">{m.label}</p>
+                  {m.href ? (
+                    <Link
+                      href={m.href}
+                      className="mt-0.5 block line-clamp-2 text-xs text-muted transition-colors hover:text-foreground"
+                    >
+                      {m.label}
+                    </Link>
+                  ) : (
+                    <p className="mt-0.5 line-clamp-2 text-xs text-muted">{m.label}</p>
+                  )}
                 </div>
                 {i < milestones.length - 1 && (
                   <span className="mx-1 h-px w-8 shrink-0 bg-border" aria-hidden />
