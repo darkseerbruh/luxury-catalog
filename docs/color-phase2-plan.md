@@ -30,7 +30,25 @@ Variant key moves from **(style, size)** to **(style, size, color)**. Each row k
 - **Color multiplicity:** the same physical bag seen under slightly different labels ("rouge" vs "red") must map to ONE family — `colorFamily` handles the common cases; spot-check the tail.
 - **Image coverage:** a color page wants a matching image; fall back to the style hero when a color has none.
 
-## Pilot: DONE on Chanel Classic Flap (2026-07-11)
+## REVERTED 2026-07-12 — the model was backwards (options must be production-driven)
+
+Owner testing of the pilot surfaced that deriving colour options from LISTINGS is wrong:
+- "No listing" ≠ "never made" — a produced colour we lack a photo of must still be a
+  selectable option (hedged "no photo yet"), never greyed out.
+- The archivist matrix (`research-drafts/classic-flap-production-matrix.md`) shows the honest
+  Classic Flap model: permanent colour families (Black/Beige/White/Red/Navy) + seasonal as
+  descriptor + season-code (Chanel has NO official seasonal colour names), materials
+  caviar/lambskin permanent, chevron is a legit construction, and the contaminants (Coco
+  Handle / 2.55 Reissue / Boy) are told apart by the LOCK, not the quilt — and aren't
+  title-detectable, so a listing-derived split surfaces wrong photos.
+
+So the pilot was reverted (`pilot-color-variants-classic-flap.ts --reverse`): Classic Flap is
+back to clean size-only (6 variants, v199 restored to 2,531 listings). The rebuild is
+**production-driven**: options come from the archivist matrix; our listings/comps/photos layer
+on top; grey-out traces to production evidence only. Superseded pilot notes below (kept for the
+mechanism, which the rebuild reuses):
+
+## Pilot (reverted) — Chanel Classic Flap (2026-07-11)
 
 Ran the URL-preserving additive split on style #1 via `pilot-color-variants-classic-flap.ts`
 (dry-run-first, reversible with `--reverse`). Result, verified live:
