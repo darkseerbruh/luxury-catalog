@@ -9,6 +9,8 @@ import {
   removeFromWatchlist,
 } from "@/lib/collection-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
+import { useAuthState } from "@/components/AuthProvider";
+import { useVariantMe } from "@/lib/use-variant-me";
 import PremiumInterest from "@/components/PremiumInterest";
 
 const STATUS_LABELS: { value: "want" | "have" | "had"; label: string }[] = [
@@ -45,6 +47,22 @@ export default function BagActions({
   const [watching, setWatching] = useState(initialWatching);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  // The page is ISR-cached signed-out; correct to real auth + closet/watch state
+  // client-side after mount (falls back to the SSR prop until auth resolves, so
+  // the first paint matches the cached HTML — no hydration mismatch).
+  const { signedIn: authSignedIn, ready } = useAuthState();
+  const effectiveSignedIn = ready ? authSignedIn : signedIn;
+  const { data: me } = useVariantMe(variantId, ready && authSignedIn);
+  // Apply the fetched closet/watch state once, DURING render (not in an effect,
+  // which would trigger a cascading re-render). React re-renders synchronously
+  // with the seeded values before painting, so there's no flash.
+  const [meApplied, setMeApplied] = useState(false);
+  if (me && !meApplied) {
+    setMeApplied(true);
+    setClosetStatus(me.closetStatus);
+    setWatching(me.watching);
+  }
 
   function jumpTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -112,7 +130,7 @@ export default function BagActions({
     <section id="your-move" className="scroll-mt-4 border-t border-border pt-8">
       <h2 className="mb-4 font-serif text-xl text-foreground">Make it yours, or move it on</h2>
 
-      {signedIn ? (
+      {effectiveSignedIn ? (
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">
           <div>
             <p className="mb-2 text-xs uppercase tracking-wide text-muted/70">In your closet</p>

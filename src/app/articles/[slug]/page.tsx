@@ -6,7 +6,7 @@ import { getBySlug, listPublished } from "@/lib/posts";
 import { classifyDepartment } from "@/lib/article-departments";
 import { getBrandsOverview } from "@/lib/queries";
 import TrackArticleView from "./TrackArticleView";
-import { getCurrentUser } from "@/lib/auth";
+import AuthorEditLink from "./AuthorEditLink";
 import { AUTHOR_NAME, AUTHOR_ROLE, SITE_URL } from "@/lib/geo";
 import { PostBagCTA } from "./PostBagCTA";
 import { ShopThisBag, type ShopThisBagData } from "./ShopThisBag";
@@ -74,7 +74,12 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...almaSizeChartRegistry,
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public article is user-agnostic (author edit link is a client island)
+
+// On-demand ISR: render + cache each article on first visit (empty = none prerendered at build).
+export function generateStaticParams() {
+  return [];
+}
 
 // Dedupe the fetch across generateMetadata + the page render.
 const getPost = cache(getBySlug);
@@ -268,8 +273,6 @@ export default async function PostDetailPage({
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const user = await getCurrentUser();
-  const isAuthor = user?.id === post.author?.userId;
   const date = formatDate(post.publishedAt) ?? formatDate(post.createdAt);
   // Show a "Last updated" date when the post has been edited on a later day than
   // it was published. This is the freshness signal for evergreen/fee/value posts
@@ -377,14 +380,7 @@ export default async function PostDetailPage({
           {date ? ` · ${date}` : ""}
           {showUpdated ? ` · Updated ${updatedDate}` : ""}
         </p>
-        {isAuthor && (
-          <Link
-            href={`/articles/${post.slug}/edit`}
-            className="mt-3 inline-block rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-          >
-            Edit article
-          </Link>
-        )}
+        <AuthorEditLink slug={post.slug} />
       </header>
 
       {post.excerpt && (

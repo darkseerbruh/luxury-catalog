@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import CompScale, { type Comp, type CompRow } from "./CompScale";
 import { track, EVENTS } from "@/lib/analytics/events";
+import { useAuthState } from "@/components/AuthProvider";
+import { useVariantMe } from "@/lib/use-variant-me";
 import { PLATFORMS } from "@/lib/platforms";
 
 /** Display name for a stored platform key ("ebay" → "eBay"); falls back to the raw value. */
@@ -174,10 +176,30 @@ export default function ValueModule({
   // Era lens shows when ≥2 decade bands are populated with real data.
   const eraLens = !!byEra && byEra.length >= 2;
 
+  // The bag page is ISR-cached signed-out, so the SERVER always passes framing
+  // "buyer". Re-derive the viewer's real framing client-side from their closet
+  // state (have→owner, had→collector) once auth + /api/bag/[id]/me resolve.
+  const { signedIn, ready } = useAuthState();
+  const { data: me } = useVariantMe(variantId, ready && signedIn);
+  const effectiveFraming: ValueFraming = me
+    ? me.closetStatus === "have"
+      ? "owner"
+      : me.closetStatus === "had"
+        ? "collector"
+        : "buyer"
+    : framing;
+  // Resolved once we KNOW the viewer's framing: signed-out (auth ready) or the
+  // per-variant fetch landed. Fire value_module_viewed ONCE, with the true
+  // framing, so the conversion instrumentation isn't polluted by a "buyer"
+  // pre-correction event.
+  const resolved = ready && (!signedIn || me != null);
+  const fired = useRef(false);
   useEffect(() => {
+    if (!resolved || fired.current) return;
+    fired.current = true;
     track(EVENTS.valueModuleViewed, {
       variant_id: variantId,
-      framing,
+      framing: effectiveFraming,
       listed_count: listed.length,
       recorded_count: range?.count ?? 0,
       has_listed: listed.length > 0,
@@ -186,13 +208,13 @@ export default function ValueModule({
       demand_level: demandLevel,
       scope: "exact",
     });
-  }, [variantId, framing, listed.length, range?.count, ladder, eraLens, demandLevel]);
+  }, [resolved, effectiveFraming, variantId, listed.length, range?.count, ladder, eraLens, demandLevel]);
 
   // Honest empty state — mirrors the catalog's "we only show real ranges" rule.
   if (!range) {
     return (
       <div>
-        <h2 className="font-serif text-xl text-foreground">{HEADINGS[framing]}</h2>
+        <h2 className="font-serif text-xl text-foreground">{HEADINGS[effectiveFraming]}</h2>
         <p className="mt-2 text-sm text-muted">
           No recorded resale data yet for this exact variant — we only show
           ranges built from real prices.
@@ -220,7 +242,7 @@ export default function ValueModule({
 
   // Framing-specific verdict line — descriptive, from the numbers above.
   let verdict: React.ReactNode;
-  if (framing === "owner") {
+  if (effectiveFraming === "owner") {
     verdict = (
       <>
         Comparable resales run{" "}
@@ -236,7 +258,7 @@ export default function ValueModule({
         )}
       </>
     );
-  } else if (framing === "collector") {
+  } else if (effectiveFraming === "collector") {
     verdict = (
       <>
         {trendPct != null ? (
@@ -291,7 +313,7 @@ export default function ValueModule({
     );
   }
 
-  const note = timingNote(framing, demandLevel, trendPct, retailTrendPct);
+  const note = timingNote(effectiveFraming, demandLevel, trendPct, retailTrendPct);
   const eraText = era ? eraNote(era) : null;
 
   // Era lens caption: total listing count + capture date, descriptive + dated,
@@ -304,7 +326,7 @@ export default function ValueModule({
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 className="font-serif text-xl text-foreground">{HEADINGS[framing]}</h2>
+        <h2 className="font-serif text-xl text-foreground">{HEADINGS[effectiveFraming]}</h2>
         <div className="flex flex-wrap items-center gap-2">
           {era?.vintage ? (
             <span className="rounded-full border border-gold/40 px-2.5 py-0.5 text-xs text-gold">
@@ -373,8 +395,8 @@ export default function ValueModule({
           Estimated from recorded resale prices{mixNote ? ` (${mixNote})` : ""} · not an appraisal.
           {asOf ? ` As of ${asOf.slice(0, 10)}.` : ""}
         </p>
-        <a href={NUDGE[framing].href} className="text-xs text-gold hover:underline">
-          {NUDGE[framing].label} →
+        <a href={NUDGE[effectiveFraming].href} className="text-xs text-gold hover:underline">
+          {NUDGE[effectiveFraming].label} →
         </a>
       </div>
     </div>

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
-import { getVariantUserState } from "@/lib/collections";
 import { getVariantDemand } from "@/lib/demand";
 import { listByBrand, listByStyle, getBrandAuthGuideSlug } from "@/lib/posts";
 import { ArticleList } from "@/components/ArticleList";
@@ -63,7 +62,12 @@ import { translateProvenance } from "@/lib/provenance";
 import { BagImage } from "@/components/BagImage";
 import CompareControls from "@/components/CompareControls";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: bag page is now user-agnostic (per-user state is client-fetched)
+
+// On-demand ISR: render + cache each bag on first visit (empty = none prerendered at build).
+export function generateStaticParams() {
+  return [];
+}
 
 // Dedupe the (heavy) detail fetch across generateMetadata + the page render.
 const getVariant = cache(getVariantDetail);
@@ -243,10 +247,15 @@ export default async function BagDetailPage({
   const id = parseInt(variantId, 10);
   if (isNaN(id)) notFound();
 
-  const [v, userState] = await Promise.all([
-    getVariant(id),
-    getVariantUserState(id),
-  ]);
+  const v = await getVariant(id);
+
+  // Per-user closet/watch state is NOT read here: that would force this page
+  // dynamic (cookies) and re-run on every view. The page renders the signed-out
+  // shell (ISR-cacheable); the client islands below (ValueModule, BagActions,
+  // StickyActionBar) fetch /api/bag/[id]/me and correct themselves after mount.
+  // Server-only personalization (Reviews inCloset, VariantSelector saved badge)
+  // gracefully shows the signed-out default on the cached HTML.
+  const userState = { signedIn: false, closetStatus: null as "want" | "have" | "had" | null, watching: false };
   if (!v) notFound();
 
   // One fan-out of every read that depends only on `v`. These used to run as a serial
