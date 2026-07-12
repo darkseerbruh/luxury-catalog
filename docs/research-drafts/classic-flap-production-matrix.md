@@ -16,7 +16,7 @@ sourced. Raw rows banked in `seasonal-archive/chanel.jsonl`; season-code map in 
 | Small | 23 × 14.5 × 6 | Permanent | |
 | Medium ("M/L") | 25.5 × 15.5 × 6.5 | Permanent | most-produced; "M/L" = collector shorthand, tag says "Medium" |
 | Jumbo ("Large") | 30 × 20 × 10 | Permanent | boutique word is "Large" |
-| Maxi | 33 × 23 × 10 | **Read as discontinued ~2021-22** | reseller/collector read, NOT house-confirmed — verify before hard-coding |
+| Maxi | 33 × 23 × 10 | **CURRENT** (confirmed 2026-07-12) | chanel.com lists it live, code A58601; PurseBlog Mar 2026 has it at $12,800; SS26 added new Maxis. The "discontinued" read was WRONG — do NOT flag it. (An SA anecdote about the structured *double*-flap Maxi's spotty availability is not a house discontinuation.) |
 
 Mini (Rectangular/Square) and East-West are SEPARATE styles, never sizes here.
 
