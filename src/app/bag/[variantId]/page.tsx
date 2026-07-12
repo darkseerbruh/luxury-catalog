@@ -55,6 +55,7 @@ import { getStyleFamily } from "@/lib/flap-family";
 import FlapLines from "./FlapLines";
 import { getFlapLines } from "@/lib/flap-lines";
 import { getProductionOptions } from "@/lib/production-options";
+import ProductionRange from "./ProductionRange";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
 import { translateProvenance } from "@/lib/provenance";
@@ -800,6 +801,10 @@ export default async function BagDetailPage({
           Boy vs WOC) differ by closure + structure, so a shopper choosing between lines
           sees all four with a representative median. */}
       {flapLines && <FlapLines lines={flapLines} articleSlug="chanel-flap-names-decoded" />}
+
+      {/* "Made in" — the sourced production range (materials, construction) beyond the
+          size/colour selector, so collectors see the full range even where we hold no listing. */}
+      {productionAxes.length > 0 && <ProductionRange axes={productionAxes} />}
 
       {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
       <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
