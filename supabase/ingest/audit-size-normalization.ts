@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- one-off read-only audit over dynamic Supabase rows */
 /**
  * READ-ONLY audit: where is a bag's SIZE baked into the style name instead of held as a
  * selectable size dimension? Clusters styles by their canonical base model (canonicalModel)
