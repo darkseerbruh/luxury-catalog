@@ -19,7 +19,14 @@
       "Bash(git pull *)",
       "Read(//Users/ariellecoambes/Documents/luxury-catalog-analyst/**)",
       "Bash(npm run *)",
-      "mcp__d72d8f03-2f45-4611-8871-d93c5edadb8f__create_draft"
+      "mcp__d72d8f03-2f45-4611-8871-d93c5edadb8f__create_draft",
+      "mcp__claude-in-chrome__computer",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__navigate",
+      "Bash(cd /Users/ariellecoambes/Documents/luxury-catalog-social-engine && wc -l docs/social-performance.md && echo \"===STANDARD===\" && cat docs/social-performance.md)",
+      "mcp__0dd8c481-aef0-42be-9f00-7ca6d79ce598__getScheduledPosts",
+      "mcp__0dd8c481-aef0-42be-9f00-7ca6d79ce598__getAnalyticsDataByMetrics",
+      "Bash(echo \"exit=$?\")"
     ]
   }
 }
