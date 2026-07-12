@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { logThriftFind } from "@/lib/actions";
-import { buildConsignmentLinks } from "@/lib/affiliate";
+import { buildConsignmentLinks, sellLinksAffiliated } from "@/lib/affiliate";
 import { track, EVENTS } from "@/lib/analytics/events";
 import AuthInterestButton from "@/components/AuthInterestButton";
 
@@ -74,10 +74,12 @@ export default function ThriftFindForm({
                 </a>
               ))}
             </div>
-            <p className="mt-3 text-xs text-muted/70">
-              Affiliate links — we may earn a commission, at no cost to you.{" "}
-              <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
-            </p>
+            {sellLinksAffiliated() && (
+              <p className="mt-3 text-xs text-muted/70">
+                These are affiliate links, so we may earn a commission at no cost to you.{" "}
+                <Link href="/disclosure" className="underline hover:text-foreground">Learn more</Link>.
+              </p>
+            )}
           </div>
         )}
 

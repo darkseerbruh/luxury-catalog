@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buildResaleLinks, buildConsignmentLinks, buildRentalLinks, applyEbayAffiliate } from "@/lib/affiliate";
+import { buildResaleLinks, buildConsignmentLinks, buildRentalLinks, applyEbayAffiliate, sellLinksAffiliated } from "@/lib/affiliate";
 
 /**
  * The "money-moment" on an article: turns a topic-tagged post into a commissionable
@@ -91,8 +91,8 @@ export function PostBagCTA({
       )}
 
       <p className="mt-4 text-xs text-muted">
-        Some links above are affiliate links. If you buy or sell through them we may earn a commission, at no
-        cost to you.{" "}
+        Some links above are affiliate links. If you buy{sellLinksAffiliated() ? " or sell" : ""} through them we
+        may earn a commission, at no cost to you.{" "}
         <Link href="/disclosure" className="underline hover:text-gold">
           How this works
         </Link>

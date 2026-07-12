@@ -35,9 +35,11 @@ The tiers are framed as that trade, never a verdict:
 
 - **GEO/SEO capture**: each venue page is the direct answer to a "how much does X pay /
   what fee does X take" query. FAQ + ItemList JSON-LD + sitemap, like `/where-to-buy`.
-- **Affiliate / referral**: selling intent is the highest-value moment we have. Consignor
-  referral programs (Fashionphile, TRR, Rebag) monetize the "sell it for you" tier once
-  wired (Awin advertiser programs pending per preferences.md). No fabricated links in v1.
+- **Affiliate / referral**: NO sell-side affiliate program exists today (confirmed
+  2026-07-11: these resellers do not pay for referring sellers). The outbound sell links
+  earn nothing and are kept as honest utility; the affiliate plumbing is dormant (see
+  `sellLinksAffiliated` in affiliate.ts) so it can activate if a program ever lands. Do
+  not frame the sell side as a revenue stream. Engagement + GEO below are the real metrics.
 - **Habit loop (the strategic core)**: the net-payout estimator seeds off the bag's live
   resale median. Every estimate links to `/search` → *know what it's worth before you
   consign.* This is the differentiator no reseller can copy: our own market data.

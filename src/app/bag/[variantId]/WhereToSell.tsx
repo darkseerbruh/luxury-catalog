@@ -7,9 +7,10 @@ import { track, EVENTS } from "@/lib/analytics/events";
 /**
  * "Where to sell" fork for the bag page. Leads into the sourced /where-to-sell
  * estimator pre-loaded with THIS bag (what you'd net at each of the venues, from
- * their real published fees), then the outbound buyout-vs-consignment links, the
- * consignor-referral revenue stream. Client component so outbound clicks fire the
- * outbound_consign_clicked event.
+ * their real published fees), then the outbound buyout-vs-consignment links. Those
+ * links earn nothing today (no sell-side affiliate program exists); they are kept as
+ * honest utility, and the plumbing is dormant per affiliate.ts. Client component so
+ * outbound clicks still fire the outbound_consign_clicked event (engagement signal).
  */
 export default function WhereToSell({
   variantId,

@@ -10,8 +10,8 @@
 - ⚡ **Signature move:** a net-payout estimator (`estimateNet` in `src/lib/where-to-sell.ts`). Enter the bag's value → what you'd keep at each venue, ranked, off each venue's PUBLISHED commission/fee. Consignment/marketplace = computed (band, marginal, or flat shapes; TLC's flat $30 subtracted). Buyout = "instant quote," never a fabricated %, routed to the median. Links to `/search` (the habit loop).
 - 📎 **Sourcing bar honored:** every fee/payout/effort/acceptance cell carries the venue's own URL + `checkedAt: 2026-07-11` (9 venues re-verified fresh this session via parallel research). Price-control on marketplaces renders "structural, no policy cited" rather than faking a source. Monthly re-verify sweep, same as where-to-buy.
 - 🔌 **Wired:** nav (`layout.tsx`, after Where to buy), `sitemap.ts` (hub + 9 profiles), FAQ/ItemList JSON-LD, cross-links both ways with `/where-to-buy`. Spec: `docs/ux/where-to-sell-spec.md`.
-- 📈 **Metrics:** GEO/SEO on "how much does X pay / what fee does X take" queries; the estimator is the highest-intent entry to consignor **referral** monetization once Awin advertiser programs approve (no fabricated affiliate links in v1).
-- ⬜ **YOUR TURN:** nothing required. New routes go live on the next prod build (auto if Vercel auto-deploys `main`, else a `vercel --prod` promote is yours). Later: wire consignor referral links when Awin approves.
+- 📈 **Metrics:** GEO/SEO on "how much does X pay / what fee does X take" queries, plus on-site **engagement** (the estimator keeps sellers here). NOTE (owner, 2026-07-11): there is NO sell-side affiliate revenue; these resellers do not pay for referring sellers. The outbound sell links are honest utility that earn nothing; the affiliate plumbing is kept dormant (`sellLinksAffiliated` in affiliate.ts) in case a program ever lands. Do not frame sell as a revenue stream.
+- ⬜ **YOUR TURN:** nothing required. New routes go live on the next prod build (auto if Vercel auto-deploys `main`, else a `vercel --prod` promote is yours).
 
 ---
 
