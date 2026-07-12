@@ -98,6 +98,9 @@ export default function HeaderNav({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // "Typing" = opened with intent to search (click / focus), so the field autofocuses
+  // and a mouse-leave won't yank the panel. A pure hover just browses the brands.
+  const [searchTyping, setSearchTyping] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -106,6 +109,7 @@ export default function HeaderNav({
       if (e.key === "Escape") {
         setOpen(false);
         setSearchOpen(false);
+        setSearchTyping(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -232,33 +236,95 @@ export default function HeaderNav({
           </Link>
         )}
 
-        {/* Search — pinned rightmost. Hover reveals a shortcuts dropdown (Deals +
-            brands by tier + All brands), absorbing the old Shop and Brands menus.
-            Click expands the field into a real input. */}
-        <div className="group relative flex items-center">
+        {/* Search — pinned rightmost. ONE panel (owner 2026-07-11): hovering opens it
+            showing "browse by brand"; clicking the field types immediately (no second
+            click, no jump to a different panel); typed matches stack ABOVE the brands. */}
+        <div
+          className="group relative flex items-center"
+          onMouseEnter={() => setSearchOpen(true)}
+          onMouseLeave={() => {
+            if (!searchTyping) setSearchOpen(false);
+          }}
+          onFocusCapture={() => setSearchTyping(true)}
+        >
           {searchOpen ? (
             <div className="relative">
               {/* Click-away layer so a tile click (navigation) wins over a blur race. */}
-              <div className="fixed inset-0 z-20" aria-hidden="true" onClick={() => setSearchOpen(false)} />
-              <div className="absolute right-0 top-0 z-30 w-[26rem] max-w-[92vw] rounded-2xl border border-border bg-bg/95 p-3 shadow-lg backdrop-blur-sm">
+              <div
+                className="fixed inset-0 z-20"
+                aria-hidden="true"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchTyping(false);
+                }}
+              />
+              <div className="absolute right-0 top-0 z-30 w-[32rem] max-w-[92vw] rounded-2xl border border-border bg-bg/95 p-3 shadow-lg backdrop-blur-sm">
                 <BagFinder
                   mode="nav"
-                  autoFocus
-                  onNavigate={() => setSearchOpen(false)}
+                  autoFocus={searchTyping}
+                  onNavigate={() => {
+                    setSearchOpen(false);
+                    setSearchTyping(false);
+                  }}
                   onSubmitQuery={(term) => {
                     const t = term.trim();
                     if (t) {
                       router.push(`/shop?q=${encodeURIComponent(t)}`);
                       setSearchOpen(false);
+                      setSearchTyping(false);
                     }
                   }}
+                  browseFooter={
+                    <div className="pt-1">
+                      <Link href="/shop" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
+                        <span>Shop the market</span>
+                        <span className="text-[11px] uppercase tracking-widest text-gold">Compare live prices</span>
+                      </Link>
+                      <Link href="/deals" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
+                        <span>Deals only</span>
+                        <span className="text-[11px] uppercase tracking-widest text-gold/80">Best prices</span>
+                      </Link>
+                      {brandGroups.length > 0 && (
+                        <>
+                          <div className="my-2 border-t border-border" />
+                          <div className="grid grid-cols-2 gap-x-5 gap-y-3">
+                            {brandGroups.map((group) => (
+                              <div key={group.label}>
+                                <p className="text-xs uppercase tracking-widest text-muted/70">{group.label}</p>
+                                <div className="mt-1.5 flex flex-col gap-0.5">
+                                  {group.brands.slice(0, BRANDS_PER_TIER).map((b) => (
+                                    <Link
+                                      key={b.brandId}
+                                      href={`/brand/${b.brandId}`}
+                                      className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                                    >
+                                      {b.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <Link
+                            href="/brands"
+                            className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
+                          >
+                            All brands →
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  }
                 />
               </div>
             </div>
           ) : (
             <button
               type="button"
-              onClick={() => setSearchOpen(true)}
+              onClick={() => {
+                setSearchOpen(true);
+                setSearchTyping(true);
+              }}
               aria-label="Search bags"
               className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
             >
@@ -266,52 +332,6 @@ export default function HeaderNav({
               <span>Search bags</span>
               <Caret />
             </button>
-          )}
-          {!searchOpen && (
-            <div className={`${menuPanel} right-0`}>
-              <div className="w-[32rem] max-w-[90vw] rounded-2xl border border-border bg-bg/95 p-4 shadow-lg backdrop-blur-sm">
-                {/* The shopping journey's door is mode-neutral (owner approved
-                    2026-07-05): /shop with the deal filter as its toggle, so the
-                    filter no longer IS the entrance. */}
-                <Link href="/shop" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
-                  <span>Shop the market</span>
-                  <span className="text-[11px] uppercase tracking-widest text-gold">Compare live prices</span>
-                </Link>
-                <Link href="/deals" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
-                  <span>Deals only</span>
-                  <span className="text-[11px] uppercase tracking-widest text-gold/80">Best prices</span>
-                </Link>
-                {brandGroups.length > 0 && (
-                  <>
-                    <div className="my-2 border-t border-border" />
-                    <div className="grid grid-cols-2 gap-x-5 gap-y-3">
-                      {brandGroups.map((group) => (
-                        <div key={group.label}>
-                          <p className="text-xs uppercase tracking-widest text-muted/70">{group.label}</p>
-                          <div className="mt-1.5 flex flex-col gap-0.5">
-                            {group.brands.slice(0, BRANDS_PER_TIER).map((b) => (
-                              <Link
-                                key={b.brandId}
-                                href={`/brand/${b.brandId}`}
-                                className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
-                              >
-                                {b.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <Link
-                      href="/brands"
-                      className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
-                    >
-                      All brands →
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
           )}
         </div>
       </nav>

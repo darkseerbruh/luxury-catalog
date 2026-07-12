@@ -49,6 +49,14 @@ interface Props {
    * yank a tile out from under the tap that's about to select it.
    */
   collapsedUntilFocus?: boolean;
+  /**
+   * Nav: a "browse by brand" block shown UNDER the field. When present, the empty
+   * state IS this footer (no popular-grid fetch, so hovering is instant), and typed
+   * results stack ABOVE it (owner 2026-07-11: "you haven't searched yet, here are the
+   * brands; typing fills the space above them"). Omit in closet mode (keeps the
+   * populate-on-focus popular grid).
+   */
+  browseFooter?: React.ReactNode;
 }
 
 const HINT = "   (start typing →)";
@@ -64,6 +72,7 @@ export function BagFinder({
   maxModels,
   onViewAll,
   collapsedUntilFocus = false,
+  browseFooter,
 }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
@@ -114,7 +123,19 @@ export function BagFinder({
   // The fetch is scheduled in a timeout, so no synchronous setState in the effect.
   useEffect(() => {
     if (focus || !engaged) return;
-    const t = setTimeout(() => void fetchModels(q), q ? 180 : 0);
+    const query = q.trim();
+    // Nav with a brand footer: the empty state is "browse by brand", so we don't fetch
+    // (hover is instant, no "Loading…"). Only a real query fetches matches. Work is
+    // deferred to a timeout so no setState runs synchronously in the effect body.
+    const browsing = !query && Boolean(browseFooter);
+    const t = setTimeout(() => {
+      if (browsing) {
+        setModels([]);
+        setLoading(false);
+      } else {
+        void fetchModels(q);
+      }
+    }, query ? 180 : 0);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, engaged]);
@@ -215,16 +236,22 @@ export function BagFinder({
         </div>
       ) : (
         <div className="mt-3">
-          <p className="mb-2 px-1 text-xs text-muted">
-            {q.trim() ? "Matches" : "Popular right now"}
-          </p>
-          {loading && models.length === 0 ? (
-            <p className="px-1 py-6 text-center text-sm text-muted">Loading…</p>
-          ) : models.length === 0 ? (
-            <p className="px-1 py-6 text-center text-sm text-muted">No match yet</p>
-          ) : (
-            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-              {(maxModels ? models.slice(0, maxModels) : models).map((m) => (
+          {/* Empty + a brand footer = "browse by brand" (no fetch). A query fills the space
+              above the brands with matches. Closet (no footer) keeps the popular grid. */}
+          {!q.trim() && browseFooter ? null : (
+            <>
+              <p className="mb-2 px-1 text-xs text-muted">
+                {q.trim() ? "Matches" : "Popular right now"}
+              </p>
+              {loading && models.length === 0 ? (
+                <p className="px-1 py-6 text-center text-sm text-muted">Loading…</p>
+              ) : models.length === 0 ? (
+                <p className="px-1 py-6 text-center text-sm text-muted">
+                  {q.trim() ? "No match yet" : "Start typing to search"}
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+                  {(maxModels ? models.slice(0, maxModels) : models).map((m) => (
                 // Nav: a click goes straight to the bag page (pick the colour there, on the
                 // variant selector). Closet: a click opens the colourways so the owner logs
                 // the exact colour they have. (Owner 2026-07-11: no colour step in search.)
@@ -266,10 +293,20 @@ export function BagFinder({
               <span aria-hidden="true">→</span>
             </button>
           )}
+            </>
+          )}
+          {browseFooter && (
+            <div className={q.trim() ? "mt-3 border-t border-border/60 pt-3" : ""}>
+              {!q.trim() && (
+                <p className="mb-2 px-1 text-xs text-muted">You haven&rsquo;t searched yet. Browse by brand:</p>
+              )}
+              {browseFooter}
+            </div>
+          )}
         </div>
       )}
 
-      {allowRequest && engaged && !focus && (
+      {allowRequest && engaged && !focus && (!browseFooter || Boolean(q.trim())) && (
         <div className="mt-3">
           {requesting ? (
             <RequestBagForm query={q} />
