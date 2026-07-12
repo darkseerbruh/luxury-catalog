@@ -354,7 +354,7 @@ export default function AboutStory() {
           <Reveal still={still} className="text-center">
             <Eyebrow icon="atelier" label="My take" />
             <h2 className="mt-4 font-serif text-3xl leading-snug text-foreground sm:text-4xl">
-              My honest read: the houses design gorgeous bags that don&rsquo;t
+              My honest read: the brands design gorgeous bags that don&rsquo;t
               quite fit modern life.
             </h2>
           </Reveal>
@@ -373,7 +373,7 @@ export default function AboutStory() {
                 on every bag, and couldn&rsquo;t find anywhere.
               </p>
               <p className="text-foreground">
-                So Luxury Catalog captures the practical details houses gloss
+                So Luxury Catalog captures the practical details brands gloss
                 over: whether a bag has feet, whether it can go crossbody,
                 whether it actually holds what you carry. The feet were just the
                 first of them.

@@ -37,9 +37,9 @@ export default function HowWeRankPage() {
         the recipe, in the open.
       </p>
       <p className="mt-2 text-sm leading-relaxed text-muted">
-        This ranks the bag. Where its <em>house</em> stands is a separate read, on its own page:{" "}
+        This ranks the bag. Where its <em>brand</em> stands is a separate read, on its own page:{" "}
         <Link href="/how-we-tier" className="text-gold-soft underline underline-offset-2">
-          how we tier houses
+          how we tier brands
         </Link>
         .
       </p>

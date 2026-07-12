@@ -9,11 +9,11 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Authentication — spot the real thing yourself, or bring in a pro · Luxury Catalog",
   description:
-    "Per-house authentication guides, a photo check, and a pro review in one place. The markers worth checking on the bags people fake most, in plain words. Markers to check, not a verdict.",
+    "Per-brand authentication guides, a photo check, and a pro review in one place. The markers worth checking on the bags people fake most, in plain words. Markers to check, not a verdict.",
   alternates: { canonical: `${SITE_URL}/authentication` },
   openGraph: {
     title: "Authentication · Luxury Catalog",
-    description: "Per-house guides, a photo check, and a pro review. Markers to check, not a verdict.",
+    description: "Per-brand guides, a photo check, and a pro review. Markers to check, not a verdict.",
     url: `${SITE_URL}/authentication`,
     type: "website",
   },
@@ -25,7 +25,7 @@ const LADDER = [
   {
     step: "01",
     title: "Learn the markers",
-    body: "Read the per-house guide for the bag you are checking. What a real one does, era by era, and the tells that warrant a second look.",
+    body: "Read the per-brand guide for the bag you are checking. What a real one does, era by era, and the tells that warrant a second look.",
     href: "#guides",
     cta: "Browse the guides",
   },
@@ -81,7 +81,7 @@ export default async function AuthenticationHub() {
         <p className="text-[11px] uppercase tracking-[0.22em] text-gold">Luxury Catalog</p>
         <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">Authentication</h1>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted">
-          Spot the real thing yourself, or bring in a pro. Per-house guides on the bags people fake most,
+          Spot the real thing yourself, or bring in a pro. Per-brand guides on the bags people fake most,
           a photo check, and a hands-on review, in one place. These are{" "}
           <span className="text-gold-soft">markers to check, not a verdict</span>: no single marker proves a
           bag, and for anything costly we point you to a professional.
@@ -108,7 +108,7 @@ export default async function AuthenticationHub() {
       <section id="guides" className="scroll-mt-24">
         <div className="border-b-2 border-gold pb-2">
           <p className="text-[11px] uppercase tracking-[0.2em] text-gold">The guides</p>
-          <h2 className="mt-1 font-serif text-2xl text-foreground">Authentication by house</h2>
+          <h2 className="mt-1 font-serif text-2xl text-foreground">Authentication by brand</h2>
           <p className="mt-1 text-sm italic text-muted">Markers to check, not a verdict.</p>
         </div>
 
@@ -142,7 +142,7 @@ export default async function AuthenticationHub() {
             </div>
             {guides.some((p) => !isHouseGuide(p)) && (
               <div className="mt-6">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Beyond the houses</p>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Beyond the brands</p>
                 <div className="mt-2 grid gap-x-10 sm:grid-cols-2">
                   {guides.filter((p) => !isHouseGuide(p)).map((p) => (
                     <Link

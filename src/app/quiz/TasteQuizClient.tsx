@@ -101,7 +101,7 @@ export default function TasteQuizClient({
       id: "houses",
       input: "mark",
       skippable: true,
-      prompt: "Any houses you always love, or never touch?",
+      prompt: "Any brands you always love, or never touch?",
       sub: "Mark only the ones you feel strongly about.",
       options: houses.map((h) => ({ value: h, label: h })),
     }),
@@ -285,7 +285,7 @@ export default function TasteQuizClient({
                   onClick={() => setShowMore((v) => !v)}
                   className="mt-3 text-sm text-muted underline-offset-2 hover:text-gold hover:underline"
                 >
-                  {showMore ? "Show fewer houses" : "More houses"}
+                  {showMore ? "Show fewer brands" : "More brands"}
                 </button>
               )}
             </>

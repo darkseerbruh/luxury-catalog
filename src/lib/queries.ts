@@ -5,6 +5,7 @@ import { displaySizeLabel, variantShortLabel } from "./variant-label";
 import { getSupabaseAdmin } from "./supabase/admin";
 import { getInstagramOEmbed } from "./instagram";
 import { CACHE_CATALOG } from "./cache";
+import { computeHouseStanding, type TierRank } from "./house-standing";
 
 export interface BrandOverview {
   brandId: number;
@@ -15,6 +16,10 @@ export interface BrandOverview {
   styleCount: number;
   /** Total catalogued variants across the brand's styles — our depth proxy for ranking. */
   variantCount: number;
+  /** Country of origin, for the /brands "by origin" view; null when unknown. */
+  country: string | null;
+  /** Year the house was founded, for the /brands "by heritage" view; null when unknown. */
+  foundedYear: number | null;
   isLive: boolean;
   /** Up to 3 most-documented styles (by catalogued variant count), each with a representative variant id to link to its bag page. */
   topStyles: { styleId: number; name: string; variantId: number | null }[];
@@ -146,7 +151,7 @@ function signatureRank(brandName: string, styleName: string): number {
 async function loadBrandsOverview(): Promise<BrandOverview[]> {
   const { data, error } = await getSupabase()
     .from("brand")
-    .select("brand_id, name, tier, style(style_id, name, variant(variant_id))");
+    .select("brand_id, name, tier, country_of_origin, founded_year, style(style_id, name, variant(variant_id))");
 
   if (error || !data) return [];
 
@@ -179,6 +184,8 @@ async function loadBrandsOverview(): Promise<BrandOverview[]> {
       tier: brand.tier as BrandOverview["tier"],
       styleCount: styles.length,
       variantCount,
+      country: (brand as { country_of_origin: string | null }).country_of_origin ?? null,
+      foundedYear: (brand as { founded_year: number | null }).founded_year ?? null,
       isLive: styles.some((s) => (s.variant ?? []).length > 0),
       topStyles,
     };
@@ -201,6 +208,87 @@ async function loadBrandsOverview(): Promise<BrandOverview[]> {
 export const getBrandsOverview = unstable_cache(
   loadBrandsOverview,
   ["brands-overview"],
+  { revalidate: CACHE_CATALOG, tags: ["catalog"] },
+);
+
+/** One brand's live standing for the read side: the same 0-100 House Standing score
+ * the ingest computes, plus its 1-based rank among placed brands. Sibling of the
+ * bag-level LC Index. See docs/ux/tier-formula-spec.md. */
+export interface HouseStandingRead {
+  brandId: number;
+  /** Composite 0-100 (1dp); null when below the n-gate (unplaced, never guessed). */
+  score: number | null;
+  /** Numbered band 1 (highest) → 5; null when unplaced. */
+  tier: TierRank | null;
+  /** 1-based position among PLACED brands, score desc; null when unplaced. */
+  rank: number | null;
+}
+
+/**
+ * Live House Standing for every brand, so /brands can rank 1→N by the SAME formula
+ * the ingest uses (src/lib/house-standing.ts) — no second methodology, no invented
+ * numbers. Mirrors the ingest's signal build (resale median/ceiling/trade, retail
+ * rows excluded), then runs the pure scorer. Resilient: [] on any error. Cached at
+ * catalog TTL because it pages price_history, which only moves when we ingest.
+ */
+async function loadHouseStandings(): Promise<HouseStandingRead[]> {
+  try {
+    const sb = getSupabase();
+    const [brands, styles, variants] = await Promise.all([
+      fetchAllRows<{ brand_id: number; name: string }>(() => sb.from("brand").select("brand_id, name")),
+      fetchAllRows<{ style_id: number; brand_id: number }>(() => sb.from("style").select("style_id, brand_id")),
+      fetchAllRows<{ variant_id: number; style_id: number }>(() => sb.from("variant").select("variant_id, style_id")),
+    ]);
+    const styleBrand = new Map(styles.map((s) => [s.style_id, s.brand_id]));
+    const variantBrand = new Map<number, number>();
+    for (const v of variants) {
+      const b = styleBrand.get(v.style_id);
+      if (b != null) variantBrand.set(v.variant_id, b);
+    }
+    const prices = await fetchAllRows<{ variant_id: number; sale_price: number | string | null; platform: string | null }>(
+      () => sb.from("price_history").select("variant_id, sale_price, platform").not("sale_price", "is", null),
+    );
+    // Group resale prices by brand (retail/boutique rows excluded, same gate as the ingest).
+    const byBrand = new Map<number, number[]>();
+    for (const r of prices) {
+      if (r.platform && HERO_RETAIL_RX.test(r.platform)) continue;
+      const b = variantBrand.get(r.variant_id);
+      if (b == null) continue;
+      const p = Number(r.sale_price);
+      if (!Number.isFinite(p) || p <= 0) continue;
+      const arr = byBrand.get(b);
+      if (arr) arr.push(p);
+      else byBrand.set(b, [p]);
+    }
+    const pctile = (sorted: number[], pct: number): number | null =>
+      sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor((pct / 100) * sorted.length))] : null;
+    const signals = brands.map((br) => {
+      const sorted = (byBrand.get(br.brand_id) ?? []).sort((a, b) => a - b);
+      return {
+        brandId: br.brand_id,
+        name: br.name,
+        resaleMedian: pctile(sorted, 50),
+        ceiling: pctile(sorted, 90),
+        tradeCount: sorted.length,
+      };
+    });
+    // computeHouseStanding returns score desc, unplaced (null) last, name tiebreak.
+    let rank = 0;
+    return computeHouseStanding(signals).map((s) => ({
+      brandId: s.brandId,
+      score: s.score,
+      tier: s.tier,
+      rank: s.score != null ? ++rank : null,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/** Brand directory ranked by live House Standing, keyed by brandId for easy merge. */
+export const getHouseStandings = unstable_cache(
+  loadHouseStandings,
+  ["house-standings"],
   { revalidate: CACHE_CATALOG, tags: ["catalog"] },
 );
 

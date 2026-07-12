@@ -31,7 +31,7 @@ export default async function DataPage() {
       <h1 className="mt-1 font-serif text-3xl text-foreground sm:text-4xl">The numbers they keep behind glass</h1>
       <p className="mt-3 max-w-2xl text-muted">
         The luxury world keeps its numbers behind glass: what a bag really resells for,
-        which houses hold their value, what the market actually pays. We think that
+        which brands hold their value, what the market actually pays. We think that
         should be open to everyone. So every figure here is real, sourced, and free to
         see, the whole dataset the rest of the site runs on.
       </p>
@@ -39,7 +39,7 @@ export default async function DataPage() {
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard value={pulse.totalPrices.toLocaleString()} label="resale prices on record" />
         <StatCard value={pulse.bags.toLocaleString()} label="bags tracked" />
-        <StatCard value={pulse.houses.toLocaleString()} label="houses covered" />
+        <StatCard value={pulse.houses.toLocaleString()} label="brands covered" />
         <StatCard value={pulse.earliestYear ? `${pulse.earliestYear}` : "—"} label="earliest price on record" />
       </div>
 
@@ -47,9 +47,9 @@ export default async function DataPage() {
       <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2">
         {pulse.medianByHouse.length > 0 && (
           <section className="rounded-2xl border border-border bg-surface p-6">
-            <h2 className="font-serif text-2xl text-foreground">Typical resale price by house</h2>
+            <h2 className="font-serif text-2xl text-foreground">Typical resale price by brand</h2>
             <p className="mt-1 text-sm text-muted">
-              The median of each house&rsquo;s styles, across the bags we track. Our read, not an appraisal.
+              The median of each brand&rsquo;s styles, across the bags we track. Our read, not an appraisal.
             </p>
             <ul className="mt-6 flex flex-col gap-2.5">
               {pulse.medianByHouse.map((h) => (
@@ -71,7 +71,7 @@ export default async function DataPage() {
         {pulse.byHouse.length > 0 && (
           <section className="rounded-2xl border border-border bg-surface p-6">
             <h2 className="font-serif text-2xl text-foreground">Where our data runs deepest</h2>
-            <p className="mt-1 text-sm text-muted">Resale prices we have logged, by house.</p>
+            <p className="mt-1 text-sm text-muted">Resale prices we have logged, by brand.</p>
             <ul className="mt-6 flex flex-col gap-2.5">
               {pulse.byHouse.map((h) => (
                 <li key={h.name} className="flex items-center gap-3">
@@ -107,7 +107,7 @@ export default async function DataPage() {
 
       <p className="mt-12 max-w-2xl text-sm text-muted">
         These are observed prices, listings and sales we have recorded, not appraisals.
-        Coverage is deeper for the houses that trade most.
+        Coverage is deeper for the brands that trade most.
       </p>
     </main>
   );
