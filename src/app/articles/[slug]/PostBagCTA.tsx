@@ -58,6 +58,12 @@ export function PostBagCTA({
         <div className="mt-4">
           <p className="text-sm font-medium text-foreground">Already own one? Sell or consign it</p>
           <p className="mt-0.5 text-xs text-muted">It holds its value, so list it where you&apos;ll get the most.</p>
+          <Link
+            href="/where-to-sell"
+            className="mt-2 inline-block text-xs text-gold-soft underline underline-offset-2 hover:text-gold"
+          >
+            See what you&apos;d keep at each venue &rarr;
+          </Link>
           <div className="mt-2 flex flex-wrap gap-2">
             {sell.map((l) => (
               <a key={l.key} href={l.url} target="_blank" rel="sponsored nofollow noopener" className={PILL}>

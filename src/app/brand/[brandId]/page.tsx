@@ -479,6 +479,12 @@ export default async function BrandPage({
           {sellLinks.length > 0 && (
             <div className="mt-4">
               <p className="text-xs uppercase tracking-wide text-muted/70">Where to sell</p>
+              <Link
+                href="/where-to-sell"
+                className="mt-1 inline-block text-xs text-gold-soft underline underline-offset-2 hover:text-gold"
+              >
+                See what you&apos;d keep at each venue, from real published fees &rarr;
+              </Link>
               <div className="mt-2 flex flex-wrap gap-2">
                 {sellLinks.map((l) => (
                   <a
