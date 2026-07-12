@@ -84,6 +84,15 @@ function namedSizeRank(v: string): number {
   return r;
 }
 
+/** Colour chips read neutrals→brights, roughly matching a house's permanent palette
+ *  (Black/White/Beige/Navy/Red) before the seasonal colours (owner 2026-07-11 size-order
+ *  precedent). Unknown colours sort last, keeping their order. */
+const COLOR_RANK = ["black", "white", "beige", "brown", "grey", "gray", "navy", "red", "blue", "green", "pink", "purple", "orange", "yellow", "metallic", "multicolor"];
+function colourRank(v: string): number {
+  const i = COLOR_RANK.indexOf(v.toLowerCase().trim());
+  return i < 0 ? Infinity : i;
+}
+
 /** The dimensions worth rendering: vary (≥2 values), not implied by an earlier one. */
 export function visibleDims(
   variants: StyleVariantOption[],
@@ -107,6 +116,13 @@ export function visibleDims(
         .sort((a, b) => a.r - b.r || a.i - b.i)
         .map((x) => x.v);
       values = [...nums, ...named];
+    }
+    // Colour reads neutrals→brights (permanent palette first), unknowns last in place.
+    if (dim.key === "color" && values.length > 1) {
+      values = values
+        .map((v, i) => ({ v, i, r: colourRank(v) }))
+        .sort((a, b) => a.r - b.r || a.i - b.i)
+        .map((x) => x.v);
     }
     return { dim, values };
   }).filter((d) => d.values.length >= 2);

@@ -54,6 +54,7 @@ import FlapFamily from "./FlapFamily";
 import { getStyleFamily } from "@/lib/flap-family";
 import FlapLines from "./FlapLines";
 import { getFlapLines } from "@/lib/flap-lines";
+import { getProductionOptions } from "@/lib/production-options";
 import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
 import { translateProvenance } from "@/lib/provenance";
@@ -251,7 +252,7 @@ export default async function BagDetailPage({
   // here they run concurrently (owner reported "crazy" bag-page load 2026-07-11).
   const [
     resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts, flapFamily, flapLines,
-    demand, standingView, eraCompsRaw, bagStory, authGuideSlug,
+    demand, standingView, eraCompsRaw, bagStory, authGuideSlug, productionAxes,
   ] = await Promise.all([
     getResourcesForStyle(v.style.styleId, v.variantId),
     getVariants(v.style.styleId),
@@ -267,7 +268,16 @@ export default async function BagDetailPage({
     getVariantEraComps(v.variantId),
     getBagStory(v.style.name, v.brand.name),
     getBrandAuthGuideSlug(v.brand.name),
+    getProductionOptions(v.style.styleId),
   ]);
+
+  // Produced-but-unlisted stub (owner 2026-07-12): this variant is a colourway/size the house
+  // made (from the production record) that we have no listing or price for yet — a real page
+  // that says so, never a broken-looking empty one. `colourProduced` = the colour is in the
+  // sourced production record (so we can say "Chanel makes this"), vs merely no data.
+  const isDataStub = v.priceHistory.length === 0;
+  const producedColours = (productionAxes.find((a) => a.axis === "color")?.options ?? []).map((o) => o.value.toLowerCase());
+  const colourProduced = v.exteriorColorway ? producedColours.includes(v.exteriorColorway.toLowerCase()) : false;
 
   // Articles for this bag, most specific first: style-tagged guides lead, then
   // brand-tagged guides not already shown. A bag inherits relevance from its
@@ -762,6 +772,25 @@ export default async function BagDetailPage({
         currentVariantId={v.variantId}
         savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
+
+      {/* Produced-but-unlisted stub: this colourway/size exists, we just have no photo or
+          price yet. Say so warmly + invite a photo (UGC), never a broken-looking empty page. */}
+      {isDataStub && (
+        <section className="rounded-2xl border border-gold/30 bg-gold/5 p-5">
+          <p className="text-sm leading-relaxed text-foreground">
+            {colourProduced
+              ? `Chanel makes the ${v.style.name} in ${(v.exteriorColorway ?? "this colour").toLowerCase()}. We just don’t have a photo or a recorded price for this exact one yet.`
+              : "We don’t have a photo or a recorded price for this exact combination yet."}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Own this one?{" "}
+            <Link href={`/bag/${v.variantId}#add-photo`} className="text-gold underline-offset-2 hover:underline">
+              Add a photo
+            </Link>{" "}
+            and help complete the record.
+          </p>
+        </section>
+      )}
 
       {/* Family module: how this flap relates to its cousins (single/double + status +
           median), so a shopper understands why look-alike flaps differ in price. */}
