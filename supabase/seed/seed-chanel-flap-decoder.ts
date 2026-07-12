@@ -43,14 +43,14 @@ Same house, similar shape, different bag.
 
 ## Classic Flap sizes: Small, Medium, Jumbo, Maxi
 
-The Classic Flap (the double flap) comes in a set size run. Per Fashionphile and Rebag:
+The Classic Flap (the double flap) comes in a set size run. There are really three vocabularies for it, and that is most of the confusion:
 
 - **Small**
-- **Medium** (the collector community calls this the "M/L")
-- **Jumbo** (Chanel's own retail word for it is **"Large"**)
+- **Medium** (about 25.5 cm). Chanel and the resale floor both call it the "Medium." Longtime collectors call it the **"M/L"** (Medium/Large), an older nickname for the same bag.
+- **Jumbo** (about 30 cm). Every resale site calls it the "Jumbo." In the boutique, Chanel's own word for it has generally been **"Large."**
 - **Maxi**
 
-The part that trips buyers up: **"Large" and "Jumbo" are the same bag**, just two naming systems. Chanel says Large, the resale world says Jumbo. So if a "Large" is priced far off a "Jumbo," the size isn't the reason.
+One caveat worth knowing: Chanel's size wording has drifted over the years, and its tags identify a bag by its **style code** (A01112 for the Medium/M-L, A58600 for the Jumbo), not a size word. So "Large" on its own is slippery, and some people even shorten the M/L to "the large." When precision matters, go by the style code, not the size word.
 
 ## Are the Minis "Classic Flaps"? The experts genuinely split
 
@@ -81,7 +81,7 @@ Discontinued doesn't automatically mean worth more, or worth less. It means the 
 
 Each bag below reads as model, then single or double flap, then status, then what else it's called.
 
-- **Classic Flap ("11.12"):** Double flap. Permanent. Chanel's "Large" is the community's "Jumbo."
+- **Classic Flap ("11.12"):** Double flap. Permanent. The ~30 cm is the "Jumbo" on resale, "Large" in the boutique; the tag goes by style code, not a size word.
 - **Mini Rectangular:** Single flap. Permanent. Chanel calls it the "Mini Flap."
 - **Mini Square:** Single flap. Permanent. Listed as the "Mini Square Flap."
 - **East-West Flap:** Single flap. Discontinued (2010). A standalone model, not a Classic Flap.
