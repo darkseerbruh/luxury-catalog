@@ -3,7 +3,7 @@ import { getSupabase, fetchAllRows } from "./supabase";
 import { CACHE_MARKET } from "./cache";
 import { displaySizeLabel } from "./variant-label";
 import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
-import { listingQualifier, parseSizeBucket } from "./deal-descriptor";
+import { listingQualifier, dealSpecKey, hasUsableSpec } from "./deal-descriptor";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -16,12 +16,11 @@ export const MIN_DEALS_TO_RENDER = 3;
 const MAX_DEAL_PCT_UNDER = 70;
 
 /**
- * When a listing states a size, grade it only against same-size comps — but only if there
- * are at least this many, so the median + verdict aren't built on a handful of rows. Below
- * it, we skip the deal rather than show a shaky like-for-like read (e.g. the v199 micro
- * bucket has n=3). A sizeless listing falls back to the whole-variant population.
+ * Grade a listing only against comps sharing its spec (size + material family + flap
+ * structure), and only when at least this many exist — so the median + verdict aren't built
+ * on a handful of rows. Below it, skip the deal rather than show a shaky like-for-like read.
  */
-const MIN_SIZE_COMPS = 5;
+const MIN_SPEC_COMPS = 5;
 
 /**
  * "Today's deals" — current resale listings priced BELOW their variant's recorded
@@ -133,6 +132,8 @@ type PriceRow = {
   /** Raw marketplace title of the listing — the ONLY field that reveals a mis-attached
    *  accessory (card holder, iPad case) whose row otherwise wears the bag's style name. */
   notes: string | null;
+  /** Structured material (0022), used with the title/slug to scope comps by material family. */
+  material: string | null;
   variant: VariantJoin | VariantJoin[] | null;
 };
 
@@ -162,7 +163,7 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       getSupabase()
         .from("price_history")
         .select(
-          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, notes, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
+          "variant_id, sale_price, currency, platform, price_type, source_url, observed_on, date_recorded, notes, material, variant:variant_id(size_label, style:style_id(name, brand:brand_id(name)))"
         )
         .not("sale_price", "is", null),
     );
@@ -173,11 +174,20 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
     // current asking prices we hunt deals in).
     type Group = {
       variantId: number;
-      /** Resale prices tagged with the listing's parsed size bucket, so the median can be
-       *  scoped to SAME-SIZE comps (a catalog "variant" often mixes sizes — v199 Classic
-       *  Flap holds micro→jumbo in one row). `bucket` is null when the row states no size. */
-      resale: { price: number; bucket: string | null }[];
-      listed: { price: number; currency: string | null; platform: string | null; sourceUrl: string | null; notes: string | null }[];
+      /** Resale prices tagged with the listing's like-for-like SPEC key (size + material
+       *  family + flap structure), so the median is scoped to genuinely comparable comps —
+       *  a catalog "variant" mixes sizes (micro→jumbo), single vs double flaps, and canvas
+       *  vs caviar, all with very different prices (owner report 2026-07-11). */
+      resale: { price: number; specKey: string }[];
+      listed: {
+        price: number;
+        currency: string | null;
+        platform: string | null;
+        sourceUrl: string | null;
+        notes: string | null;
+        material: string | null;
+        specKey: string;
+      }[];
       brandName: string;
       styleName: string;
       sizeLabel: string | null;
@@ -224,10 +234,19 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       }
 
       // Resale population for the median = listed + sold + auction (+ legacy nulls), each
-      // tagged with its size bucket so the median can be scoped to the same size.
-      g.resale.push({ price, bucket: parseSizeBucket(row.notes, row.source_url) });
+      // tagged with its spec key so the median is scoped to like-for-like comps.
+      const specKey = dealSpecKey(row.notes, row.source_url, row.material);
+      g.resale.push({ price, specKey });
       if (row.price_type === "listed") {
-        g.listed.push({ price, currency: row.currency, platform: row.platform, sourceUrl: row.source_url, notes: row.notes });
+        g.listed.push({
+          price,
+          currency: row.currency,
+          platform: row.platform,
+          sourceUrl: row.source_url,
+          notes: row.notes,
+          material: row.material,
+          specKey,
+        });
       }
     }
 
@@ -238,18 +257,16 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       // The best (lowest) current listing is the strongest deal for the variant.
       const best = g.listed.reduce((lo, c) => (c.price < lo.price ? c : lo), g.listed[0]);
 
-      // SIZE-COHERENT median (owner report 2026-07-11): a catalog "variant" often mixes
-      // sizes (v199 Classic Flap = micro→jumbo in one row), so grading the listing against
-      // the whole variant makes a $1,938 micro-mini read "71% under" a medium-flap median.
-      // Grade it only against SAME-SIZE comps. When the listing states a size, require
-      // enough same-size comps to grade honestly, else skip (better no deal than a false
-      // one). When it states no size, fall back to the whole-variant population.
-      const bestBucket = parseSizeBucket(best.notes, best.sourceUrl);
-      const pop = bestBucket
-        ? g.resale.filter((r) => r.bucket === bestBucket).map((r) => r.price)
-        : g.resale.map((r) => r.price);
-      if (bestBucket && pop.length < MIN_SIZE_COMPS) continue; // too few like-for-like comps
-      if (pop.length < 2) continue;
+      // SPEC-COHERENT median (owner report 2026-07-11): a catalog "variant" blends sizes
+      // (micro→jumbo), single vs double flaps, and canvas vs caviar — 3-4x price spreads —
+      // so the whole-variant median invents fake discounts (a $2,715 Mini Rectangular single
+      // flap read "68% under" a Small Classic double-flap median). Grade the listing ONLY
+      // against comps sharing its size + material + structure, and require enough of them or
+      // skip (better no deal than a false one). If the listing states no comparable spec at
+      // all, we can't grade it honestly — skip.
+      if (!hasUsableSpec(best.notes, best.sourceUrl, best.material)) continue;
+      const pop = g.resale.filter((r) => r.specKey === best.specKey).map((r) => r.price);
+      if (pop.length < MIN_SPEC_COMPS) continue; // too few like-for-like comps
 
       const med = median(pop);
       if (med <= 0) continue;
