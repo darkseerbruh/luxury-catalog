@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { getVariantsByFits } from "@/lib/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public page, cache 1h (was force-dynamic — see infra-limits)
+
+// On-demand ISR: render + cache each path on first visit (empty = none prerendered at build).
+export function generateStaticParams() {
+  return [];
+}
 
 const FITS_LABELS: Record<string, string> = {
   "cell-phone": "Fits a cell phone",

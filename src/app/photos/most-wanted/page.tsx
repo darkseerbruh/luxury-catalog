@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMostWantedPhotos } from "@/lib/photos";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public page, cache 1h (was force-dynamic — see infra-limits)
 
 export const metadata = {
   title: "Most wanted photos · Luxury Catalog",

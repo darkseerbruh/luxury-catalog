@@ -3,7 +3,7 @@ import { getCovetedClosets, getTopReviewers, getAvatarUrls } from "@/lib/social"
 import { Avatar } from "@/components/Avatar";
 import { TrustBadges } from "@/components/TrustBadges";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // lib/social uses cookie client — de-cookie in follow-up
 
 export const metadata = {
   title: "Leaderboards · Luxury Catalog",

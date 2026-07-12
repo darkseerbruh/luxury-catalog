@@ -9,7 +9,12 @@ import { ArticleList } from "@/components/ArticleList";
 import { HouseStory } from "@/components/HouseStory";
 import { tierDisplay } from "@/lib/house-standing";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public catalog page, cache 1h (was force-dynamic — see infra-limits)
+
+// On-demand ISR: render + cache each path on first visit (empty = none prerendered at build).
+export function generateStaticParams() {
+  return [];
+}
 
 function symbolFor(currency: string | null): string {
   return currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";

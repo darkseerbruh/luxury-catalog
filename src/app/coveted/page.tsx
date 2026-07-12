@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getMostWantedBags } from "@/lib/coveted-bags";
 import { BagImage } from "@/components/BagImage";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: public catalog page, cache 1h (was force-dynamic — see infra-limits)
 
 export const metadata: Metadata = {
   title: "Most Wanted Bags · Luxury Catalog",
