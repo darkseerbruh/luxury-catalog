@@ -74,12 +74,14 @@ const DIAGRAMS: Record<string, ComponentType> = {
   ...almaSizeChartRegistry,
 };
 
-export const revalidate = 3600; // ISR: public article is user-agnostic (author edit link is a client island)
-
-// On-demand ISR: render + cache each article on first visit (empty = none prerendered at build).
-export function generateStaticParams() {
-  return [];
-}
+// Dynamic (per-request) render. Same latent bug as the bag page: this was
+// briefly switched to ISR, but getBySlug/listPublished still go through the
+// cookie-aware Supabase client, so an on-demand static render calls `cookies()`
+// and throws DynamicServerError (a 5xx). Do NOT re-enable ISR until getBySlug +
+// listPublished read via the anon getSupabase() client (author-only draft
+// visibility can't live in a shared cache anyway; the edit link is already a
+// client island).
+export const dynamic = "force-dynamic";
 
 // Dedupe the fetch across generateMetadata + the page render.
 const getPost = cache(getBySlug);
