@@ -116,10 +116,35 @@ const REISSUE: Row[] = [
   { axis: "color", value: "Navy", permanence: "permanent", sort_order: 5 },
 ];
 
+// LV Speedy (style 433), archivist-sourced 2026-07-12 (LV.com / PurseBlog / Yoogi's). LV's
+// PRIMARY axis is the CANVAS/material (Monogram default, Damier Ebene/Azur, Empreinte leather);
+// colour only varies inside the leather lines (Empreinte/Epi) and LV names are OFFICIAL. Strap
+// (Bandoulière) is a construction flag, not a size. Hardware is fixed per line, not an axis.
+const LV_SPEEDY: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~16 cm, with strap", sort_order: 1 },
+  { axis: "size", value: "20", permanence: "permanent", note: "~20 cm", sort_order: 2 },
+  { axis: "size", value: "25", permanence: "permanent", note: "~25 cm, added 1959", sort_order: 3 },
+  { axis: "size", value: "30", permanence: "permanent", is_default: true, note: "the original 1930 size, most popular", sort_order: 4 },
+  { axis: "size", value: "35", permanence: "permanent", note: "reduced availability", sort_order: 5 },
+  { axis: "size", value: "40", permanence: "permanent", note: "travel size, mostly Monogram", sort_order: 6 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated canvas, natural vachetta trim", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim (no vachetta)", sort_order: 2 },
+  { axis: "material", value: "Damier Azur", permanence: "permanent", note: "pale check, vachetta trim", sort_order: 3 },
+  { axis: "material", value: "Empreinte", permanence: "permanent", note: "embossed calfskin, the colour-bearing line", sort_order: 4 },
+  { axis: "material", value: "Epi", permanence: "seasonal", note: "textured leather, intermittent runs", sort_order: 5 },
+  { axis: "material", value: "Vernis", permanence: "seasonal", note: "patent leather", sort_order: 6 },
+  { axis: "material", value: "Denim", permanence: "seasonal", sort_order: 7 },
+  { axis: "construction", value: "Standard", permanence: "permanent", is_default: true, note: "handheld", sort_order: 1 },
+  { axis: "construction", value: "Bandoulière", permanence: "permanent", note: "adds a detachable strap + two-way zip (since 2011)", sort_order: 2 },
+  // Colour applies only to the leather lines (Empreinte/Epi); LV names are official. Noir is the anchor.
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte/Epi 'Noir'; canvas lines take no colour choice", sort_order: 1 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
   { styleId: 423, name: "2.55 Reissue", rows: REISSUE },
+  { styleId: 433, name: "Speedy", rows: LV_SPEEDY },
 ];
 
 async function main() {
