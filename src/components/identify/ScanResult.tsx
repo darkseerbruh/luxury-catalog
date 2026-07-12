@@ -91,6 +91,9 @@ export default function ScanResult({
   // In the catalog = a real style row (styleId > 0). A brand-only match still
   // deserves the off-catalog treatment: no comps of ours to show.
   const inCatalog = Boolean(match && match.styleId);
+  // The sourced net-payout estimator: pre-loaded with the matched bag when we have
+  // it, else the hub where they can search it themselves.
+  const sellEstimatorHref = inCatalog ? `/where-to-sell?bag=${match!.styleId}` : "/where-to-sell";
 
   async function handleShare() {
     const text = `I found a ${shareLabel} — identified with Luxury Catalog.`;
@@ -342,10 +345,15 @@ export default function ScanResult({
           {consignLinks.length > 0 && (
             <div className="rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-gold">
               <h2 className="font-serif text-lg text-foreground">Where to sell</h2>
-              <p className="mt-1 text-xs text-muted">
-                Sell fast for cash or consign for more.
-              </p>
-              <div className="mt-3 flex flex-col gap-2">
+              <Link
+                href={sellEstimatorHref}
+                className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-gold/40 px-3 py-2 text-xs text-foreground transition-colors hover:border-gold"
+              >
+                <span>See what you&apos;d keep at each venue, from real published fees</span>
+                <span aria-hidden className="shrink-0 text-gold-soft">&rarr;</span>
+              </Link>
+              <p className="mt-3 text-[11px] uppercase tracking-wide text-muted/80">Or start a sale now</p>
+              <div className="mt-2 flex flex-col gap-2">
                 {consignLinks.map((l) => (
                   <a
                     key={l.key}
