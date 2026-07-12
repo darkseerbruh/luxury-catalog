@@ -246,18 +246,28 @@ export default async function BagDetailPage({
   ]);
   if (!v) notFound();
 
-  const [resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts, flapFamily, flapLines] =
-    await Promise.all([
-      getResourcesForStyle(v.style.styleId, v.variantId),
-      getVariants(v.style.styleId),
-      getVariantImages([v.variantId]),
-      getApprovedPhotos(v.variantId),
-      hasActiveAuthenticators(),
-      listByStyle(v.style.styleId, 4),
-      listByBrand(v.brand.brandId, 4),
-      getFamily(v.style.styleId),
-      getLines(v.style.styleId),
-    ]);
+  // One fan-out of every read that depends only on `v`. These used to run as a serial
+  // waterfall further down the render (~5 extra round-trips ≈ several seconds); folded in
+  // here they run concurrently (owner reported "crazy" bag-page load 2026-07-11).
+  const [
+    resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts, flapFamily, flapLines,
+    demand, standingView, eraCompsRaw, bagStory, authGuideSlug,
+  ] = await Promise.all([
+    getResourcesForStyle(v.style.styleId, v.variantId),
+    getVariants(v.style.styleId),
+    getVariantImages([v.variantId]),
+    getApprovedPhotos(v.variantId),
+    hasActiveAuthenticators(),
+    listByStyle(v.style.styleId, 4),
+    listByBrand(v.brand.brandId, 4),
+    getFamily(v.style.styleId),
+    getLines(v.style.styleId),
+    getVariantDemand(v.variantId),
+    getStyleStandingView(v.style.styleId),
+    getVariantEraComps(v.variantId),
+    getBagStory(v.style.name, v.brand.name),
+    getBrandAuthGuideSlug(v.brand.name),
+  ]);
 
   // Articles for this bag, most specific first: style-tagged guides lead, then
   // brand-tagged guides not already shown. A bag inherits relevance from its
@@ -291,13 +301,8 @@ export default async function BagDetailPage({
   // (Product JSON-LD is assembled below, after the resale comps — its `offers`
   // block is built from the same listed rows the page renders.)
 
-  // Demand signal (privacy-safe counts of wants + watchers) — powers the timing
-  // read; renders only when there's real signal.
-  const demand = await getVariantDemand(v.variantId);
-
-  // LC Index standing (docs/ux/lc-index-spec.md). Null when the style is unranked
-  // or migration 0048 is not yet applied, so the module simply does not render.
-  const standingView = await getStyleStandingView(v.style.styleId);
+  // `demand` (privacy-safe want/watcher counts) + `standingView` (LC Index standing)
+  // are fetched in the fan-out above.
 
   // Fair Market Range — computed ONLY from recorded RESALE sales (no fabrication).
   // KBB "Fair Market Range, not a single price" + StockX "Last Sale". Exclude
@@ -473,7 +478,7 @@ export default async function BagDetailPage({
   //
   // TODO: era×condition matrix once per-listing condition is captured+enriched
   //       (TRR rows currently have null condition; the 2-axis view waits on that).
-  const eraCompsRaw = await getVariantEraComps(v.variantId);
+  // `eraCompsRaw` is fetched in the fan-out above.
   function eraDecadeLabel(year: number): string {
     const decade = Math.floor(year / 10) * 10;
     return `${decade}s`;
@@ -583,14 +588,8 @@ export default async function BagDetailPage({
     });
   }
 
-  // "The Story" editorial module — cited origin/design/culture tidbits for the
-  // hero icons, plus a self-updating market fact derived from the resale rows
-  // above (no new data source; renders only when we've seeded a story).
-  const bagStory = await getBagStory(v.style.name, v.brand.name);
-
-  // Published per-house authentication guide, for the digest + escalation
-  // links (null when the house has no live guide; links degrade to the hub).
-  const authGuideSlug = await getBrandAuthGuideSlug(v.brand.name);
+  // "The Story" editorial module (`bagStory`) + the per-house auth guide
+  // (`authGuideSlug`) are fetched in the fan-out above.
   const storyMarketFact: StoryMarketFact | null =
     bagStory && fairMarket
       ? {
