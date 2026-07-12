@@ -42,7 +42,15 @@ export default function VariantSelector({
 
   // Dimensions that actually vary (≥2 distinct values) are the ones worth
   // showing — minus any fully implied by a dimension already shown.
-  const dims = visibleDims(variants);
+  // Also hide the Colour axis on a PRINT-ONLY material (a canvas line like LV Monogram/Damier
+  // that never comes in a colour choice): a material is colour-bearing only if some variant
+  // pairs it with a colour, so on a material outside that set the colour row is irrelevant.
+  const colourBearingMaterials = new Set(
+    variants.filter((v) => v.exteriorColorway && v.exteriorMaterial).map((v) => v.exteriorMaterial),
+  );
+  const colourApplies =
+    !current.exteriorMaterial || colourBearingMaterials.size === 0 || colourBearingMaterials.has(current.exteriorMaterial);
+  const dims = visibleDims(variants).filter((d) => d.dim.key !== "color" || colourApplies);
 
   // Prefetch the one-dimension-away neighbours so the common swaps feel instant.
   useEffect(() => {
