@@ -21,7 +21,7 @@ import { QUIZ_HEADLINE_FLAG, type QuizHeadlineVariant } from "@/lib/experiments/
 const EXAMPLE_READS = [
   {
     headline: "You don't need it to shout.",
-    read: "You feel composed, in control, warm and quietly certain. The room feels that you have it handled.",
+    read: "You feel composed, in control, warm and self-assured. The room feels that you have it handled.",
     tags: "Structured · No logos · Gold",
   },
   {
