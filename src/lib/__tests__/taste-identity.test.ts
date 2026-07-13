@@ -9,7 +9,7 @@ describe("tasteIdentity", () => {
       hardware: { gold: "love" },
     });
     expect(r.headline).toBe("You don't need it to shout.");
-    expect(r.read).toContain("You feel composed, in control, warm and quietly certain.");
+    expect(r.read).toContain("You feel composed, in control, warm and self-assured.");
     expect(r.read).toContain("The room feels that you have it handled.");
     expect(r.tags).toEqual(["Structured", "No logos", "Gold"]);
   });
@@ -51,7 +51,7 @@ describe("tasteIdentity", () => {
   it("handles a decisive logo with no loved vibe", () => {
     const r = tasteIdentity({ logo: "quiet" });
     expect(r.headline).toBe("You don't need it to shout.");
-    expect(r.read).toContain("quietly certain");
+    expect(r.read).toContain("self-assured");
     expect(r.tags).toEqual(["No logos"]);
   });
 

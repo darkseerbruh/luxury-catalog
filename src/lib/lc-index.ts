@@ -191,7 +191,7 @@ export function whyNote(
       ? "The liquid one. Changes hands more than almost anything here."
       : "Trades constantly, one of the easiest names here to buy or sell.";
   if (scarce)
-    return alt ? "Hard to find listed right now." : "Rarely on the market, even quietly.";
+    return alt ? "Hard to find listed right now." : "Rarely surfaces on the market.";
   if (priceTop)
     return alt
       ? "Among the highest medians we rank."

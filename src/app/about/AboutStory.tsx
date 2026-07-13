@@ -445,7 +445,7 @@ export default function AboutStory() {
               wrong.
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted">
-              These are the myths I&rsquo;d quietly correct for a friend at the
+              These are the myths I&rsquo;d correct for a friend at the
               counter. None of them is a verdict on any one bag, they&rsquo;re
               the kind of lore that gets passed around as gospel and shouldn&rsquo;t
               be.
@@ -573,7 +573,7 @@ export default function AboutStory() {
             </p>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted/90">
               The brand still matters, I won&rsquo;t pretend it doesn&rsquo;t. I
-              just like it worn quietly: a subtle read, not a loud one.
+              just like it understated: a subtle read, not a loud one.
             </p>
           </Reveal>
 

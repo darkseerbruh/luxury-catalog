@@ -6,7 +6,7 @@ import { deriveMaturityStage } from "@/lib/maturity";
 /**
  * Recompute Axis-A maturity_stage for every user from current closet state and
  * write it back. Best-effort: if 0035_persona_model is not applied yet the first
- * update errors on the missing column, so we bail out quietly. Returns the count
+ * update errors on the missing column, so we bail out without erroring. Returns the count
  * updated.
  */
 async function refreshMaturity(
@@ -31,7 +31,7 @@ async function refreshMaturity(
       .from("profile")
       .update({ maturity_stage: stage })
       .eq("id", userId);
-    if (error) return updated; // column missing (0037 unapplied) — stop quietly.
+    if (error) return updated; // column missing (0037 unapplied), stop without erroring.
     updated++;
   }
   return updated;
