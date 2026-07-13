@@ -24,11 +24,15 @@ export function lvCanvas(notes: string | null, url: string | null, material: str
   if (/damier|ebene|ébène/.test(h)) return "Damier Ebene";
   if (/empreinte/.test(h)) return "Empreinte";
   if (/\bepi\b/.test(h)) return "Epi";
+  // Vernis + Multicolore are their own lines and often co-occur with "Monogram" in the title
+  // (Monogram Vernis, Monogram Multicolore), so they must be matched BEFORE the Monogram fallback.
+  if (/vernis/.test(h)) return "Vernis";
+  if (/multicolore|murakami/.test(h)) return "Multicolore";
   if (/monogram|\bmono\b/.test(h)) return "Monogram";
   return null; // generic canvas / leather with no line named — leave on the base
 }
 
-const MAT_TYPE: Record<string, string> = { Monogram: "canvas", "Damier Ebene": "canvas", "Damier Azur": "canvas", Empreinte: "leather", Epi: "leather" };
+const MAT_TYPE: Record<string, string> = { Monogram: "canvas", "Damier Ebene": "canvas", "Damier Azur": "canvas", Empreinte: "leather", Epi: "leather", Vernis: "leather", Multicolore: "canvas" };
 async function resolveMaterialId(name: string): Promise<number | null> {
   const { data: found } = await db.from("material").select("material_id").ilike("name", `%${name}%`).limit(1);
   if ((found ?? [])[0]) return found![0].material_id;

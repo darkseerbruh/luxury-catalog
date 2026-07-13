@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Colour within LV's leather lines (owner 2026-07-12). LV's canvas lines (Monogram/Damier)
- * carry a fixed print, but the LEATHER lines (Empreinte, Epi) come in colours, so split those
+ * carry a fixed print, but the LEATHER lines (Empreinte, Epi, Vernis) come in colours, so split those
  * canvas variants by colour family into (size, canvas, colour) variants — preserving the
  * material_id, adding exterior_colorway. Completes the LV Speedy to a Size × Canvas × Colour
  * selector. Reversible, paginated, dry-run.
@@ -17,7 +17,7 @@ const FLOOR = 5;
 const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
 
 async function leatherLineVariants() {
-  const { data: mats } = await db.from("material").select("material_id").or("name.ilike.%empreinte%,name.ilike.%epi%");
+  const { data: mats } = await db.from("material").select("material_id").or("name.ilike.%empreinte%,name.ilike.%epi%,name.ilike.%vernis%");
   const ids = (mats ?? []).map((m: any) => m.material_id);
   const { data: vs } = await db.from("variant").select("variant_id,size_label,size_category,exterior_material_id,exterior_colorway").eq("style_id", STYLE_ID).in("exterior_material_id", ids);
   return ((vs ?? []) as any[]).filter((v) => !v.exterior_colorway); // only the not-yet-colour-split ones
@@ -62,7 +62,7 @@ async function forward() {
 
 async function reverse() {
   console.log(`\nseed-lv-empreinte-colors REVERSE ${WRITE ? "(WRITE)" : "(DRY RUN)"}\n`);
-  const { data: mats } = await db.from("material").select("material_id").or("name.ilike.%empreinte%,name.ilike.%epi%");
+  const { data: mats } = await db.from("material").select("material_id").or("name.ilike.%empreinte%,name.ilike.%epi%,name.ilike.%vernis%");
   const ids = (mats ?? []).map((m: any) => m.material_id);
   const { data: kids } = await db.from("variant").select("variant_id,size_label,exterior_material_id,exterior_colorway").eq("style_id", STYLE_ID).in("exterior_material_id", ids).not("exterior_colorway", "is", null);
   for (const k of (kids ?? []) as any[]) {
