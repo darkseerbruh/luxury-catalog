@@ -22,7 +22,10 @@ Parked follow-ons (bounded):
 - ⬜ Lady Dior (208) + GG Marmont (200) HARDWARE axis (gold/silver charms; production_option seeded, needs a hardware split from titles).
 - ⬜ Birkin (4): Colour + Hardware + Retourné/Sellier axes. Colour is DEFERRED — listings carry generic families (brown/black), not the Hermès named palette (Noir/Étoupe/Gold), so a generic colour chip would mislead; needs named-colour capture first.
 - ⬜ Birkin sub-style fold (80/84/89/113/114 → style 4): ~5 listings total, taxonomy judgment (Birkin Touch is arguably distinct) — low value.
-- ⬜ Template more styles — OWNER PICKS which (768 total): natural next batch = her Vivrelle shoot plan (Bottega Cassette, Gucci Jackie 1961, Goyard Artois, LV Pochette Métis) = 1 archivist pull + seed each.
+- ✅ Templated the Vivrelle-batch (Cassette, Jackie 1961, Artois, Pochette Métis) + 6 top icons (Kelly, WOC, Saddle, Chanel 19, Dionysus, Horsebit 1955). **21 styles faceted total** (through main d112fba). Generic tooling built: seed-lv-line-variants.ts (LV line categories→production names), reusable production-colour + material + Hermès-leather splitters.
+- ⬜ Template the NEXT icon tier (by listing volume, all unfaceted): Dior Book Tote (1461), Fendi Peekaboo (1330), YSL Loulou (925), Fendi Baguette (893), Celine Luggage (823), Valentino Rockstud (780), YSL Kate (746), BV Jodie (656), Loewe Puzzle (644), Gucci Bamboo 1947 (638), Balenciaga City (587), Chanel 22 (555), Gucci Diana (554), Prada Re-Edition 2005 (527), Givenchy Antigona (516) = 1 archivist pull + seed each.
+- ⬜ Data-quality: Dionysus (201) has a pre-existing junk material chip ("fabric lining (varies by version…)") from an earlier ingest — clean it in a material-name pass.
+- ⬜ Kelly/Birkin COLOUR axis stays deferred (Hermès named palette absent from generic listing colours).
 
 ## PAGE-DEPTH: descriptions + intro years on new styles (started 2026-07-10)
 *The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
