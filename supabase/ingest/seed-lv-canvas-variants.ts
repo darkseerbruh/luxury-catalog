@@ -32,7 +32,7 @@ export function lvCanvas(notes: string | null, url: string | null, material: str
   return null; // generic canvas / leather with no line named — leave on the base
 }
 
-const MAT_TYPE: Record<string, string> = { Monogram: "canvas", "Damier Ebene": "canvas", "Damier Azur": "canvas", Empreinte: "leather", Epi: "leather", Vernis: "leather", Multicolore: "canvas" };
+const MAT_TYPE: Record<string, string> = { Monogram: "coated canvas", "Damier Ebene": "coated canvas", "Damier Azur": "coated canvas", Empreinte: "leather", Epi: "leather", Vernis: "leather", Multicolore: "coated canvas" };
 async function resolveMaterialId(name: string): Promise<number | null> {
   const { data: found } = await db.from("material").select("material_id").ilike("name", `%${name}%`).limit(1);
   if ((found ?? [])[0]) return found![0].material_id;
