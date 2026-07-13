@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -228,6 +228,103 @@ const BIRKIN: Row[] = [
   { axis: "color", value: "Orange H", permanence: "permanent", note: "code 93; the signature box orange (Feu); harder to find lately", sort_order: 8 },
 ];
 
+// LV OnTheGo (style 437), archivist-sourced 2026-07-12 (us.louisvuitton.com product dimensions +
+// Spotted Fashion OnTheGo reference guide 2020-06-26; lines from seasonal-archive/louis-vuitton.md,
+// OnTheGo SS2019). LV canvas-primary (Monogram Giant default); colour only on the Empreinte leather
+// line. Signature is the bicolour "Giant" two-tone. NO construction toggle (fixed handles+straps),
+// NO hardware axis (fixed gold-tone per line). cm approximate.
+const LV_ONTHEGO: Row[] = [
+  { axis: "size", value: "BB", permanence: "permanent", note: "~18 x 15 x 8 cm; the mini, least common", sort_order: 1 },
+  { axis: "size", value: "PM", permanence: "permanent", note: "~25 x 19 x 11.5 cm; the compact everyday size", sort_order: 2 },
+  { axis: "size", value: "MM", permanence: "permanent", is_default: true, note: "~35 x 27 x 14 cm; most-carried/most-liquid (default vs GM is soft)", sort_order: 3 },
+  { axis: "size", value: "GM", permanence: "permanent", note: "~41 x 34 x 19 cm; the original 2019 launch size, true large tote", sort_order: 4 },
+  { axis: "material", value: "Monogram Giant", permanence: "permanent", is_default: true, note: "enlarged-Monogram coated canvas, vachetta trim; SS2019 launch line", sort_order: 1 },
+  { axis: "material", value: "Monogram Empreinte Giant", permanence: "permanent", note: "embossed calfskin, giant Monogram; the bicolour (black/beige) signature; colour-bearing", sort_order: 2 },
+  { axis: "material", value: "Monogram Reverse Giant", permanence: "permanent", note: "caramel/brown reverse-Monogram canvas; the other two-tone look", sort_order: 3 },
+  { axis: "material", value: "Epi", permanence: "seasonal", note: "textured leather, MM only; intermittent runs", sort_order: 4 },
+  { axis: "material", value: "Monogram Denim", permanence: "seasonal", note: "denim Giant Monogram, limited", sort_order: 5 },
+  { axis: "material", value: "LV Escale", note: "SS2020 tie-dye print capsule; discontinued/collectible", sort_order: 6 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir' half of the bicolour; the anchor; canvas lines take no colour choice", sort_order: 1 },
+  { axis: "color", value: "Cream", permanence: "permanent", note: "Empreinte 'Crème/Beige'; the pale bicolour, near-permanent (permanence soft)", sort_order: 2 },
+];
+
+// Dior Lady Dior (style 208), archivist-sourced 2026-07-12 (Fashionphile + saclab size guides;
+// dior.com + banked chrome-com-colors-2026.md for the named colour lexicon; model + Cannage from
+// seasonal-archive/dior.md, Lady Dior 1995). COLOUR-PRIMARY like Chanel: Cannage leather uniform,
+// size + colour are the axes. Dior names its colours (seed permanent anchors, seasonal per-listing).
+// Hardware is a real but colorway-tracking axis (gold default). cm approximate.
+const LADY_DIOR: Row[] = [
+  { axis: "size", value: "Micro", permanence: "permanent", note: "~12 x 10 x 5 cm; SLG-scale, worn as a charm/mini", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~17 x 15 x 7 cm; the popular crossbody-scale mini", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "~20 x 17 x 8 cm; the My ABCDior size, co-most-popular on resale", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~24 x 20 x 11 cm; the classic reference (Small is co-default on resale)", sort_order: 4 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~32 cm wide; the roomiest, less common now", sort_order: 5 },
+  { axis: "material", value: "Cannage Lambskin", permanence: "permanent", is_default: true, note: "the classic softest Lady Dior leather, Cannage-quilted", sort_order: 1 },
+  { axis: "material", value: "Cannage Calfskin", permanence: "permanent", note: "grained calfskin, sturdier/more scratch-resistant", sort_order: 2 },
+  { axis: "material", value: "Patent", permanence: "permanent", note: "patent calfskin, glossy; recurring", sort_order: 3 },
+  { axis: "material", value: "Ultramatte", permanence: "seasonal", note: "matte tonal calfskin with tonal hardware; recurring capsule", sort_order: 4 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "croc / python / ostrich / lizard, limited runs", sort_order: 5 },
+  { axis: "material", value: "Embroidered", permanence: "seasonal", note: "beaded/sequined/canvas (Oblique, Toile de Jouy) + Lady Art editions, per-listing", sort_order: 6 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "pale/aged gold-finish D.I.O.R. charms; the classic (hardware largely tracks the colorway)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone charms", sort_order: 2 },
+  { axis: "hardware", value: "Ruthenium", permanence: "seasonal", note: "dark aged/ruthenium charms; on darker colorways", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black lambskin + gold = the reference Lady Dior", sort_order: 1 },
+  { axis: "color", value: "Latte", permanence: "permanent", note: "Dior's signature warm beige/nude, a standing Lady Dior neutral", sort_order: 2 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "deep blue; recurring house neutral (permanence soft)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Dior's recurring red (Garance/Cherry rotate); near-permanent (permanence soft)", sort_order: 4 },
+];
+
+// Goyard Saint Louis (style 559), archivist-sourced 2026-07-12 (goyard.com Saint Louis PM/GM pages;
+// BagUSeek tote guide mod. 2026-05-11 + goyard.com "11 available colors" PLP). COLOUR-PRIMARY: one
+// tote shape, the Goyardine colour is the variant; Goyard keeps a standing named palette. NO hardware
+// axis (minimal palladium). cm are Goyard's own.
+const GOYARD_SAINT_LOUIS: Row[] = [
+  { axis: "size", value: "PM", permanence: "permanent", is_default: true, note: "34 x 15 x 28 cm; the everyday core size (Petit Modèle)", sort_order: 1 },
+  { axis: "size", value: "GM", permanence: "permanent", note: "40 x 20 x 32 cm; the true carryall (Grand Modèle)", sort_order: 2 },
+  { axis: "size", value: "XXL", permanence: "seasonal", note: "~50 x 23 x 40 cm; oversized travel/beach, rarer (dims from resale)", sort_order: 3 },
+  { axis: "size", value: "Junior", note: "smaller size, discontinued; resale-only now", sort_order: 4 },
+  { axis: "material", value: "Goyardine", permanence: "permanent", is_default: true, note: "coated chevron canvas + Chevroches calfskin trim, unlined/reversible; the one construction", sort_order: 1 },
+  { axis: "material", value: "Pearly Goyardine", permanence: "seasonal", note: "pearlescent-finish Goyardine, limited", sort_order: 2 },
+  { axis: "material", value: "Claire-Voie", permanence: "seasonal", note: "edge-painted/openwork special edition, per-listing", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black (natural-tan trim) is the easiest to source", sort_order: 1 },
+  { axis: "color", value: "Tan", permanence: "permanent", note: "natural/tan Goyardine", sort_order: 2 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "standing blue", sort_order: 3 },
+  { axis: "color", value: "Grey", permanence: "permanent", sort_order: 4 },
+  { axis: "color", value: "Green", permanence: "permanent", sort_order: 5 },
+  { axis: "color", value: "Sky Blue", permanence: "permanent", note: "pale blue, a standing bright", sort_order: 6 },
+  { axis: "color", value: "Burgundy", permanence: "permanent", sort_order: 7 },
+  { axis: "color", value: "Red", permanence: "permanent", sort_order: 8 },
+  { axis: "color", value: "Orange", permanence: "permanent", sort_order: 9 },
+  { axis: "color", value: "Yellow", permanence: "permanent", sort_order: 10 },
+  { axis: "color", value: "White", permanence: "permanent", sort_order: 11 },
+];
+
+// Gucci GG Marmont (style 200), archivist-sourced 2026-07-12 (Fashionphile + Rebag size guides;
+// model + matelassé from seasonal-archive/gucci.md, GG Marmont 2016; colour treatment from
+// chrome-com-colors-2026.md, which house-confirms GUCCI DOES NOT NAME ITS COLOURS — descriptor
+// families only). Faceted size × leather-colour × hardware. Colour anchors are DESCRIPTORS, not house
+// names. Antique-gold GG is the signature hardware. cm approximate (shoulder-flap sizing).
+const GG_MARMONT: Row[] = [
+  { axis: "size", value: "Super Mini", permanence: "permanent", note: "~16.5 x 9.5 x 4 cm; the smallest, evening-scale", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~21 x 14 x 5.5 cm; the popular chain mini", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~26 x 15 x 7.5 cm; the reference flap, most cross-shopped (Mini is co-popular)", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~29 x 18 x 7 cm", sort_order: 4 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~31 x 24 x 9.5 cm; scarcer", sort_order: 5 },
+  { axis: "material", value: "Matelasse Chevron", permanence: "permanent", is_default: true, note: "the signature chevron-quilted calfskin with antique-gold Double-G", sort_order: 1 },
+  { axis: "material", value: "Matelasse Diagonal", permanence: "permanent", note: "'Torchon' diagonal quilting variant, same leather tier", sort_order: 2 },
+  { axis: "material", value: "Velvet", permanence: "seasonal", note: "matelassé velvet, often embellished", sort_order: 3 },
+  { axis: "material", value: "Monogram Canvas", permanence: "seasonal", note: "GG Supreme / multicolor matelassé canvas", sort_order: 4 },
+  { axis: "material", value: "Raffia", permanence: "seasonal", note: "straw/raffia-effect, summer capsules", sort_order: 5 },
+  { axis: "material", value: "Embellished", permanence: "seasonal", note: "embroidered/beaded/pearl-studded editions, per-listing", sort_order: 6 },
+  { axis: "hardware", value: "Antique Gold", permanence: "permanent", is_default: true, note: "the signature aged-gold Double-G; on virtually every Marmont", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "seasonal", note: "silver/palladium-tone Double-G; exists but uncommon", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/beige family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. off-white; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the Gucci red (descriptor); recurring (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Dusty Pink", permanence: "permanent", note: "the signature Marmont blush/rose (descriptor); recurring (permanence soft)", sort_order: 5 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
@@ -236,6 +333,10 @@ const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 218, name: "Neverfull", rows: LV_NEVERFULL },
   { styleId: 434, name: "Alma", rows: LV_ALMA },
   { styleId: 4, name: "Birkin", rows: BIRKIN },
+  { styleId: 437, name: "OnTheGo", rows: LV_ONTHEGO },
+  { styleId: 208, name: "Lady Dior", rows: LADY_DIOR },
+  { styleId: 559, name: "Saint Louis", rows: GOYARD_SAINT_LOUIS },
+  { styleId: 200, name: "GG Marmont", rows: GG_MARMONT },
 ];
 
 async function main() {
