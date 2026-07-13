@@ -21,9 +21,10 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Wait for external traffic, then read it | If it is a break, the first real saves go unmeasured | Acceptable only after a quick drive confirms wiring |
   | Assume first-party noise; do nothing | Blinds the flywheel's core intent signal | Do not choose |
 - **Moves:** `item_saved` is the Intent step (`want`/`have`) feeding Maya's aspiration loop, Sofia's `have`-add, and every downstream lane. A dark save event blinds the whole engagement→monetization flywheel.
-- **Confidence:** Too thin to call a confirmed bug on counts alone (pre-launch, first-party). My read: seven wired sites + zero all-time makes a one-session live verification worth doing before launch. A leaning toward "break," not a verdict.
-- **Class:** OWNER (needs a live end-to-end drive + her call on auth-gating vs. bug; not a blind in-repo edit).
-- **Status:** OPEN
+- **Code audit 2026-07-13 (owner-directed):** all seven call sites read clean. Each fires `track(EVENTS.itemSaved, …)` only inside the success branch of a save/watch server action (`QuickSaveHeart`, `BagActions` ×2, `StickyActionBar` ×2, `ReviewForm`, `PendingSaveFlusher`); the logged-out heart correctly stashes intent + routes to `/signup`, and `PendingSaveFlusher` fires the event after the account exists. **No wiring bug found.** The zero is fully consistent with a behavioral zero pre-launch: a save requires a logged-in user, the owner (the main first-party saver) is internal-excluded from the pulse, and external non-internal logged-in traffic ≈ 0. This **downgrades the earlier "leaning toward break" read** to "expected pre-launch."
+- **Confidence:** No bug on inspection; zero is behavioral. Still worth one opportunistic end-to-end drive (logged-out heart → signup → flush) at/after launch to confirm the event fires from a real non-internal session before the first external saves land — a launch-day check, not a pre-launch blocker.
+- **Class:** OWNER (needs a live end-to-end drive from a real logged-in, non-internal session; can't be driven in-repo — creating accounts / signing in is out of scope for automation).
+- **Status:** OPEN (code audited clean 2026-07-13; awaits a live fire-confirmation)
 
 ---
 
@@ -55,7 +56,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 - **Moves:** Acquisition / Bet 1 (GEO is the lead channel) — the spine feeding all five lanes. A false pass would let a broken acquisition thesis go unchallenged.
 - **Confidence:** The definitional gap is deterministic. Whether GEO is on track stays too thin to call today (organic+AI ≈ 1 visitor/7d; pre-launch indexing window runs to ~8/10). Leaning: keep the 8/10 date, fix what it measures.
 - **Class:** OWNER (edits a strategy trigger she set + the acquisition-thesis read).
-- **Status:** OPEN
+- **Status:** DECIDED (owner-directed 2026-07-13, "fix everything you can") — the operative 2026-08-10 trigger is redefined: **treat Bet 1 (GEO) as broken if organic-search + AI-referral share (chatgpt / perplexity / bing / google organic) is under ~5% of weekly visitors, measured separately from social (ig / tiktok / fb).** Replaces the "non-direct < 10%" definition, which social traffic could false-pass. Date (2026-08-10) unchanged; ~5% threshold inherited from the recommendation, tunable. Reversible doc edit — revert if you prefer the original wording.
 
 ---
 
@@ -85,7 +86,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Do nothing; keep deferring | No trigger, no call; the strategy assumption stays unchecked indefinitely | Do not choose |
 - **Moves:** GEO/AI-referral is the acquisition spine feeding all five revenue lanes. If Bet 1 breaks, the traffic ramp in `monetization-projections.md` compresses toward the conservative case (~$7K yr-1 take-home vs. ~$32K base), and the strategy doc needs a revised acquisition thesis.
 - **Confidence:** Too thin to call the bet broken or confirmed today (n=246, 9 days, mostly first-party). My read: the absence of any organic referrer at day 9 is within the expected indexing delay -- but a six-week watch deadline is the right discipline. The 2026-06-24 model explicitly says "recalibrate the moment you have 4-6 weeks of real PostHog data."
-- **Status:** DECIDED 2026-07-10 (owner) — hard check-in set for 2026-08-10: if non-direct traffic is still under 10% of weekly visitors, treat Bet 1 (GEO) as broken and open a strategy-revision decision.
+- **Status:** DECIDED 2026-07-10 (owner) — hard check-in set for 2026-08-10. **Trigger redefined 2026-07-13** (see the 2026-07-13 GEO-redefinition decision above): if **organic-search + AI-referral share is under ~5% of weekly visitors** (measured separately from social), treat Bet 1 (GEO) as broken and open a strategy-revision decision. Supersedes the original "non-direct < 10%" wording, which social traffic could false-pass.
 
 ---
 
