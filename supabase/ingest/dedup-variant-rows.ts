@@ -16,7 +16,7 @@ const WRITE = process.argv.includes("--write");
 async function allVars() {
   const out: any[] = []; const P = 1000;
   for (let f = 0; ; f += P) {
-    const { data } = await db.from("variant").select("variant_id,style_id,size_label,exterior_colorway,exterior_material_id").order("variant_id").range(f, f + P - 1);
+    const { data } = await db.from("variant").select("variant_id,style_id,size_label,exterior_colorway,exterior_material_id,construction_method,hardware_color,strap_type").order("variant_id").range(f, f + P - 1);
     const r = (data ?? []) as any[]; out.push(...r); if (r.length < P) break;
   }
   return out;
@@ -28,7 +28,11 @@ async function main() {
   const vs = await allVars();
   const groups = new Map<string, any[]>();
   for (const v of vs) {
-    const k = `${v.style_id}|${(v.size_label ?? "").toLowerCase().trim()}|${(v.exterior_colorway ?? "").toLowerCase().trim()}|${v.exterior_material_id ?? ""}`;
+    // Key on EVERY selector-facing distinguishing field, not just size/colour/material — else a
+    // legit construction (Standard vs Bandoulière), hardware, or strap variant reads as a "dup"
+    // and gets merged away, collapsing the faceted selector (Speedy Bandoulière regression, 2026-07-12).
+    const norm = (s: any) => (s ?? "").toString().toLowerCase().trim();
+    const k = `${v.style_id}|${norm(v.size_label)}|${norm(v.exterior_colorway)}|${v.exterior_material_id ?? ""}|${norm(v.construction_method)}|${norm(v.hardware_color)}|${norm(v.strap_type)}`;
     (groups.get(k) ?? groups.set(k, []).get(k)!).push(v);
   }
   const dups = [...groups.values()].filter((g) => g.length > 1);
