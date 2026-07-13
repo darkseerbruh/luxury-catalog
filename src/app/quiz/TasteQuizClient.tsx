@@ -6,6 +6,7 @@ import { QUIZ_FLOW, MARKS, type QuizQuestion } from "@/lib/taste-quiz";
 import { tasteIdentity, type Mark, type TasteAnswers, type Vibe, type Logo } from "@/lib/taste-identity";
 import { saveTasteResult, getStyleReadBoards, type StyleReadBoard } from "@/lib/taste-result-actions";
 import { PENDING_QUIZ_KEY } from "@/lib/taste-pending";
+import { track, EVENTS } from "@/lib/analytics/events";
 import { BagImage } from "@/components/BagImage";
 import { QuickSaveHeart } from "@/components/QuickSaveHeart";
 
@@ -140,7 +141,33 @@ export default function TasteQuizClient({
     }));
   }
 
-  const next = () => setStep((s) => Math.min(s + 1, flow.length));
+  // Instrumentation: the /quiz page previously fired no events, so quiz_started
+  // and quiz_completed were dark (Bet 4 was untestable). Fire from next() only —
+  // this excludes the post-signup restore path below, which jumps straight to the
+  // result without advancing.
+  const startedRef = useRef(false);
+  const next = () => {
+    if (step === 0 && !startedRef.current) {
+      startedRef.current = true;
+      track(EVENTS.quizStarted, { source: "quiz_page", total_steps: flow.length });
+    }
+    if (step === flow.length - 1) {
+      const filled = [
+        a.occasions.length > 0,
+        Object.keys(a.vibe).length > 0,
+        a.logo != null,
+        Object.keys(a.carry).length > 0,
+        Object.keys(a.finishes).length > 0,
+        Object.keys(a.hardware).length > 0,
+        Object.keys(a.houses).length > 0,
+      ].filter(Boolean).length;
+      track(EVENTS.quizCompleted, {
+        source: "quiz_page",
+        completeness: Math.round((filled / 7) * 100) / 100,
+      });
+    }
+    setStep((s) => Math.min(s + 1, flow.length));
+  };
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
   // When the result is reached: save it for signed-in users, and fetch a few real
