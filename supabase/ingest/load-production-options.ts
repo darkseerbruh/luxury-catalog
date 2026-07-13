@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12; classic-flap-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -136,8 +136,17 @@ const LV_SPEEDY: Row[] = [
   { axis: "material", value: "Denim", permanence: "seasonal", sort_order: 7 },
   { axis: "construction", value: "Standard", permanence: "permanent", is_default: true, note: "handheld", sort_order: 1 },
   { axis: "construction", value: "Bandoulière", permanence: "permanent", note: "adds a detachable strap + two-way zip (since 2011)", sort_order: 2 },
-  // Colour applies only to the leather lines (Empreinte/Epi); LV names are official. Noir is the anchor.
-  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte/Epi 'Noir'; canvas lines take no colour choice", sort_order: 1 },
+  // Colour applies only to the leather lines (Empreinte/Epi); LV names are official. Noir is the
+  // anchor; the rest are the colour families we have Empreinte/Epi resale listings for (n>=5,
+  // observed 2026-07-12) — permanence left null because LV's leather palette rotates and we don't
+  // source which brights are permanent. Canvas lines (Monogram/Damier) take no colour choice.
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte/Epi 'Noir'; the anchor", sort_order: 1 },
+  { axis: "color", value: "Beige", note: "Empreinte neutral (observed listings)", sort_order: 2 },
+  { axis: "color", value: "Blue", note: "Empreinte (observed listings)", sort_order: 3 },
+  { axis: "color", value: "Red", note: "Empreinte/Epi (observed listings)", sort_order: 4 },
+  { axis: "color", value: "Green", note: "Empreinte (observed listings)", sort_order: 5 },
+  { axis: "color", value: "Purple", note: "Epi (observed listings)", sort_order: 6 },
+  { axis: "color", value: "Metallic", note: "Epi (observed listings)", sort_order: 7 },
 ];
 
 // LV Neverfull (style 218). Same LV canvas-primary model as the Speedy: the core canvases
@@ -155,12 +164,78 @@ const LV_NEVERFULL: Row[] = [
   { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte anchor; canvas lines take no colour choice", sort_order: 1 },
 ];
 
+// LV Alma (style 434), archivist-sourced 2026-07-12 (Rebag size guide / Fashionphile / PurseBlog
+// / louisvuitton.com snippet; LV line vocabulary from seasonal-archive/louis-vuitton.md). LV's
+// PRIMARY axis is the CANVAS/material (Monogram default); colour varies only inside the leather
+// lines (Epi/Vernis/Empreinte) and LV names are OFFICIAL. Strap is decided by SIZE (Nano/BB/PM
+// include one, MM/GM do not), so there is NO Bandoulière construction toggle. Hardware is fixed
+// per line, not an axis. cm are approximate (converted from reseller inch measurements).
+const LV_ALMA: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~16.5 cm, crossbody w/ strap; current but rare", sort_order: 1 },
+  { axis: "size", value: "BB", permanence: "permanent", is_default: true, note: "~23.5 cm, the most common on resale; includes removable strap", sort_order: 2 },
+  { axis: "size", value: "PM", permanence: "permanent", note: "~32 cm, the original 1934 proportion; includes strap", sort_order: 3 },
+  { axis: "size", value: "MM", permanence: "permanent", note: "~34 cm, no strap included", sort_order: 4 },
+  { axis: "size", value: "GM", permanence: "permanent", note: "~38 cm, travel size; reduced availability (may be retired from current canvas lineup)", sort_order: 5 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated canvas, natural vachetta trim", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim (no vachetta)", sort_order: 2 },
+  { axis: "material", value: "Damier Azur", permanence: "permanent", note: "pale check, vachetta trim", sort_order: 3 },
+  { axis: "material", value: "Epi", permanence: "permanent", note: "textured leather; the Alma is a signature Epi shape, the colour-bearing line", sort_order: 4 },
+  { axis: "material", value: "Vernis", permanence: "permanent", note: "Monogram Vernis patent; the Alma Vernis is the signature, colour-bearing (LV phasing Vernis down)", sort_order: 5 },
+  { axis: "material", value: "Empreinte", permanence: "permanent", note: "embossed calfskin, colour-bearing", sort_order: 6 },
+  { axis: "material", value: "Multicolore", note: "Murakami screen-print Monogram; discontinued 2015, historic/collectible", sort_order: 7 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "crocodile / ostrich / Malletage-quilted, limited runs", sort_order: 8 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Epi/Vernis/Empreinte 'Noir'; canvas lines take no colour choice; all other colours rotate seasonally, captured per-listing", sort_order: 1 },
+];
+
+// Hermès Birkin (style 4), archivist-sourced 2026-07-12. Leathers + permanent colour core + codes
+// reused from seasonal-archive/hermes.md (auction + reference-cross-checked); size/construction/
+// hardware confirmed against Christie's "Retourné vs Sellier Birkin" collecting guide (2026-05-14,
+// auction-grade) + Sotheby's Gold Birkin guide. LEATHER is the primary spec axis (Togo default);
+// the palette rotates by the hundreds seasonally so only house-permanent anchor colours are seeded,
+// the rest captured per-listing. Retourné (default) vs Sellier is a genuine construction toggle.
+const BIRKIN: Row[] = [
+  { axis: "size", value: "25", permanence: "permanent", note: "~25 cm; the current desire-object, scarcer at retail", sort_order: 1 },
+  { axis: "size", value: "30", permanence: "permanent", is_default: true, note: "~30 cm; the practical everyday size, most liquid on resale", sort_order: 2 },
+  { axis: "size", value: "35", permanence: "permanent", note: "~35 cm; an original 1984 size, abundant in vintage", sort_order: 3 },
+  { axis: "size", value: "40", permanence: "permanent", note: "~40 cm; original 1984 travel size, less common now (produced but scarce)", sort_order: 4 },
+  { axis: "size", value: "20", permanence: "seasonal", note: "20 cm; Sellier-only, Faubourg + limited editions since 2019", sort_order: 5 },
+  { axis: "material", value: "Togo", permanence: "permanent", is_default: true, note: "Veau Togo; fine pebbled calf, the most common Birkin leather; Retourné", sort_order: 1 },
+  { axis: "material", value: "Clemence", permanence: "permanent", note: "Veau Taurillon Clemence; soft flat-grained bull calf, relaxed slouch; Retourné", sort_order: 2 },
+  { axis: "material", value: "Epsom", permanence: "permanent", note: "Veau Epsom; embossed rigid calf, holds shape; the primary Sellier leather", sort_order: 3 },
+  { axis: "material", value: "Swift", permanence: "permanent", note: "Veau Swift; soft near-smooth calf, takes colour brightly; smaller sizes", sort_order: 4 },
+  { axis: "material", value: "Box Calf", permanence: "permanent", note: "Veau Box; smooth glossy heritage calf that patinates; vintage + Sellier", sort_order: 5 },
+  { axis: "material", value: "Barenia", permanence: "permanent", note: "smooth saddle calf, patinas/darkens; heritage, highly sought", sort_order: 6 },
+  { axis: "material", value: "Chevre Mysore", permanence: "seasonal", note: "bright-grained goat; occasional on the Birkin, more common on Kelly/small", sort_order: 7 },
+  { axis: "material", value: "Ostrich", permanence: "seasonal", note: "Autruche; quill-bump exotic, cyclical", sort_order: 8 },
+  { axis: "material", value: "Niloticus Crocodile", permanence: "seasonal", note: "Nile croc exotic; two-dot blind stamp", sort_order: 9 },
+  { axis: "material", value: "Porosus Crocodile", permanence: "seasonal", note: "saltwater croc, smallest/most-prized scales; caret blind stamp", sort_order: 10 },
+  { axis: "material", value: "Alligator", permanence: "seasonal", note: "Alligator Mississippiensis exotic; square blind stamp", sort_order: 11 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "GHW; warm-tone, the classic pairing (Palladium is co-equal; default is a judgment call)", sort_order: 1 },
+  { axis: "hardware", value: "Palladium", permanence: "permanent", note: "PHW; bright silver-tone, equally standard", sort_order: 2 },
+  { axis: "hardware", value: "Ruthenium", permanence: "seasonal", note: "dark gunmetal tone; intermittent", sort_order: 3 },
+  { axis: "hardware", value: "Brushed", permanence: "seasonal", note: "matte brushed finish of gold/palladium, seasonal", sort_order: 4 },
+  { axis: "hardware", value: "So Black", permanence: "seasonal", note: "all-black hardware, limited editions", sort_order: 5 },
+  { axis: "hardware", value: "Rose Gold", permanence: "seasonal", note: "limited", sort_order: 6 },
+  { axis: "construction", value: "Retourne", permanence: "permanent", is_default: true, note: "stitched inward, soft rounded silhouette; the original/dominant form; Togo/Clemence/Swift; broader size range", sort_order: 1 },
+  { axis: "construction", value: "Sellier", permanence: "permanent", note: "stitched outward, crisp architectural silhouette; since 2014; Epsom/Box; 25/30/35 (+20-only). Special builds (Touch/Cargo/Shadow/Faubourg/3-in-1) are per-listing, not seeded", sort_order: 2 },
+  { axis: "color", value: "Noir", permanence: "permanent", is_default: true, note: "code 89; true black, the anchor", sort_order: 1 },
+  { axis: "color", value: "Etoupe", permanence: "permanent", note: "code 18; grey-brown taupe, the bestselling everyday neutral", sort_order: 2 },
+  { axis: "color", value: "Gold", permanence: "permanent", note: "code 06; warm camel-brown, the iconic Birkin tan (Or)", sort_order: 3 },
+  { axis: "color", value: "Etain", permanence: "permanent", note: "code 8F; mid-dark cool pewter grey", sort_order: 4 },
+  { axis: "color", value: "Craie", permanence: "permanent", note: "code 10; soft chalk off-white", sort_order: 5 },
+  { axis: "color", value: "Gris Tourterelle", permanence: "permanent", note: "code 81; soft taupe-grey, a perennial collector neutral", sort_order: 6 },
+  { axis: "color", value: "Rouge H", permanence: "permanent", note: "code 46; deep brown-red near-burgundy, since 1925", sort_order: 7 },
+  { axis: "color", value: "Orange H", permanence: "permanent", note: "code 93; the signature box orange (Feu); harder to find lately", sort_order: 8 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
   { styleId: 423, name: "2.55 Reissue", rows: REISSUE },
   { styleId: 433, name: "Speedy", rows: LV_SPEEDY },
   { styleId: 218, name: "Neverfull", rows: LV_NEVERFULL },
+  { styleId: 434, name: "Alma", rows: LV_ALMA },
+  { styleId: 4, name: "Birkin", rows: BIRKIN },
 ];
 
 async function main() {

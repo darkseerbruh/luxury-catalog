@@ -239,6 +239,24 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-12 (run 15)** — SELECTOR-SEED unit (not a naming pull). The production-driven variant
+  selector is being extended to **LV Alma (style 434)** and **Hermès Birkin (style 4)**; delivered
+  `docs/research-drafts/lv-alma-hermes-birkin-production-matrix.md` — two paste-ready `Row[]` lists
+  in the exact `load-production-options.ts` shape (axis/value/permanence/is_default/note/sort_order),
+  reusing the already-banked `hermes.md` leathers + colour-core-with-codes and `louis-vuitton.md`
+  line vocabulary. New sources this run: Rebag Alma size guide (2022-08-13) + Christie's "Retourné vs
+  Sellier Birkin" collecting guide (2026-05-14, AUCTION-GRADE: Birkin invented 1983/prototype 1984,
+  Sellier emerged 2014 Epsom/Box 25-30-35, Faubourg 20cm Sellier-only 2019). Defaults set: Alma size
+  BB / material Monogram / colour Black; Birkin size 30 / leather Togo / hardware Gold / construction
+  Retourné / colour Noir. HELD RIGOR: no Alma construction axis (strap is size-determined, no
+  "Alma Bandoulière" line) + no Alma hardware axis (fixed per line); HAC excluded as a SEPARATE model
+  not a Birkin size; Birkin 45 omitted as retired not guessed; special Birkin builds (Touch/Cargo/
+  Shadow/Faubourg/3-in-1) left per-listing not seeded. MEDIUM flags handed to the owner to hold: Alma
+  GM currency (may be retired from current canvas lineup) + Vernis permanence (LV phasing down);
+  Birkin Gold-vs-Palladium default (co-equal, soft), Chèvre-as-Birkin-leather, Ruthenium permanence,
+  Birkin 40 scarcity. 2 firecrawl_search (both refunded 2→1 via feedback) + 2 raw scrapes (Rebag +
+  Christie's) = ~4 credits net. **Next unit: the HERMÈS seasonal-color backfill pre-2015 (still the
+  highest-GEO-value open gap), or the owner-present Chrome .com batch.**
 - **2026-06-28 (run 14)** — Did the LOEWE lexicon (house 11, the LAST house in the "other houses"
   queue, after Prada). **THE "OTHER HOUSES" FIRST PASS IS NOW COMPLETE** (BV, YSL, Celine, Fendi,
   Prada, Loewe all drafted). Output `docs/research-drafts/seasonal-archive/loewe.{md,jsonl}` (33
