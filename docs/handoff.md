@@ -3,15 +3,23 @@
 
 ---
 
-## TL;DR — The care shelf: OWN-state surface + dormant Amazon Associates channel (2026-07-13, on branch `claude/bag-adjacent-products-ypl7pc`, PR-ready)
+## TL;DR — The care shelf: OWN-state surface + dormant Amazon Associates channel (2026-07-13, MERGED to `main` via PR #45)
 
-**Off the owner's "Amazon list of bag-adjacent products" idea. Built Option A: a `/care` hub + a material-aware bag-page module.** Serves the OWN state, which had no surface (the site covered want/buy/sell). Activates the parked Amazon Associates care/accessories revenue line from `docs/monetization-projections.md`. All green (tsc, lint, 860 tests; `next build` compiles + typechecks, prerender blocked only by the known DB-less-container `supabaseKey` limit, verified identical on a clean stash).
+**Off the owner's "Amazon list of bag-adjacent products" idea. Built Option A: a `/care` hub + a material-aware bag-page module.** Serves the OWN state, which had no surface (the site covered want/buy/sell). Activates the parked Amazon Associates care/accessories revenue line from `docs/monetization-projections.md`. All green (tsc, lint, 860 tests; `next build` compiles + typechecks, prerender blocked only by the known DB-less-container `supabaseKey` limit, verified identical on a clean stash). **Code is on `main` (PR #45 squash-merged, `ac0fdad`), live on the next prod build.**
 - 🧴 **`/care` hub** (`src/app/care/page.tsx`): 18 curated products grouped by job (shape & store · clean & condition · hardware · display & use · travel), jump-nav, ItemList JSON-LD for GEO. Registry + material helpers in `src/lib/bag-care.ts`.
 - 👜 **Material-aware `CareModule`** on the bag page (after Where-to-sell): reads `exteriorMaterial` and shows the 2-3 items that fit that finish (suede brush for suede, no-solvents note for patent), routes to the hub.
 - 💰 **Amazon Associates, dormant + self-activating** (mirrors the eBay/CJ pattern in `affiliate.ts`): every product deep-links an Amazon SEARCH (never held ASINs/prices, so the live page shows the real current price). Plain search links until `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` is set, then commission-tagged, no code change. New `outbound_care_clicked` event is the channel's proxy.
 - 🛡️ **Factuality held:** no invented prices; brands framed "what I'd look at" (opinion); every surface-touching item carries "test on a hidden spot first" + the finish danger. Disclosure page + footer + sitemap updated.
-- 📝 **Companion article** drafted (owner asked): `docs/research-drafts/how-to-care-for-a-designer-bag-draft.md` (copywriter-drafted, on-voice; owner reviews + publishes).
-- ⬜ **YOUR TURN:** (1) **Sign up for Amazon Associates once traffic grows** (owner's call 2026-07-13), then set `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` in Vercel and the channel earns. (2) Merge the PR (green gate runs in GitHub CI, which has the DB key this container lacks) or land from an interactive session via `land-to-main.sh`. (3) Review + publish the companion article. (4) Eyeball `/care` + a bag page; group order / product picks are one-line edits.
+- 📝 **Companion article** drafted (owner asked): `docs/research-drafts/how-to-care-for-a-designer-bag-draft.md` (copywriter-drafted, on-voice). Owner said **publish it**, but publishing is a Supabase write and this web container has only placeholder DB creds (30-char service key → "Invalid API key"), so it could not run here. A one-command publish script was written instead (**PR #46**, branch `claude/bag-adjacent-products-ypl7pc`).
+
+- 🖥️ **NEXT LOCAL (DB-enabled) CHAT — do the 2 things this web session couldn't:**
+  1. **Publish the care article** (owner already approved). Merge PR #46 (or pull the branch), then from a session with real Supabase creds:
+     - `npx tsx supabase/ingest/publish-care-article.ts` — dry-run, prints candidate author profiles + a body preview, writes nothing. Copy Arielle's `user_id`.
+     - `npx tsx supabase/ingest/publish-care-article.ts --author=<arielle-uuid> --write` — inserts the post as PUBLISHED (idempotent: skips if the slug `how-to-care-for-a-designer-bag` already exists; reversible via unpublish). Then confirm it renders at `/articles/how-to-care-for-a-designer-bag`.
+  2. **Land any doc follow-ups to `main` via `land-to-main.sh`** — the web container can't run the green gate (`next build` needs the DB key), so PR #46's doc + script changes land cleanly from local.
+- ⬜ **OWNER (outward-facing, hers):** **Sign up for Amazon Associates once traffic grows** (her call 2026-07-13), then set `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` in Vercel — every care link flips to commission-tracked, no code change.
+- 🔎 **Optional SEO follow-up:** the care article's headings aren't keyword-targeted (no care/cleaning topic in the demand map yet). Add one to the next trends refresh so a follow-up can be search-optimized.
+- 👀 **Eyeball when convenient:** `/care` + any bag page's "Care for it" module; group order / product picks are one-line edits in `src/lib/bag-care.ts`.
 
 ---
 
