@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /**
  * Seed the production_option table (migration 0054) from the archivist production matrix
  * (docs/research-drafts/classic-flap-production-matrix.md). One reviewed source of what each
