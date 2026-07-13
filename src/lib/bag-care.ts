@@ -67,7 +67,7 @@ export const CARE_GROUPS: CareGroup[] = [
     key: "shape-store",
     icon: "🧳",
     title: "Shape & store",
-    blurb: "Keep the silhouette while it sits in the closet. This is where most damage quietly happens.",
+    blurb: "Keep the silhouette while it sits in the closet. This is where most damage starts.",
   },
   {
     key: "clean-condition",
