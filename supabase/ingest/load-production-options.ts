@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -325,6 +325,86 @@ const GG_MARMONT: Row[] = [
   { axis: "color", value: "Dusty Pink", permanence: "permanent", note: "the signature Marmont blush/rose (descriptor); recurring (permanence soft)", sort_order: 5 },
 ];
 
+// Bottega Veneta Cassette (style 211), archivist-sourced 2026-07-13 (net-a-porter/Mytheresa/Amazon
+// PDPs for cm; model + Padded Cassette FW2019 + named-colour lexicon from seasonal-archive/bottega-
+// veneta.md). COLOUR-PRIMARY: the Intrecciato weave is the one construction, colour is the variant,
+// BV names its colours (Parakeet is the one house-confirmed official; the rest reseller-attributed,
+// seeded seasonal + MEDIUM). Material axis = weave/finish. NO hardware axis (Chain Cassette is per-listing).
+const BV_CASSETTE: Row[] = [
+  { axis: "size", value: "Candy", permanence: "permanent", note: "~9 x 12.5 x 5 cm; the cult mini (formerly 'Mini Cassette'), evening/crossbody scale", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~14 x 23 x 7 cm; the everyday Padded Cassette, most liquid (default vs Candy is soft)", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~15 x 28 x 7 cm; the roomier shoulder size", sort_order: 3 },
+  { axis: "material", value: "Intrecciato", permanence: "permanent", is_default: true, note: "Maxi Intrecciato woven nappa/lambskin; the base weave (Lee's oversized plait, 2019)", sort_order: 1 },
+  { axis: "material", value: "Padded Intrecciato", permanence: "permanent", note: "the puffy padded weave; the FW2019 It-bag finish, the Cassette's signature look", sort_order: 2 },
+  { axis: "material", value: "Tech / Nylon", permanence: "seasonal", note: "'Padded Tech Cassette' coated/tech-canvas seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede/other seasonal finishes", sort_order: 4 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "lizard / crocodile / metallic special editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; nero, the easiest Cassette to source", sort_order: 1 },
+  { axis: "color", value: "Parakeet", permanence: "seasonal", note: "BV's signature acid-green house colour (OFFICIAL, reintroduced SS2021); recurs but rotates", sort_order: 2 },
+  { axis: "color", value: "Fondant", permanence: "seasonal", note: "deep warm chocolate; reseller-attributed BV name (MEDIUM)", sort_order: 3 },
+  { axis: "color", value: "Barolo", permanence: "seasonal", note: "deep burgundy; reseller-attributed BV name (MEDIUM)", sort_order: 4 },
+  { axis: "color", value: "Travertine", permanence: "seasonal", note: "light olive; reseller-attributed BV name (MEDIUM)", sort_order: 5 },
+  { axis: "color", value: "Porridge", permanence: "seasonal", note: "ivory beige neutral; reseller-attributed BV name (MEDIUM)", sort_order: 6 },
+];
+
+// Gucci Jackie 1961 (style 446), archivist-sourced 2026-07-13 (Rebag Feb 2023 + luxbags.fr for sizes;
+// model = 1961 crescent hobo w/ piston, reissued FW2020 by Michele, from seasonal-archive/gucci.md;
+// colour from chrome-com-colors-2026.md — GUCCI DOES NOT NAME ITS COLOURS, descriptors only). Faceted
+// size × material × colour. NO hardware axis (piston fixed, finish tracks the colorway). cm approximate.
+const GUCCI_JACKIE: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~19 x 13 x 3 cm; the tiny crossbody", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~28 x 19 x 4.5 cm; the reference Jackie, most cross-shopped (default vs Medium is soft)", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~36.5 x 24 x 4.5 cm; the largest, classic hobo proportion", sort_order: 3 },
+  { axis: "size", value: "Notte", permanence: "seasonal", note: "elongated mini evening/baguette variant; recent, scarcer (cm not sourced)", sort_order: 4 },
+  { axis: "material", value: "GG Supreme Canvas", permanence: "permanent", is_default: true, note: "beige/ebony coated GG Supreme canvas with leather trim; the everyday Jackie", sort_order: 1 },
+  { axis: "material", value: "Smooth Leather", permanence: "permanent", note: "calfskin; the polished reissue leather", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Printed / Exotic", permanence: "seasonal", note: "leopard/snakeskin prints + exotics + Hacker Project capsule, per-listing", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "the GG Supreme beige/ebony + nude leather family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory leather; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring Gucci red (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Pink", permanence: "permanent", note: "the recurring light-pink Jackie (descriptor); near-permanent (permanence soft)", sort_order: 5 },
+];
+
+// Goyard Artois (style 561), archivist-sourced 2026-07-13 (goyard.com Artois PM/GM pages; leelinebags +
+// fashionphile for MM; the standing Goyardine palette reused from the Saint Louis). COLOUR-PRIMARY: one
+// structured zip-top tote shape, the Goyardine colour is the variant. NO hardware axis. cm are Goyard's own.
+const GOYARD_ARTOIS: Row[] = [
+  { axis: "size", value: "PM", permanence: "permanent", is_default: true, note: "40 x 14 x 25 cm; the everyday core size (Petit Modèle)", sort_order: 1 },
+  { axis: "size", value: "MM", permanence: "permanent", note: "~50 x 17 x 30 cm; the mid carryall (cm from reseller charts)", sort_order: 2 },
+  { axis: "size", value: "GM", permanence: "permanent", note: "68 x 24 x 37 cm; the large travel tote (Grand Modèle)", sort_order: 3 },
+  { axis: "material", value: "Goyardine", permanence: "permanent", is_default: true, note: "coated chevron canvas + Chevroches calfskin trim, structured with a zip top; the one construction", sort_order: 1 },
+  { axis: "material", value: "Pearly Goyardine", permanence: "seasonal", note: "pearlescent-finish Goyardine, limited", sort_order: 2 },
+  { axis: "material", value: "Claire-Voie", permanence: "seasonal", note: "edge-painted/openwork special edition, per-listing", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black (natural-tan trim) is the easiest to source", sort_order: 1 },
+  { axis: "color", value: "Tan", permanence: "permanent", note: "natural/tan Goyardine", sort_order: 2 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "standing blue", sort_order: 3 },
+  { axis: "color", value: "Grey", permanence: "permanent", sort_order: 4 },
+  { axis: "color", value: "Green", permanence: "permanent", sort_order: 5 },
+  { axis: "color", value: "Sky Blue", permanence: "permanent", note: "pale blue, a standing bright", sort_order: 6 },
+  { axis: "color", value: "Burgundy", permanence: "permanent", sort_order: 7 },
+  { axis: "color", value: "Red", permanence: "permanent", sort_order: 8 },
+  { axis: "color", value: "Orange", permanence: "permanent", sort_order: 9 },
+  { axis: "color", value: "Yellow", permanence: "permanent", sort_order: 10 },
+  { axis: "color", value: "White", permanence: "permanent", sort_order: 11 },
+];
+
+// LV Pochette Métis (style 438), archivist-sourced 2026-07-13 (us.louisvuitton.com PDPs + bagreligion;
+// lines from seasonal-archive/louis-vuitton.md, Pochette Métis 2012, Reverse 2016). LV canvas-primary
+// (Monogram default); colour only on the Empreinte leather line. NO construction toggle (leather + chain
+// straps both ship standard, no Bandoulière line). NO hardware axis. cm approximate.
+const LV_POCHETTE_METIS: Row[] = [
+  { axis: "size", value: "Regular", permanence: "permanent", is_default: true, note: "~25 x 19 x 7 cm; the original 2012 satchel, the resale workhorse", sort_order: 1 },
+  { axis: "size", value: "East West", permanence: "permanent", note: "~21.5 x 13.5 x 6 cm; the flatter horizontal reissue", sort_order: 2 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~20 x 14 x 6 cm; the compact version (cm from a reference table)", sort_order: 3 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, natural vachetta trim; the 2012 launch line", sort_order: 1 },
+  { axis: "material", value: "Monogram Empreinte", permanence: "permanent", note: "embossed calfskin; the colour-bearing line (added after the 2012 launch)", sort_order: 2 },
+  { axis: "material", value: "Monogram Reverse", permanence: "permanent", note: "caramel/brown reverse-Monogram canvas (line debuted 2016); the two-tone look", sort_order: 3 },
+  { axis: "material", value: "Damier Ebene", permanence: "seasonal", note: "brown check, dark leather trim; intermittent runs (less common here)", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
@@ -337,6 +417,10 @@ const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 208, name: "Lady Dior", rows: LADY_DIOR },
   { styleId: 559, name: "Saint Louis", rows: GOYARD_SAINT_LOUIS },
   { styleId: 200, name: "GG Marmont", rows: GG_MARMONT },
+  { styleId: 211, name: "Cassette", rows: BV_CASSETTE },
+  { styleId: 446, name: "Jackie 1961", rows: GUCCI_JACKIE },
+  { styleId: 561, name: "Artois", rows: GOYARD_ARTOIS },
+  { styleId: 438, name: "Pochette Métis", rows: LV_POCHETTE_METIS },
 ];
 
 async function main() {
