@@ -99,20 +99,42 @@ type AvailRow = { platform: string | null; listing_ref: string | null };
 // to reconcile too). Only 'sold' is excluded.
 const NOT_RETIRED = "listing_status.is.null,listing_status.eq.available";
 
+// The EXACT platform strings stored in price_history, i.e. every loader's PLATFORM
+// constant (supabase/ingest/sources/*.ts) plus eBay. Callers pass loose names
+// ("fashionphile", "RealReal"); we resolve them to these so the paged reads can filter
+// the indexed `platform` column by equality. Keep in sync when a new source loader lands
+// (the DB fallback in resolvePlatforms covers anything missing here, just more slowly).
+const KNOWN_PLATFORMS = [
+  "Fashionphile",
+  "The RealReal",
+  "Vestiaire Collective",
+  "eBay",
+  "The Luxury Closet",
+  "myGemma",
+  "Redeluxe",
+  "Couture USA",
+  "Ann's Fabulous Finds",
+] as const;
+
 /**
  * Resolve a loose platform name (callers pass e.g. "fashionphile" -> "Fashionphile",
- * "RealReal" -> "The RealReal") to the EXACT platform string(s) stored in
- * price_history, with ONE lightweight single-column lookup.
+ * "RealReal" -> "The RealReal") to the EXACT platform string(s) stored in price_history.
  *
  * WHY: the heavy paged reads below must filter on the indexed `platform` column by
  * equality (price_history_status_platform_idx = platform, listing_status, listing_ref).
- * A leading-wildcard `ilike('%name%')` can't use that index, so it seq-scanned the
- * whole price_history table on every page and tipped over Supabase's statement timeout
- * under load — the 57014 failure on the myGemma refresh (2026-07-13). This one lookup
- * is capped (early-stops once it has a page of matches), and everything after it filters
- * by exact `.in(platform)` so the index does the work.
+ * A leading-wildcard `ilike('%name%')` can't use that index, so it seq-scanned the whole
+ * ~138k-row table and tipped over Supabase's statement timeout under the load right after
+ * the price upserts: the 57014 failure on the myGemma refresh (2026-07-13).
+ *
+ * Fast path: match the loose name against KNOWN_PLATFORMS in memory (zero DB work, same
+ * case-insensitive substring semantics). Fallback: the capped ilike lookup, only for a
+ * platform not yet in KNOWN_PLATFORMS.
  */
 async function resolvePlatforms(loose: string): Promise<string[]> {
+  const needle = loose.toLowerCase();
+  const known = KNOWN_PLATFORMS.filter((p) => p.toLowerCase().includes(needle));
+  if (known.length > 0) return [...known];
+
   const { data, error } = await supabaseAdmin
     .from("price_history")
     .select("platform")
