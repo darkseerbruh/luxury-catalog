@@ -3,6 +3,19 @@
 
 ---
 
+## TL;DR — Production-driven faceted variant selector: engine + 5 styles across 2 brands (2026-07-12, on `main`)
+
+**A long build: the bag page now selects on production-sourced axes, and it's templated across Chanel + LV.** All green each land.
+- 🧭 **The model flipped (owner correction):** selector OPTIONS come from what the house PRODUCED (archivist matrix → `production_option`, migration 0054 APPLIED), not our listings. A produced-but-unlisted value is a real hedged **stub** ("made in this, no photo yet, add one"); grey-out = never-made only. Pipeline: `load-production-options.ts` + `seed-*-variants*.ts` (`--style`, dry-run-first).
+- 🎨 **Faceted, brand-aware axes:** Chanel = Size × Colour × **Material** (Caviar/Lambskin/Patent/Tweed); LV = Size × **Canvas** (Monogram/Damier/Empreinte) × Colour (leather lines only, hidden on print-only canvas). Each combo its own `/bag` URL. **Styles live:** Chanel Classic Flap, Boy, 2.55 Reissue; LV Speedy, Neverfull.
+- 🖼️ **Data integrity:** reseller decode classifier routes listings to the right model (`chanel-flap-classify.ts`); face-scorer vetoes wrong-model/wrong-size photos; dedup removed 63 phantom variant rows.
+- 🔎 **Search fixed:** nav click → bag page (no colour-picker step); one unified panel (hover=brands, type=matches above); killed the "Standard" pseudo-colour. Also: shop-index memoization, bag-page query fan-out (perf).
+- 📦 **Also live:** cross-line "four Chanel flap lines" module; "Made in" production-range panel; recorded-shades per colour; size chips in physical order.
+- ⬜ **YOUR TURN:** new code goes live on next prod build (auto if Vercel auto-deploys `main`, else `vercel --prod`). Migrations 0053 + 0054 already applied via GitHub Actions this session.
+- 🔭 **Next levers (parked):** template more styles (Alma/Hermès Birkin, each = 1 archivist pull + seed); LV canvas colours beyond Empreinte; Bandoulière strap as a construction toggle; Neverfull size-dedup (dup MM rows) for even faceting.
+
+---
+
 ## TL;DR — SLG-vs-bag taxonomy sweep: 13 mis-catalogued SLGs retired + Multi-Pochette hyphen bug fixed (2026-07-11, on `main`)
 
 **Follow-up to the two Chanel SLG retires (styles 171/141). A full `style`-table scan flagged 20 more bag-catalogued styles reading as SLGs; owner made the taxonomy call on each.** All green (827 tests), landed (commit `d51e77c`, merge `631fa35`).
