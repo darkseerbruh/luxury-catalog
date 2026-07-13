@@ -8,6 +8,15 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
+## VARIANT-SELECTOR levers (2026-07-12: 4 landed — see below)
+✅ 2026-07-12: Neverfull MM canvas-in-colorway dedup (merge-lv-canvas-colorway.ts); LV colours beyond Empreinte (production_option filled + Vernis added to the leather-colour split); Speedy Bandoulière construction toggle (seed-lv-strap-variants.ts); Alma templated to Size×Material×Colour + Birkin templated to a leather Material axis (seed-hermes-leather-variants.ts). Migration 0054 already applied. All on main (e5f1c3a).
+Parked follow-ons:
+- ⬜ Birkin (4): add Colour + Hardware (GHW/PHW) + Retourné/Sellier construction axes (production_option already seeded; needs colour + hardware + construction split scripts, Hermès named-colour palette not generic families).
+- ⬜ Birkin sub-style fold: merge the fragmented `Togo Birkin 35` / `Clemence Birkin 35` / `Guilloche Tadelakt` / `Niloticus Birkin Touch` / `Ostrich Birkin 35` styles (80/84/89/113/114) into style 4 as (size,leather) variants.
+- ⬜ Material dedup: `Togo leather` (mat 34) vs `Togo Leather` duplicate rows (display already collapses via cleanMaterialLabel, but the variant rows should merge). Same for any generic `Crocodile` vs species.
+- ⬜ Neverfull PM/GM canvas split: only MM has the canvas×colour facets; PM/GM Empreinte colours aren't split.
+- ⬜ Template more styles (Lady Dior, Goyard, Gucci Marmont/Jackie) = 1 archivist production pull + seed each.
+
 ## PAGE-DEPTH: descriptions + intro years on new styles (started 2026-07-10)
 *The 229 styles promoted 2026-07-09/10 are bare (name only) — descriptions dropped to 30%,
 year_introduced ~0%. Thin pages rank + convert worse. Descriptions must be SOURCED (factuality
