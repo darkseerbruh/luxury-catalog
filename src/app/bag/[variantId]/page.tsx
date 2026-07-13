@@ -32,6 +32,7 @@ import ListingsForSale from "./ListingsForSale";
 import { getHeroListing } from "@/lib/listings";
 import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
+import CareModule from "./CareModule";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
 import RequestAuthentication from "./RequestAuthentication";
@@ -1603,6 +1604,12 @@ export default async function BagDetailPage({
         styleId={v.style.styleId}
         brand={v.brand.name}
         style={v.style.name}
+      />
+
+      {/* Care for it — the OWN state. Material-aware picks + the /care shelf. */}
+      <CareModule
+        materialName={v.exteriorMaterial?.name ?? null}
+        materialLabel={v.exteriorMaterial?.name ?? null}
       />
 
       {/* Reviews & ratings */}

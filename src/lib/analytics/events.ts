@@ -103,6 +103,9 @@ export const EVENTS = {
   identifyScanStarted: "identify_scan_started",
   /** A camera identify scan finished (matched, confidence, brand, refined, kind). */
   identifyScanCompleted: "identify_scan_completed",
+  /** A click out to an Amazon care product from the care shelf — the Amazon
+   *  Associates affiliate-revenue proxy (carries `item` + optional `source`). */
+  outboundCareClicked: "outbound_care_clicked",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
