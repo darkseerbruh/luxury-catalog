@@ -142,6 +142,43 @@ export function applyEbayAffiliate(url: string, customId?: string): string {
   return `${url}${sep}${params.toString()}`;
 }
 
+// Amazon Associates for the care shelf (/care). The store/tracking id is NOT a
+// secret — it rides openly in every affiliate URL as the `tag` param — but unlike
+// eBay it is account-specific, so it stays env-configured and the channel is
+// DORMANT until it lands. With no tag set, every care link is a plain Amazon
+// search that still works; monetization is purely additive and self-activating on
+// deploy once NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG is set.
+const AMAZON_ASSOCIATES_TAG = process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG;
+
+/** True for any Amazon domain (amazon.com, amazon.co.uk, amzn.to, …). */
+export function isAmazonUrl(url: string): boolean {
+  try {
+    const h = new URL(url).hostname.toLowerCase();
+    return /(^|\.)amazon\.[a-z.]+$/.test(h) || /(^|\.)amzn\.(to|com)$/.test(h);
+  } catch {
+    return /\bamazon\.[a-z.]+|\bamzn\./i.test(url);
+  }
+}
+
+/**
+ * Build an Amazon SEARCH deep link for a care product, attributed to our
+ * Associates tag when configured. We link searches (like "Where to buy"), not
+ * held ASINs, so the live page always shows Amazon's current price and stock and
+ * we never publish a price that can go stale. Returns a plain search URL when no
+ * tag is set, so the link is never broken.
+ */
+export function amazonCareSearchUrl(query: string): string {
+  const base = `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+  return AMAZON_ASSOCIATES_TAG
+    ? `${base}&tag=${encodeURIComponent(AMAZON_ASSOCIATES_TAG)}`
+    : base;
+}
+
+/** True once an Amazon Associates tag is configured (the care shelf earns). */
+export function amazonAffiliateActive(): boolean {
+  return Boolean(AMAZON_ASSOCIATES_TAG);
+}
+
 function applyAffiliate(url: string, platform: Platform): string {
   const code = AFFILIATE_CODES[platform.paramEnv];
   let finalUrl = url;
