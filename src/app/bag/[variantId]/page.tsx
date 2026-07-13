@@ -436,7 +436,7 @@ export default async function BagDetailPage({
       : null;
   const heroImage = images[v.variantId] ?? null;
   // When the face photo is an affiliate LISTING photo (no first-party / UGC
-  // shot), the hero quietly links to buy that exact listing — same image every
+  // shot), the hero links to buy that exact listing, same image every
   // surface shows, platform context lives in the rail below. A genuine
   // first-party photo stays a plain unlinked hero.
   const heroIsAffiliate = heroImage != null && heroImage.includes("theluxurycloset.com");
