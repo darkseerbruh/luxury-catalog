@@ -62,12 +62,20 @@ import { translateProvenance } from "@/lib/provenance";
 import { BagImage } from "@/components/BagImage";
 import CompareControls from "@/components/CompareControls";
 
-export const revalidate = 3600; // ISR: bag page is now user-agnostic (per-user state is client-fetched)
-
-// On-demand ISR: render + cache each bag on first visit (empty = none prerendered at build).
-export function generateStaticParams() {
-  return [];
-}
+// Dynamic (per-request) render. This page was briefly switched to ISR
+// (`revalidate = 3600` + empty `generateStaticParams`) for the perf win, but its
+// server render tree still calls `cookies()` transitively — the public reads
+// listByStyle/listByBrand (posts), getReviews, getBagStory, getApprovedPhotos,
+// and the getCurrentUser calls in <Reviews/> + <ContributionSlots/> all go
+// through the cookie-aware Supabase client. Under on-demand ISR those run in a
+// static-generation context where `cookies()` throws DynamicServerError, which
+// surfaced as a High-severity 5xx "Server Components render error" on this route
+// in production (build passed because empty generateStaticParams renders nothing
+// at build; dev passed because dev always renders dynamically). Do NOT re-enable
+// ISR here until the whole server tree is de-cookied (route those public reads
+// through the anon getSupabase() client and move per-user bits to client islands
+// like BagActions/StickyActionBar already do).
+export const dynamic = "force-dynamic";
 
 // Dedupe the (heavy) detail fetch across generateMetadata + the page render.
 const getVariant = cache(getVariantDetail);
