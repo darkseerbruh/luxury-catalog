@@ -11,6 +11,54 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 
 ---
 
+### 2026-07-13 DECISION: Verify the `item_saved` flow before launch — 7 wired call sites, zero fires all-time
+
+- **Evidence:** `item_saved` is wired at seven call sites (`BagActions.tsx` ×2, `StickyActionBar.tsx` ×2, `ReviewForm.tsx`, `QuickSaveHeart.tsx`, `PendingSaveFlusher.tsx`) yet the pulse shows `count_all_time` = 0, `last_seen` = null (2026-07-13, all-time). Over the 30d prod journey (to 2026-07-13): variant_viewed 91 → price_history_viewed 84 → value_module_viewed 86 → **item_saved 0**. Depth engagement is strong (94% of bag-page viewers reach the value module), but the save-intent step is completely dark. The design even has a logged-out stash-and-flush path (`PendingSaveFlusher` fires `item_saved` after signup), so a save firing zero across 91 bag views and all history is more consistent with a break than with "no one saved."
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Drive the save flow end-to-end on preview** (logged-out heart → signup → flush, and a logged-in save) and confirm `item_saved` fires; fix the break if it does not | Cheapest before external traffic sets a false baseline; a break here is the "tracker reads as demand dropped" mistake | Best |
+  | Wait for external traffic, then read it | If it is a break, the first real saves go unmeasured | Acceptable only after a quick drive confirms wiring |
+  | Assume first-party noise; do nothing | Blinds the flywheel's core intent signal | Do not choose |
+- **Moves:** `item_saved` is the Intent step (`want`/`have`) feeding Maya's aspiration loop, Sofia's `have`-add, and every downstream lane. A dark save event blinds the whole engagement→monetization flywheel.
+- **Confidence:** Too thin to call a confirmed bug on counts alone (pre-launch, first-party). My read: seven wired sites + zero all-time makes a one-session live verification worth doing before launch. A leaning toward "break," not a verdict.
+- **Class:** OWNER (needs a live end-to-end drive + her call on auth-gating vs. bug; not a blind in-repo edit).
+- **Status:** OPEN
+
+---
+
+### 2026-07-13 DECISION: Wire `quiz_started` + `quiz_completed` on the /quiz page so Bet 4 becomes measurable
+
+- **Evidence:** Grep of `src/` (2026-07-13): `quiz_completed` has **zero call sites anywhere** — defined in `events.ts`, never fired by any surface. `quiz_started` fires only from the homepage `StyleReadCallout` (flag-gated), **not** from the dedicated `/quiz` page (`TasteQuizClient.tsx`), which is the route linked from the header nav, footer, About, profile, and PersonalizedRecs. `TasteQuizClient` fires no `track()` calls at all. Pulse all-time: quiz_started 2, quiz_completed 1 (last 2026-06-26) — the lone completion predates the current page and cannot recur. Bet 4 (engagement-strategy §2b: "quiz completes ~65%") is therefore untestable by construction.
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Wire `quiz_started` on first advance + `quiz_completed` (with completeness) on reaching the result**, inside `TasteQuizClient` | Makes the start→complete funnel real; fires in `next()` so the post-signup restore path is excluded | Best |
+  | Wire only `quiz_completed` | Leaves the start→complete rate uncomputable | Partial |
+  | Leave it | Bet 4 stays permanently unmeasurable | Do not choose |
+- **Moves:** the Intent step (quiz) + Bet 4 measurability. The quiz is the cold-start engine feeding recommendations → buyer affiliate (lane 1) and shareable acquisition.
+- **Confidence:** Deterministic instrumentation gap, confirmed by grep (no call site). Completion-rate reads stay pre-launch-thin until real traffic arrives.
+- **Class:** AUTO (in-repo, reversible; two `track()` calls in `TasteQuizClient`; no published number, nav, or strategy touched).
+- **Status:** DECIDED (auto-implemented 2026-07-13, commit 9d78de9) — `quiz_started` (first advance) + `quiz_completed` (with `completeness`) now fire from `TasteQuizClient.next()`; green gate passed (tsc / lint / build / 841 tests). Bet 4 is now measurable once real traffic arrives.
+
+---
+
+### 2026-07-13 DECISION: Redefine the 2026-08-10 GEO check-in as organic+AI-referral share, not "non-direct" share
+
+- **Evidence:** The 2026-08-10 check-in (DECIDED 2026-07-10) reads Bet 1 (GEO) as broken if "non-direct traffic is still under 10% of weekly visitors." But the non-direct traffic that is actually appearing is **social, not GEO**. Acquisition 7d to 2026-07-13 (n=194 visitors, +143% WoW): $direct 148 (76%), luxurycatalog.com self-ref 15, ig 11, tiktok 3, facebook 4, google.com 1. External non-direct ≈ 19 (~10%), of which ~18 is social (ig/tiktok/fb) and organic search is a single google.com hit; **zero AI-referral** (the lone chatgpt.com referrer seen 7/10–7/11 has dropped out of the 7d window). So a social bump alone could push "non-direct" over 10% and register a **false PASS** on a GEO bet that is still effectively at zero. The trigger measures the wrong thing.
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Redefine the 8/10 trigger:** GEO is broken if **organic-search + AI-referral** (chatgpt / perplexity / bing / google) share is under ~5% of weekly visitors, measured separately from social | Tests the actual bet; keeps the date | Best |
+  | Keep "non-direct <10%" | Risks a false pass from social | Do not choose |
+  | Add a second GEO-specific line alongside the existing one | Works, but cleaner to just redefine | Acceptable |
+- **Moves:** Acquisition / Bet 1 (GEO is the lead channel) — the spine feeding all five lanes. A false pass would let a broken acquisition thesis go unchallenged.
+- **Confidence:** The definitional gap is deterministic. Whether GEO is on track stays too thin to call today (organic+AI ≈ 1 visitor/7d; pre-launch indexing window runs to ~8/10). Leaning: keep the 8/10 date, fix what it measures.
+- **Class:** OWNER (edits a strategy trigger she set + the acquisition-thesis read).
+- **Status:** OPEN
+
+---
+
 ### 2026-06-29 DECISION: Add three newly-wired events to the analytics pulse query
 
 - **Evidence:** Three events were added to `src/lib/analytics/events.ts` on 2026-06-28 (commit 945281e) and are now firing from live surfaces: `article_viewed` (editorial article reads, excluding drafts), `attribute_object_viewed` (all five object pages via `AttributeObjectPage`), and `bags_compared` (side-by-side compare CTA). None of the three appear in the `journey_step_order` array in `scripts/analytics-pulse.ts`, so they produce data in PostHog but are invisible to the decision feed. The `bags_compared` event is the decision-intent signal for the Cross-Shopper overlay persona; `article_viewed` is the primary GEO/content-channel engagement signal; `attribute_object_viewed` feeds the Collector persona's depth signature. Measured as of 2026-06-29T13:40Z, n=249 30d visitors.
@@ -67,6 +115,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
   | Do nothing | The 0 is probably first-party noise, but if the CTA is actually buried this costs the backbone lane | Do not choose |
 - **Moves:** Directly moves `outbound_resale_clicked` (buyer affiliate, lane 1 -- the backbone). The model's base-case CTR assumption is 4.5%; even a buried CTA on a pre-launch site is a pre-launch fix, not a post-launch optimization.
 - **Confidence:** The n=22 is too thin to call the drop-off a real problem vs. first-party noise. My read: the first-party explanation is more likely (developer traffic does not shop), but a CTA audit costs one hour and is right to do before external traffic creates a baseline. Frame this as "pre-launch hygiene," not "the funnel is broken."
+- **Class:** OWNER (recommended action is a qualitative CTA/visual placement audit + judgment, not a blind in-repo edit).
 - **Status:** OPEN
 
 ---
@@ -76,6 +125,7 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 - **Options:** (Recommended) add `outbound_rental_clicked` to the taxonomy when you build the CTA (which is itself gated on approval), so measurement ships with the feature, vs. add it now, vs. skip.
 - **Moves:** the rental-affiliate proxy (revenue stream #2).
 - **Confidence:** low-stakes, deterministic gap, not a judgment call.
+- **Class:** OWNER (gated on the Vivrelle program clearing approval + the "Rent it first" CTA build — outward-dependent).
 
 > **Baseline note (2026-07-10, daily scan):** real_visitors 7d = 141 (+44% WoW vs 98), 30d = 386. Pre-launch mode, so counts are readiness not audience. First real non-direct traffic now present: $direct 118, ig 8, tiktok 4, facebook 4, chatgpt.com 1, cj.com 1 (7d) -- direct is down to ~84% and social + one AI referrer have appeared. Top entry pages (7d): `/` (32), `/signup` (13), `/social/instagram` (9), `/bag/589` (6), `/rankings` (5). Value proxies: `outbound_resale_clicked` all-time = 4 (last fired today 2026-07-10, so wired + live, not broken); `outbound_consign_clicked` still 0. Instrumentation: 19/40 events have fired ever; `bags_compared` + `attribute_object_viewed` (n=1) still effectively silent (see 2026-06-29 pulse-query decision). Quiz still n<3 (too thin). Top brands 30d: Chanel 23 / Hermes 18 / Coach 10 / Fendi 5 / LV 4 -- ultra-luxury skew holds but n too thin to call distribution. No section-3 urgent threshold tripped this scan. Full strategy-register walk deferred to Monday deep brief; revisit once 200+ non-direct visitors accumulate.
 >
