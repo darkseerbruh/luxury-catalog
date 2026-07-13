@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { careItemsForMaterial, careMaterialsFor } from "@/lib/bag-care";
 import CareOutboundLink from "@/components/care/CareOutboundLink";
+import { careItemImageUrl } from "@/lib/affiliate";
 
 /**
  * "Care for it" — the OWN-state module on the bag page. The rest of the page
@@ -60,11 +61,20 @@ export default function CareModule({
       </p>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        {items.map((item) => (
+        {items.map((item) => {
+          // Real Amazon product photo once PA-API is live; null today (affiliate.ts).
+          const imageUrl = careItemImageUrl(item.searchQuery);
+          return (
           <div
             key={item.key}
             className="flex flex-col rounded-xl border border-border p-4 transition-colors hover:border-gold"
           >
+            {imageUrl && (
+              <div className="mb-3 aspect-[4/3] overflow-hidden rounded-lg bg-foreground/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={imageUrl} alt={item.name} loading="lazy" className="h-full w-full object-contain" />
+              </div>
+            )}
             <p className="text-sm font-medium text-foreground">{item.name}</p>
             <p className="mt-1 text-xs leading-relaxed text-muted">{item.whatItDoes}</p>
             <CareOutboundLink
@@ -76,12 +86,13 @@ export default function CareModule({
               Find on Amazon &rarr;
             </CareOutboundLink>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <p className="mt-3 text-[11px] leading-relaxed text-muted/70">
-        Our picks, not a verdict. Test anything new on a hidden spot first. Some Amazon links are
-        affiliate links.
+        Our picks are a starting point. Test anything new on a hidden spot first. Some Amazon links
+        are affiliate links.
       </p>
       <Link
         href="/care"
