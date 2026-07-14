@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks, isCjTrackingUrl, isTheLuxuryClosetUrl, cjDeepLink, isAmazonUrl, amazonCareSearchUrl, amazonAffiliateActive } from "../affiliate";
+import { isEbayUrl, applyEbayAffiliate, affiliateListingUrl, buildRentalLinks, isCjTrackingUrl, isTheLuxuryClosetUrl, cjDeepLink, isMyGemmaUrl, isAwinTrackingUrl, awinDeepLink, isAmazonUrl, amazonCareSearchUrl, amazonAffiliateActive } from "../affiliate";
 
 const DEFAULT_CAMPID = "5339158071";
 
@@ -156,5 +156,30 @@ describe("The Luxury Closet deep-link attribution", () => {
   it("does not double-wrap an already-tracked TLC deep link", () => {
     const wrapped = cjDeepLink(raw);
     expect(affiliateListingUrl(wrapped, "The Luxury Closet")).toBe(wrapped);
+  });
+});
+
+describe("myGemma Awin deep-link attribution", () => {
+  const raw = "https://mygemma.com/products/louis-vuitton-neverfull-mm-monogram";
+
+  it("detects a raw myGemma product URL", () => {
+    expect(isMyGemmaUrl(raw)).toBe(true);
+    expect(isMyGemmaUrl("https://www.mygemma.com/x")).toBe(true);
+    expect(isMyGemmaUrl("https://theluxurycloset.com/x")).toBe(false);
+  });
+
+  it("wraps a raw myGemma URL in an Awin deep link with our ids", () => {
+    const out = affiliateListingUrl(raw, "myGemma");
+    expect(out).toContain("https://www.awin1.com/cread.php?");
+    expect(out).toContain("awinmid=59483");
+    expect(out).toContain("awinaffid=2945769");
+    // The destination rides in the URL-encoded `ued` param.
+    expect(out).toContain(`ued=${encodeURIComponent(raw)}`);
+  });
+
+  it("does not double-wrap an already-tracked Awin deep link", () => {
+    const wrapped = awinDeepLink(raw);
+    expect(isAwinTrackingUrl(wrapped)).toBe(true);
+    expect(affiliateListingUrl(wrapped, "myGemma")).toBe(wrapped);
   });
 });

@@ -477,7 +477,8 @@ export default async function BagDetailPage({
   // shot), the hero links to buy that exact listing, same image every
   // surface shows, platform context lives in the rail below. A genuine
   // first-party photo stays a plain unlinked hero.
-  const heroIsAffiliate = heroImage != null && heroImage.includes("theluxurycloset.com");
+  const heroIsAffiliate =
+    heroImage != null && (heroImage.includes("theluxurycloset.com") || heroImage.includes("mygemma.com"));
   const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId, heroImage) : null;
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)

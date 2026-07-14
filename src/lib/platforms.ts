@@ -62,6 +62,13 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
     returns: "Per The Luxury Closet's return policy",
     buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
   },
+  // Facts sourced from mygemma.com 2026-07-14 (authentication + shipping-returns pages).
+  mygemma: {
+    key: "mygemma", label: "myGemma", authenticates: "all",
+    authNote: "In-house authenticated; Certificate of Authenticity with every item",
+    returns: "14-day returns on items in original, unused condition",
+    buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
+  },
 };
 
 export interface LandedCost {

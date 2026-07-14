@@ -121,6 +121,41 @@ export function cjDeepLink(url: string): string {
   return `https://www.anrdoezrs.net/links/${CJ_PID}/type/dlg/${url}`;
 }
 
+// Awin ids for the myGemma programme (approved 2026-07-14). Neither is a secret —
+// both ride openly in every Awin click URL (like the CJ PID and eBay campaign id):
+// AWIN_AFFID is our publisher account (the /affiliate/<id>/ id), MYGEMMA_AWIN_MID is
+// myGemma's advertiser id (the approval email's "aid"). Overridable via env.
+const AWIN_AFFID = process.env.NEXT_PUBLIC_AWIN_AFFID || "2945769";
+const MYGEMMA_AWIN_MID = process.env.NEXT_PUBLIC_MYGEMMA_AWIN_MID || "59483";
+
+/** Awin click-redirect host. A link already routed through it has attribution
+ * baked in, so it must never be re-wrapped. */
+export function isAwinTrackingUrl(url: string): boolean {
+  try {
+    const h = new URL(url).hostname.toLowerCase();
+    return /(^|\.)awin1\.com$/.test(h);
+  } catch {
+    return /awin1\.com/i.test(url);
+  }
+}
+
+/** True for a raw myGemma product URL (not yet Awin-tracked). */
+export function isMyGemmaUrl(url: string): boolean {
+  try {
+    return /(^|\.)mygemma\.com$/i.test(new URL(url).hostname);
+  } catch {
+    return /mygemma\.com/i.test(url);
+  }
+}
+
+/** Wrap a raw destination URL in an Awin deep link so the click is commission-
+ * tracked. Format: https://www.awin1.com/cread.php?awinmid=<MID>&awinaffid=<AFFID>
+ * &ued=<encoded destination>. `ued` is URL-encoded by URLSearchParams. */
+export function awinDeepLink(url: string, awinmid: string = MYGEMMA_AWIN_MID): string {
+  const params = new URLSearchParams({ awinmid, awinaffid: AWIN_AFFID, ued: url });
+  return `https://www.awin1.com/cread.php?${params.toString()}`;
+}
+
 /**
  * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
  * campaign id configured this returns the URL unchanged, so eBay links always work
@@ -226,11 +261,13 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
     return applyEbayAffiliate(url);
   }
-  // Already a CJ-tracked deep link: attribution is baked in, return untouched.
-  if (isCjTrackingUrl(url)) return url;
+  // Already a CJ- or Awin-tracked deep link: attribution is baked in, return untouched.
+  if (isCjTrackingUrl(url) || isAwinTrackingUrl(url)) return url;
   // Raw The Luxury Closet product URL (from the CJ API feed): wrap in a CJ deep
   // link so the click is commission-tracked.
   if (isTheLuxuryClosetUrl(url)) return cjDeepLink(url);
+  // Raw myGemma product URL (from the Shopify feed): wrap in an Awin deep link.
+  if (isMyGemmaUrl(url)) return awinDeepLink(url);
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);
