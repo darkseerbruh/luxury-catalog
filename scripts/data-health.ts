@@ -76,13 +76,20 @@ function daysAgo(n: number, from: Date): string {
   return isoDay(new Date(from.getTime() - n * 86_400_000));
 }
 
-/** Cheap exact head-count with arbitrary filters. */
+/**
+ * Head-count with arbitrary filters. `mode: "planned"` returns the query planner's
+ * estimate (near-instant) instead of a true scan — use it for large tables where an
+ * exact count on an unindexed filter would trip Supabase's ~8s timeout (e.g. the
+ * 77k-row discovered_listing filtered by the unindexed unresolved_reason: 3.7s exact
+ * vs 0.2s planned). Only for info-only metrics; keep scored metrics exact.
+ */
 async function count(
   sb: SupabaseClient,
   table: string,
   apply: (q: ReturnType<ReturnType<SupabaseClient["from"]>["select"]>) => unknown,
+  mode: "exact" | "planned" = "exact",
 ): Promise<number> {
-  const q = sb.from(table).select("*", { count: "exact", head: true });
+  const q = sb.from(table).select("*", { count: mode, head: true });
   const { count: n, error } = (await apply(q)) as { count: number | null; error: { message: string } | null };
   if (error) throw new Error(`${table} count failed: ${error.message}`);
   return n ?? 0;
@@ -268,8 +275,10 @@ async function main() {
   const reasons = ["no_brand", "no_style", "no_variant"];
   const reasonCounts: string[] = [];
   for (const r of reasons) {
-    const n = await count(sb, "discovered_listing", (q) => q.is("promoted_variant_id", null).eq("unresolved_reason", r));
-    reasonCounts.push(`${r}: ${n}`);
+    // Planner estimate (info-only breakdown): an exact count on the unindexed
+    // unresolved_reason over 77k rows takes ~3.7s and trips the ~8s timeout under load.
+    const n = await count(sb, "discovered_listing", (q) => q.is("promoted_variant_id", null).eq("unresolved_reason", r), "planned");
+    reasonCounts.push(`${r}: ~${n.toLocaleString()}`);
   }
   checks.push({
     id: "backlog-breakdown",
