@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md; kelly-woc-saddle-chanel19-dionysus-horsebit-production-matrix.md; booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md; rockstud-kate-jodie-puzzle-bamboo-city-antigona-production-matrix.md; ophidia-triomphe-luggage-tabby-sohodisco-sacdejour-reedition-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md; kelly-woc-saddle-chanel19-dionysus-horsebit-production-matrix.md; booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md; rockstud-kate-jodie-puzzle-bamboo-city-antigona-production-matrix.md; ophidia-triomphe-luggage-tabby-sohodisco-sacdejour-reedition-production-matrix.md; loucamera-le5a7-pochetteacc-hourglass-niki-multipochette-30montaigne-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -948,6 +948,125 @@ const PRADA_RE_EDITION_2005: Row[] = [
   { axis: "color", value: "Blue", permanence: "permanent", note: "the recurring cornflower/cerulean blue; a Re-Edition signature bright (descriptor); near-permanent (permanence soft)", sort_order: 5 },
 ];
 
+// YSL Lou Camera (464), archivist-sourced 2026-07-13 — camera bag, size × material × colour × hardware-tone.
+const YSL_LOU_CAMERA: Row[] = [
+  { axis: "size", value: "Baby", permanence: "seasonal", note: "~12 x 8.5 x 4 cm; the micro Lou, evening/charm scale", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~19 x 11 cm face; the compact crossbody Lou", sort_order: 2 },
+  { axis: "size", value: "Lou", permanence: "permanent", is_default: true, note: "23 x 16 x 6 cm (ysl.com); the reference camera bag, also sold as 'Medium Lou', most cross-shopped", sort_order: 3 },
+  { axis: "material", value: "Matelasse Quilted", permanence: "permanent", is_default: true, note: "the signature matelassé quilted calfskin/lambskin; the classic Lou surface", sort_order: 1 },
+  { axis: "material", value: "Smooth Calf", permanence: "permanent", note: "smooth/plain calfskin, unquilted; the polished Lou, the colour-bearing surface", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Exotic / Embellished", permanence: "seasonal", note: "croc-embossed / metallic / studded / raffia editions, per-listing", sort_order: 4 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone metallic YSL Cassandre; the classic pairing (hardware tone carries YSL's naming weight)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone Cassandre; equally standard", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the anchor (plain descriptor)", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Dark Beige / greige neutral (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "Blanc / Crème neutral (descriptor)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Rouge; a recurring statement colour (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "Storm/grey neutral; a recurring core option (descriptor) (permanence soft)", sort_order: 5 },
+];
+
+// Saint Laurent Le 5 à 7 (467) — YSL model (DB already correctly attributes it to brand 398). Archivist-sourced
+// 2026-07-13. Clean evening hobo; DESCRIPTOR colours + hardware-tone axis. NOT Celine (Triomphe Canvas/'Teen' excluded).
+const YSL_LE_5_A_7: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "19 x 11.5 x 4.5 cm (ysl.com); the small structured evening Le 5 à 7", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~23 x 21.5 x 9 cm (Fashionphile 'regular'); the reference hobo, most cross-shopped", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "the larger hobo proportion (resellers also call it 'Large'; full cm not cleanly pinned)", sort_order: 3 },
+  { axis: "material", value: "Smooth Structured Calf", permanence: "permanent", is_default: true, note: "smooth structured calfskin; the classic Le 5 à 7, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Supple Calf", permanence: "permanent", note: "the softer 'supple' Le 5 à 7 hobo (an unstructured version)", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Croc-Embossed / Exotic", permanence: "seasonal", note: "croc-embossed calfskin or exotic editions, per-listing", sort_order: 4 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone hardware + Cassandre; the classic pairing (hardware tone carries YSL's naming weight)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone hardware; equally standard", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the anchor and the bag's signature ('the perfect little black bag'); plain descriptor", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Dark Beige / greige neutral (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "Blanc / Crème neutral (descriptor)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Rouge; a recurring statement colour (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+];
+
+// LV Pochette Accessoires (690), archivist-sourced 2026-07-13 — LV canvas-primary (Monogram default); colour only
+// on Empreinte. Current standard ships with a removable chain. NO construction/hardware axis.
+const LV_POCHETTE_ACCESSOIRES: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~15.5 x 10.5 x 4 cm (louisvuitton.com M58009); the Mini Pochette, the cult small pouch/crossbody", sort_order: 1 },
+  { axis: "size", value: "Pochette Accessoires", permanence: "permanent", is_default: true, note: "~23.5 x 13.5 x 4 cm (louisvuitton.com M82766); the standard flat zip pouch-bag; current model ships with a removable chain", sort_order: 2 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, natural vachetta trim; the default line", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim (no vachetta)", sort_order: 2 },
+  { axis: "material", value: "Damier Azur", permanence: "permanent", note: "pale check, vachetta trim", sort_order: 3 },
+  { axis: "material", value: "Empreinte", permanence: "permanent", note: "embossed calfskin; the colour-bearing line", sort_order: 4 },
+  { axis: "material", value: "Monogram Reverse", permanence: "seasonal", note: "caramel/brown reverse-Monogram canvas; intermittent runs", sort_order: 5 },
+  { axis: "material", value: "Seasonal Print / Vernis", permanence: "seasonal", note: "seasonal Monogram-print capsules, Vernis patent, per-listing", sort_order: 6 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
+// Balenciaga Hourglass (567), archivist-sourced 2026-07-13 — size × material × colour × hardware. Balenciaga NAMES
+// colours (Black/White/Beige permanent + named seasonals per-listing).
+const BALENCIAGA_HOURGLASS: Row[] = [
+  { axis: "size", value: "Nano", permanence: "seasonal", note: "the tiniest Hourglass (charm/mini top-handle), recent (cm not cleanly sourced)", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~12.7 x 9 x 5 cm; the mini top-handle with crossbody strap", sort_order: 2 },
+  { axis: "size", value: "XS", permanence: "permanent", is_default: true, note: "~19 x 12 x 7.5 cm; the reference/most-iconic Hourglass top-handle (default vs Small is soft)", sort_order: 3 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "the mid Hourglass, between XS and Medium (cm not cleanly pinned)", sort_order: 4 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~28 x 18 x 9 cm; the roomier top-handle/shoulder proportion", sort_order: 5 },
+  { axis: "material", value: "Shiny Box Calf", permanence: "permanent", is_default: true, note: "the signature shiny box/smooth calfskin; the classic structured Hourglass, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Grained Calf", permanence: "permanent", note: "grained/pebbled calfskin; the sturdier finish", sort_order: 2 },
+  { axis: "material", value: "Croc-Embossed", permanence: "permanent", note: "crocodile-embossed shiny calfskin; a recurring textured Hourglass", sort_order: 3 },
+  { axis: "material", value: "Crocodile / Exotic", permanence: "seasonal", note: "genuine crocodile / lizard / rhinestone / denim / Hacker-Project editions, per-listing", sort_order: 4 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone B buckle; the classic (the B-clasp tone often tracks the colorway)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/aged-silver B buckle; equally standard", sort_order: 2 },
+  { axis: "hardware", value: "Tonal", permanence: "seasonal", note: "colour-matched/tonal B buckle on some seasonal colorways", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "produced every season (Balenciaga names it); the anchor", sort_order: 1 },
+  { axis: "color", value: "White", permanence: "permanent", note: "produced every season (Balenciaga names it)", sort_order: 2 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "the recurring beige/sand neutral (a Balenciaga house name); near-permanent (permanence soft)", sort_order: 3 },
+];
+
+// YSL Niki (463), archivist-sourced 2026-07-13 — crinkled-leather quilted chain hobo, size × material × colour × hardware-tone.
+const YSL_NIKI: Row[] = [
+  { axis: "size", value: "Baby", permanence: "permanent", is_default: true, note: "~21 x 16 x 7.5 cm; the compact everyday Niki, most cross-shopped (resellers also label it 'Small')", sort_order: 1 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~28 x 20 x 8.5 cm; the mid hobo, the roomier everyday size", sort_order: 2 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~32 x 23 x 9 cm; the biggest Niki, the true shoulder carryall", sort_order: 3 },
+  { axis: "material", value: "Crinkled Washed Lambskin", permanence: "permanent", is_default: true, note: "the signature crinkled/washed vintage-effect quilted lambskin; the classic Niki, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Smooth Leather", permanence: "permanent", note: "smooth/plain quilted calfskin; the cleaner Niki variant", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Exotic / Embellished", permanence: "seasonal", note: "croc-embossed / metallic / denim / studded editions, per-listing", sort_order: 4 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone worn/aged-effect Cassandre; the classic pairing (hardware tone carries YSL's naming weight)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone worn-effect Cassandre; equally standard", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the anchor (plain descriptor)", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Dark Beige / greige neutral (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "Blanc / Crème neutral (descriptor)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Rouge; a recurring statement colour (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "Storm/grey neutral; a recurring core option (descriptor) (permanence soft)", sort_order: 5 },
+];
+
+// LV Multi Pochette Accessoires (444), archivist-sourced 2026-07-13 — the 2019 three-piece; canvas-primary but the
+// STRAP colour is the signature variant. One core size. NO hardware/construction axis.
+const LV_MULTI_POCHETTE_ACCESSOIRES: Row[] = [
+  { axis: "size", value: "One size", permanence: "permanent", is_default: true, note: "the 2019 three-piece set: large Pochette (~21 cm) + round coin purse + card holder on one removable strap", sort_order: 1 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, natural vachetta trim; the default line", sort_order: 1 },
+  { axis: "material", value: "Monogram Empreinte", permanence: "permanent", note: "embossed calfskin; the colour-bearing leather line", sort_order: 2 },
+  { axis: "material", value: "Bicolor / Reverse", permanence: "seasonal", note: "bicolour Empreinte or Monogram Reverse canvas seasonal runs, per-listing", sort_order: 3 },
+  { axis: "material", value: "Seasonal Print", permanence: "seasonal", note: "seasonal Monogram-print / By-the-Pool / capsule editions, per-listing", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the classic all-black strap + Empreinte 'Noir'; the anchor (the strap is the variant)", sort_order: 1 },
+  { axis: "color", value: "Rose Clair", permanence: "permanent", note: "the pale-pink strap — the iconic 2019 launch look; the signature bright strap (permanence soft)", sort_order: 2 },
+  { axis: "color", value: "Khaki", permanence: "permanent", note: "the khaki-green strap/round-purse — the other half of the launch bicolour signature (permanence soft)", sort_order: 3 },
+];
+
+// Dior 30 Montaigne (455), archivist-sourced 2026-07-13 — CD-clasp flap, colour-primary + size + material. Dior NAMES
+// colours. Antique-gold CD clasp fixed (no hardware axis).
+const DIOR_30_MONTAIGNE: Row[] = [
+  { axis: "size", value: "Micro", permanence: "permanent", note: "~15 x 10 x 3 cm (Fashionphile); the SLG-scale mini flap/crossbody", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "the compact flap between Micro and Small (cm not cleanly pinned)", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~21 cm base x 17 tall (saclab); the reference 30 Montaigne flap, most cross-shopped", sort_order: 3 },
+  { axis: "size", value: "East-West", permanence: "permanent", note: "the elongated horizontal flap (a distinct format on the same CD clasp); a newer resale-popular shape", sort_order: 4 },
+  { axis: "size", value: "Avenue", permanence: "seasonal", note: "the '30 Montaigne Avenue' chain flap (a distinct format with a chain + CD clasp); newer, per-listing", sort_order: 5 },
+  { axis: "material", value: "Box Calf", permanence: "permanent", is_default: true, note: "smooth box calfskin; the classic structured 30 Montaigne, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Grained Calf", permanence: "permanent", note: "grained/pebbled calfskin; the sturdier finish", sort_order: 2 },
+  { axis: "material", value: "Oblique Jacquard", permanence: "permanent", note: "the diagonal 'Dior' Oblique jacquard canvas (Bohan 1967 motif), trimmed in calfskin; the logo 30 Montaigne", sort_order: 3 },
+  { axis: "material", value: "Exotic / Embellished", permanence: "seasonal", note: "alligator / ombré / Toile de Jouy / embroidered editions, per-listing", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black box calf + antique-gold CD = the reference 30 Montaigne", sort_order: 1 },
+  { axis: "color", value: "Latte", permanence: "permanent", note: "Dior's signature warm beige/nude, a standing 30 Montaigne neutral (Dior names it)", sort_order: 2 },
+  { axis: "color", value: "Blue", permanence: "permanent", note: "deep/sky blue; a recurring house colour (Dior names it); near-permanent (permanence soft)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Dior's recurring red; near-permanent (permanence soft)", sort_order: 4 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
@@ -990,6 +1109,13 @@ const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 450, name: "Soho Disco", rows: GUCCI_SOHO_DISCO },
   { styleId: 461, name: "Sac de Jour", rows: YSL_SAC_DE_JOUR },
   { styleId: 202, name: "Re-Edition 2005", rows: PRADA_RE_EDITION_2005 },
+  { styleId: 464, name: "Lou Camera", rows: YSL_LOU_CAMERA },
+  { styleId: 467, name: "Le 5 à 7", rows: YSL_LE_5_A_7 },
+  { styleId: 690, name: "Pochette Accessoires", rows: LV_POCHETTE_ACCESSOIRES },
+  { styleId: 567, name: "Hourglass", rows: BALENCIAGA_HOURGLASS },
+  { styleId: 463, name: "Niki", rows: YSL_NIKI },
+  { styleId: 444, name: "Multi Pochette Accessoires", rows: LV_MULTI_POCHETTE_ACCESSOIRES },
+  { styleId: 455, name: "30 Montaigne", rows: DIOR_30_MONTAIGNE },
 ];
 
 async function main() {
