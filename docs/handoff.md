@@ -3,6 +3,15 @@
 
 ---
 
+## TL;DR — Ingest workflows unblocked: reconcile + summary-refresh statement-timeout fixes (2026-07-13, on `main`)
+
+**The myGemma refresh Action failed with Postgres `57014` (statement timeout). Two root causes fixed + verified; the whole workflow now passes green.** No new preferences; the durable gotcha is in memory ([[supabase-statement-timeout]]).
+- ⏱️ **Reconcile (commit `df07395`):** `reconcile-sold.ts` matched `platform` with a leading-wildcard `ilike('%name%')` that seq-scanned all ~138k `price_history` rows and tipped over the 8s limit. Now resolves the loose name to exact stored strings in-memory (`KNOWN_PLATFORMS`) and reads via `.in('platform', …)` so `price_history_status_platform_idx` does the work. Verified: step retired 73 rows and completed.
+- 🗄️ **Summary refresh (migration `0055`, APPLIED):** `refresh_variant_price_summary()` (MV rebuild over all rows) now takes ~7.3s and was intermittently crossing the same 8s wall even idle. Scoped `set statement_timeout = '180s'` onto that one function. Fixes every ingest workflow's final `summary:refresh` step **and** the `/api/cron/price-summary` twin, not just myGemma. Verified: RPC returns 204 in 7.3s; full myGemma run `29271266812` = success.
+- ✅ **Nothing pending.** Migration 0055 applied via the `db-migrate.yml` runner this session; no outward-facing items left.
+
+---
+
 ## TL;DR — The care shelf: OWN-state surface + dormant Amazon Associates channel (2026-07-13, on branch `claude/bag-adjacent-products-ypl7pc`, PR-ready)
 
 **Off the owner's "Amazon list of bag-adjacent products" idea. Built Option A: a `/care` hub + a material-aware bag-page module.** Serves the OWN state, which had no surface (the site covered want/buy/sell). Activates the parked Amazon Associates care/accessories revenue line from `docs/monetization-projections.md`. All green (tsc, lint, 860 tests; `next build` compiles + typechecks, prerender blocked only by the known DB-less-container `supabaseKey` limit, verified identical on a clean stash).
