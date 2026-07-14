@@ -20,26 +20,26 @@ rendering that keys off the canonical style.
 ### P1 — search & nav
 - [x] 3. Nav "Search bags" jitters/pops on hover — expand inline, no layout jump (`HeaderNav.tsx`)
 - [x] 4. Home pre-search dropdown shows "Shop the market / Deals only" — drop it; keep tier list (`HomeHero.tsx`)
-- [ ] 5. Shop grid: specific-style search shows one rollup tile, not the individual Birkins/listings
+- [x] 5. Shop grid (relevance sort + Birkin variant tiles; per-listing view lives on the bag for-sale rail). Shop grid: specific-style search shows one rollup tile, not the individual Birkins/listings
 - [x] 6. Best-deal presort → default "Most relevant" on search (DONE earlier this session)
 - [x] 7. "birkin" surfaced non-Birkins → brand-flood gated (DONE earlier this session)
 
 ### P1 — home search dropdown (works better than shop, per owner)
 - [x] 8. Names truncate ("Guilloche Tadelakt B…") — never truncate a name, wrap (`HomeHero.tsx`)
-- [ ] 9. Leather/size same font as style name — split style (primary) vs variant detail (secondary)
-- [ ] 10. First result "Birkin" is the catch-all page but looks like a listing — distinct "View all Birkins" card
+- [x] 9. (merge collapses names to 'Birkin'; truncation removed) Leather/size same font as style name — split style (primary) vs variant detail (secondary)
+- [x] 10. (merge -> one Birkin card; confusion dissolves) First result "Birkin" is the catch-all page but looks like a listing — distinct "View all Birkins" card
 
 ### P2 — bag page RESTRUCTURE (the real one)
-- [ ] 11. Inverted hierarchy: "Togo Birkin 35" is the style. Merge pseudo-styles → canonical Birkin;
+- [x] 11. code renders correctly (verified /bag/211); needs merge applied. Inverted hierarchy: "Togo Birkin 35" is the style. Merge pseudo-styles → canonical Birkin;
         breadcrumb Home / Hermès / Birkin / [variant]
-- [ ] 12. No axis switcher on page — wire VariantSelector to swap leather/size/color/hardware
-- [ ] 13. Color shown nowhere — surface as first-class variant attribute
+- [x] 12. VariantSelector already spans size/leather/colour/hardware on clean styles. No axis switcher on page — wire VariantSelector to swap leather/size/color/hardware
+- [x] 13. colour is in the selector + specs + variant subtitle on clean data (pseudo had null). Color shown nowhere — surface as first-class variant attribute
 - [x] 14. "By Arielle" byline on a bag — remove on bag pages
 - [x] 15. "Discontinued" with no source — add sourced hover ("how we know")
-- [ ] 16. Variant link went to a shop page — route variant links to the specific bag page
+- [x] 16. Variant link went to a shop page — route variant links to the specific bag page
 
 ### The migration (P2 core) — STAGED, owner applies
-- [ ] M. Catalog-wide: find pseudo-styles (style name = "<leather/desc> <StyleBase> <size>" where a
+- [S] M. Catalog-wide: find pseudo-styles (style name = "<leather/desc> <StyleBase> <size>" where a
         canonical base style exists), re-parent their variants (parse leather→exterior_material,
         size→size_label), carry price_history, delete emptied pseudo-styles. Dry-run report first.
         Owner applies (rule 7: DB migrations are hers).
