@@ -39,15 +39,12 @@ export default function CarePage() {
       />
 
       <header className="mb-6">
-        <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Care your bag</p>
+        <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-gold">Bag care essentials</p>
         <h1 className="font-serif text-3xl text-foreground">The care shelf</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          You found it, you bought it, now it&apos;s yours to keep. A good bag rewards a
-          little upkeep, and loses value when it goes without.
-        </p>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-          This is the small shelf we&apos;d keep beside a collection: what shapes it, cleans
-          it, and protects it, grouped by the job it does.
+          A good bag rewards a little upkeep, and loses value when it goes without. This is the
+          small shelf we&apos;d keep beside a collection: what shapes it, cleans it, and protects
+          it, grouped by the job it does.
         </p>
         <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted/80">
           Our picks are a starting point. Leather is unforgiving, so test anything new on a
