@@ -40,6 +40,44 @@ describe("canonicalModel — Chanel 'Timeless' line", () => {
 });
 
 /**
+ * Top Handle Rectangular Flap (2026-07-14 comps-remap): FP/TRR list the modern
+ * top-handle rectangular mini as its own model, but "rectangular flap" rolled it
+ * into Classic Flap, which is how Classic Flap comps polluted style #906 and vice
+ * versa. The def must claim handle+flap titles without touching the vintage Kelly,
+ * the Coco Handle, or the handle-less square/rectangular minis (0709 roll-up).
+ */
+describe("canonicalModel — Chanel Top Handle Rectangular Flap", () => {
+  it("claims top-handle flap titles (FP + TRR phrasings)", () => {
+    expect(
+      canonicalModel("Chanel", "Lambskin Quilted Mini Top Handle Rectangular Flap So Black"),
+    ).toBe("Top Handle Rectangular Flap");
+    expect(
+      canonicalModel("Chanel", "Metallic Caviar Quilted Mini Top Handle Rectangular Flap Silver"),
+    ).toBe("Top Handle Rectangular Flap");
+    expect(
+      canonicalModel("Chanel", "Rectangular Mini Classic Top Handle Flap Bag"),
+    ).toBe("Top Handle Rectangular Flap");
+    expect(canonicalModel("Chanel", "2026 Quilted CC Handle Flap Bag")).toBe(
+      "Top Handle Rectangular Flap",
+    );
+  });
+
+  it("keeps handle-less square/rectangular minis rolling up to Classic Flap", () => {
+    expect(canonicalModel("Chanel", "Classic Mini Square Flap Bag")).toBe("Classic Flap");
+    expect(canonicalModel("Chanel", "Chanel Mini Rectangular Flap Bag Black Lambskin")).toBe("Classic Flap");
+    expect(
+      canonicalModel("Chanel", "Auth CHANEL Matelasse Lambskin Black Mini Flap Chain Shoulder Bag"),
+    ).toBe("Classic Flap");
+  });
+
+  it("never swallows the other top-handle flaps (Kelly, Coco Handle, Trendy CC)", () => {
+    expect(canonicalModel("Chanel", "Chanel Vintage Kelly Flap Bag Top Handle")).toBe("Kelly Flap");
+    expect(canonicalModel("Chanel", "Chanel Quilted Coco Top Handle Flap Bag")).toBe("Coco Handle");
+    expect(canonicalModel("Chanel", "Chanel Trendy CC Top Handle Flap Bag")).toBe("Trendy CC");
+  });
+});
+
+/**
  * Slug-reconstructed titles (2026-07-09): titles rebuilt from source_url slugs have
  * every separator flattened to a space ("d-lite" -> "d lite", "2.55" -> "2 55"), which
  * made punctuated model tokens unmatchable and over-flagged the mis-map re-triage.
