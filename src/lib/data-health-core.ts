@@ -108,6 +108,14 @@ export interface SourceConfig {
   label: string;
   /** ilike fragment matched against price_history.platform (labels vary, e.g. "The RealReal"). */
   platformMatch: string;
+  /**
+   * The EXACT platform string stored in price_history (the loader PLATFORM constant).
+   * Queries filter the indexed `platform` column by equality against this; the loose
+   * `platformMatch` ilike stays only as a fallback. Keep in sync with the loaders and
+   * reconcile-sold's KNOWN_PLATFORMS. A leading-wildcard ilike seq-scans ~138k rows and
+   * trips Supabase's ~8s statement timeout once a source's table grows.
+   */
+  platform: string;
   /** null → info-only source (never scores). */
   greenMaxDays: number | null;
   yellowMaxDays: number | null;
@@ -122,6 +130,7 @@ export const SOURCES: SourceConfig[] = [
     id: "fashionphile",
     label: "Fashionphile",
     platformMatch: "%fashionphile%",
+    platform: "Fashionphile",
     greenMaxDays: 1,
     yellowMaxDays: 2,
     configuredIntervalDays: 0.125,
@@ -131,6 +140,7 @@ export const SOURCES: SourceConfig[] = [
     id: "therealreal",
     label: "TheRealReal",
     platformMatch: "%realreal%",
+    platform: "The RealReal",
     greenMaxDays: 3,
     yellowMaxDays: 5,
     configuredIntervalDays: 2,
@@ -140,6 +150,7 @@ export const SOURCES: SourceConfig[] = [
     id: "tlc",
     label: "The Luxury Closet",
     platformMatch: "%luxury closet%",
+    platform: "The Luxury Closet",
     greenMaxDays: 2,
     yellowMaxDays: 3,
     configuredIntervalDays: 1,
@@ -149,6 +160,7 @@ export const SOURCES: SourceConfig[] = [
     id: "ebay",
     label: "eBay (sold)",
     platformMatch: "%ebay%",
+    platform: "eBay",
     greenMaxDays: null,
     yellowMaxDays: null,
     configuredIntervalDays: null, // dispatch-only: exempt from the cadence audit

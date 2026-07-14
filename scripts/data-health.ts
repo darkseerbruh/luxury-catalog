@@ -56,6 +56,7 @@ import {
   spliceWorklist,
   type CheckResult,
   type HealthState,
+  type SourceConfig,
 } from "../src/lib/data-health-core";
 import { LC_INDEX_MIN_N, LC_INDEX_MIN_SOURCES } from "../src/lib/lc-index";
 
@@ -87,16 +88,21 @@ async function count(
   return n ?? 0;
 }
 
-/** Age in days of the newest observed_on for a platform match, or null when none. */
-async function freshnessAge(sb: SupabaseClient, platformMatch: string, now: Date): Promise<number | null> {
+/**
+ * Age in days of the newest observed_on for a source, or null when none.
+ * Filters the indexed `platform` column by equality (exact string) — a leading-wildcard
+ * ilike here seq-scans ~138k rows and trips Supabase's ~8s statement timeout once a
+ * source's table grows (Fashionphile crossed ~20k rows on 2026-07-14).
+ */
+async function freshnessAge(sb: SupabaseClient, source: SourceConfig, now: Date): Promise<number | null> {
   const { data, error } = await sb
     .from("price_history")
     .select("observed_on")
-    .ilike("platform", platformMatch)
+    .eq("platform", source.platform)
     .not("observed_on", "is", null)
     .order("observed_on", { ascending: false })
     .limit(1);
-  if (error) throw new Error(`freshness(${platformMatch}) failed: ${error.message}`);
+  if (error) throw new Error(`freshness(${source.platform}) failed: ${error.message}`);
   const newest = data?.[0]?.observed_on as string | undefined;
   if (!newest) return null;
   return (now.getTime() - new Date(`${newest}T00:00:00Z`).getTime()) / 86_400_000;
@@ -131,7 +137,7 @@ async function main() {
 
   // ── A. Freshness per source ──────────────────────────────────────────────
   for (const source of SOURCES) {
-    checks.push(scoreFreshness(source, await freshnessAge(sb, source.platformMatch, now)));
+    checks.push(scoreFreshness(source, await freshnessAge(sb, source, now)));
   }
 
   // ── B. Capture sanity (date_recorded is a DATE, so ">= yesterday" spans
@@ -281,7 +287,7 @@ async function main() {
         sb
           .from("price_history")
           .select("source_url")
-          .ilike("platform", "%realreal%")
+          .eq("platform", "The RealReal")
           .gte("date_recorded", weekAgo)
           .order("price_id", { ascending: true }),
       20000,
@@ -419,7 +425,7 @@ async function main() {
         sb
           .from("price_history")
           .select("listing_ref, observed_on, delisted_on")
-          .ilike("platform", source.platformMatch)
+          .eq("platform", source.platform)
           .eq("listing_status", "sold")
           .gte("delisted_on", monthAgo)
           .order("price_id", { ascending: true }),
