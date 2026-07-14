@@ -400,6 +400,7 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **First-person opinion hooks get NO robotic statistical hedging** — her take on one specific bag IS the hedge (the narrow exception; on-site value claims still hedge + cite).
 - **Text-card reels = one held clip (no cuts), text on screen from frame 0 (no pop-in), Playfair serif uniform** (not the per-word caption sweep), brand footer lifted off the bottom.
 - **Accessibility is non-negotiable:** min on-screen text 46px (headline ≥56); cream text ALWAYS on a dark backing (shadow alone fails on bright footage); verify on the BRIGHTEST frame.
+- **Safe zone, EVERY video, every format:** nothing critical below y1400, right of x900 below y620, or above y150; list/recap thumbnails LEFT (never the right rail); captions center, not the lower third. Verify against the TikTok UI zones before delivering (flagged 2026-07-14). Detail: `docs/video-accessibility.md` §1a.
 - **Footage:** no people walking into frame (trim or replace); match motion to the message (low-motion window under calm copy); keep text off a centered subject (`pos:"top"`).
 - **Per-type layout:** tips posts = headline + small "(more in caption)"; listicles ("Hills I will die on") = the bulleted list ON the page; confessional = shrinking line sizes.
 - **Publish-time default = 10:00 ET, then 18:00, then 12:00; one post per slot per day.** Metricool best-time peak on both IG + TikTok (2026-07-06). Canonical: `docs/social-content-calendar.md` §3.5.
