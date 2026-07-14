@@ -191,7 +191,20 @@ only be as good as these fields. This is the existing attribute-capture pass
      turnlock at the bottom edge). Tentative merge → #79 REFUSED: #79's own
      description is a RED ZIP-TOP chain bag — a different bag, and #79 itself is
      now flagged (junk listing-dump description, unverified identity, 0 comps).
-11. Remaining lanes: #79 identity/description fix (flagged as a spawned task) ·
-   fresh capture for the 433 too-thin variants + the zero-comp ex-junk styles ·
-   the 1,466 multi-colour buckets = the variant-levers colour-splitter lane
-   (active elsewhere; do not duplicate).
+11. ✅ #79 identity fix DONE (2026-07-14): seed photos pulled from data/raw
+   (therealreal_data-1.csv ref CHA674812, Photos column) and looked at, then an
+   archivist web pass pinned the reseller-consensus family — RENAMED "Vintage
+   Quilted Shoulder Bag" → **"Vintage CC Charm Tote"** (Rebag carries it as
+   taxonomy family HB.CH.VCCCT.QULA.*; myGemma/eBay/1stDibs concur; no official
+   Chanel name, Regime B). Junk seller-dump description replaced via the
+   review-gated apply-style-depth flow (style-depth-79.json); v361 attributes
+   set from the photos (Red, Lambskin, gold, "chain with leather weave" — the
+   old strap_type "16" was the CSV strap-DROP mis-mapped); old title kept
+   searchable in bag_alias. Era reads late-1980s–90s on markers + seller
+   attribution only → year_introduced stays null. Scripts:
+   fix-style-79.ts (+rollback-style-79.json, holds the old seller-dump text).
+   The §10 merge refusal stands confirmed: #191 (full-front-flap) ≠ #79
+   (zip-top chain tote). #79 still has 0 comps → it rides the fresh-capture lane.
+12. Remaining lanes: fresh capture for the 433 too-thin variants + the
+   zero-comp ex-junk styles (#79 now included) · the 1,466 multi-colour buckets
+   = the variant-levers colour-splitter lane (active elsewhere; do not duplicate).
