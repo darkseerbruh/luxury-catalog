@@ -35,6 +35,33 @@ const STRING_FIELDS = ["season", "colorway", "material", "hardware_color"] as co
 const MIN_YEAR = 1950;
 const maxYear = () => new Date().getFullYear() + 1;
 
+/**
+ * Model names that CONTAIN a year ("Gucci Jackie 1961", Fendi's "FF 1974" jacquard,
+ * Prada "Re-Edition 2005/2000", Bottega "Lauren 1980"). The LLM extractor reads these
+ * as production years — 1,300+ contaminated rows found 2026-07-14, which fed wrong
+ * decades into the bag-page era lens. If the extracted year appears in the source
+ * text only inside one of these phrases, it is the bag's NAME, not its birth year.
+ */
+export const MODEL_NAME_YEARS: { year: number; phrase: RegExp }[] = [
+  { year: 1961, phrase: /jackie\s*1961/i },
+  { year: 1974, phrase: /(ff|jacquard)\s*1974/i },
+  { year: 2005, phrase: /re-?edition\s*2005/i },
+  { year: 2000, phrase: /re-?edition\s*2000/i },
+  { year: 1980, phrase: /lauren\s*1980/i },
+];
+
+/** Null a model-name year unless the text ALSO states it outside the phrase. */
+export function stripModelNameYear(spec: ItemSpec, sourceText: string): ItemSpec {
+  const y = spec.production_year;
+  if (y == null) return spec;
+  const hit = MODEL_NAME_YEARS.find((m) => m.year === y && m.phrase.test(sourceText));
+  if (!hit) return spec;
+  // Does the year appear anywhere OUTSIDE the model phrase? Then it may be genuine.
+  const withoutPhrase = sourceText.replace(new RegExp(hit.phrase.source, "gi"), " ");
+  if (new RegExp(`\\b${y}\\b`).test(withoutPhrase)) return spec;
+  return { ...spec, production_year: null };
+}
+
 /** Build the extraction prompt for a listing's title + description text. */
 export function buildSpecPrompt(text: string): string {
   return [
