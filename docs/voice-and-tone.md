@@ -403,9 +403,9 @@ taste.
 
 ### The blacklist (never use these — they read as AI). Added 2026-06-25.
 - **Words:** crucial, delve, realm, robust, seamless, unlock, empower, leverage, elevate,
-  boasts, nestled, bustling, tapestry, testament, foster, pivotal, myriad, "navigate the
+  boasts, nestled, bustling, tapestry, testament, foster, pivotal, myriad, quietly, "navigate the
   landscape," "embark on a journey." Reach for the plain word (important, dig into, area,
-  strong, smooth) or cut.
+  strong, smooth) or cut. ("quietly" added 2026-07-13, owner call: "quietly loses value" reads AI; name the mechanism plainly.)
 - **Filler transitions:** Moreover, Furthermore, Additionally, "That said," "Ultimately,"
   "At the end of the day," "It's worth noting," "It's important to note." Cut them and
   start the sentence.

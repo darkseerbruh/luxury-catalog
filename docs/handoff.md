@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Care shelf polish + Amazon image seam pre-wired (2026-07-13, on `main`)
+
+**The /care "care shelf" (own-state accessory surface, shipped in #45) got a copy pass + a decision locked on product images. All landed to `main`.**
+- 🖇️ **Discoverability:** cross-linked the `/closet` Have section → `/care` (own-state → own-state; commit `60eb44c`). `/care` is in the footer (relabeled **"Bag care essentials"** to match the page eyebrow, `10fb8cb`) + the bag-page CareModule; NOT in the header nav (owner-protected placement, still her call).
+- ✂️ **Voice:** banned **"quietly"** sitewide (AI tell; scrubbed 6 copy spots + 3 comments, `a0b0b47`; added to voice-and-tone.md blacklist). Cut **"not a verdict"** from /care + CareModule (`1ec3b59`). Tightened the /care header: eyebrow → "Bag care essentials", cut the "You found it, you bought it" opener, merged the two intro sentences (`425dc1c`).
+- 🖼️ **Images decision (owner):** rejected abstract illustrations ("those icons mean nothing"). Locked **clean text now → real Amazon photos later**. Pre-wired the seam `careItemImageUrl()` in `src/lib/affiliate.ts` (returns null today; the card + CareModule reserve the slot, render nothing until a URL exists; commit `444c43b`). `img-src` already permits https hosts, so no CSP change needed when photos land.
+- 🔑 **Amazon status (unchanged, verified 2026-07-13):** Associates still DEFERRED to ~2-4 wks pre-launch. Real product photos need PA-API = **3 qualifying sales in the first 180 days** (rolling to maintain); **self/friend/family purchases don't count + risk a ban**. The tagged search links earn WITHOUT PA-API, so text links drive the first sales that unlock the images. Full detail in memory [[care-shelf-amazon-images]].
+- ⬜ **YOUR TURN (nothing blocking):** (a) apply to Amazon Associates ~2-4 wks pre-launch + set `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG`, then point some social traffic at `/care` to bank the first 3 sales; (b) implement `careItemImageUrl()` once PA-API creds exist (one function, images auto-appear); (c) optional: a header-nav slot for `/care`.
+
+---
+
 ## TL;DR — Ingest workflows unblocked: reconcile + summary-refresh statement-timeout fixes (2026-07-13, on `main`)
 
 **The myGemma refresh Action failed with Postgres `57014` (statement timeout). Two root causes fixed + verified; the whole workflow now passes green.** No new preferences; the durable gotcha is in memory ([[supabase-statement-timeout]]).
