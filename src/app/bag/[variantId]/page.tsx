@@ -345,6 +345,13 @@ export default async function BagDetailPage({
     .filter(Boolean)
     .join(" · ") || "Variant";
 
+  // The style crumb lands on the style's own page — a bag page carrying the variant
+  // selector — not a /search results page (owner UX review 0714 #16: clicking the
+  // style name should open the bag, not a shop grid).
+  const styleHomeVariantId =
+    (styleVariants.find((s) => s.sizeLabel && s.sizeLabel !== "Standard") ?? styleVariants[0])?.variantId ??
+    v.variantId;
+
   const yearRange = v.yearStart
     ? v.yearEnd
       ? `${v.yearStart}–${v.yearEnd}`
@@ -750,7 +757,7 @@ export default async function BagDetailPage({
         </Link>
         <span>/</span>
         <Link
-          href={`/search?q=${encodeURIComponent(v.style.name)}`}
+          href={`/bag/${styleHomeVariantId}`}
           className="hover:text-foreground"
         >
           {v.style.name}
