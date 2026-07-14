@@ -60,7 +60,10 @@ they reflect what Fendi made, not our listing coverage.
 - [ ] **17. Sticky selector header.** Small thumb + selected variant pinned on scroll, so the
   worth chart etc. always has context. File: `StickyActionBar.tsx` (exists — extend).
 - [ ] **18. On-hover availability (Amazon pattern).** Grey-out / strike combos the house never
-  made. GATED on the archivist Baguette production pull (canon data first).
+  made. Archivist canon is IN (`docs/research-drafts/fendi-baguette-production-canon.md`):
+  Baguette Mini in blue = YES (do not strike). DB load of the production matrix is owner-gated
+  (migration = hers). Also flagged: Micro/Small/Large/Maxi/Midi are RESELLER labels, official
+  Fendi sizes are Nano/Mini/Baguette(Medium)/Chain Midi/Mamma — belongs in the alias layer.
 - [ ] **19. Bag DNA reconcile.** Spec is `docs/ux/object-oriented-ux.md` + mockup
   `docs/ux/mockups/bagdna.png` (6-card grid: House/Leather/Hardware/Shape/Era/Designer). Fixes:
   House card subtitle must be a heritage line (e.g. "est. 1997 · Italy"), NOT the raw tier number
