@@ -719,3 +719,13 @@ UX-lane design session, all landed on `main` (`5454b82..5b48d05`, 8 commits, gat
 - **Queued (on the slate/worklist):** the **"Why are these the it bags of all time?"** article (archivist top-20 backbone, [content-ideas.md](research-drafts/seasonal-archive/content-ideas.md)) + **3 catalog data-pull gaps** (Balenciaga City, Mulberry Bayswater, Telfar Shopping Bag) in [data-content-worklist.md](data-content-worklist.md), plus a `condition` backfill (chip) so the verdict can become condition-aware.
 - **Your turn (owner-gated):** apply the `variant_price_summary()` migration when you want the perf fix; the article draft + the 3 data pulls are Content/Data-lane jobs.
 
+
+---
+
+## TL;DR — The care shelf: OWN-state surface + dormant Amazon Associates channel (2026-07-13, PR-ready; SUPERSEDED by the landed "Care shelf polish" entry)
+
+**Off the owner's "Amazon list of bag-adjacent products" idea. Built Option A: a `/care` hub + a material-aware bag-page module.** Serves the OWN state, which had no surface (the site covered want/buy/sell). Activates the parked Amazon Associates care/accessories revenue line from `docs/monetization-projections.md`.
+- 🧴 **`/care` hub** (`src/app/care/page.tsx`): 18 curated products grouped by job, jump-nav, ItemList JSON-LD for GEO. Registry + material helpers in `src/lib/bag-care.ts`.
+- 👜 **Material-aware `CareModule`** on the bag page: reads `exteriorMaterial`, shows the 2-3 items that fit that finish, routes to the hub.
+- 💰 **Amazon Associates, dormant + self-activating**: each product deep-links an Amazon SEARCH; plain until `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` is set, then commission-tagged. `outbound_care_clicked` is the proxy event.
+- 📝 Companion article drafted: `docs/research-drafts/how-to-care-for-a-designer-bag-draft.md`.
