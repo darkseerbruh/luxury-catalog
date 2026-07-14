@@ -167,7 +167,25 @@ only be as good as these fields. This is the existing attribute-capture pass
    distinct listing states the SAME year (seasonal-piece signature, mostly 2021/22).
    Spread evidence (179 variants) stays null by design — listings can't bound a
    production range; the era lens renders it honestly. year_end never filled.
-10. Remaining lanes: image pass for the 4 interim-named Chanel rows · fresh capture
-   for the 433 too-thin variants + the zero-comp ex-junk styles · the 1,466
-   multi-colour buckets = the variant-levers colour-splitter lane (active
-   elsewhere; do not duplicate).
+10. ✅ Image pass DONE (2026-07-14 night, apply-image-pass-chanel.ts + rollback):
+   seed photos recovered from the 2022 TLC export (data/raw, Photos column) and
+   verified by eye. **Seller-title check now 0 🟢** (was 21 at baseline).
+   - #167 Vintage Chevron Flap → MERGED into Classic Flap (#1): the photo is a
+     chevron-quilted classic double flap (CC turnlock, woven chain) — chevron is
+     a quilting option, a variant trait wearing a style name.
+   - #178 kept (no merge into #185 — photo shows a Mademoiselle TURNLOCK + flat
+     leather strap vs #185's push-lock + chain: different bags). Variant material
+     corrected lambskin → caviar per the photo; its one kept eBay comp
+     ("…Lambskin…Chain Shoulder Bag") contradicted the sharpened identity and was
+     evicted to discovered_listing. Model name still open (archivist web pass).
+   - #189 → "Vintage Front Pocket Tote": NONE of the four guesses (GST/Medallion/
+     PST/Cerf) — it's the 90s caviar open-top shopper with the CC-turnlock front
+     pocket. New name also stops baking material into the style name.
+   - #191 → "Vintage Full Flap" (black lambskin, flap covers the whole front, CC
+     turnlock at the bottom edge). Tentative merge → #79 REFUSED: #79's own
+     description is a RED ZIP-TOP chain bag — a different bag, and #79 itself is
+     now flagged (junk listing-dump description, unverified identity, 0 comps).
+11. Remaining lanes: archivist web pass to name #178 · #79 identity/description fix
+   (flagged as a spawned task) · fresh capture for the 433 too-thin variants + the
+   zero-comp ex-junk styles · the 1,466 multi-colour buckets = the variant-levers
+   colour-splitter lane (active elsewhere; do not duplicate).
