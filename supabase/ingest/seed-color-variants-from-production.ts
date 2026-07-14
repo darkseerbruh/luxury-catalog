@@ -37,8 +37,10 @@ async function allPh(variantId: number): Promise<{ price_id: number; colorway: s
 /** Size variants of the style that carry NO colour (the per-size catch-alls / bases). */
 async function sizeBases() {
   const { data } = await db.from("variant").select("variant_id,size_label,exterior_colorway").eq("style_id", STYLE_ID).is("exterior_colorway", null);
-  // Real sizes only (skip the "Standard" bucket + null-size junk).
-  return ((data ?? []) as any[]).filter((v) => v.size_label && v.size_label !== "Standard");
+  // Keep the "Standard" size-unknown bucket IN: colour is orthogonal to size, "Standard" is hidden
+  // from the size chips (visibleDims drops it), and many styles hold their bulk there — so it should
+  // still get a colour axis. Only null/empty-size junk is skipped.
+  return ((data ?? []) as any[]).filter((v) => v.size_label && String(v.size_label).trim());
 }
 
 async function forward() {
@@ -54,7 +56,12 @@ async function forward() {
   const { data: sizeOpts } = await db.from("production_option").select("value").eq("style_id", STYLE_ID).eq("axis", "size");
   const productionSizes = new Set(((sizeOpts ?? []) as any[]).map((r) => String(r.value).toLowerCase().trim()));
   const allBases = await sizeBases();
-  const bases = productionSizes.size === 0 ? allBases : allBases.filter((b: any) => productionSizes.has(String(b.size_label).toLowerCase().trim()));
+  // "Standard" (size-unknown catch-all) always passes; otherwise the size must be in the production
+  // record so a stray/mis-parsed size never spawns colour variants.
+  const bases = productionSizes.size === 0 ? allBases : allBases.filter((b: any) => {
+    const sz = String(b.size_label).toLowerCase().trim();
+    return sz === "standard" || productionSizes.has(sz);
+  });
   const skipped = allBases.filter((b: any) => !bases.includes(b)).map((b: any) => b.size_label);
   if (skipped.length) console.log(`  skipping non-production size bases: ${skipped.join(", ")}`);
   let created = 0, moved = 0, stubs = 0;

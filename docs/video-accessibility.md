@@ -29,6 +29,26 @@ the `video` skill (how to run it).*
   old 940px box (edge at 93.5% of width) ran the hook and the backing box straight
   into the avatar and action buttons.
 
+## 1a. Safe zone — EVERY video, every format (hard rule)
+
+*Applies to ALL vertical 1080x1920 videos we produce — montage cards, talking-head
+reels, and hand-composited edits alike, not just the code-enforced card stack. The
+app UI paints on top of the frame; anything outside the safe box gets clipped.*
+
+- **Bottom:** nothing critical below **y1400**. TikTok's caption + sound row and IG's
+  caption live in the bottom ~420px. Lower-third graphics (chips, value ladders,
+  footers) end by y1400; captions go in the **center band, not the lower third**.
+- **Right rail:** nothing critical **right of x900 below y~620** — profile, like,
+  comment, save, share, sound disc. **List / recap thumbnails go on the LEFT**, never
+  the right rail.
+- **Top:** keep critical content below **y150**.
+- A picture-in-picture may use the top-right corner **above y~620**, kept left of
+  x1040.
+- **Verify, don't assume:** before delivering ANY render, pull frames and overlay the
+  TikTok unsafe zones (right rail + bottom strip) to confirm clearance. Evidence for
+  this rule: two 2026-07-14 screenshots where bottom chips hid under the caption and
+  the recap thumbnails sat under the right action rail.
+
 ## 2. Format (the look)
 
 - **One short clip (5-7s), held the whole time.** No cutting between clips.
@@ -75,3 +95,6 @@ the `video` skill (how to run it).*
 5. Text + backing box clear the side safe zone — nothing touches the right-side
    action rail or the avatar (§1).
 6. Hooks are **verbatim** to her line (never trimmed — see the copy rules).
+7. **Safe-zone red-check (all formats, §1a):** overlay the TikTok right rail + bottom
+   caption zones on sampled frames and confirm every graphic clears them — bottom
+   content above y1400, thumbnails on the left, nothing under the right rail.

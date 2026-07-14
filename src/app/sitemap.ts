@@ -32,6 +32,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/where-to-buy`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     // Where to Sell — the payout + effort hub (docs/ux/where-to-sell-spec.md).
     { url: `${SITE_URL}/where-to-sell`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    // Care shelf — the OWN state; curated care products by material (src/lib/bag-care.ts).
+    { url: `${SITE_URL}/care`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
   ];
 
   // One entry per venue profile — each is the direct answer to an "is X legit" query.

@@ -66,7 +66,7 @@ const LOGO_HEADLINE: Record<Logo, string> = {
 };
 
 const LOGO_MODIFIER: Record<Logo, string> = {
-  quiet: "and quietly certain",
+  quiet: "and self-assured",
   recognizable: "and in on it",
   loud: "and happy to be looked at",
 };
@@ -192,7 +192,7 @@ export function tasteIdentity(answers: TasteAnswers): TasteIdentity {
   } else {
     // Decisive logo with no loved vibe: a short, logo-led read.
     const you = logo === "quiet"
-      ? "You feel quietly certain, nothing to prove."
+      ? "You feel self-assured, nothing to prove."
       : "You feel confident, and happy to be looked at.";
     read = `${you} The room notices.`;
   }

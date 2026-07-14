@@ -247,8 +247,28 @@ export default function HeaderNav({
           }}
           onFocusCapture={() => setSearchTyping(true)}
         >
-          {searchOpen ? (
-            <div className="relative">
+          {/* The pill is ALWAYS mounted, so the nav slot keeps a fixed width and the
+              row never reflows when the panel opens (owner UX review 0714 #3: no more
+              jittery pop-out). When open, the panel overlays anchored to the pill's own
+              right edge, so it reads as the field expanding in place. */}
+          <button
+            type="button"
+            onClick={() => {
+              setSearchOpen(true);
+              setSearchTyping(true);
+            }}
+            aria-label="Search bags"
+            aria-expanded={searchOpen}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors ${
+              searchOpen ? "border-gold text-gold" : "border-border bg-surface text-muted hover:border-gold hover:text-gold"
+            }`}
+          >
+            <SearchIcon className="flex-shrink-0" />
+            <span>Search bags</span>
+            <Caret />
+          </button>
+          {searchOpen && (
+            <>
               {/* Click-away layer so a tile click (navigation) wins over a blur race. */}
               <div
                 className="fixed inset-0 z-20"
@@ -275,63 +295,41 @@ export default function HeaderNav({
                     }
                   }}
                   browseFooter={
-                    <div className="pt-1">
-                      <Link href="/shop" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface hover:text-gold">
-                        <span>Shop the market</span>
-                        <span className="text-[11px] uppercase tracking-widest text-gold">Compare live prices</span>
-                      </Link>
-                      <Link href="/deals" className="flex items-center justify-between rounded-xl px-2 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-gold">
-                        <span>Deals only</span>
-                        <span className="text-[11px] uppercase tracking-widest text-gold/80">Best prices</span>
-                      </Link>
-                      {brandGroups.length > 0 && (
-                        <>
-                          <div className="my-2 border-t border-border" />
-                          <div className="grid grid-cols-2 gap-x-5 gap-y-3">
-                            {brandGroups.map((group) => (
-                              <div key={group.label}>
-                                <p className="text-xs uppercase tracking-widest text-muted/70">{group.label}</p>
-                                <div className="mt-1.5 flex flex-col gap-0.5">
-                                  {group.brands.slice(0, BRANDS_PER_TIER).map((b) => (
-                                    <Link
-                                      key={b.brandId}
-                                      href={`/brand/${b.brandId}`}
-                                      className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
-                                    >
-                                      {b.name}
-                                    </Link>
-                                  ))}
-                                </div>
+                    // Pre-search: browse by tier only. "Shop the market / Deals only"
+                    // dropped from here (owner UX review 0714 #4) — someone who opened
+                    // search came to type, not to be handed two other destinations.
+                    brandGroups.length > 0 ? (
+                      <div className="pt-1">
+                        <div className="grid grid-cols-2 gap-x-5 gap-y-3">
+                          {brandGroups.map((group) => (
+                            <div key={group.label}>
+                              <p className="text-xs uppercase tracking-widest text-muted/70">{group.label}</p>
+                              <div className="mt-1.5 flex flex-col gap-0.5">
+                                {group.brands.slice(0, BRANDS_PER_TIER).map((b) => (
+                                  <Link
+                                    key={b.brandId}
+                                    href={`/brand/${b.brandId}`}
+                                    className="rounded-lg px-1.5 py-1 text-sm text-muted transition-colors hover:bg-surface hover:text-gold"
+                                  >
+                                    {b.name}
+                                  </Link>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                          <Link
-                            href="/brands"
-                            className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
-                          >
-                            All brands →
-                          </Link>
-                        </>
-                      )}
-                    </div>
+                            </div>
+                          ))}
+                        </div>
+                        <Link
+                          href="/brands"
+                          className="mt-3 block border-t border-border pt-3 text-sm text-gold transition-colors hover:text-gold-soft"
+                        >
+                          All brands →
+                        </Link>
+                      </div>
+                    ) : null
                   }
                 />
               </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchOpen(true);
-                setSearchTyping(true);
-              }}
-              aria-label="Search bags"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-1.5 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
-            >
-              <SearchIcon className="flex-shrink-0" />
-              <span>Search bags</span>
-              <Caret />
-            </button>
+            </>
           )}
         </div>
       </nav>

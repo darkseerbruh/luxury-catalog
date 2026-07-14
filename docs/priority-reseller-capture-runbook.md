@@ -88,12 +88,15 @@ bag-type filter needs a trailing `s?` — Ann's type is the plural "Handbags", w
 misses. Verified 2026-07-10: a 2-page sample gave 156 named (Hermès / Chanel / LV / Gucci…) + 65
 discovered rows, prices $550-$33,000, 0 invalid.
 
-### myGemma (free Shopify feed, automated via `mygemma-refresh.yml`)
+### myGemma (LICENSED Awin datafeed, automated via `mygemma-refresh.yml`)
+Feed F512 (Google/Enhanced format) carries image_link + aw_deep_link, so listings get real
+photos + Awin-tracked buy-links. Needs the `AWIN_MYGEMMA_FEED_URL` secret (the Create-a-Feed
+download URL). Replaced the old Shopify crawl 2026-07-14.
 ```
-npx tsx supabase/ingest/sources/mygemma-crawl.ts handbags
-npx tsx supabase/ingest/sources/mygemma.ts --raw
+AWIN_MYGEMMA_FEED_URL=… npx tsx supabase/ingest/sources/mygemma-awin.ts
 npm run load:prices -- mygemma --write
 npm run load:prices -- mygemma-discovered --discovered-only --write
+npm run load:listing-images -- myGemma --write
 npm run reconcile:sold -- --platform=myGemma --snapshot=data/ingest/_raw/mygemma-live.json --write
 npm run summary:refresh
 ```

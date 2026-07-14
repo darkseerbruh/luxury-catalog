@@ -52,12 +52,15 @@ import {
   scoreRankedCount,
   scoreRowsAdded,
   scoreSnapshotAge,
+  scoreStructure,
   scoreSummaryStaleness,
   spliceWorklist,
   type CheckResult,
   type HealthState,
+  type SourceConfig,
 } from "../src/lib/data-health-core";
 import { LC_INDEX_MIN_N, LC_INDEX_MIN_SOURCES } from "../src/lib/lc-index";
+import { auditCatalogStructure } from "../src/lib/catalog-structure";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env.local"), override: true, quiet: true });
 
@@ -75,28 +78,40 @@ function daysAgo(n: number, from: Date): string {
   return isoDay(new Date(from.getTime() - n * 86_400_000));
 }
 
-/** Cheap exact head-count with arbitrary filters. */
+/**
+ * Head-count with arbitrary filters. `mode: "planned"` returns the query planner's
+ * estimate (near-instant) instead of a true scan — use it for large tables where an
+ * exact count on an unindexed filter would trip Supabase's ~8s timeout (e.g. the
+ * 77k-row discovered_listing filtered by the unindexed unresolved_reason: 3.7s exact
+ * vs 0.2s planned). Only for info-only metrics; keep scored metrics exact.
+ */
 async function count(
   sb: SupabaseClient,
   table: string,
   apply: (q: ReturnType<ReturnType<SupabaseClient["from"]>["select"]>) => unknown,
+  mode: "exact" | "planned" = "exact",
 ): Promise<number> {
-  const q = sb.from(table).select("*", { count: "exact", head: true });
+  const q = sb.from(table).select("*", { count: mode, head: true });
   const { count: n, error } = (await apply(q)) as { count: number | null; error: { message: string } | null };
   if (error) throw new Error(`${table} count failed: ${error.message}`);
   return n ?? 0;
 }
 
-/** Age in days of the newest observed_on for a platform match, or null when none. */
-async function freshnessAge(sb: SupabaseClient, platformMatch: string, now: Date): Promise<number | null> {
+/**
+ * Age in days of the newest observed_on for a source, or null when none.
+ * Filters the indexed `platform` column by equality (exact string) — a leading-wildcard
+ * ilike here seq-scans ~138k rows and trips Supabase's ~8s statement timeout once a
+ * source's table grows (Fashionphile crossed ~20k rows on 2026-07-14).
+ */
+async function freshnessAge(sb: SupabaseClient, source: SourceConfig, now: Date): Promise<number | null> {
   const { data, error } = await sb
     .from("price_history")
     .select("observed_on")
-    .ilike("platform", platformMatch)
+    .eq("platform", source.platform)
     .not("observed_on", "is", null)
     .order("observed_on", { ascending: false })
     .limit(1);
-  if (error) throw new Error(`freshness(${platformMatch}) failed: ${error.message}`);
+  if (error) throw new Error(`freshness(${source.platform}) failed: ${error.message}`);
   const newest = data?.[0]?.observed_on as string | undefined;
   if (!newest) return null;
   return (now.getTime() - new Date(`${newest}T00:00:00Z`).getTime()) / 86_400_000;
@@ -131,7 +146,7 @@ async function main() {
 
   // ── A. Freshness per source ──────────────────────────────────────────────
   for (const source of SOURCES) {
-    checks.push(scoreFreshness(source, await freshnessAge(sb, source.platformMatch, now)));
+    checks.push(scoreFreshness(source, await freshnessAge(sb, source, now)));
   }
 
   // ── B. Capture sanity (date_recorded is a DATE, so ">= yesterday" spans
@@ -262,8 +277,10 @@ async function main() {
   const reasons = ["no_brand", "no_style", "no_variant"];
   const reasonCounts: string[] = [];
   for (const r of reasons) {
-    const n = await count(sb, "discovered_listing", (q) => q.is("promoted_variant_id", null).eq("unresolved_reason", r));
-    reasonCounts.push(`${r}: ${n}`);
+    // Planner estimate (info-only breakdown): an exact count on the unindexed
+    // unresolved_reason over 77k rows takes ~3.7s and trips the ~8s timeout under load.
+    const n = await count(sb, "discovered_listing", (q) => q.is("promoted_variant_id", null).eq("unresolved_reason", r), "planned");
+    reasonCounts.push(`${r}: ~${n.toLocaleString()}`);
   }
   checks.push({
     id: "backlog-breakdown",
@@ -281,7 +298,7 @@ async function main() {
         sb
           .from("price_history")
           .select("source_url")
-          .ilike("platform", "%realreal%")
+          .eq("platform", "The RealReal")
           .gte("date_recorded", weekAgo)
           .order("price_id", { ascending: true }),
       20000,
@@ -376,6 +393,83 @@ async function main() {
   for (const n of seen.values()) if (n > 1) dupRows += n - 1;
   checks.push(scoreDuplicates(dupRows));
 
+  // ── F3. Style→variant structure (the 0714 catalog audit, now standing) ────
+  // Pseudo-styles / seller-title styles / accent dups render junk tiles in search
+  // and break the bag-page hierarchy; variant attribute gaps starve the axis
+  // selector. Pure logic in src/lib/catalog-structure.ts; ~1k styles + ~4k
+  // variants, cheap to pull whole.
+  const styleRows = await fetchAllRows<{ style_id: number; name: string; brand_id: number }>(
+    () => sb.from("style").select("style_id, name, brand_id").order("style_id", { ascending: true }),
+    10000,
+  );
+  const variantRows = await fetchAllRows<{
+    variant_id: number;
+    style_id: number;
+    size_label: string | null;
+    exterior_colorway: string | null;
+    exterior_material_id: number | null;
+    hardware_color: string | null;
+  }>(
+    () =>
+      sb
+        .from("variant")
+        .select("variant_id, style_id, size_label, exterior_colorway, exterior_material_id, hardware_color")
+        .order("variant_id", { ascending: true }),
+    20000,
+  );
+  const structure = auditCatalogStructure(
+    styleRows.map((s) => ({ styleId: s.style_id, name: s.name, brandId: s.brand_id })),
+    variantRows.map((v) => ({
+      variantId: v.variant_id,
+      styleId: v.style_id,
+      sizeLabel: v.size_label,
+      exteriorColorway: v.exterior_colorway,
+      exteriorMaterialId: v.exterior_material_id,
+      hardwareColor: v.hardware_color,
+    })),
+  );
+  checks.push(
+    scoreStructure(
+      "structure-pseudo",
+      "Pseudo-styles (material+size baked into a style name)",
+      structure.safePseudo.length,
+      prev.metrics["structure-pseudo"] ?? null,
+      "Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md).",
+    ),
+    scoreStructure(
+      "structure-title-junk",
+      "Seller-title styles (promoted listing titles)",
+      structure.titleJunk.length,
+      prev.metrics["structure-title-junk"] ?? null,
+      "Per-row mapping pass (merge into the real style or rename) — docs/catalog-structure-audit-0714.md §2.",
+    ),
+    scoreStructure(
+      "structure-accent-dupes",
+      "Accent-duplicate style groups",
+      structure.dupGroups.length,
+      prev.metrics["structure-accent-dupes"] ?? null,
+      "Keep the accented spelling, re-parent variants, delete the ASCII twin — docs/catalog-structure-audit-0714.md §3.",
+    ),
+  );
+  // Variant-level attribute coverage (the axis-selector fuel) — delta-scored like
+  // the other coverage checks: any drop vs the last run is a loader regression.
+  for (const c of [
+    { id: "coverage-variant-size", label: "Variant size coverage", pct: structure.variantCoverage.sizePct },
+    { id: "coverage-variant-colour", label: "Variant colour coverage", pct: structure.variantCoverage.colourPct },
+    { id: "coverage-variant-material", label: "Variant material coverage", pct: structure.variantCoverage.materialPct },
+    { id: "coverage-variant-hardware", label: "Variant hardware coverage", pct: structure.variantCoverage.hardwarePct },
+  ]) {
+    checks.push(
+      scoreCoverageDelta(
+        c.id,
+        c.label,
+        c.pct,
+        prev.metrics[c.id] ?? null,
+        "Attribute-capture lane (docs/data-content-worklist.md); production-record axes cover the selector meanwhile.",
+      ),
+    );
+  }
+
   // ── G. Summary staleness (+ the one safe auto-fix) ───────────────────────
   const readSummaryAgeHours = async (): Promise<number | null> => {
     const { data, error } = await sb
@@ -419,7 +513,7 @@ async function main() {
         sb
           .from("price_history")
           .select("listing_ref, observed_on, delisted_on")
-          .ilike("platform", source.platformMatch)
+          .eq("platform", source.platform)
           .eq("listing_status", "sold")
           .gte("delisted_on", monthAgo)
           .order("price_id", { ascending: true }),

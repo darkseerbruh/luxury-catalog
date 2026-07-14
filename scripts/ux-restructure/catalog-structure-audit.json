@@ -1,0 +1,924 @@
+[
+  {
+    "brand": "Louis Vuitton",
+    "styles": 276,
+    "variants": 881,
+    "pseudoStyles": 42,
+    "listingTitleStyles": 6,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 155,
+    "vMissingSize": 57,
+    "vMissingColor": 686,
+    "vMissingMaterial": 610,
+    "examples": {
+      "pseudo": [
+        "Damier Ebene Bloomsbury PM",
+        "Monogram Speedy 35",
+        "Monogram Delightful MM"
+      ],
+      "listing": [
+        "Louis Vuitton Monogram Canvas Neverfull Pochette Pouch",
+        "Louis Vuitton Mango Monogram Vernis Thompson Street Bag",
+        "Louis Vuitton Brown/Red Canvas Antigua Cabas PM Bag"
+      ],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Chanel",
+    "styles": 92,
+    "variants": 740,
+    "pseudoStyles": 16,
+    "listingTitleStyles": 17,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 63,
+    "vMissingSize": 58,
+    "vMissingColor": 205,
+    "vMissingMaterial": 485,
+    "examples": {
+      "pseudo": [
+        "Mini Square Flap Bag w/ Tags",
+        "Vintage Travel Ligne Duffle Bag",
+        "Vintage Travel Ligne Tote"
+      ],
+      "listing": [
+        "Printed Denim Large Flap Bag",
+        "Chanel Pink Tweed 19 Large Flap Bag",
+        "Chanel Red Quilted Leather CC Waist Bag"
+      ],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Hermès",
+    "styles": 65,
+    "variants": 228,
+    "pseudoStyles": 23,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 1,
+    "oneVariantStyles": 33,
+    "vMissingSize": 45,
+    "vMissingColor": 228,
+    "vMissingMaterial": 160,
+    "examples": {
+      "pseudo": [
+        "Togo Birkin 35",
+        "Guilloche Tadelakt Birkin 35",
+        "Clemence Birkin 35"
+      ],
+      "listing": [],
+      "dup": [
+        "\"Bride-à-Brac\" == \"Bride-a-Brac\""
+      ]
+    }
+  },
+  {
+    "brand": "Gucci",
+    "styles": 60,
+    "variants": 461,
+    "pseudoStyles": 15,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 26,
+    "vMissingSize": 9,
+    "vMissingColor": 184,
+    "vMissingMaterial": 341,
+    "examples": {
+      "pseudo": [
+        "GG Marmont Chain",
+        "GG Marmont Top Handle",
+        "GG Marmont Bucket"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Saint Laurent",
+    "styles": 40,
+    "variants": 306,
+    "pseudoStyles": 7,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 15,
+    "vMissingSize": 5,
+    "vMissingColor": 133,
+    "vMissingMaterial": 198,
+    "examples": {
+      "pseudo": [
+        "Icare Tote",
+        "Loulou Puffer",
+        "Lou Camera Bag"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "The Row",
+    "styles": 32,
+    "variants": 51,
+    "pseudoStyles": 4,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 23,
+    "vMissingSize": 22,
+    "vMissingColor": 51,
+    "vMissingMaterial": 51,
+    "examples": {
+      "pseudo": [
+        "Soft Margaux",
+        "Slouchy Banana",
+        "90s Bag"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Celine",
+    "styles": 31,
+    "variants": 183,
+    "pseudoStyles": 8,
+    "listingTitleStyles": 1,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 14,
+    "vMissingSize": 7,
+    "vMissingColor": 90,
+    "vMissingMaterial": 153,
+    "examples": {
+      "pseudo": [
+        "Luggage Tote",
+        "Horizontal Cabas",
+        "Triomphe Oval"
+      ],
+      "listing": [
+        "Celine 16"
+      ],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Goyard",
+    "styles": 31,
+    "variants": 108,
+    "pseudoStyles": 4,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 4,
+    "oneVariantStyles": 18,
+    "vMissingSize": 16,
+    "vMissingColor": 50,
+    "vMissingMaterial": 108,
+    "examples": {
+      "pseudo": [
+        "Bohème Hobo",
+        "Alpin Backpack",
+        "Marquises Tote"
+      ],
+      "listing": [],
+      "dup": [
+        "\"Bohème\" == \"Boheme\"",
+        "\"Belvédère\" == \"Belvedere\"",
+        "\"Saïgon\" == \"Saigon\""
+      ]
+    }
+  },
+  {
+    "brand": "Prada",
+    "styles": 27,
+    "variants": 90,
+    "pseudoStyles": 3,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 14,
+    "vMissingSize": 2,
+    "vMissingColor": 57,
+    "vMissingMaterial": 78,
+    "examples": {
+      "pseudo": [
+        "Re-Edition 2005",
+        "Re-Edition 2000",
+        "Triangle Padded Shoulder"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Loewe",
+    "styles": 26,
+    "variants": 97,
+    "pseudoStyles": 7,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 10,
+    "vMissingSize": 3,
+    "vMissingColor": 65,
+    "vMissingMaterial": 93,
+    "examples": {
+      "pseudo": [
+        "Puzzle Edge",
+        "Puzzle Fold Tote",
+        "Puzzle Bumbag"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Dior",
+    "styles": 25,
+    "variants": 383,
+    "pseudoStyles": 2,
+    "listingTitleStyles": 6,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 9,
+    "vMissingSize": 4,
+    "vMissingColor": 94,
+    "vMissingMaterial": 259,
+    "examples": {
+      "pseudo": [
+        "Saddle Pochette",
+        "Saddle Chain Pouch"
+      ],
+      "listing": [
+        "Dior Toujours",
+        "Dioraddict",
+        "Diorissimo"
+      ],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Burberry",
+    "styles": 23,
+    "variants": 31,
+    "pseudoStyles": 7,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 14,
+    "vMissingSize": 1,
+    "vMissingColor": 31,
+    "vMissingMaterial": 31,
+    "examples": {
+      "pseudo": [
+        "The Knight Bag",
+        "Sonny Bum Bag",
+        "Lola Camera Bag"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Chloé",
+    "styles": 21,
+    "variants": 36,
+    "pseudoStyles": 5,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 12,
+    "vMissingSize": 0,
+    "vMissingColor": 36,
+    "vMissingMaterial": 36,
+    "examples": {
+      "pseudo": [
+        "Woody Tote",
+        "Paddington Tote",
+        "Marcie Saddle"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Balenciaga",
+    "styles": 21,
+    "variants": 119,
+    "pseudoStyles": 6,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 12,
+    "vMissingSize": 6,
+    "vMissingColor": 56,
+    "vMissingMaterial": 92,
+    "examples": {
+      "pseudo": [
+        "Le City",
+        "Hourglass Chain",
+        "Rodeo Sling Pochette"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Bottega Veneta",
+    "styles": 20,
+    "variants": 89,
+    "pseudoStyles": 5,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 8,
+    "vMissingSize": 3,
+    "vMissingColor": 58,
+    "vMissingMaterial": 82,
+    "examples": {
+      "pseudo": [
+        "Long Andiamo Clutch",
+        "The Pouch Chain",
+        "Loop Camera Bag"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Fendi",
+    "styles": 19,
+    "variants": 149,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 2,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 5,
+    "vMissingSize": 2,
+    "vMissingColor": 58,
+    "vMissingMaterial": 120,
+    "examples": {
+      "pseudo": [],
+      "listing": [
+        "Fendi Basket",
+        "Fendigraphy"
+      ],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Valentino",
+    "styles": 17,
+    "variants": 50,
+    "pseudoStyles": 6,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 1,
+    "oneVariantStyles": 10,
+    "vMissingSize": 4,
+    "vMissingColor": 34,
+    "vMissingMaterial": 50,
+    "examples": {
+      "pseudo": [
+        "VLogo Signature",
+        "Rockstud Spike",
+        "Rockstud Tote"
+      ],
+      "listing": [],
+      "dup": [
+        "\"Locò\" == \"Loco\""
+      ]
+    }
+  },
+  {
+    "brand": "Jacquemus",
+    "styles": 15,
+    "variants": 22,
+    "pseudoStyles": 2,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 6,
+    "vMissingSize": 7,
+    "vMissingColor": 22,
+    "vMissingMaterial": 22,
+    "examples": {
+      "pseudo": [
+        "Le Chiquito Moyen",
+        "Le Chiquito Noeud"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Givenchy",
+    "styles": 14,
+    "variants": 61,
+    "pseudoStyles": 4,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 8,
+    "vMissingSize": 0,
+    "vMissingColor": 32,
+    "vMissingMaterial": 59,
+    "examples": {
+      "pseudo": [
+        "Soft Antigona",
+        "Antigona Lock",
+        "Voyou Tote"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Coach",
+    "styles": 13,
+    "variants": 63,
+    "pseudoStyles": 3,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 5,
+    "vMissingSize": 0,
+    "vMissingColor": 33,
+    "vMissingMaterial": 52,
+    "examples": {
+      "pseudo": [
+        "Pillow Tabby",
+        "Tabby Shoulder Bag",
+        "Willow Tote"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Alexander McQueen",
+    "styles": 11,
+    "variants": 14,
+    "pseudoStyles": 2,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 6,
+    "vMissingSize": 9,
+    "vMissingColor": 13,
+    "vMissingMaterial": 14,
+    "examples": {
+      "pseudo": [
+        "Skull Chain",
+        "Skull Box Clutch"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Miu Miu",
+    "styles": 10,
+    "variants": 14,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 8,
+    "vMissingSize": 2,
+    "vMissingColor": 14,
+    "vMissingMaterial": 14,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Tory Burch",
+    "styles": 10,
+    "variants": 10,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 10,
+    "vMissingSize": 8,
+    "vMissingColor": 10,
+    "vMissingMaterial": 10,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Michael Kors",
+    "styles": 9,
+    "variants": 10,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 8,
+    "vMissingSize": 6,
+    "vMissingColor": 10,
+    "vMissingMaterial": 10,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Delvaux",
+    "styles": 5,
+    "variants": 5,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 5,
+    "vMissingSize": 0,
+    "vMissingColor": 5,
+    "vMissingMaterial": 5,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Alexander Wang",
+    "styles": 5,
+    "variants": 5,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 5,
+    "vMissingSize": 0,
+    "vMissingColor": 5,
+    "vMissingMaterial": 5,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Mulberry",
+    "styles": 4,
+    "variants": 9,
+    "pseudoStyles": 1,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 2,
+    "vMissingSize": 0,
+    "vMissingColor": 9,
+    "vMissingMaterial": 9,
+    "examples": {
+      "pseudo": [
+        "Zipped Bayswater"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Off-White",
+    "styles": 4,
+    "variants": 3,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 3,
+    "vMissingSize": 1,
+    "vMissingColor": 3,
+    "vMissingMaterial": 3,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Dolce & Gabbana",
+    "styles": 4,
+    "variants": 7,
+    "pseudoStyles": 1,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 3,
+    "vMissingSize": 3,
+    "vMissingColor": 7,
+    "vMissingMaterial": 7,
+    "examples": {
+      "pseudo": [
+        "Miss Sicily"
+      ],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Marc Jacobs",
+    "styles": 4,
+    "variants": 9,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 9,
+    "vMissingMaterial": 9,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Alaïa",
+    "styles": 4,
+    "variants": 5,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 3,
+    "vMissingSize": 0,
+    "vMissingColor": 5,
+    "vMissingMaterial": 5,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Salvatore Ferragamo",
+    "styles": 3,
+    "variants": 9,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 9,
+    "vMissingMaterial": 9,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Jimmy Choo",
+    "styles": 3,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 2,
+    "vMissingSize": 0,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Versace",
+    "styles": 3,
+    "variants": 9,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 9,
+    "vMissingMaterial": 9,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Kate Spade",
+    "styles": 2,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Khaite",
+    "styles": 2,
+    "variants": 3,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 3,
+    "vMissingMaterial": 3,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "MCM",
+    "styles": 2,
+    "variants": 5,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 5,
+    "vMissingMaterial": 5,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Stella McCartney",
+    "styles": 2,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Moynat",
+    "styles": 2,
+    "variants": 6,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 6,
+    "vMissingMaterial": 6,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Telfar",
+    "styles": 1,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 1,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Christian Louboutin",
+    "styles": 1,
+    "variants": 3,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 3,
+    "vMissingMaterial": 3,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Longchamp",
+    "styles": 1,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Judith Leiber",
+    "styles": 1,
+    "variants": 1,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 1,
+    "vMissingMaterial": 1,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Mansur Gavriel",
+    "styles": 1,
+    "variants": 2,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 2,
+    "vMissingMaterial": 2,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Furla",
+    "styles": 1,
+    "variants": 1,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 1,
+    "vMissingMaterial": 1,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Proenza Schouler",
+    "styles": 1,
+    "variants": 1,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 1,
+    "vMissingSize": 0,
+    "vMissingColor": 1,
+    "vMissingMaterial": 1,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Bulgari",
+    "styles": 1,
+    "variants": 4,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 4,
+    "vMissingMaterial": 4,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  },
+  {
+    "brand": "Loro Piana",
+    "styles": 1,
+    "variants": 2,
+    "pseudoStyles": 0,
+    "listingTitleStyles": 0,
+    "dupNamePairs": 0,
+    "oneVariantStyles": 0,
+    "vMissingSize": 0,
+    "vMissingColor": 2,
+    "vMissingMaterial": 2,
+    "examples": {
+      "pseudo": [],
+      "listing": [],
+      "dup": []
+    }
+  }
+]

@@ -22,10 +22,19 @@ export default function DisclosurePage() {
           you</span>.
         </p>
         <p>
-          Those links are managed through affiliate networks, including{" "}
+          Our{" "}
+          <a href="/care" className="text-foreground underline hover:text-gold">
+            care shelf
+          </a>{" "}
+          links to bag-care products on <span className="text-foreground">Amazon</span> through the
+          Amazon Associates program, on the same terms: if you buy through one of those links we may
+          earn a small commission, at no extra cost to you.
+        </p>
+        <p>
+          Those links are managed through affiliate networks and programs, including{" "}
           <span className="text-foreground">Impact (impact.com)</span>, CJ (Commission Junction), Awin,
-          Skimlinks, and the eBay Partner Network. The network credits your purchase to us and processes
-          that data under its own privacy terms; see our{" "}
+          Skimlinks, Amazon Associates, and the eBay Partner Network. The network credits your purchase
+          to us and processes that data under its own privacy terms; see our{" "}
           <a href="/privacy" className="text-foreground underline hover:text-gold">
             privacy policy
           </a>{" "}

@@ -121,6 +121,41 @@ export function cjDeepLink(url: string): string {
   return `https://www.anrdoezrs.net/links/${CJ_PID}/type/dlg/${url}`;
 }
 
+// Awin ids for the myGemma programme (approved 2026-07-14). Neither is a secret —
+// both ride openly in every Awin click URL (like the CJ PID and eBay campaign id):
+// AWIN_AFFID is our publisher account (the /affiliate/<id>/ id), MYGEMMA_AWIN_MID is
+// myGemma's advertiser id (the approval email's "aid"). Overridable via env.
+const AWIN_AFFID = process.env.NEXT_PUBLIC_AWIN_AFFID || "2945769";
+const MYGEMMA_AWIN_MID = process.env.NEXT_PUBLIC_MYGEMMA_AWIN_MID || "59483";
+
+/** Awin click-redirect host. A link already routed through it has attribution
+ * baked in, so it must never be re-wrapped. */
+export function isAwinTrackingUrl(url: string): boolean {
+  try {
+    const h = new URL(url).hostname.toLowerCase();
+    return /(^|\.)awin1\.com$/.test(h);
+  } catch {
+    return /awin1\.com/i.test(url);
+  }
+}
+
+/** True for a raw myGemma product URL (not yet Awin-tracked). */
+export function isMyGemmaUrl(url: string): boolean {
+  try {
+    return /(^|\.)mygemma\.com$/i.test(new URL(url).hostname);
+  } catch {
+    return /mygemma\.com/i.test(url);
+  }
+}
+
+/** Wrap a raw destination URL in an Awin deep link so the click is commission-
+ * tracked. Format: https://www.awin1.com/cread.php?awinmid=<MID>&awinaffid=<AFFID>
+ * &ued=<encoded destination>. `ued` is URL-encoded by URLSearchParams. */
+export function awinDeepLink(url: string, awinmid: string = MYGEMMA_AWIN_MID): string {
+  const params = new URLSearchParams({ awinmid, awinaffid: AWIN_AFFID, ued: url });
+  return `https://www.awin1.com/cread.php?${params.toString()}`;
+}
+
 /**
  * Add eBay Partner Network attribution to an eBay URL (listing or search). With no
  * campaign id configured this returns the URL unchanged, so eBay links always work
@@ -140,6 +175,64 @@ export function applyEbayAffiliate(url: string, customId?: string): string {
   if (customId) params.set("customid", customId.slice(0, 256));
   const sep = url.includes("?") ? "&" : "?";
   return `${url}${sep}${params.toString()}`;
+}
+
+// Amazon Associates for the care shelf (/care). The store/tracking id is NOT a
+// secret — it rides openly in every affiliate URL as the `tag` param — but unlike
+// eBay it is account-specific, so it stays env-configured and the channel is
+// DORMANT until it lands. With no tag set, every care link is a plain Amazon
+// search that still works; monetization is purely additive and self-activating on
+// deploy once NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG is set.
+const AMAZON_ASSOCIATES_TAG = process.env.NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG;
+
+/** True for any Amazon domain (amazon.com, amazon.co.uk, amzn.to, …). */
+export function isAmazonUrl(url: string): boolean {
+  try {
+    const h = new URL(url).hostname.toLowerCase();
+    return /(^|\.)amazon\.[a-z.]+$/.test(h) || /(^|\.)amzn\.(to|com)$/.test(h);
+  } catch {
+    return /\bamazon\.[a-z.]+|\bamzn\./i.test(url);
+  }
+}
+
+/**
+ * Build an Amazon SEARCH deep link for a care product, attributed to our
+ * Associates tag when configured. We link searches (like "Where to buy"), not
+ * held ASINs, so the live page always shows Amazon's current price and stock and
+ * we never publish a price that can go stale. Returns a plain search URL when no
+ * tag is set, so the link is never broken.
+ */
+export function amazonCareSearchUrl(query: string): string {
+  const base = `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+  return AMAZON_ASSOCIATES_TAG
+    ? `${base}&tag=${encodeURIComponent(AMAZON_ASSOCIATES_TAG)}`
+    : base;
+}
+
+/** True once an Amazon Associates tag is configured (the care shelf earns). */
+export function amazonAffiliateActive(): boolean {
+  return Boolean(AMAZON_ASSOCIATES_TAG);
+}
+
+/**
+ * Product image for a care item, when we have one. Returns null TODAY by design:
+ * the care shelf ships as clean text with NO placeholder image (owner call
+ * 2026-07-13: an abstract icon "means nothing", so we show nothing until we can
+ * show a real product photo). This is the single seam where real photos plug in.
+ *
+ * The source is Amazon's Product Advertising API (PA-API). It unlocks only after
+ * the account clears 3 qualifying sales in its first 180 days, and access is
+ * revoked if sales lapse, so it cannot render on a pre-launch site. When it lands,
+ * implement here: resolve `searchQuery` to the top product via PA-API SearchItems
+ * server-side and return its image URL (cache it; PA-API is rate-limited). The
+ * card already reserves the slot, and img-src permits https image hosts, so this
+ * one function is the whole switch. Until then every care card renders text-only.
+ */
+export function careItemImageUrl(searchQuery: string): string | null {
+  // No image source wired yet (PA-API is gated on approval). Touch the arg so the
+  // seam stays lint-clean and future-ready; the real impl resolves it to a photo.
+  void searchQuery;
+  return null;
 }
 
 function applyAffiliate(url: string, platform: Platform): string {
@@ -168,11 +261,13 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   if (isEbayUrl(url) || (platformRaw ?? "").toLowerCase().includes("ebay")) {
     return applyEbayAffiliate(url);
   }
-  // Already a CJ-tracked deep link: attribution is baked in, return untouched.
-  if (isCjTrackingUrl(url)) return url;
+  // Already a CJ- or Awin-tracked deep link: attribution is baked in, return untouched.
+  if (isCjTrackingUrl(url) || isAwinTrackingUrl(url)) return url;
   // Raw The Luxury Closet product URL (from the CJ API feed): wrap in a CJ deep
   // link so the click is commission-tracked.
   if (isTheLuxuryClosetUrl(url)) return cjDeepLink(url);
+  // Raw myGemma product URL (from the Shopify feed): wrap in an Awin deep link.
+  if (isMyGemmaUrl(url)) return awinDeepLink(url);
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");
   const platform = PLATFORMS.find((p) => key.includes(p.key));
   if (platform) return applyAffiliate(url, platform);

@@ -239,6 +239,38 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-13 (run 17)** — SELECTOR-SEED unit (not a naming pull), continuing the series after the
+  kelly-woc-saddle-chanel19-dionysus-horsebit matrix. Extended the production-driven variant selector to
+  SIX more styles: **Dior Book Tote (454)**, **Fendi Peekaboo (205)**, **YSL Loulou (460)**, **Fendi
+  Baguette (204)**, **Chanel 22 (431)**, **Gucci Diana (451)**. Delivered
+  `docs/research-drafts/booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md` — six
+  paste-ready `Row[]` lists in the exact `load-production-options.ts` shape, reusing banked `dior.md`
+  (Book Tote SS2018 Chiuri, Oblique), `fendi.md` (Baguette 1997/Peekaboo ~2008-09, FF Zucca + Selleria,
+  Fendi-doesn't-name-colours), `saint-laurent.md` (Loulou ~2017 Vaccarello, Cassandre 1963, chevron
+  matelassé, YSL-doesn't-name-a-lexicon), `chanel.md` (permanent palette + no-seasonal-name rule),
+  `gucci.md` (Diana 1991 bamboo tote, Gucci-doesn't-name-colours). New sources this run (all free-tier
+  Firecrawl, all 6 searches refunded 2→1 via feedback = ~6 credits net): PurseBlog/Fashionphile/Rebag
+  Book Tote size guide; luxbags.fr/PurseBop/fendi.com Peekaboo (Iconic + ISeeU) sizes; ysl.com Loulou
+  Small PDP + Rebag/luxbags Loulou run; the-hosta/Sellier Knightsbridge/Rebag Baguette sizes;
+  luxbags.fr/cocoapproved/chanel.com Chanel 22 sizes; gucci.com Diana Small/Medium PDPs + a Mini spec
+  (20x16x10). **Encoding decisions:** Book Tote = PRINT-primary (material = the embroidery: Oblique
+  default/Toile/plain-canvas), Dior NAMES colours (Oblique blue default); Baguette = MATERIAL-primary
+  (the 1,000+ variations), Fendi DESCRIPTOR colours; Peekaboo/Diana = size×material×descriptor colours;
+  Loulou = size×material×colour + a real HARDWARE-TONE axis (gold vs silver Cassandre, the axis that
+  carries YSL's naming weight) with plain descriptor colours; Chanel 22 = colour-primary, permanent
+  palette only + oversized-diamond construction + gold chain / "22" plate hardware. **Answered the
+  brief's open YSL question:** YSL names permanents only as plain DESCRIPTORS (Noir/Blanc/Rouge), no
+  seasonal lexicon — Dior/Gucci camp, per the banked archive. **HELD RIGOR / omitted-not-invented:** no
+  Chanel 22 WOC (unsourced — the Mini is the compact format); Baguette Chain formats left per-listing
+  (strap variant, not a size); Peekaboo Iconic-vs-ISeeU folded into one size axis with the line noted
+  per row; no hardware axis on Book Tote (open tote) / Peekaboo (twin twist-locks) / Baguette (FF clasp)
+  / Diana (bamboo handles + removable belts fixed). **MEDIUM flags handed to owner:** Book Tote colour
+  default (Blue vs Black), Large cm; Peekaboo size default (Regular vs Mini); Loulou size default (Medium
+  vs Small) + Large cm; Baguette Nano/Large permanence; Chanel 22 size-label overlap (Small vs Medium) +
+  Small-vs-Medium default + Large cm; Diana small/medium/large body cm (reseller composite — only Mini
+  directly sourced) + Small-vs-Medium default. **Integration reminders in the doc:** register all six in
+  STYLES (454/205/460/204/431/451), extend SRC with the new filename. **Next unit: the HERMÈS
+  seasonal-color backfill pre-2015 (highest-GEO-value open gap), or the owner-present Chrome .com batch.**
 - **2026-07-12 (run 15)** — SELECTOR-SEED unit (not a naming pull). The production-driven variant
   selector is being extended to **LV Alma (style 434)** and **Hermès Birkin (style 4)**; delivered
   `docs/research-drafts/lv-alma-hermes-birkin-production-matrix.md` — two paste-ready `Row[]` lists

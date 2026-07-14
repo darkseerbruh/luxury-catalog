@@ -1,0 +1,2188 @@
+{
+  "safe": [],
+  "flagged": [
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 14,
+      "pseudoName": "Damier Ebene Bloomsbury PM",
+      "pseudoVariants": 2,
+      "baseId": 729,
+      "baseName": "Bloomsbury",
+      "baseVariants": 2,
+      "residual": "damier ebene pm",
+      "size": "PM",
+      "leather": "damier ebene",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 39,
+      "pseudoName": "Monogram Neverfull Pouch",
+      "pseudoVariants": 1,
+      "baseId": 218,
+      "baseName": "Neverfull",
+      "baseVariants": 21,
+      "residual": "monogram pouch",
+      "size": null,
+      "leather": "monogram pouch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 725,
+      "pseudoName": "Musette Tango",
+      "pseudoVariants": 2,
+      "baseId": 990,
+      "baseName": "Musette",
+      "baseVariants": 2,
+      "residual": "tango",
+      "size": null,
+      "leather": "tango",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 444,
+      "pseudoName": "Multi Pochette Accessoires",
+      "pseudoVariants": 12,
+      "baseId": 690,
+      "baseName": "Pochette Accessoires",
+      "baseVariants": 13,
+      "residual": "multi",
+      "size": null,
+      "leather": "multi",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 52,
+      "pseudoName": "Epi Soufflot Pochette",
+      "pseudoVariants": 1,
+      "baseId": 1136,
+      "baseName": "Soufflot",
+      "baseVariants": 3,
+      "residual": "epi pochette",
+      "size": null,
+      "leather": "epi pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 54,
+      "pseudoName": "x Urs Fischer Neverfull Pochette",
+      "pseudoVariants": 1,
+      "baseId": 218,
+      "baseName": "Neverfull",
+      "baseVariants": 21,
+      "residual": "x urs fischer pochette",
+      "size": null,
+      "leather": "x urs fischer pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 56,
+      "pseudoName": "Monogram Neverfull Pouch PM",
+      "pseudoVariants": 1,
+      "baseId": 39,
+      "baseName": "Monogram Neverfull Pouch",
+      "baseVariants": 1,
+      "residual": "pm",
+      "size": "PM",
+      "leather": null,
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 59,
+      "pseudoName": "2021 Monogram Multi-Pochette Accessoires",
+      "pseudoVariants": 1,
+      "baseId": 444,
+      "baseName": "Multi Pochette Accessoires",
+      "baseVariants": 12,
+      "residual": "2021 monogram",
+      "size": null,
+      "leather": "2021 monogram",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 160,
+      "pseudoName": "Louis Vuitton Monogram Canvas Neverfull Pochette Pouch",
+      "pseudoVariants": 1,
+      "baseId": 218,
+      "baseName": "Neverfull",
+      "baseVariants": 21,
+      "residual": "louis vuitton monogram canvas pochette pouch",
+      "size": null,
+      "leather": "louis vuitton monogram canvas pochette pouch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 724,
+      "pseudoName": "Musette Salsa",
+      "pseudoVariants": 2,
+      "baseId": 990,
+      "baseName": "Musette",
+      "baseVariants": 2,
+      "residual": "salsa",
+      "size": null,
+      "leather": "salsa",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 20,
+      "pseudoName": "City Steamer MM",
+      "pseudoVariants": 1,
+      "baseId": 1122,
+      "baseName": "City Steamer",
+      "baseVariants": 4,
+      "residual": "mm",
+      "size": "MM",
+      "leather": null,
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 23,
+      "pseudoName": "Monogram Tivoli GM",
+      "pseudoVariants": 2,
+      "baseId": 719,
+      "baseName": "Tivoli",
+      "baseVariants": 3,
+      "residual": "monogram gm",
+      "size": "GM",
+      "leather": "monogram",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 48,
+      "pseudoName": "Monogram Papillon Pochette",
+      "pseudoVariants": 1,
+      "baseId": 718,
+      "baseName": "Papillon",
+      "baseVariants": 6,
+      "residual": "monogram pochette",
+      "size": null,
+      "leather": "monogram pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 691,
+      "pseudoName": "Félicie Strap & Go",
+      "pseudoVariants": 1,
+      "baseId": 523,
+      "baseName": "Félicie",
+      "baseVariants": 13,
+      "residual": "strap go",
+      "size": null,
+      "leather": "strap go",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 692,
+      "pseudoName": "Félicie Pochette",
+      "pseudoVariants": 1,
+      "baseId": 523,
+      "baseName": "Félicie",
+      "baseVariants": 13,
+      "residual": "pochette",
+      "size": null,
+      "leather": "pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 697,
+      "pseudoName": "Pochette Coussin",
+      "pseudoVariants": 1,
+      "baseId": 442,
+      "baseName": "Coussin",
+      "baseVariants": 30,
+      "residual": "pochette",
+      "size": null,
+      "leather": "pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 699,
+      "pseudoName": "Petite Malle Souple",
+      "pseudoVariants": 1,
+      "baseId": 443,
+      "baseName": "Petite Malle",
+      "baseVariants": 2,
+      "residual": "souple",
+      "size": null,
+      "leather": "souple",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 700,
+      "pseudoName": "Loop Hobo",
+      "pseudoVariants": 1,
+      "baseId": 528,
+      "baseName": "Loop",
+      "baseVariants": 2,
+      "residual": "hobo",
+      "size": null,
+      "leather": "hobo",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 701,
+      "pseudoName": "Speedy Soft",
+      "pseudoVariants": 3,
+      "baseId": 433,
+      "baseName": "Speedy",
+      "baseVariants": 70,
+      "residual": "soft",
+      "size": null,
+      "leather": "soft",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 706,
+      "pseudoName": "Boîte Chapeau Souple",
+      "pseudoVariants": 2,
+      "baseId": 996,
+      "baseName": "Boîte Chapeau",
+      "baseVariants": 4,
+      "residual": "souple",
+      "size": null,
+      "leather": "souple",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 707,
+      "pseudoName": "Petite Boîte Chapeau",
+      "pseudoVariants": 1,
+      "baseId": 996,
+      "baseName": "Boîte Chapeau",
+      "baseVariants": 4,
+      "residual": "petite",
+      "size": null,
+      "leather": "petite",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 728,
+      "pseudoName": "Marais Bucket",
+      "pseudoVariants": 1,
+      "baseId": 1068,
+      "baseName": "Bucket",
+      "baseVariants": 3,
+      "residual": "marais",
+      "size": null,
+      "leather": "marais",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 732,
+      "pseudoName": "Keepall Bandoulière",
+      "pseudoVariants": 6,
+      "baseId": 440,
+      "baseName": "Keepall",
+      "baseVariants": 25,
+      "residual": "bandouli re",
+      "size": null,
+      "leather": "bandouli re",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 903,
+      "pseudoName": "Petit Bucket",
+      "pseudoVariants": 2,
+      "baseId": 1068,
+      "baseName": "Bucket",
+      "baseVariants": 3,
+      "residual": "petit",
+      "size": null,
+      "leather": "petit",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Louis Vuitton",
+      "pseudoId": 979,
+      "pseudoName": "Petit Sac Plat",
+      "pseudoVariants": 1,
+      "baseId": 714,
+      "baseName": "Sac Plat",
+      "baseVariants": 10,
+      "residual": "petit",
+      "size": null,
+      "leather": "petit",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Coach",
+      "pseudoId": 500,
+      "pseudoName": "Pillow Tabby",
+      "pseudoVariants": 3,
+      "baseId": 3,
+      "baseName": "Tabby",
+      "baseVariants": 6,
+      "residual": "pillow",
+      "size": null,
+      "leather": "pillow",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Coach",
+      "pseudoId": 946,
+      "pseudoName": "Tabby Shoulder Bag",
+      "pseudoVariants": 20,
+      "baseId": 3,
+      "baseName": "Tabby",
+      "baseVariants": 6,
+      "residual": "shoulder bag",
+      "size": null,
+      "leather": "shoulder bag",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Coach",
+      "pseudoId": 947,
+      "pseudoName": "Willow Tote",
+      "pseudoVariants": 1,
+      "baseId": 499,
+      "baseName": "Willow",
+      "baseVariants": 2,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 113,
+      "pseudoName": "Niloticus Novillo Birkin Touch 30",
+      "pseudoVariants": 1,
+      "baseId": 4,
+      "baseName": "Birkin",
+      "baseVariants": 40,
+      "residual": "niloticus novillo touch 30",
+      "size": "30",
+      "leather": "niloticus novillo touch",
+      "flags": [
+        "DISTINCT_MODEL",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 101,
+      "pseudoName": "Toile Fourre-Tout Messenger",
+      "pseudoVariants": 1,
+      "baseId": 1036,
+      "baseName": "Fourre-Tout",
+      "baseVariants": 3,
+      "residual": "toile messenger",
+      "size": null,
+      "leather": "toile messenger",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 78,
+      "pseudoName": "Toile & Negonda Garden Party 36",
+      "pseudoVariants": 1,
+      "baseId": 413,
+      "baseName": "Garden Party",
+      "baseVariants": 5,
+      "residual": "toile negonda 36",
+      "size": null,
+      "leather": "toile negonda 36",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 323,
+      "pseudoName": "Toile Herbag Zip 31",
+      "pseudoVariants": 1,
+      "baseId": 417,
+      "baseName": "Herbag",
+      "baseVariants": 11,
+      "residual": "toile zip 31",
+      "size": "31",
+      "leather": "toile zip",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 326,
+      "pseudoName": "Clemence Picotin 22",
+      "pseudoVariants": 1,
+      "baseId": 751,
+      "baseName": "Picotin",
+      "baseVariants": 2,
+      "residual": "clemence 22",
+      "size": null,
+      "leather": "clemence 22",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 336,
+      "pseudoName": "Toile Herline Pochette",
+      "pseudoVariants": 2,
+      "baseId": 756,
+      "baseName": "Herline",
+      "baseVariants": 3,
+      "residual": "toile pochette",
+      "size": null,
+      "leather": "toile pochette",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 338,
+      "pseudoName": "Sikkim Double Sens 36",
+      "pseudoVariants": 1,
+      "baseId": 1017,
+      "baseName": "Double Sens",
+      "baseVariants": 3,
+      "residual": "sikkim 36",
+      "size": null,
+      "leather": "sikkim 36",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 418,
+      "pseudoName": "Kelly Pochette",
+      "pseudoVariants": 1,
+      "baseId": 5,
+      "baseName": "Kelly",
+      "baseVariants": 50,
+      "residual": "pochette",
+      "size": null,
+      "leather": "pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 414,
+      "pseudoName": "Picotin Lock",
+      "pseudoVariants": 6,
+      "baseId": 751,
+      "baseName": "Picotin",
+      "baseVariants": 2,
+      "residual": "lock",
+      "size": null,
+      "leather": "lock",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 1079,
+      "pseudoName": "Constance To Go",
+      "pseudoVariants": 2,
+      "baseId": 411,
+      "baseName": "Constance",
+      "baseVariants": 9,
+      "residual": "to go",
+      "size": null,
+      "leather": "to go",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Hermès",
+      "pseudoId": 1049,
+      "pseudoName": "Kelly To Go",
+      "pseudoVariants": 2,
+      "baseId": 5,
+      "baseName": "Kelly",
+      "baseVariants": 50,
+      "residual": "to go",
+      "size": null,
+      "leather": "to go",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 77,
+      "pseudoName": "Mini Square Flap Bag w/ Tags",
+      "pseudoVariants": 1,
+      "baseId": 1285,
+      "baseName": "Mini Square Flap",
+      "baseVariants": 1,
+      "residual": "bag w tags",
+      "size": "Mini",
+      "leather": "bag w tags",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 83,
+      "pseudoName": "Vintage Travel Ligne Duffle Bag",
+      "pseudoVariants": 1,
+      "baseId": 64,
+      "baseName": "Travel Ligne Duffle Bag",
+      "baseVariants": 1,
+      "residual": "vintage",
+      "size": null,
+      "leather": "vintage",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 30,
+      "pseudoName": "Vintage Travel Ligne Tote",
+      "pseudoVariants": 1,
+      "baseId": 31,
+      "baseName": "Travel Ligne Tote",
+      "baseVariants": 2,
+      "residual": "vintage",
+      "size": null,
+      "leather": "vintage",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 65,
+      "pseudoName": "Medium Travel Ligne Tote",
+      "pseudoVariants": 1,
+      "baseId": 31,
+      "baseName": "Travel Ligne Tote",
+      "baseVariants": 2,
+      "residual": "medium",
+      "size": "Medium",
+      "leather": null,
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 73,
+      "pseudoName": "Small Executive Cerf Tote",
+      "pseudoVariants": 1,
+      "baseId": 735,
+      "baseName": "Cerf Tote",
+      "baseVariants": 3,
+      "residual": "small executive",
+      "size": "Small",
+      "leather": "executive",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 82,
+      "pseudoName": "Large Business Affinity Tote",
+      "pseudoVariants": 1,
+      "baseId": 432,
+      "baseName": "Business Affinity",
+      "baseVariants": 36,
+      "residual": "large tote",
+      "size": "Large",
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 106,
+      "pseudoName": "Medium Gabrielle Hobo",
+      "pseudoVariants": 1,
+      "baseId": 426,
+      "baseName": "Gabrielle",
+      "baseVariants": 45,
+      "residual": "medium hobo",
+      "size": "Medium",
+      "leather": "hobo",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 742,
+      "pseudoName": "Top Handle Vanity Case",
+      "pseudoVariants": 2,
+      "baseId": 430,
+      "baseName": "Vanity Case",
+      "baseVariants": 71,
+      "residual": "top handle",
+      "size": null,
+      "leather": "top handle",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 740,
+      "pseudoName": "Souplissimo Maxi Flap",
+      "pseudoVariants": 2,
+      "baseId": 994,
+      "baseName": "Souplissimo",
+      "baseVariants": 2,
+      "residual": "maxi flap",
+      "size": null,
+      "leather": "maxi flap",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 733,
+      "pseudoName": "Gabrielle Backpack",
+      "pseudoVariants": 2,
+      "baseId": 426,
+      "baseName": "Gabrielle",
+      "baseVariants": 45,
+      "residual": "backpack",
+      "size": null,
+      "leather": "backpack",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 741,
+      "pseudoName": "CC Filigree Vanity Case",
+      "pseudoVariants": 4,
+      "baseId": 430,
+      "baseName": "Vanity Case",
+      "baseVariants": 71,
+      "residual": "cc filigree",
+      "size": null,
+      "leather": "cc filigree",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 743,
+      "pseudoName": "Pearl Crush Vanity Case",
+      "pseudoVariants": 1,
+      "baseId": 430,
+      "baseName": "Vanity Case",
+      "baseVariants": 71,
+      "residual": "pearl crush",
+      "size": null,
+      "leather": "pearl crush",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 747,
+      "pseudoName": "Round Clutch with Chain",
+      "pseudoVariants": 1,
+      "baseId": 749,
+      "baseName": "Clutch with Chain",
+      "baseVariants": 1,
+      "residual": "round",
+      "size": null,
+      "leather": "round",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 748,
+      "pseudoName": "Barrel Clutch with Chain",
+      "pseudoVariants": 1,
+      "baseId": 749,
+      "baseName": "Clutch with Chain",
+      "baseVariants": 1,
+      "residual": "barrel",
+      "size": null,
+      "leather": "barrel",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chanel",
+      "pseudoId": 909,
+      "pseudoName": "Pearl Crush Flap",
+      "pseudoVariants": 1,
+      "baseId": 1059,
+      "baseName": "Pearl Crush",
+      "baseVariants": 4,
+      "residual": "flap",
+      "size": null,
+      "leather": "flap",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 470,
+      "pseudoName": "Icare Tote",
+      "pseudoVariants": 2,
+      "baseId": 832,
+      "baseName": "Icare",
+      "baseVariants": 1,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 829,
+      "pseudoName": "Loulou Puffer",
+      "pseudoVariants": 2,
+      "baseId": 460,
+      "baseName": "Loulou",
+      "baseVariants": 53,
+      "residual": "puffer",
+      "size": null,
+      "leather": "puffer",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 830,
+      "pseudoName": "Lou Camera Bag",
+      "pseudoVariants": 2,
+      "baseId": 464,
+      "baseName": "Lou Camera",
+      "baseVariants": 14,
+      "residual": "bag",
+      "size": null,
+      "leather": "bag",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 833,
+      "pseudoName": "Bea Tote",
+      "pseudoVariants": 1,
+      "baseId": 1282,
+      "baseName": "Bea",
+      "baseVariants": 1,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 834,
+      "pseudoName": "Rive Gauche Tote",
+      "pseudoVariants": 1,
+      "baseId": 1061,
+      "baseName": "Rive Gauche",
+      "baseVariants": 2,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 836,
+      "pseudoName": "Belle de Jour Clutch",
+      "pseudoVariants": 1,
+      "baseId": 1093,
+      "baseName": "Belle de Jour",
+      "baseVariants": 2,
+      "residual": "clutch",
+      "size": null,
+      "leather": "clutch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Saint Laurent",
+      "pseudoId": 931,
+      "pseudoName": "Cassandra Top Handle",
+      "pseudoVariants": 1,
+      "baseId": 1016,
+      "baseName": "Cassandra",
+      "baseVariants": 3,
+      "residual": "top handle",
+      "size": null,
+      "leather": "top handle",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Dior",
+      "pseudoId": 886,
+      "pseudoName": "Saddle Pochette",
+      "pseudoVariants": 1,
+      "baseId": 209,
+      "baseName": "Saddle",
+      "baseVariants": 47,
+      "residual": "pochette",
+      "size": null,
+      "leather": "pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Dior",
+      "pseudoId": 887,
+      "pseudoName": "Saddle Chain Pouch",
+      "pseudoVariants": 1,
+      "baseId": 209,
+      "baseName": "Saddle",
+      "baseVariants": 47,
+      "residual": "chain pouch",
+      "size": null,
+      "leather": "chain pouch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Bottega Veneta",
+      "pseudoId": 849,
+      "pseudoName": "Long Andiamo Clutch",
+      "pseudoVariants": 1,
+      "baseId": 472,
+      "baseName": "Andiamo",
+      "baseVariants": 6,
+      "residual": "long clutch",
+      "size": null,
+      "leather": "long clutch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Bottega Veneta",
+      "pseudoId": 850,
+      "pseudoName": "The Pouch Chain",
+      "pseudoVariants": 1,
+      "baseId": 471,
+      "baseName": "The Pouch",
+      "baseVariants": 3,
+      "residual": "chain",
+      "size": null,
+      "leather": "chain",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Bottega Veneta",
+      "pseudoId": 851,
+      "pseudoName": "Loop Camera Bag",
+      "pseudoVariants": 1,
+      "baseId": 474,
+      "baseName": "Loop",
+      "baseVariants": 4,
+      "residual": "camera bag",
+      "size": null,
+      "leather": "camera bag",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Bottega Veneta",
+      "pseudoId": 942,
+      "pseudoName": "Padded Cassette",
+      "pseudoVariants": 1,
+      "baseId": 211,
+      "baseName": "Cassette",
+      "baseVariants": 18,
+      "residual": "padded",
+      "size": null,
+      "leather": "padded",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Bottega Veneta",
+      "pseudoId": 943,
+      "pseudoName": "Chain Cassette",
+      "pseudoVariants": 1,
+      "baseId": 211,
+      "baseName": "Cassette",
+      "baseVariants": 18,
+      "residual": "chain",
+      "size": null,
+      "leather": "chain",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 770,
+      "pseudoName": "GG Marmont Chain",
+      "pseudoVariants": 3,
+      "baseId": 200,
+      "baseName": "GG Marmont",
+      "baseVariants": 41,
+      "residual": "chain",
+      "size": null,
+      "leather": "chain",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 771,
+      "pseudoName": "GG Marmont Top Handle",
+      "pseudoVariants": 1,
+      "baseId": 200,
+      "baseName": "GG Marmont",
+      "baseVariants": 41,
+      "residual": "top handle",
+      "size": null,
+      "leather": "top handle",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 772,
+      "pseudoName": "GG Marmont Bucket",
+      "pseudoVariants": 1,
+      "baseId": 200,
+      "baseName": "GG Marmont",
+      "baseVariants": 41,
+      "residual": "bucket",
+      "size": null,
+      "leather": "bucket",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 775,
+      "pseudoName": "Ophidia Shoulder",
+      "pseudoVariants": 2,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 776,
+      "pseudoName": "Ophidia Crossbody",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "crossbody",
+      "size": null,
+      "leather": "crossbody",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 777,
+      "pseudoName": "Ophidia Tote",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 778,
+      "pseudoName": "Ophidia Shopping Tote",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "shopping tote",
+      "size": null,
+      "leather": "shopping tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 779,
+      "pseudoName": "Ophidia Half Moon Hobo",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "half moon hobo",
+      "size": null,
+      "leather": "half moon hobo",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 780,
+      "pseudoName": "Ophidia Round Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "round shoulder",
+      "size": null,
+      "leather": "round shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 781,
+      "pseudoName": "Ophidia Vanity Case",
+      "pseudoVariants": 1,
+      "baseId": 448,
+      "baseName": "Ophidia",
+      "baseVariants": 61,
+      "residual": "vanity case",
+      "size": null,
+      "leather": "vanity case",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 783,
+      "pseudoName": "Neo Vintage Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 1050,
+      "baseName": "Neo Vintage",
+      "baseVariants": 3,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 784,
+      "pseudoName": "Neo Vintage Messenger",
+      "pseudoVariants": 1,
+      "baseId": 1050,
+      "baseName": "Neo Vintage",
+      "baseVariants": 3,
+      "residual": "messenger",
+      "size": null,
+      "leather": "messenger",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 788,
+      "pseudoName": "Abbey Tote",
+      "pseudoVariants": 1,
+      "baseId": 999,
+      "baseName": "Abbey",
+      "baseVariants": 4,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 789,
+      "pseudoName": "Padlock Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 521,
+      "baseName": "Padlock",
+      "baseVariants": 5,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Gucci",
+      "pseudoId": 923,
+      "pseudoName": "Bree Messenger",
+      "pseudoVariants": 1,
+      "baseId": 967,
+      "baseName": "Bree",
+      "baseVariants": 3,
+      "residual": "messenger",
+      "size": null,
+      "leather": "messenger",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 198,
+      "pseudoName": "The Knight Bag",
+      "pseudoVariants": 2,
+      "baseId": 1241,
+      "baseName": "Knight",
+      "baseVariants": 2,
+      "residual": "the bag",
+      "size": null,
+      "leather": "the bag",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 869,
+      "pseudoName": "Sonny Bum Bag",
+      "pseudoVariants": 1,
+      "baseId": 1139,
+      "baseName": "Sonny",
+      "baseVariants": 1,
+      "residual": "bum bag",
+      "size": null,
+      "leather": "bum bag",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 870,
+      "pseudoName": "Lola Camera Bag",
+      "pseudoVariants": 2,
+      "baseId": 199,
+      "baseName": "Lola",
+      "baseVariants": 2,
+      "residual": "camera bag",
+      "size": null,
+      "leather": "camera bag",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 871,
+      "pseudoName": "Title Bag",
+      "pseudoVariants": 1,
+      "baseId": 575,
+      "baseName": "Title",
+      "baseVariants": 2,
+      "residual": "bag",
+      "size": null,
+      "leather": "bag",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 872,
+      "pseudoName": "Banner Tote",
+      "pseudoVariants": 1,
+      "baseId": 576,
+      "baseName": "Banner",
+      "baseVariants": 2,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 873,
+      "pseudoName": "Note Crossbody",
+      "pseudoVariants": 1,
+      "baseId": 577,
+      "baseName": "Note",
+      "baseVariants": 1,
+      "residual": "crossbody",
+      "size": null,
+      "leather": "crossbody",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Burberry",
+      "pseudoId": 1242,
+      "pseudoName": "Pocket Bag",
+      "pseudoVariants": 1,
+      "baseId": 573,
+      "baseName": "Pocket",
+      "baseVariants": 1,
+      "residual": "bag",
+      "size": null,
+      "leather": "bag",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Prada",
+      "pseudoId": 202,
+      "pseudoName": "Re-Edition 2005",
+      "pseudoVariants": 9,
+      "baseId": 492,
+      "baseName": "Re-Edition",
+      "baseVariants": 4,
+      "residual": "2005",
+      "size": null,
+      "leather": "2005",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Prada",
+      "pseudoId": 790,
+      "pseudoName": "Re-Edition 2000",
+      "pseudoVariants": 1,
+      "baseId": 492,
+      "baseName": "Re-Edition",
+      "baseVariants": 4,
+      "residual": "2000",
+      "size": null,
+      "leather": "2000",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Prada",
+      "pseudoId": 797,
+      "pseudoName": "Triangle Padded Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 1051,
+      "baseName": "Triangle",
+      "baseVariants": 4,
+      "residual": "padded shoulder",
+      "size": null,
+      "leather": "padded shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 484,
+      "pseudoName": "Luggage Tote",
+      "pseudoVariants": 43,
+      "baseId": 207,
+      "baseName": "Luggage",
+      "baseVariants": 35,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 843,
+      "pseudoName": "Horizontal Cabas",
+      "pseudoVariants": 1,
+      "baseId": 489,
+      "baseName": "Cabas",
+      "baseVariants": 5,
+      "residual": "horizontal",
+      "size": null,
+      "leather": "horizontal",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 848,
+      "pseudoName": "Triomphe Oval",
+      "pseudoVariants": 1,
+      "baseId": 206,
+      "baseName": "Triomphe",
+      "baseVariants": 43,
+      "residual": "oval",
+      "size": null,
+      "leather": "oval",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 839,
+      "pseudoName": "Sangle Bucket",
+      "pseudoVariants": 1,
+      "baseId": 490,
+      "baseName": "Sangle",
+      "baseVariants": 5,
+      "residual": "bucket",
+      "size": null,
+      "leather": "bucket",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 844,
+      "pseudoName": "Triomphe Boston",
+      "pseudoVariants": 1,
+      "baseId": 206,
+      "baseName": "Triomphe",
+      "baseVariants": 43,
+      "residual": "boston",
+      "size": null,
+      "leather": "boston",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 837,
+      "pseudoName": "Phantom Luggage",
+      "pseudoVariants": 1,
+      "baseId": 207,
+      "baseName": "Luggage",
+      "baseVariants": 35,
+      "residual": "phantom",
+      "size": null,
+      "leather": "phantom",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 838,
+      "pseudoName": "Triomphe Shoulder",
+      "pseudoVariants": 2,
+      "baseId": 206,
+      "baseName": "Triomphe",
+      "baseVariants": 43,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Celine",
+      "pseudoId": 842,
+      "pseudoName": "Vertical Cabas",
+      "pseudoVariants": 1,
+      "baseId": 489,
+      "baseName": "Cabas",
+      "baseVariants": 5,
+      "residual": "vertical",
+      "size": null,
+      "leather": "vertical",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 510,
+      "pseudoName": "Puzzle Edge",
+      "pseudoVariants": 4,
+      "baseId": 504,
+      "baseName": "Puzzle",
+      "baseVariants": 39,
+      "residual": "edge",
+      "size": null,
+      "leather": "edge",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 854,
+      "pseudoName": "Puzzle Fold Tote",
+      "pseudoVariants": 2,
+      "baseId": 504,
+      "baseName": "Puzzle",
+      "baseVariants": 39,
+      "residual": "fold tote",
+      "size": null,
+      "leather": "fold tote",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 855,
+      "pseudoName": "Puzzle Bumbag",
+      "pseudoVariants": 1,
+      "baseId": 504,
+      "baseName": "Puzzle",
+      "baseVariants": 39,
+      "residual": "bumbag",
+      "size": null,
+      "leather": "bumbag",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 856,
+      "pseudoName": "Basket Tote",
+      "pseudoVariants": 1,
+      "baseId": 512,
+      "baseName": "Basket",
+      "baseVariants": 3,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 857,
+      "pseudoName": "Square Basket Tote",
+      "pseudoVariants": 1,
+      "baseId": 856,
+      "baseName": "Basket Tote",
+      "baseVariants": 1,
+      "residual": "square",
+      "size": null,
+      "leather": "square",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 954,
+      "pseudoName": "Braid Basket",
+      "pseudoVariants": 3,
+      "baseId": 512,
+      "baseName": "Basket",
+      "baseVariants": 3,
+      "residual": "braid",
+      "size": null,
+      "leather": "braid",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Loewe",
+      "pseudoId": 956,
+      "pseudoName": "Hammock Flip",
+      "pseudoVariants": 1,
+      "baseId": 505,
+      "baseName": "Hammock",
+      "baseVariants": 3,
+      "residual": "flip",
+      "size": null,
+      "leather": "flip",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Goyard",
+      "pseudoId": 758,
+      "pseudoName": "Bohème Hobo",
+      "pseudoVariants": 1,
+      "baseId": 565,
+      "baseName": "Bohème",
+      "baseVariants": 2,
+      "residual": "hobo",
+      "size": null,
+      "leather": "hobo",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Goyard",
+      "pseudoId": 761,
+      "pseudoName": "Alpin Backpack",
+      "pseudoVariants": 2,
+      "baseId": 646,
+      "baseName": "Alpin",
+      "baseVariants": 1,
+      "residual": "backpack",
+      "size": null,
+      "leather": "backpack",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Goyard",
+      "pseudoId": 766,
+      "pseudoName": "Marquises Tote",
+      "pseudoVariants": 1,
+      "baseId": 652,
+      "baseName": "Marquises",
+      "baseVariants": 1,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Goyard",
+      "pseudoId": 767,
+      "pseudoName": "Voltaire Tote",
+      "pseudoVariants": 1,
+      "baseId": 649,
+      "baseName": "Voltaire",
+      "baseVariants": 1,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "The Row",
+      "pseudoId": 609,
+      "pseudoName": "Soft Margaux",
+      "pseudoVariants": 4,
+      "baseId": 605,
+      "baseName": "Margaux",
+      "baseVariants": 1,
+      "residual": "soft",
+      "size": null,
+      "leather": "soft",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "The Row",
+      "pseudoId": 622,
+      "pseudoName": "Slouchy Banana",
+      "pseudoVariants": 4,
+      "baseId": 1008,
+      "baseName": "Banana",
+      "baseVariants": 2,
+      "residual": "slouchy",
+      "size": null,
+      "leather": "slouchy",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "The Row",
+      "pseudoId": 768,
+      "pseudoName": "90s Bag",
+      "pseudoVariants": 2,
+      "baseId": 1283,
+      "baseName": "90s",
+      "baseVariants": 1,
+      "residual": "bag",
+      "size": null,
+      "leather": "bag",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "The Row",
+      "pseudoId": 769,
+      "pseudoName": "Margaux Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 605,
+      "baseName": "Margaux",
+      "baseVariants": 1,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chloé",
+      "pseudoId": 581,
+      "pseudoName": "Woody Tote",
+      "pseudoVariants": 3,
+      "baseId": 1041,
+      "baseName": "Woody",
+      "baseVariants": 3,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chloé",
+      "pseudoId": 862,
+      "pseudoName": "Paddington Tote",
+      "pseudoVariants": 1,
+      "baseId": 861,
+      "baseName": "Paddington",
+      "baseVariants": 3,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chloé",
+      "pseudoId": 863,
+      "pseudoName": "Marcie Saddle",
+      "pseudoVariants": 1,
+      "baseId": 578,
+      "baseName": "Marcie",
+      "baseVariants": 6,
+      "residual": "saddle",
+      "size": null,
+      "leather": "saddle",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chloé",
+      "pseudoId": 864,
+      "pseudoName": "Marcie Round Crossbody",
+      "pseudoVariants": 1,
+      "baseId": 578,
+      "baseName": "Marcie",
+      "baseVariants": 6,
+      "residual": "round crossbody",
+      "size": null,
+      "leather": "round crossbody",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Chloé",
+      "pseudoId": 865,
+      "pseudoName": "Faye Backpack",
+      "pseudoVariants": 1,
+      "baseId": 580,
+      "baseName": "Faye",
+      "baseVariants": 3,
+      "residual": "backpack",
+      "size": null,
+      "leather": "backpack",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Mulberry",
+      "pseudoId": 881,
+      "pseudoName": "Zipped Bayswater",
+      "pseudoVariants": 1,
+      "baseId": 516,
+      "baseName": "Bayswater",
+      "baseVariants": 3,
+      "residual": "zipped",
+      "size": null,
+      "leather": "zipped",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 807,
+      "pseudoName": "Le City",
+      "pseudoVariants": 2,
+      "baseId": 568,
+      "baseName": "City",
+      "baseVariants": 26,
+      "residual": "le",
+      "size": null,
+      "leather": "le",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 808,
+      "pseudoName": "Hourglass Chain",
+      "pseudoVariants": 1,
+      "baseId": 567,
+      "baseName": "Hourglass",
+      "baseVariants": 38,
+      "residual": "chain",
+      "size": null,
+      "leather": "chain",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 810,
+      "pseudoName": "Rodeo Sling Pochette",
+      "pseudoVariants": 1,
+      "baseId": 809,
+      "baseName": "Rodeo",
+      "baseVariants": 6,
+      "residual": "sling pochette",
+      "size": null,
+      "leather": "sling pochette",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 811,
+      "pseudoName": "Bel Air Carry All",
+      "pseudoVariants": 1,
+      "baseId": 998,
+      "baseName": "Bel Air",
+      "baseVariants": 3,
+      "residual": "carry all",
+      "size": null,
+      "leather": "carry all",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 812,
+      "pseudoName": "Bel Air Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 998,
+      "baseName": "Bel Air",
+      "baseVariants": 3,
+      "residual": "shoulder",
+      "size": null,
+      "leather": "shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Balenciaga",
+      "pseudoId": 813,
+      "pseudoName": "Bel Air Clutch on Strap",
+      "pseudoVariants": 1,
+      "baseId": 998,
+      "baseName": "Bel Air",
+      "baseVariants": 3,
+      "residual": "clutch on strap",
+      "size": null,
+      "leather": "clutch on strap",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Givenchy",
+      "pseudoId": 823,
+      "pseudoName": "Soft Antigona",
+      "pseudoVariants": 1,
+      "baseId": 585,
+      "baseName": "Antigona",
+      "baseVariants": 37,
+      "residual": "soft",
+      "size": null,
+      "leather": "soft",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Givenchy",
+      "pseudoId": 824,
+      "pseudoName": "Antigona Lock",
+      "pseudoVariants": 1,
+      "baseId": 585,
+      "baseName": "Antigona",
+      "baseVariants": 37,
+      "residual": "lock",
+      "size": null,
+      "leather": "lock",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Givenchy",
+      "pseudoId": 825,
+      "pseudoName": "Voyou Tote",
+      "pseudoVariants": 1,
+      "baseId": 590,
+      "baseName": "Voyou",
+      "baseVariants": 5,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Givenchy",
+      "pseudoId": 827,
+      "pseudoName": "4G Chain Shoulder",
+      "pseudoVariants": 1,
+      "baseId": 589,
+      "baseName": "4G",
+      "baseVariants": 3,
+      "residual": "chain shoulder",
+      "size": null,
+      "leather": "chain shoulder",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 595,
+      "pseudoName": "VLogo Signature",
+      "pseudoVariants": 1,
+      "baseId": 675,
+      "baseName": "VLogo",
+      "baseVariants": 6,
+      "residual": "signature",
+      "size": null,
+      "leather": "signature",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 591,
+      "pseudoName": "Rockstud Spike",
+      "pseudoVariants": 3,
+      "baseId": 674,
+      "baseName": "Rockstud",
+      "baseVariants": 22,
+      "residual": "spike",
+      "size": null,
+      "leather": "spike",
+      "flags": [
+        "MULTI_VARIANT_PSEUDO",
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 817,
+      "pseudoName": "Rockstud Tote",
+      "pseudoVariants": 1,
+      "baseId": 674,
+      "baseName": "Rockstud",
+      "baseVariants": 22,
+      "residual": "tote",
+      "size": null,
+      "leather": "tote",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 818,
+      "pseudoName": "Rockstud Flip Lock Messenger",
+      "pseudoVariants": 1,
+      "baseId": 674,
+      "baseName": "Rockstud",
+      "baseVariants": 22,
+      "residual": "flip lock messenger",
+      "size": null,
+      "leather": "flip lock messenger",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 819,
+      "pseudoName": "VLogo Crossbody",
+      "pseudoVariants": 1,
+      "baseId": 675,
+      "baseName": "VLogo",
+      "baseVariants": 6,
+      "residual": "crossbody",
+      "size": null,
+      "leather": "crossbody",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Valentino",
+      "pseudoId": 822,
+      "pseudoName": "VLogo Moon",
+      "pseudoVariants": 1,
+      "baseId": 675,
+      "baseName": "VLogo",
+      "baseVariants": 6,
+      "residual": "moon",
+      "size": null,
+      "leather": "moon",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Alexander McQueen",
+      "pseudoId": 665,
+      "pseudoName": "Skull Chain",
+      "pseudoVariants": 1,
+      "baseId": 600,
+      "baseName": "Skull",
+      "baseVariants": 1,
+      "residual": "chain",
+      "size": null,
+      "leather": "chain",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Alexander McQueen",
+      "pseudoId": 667,
+      "pseudoName": "Skull Box Clutch",
+      "pseudoVariants": 1,
+      "baseId": 600,
+      "baseName": "Skull",
+      "baseVariants": 1,
+      "residual": "box clutch",
+      "size": null,
+      "leather": "box clutch",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Jacquemus",
+      "pseudoId": 883,
+      "pseudoName": "Le Chiquito Moyen",
+      "pseudoVariants": 1,
+      "baseId": 611,
+      "baseName": "Le Chiquito",
+      "baseVariants": 1,
+      "residual": "moyen",
+      "size": null,
+      "leather": "moyen",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Jacquemus",
+      "pseudoId": 884,
+      "pseudoName": "Le Chiquito Noeud",
+      "pseudoVariants": 1,
+      "baseId": 611,
+      "baseName": "Le Chiquito",
+      "baseVariants": 1,
+      "residual": "noeud",
+      "size": null,
+      "leather": "noeud",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    },
+    {
+      "brand": "Dolce & Gabbana",
+      "pseudoId": 962,
+      "pseudoName": "Miss Sicily",
+      "pseudoVariants": 1,
+      "baseId": 982,
+      "baseName": "Sicily",
+      "baseVariants": 1,
+      "residual": "miss",
+      "size": null,
+      "leather": "miss",
+      "flags": [
+        "RESIDUAL_NOT_MATERIAL"
+      ]
+    }
+  ]
+}

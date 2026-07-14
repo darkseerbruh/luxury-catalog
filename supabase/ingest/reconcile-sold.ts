@@ -99,8 +99,61 @@ type AvailRow = { platform: string | null; listing_ref: string | null };
 // to reconcile too). Only 'sold' is excluded.
 const NOT_RETIRED = "listing_status.is.null,listing_status.eq.available";
 
-/** Page through every still-shown listed row for the target platform. */
-async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
+// The EXACT platform strings stored in price_history, i.e. every loader's PLATFORM
+// constant (supabase/ingest/sources/*.ts) plus eBay. Callers pass loose names
+// ("fashionphile", "RealReal"); we resolve them to these so the paged reads can filter
+// the indexed `platform` column by equality. Keep in sync when a new source loader lands
+// (the DB fallback in resolvePlatforms covers anything missing here, just more slowly).
+const KNOWN_PLATFORMS = [
+  "Fashionphile",
+  "The RealReal",
+  "Vestiaire Collective",
+  "eBay",
+  "The Luxury Closet",
+  "myGemma",
+  "Redeluxe",
+  "Couture USA",
+  "Ann's Fabulous Finds",
+] as const;
+
+/**
+ * Resolve a loose platform name (callers pass e.g. "fashionphile" -> "Fashionphile",
+ * "RealReal" -> "The RealReal") to the EXACT platform string(s) stored in price_history.
+ *
+ * WHY: the heavy paged reads below must filter on the indexed `platform` column by
+ * equality (price_history_status_platform_idx = platform, listing_status, listing_ref).
+ * A leading-wildcard `ilike('%name%')` can't use that index, so it seq-scanned the whole
+ * ~138k-row table and tipped over Supabase's statement timeout under the load right after
+ * the price upserts: the 57014 failure on the myGemma refresh (2026-07-13).
+ *
+ * Fast path: match the loose name against KNOWN_PLATFORMS in memory (zero DB work, same
+ * case-insensitive substring semantics). Fallback: the capped ilike lookup, only for a
+ * platform not yet in KNOWN_PLATFORMS.
+ */
+async function resolvePlatforms(loose: string): Promise<string[]> {
+  const needle = loose.toLowerCase();
+  const known = KNOWN_PLATFORMS.filter((p) => p.toLowerCase().includes(needle));
+  if (known.length > 0) return [...known];
+
+  const { data, error } = await supabaseAdmin
+    .from("price_history")
+    .select("platform")
+    .eq("price_type", "listed")
+    .ilike("platform", `%${loose}%`)
+    .limit(1000);
+  if (error) throw error;
+  return [
+    ...new Set(
+      (data ?? [])
+        .map((r) => (r as { platform: string | null }).platform)
+        .filter((p): p is string => !!p),
+    ),
+  ];
+}
+
+/** Page through every still-shown listed row for the resolved platform(s). */
+async function fetchAvailableRows(platforms: string[]): Promise<AvailRow[]> {
+  if (platforms.length === 0) return [];
   const all: AvailRow[] = [];
   const PAGE = 1000;
   for (let from = 0; ; from += PAGE) {
@@ -109,7 +162,7 @@ async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
       .select("platform, listing_ref")
       .eq("price_type", "listed")
       .or(NOT_RETIRED)
-      .ilike("platform", `%${platform}%`)
+      .in("platform", platforms)
       .range(from, from + PAGE - 1);
     if (error) throw error;
     const rows = (data ?? []) as AvailRow[];
@@ -121,8 +174,9 @@ async function fetchAvailableRows(platform: string): Promise<AvailRow[]> {
 
 type DatedRow = { platform: string | null; listing_ref: string | null; observed_on: string | null };
 
-/** Page every still-shown listed row for a platform, WITH its observed_on date. */
-async function fetchDatedRows(platform: string): Promise<DatedRow[]> {
+/** Page every still-shown listed row for the resolved platform(s), WITH observed_on. */
+async function fetchDatedRows(platforms: string[]): Promise<DatedRow[]> {
+  if (platforms.length === 0) return [];
   const all: DatedRow[] = [];
   const PAGE = 1000;
   for (let from = 0; ; from += PAGE) {
@@ -131,7 +185,7 @@ async function fetchDatedRows(platform: string): Promise<DatedRow[]> {
       .select("platform, listing_ref, observed_on")
       .eq("price_type", "listed")
       .or(NOT_RETIRED)
-      .ilike("platform", `%${platform}%`)
+      .in("platform", platforms)
       .range(from, from + PAGE - 1);
     if (error) throw error;
     const rows = (data ?? []) as DatedRow[];
@@ -150,7 +204,12 @@ async function fetchDatedRows(platform: string): Promise<DatedRow[]> {
  * running — don't retire the whole catalogue).
  */
 async function ageReconcile(platform: string, ageDays: number, write: boolean, force: boolean): Promise<void> {
-  const rows = await fetchDatedRows(platform);
+  const platforms = await resolvePlatforms(platform);
+  if (platforms.length === 0) {
+    console.error(`\nABORT: no listed rows match platform "${platform}" — nothing to reconcile.`);
+    process.exit(1);
+  }
+  const rows = await fetchDatedRows(platforms);
   const today = new Date();
   const cutoff = new Date(today.getTime() - ageDays * 86_400_000).toISOString().slice(0, 10);
   const todayStr = today.toISOString().slice(0, 10);
@@ -170,7 +229,7 @@ async function ageReconcile(platform: string, ageDays: number, write: boolean, f
   const goneRefs = refs.filter((ref) => (lastSeen.get(ref) as string) < cutoff);
 
   console.log(`\nReconcile resale listings (AGE mode) — ${write ? "WRITE" : "DRY RUN"}`);
-  console.log(`  platform match:  "${platform}"`);
+  console.log(`  platform match:  "${platform}" -> [${platforms.join(", ")}]`);
   console.log(`  age cutoff:      ${cutoff} (older than ${ageDays}d)`);
   console.log(`  distinct live:   ${refs.length}`);
   console.log(`  seen since cutoff: ${seenRecently}`);
@@ -237,7 +296,12 @@ async function main() {
   }
 
   const liveRefs = readLiveRefs(flags.snapshot as string);
-  const rows = await fetchAvailableRows(flags.platform);
+  const platforms = await resolvePlatforms(flags.platform);
+  if (platforms.length === 0) {
+    console.error(`\nABORT: no listed rows match platform "${flags.platform}" — nothing to reconcile.`);
+    process.exit(1);
+  }
+  const rows = await fetchAvailableRows(platforms);
   const today = new Date().toISOString().slice(0, 10);
 
   // Gone = currently available, keyed, but absent from the fresh live set.
@@ -245,7 +309,7 @@ async function main() {
   const goneRefs = [...new Set(goneRows.map((r) => r.listing_ref as string))];
 
   console.log(`\nReconcile resale listings — ${flags.write ? "WRITE" : "DRY RUN"}`);
-  console.log(`  platform match: "${flags.platform}"`);
+  console.log(`  platform match: "${flags.platform}" -> [${platforms.join(", ")}]`);
   console.log(`  live in snapshot: ${liveRefs.size}`);
   console.log(`  available in DB:  ${rows.length}`);
   console.log(`  would retire:     ${goneRefs.length}`);
@@ -272,10 +336,10 @@ async function main() {
     return;
   }
 
-  // Update against each ACTUAL platform string present (the ilike may span variants).
-  const platforms = [...new Set(goneRows.map((r) => r.platform).filter((p): p is string => !!p))];
+  // Update against each ACTUAL platform string present (resolved match may span variants).
+  const gonePlatforms = [...new Set(goneRows.map((r) => r.platform).filter((p): p is string => !!p))];
   let total = 0;
-  for (const p of platforms) {
+  for (const p of gonePlatforms) {
     const refsForP = [...new Set(goneRows.filter((r) => r.platform === p).map((r) => r.listing_ref as string))];
     const n = await retire(p, refsForP, today);
     console.log(`  ${p}: marked ${n} row(s) sold (delisted_on=${today}).`);

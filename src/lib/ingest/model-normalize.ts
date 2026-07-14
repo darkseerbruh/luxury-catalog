@@ -193,10 +193,19 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Boy", "boy", "!wallet on chain", "!woc", "!camera"],
     ["Chanel 19", "19 flap", "chanel 19", "!wallet on chain", "!woc"],
     ["Chanel 22", "chanel 22", "22 bag", "c22"], ["Chanel 25", "chanel 25", "25 bag"],
-    ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle"], ["Deauville", "deauville"],
+    ["Gabrielle", "gabrielle"], ["Coco Handle", "coco handle", "coco top handle"], ["Deauville", "deauville"],
     ["Vanity Case", "vanity"], ["Business Affinity", "business affinity"],
     ["Trendy CC", "trendy cc", "!wallet on chain", "!woc"],
     ["Urban Spirit", "urban spirit"],
+    // Top Handle Rectangular Flap = the modern mini/small rectangular flap WITH a top
+    // handle — its own catalog style (#906) with FP comps titled literally "Mini Top
+    // Handle Rectangular Flap" (0714 comps-remap found them mis-resolving to Classic
+    // Flap). Must sit BEFORE Classic Flap so "rectangular flap" doesn't swallow it.
+    // Kelly/Coco vetoed: the vintage Kelly and the Coco Handle are also top-handle
+    // flaps with their own defs (Coco Handle's def only fires on the exact phrase, so
+    // a "coco top handle flap" title needs the veto here). Handle-LESS square /
+    // rectangular minis still roll up to Classic Flap (0709 decision, unchanged).
+    ["Top Handle Rectangular Flap", "top handle&flap", "handle flap", "!kelly", "!coco"],
     ["Classic Flap", "classic flap", "double flap", "single flap", "rectangular flap", "square flap", "mini flap"],
     ["Wallet on Chain", "wallet on chain", "woc"],
     ["Camera Bag", "camera"], ["Diana", "diana"], ["Cerf Tote", "cerf"],

@@ -1,0 +1,48 @@
+{
+  "style": {
+    "style_id": 79,
+    "brand_id": 1,
+    "name": "Vintage Quilted Shoulder Bag",
+    "style_family": null,
+    "silhouette": null,
+    "closure_type": null,
+    "year_introduced": null,
+    "redesigned": null,
+    "discontinued": false,
+    "year_discontinued": null,
+    "description": "Chanel Shoulder Bag\nRed Leather\nGold-Tone Hardware\nChain-Link Shoulder Straps\nLeather Lining & Single Interior Pocket\nZip Closure at Top\nModerate discoloration at interior; moderate tarnishing at hardware; moderate scratches at hardware; minor discoloration at exterior; light scuffs at corner.",
+    "created_at": "2026-06-19T17:23:05.60987+00:00",
+    "has_protective_feet": null
+  },
+  "variants": [
+    {
+      "variantId": 361,
+      "prev": {
+        "exterior_colorway": null,
+        "exterior_material_id": null,
+        "hardware_color": null,
+        "strap_type": "16"
+      }
+    }
+  ],
+  "aliases": [
+    {
+      "brand": "Chanel",
+      "canonical_model": "Vintage CC Charm Tote",
+      "tier": null,
+      "alias": "CC Charm Tote",
+      "source_type": "reseller",
+      "source": "rebag",
+      "listing_count": 1
+    },
+    {
+      "brand": "Chanel",
+      "canonical_model": "Vintage CC Charm Tote",
+      "tier": null,
+      "alias": "Vintage Quilted Shoulder Bag",
+      "source_type": "reseller",
+      "source": "therealreal",
+      "listing_count": 1
+    }
+  ]
+}

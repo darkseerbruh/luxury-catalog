@@ -44,7 +44,7 @@ async function resolveMaterialId(name: string): Promise<number | null> {
   const { data } = await db.from("material").select("material_id").ilike("name", `%${name}%`).limit(1);
   if ((data ?? [])[0]) return data![0].material_id;
   if (!WRITE) return -1;
-  const type = name === "Empreinte" || name === "Epi" || name === "Vernis" ? "leather" : "canvas";
+  const type = name === "Empreinte" || name === "Epi" || name === "Vernis" ? "leather" : "coated canvas";
   const { data: ins, error } = await db.from("material").insert({ name, material_type: type }).select("material_id").single();
   if (error) { console.error(`   material create failed for ${name}: ${error.message}`); return null; }
   return ins!.material_id;

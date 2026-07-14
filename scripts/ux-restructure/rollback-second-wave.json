@@ -1,0 +1,262 @@
+{
+  "movedVariants": [
+    {
+      "variantId": 425,
+      "oldStyleId": 326,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 439,
+      "oldStyleId": 338,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 360,
+      "oldStyleId": 78,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 422,
+      "oldStyleId": 323,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 244,
+      "oldStyleId": 20,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 341,
+      "oldStyleId": 65,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 269,
+      "oldStyleId": 30,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 367,
+      "oldStyleId": 83,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 354,
+      "oldStyleId": 73,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 366,
+      "oldStyleId": 82,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": null
+      }
+    },
+    {
+      "variantId": 392,
+      "oldStyleId": 106,
+      "prev": {
+        "size_label": null,
+        "exterior_material_id": 44
+      }
+    }
+  ],
+  "deletedStyles": [
+    {
+      "style_id": 326,
+      "brand_id": 4,
+      "name": "Clemence Picotin 22",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nBleu Indigo Clemence Leather\nSilver-Tone Hardware\nFlat Handles\nUnlined\nPull-Through Closure at Top\nProtective Feet at Base\nMinor wear throughout.",
+      "created_at": "2026-06-20T16:52:14.896111+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 338,
+      "brand_id": 4,
+      "name": "Sikkim Double Sens 36",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Tote\nNoir & Étain Calfskin\nDual Shoulder Straps\nLeather Lining\nOpen Top\nIncludes Box\nShape has relaxed due to wear; slightly misshapen handles; minor marks at interior; minor scuffs at corner; light marks at exterior; light scratches at exterior.",
+      "created_at": "2026-06-20T16:52:22.082294+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 78,
+      "brand_id": 4,
+      "name": "Toile & Negonda Garden Party 36",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Weekender Bag\nBrown & Neutrals Toile H Canvas\nColorblock Pattern\nPalladium-Plated Hardware\nNegonda Leather Trim\nRolled Handles & Dual Shoulder Straps\nCanvas Lining\nSnap Closure at Top\nModerate discoloration throughout; slight tarnishing at hardware.",
+      "created_at": "2026-06-19T17:23:05.263681+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 323,
+      "brand_id": 4,
+      "name": "Toile Herbag Zip 31",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nBlue\nColorblock Pattern\nSilver-Tone Hardware\nFlat Handles & Single Shoulder Strap\nSingle Exterior Pocket\nCanvas Lining & Single Interior Pocket\nTurn-Lock Closure at Front\nIncludes Interior Zip Pouch\nFaint marks at front.",
+      "created_at": "2026-06-20T16:52:13.225954+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 20,
+      "brand_id": 15,
+      "name": "City Steamer MM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Weekender Bag\nFrom the 2016 Collection\nBlack & Neutrals Leather\nColorblock Pattern\nGold-Tone Hardware\nRolled Handles\nLeather Lining & Four Interior Pockets\nTurn-Lock Closure at Front\nProtective Feet at Base\nIncludes Dust Bag, Lock, Keys & Luggage Tag\nNo visible signs of wear.",
+      "created_at": "2026-06-19T17:22:45.124625+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 65,
+      "brand_id": 1,
+      "name": "Medium Travel Ligne Tote",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Tote\nFrom the 2000's Collection by Karl Lagerfeld\nBlue\nInterlocking CC Logo\nSilver-Tone Hardware\nDual Shoulder Straps\nNylon Lining\nOpen Top\nProtective Feet at Base\nMinor marks at interior; light wear at edges.",
+      "created_at": "2026-06-19T17:23:00.716308+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 30,
+      "brand_id": 1,
+      "name": "Vintage Travel Ligne Tote",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Tote\nFrom the Late 1990's - Early 2000's Collection by Karl Lagerfeld\nVintage\nBlack\nSilver-Tone Hardware\nRolled Handles\nSatin Lining & Dual Interior Pockets\nOpen Top\nProtective Feet at Base\nLight wear throughout.",
+      "created_at": "2026-06-19T17:22:48.581206+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 83,
+      "brand_id": 1,
+      "name": "Vintage Travel Ligne Duffle Bag",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Top Handle Bag\nBy Karl Lagerfeld\nVintage\nBlue\nSilver-Tone Hardware\nFlat Handles\nNylon Lining\nZip Closure at Top\nProtective Feet at Base\nLight discoloration at interior.",
+      "created_at": "2026-06-19T17:23:06.977078+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 73,
+      "brand_id": 1,
+      "name": "Small Executive Cerf Tote",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Tote\nFrom the 2013 Collection by Karl Lagerfeld\nWhite Leather\nSilver-Tone Hardware\nDual Shoulder Straps\nDual Exterior Pockets\nCanvas Lining & Dual Interior Pockets\nSnap Closure at Top\nProtective Feet at Base\nIncludes Dust Bag & Interior Zip Pouch\nMinor spots throughout; minor scratches at corner.",
+      "created_at": "2026-06-19T17:23:03.536442+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 82,
+      "brand_id": 1,
+      "name": "Large Business Affinity Tote",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Tote\nBy Karl Lagerfeld\nPink Caviar Leather\nInterlocking CC Logo & Quilted Pattern\nGold-Tone Hardware\nFlat Handles\nSingle Exterior Pocket\nLeather Lining & Three Interior Pockets\nTurn-Lock & Zip Closures at Front\nProtective Feet at Base\nIncludes Dust Bag\nMinor mark at base; slight scratches at hardware; shoulder strap not included.",
+      "created_at": "2026-06-19T17:23:06.621228+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 106,
+      "brand_id": 1,
+      "name": "Medium Gabrielle Hobo",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Shoulder Bag\nFrom the 2016 Collection by Karl Lagerfeld\nBlack Leather\nInterlocking CC Logo & Quilted Pattern\nMultitonal Hardware\nChain-Link Shoulder Straps\nMicrofiber Lining & Three Interior Pockets\nZip Closure at Top\nIncludes Dust Bag & Authenticity Card\nMinor creasing at exterior.",
+      "created_at": "2026-06-19T17:23:14.906381+00:00",
+      "has_protective_feet": null
+    }
+  ],
+  "restored": [
+    463
+  ]
+}

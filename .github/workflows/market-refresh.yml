@@ -30,6 +30,10 @@ on:
     # Every 3 hours (listings sell hourly, so retire sold Fashionphile listings fast — this is
     # the only source crawlable headless). Off the :00 mark. Tune up/down here.
     - cron: "17 */3 * * *"
+    # Once daily at 05:17 UTC: ALSO load the full live catalogue's prices (the freshness
+    # source). Its own cron because `*/3` never lands on hour 05, so the old hour==05 gate
+    # never fired and Fashionphile freshness silently froze (2026-07-10..14).
+    - cron: "17 5 * * *"
   workflow_dispatch:
     inputs:
       collection:
@@ -85,12 +89,15 @@ jobs:
       - name: Load the full catalogue's prices (once daily)
         env:
           FULL_LOAD: ${{ github.event.inputs.full_load || 'auto' }}
+          TRIGGER_CRON: ${{ github.event.schedule }}
         run: |
-          HOUR=$(date -u +%H)
-          # auto = load only on the daily 05:xx run; true = force; false = skip.
+          # auto = load only on the dedicated daily 05:17 cron; true = force; false = skip.
+          # Gate on the triggering cron STRING, not wall-clock hour: a delayed Actions run
+          # would miss an exact-hour match and silently skip the load. (Empty on manual
+          # dispatch, so a manual run must pass full_load=true to load.)
           if [ "$FULL_LOAD" = "false" ]; then echo "full_load=false — skipping full price load."; exit 0; fi
-          if [ "$FULL_LOAD" != "true" ] && [ "$HOUR" != "05" ]; then
-            echo "full_load=auto and hour=$HOUR UTC (not 05) — sold-reconcile only this run."; exit 0
+          if [ "$FULL_LOAD" != "true" ] && [ "$TRIGGER_CRON" != "17 5 * * *" ]; then
+            echo "full_load=auto and trigger='$TRIGGER_CRON' (not the daily load cron) — sold-reconcile only this run."; exit 0
           fi
           if [ "$WRITE" != "true" ]; then echo "Dry run — skipping DB writes for the full load."; exit 0; fi
           echo "Loading the full live catalogue's prices..."

@@ -1,0 +1,137 @@
+{
+  "movedVariants": [
+    {
+      "variantId": 1102,
+      "oldStyleId": 644
+    },
+    {
+      "variantId": 1311,
+      "oldStyleId": 759
+    },
+    {
+      "variantId": 1312,
+      "oldStyleId": 759
+    },
+    {
+      "variantId": 2338,
+      "oldStyleId": 645
+    },
+    {
+      "variantId": 1103,
+      "oldStyleId": 645
+    },
+    {
+      "variantId": 2250,
+      "oldStyleId": 645
+    },
+    {
+      "variantId": 2249,
+      "oldStyleId": 645
+    },
+    {
+      "variantId": 1101,
+      "oldStyleId": 643
+    },
+    {
+      "variantId": 1407,
+      "oldStyleId": 816
+    },
+    {
+      "variantId": 1723,
+      "oldStyleId": 983
+    }
+  ],
+  "repointed": [],
+  "deletedStyles": [
+    {
+      "style_id": 644,
+      "brand_id": 404,
+      "name": "Belvedere",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-01T01:02:26.265717+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 759,
+      "brand_id": 404,
+      "name": "Belvedère",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-02T18:47:44.331815+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 645,
+      "brand_id": 404,
+      "name": "Saigon",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-01T01:02:26.930521+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 643,
+      "brand_id": 404,
+      "name": "Boheme",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-01T01:02:25.588527+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 816,
+      "brand_id": 408,
+      "name": "Loco",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-02T18:52:39.773241+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 983,
+      "brand_id": 4,
+      "name": "Bride-a-Brac",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-07-08T19:18:47.467318+00:00",
+      "has_protective_feet": null
+    }
+  ]
+}

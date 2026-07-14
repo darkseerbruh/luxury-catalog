@@ -12,6 +12,7 @@
 - Authentication information lives as close to the specific production record as possible — never generalized at brand level
 - "Explicitly not produced" combinations are as valuable as "produced" — both are stored
 - Confidence level tracked on all authentication-critical data
+- Every new table enables RLS in the same migration that creates it (Supabase defaults make new tables publicly writable) — boilerplate in `supabase/migrations/README.md`
 
 ---
 

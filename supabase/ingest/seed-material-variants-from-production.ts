@@ -32,8 +32,14 @@ async function allPh(variantId: number): Promise<{ price_id: number; material: s
 
 const LEATHER = new Set(["caviar", "lambskin", "calfskin", "aged calfskin", "patent", "epi", "monogram", "damier ebene", "damier azur", "empreinte"]);
 async function resolveMaterialId(name: string): Promise<number | null> {
-  const { data: found } = await db.from("material").select("material_id,name").ilike("name", `%${name}%`).limit(1);
-  if ((found ?? [])[0]) return found![0].material_id;
+  // Match the production value as a WHOLE material name (exact, else a prefix like "Leather" ->
+  // "Leather Trim"), never mid-string: a bare "%${name}%" grabbed unrelated rows — production
+  // "Leather" matched "Caviar Leather" (wrong house) and a junk "fabric lining...leather versions"
+  // row, corrupting the Gucci Dionysus material axis (2026-07-13). Exact -> prefix -> create.
+  const { data: exact } = await db.from("material").select("material_id").ilike("name", name).limit(1);
+  if ((exact ?? [])[0]) return exact![0].material_id;
+  const { data: pref } = await db.from("material").select("material_id").ilike("name", `${name} %`).limit(1);
+  if ((pref ?? [])[0]) return pref![0].material_id;
   if (!WRITE) return -1; // placeholder in dry-run
   const material_type = LEATHER.has(name.toLowerCase()) ? "leather" : name.toLowerCase() === "tweed" ? "fabric" : "other";
   const { data: ins, error } = await db.from("material").insert({ name, material_type }).select("material_id").single();

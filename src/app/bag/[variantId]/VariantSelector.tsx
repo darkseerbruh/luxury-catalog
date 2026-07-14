@@ -21,7 +21,7 @@ import { QuickSaveHeart } from "@/components/QuickSaveHeart";
  */
 // Dimension logic (which details become chip rows, target resolution) lives in
 // src/lib/variant-dims.ts so it's unit-testable; this file is just the UI.
-import { resolveTarget, visibleDims } from "@/lib/variant-dims";
+import { UNKNOWN_LABEL, UNKNOWN_VALUE, dimValue, resolveTarget, visibleDims } from "@/lib/variant-dims";
 import { measuredSizeLabel } from "@/lib/variant-label";
 
 export default function VariantSelector({
@@ -82,7 +82,7 @@ export default function VariantSelector({
       </p>
       <div className="mt-3 flex flex-col gap-4">
         {dims.map(({ dim, values }) => {
-          const currentVal = dim.get(current);
+          const currentVal = dimValue(dim, current);
           return (
             <div key={dim.key}>
               <p className="mb-1.5 text-xs uppercase tracking-wide text-muted/70">
@@ -91,6 +91,7 @@ export default function VariantSelector({
               <div className="flex flex-wrap gap-2">
                 {values.map((value) => {
                   const active = value === currentVal;
+                  const isUnknown = value === UNKNOWN_VALUE;
                   // NOTE: no grey-out here yet. Greying a value must mean "the house never made
                   // it" (archivist production record), NOT "we have no listing" (owner 2026-07-11:
                   // absence of a comp ≠ absence of the product). Wire isCombinationAvailable to the
@@ -98,7 +99,16 @@ export default function VariantSelector({
                   const target = active ? currentVariantId : resolveTarget(variants, current, dim, value);
                   // Display only: size chips carry the measurement + boutique alias so
                   // "Jumbo" reads "Jumbo (Large) · 30 cm". The raw `value` still keys matching.
-                  const label = dim.key === "size" ? measuredSizeLabel(value) ?? value : value;
+                  // The Unknown bucket (owner 2026-07-14) is explicit, selectable state —
+                  // dashed so it reads as "not yet documented", never as a value named Unknown.
+                  const label = isUnknown
+                    ? UNKNOWN_LABEL
+                    : dim.key === "size"
+                      ? measuredSizeLabel(value) ?? value
+                      : value;
+                  const unknownTitle = isUnknown
+                    ? `${dim.label} not yet documented for this one — tap to view it`
+                    : undefined;
                   if (target == null) {
                     return (
                       <span
@@ -114,7 +124,10 @@ export default function VariantSelector({
                     <span
                       key={value}
                       aria-current="true"
-                      className="rounded-full border border-gold bg-gold/10 px-4 py-2 text-sm font-medium text-gold"
+                      title={unknownTitle}
+                      className={`rounded-full px-4 py-2 text-sm font-medium text-gold ${
+                        isUnknown ? "border border-dashed border-gold/70 bg-gold/5" : "border border-gold bg-gold/10"
+                      }`}
                     >
                       {label}
                     </span>
@@ -124,7 +137,10 @@ export default function VariantSelector({
                       href={`/bag/${target}`}
                       prefetch
                       scroll={false}
-                      className="rounded-full border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold"
+                      title={unknownTitle}
+                      className={`rounded-full px-4 py-2 text-sm text-muted transition-colors hover:border-gold hover:text-gold ${
+                        isUnknown ? "border border-dashed border-border" : "border border-border"
+                      }`}
                     >
                       {label}
                     </Link>

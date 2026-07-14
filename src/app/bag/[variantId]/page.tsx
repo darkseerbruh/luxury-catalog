@@ -9,7 +9,6 @@ import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
 import {
-  AUTHOR_NAME,
   SITE_URL,
   buildLeadAnswer,
   metaDescription,
@@ -32,6 +31,7 @@ import ListingsForSale from "./ListingsForSale";
 import { getHeroListing } from "@/lib/listings";
 import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
+import CareModule from "./CareModule";
 import StickyActionBar from "./StickyActionBar";
 import PhotoContributions from "./PhotoContributions";
 import RequestAuthentication from "./RequestAuthentication";
@@ -154,14 +154,60 @@ function Section({
   );
 }
 
-function SpecRow({ label, value }: { label: string; value: string | null | undefined }) {
-  if (!value) return null;
+/** A quiet "ⓘ" that reveals a source note on hover/focus — CSS-only, no client JS,
+ *  so it works on this server-rendered page. Keeps a `title` for touch/AT fallback. */
+function InfoHint({ note }: { note: string }) {
+  return (
+    <span className="group/hint relative ml-1 inline-flex align-middle" tabIndex={0} title={note}>
+      <span
+        aria-hidden
+        className="grid h-3.5 w-3.5 cursor-help place-items-center rounded-full border border-muted/40 text-[9px] leading-none text-muted/70"
+      >
+        i
+      </span>
+      <span className="sr-only">{note}</span>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 hidden w-56 -translate-x-1/2 rounded-lg border border-border bg-surface-raised px-3 py-2 text-xs font-normal normal-case leading-relaxed tracking-normal text-muted shadow-lg group-hover/hint:block group-focus/hint:block"
+      >
+        {note}
+      </span>
+    </span>
+  );
+}
+
+/** The honest empty state for a core spec (owner 2026-07-14): a missing value is
+ *  stated as not-yet-documented and invites the correction, never a silent gap.
+ *  DB keeps NULL as the machine truth; this is render-layer only. */
+function UnknownSpecValue() {
+  return (
+    <span className="italic text-muted/70">
+      Not yet documented ·{" "}
+      <a href="#suggest-edit" className="not-italic text-gold/80 underline-offset-2 hover:underline">
+        know it? Tell us
+      </a>
+    </span>
+  );
+}
+
+function SpecRow({
+  label,
+  value,
+  unknownable = false,
+}: {
+  label: string;
+  value: string | null | undefined;
+  /** Core axes (size/colour/material/hardware) render an explicit unknown state
+   *  instead of hiding; minor fields keep hiding so the table stays scannable. */
+  unknownable?: boolean;
+}) {
+  if (!value && !unknownable) return null;
   return (
     <div className="flex gap-3 py-2 text-sm">
       <span className="w-36 shrink-0 text-muted">{label}</span>
       {/* Researched fields can carry editor provenance flags; translate at the
           shared renderer so no section leaks "Snippet-sourced" to a reader. */}
-      <span className="text-foreground">{translateProvenance(value)}</span>
+      {value ? <span className="text-foreground">{translateProvenance(value)}</span> : <UnknownSpecValue />}
     </div>
   );
 }
@@ -171,12 +217,22 @@ function LinkedSpecRow({
   label,
   value,
   query,
+  unknownable = false,
 }: {
   label: string;
   value: string | null | undefined;
   query?: string | null;
+  unknownable?: boolean;
 }) {
-  if (!value) return null;
+  if (!value && !unknownable) return null;
+  if (!value) {
+    return (
+      <div className="flex gap-3 py-2 text-sm">
+        <span className="w-36 shrink-0 text-muted">{label}</span>
+        <UnknownSpecValue />
+      </div>
+    );
+  }
   const q = query ?? value;
   return (
     <div className="flex gap-3 py-2 text-sm">
@@ -319,15 +375,38 @@ export default async function BagDetailPage({
   const seen = new Set(stylePosts.map((p) => p.postId));
   const bagPosts = [...stylePosts, ...brandPosts.filter((p) => !seen.has(p.postId))].slice(0, 4);
 
-  const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
+  // "Standard" is the ingest's size-unknown bucket, not a house size — the title
+  // never presents it as one (owner 2026-07-14: unknowns are stated, not dressed up).
+  const variantTitle = [
+    v.sizeLabel === "Standard" ? null : v.sizeLabel,
+    v.exteriorColorway,
+    v.hardwareColor ? `${v.hardwareColor} HW` : null,
+  ]
     .filter(Boolean)
-    .join(" · ") || "Variant";
+    .join(" · ") || "Spec not yet documented";
+
+  // The style crumb lands on the style's own page — a bag page carrying the variant
+  // selector — not a /search results page (owner UX review 0714 #16: clicking the
+  // style name should open the bag, not a shop grid).
+  const styleHomeVariantId =
+    (styleVariants.find((s) => s.sizeLabel && s.sizeLabel !== "Standard") ?? styleVariants[0])?.variantId ??
+    v.variantId;
 
   const yearRange = v.yearStart
     ? v.yearEnd
       ? `${v.yearStart}–${v.yearEnd}`
       : v.yearStart.toString()
     : null;
+
+  // Honest sourcing for the production Status pill (owner 2026-07-14: "why is it
+  // discontinued? how do we know?"). We only claim what the record holds: a year_end
+  // is a concrete signal; without one, we hedge and invite a correction.
+  const statusLabel = v.stillInProduction ? "In production" : "Discontinued";
+  const statusNote = v.stillInProduction
+    ? "Listed as still in production in our research record."
+    : v.yearEnd
+      ? `Last catalogued production year ${v.yearEnd}, from our production record. Tell us if that's wrong.`
+      : "Not currently listed in production in our records — a best read, not the maker's word. Know otherwise? Suggest an edit below.";
 
   const leadAnswer = buildLeadAnswer(v);
   const faq = buildFaq(v);
@@ -435,10 +514,11 @@ export default async function BagDetailPage({
       : null;
   const heroImage = images[v.variantId] ?? null;
   // When the face photo is an affiliate LISTING photo (no first-party / UGC
-  // shot), the hero quietly links to buy that exact listing — same image every
+  // shot), the hero links to buy that exact listing, same image every
   // surface shows, platform context lives in the rail below. A genuine
   // first-party photo stays a plain unlinked hero.
-  const heroIsAffiliate = heroImage != null && heroImage.includes("theluxurycloset.com");
+  const heroIsAffiliate =
+    heroImage != null && (heroImage.includes("theluxurycloset.com") || heroImage.includes("mygemma.com"));
   const heroListing = heroIsAffiliate ? await getHeroListing(v.variantId, heroImage) : null;
   const jsonLdImage = heroImage
     ? /^https?:\/\//.test(heroImage)
@@ -718,7 +798,7 @@ export default async function BagDetailPage({
         </Link>
         <span>/</span>
         <Link
-          href={`/search?q=${encodeURIComponent(v.style.name)}`}
+          href={`/bag/${styleHomeVariantId}`}
           className="hover:text-foreground"
         >
           {v.style.name}
@@ -741,10 +821,11 @@ export default async function BagDetailPage({
         {styleVariants.length < 2 && (
           <p className="mt-1 text-lg text-muted">{variantTitle}</p>
         )}
-        <p className="mt-2 text-xs text-muted/70">
-          By {AUTHOR_NAME}
-          {updated ? ` · Catalogued ${updated}` : ""}
-        </p>
+        {/* A bag is a catalogue record, not an article — no author byline (owner
+            2026-07-14). The catalogued date stays as honest freshness metadata. */}
+        {updated && (
+          <p className="mt-2 text-xs text-muted/70">Catalogued {updated}</p>
+        )}
         {v.style.description && (
           <p className="mt-4 text-sm leading-relaxed text-muted">
             {v.style.description}
@@ -912,7 +993,8 @@ export default async function BagDetailPage({
           <div>
             <dt className="text-xs uppercase tracking-wide text-muted/70">Status</dt>
             <dd className="text-foreground">
-              {v.stillInProduction ? "In production" : "Discontinued"}
+              {statusLabel}
+              <InfoHint note={statusNote} />
             </dd>
           </div>
         </dl>
@@ -1054,11 +1136,14 @@ export default async function BagDetailPage({
       <div id="specifications" className="scroll-mt-4">
         <Section title="Specifications">
           <div className="divide-y divide-border rounded-xl border border-border bg-surface">
-            <SpecRow label="Size" value={v.sizeLabel} />
+            {/* Core axes state their unknowns out loud (owner 2026-07-14): a shopper
+                picking by colour/size/hardware must see "not yet documented", not a
+                missing row — and gets the one-tap path to tell us. */}
+            <SpecRow label="Size" value={v.sizeLabel === "Standard" ? null : v.sizeLabel} unknownable />
             <SpecRow label="Size category" value={v.sizeCategory} />
-            <LinkedSpecRow label="Exterior material" value={v.exteriorMaterial?.name ?? null} />
-            <SpecRow label="Colorway" value={v.exteriorColorway} />
-            <LinkedSpecRow label="Hardware color" value={v.hardwareColor} />
+            <LinkedSpecRow label="Exterior material" value={v.exteriorMaterial?.name ?? null} unknownable />
+            <SpecRow label="Colorway" value={v.exteriorColorway} unknownable />
+            <LinkedSpecRow label="Hardware color" value={v.hardwareColor} unknownable />
             <SpecRow label="Hardware type" value={v.hardwareType} />
             <SpecRow label="Strap type" value={v.strapType} />
             <SpecRow label="Strap attachment" value={v.strapAttachmentType} />
@@ -1605,6 +1690,12 @@ export default async function BagDetailPage({
         style={v.style.name}
       />
 
+      {/* Care for it — the OWN state. Material-aware picks + the /care shelf. */}
+      <CareModule
+        materialName={v.exteriorMaterial?.name ?? null}
+        materialLabel={v.exteriorMaterial?.name ?? null}
+      />
+
       {/* Reviews & ratings */}
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
 
@@ -1655,12 +1746,15 @@ export default async function BagDetailPage({
         </Section>
       )}
 
-      {/* Structured suggest-an-edit (corrections) */}
-      <SuggestEdit
-        variantId={v.variantId}
-        signedIn={userState.signedIn}
-        fields={correctableFields}
-      />
+      {/* Structured suggest-an-edit (corrections). The id is the jump target for
+          every "Not yet documented · know it? Tell us" link in the specs table. */}
+      <div id="suggest-edit" className="scroll-mt-4">
+        <SuggestEdit
+          variantId={v.variantId}
+          signedIn={userState.signedIn}
+          fields={correctableFields}
+        />
+      </div>
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />

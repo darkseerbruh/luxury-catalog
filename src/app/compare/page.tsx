@@ -209,7 +209,7 @@ export default async function ComparePage({
               {bags.map((b) => (
                 <td key={b.variantId} className="p-3">
                   <Link
-                    href={`/bag/${b.variantId}#for-sale`}
+                    href={`/bag/${b.variantId}`}
                     className="inline-block rounded-full border border-border px-4 py-2 text-xs text-foreground transition-colors hover:border-gold"
                   >
                     View bag

@@ -219,7 +219,7 @@ export function BagFinder({
                   invite={false}
                   className="aspect-square w-full rounded-xl"
                 />
-                <span className="truncate px-0.5 text-xs font-medium text-foreground">{c.colourName}</span>
+                <span className="px-0.5 text-xs font-medium leading-snug text-foreground">{c.colourName}</span>
               </button>
             ))}
             <button
@@ -275,9 +275,11 @@ export function BagFinder({
                       </span>
                     )}
                   </div>
+                  {/* Names never truncate (owner UX review 0714 #8) — a clipped
+                      "Guilloche Tadelakt B…" tells the shopper nothing. Wrap instead. */}
                   <span className="px-0.5">
-                    <span className="block truncate text-xs font-medium text-foreground">{m.name}</span>
-                    <span className="block truncate text-[11px] text-muted">{m.brand}</span>
+                    <span className="block text-xs font-medium leading-snug text-foreground">{m.name}</span>
+                    <span className="block text-[11px] text-muted">{m.brand}</span>
                   </span>
                 </button>
               ))}

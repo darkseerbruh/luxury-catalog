@@ -59,7 +59,10 @@ async function main() {
       .is("condition", null)
       .eq("listing_status", "available") // only LIVE listings are gradeable (sold pages are gone)
       .not("source_url", "is", null)
-      .like("source_url", "%/products/%")
+      // The "/products/" shape is checked in JS below, NOT here: a leading-wildcard
+      // like("%/products/%") is unindexable and seq-scans the Fashionphile subset (~6.6s
+      // on 14k rows, tripping Supabase's ~8s timeout under post-crawl write load). The
+      // indexed platform/listing_status filter returns the same rows in ~0.5s.
       .gt("price_id", cursor)
       .order("price_id", { ascending: true })
       .limit(Math.min(1000, limit - processed));
@@ -70,6 +73,9 @@ async function main() {
     for (const row of rows) {
       if (Date.now() >= deadline) { outOfTime = true; break; }
       cursor = row.price_id;
+      // Only Fashionphile product pages carry a condition grade. (Formerly a DB-side
+      // like("%/products/%"); moved here to keep the query indexed — see the query above.)
+      if (!row.source_url!.includes("/products/")) continue;
       processed++;
       const html = await fetchHtml(row.source_url!);
       const condition = html ? mapFashionphileCondition(parseConditionGrade(html)) : null;
