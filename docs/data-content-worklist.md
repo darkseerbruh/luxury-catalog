@@ -8,7 +8,8 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
-## VARIANT-SELECTOR levers — **55 styles faceted (through main 44f0a35, 2026-07-13)**, batch to 62 in flight
+## VARIANT-SELECTOR levers — **62 styles faceted (through main d4b10a6, 2026-07-13)**
+*Latest batch (+Vanity Case 71v / Coussin / Galleria / Félicie / Dauphine / Trendy CC / Le Cagole). Remaining unfaceted are mostly <300 listings; the ≥300 icon set is essentially covered. Continuing = more archivist Firecrawl batches (owner spend) into a thinning tail — pace deliberately or stop here.*
 *Every high-volume icon across all major houses now has an Amazon-style Size/Material/Colour(/Construction/Hardware) selector, production-driven + archivist-sourced. Tooling: seed-color-variants-from-production, seed-material-keyword-variants, seed-lv-line-variants, seed-hermes-leather-variants, seed-lv-empreinte-colors. Matrices in docs/research-drafts/*-production-matrix.md. The <300-listing tail remains (owner-paced).*
 
 ### Original 8 units (2026-07-12, up to e940248): 11 styles + the tooling
