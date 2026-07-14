@@ -9,12 +9,13 @@ import { ArticleList } from "@/components/ArticleList";
 import { HouseStory } from "@/components/HouseStory";
 import { tierDisplay } from "@/lib/house-standing";
 
-export const revalidate = 3600; // ISR: public catalog page, cache 1h (was force-dynamic — see infra-limits)
-
-// On-demand ISR: render + cache each path on first visit (empty = none prerendered at build).
-export function generateStaticParams() {
-  return [];
-}
+// Dynamic (per-request) render. Same latent bug as bag + articles (cbd702f): switching
+// this to ISR (revalidate + empty generateStaticParams) 5xx'd it, because the render tree
+// calls cookies() transitively — listByBrand/listByStyle (posts) go through the cookie-aware
+// Supabase client, so an on-demand static render throws DynamicServerError (a 500). This
+// route was MISSED in cbd702f, so it 500'd 100% in prod from 2026-07-13. Don't re-enable
+// ISR until those reads use the anon getSupabase() client.
+export const dynamic = "force-dynamic";
 
 function symbolFor(currency: string | null): string {
   return currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";

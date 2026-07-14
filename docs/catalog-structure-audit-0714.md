@@ -157,6 +157,17 @@ only be as good as these fields. This is the existing attribute-capture pass
      Boulevard precedent — + a Vanity phone holder for the accessory lane);
      33 stay banked (21 unresolved by design, rest lack a clean size variant,
      e.g. "Maxi 2.55" with no Maxi on 2.55 Reissue).
-8. Remaining lanes: image pass for the 4 above · fresh capture for the 433 too-thin
-   variants · the 1,466 multi-colour buckets = the variant-levers colour-splitter
-   lane (active elsewhere; do not duplicate).
+8. ✅ Model-name year contamination FIXED (2026-07-14 night): the spec extractor
+   read model names as production years — Jackie 1961 (511 rows), FF/Jacquard 1974
+   (444), Re-Edition 2005 (357) / 2000 (90), Lauren 1980 (27) = 1,429 price rows
+   fed wrong decades into the bag-page era lens. Cleaned (rollback-model-years.json
+   + rollback-fendi-1974.json) and guarded at the extractor (stripModelNameYear in
+   spec-extract.ts, tested) so new captures can't re-pollute.
+9. ✅ Variant year fill (tight gate): year_start set on 35 variants where every
+   distinct listing states the SAME year (seasonal-piece signature, mostly 2021/22).
+   Spread evidence (179 variants) stays null by design — listings can't bound a
+   production range; the era lens renders it honestly. year_end never filled.
+10. Remaining lanes: image pass for the 4 interim-named Chanel rows · fresh capture
+   for the 433 too-thin variants + the zero-comp ex-junk styles · the 1,466
+   multi-colour buckets = the variant-levers colour-splitter lane (active
+   elsewhere; do not duplicate).
