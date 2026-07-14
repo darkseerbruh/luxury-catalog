@@ -13,19 +13,19 @@ rendering that keys off the canonical style.
 ## Status legend: [ ] todo  [~] in progress  [x] done+committed  [S] staged for owner (migration)
 
 ### P0 — "looks broken"
-- [ ] 1. Shop search: loading skeleton (`shop/loading.tsx`) so a slow search never looks dead
-- [ ] 1b. Shop search: hunt the actual latency (force-dynamic + serial LLM parse + hybrid)
-- [ ] 2. Bag page auto-jumps to #for-sale on load — land at top; stop appending #for-sale to bag links
+- [x] 1. Shop search: loading skeleton (`shop/loading.tsx`) so a slow search never looks dead
+- [x] 1b. Shop search: LLM parse skipped for name queries (fast-path) (force-dynamic + serial LLM parse + hybrid)
+- [x] 2. Bag page auto-jumps to #for-sale on load — land at top; stop appending #for-sale to bag links
 
 ### P1 — search & nav
-- [ ] 3. Nav "Search bags" jitters/pops on hover — expand inline, no layout jump (`HeaderNav.tsx`)
-- [ ] 4. Home pre-search dropdown shows "Shop the market / Deals only" — drop it; keep tier list (`HomeHero.tsx`)
+- [x] 3. Nav "Search bags" jitters/pops on hover — expand inline, no layout jump (`HeaderNav.tsx`)
+- [x] 4. Home pre-search dropdown shows "Shop the market / Deals only" — drop it; keep tier list (`HomeHero.tsx`)
 - [ ] 5. Shop grid: specific-style search shows one rollup tile, not the individual Birkins/listings
 - [x] 6. Best-deal presort → default "Most relevant" on search (DONE earlier this session)
 - [x] 7. "birkin" surfaced non-Birkins → brand-flood gated (DONE earlier this session)
 
 ### P1 — home search dropdown (works better than shop, per owner)
-- [ ] 8. Names truncate ("Guilloche Tadelakt B…") — never truncate a name, wrap (`HomeHero.tsx`)
+- [x] 8. Names truncate ("Guilloche Tadelakt B…") — never truncate a name, wrap (`HomeHero.tsx`)
 - [ ] 9. Leather/size same font as style name — split style (primary) vs variant detail (secondary)
 - [ ] 10. First result "Birkin" is the catch-all page but looks like a listing — distinct "View all Birkins" card
 
@@ -34,8 +34,8 @@ rendering that keys off the canonical style.
         breadcrumb Home / Hermès / Birkin / [variant]
 - [ ] 12. No axis switcher on page — wire VariantSelector to swap leather/size/color/hardware
 - [ ] 13. Color shown nowhere — surface as first-class variant attribute
-- [ ] 14. "By Arielle" byline on a bag — remove on bag pages
-- [ ] 15. "Discontinued" with no source — add sourced hover ("how we know")
+- [x] 14. "By Arielle" byline on a bag — remove on bag pages
+- [x] 15. "Discontinued" with no source — add sourced hover ("how we know")
 - [ ] 16. Variant link went to a shop page — route variant links to the specific bag page
 
 ### The migration (P2 core) — STAGED, owner applies
