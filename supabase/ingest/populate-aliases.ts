@@ -63,12 +63,27 @@ async function main() {
   console.log("sample:", rows.slice(0, 6).map((r) => `${r.brand}/${r.canonical_model} = "${r.alias}" [${r.source_type}:${r.source}]`));
   if (!write) { console.log("\nDRY RUN — pass --write to upsert into bag_alias (needs migration 0031)."); return; }
   const { supabaseAdmin: db } = await import("../seed/lib/client");
-  let n = 0;
-  for (let i = 0; i < rows.length; i += 500) {
-    const { error } = await db.from("bag_alias").upsert(rows.slice(i, i + 500), { onConflict: "brand,canonical_model,alias,source", ignoreDuplicates: true });
-    if (error) throw error; n += Math.min(500, rows.length - i);
+  // bag_alias uniqueness is the expression index bag_alias_uniq
+  // (brand, canonical_model, lower(alias), coalesce(source,'')) — PostgREST
+  // on_conflict can't target expression indexes, so check-then-insert.
+  const key = (r: { brand: string; canonical_model: string; alias: string; source: string | null }) =>
+    `${r.brand}|${r.canonical_model}|${r.alias.toLowerCase()}|${r.source ?? ""}`;
+  const existing = new Set<string>();
+  const PAGE = 1000;
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await db.from("bag_alias").select("brand, canonical_model, alias, source").range(from, from + PAGE - 1);
+    if (error) throw error;
+    for (const r of data ?? []) existing.add(key(r));
+    if (!data || data.length < PAGE) break;
   }
-  console.log(`Upserted ${n} alias rows into bag_alias.`);
+  const fresh = rows.filter((r) => !existing.has(key(r)));
+  console.log(`${existing.size} aliases already in bag_alias; inserting ${fresh.length} new.`);
+  let n = 0;
+  for (let i = 0; i < fresh.length; i += 500) {
+    const { error } = await db.from("bag_alias").insert(fresh.slice(i, i + 500));
+    if (error) throw error; n += Math.min(500, fresh.length - i);
+  }
+  console.log(`Inserted ${n} alias rows into bag_alias.`);
 }
 
 main().then(() => process.exit(0)).catch((e) => { console.error(e.message ?? e); process.exit(1); });
