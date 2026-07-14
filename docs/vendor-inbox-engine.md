@@ -8,11 +8,14 @@ owner merges, spends, rotates keys, and replies. Fits the §3 safety line in
 
 ## §0 Where the mail lives (the one dependency)
 
-Vendor/tool mail lands in the **arielle@luxurycatalog.com Google Workspace inbox**,
-NOT the personal Gmail. The engine reads it through the Gmail connector authed to that
-Workspace address (connected in claude.ai settings). If that connector is not available
-in the run, the engine can do nothing: write one ledger line saying "inbox connector
-unavailable, skipped" and stop. It never guesses at mail it cannot read.
+Vendor/tool mail all lands in **ariellecoambes@gmail.com** — the personal Gmail already
+wired to the Gmail connector. Most vendors mail there directly; the
+arielle@luxurycatalog.com Workspace mail is auto-forwarded there too (owner set the
+forward). So the engine reads the ONE connected personal Gmail; no second connector.
+If the Gmail connector is not available in the run, the engine can do nothing: write one
+ledger line "inbox connector unavailable, skipped" and stop. It never guesses at mail it
+cannot read. (Forwarded mail keeps the original sender, so the §1 sender scope still
+matches it.)
 
 ## §1 What counts as a vendor/tool email (sender scope)
 
