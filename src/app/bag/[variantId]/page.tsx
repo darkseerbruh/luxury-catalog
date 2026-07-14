@@ -9,7 +9,6 @@ import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
 import { getApprovedPhotos } from "@/lib/photos";
 import {
-  AUTHOR_NAME,
   SITE_URL,
   buildLeadAnswer,
   metaDescription,
@@ -152,6 +151,28 @@ function Section({
       <h2 className="mb-4 font-serif text-xl text-foreground">{title}</h2>
       {children}
     </section>
+  );
+}
+
+/** A quiet "ⓘ" that reveals a source note on hover/focus — CSS-only, no client JS,
+ *  so it works on this server-rendered page. Keeps a `title` for touch/AT fallback. */
+function InfoHint({ note }: { note: string }) {
+  return (
+    <span className="group/hint relative ml-1 inline-flex align-middle" tabIndex={0} title={note}>
+      <span
+        aria-hidden
+        className="grid h-3.5 w-3.5 cursor-help place-items-center rounded-full border border-muted/40 text-[9px] leading-none text-muted/70"
+      >
+        i
+      </span>
+      <span className="sr-only">{note}</span>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 hidden w-56 -translate-x-1/2 rounded-lg border border-border bg-surface-raised px-3 py-2 text-xs font-normal normal-case leading-relaxed tracking-normal text-muted shadow-lg group-hover/hint:block group-focus/hint:block"
+      >
+        {note}
+      </span>
+    </span>
   );
 }
 
@@ -329,6 +350,16 @@ export default async function BagDetailPage({
       ? `${v.yearStart}–${v.yearEnd}`
       : v.yearStart.toString()
     : null;
+
+  // Honest sourcing for the production Status pill (owner 2026-07-14: "why is it
+  // discontinued? how do we know?"). We only claim what the record holds: a year_end
+  // is a concrete signal; without one, we hedge and invite a correction.
+  const statusLabel = v.stillInProduction ? "In production" : "Discontinued";
+  const statusNote = v.stillInProduction
+    ? "Listed as still in production in our research record."
+    : v.yearEnd
+      ? `Last catalogued production year ${v.yearEnd}, from our production record. Tell us if that's wrong.`
+      : "Not currently listed in production in our records — a best read, not the maker's word. Know otherwise? Suggest an edit below.";
 
   const leadAnswer = buildLeadAnswer(v);
   const faq = buildFaq(v);
@@ -742,10 +773,11 @@ export default async function BagDetailPage({
         {styleVariants.length < 2 && (
           <p className="mt-1 text-lg text-muted">{variantTitle}</p>
         )}
-        <p className="mt-2 text-xs text-muted/70">
-          By {AUTHOR_NAME}
-          {updated ? ` · Catalogued ${updated}` : ""}
-        </p>
+        {/* A bag is a catalogue record, not an article — no author byline (owner
+            2026-07-14). The catalogued date stays as honest freshness metadata. */}
+        {updated && (
+          <p className="mt-2 text-xs text-muted/70">Catalogued {updated}</p>
+        )}
         {v.style.description && (
           <p className="mt-4 text-sm leading-relaxed text-muted">
             {v.style.description}
@@ -913,7 +945,8 @@ export default async function BagDetailPage({
           <div>
             <dt className="text-xs uppercase tracking-wide text-muted/70">Status</dt>
             <dd className="text-foreground">
-              {v.stillInProduction ? "In production" : "Discontinued"}
+              {statusLabel}
+              <InfoHint note={statusNote} />
             </dd>
           </div>
         </dl>

@@ -269,7 +269,7 @@ export default async function ShopPage({
                     className="absolute right-2 top-2 z-20"
                   />
                   <Link
-                    href={`/bag/${p.variantId}#for-sale`}
+                    href={`/bag/${p.variantId}`}
                     aria-label={bagLabel(p)}
                     className="absolute inset-0 z-0 rounded-2xl"
                   />
