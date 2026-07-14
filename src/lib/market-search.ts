@@ -63,17 +63,25 @@ export async function resolveMarketSearch(
   // A fired pin IS the interpretation (the NL chips misread exactly these shapes).
   const interpreted = pinned.length > 0 ? priorityChipLabels(pinned) : ranked.interpreted;
 
-  // The matched styleId set = matched styles + every style under a matched brand, so a
-  // bare brand query ("Chanel") narrows the market to that whole house.
+  // The matched styleId set, ordered by relevance (styles first, best match first —
+  // a Set preserves insertion order, and getShopProducts reads that order for the
+  // "relevance" sort). We only fan out to a matched brand's whole house for a BARE
+  // brand query ("Chanel"): when the query pinned or ranked a specific style
+  // ("birkin"), pouring in every sibling style buries the bag they asked for under
+  // the rest of the house, so we keep the set to the styles that actually matched.
   const ids = new Set<number>();
   for (const s of styles) ids.add(s.styleId);
-  for (const b of ranked.brands) for (const s of b.styles) ids.add(s.styleId);
+  if (styles.length === 0) {
+    for (const b of ranked.brands) for (const s of b.styles) ids.add(s.styleId);
+  }
 
   return {
     styleIds: [...ids],
     styles,
     brands: ranked.brands,
     interpreted,
-    usedNaturalLanguage: ranked.usedNaturalLanguage,
+    // A fired pin IS an interpretation ("Interpreted as: Hermès Birkin"), so show
+    // the chip for it even though the name fast-path skips the NL parser.
+    usedNaturalLanguage: pinned.length > 0 || ranked.usedNaturalLanguage,
   };
 }

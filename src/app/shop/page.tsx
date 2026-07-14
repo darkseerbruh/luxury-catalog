@@ -37,7 +37,7 @@ function subLabel(p: ShopProduct): string {
   return [p.sizeLabel, colors].filter(Boolean).join(" · ");
 }
 
-const VALID_SORTS: ShopSort[] = ["best-deal", "price-asc", "price-desc", "newest"];
+const VALID_SORTS: ShopSort[] = ["relevance", "best-deal", "price-asc", "price-desc", "newest"];
 
 export default async function ShopPage({
   searchParams,
@@ -59,7 +59,7 @@ export default async function ShopPage({
   const {
     q = "",
     brand = "",
-    sort = "best-deal",
+    sort = "",
     deals = "",
     min = "",
     max = "",
@@ -71,7 +71,10 @@ export default async function ShopPage({
   } = await searchParams;
   const query = q.trim();
   const protectiveFeet = feet === "yes" || feet === "unknown" ? feet : undefined;
-  const sortValue = (VALID_SORTS as string[]).includes(sort) ? (sort as ShopSort) : "best-deal";
+  // A text search leads with relevance (the searched bag first); a bare browse leads
+  // with best-deal. An explicit ?sort= always wins.
+  const defaultSort: ShopSort = query ? "relevance" : "best-deal";
+  const sortValue = (VALID_SORTS as string[]).includes(sort) ? (sort as ShopSort) : defaultSort;
   const minPrice = min && Number.isFinite(Number(min)) ? Number(min) : undefined;
   const maxPrice = max && Number.isFinite(Number(max)) ? Number(max) : undefined;
 
@@ -266,7 +269,7 @@ export default async function ShopPage({
                     className="absolute right-2 top-2 z-20"
                   />
                   <Link
-                    href={`/bag/${p.variantId}#for-sale`}
+                    href={`/bag/${p.variantId}`}
                     aria-label={bagLabel(p)}
                     className="absolute inset-0 z-0 rounded-2xl"
                   />

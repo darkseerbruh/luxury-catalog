@@ -91,7 +91,7 @@ export interface ShopProduct {
   dealBand: DealBand | null;
 }
 
-export type ShopSort = "best-deal" | "price-asc" | "price-desc" | "newest";
+export type ShopSort = "relevance" | "best-deal" | "price-asc" | "price-desc" | "newest";
 
 /** A color/material filter value is either an exact specific (e.g. "Étoupe") or a whole
  *  family, encoded "f:Beige". The matcher and the controls both understand this prefix. */
@@ -881,9 +881,23 @@ export async function getShopProducts(filters: ShopFilters = {}, limit = 60): Pr
 
     const totalProducts = products.length;
 
-    const sort = filters.sort ?? "best-deal";
+    // Default to relevance when a text search set the styleId order (the bag they
+    // searched leads), otherwise best-deal for a bare browse.
+    const sort = filters.sort ?? (filters.styleIds?.length ? "relevance" : "best-deal");
+    // Relevance = the position of each product's style in the search-ranked styleIds
+    // (pins + best matches first). Unranked styles fall to the end.
+    const styleRank = new Map<number, number>();
+    (filters.styleIds ?? []).forEach((id, i) => {
+      if (!styleRank.has(id)) styleRank.set(id, i);
+    });
     products.sort((a, b) => {
       switch (sort) {
+        case "relevance": {
+          const ra = styleRank.get(a.styleId) ?? Number.MAX_SAFE_INTEGER;
+          const rb = styleRank.get(b.styleId) ?? Number.MAX_SAFE_INTEGER;
+          if (ra !== rb) return ra - rb;
+          return a.fromPrice - b.fromPrice; // same style: cheapest group first
+        }
         case "price-asc":
           return a.fromPrice - b.fromPrice;
         case "price-desc":
