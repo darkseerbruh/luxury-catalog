@@ -1,5 +1,15 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-14 (all on `main`, all auto-deployed to prod: Chanel ex-seller-title lane CLOSED [comps decontaminated, dictionary root fix, image pass — seller-title check 0 🟢]; myGemma on its licensed Awin datafeed [buy-links + trust + real photos, Shopify crawl retired]; two ingest-timeout crons fixed + index migration 0056; Fashionphile freshness un-frozen; a 100%-since-07-13 prod 500 on /brand fixed). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-14 (all on `main`, all auto-deployed to prod: Supabase RLS finding CLOSED [migration 0057 applied + verified, new-table RLS convention codified]; Chanel ex-seller-title lane CLOSED [comps decontaminated, dictionary root fix, image pass — seller-title check 0 🟢]; myGemma on its licensed Awin datafeed [buy-links + trust + real photos, Shopify crawl retired]; two ingest-timeout crons fixed + index migration 0056; Fashionphile freshness un-frozen; a 100%-since-07-13 prod 500 on /brand fixed). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Supabase security finding CLOSED: RLS enabled on the 2 exposed tables + convention codified (2026-07-14, on `main`, migration 0057 APPLIED)
+
+**The Supabase advisor email (rls_disabled_in_public, 2026-07-12) was real: `lc_index_snapshot` (0049) and `production_option` (0054) shipped without RLS, and Supabase default privileges gave the public anon key FULL write on both. Fixed, verified, and made unrepeatable.**
+- 🔒 **Migration `0057` (owner cleared "apply them"; run `29376232171` green):** RLS on both tables + public `select_all` policies (the app reads both with the anon key) + write grants revoked from anon/authenticated. Writes stay service-role only (snapshot cron, `load-production-options.ts`) — service role bypasses RLS, so nothing broke.
+- ✅ **Verified live, not assumed:** zero `public` tables with RLS off; anon read of `production_option` still returns rows (selector intact, 1,088 rows present); anon DELETE refused with `42501` permission denied.
+- 📖 **Convention codified so it can't recur:** new `supabase/migrations/README.md` — every `create table` ships RLS + policy + write-revoke boilerplate IN THE SAME migration (per-user tables copy the `auth.uid()` pattern from 0003); one-line pointer added to `docs/database-schema.md` Core Principles. Root cause was 0054's table being created without the step.
+- ⬜ **YOUR TURN:** nothing. The weekly advisor email should stop; if another finding arrives, paste it.
 
 ---
 
