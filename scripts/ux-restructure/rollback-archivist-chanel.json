@@ -1,0 +1,165 @@
+{
+  "renamed": [
+    {
+      "styleId": 69,
+      "oldName": "Large Leather Patchwork Brooklyn Cabas"
+    },
+    {
+      "styleId": 145,
+      "oldName": "Chanel Charcoal Grey Quilted Patent Leather Golden Class Accordion Flap Bag"
+    },
+    {
+      "styleId": 153,
+      "oldName": "Chanel Black Quilted Shiny Lambskin Leather Small Bowling Bag"
+    },
+    {
+      "styleId": 185,
+      "oldName": "Chanel Beige Quilted Leather Mademoiselle Lock Shoulder Bag"
+    },
+    {
+      "styleId": 50,
+      "oldName": "Printed Denim Large Flap Bag"
+    },
+    {
+      "styleId": 76,
+      "oldName": "2021 Quilted Sponge Flap Bag"
+    },
+    {
+      "styleId": 138,
+      "oldName": "Chanel Beige Quilted Leather Button Top Flap Bag"
+    },
+    {
+      "styleId": 158,
+      "oldName": "Chanel Red Quilted Leather CC Waist Bag"
+    },
+    {
+      "styleId": 167,
+      "oldName": "Chanel Black Leather Chevron Flap Bag"
+    },
+    {
+      "styleId": 178,
+      "oldName": "Chanel Leather Beige Quilted Leather Flap Shoulder Bag"
+    },
+    {
+      "styleId": 189,
+      "oldName": "Chanel Black Caviar Leather Tote Bag"
+    }
+  ],
+  "variants": [
+    {
+      "variantId": 443,
+      "prev": {
+        "style_id": 136,
+        "exterior_colorway": "Pink",
+        "exterior_material_id": 21,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 455,
+      "prev": {
+        "style_id": 150,
+        "exterior_colorway": "Blue",
+        "exterior_material_id": 2,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 350,
+      "prev": {
+        "style_id": 69,
+        "exterior_colorway": null,
+        "exterior_material_id": null,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 451,
+      "prev": {
+        "style_id": 145,
+        "exterior_colorway": "Grey",
+        "exterior_material_id": 50,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 457,
+      "prev": {
+        "style_id": 153,
+        "exterior_colorway": "Black",
+        "exterior_material_id": 52,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 308,
+      "prev": {
+        "style_id": 50,
+        "exterior_colorway": null,
+        "exterior_material_id": null,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 358,
+      "prev": {
+        "style_id": 76,
+        "exterior_colorway": null,
+        "exterior_material_id": null,
+        "size_label": null
+      }
+    }
+  ],
+  "deletedStyles": [
+    {
+      "style_id": 136,
+      "brand_id": 1,
+      "name": "Chanel Pink Tweed 19 Large Flap Bag",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "First unveiled in the Chanel Fall 2019 collection, the Chanel 19 bag is named after the year of its release, just like the Chanel 2.55. In design, the bag has exaggerated quilting and hardware in two tones. The bag has a CC twist-lock and a small chain handle to be carried by hand. This version in pink is made from tweed and lined with canvas.",
+      "created_at": "2026-06-19T17:23:25.246378+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 150,
+      "brand_id": 1,
+      "name": "Chanel Light Blue Quilted Lambskin Leather Mini Top Handle Flap Bag",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Complement the diva in you by adorning this attractive bag from Chanel. The first-class pick for everyday use or special events this pleasing blue bag is true to its existence. The ever-classic ample bag is composed of beautifully textured Quilted leather.",
+      "created_at": "2026-06-19T17:23:30.109012+00:00",
+      "has_protective_feet": null
+    }
+  ],
+  "years": [
+    {
+      "styleId": 69
+    },
+    {
+      "styleId": 145
+    },
+    {
+      "styleId": 153
+    },
+    {
+      "styleId": 50
+    },
+    {
+      "styleId": 76
+    },
+    {
+      "styleId": 138
+    }
+  ]
+}

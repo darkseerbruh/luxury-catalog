@@ -119,7 +119,25 @@ only be as good as these fields. This is the existing attribute-capture pass
      Cerf (Executive), Business Affinity Large, Gabrielle Hobo Medium.
    - 1 un-merge: Neverfull Pochette Pouch back OUT of Neverfull (pouch = accessory,
      restored as style 1288; the accessory-surface lane owns its future).
-6. Remaining: the 14 Chanel archivist rows (naming research), fresh capture for the
-   433 too-thin variants, and the 1,466 multi-colour buckets — those want SPLITTING
-   into per-colour variants, which is the variant-levers colour-splitter lane
-   (active, batch-by-batch; do not duplicate).
+6. ✅ Archivist naming pass DONE (2026-07-14 evening): all 14 Chanel rows identified
+   (research table + sources in the archivist run; apply-archivist-chanel.ts).
+   - 2 merges: Pink Tweed 19 → Chanel 19 (#425); Mini Top Handle → Top Handle
+     Rectangular Flap (#906).
+   - 8 sourced renames: Brooklyn Cabas (F/W 2007 — genuinely Chanel, NOT the LV
+     Brooklyn), Golden Class Double CC Flap (Cruise 2014), Fashion Therapy Bowling
+     Bag (2020), Mademoiselle Lock Flap, Denim Graffiti Flap (22P), Terrycloth
+     Flap (2021), Button On Top Flap (~2020), Quilted CC Belt Bag. These are
+     reseller/collector-consensus labels, not official Chanel names (Chanel
+     seasonal has only style codes) — keep that hedge in any page copy.
+   - 3 interim renames pending an image pass: Vintage Chevron Flap (#167),
+     Quilted Flap Shoulder Bag (#178), Caviar CC Tote (#189 — likely one of
+     GST/Medallion/PST/Cerf; the image decides).
+   - 1 untouched: #191 (tentative merge → Vintage Quilted Shoulder Bag #79, image
+     first). It is the single remaining seller-title row in the daily check.
+7. Follow-up found by the archivist: the price_history comps attached to those 14
+   variants are CONTAMINATED (unrelated eBay/TRR bags mapped onto them, e.g. a
+   "Novelty Drawstring" comp on the Chanel 19 row). Needs a comps-remap pass —
+   same discipline as the TRR mismap sweep.
+8. Remaining lanes: image pass for the 4 above · comps-remap for the 14 · fresh
+   capture for the 433 too-thin variants · the 1,466 multi-colour buckets =
+   the variant-levers colour-splitter lane (active elsewhere; do not duplicate).
