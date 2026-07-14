@@ -473,6 +473,42 @@ export function scoreDuplicates(dupCount: number): CheckResult {
   };
 }
 
+/**
+ * F3. Structural defects in the style→variant hierarchy (the 0714 catalog audit,
+ * docs/catalog-structure-audit-0714.md). Baseline junk is KNOWN and staged for
+ * cleanup, so a stable-or-shrinking count is yellow (backlog, not an incident);
+ * GROWTH is red — it means the promotion pipeline is minting new junk rows.
+ */
+export function scoreStructure(
+  id: string,
+  label: string,
+  count: number,
+  previous: number | null,
+  cleanupCmd: string,
+): CheckResult {
+  const grew = previous != null && count > previous;
+  const status: CheckStatus = count === 0 ? "green" : grew ? "red" : "yellow";
+  return {
+    id,
+    label,
+    status,
+    value: `${count} (prev ${previous ?? "n/a"})`,
+    metric: count,
+    plainEnglish:
+      status === "green"
+        ? ""
+        : grew
+          ? `${label} grew from ${previous} to ${count} — the promotion pipeline is creating NEW structurally-wrong style rows; find and fix the source before cleaning up.`
+          : `${count} known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged.`,
+    action:
+      status === "green"
+        ? ""
+        : grew
+          ? "Diff scripts/ux-restructure/pseudo-style-plan.json against a fresh detect run to find the new rows, then check promote-safe/--create-new naming."
+          : cleanupCmd,
+  };
+}
+
 /** G. variant_price_summary staleness — the one condition the routine may auto-fix. */
 export function scoreSummaryStaleness(asOfAgeHours: number | null, rowsAdded: number): CheckResult {
   const stale = asOfAgeHours != null && asOfAgeHours > 36 && rowsAdded > 0;

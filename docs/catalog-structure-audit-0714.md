@@ -1,5 +1,13 @@
 # Catalog structure audit — full sweep (2026-07-14)
 
+> **Now a standing check.** The daily data-health action scores all three defect
+> classes plus variant size/colour/material coverage on every run
+> (`structure-pseudo`, `structure-title-junk`, `structure-accent-dupes`,
+> `coverage-variant-*` — logic in `src/lib/catalog-structure.ts`, scoring in
+> `data-health-core.ts`). Stable-or-shrinking junk = yellow (known backlog);
+> GROWTH = red + a GitHub issue, because it means the promotion pipeline is
+> minting new junk. This document is the baseline + cleanup plan.
+
 Owner asked: does the Birkin pseudo-style disease exist across the whole catalog?
 Audit run 2026-07-14 against the live DB: **48 brands · 966 styles · 4,305 variants**.
 Tooling: `scripts/ux-restructure/audit-catalog-structure.ts` (+ `list-title-junk.ts`,
@@ -10,6 +18,32 @@ The hierarchy is fundamentally sound; the junk is real but **bounded and enumera
 ~60 style rows (~6% of 966) are structurally wrong, concentrated in Chanel + Louis
 Vuitton + Hermès, plus one catalog-wide attribute-coverage gap that is a known,
 separate workstream.
+
+## What we learned, on the three axes
+
+**Completeness** (live baseline 2026-07-14, n=4,305 variants)
+- Variant size: **93.5%** filled · colour: **45.2%** · material: **24.8%**.
+- Colour/material gaps starve the bag-page axis selector; production-record axes
+  stand in meanwhile. This is the attribute-capture lane, now delta-scored daily
+  (`coverage-variant-*`) so any DROP flags a loader regression same-day.
+
+**Correctness**
+- Style names are the weak field: ~60 of 966 rows carry a wrong IDENTITY
+  (a variant spec or a seller title posing as a style). Prices/listings under
+  them are real data on wrong shelves — merges move them, nothing is deleted.
+- Correctness failures cluster at INGEST/PROMOTION time (breadth-seed 2022 export,
+  title-promotion), not decay in place. So the daily check scores GROWTH as red:
+  a rising count means the pipeline is minting new junk today.
+
+**Organization**
+- The style→variant hierarchy model itself is right; defects are rows filed at the
+  wrong level, not a schema problem. No migration needed — merges suffice.
+- Guardrail learned the hard way: "name embeds another style" is NOT junk on its
+  own (173 hits, mostly real sub-models like "Puzzle Edge"). Only the
+  material-vocabulary-validated residual class auto-merges; over-cleaning would
+  destroy real catalog breadth.
+- Accent handling needs one canonical spelling per style (keep the accented form);
+  the dup detector folds accents to catch ASCII twins at promotion time.
 
 ## The four real defect classes
 

@@ -2,7 +2,10 @@ name: Daily data health
 
 # The data health & completeness routine (owner-locked 2026-07-10): scores
 # freshness, capture sanity, ranking floor, attribute coverage, backlog growth,
-# contamination sentinels, summary staleness, and the per-source cadence audit;
+# contamination sentinels, catalog structure (pseudo-styles / seller-title
+# styles / accent dups + variant size/colour/material coverage — the 0714
+# audit, now standing; src/lib/catalog-structure.ts), summary staleness, and
+# the per-source cadence audit;
 # commits a dated report; opens/closes deduped `data-health` issues on reds;
 # feeds findings to docs/data-content-worklist.md. The routine graduates itself
 # to weekly (Mondays) after 7 straight green daily runs — the cadence lives in
