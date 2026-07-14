@@ -1,0 +1,54 @@
+[
+  {
+    "styleId": 186,
+    "oldName": "Louis Vuitton Mango Monogram Vernis Thompson Street Bag",
+    "variants": []
+  },
+  {
+    "styleId": 161,
+    "oldName": "Louis Vuitton Brown/Red Canvas Antigua Cabas PM Bag",
+    "variants": [
+      {
+        "variantId": 464,
+        "prev": {
+          "exterior_colorway": "Brown,Red",
+          "exterior_material_id": 54,
+          "size_label": null
+        }
+      }
+    ]
+  },
+  {
+    "styleId": 165,
+    "oldName": "Louis Vuitton Monogram Canvas Boetie MM Bag",
+    "variants": [
+      {
+        "variantId": 468,
+        "prev": {
+          "exterior_colorway": "Brown",
+          "exterior_material_id": 48,
+          "size_label": null
+        }
+      }
+    ]
+  },
+  {
+    "styleId": 181,
+    "oldName": "Louis Vuitton Black Epi Leather Pegase 50 Luggage",
+    "variants": [
+      {
+        "variantId": 483,
+        "prev": {
+          "exterior_colorway": "Black",
+          "exterior_material_id": 6,
+          "size_label": null
+        }
+      }
+    ]
+  },
+  {
+    "styleId": 187,
+    "oldName": "Louis Vuitton Cream Suhali Leather Le Majestueux Bag",
+    "variants": []
+  }
+]

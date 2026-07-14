@@ -90,10 +90,22 @@ only be as good as these fields. This is the existing attribute-capture pass
 - 522 one-variant styles — mostly fine (genuinely single-spec or thin-data bags); a
   smell only in combination with classes 1-2.
 
-## Cleanup order (recommended)
-1. Owner runs the staged class-1 merge (28 rows) — biggest UX win, zero judgment needed.
-2. Add class-3 accent dups to the same script (5 mechanical merges) — small patch.
-3. Class-2 title-junk mapping pass (21 rows) — research each, propose merge/rename table,
-   owner approves once, apply.
-4. The 143 flagged name-embeds — periodic judgment pass; most will be "keep".
-5. Attribute-capture continues as its own lane (already on the data worklist).
+## Cleanup status (owner gave blanket go 2026-07-14, applied same day)
+1. ✅ Class-1 merge APPLIED: 28 pseudo-styles folded into their real styles
+   (rollback-all-28.json). 1 multi-variant judgment row remains (Bloomsbury).
+2. ✅ Class-3 accent dups APPLIED: 5 groups merged, 6 twin rows deleted, accented
+   spelling kept (merge-accent-dups.ts, rollback-accent-dups.json).
+3. ✅ Class-2 partial: 2 auto-merges (Mini Square Flap, Neverfull) + 5 hand-verified
+   LV renames (Thompson Street, Antigua Cabas, Boétie, Pégase, Le Majestueux) with
+   title-parsed colour/material/size moved onto the variants. **14 Chanel rows
+   remain** — no-model-name vintage/seasonal pieces; naming them needs the archivist
+   (renaming by heuristic would be inventing). List: `map-title-junk.ts` dry-run.
+4. ✅ Attribute roll-up APPLIED (enrich-variant-attributes.ts): 1,613 variants filled
+   from listing evidence — votes are DISTINCT listings (re-scrape dedupe, the
+   deals-rail lesson), colour needs ≥90% consensus, material/hardware ≥80%; mixed
+   buckets stay NULL by design. Coverage: colour 45.2%→51%, material 24.8%→41%.
+   Rollbacks: rollback-attr-enrich.json.
+5. Remaining: the 14 Chanel archivist rows, the 143 name-embeds judgment pass
+   (mostly "keep"), and fresh capture for the still-thin variants (433 had too
+   little evidence; 1,466 are genuine multi-colour buckets that want SPLITTING
+   into per-colour variants via the promotion pipeline, not filling).

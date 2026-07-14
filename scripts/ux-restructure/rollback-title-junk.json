@@ -1,0 +1,54 @@
+{
+  "movedVariants": [
+    {
+      "variantId": 359,
+      "oldStyleId": 77,
+      "prev": {
+        "exterior_colorway": null,
+        "exterior_material_id": null,
+        "size_label": null
+      }
+    },
+    {
+      "variantId": 463,
+      "oldStyleId": 160,
+      "prev": {
+        "exterior_colorway": "Brown",
+        "exterior_material_id": 46,
+        "size_label": null
+      }
+    }
+  ],
+  "deletedStyles": [
+    {
+      "style_id": 77,
+      "brand_id": 1,
+      "name": "Mini Square Flap Bag w/ Tags",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Crossbody Bag\nFrom the Spring/Summer 2022 Collection by Virginie Viard\nBlack & Neutrals Leather\nInterlocking CC Logo & Quilted Pattern\nGold-Tone Hardware\nChain-Link Shoulder Strap\nSingle Exterior Pocket\nUnlined & Dual Interior Pockets with Card Slots\nTurn-Lock Closure at Front\nIncludes Box",
+      "created_at": "2026-06-19T17:23:04.931082+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 160,
+      "brand_id": 15,
+      "name": "Louis Vuitton Monogram Canvas Neverfull Pochette Pouch",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Carry this bag from the house of Louis Vuitton to instantly uplift your look. Brilliantly designed, this brown bag is for the fashionista in you. This monogram canvas bag is fabulously built and extremely alluring.",
+      "created_at": "2026-06-19T17:23:33.628518+00:00",
+      "has_protective_feet": null
+    }
+  ]
+}
