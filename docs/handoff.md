@@ -1,5 +1,16 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-10 (busy day, all on `main`: durable TRR+eBay cloud-Apify capture + backlog promotion [catalog-promote lane], eBay coverage extended + mid-tier deals-basis unlocked, platforms normalized, migration 0038, +4 brands; a promotion pass creating 11 new styles; page-depth descriptions; unified market surface + UX fixes; TRR mis-map sweeps; McQueen dedup+re-triage, Jacquemus coverage, LV Alma article published). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-14 (all on `main`, all auto-deployed to prod: myGemma on its licensed Awin datafeed [buy-links + trust + real photos, Shopify crawl retired]; two ingest-timeout crons fixed + index migration 0056; Fashionphile freshness un-frozen; a 100%-since-07-13 prod 500 on /brand fixed). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — myGemma feed + 3 prod/cron fixes (2026-07-14, on `main`, all live in prod)
+
+**Started from "MyGemma membership email + failed-run alerts"; ended with myGemma fully on the TLC-style licensed feed and four separate breakages fixed. Everything landed on `main` and auto-deployed (main → Production is automatic; the old "manual `vercel --prod`" note was stale).**
+- 🛍️ **myGemma = the TLC treatment (approved on Awin 2026-07-14).** Buy-links now route through our Awin publisher id (`awinmid=59483`/`awinaffid=2945769`; `affiliate.ts` + trust entry in `platforms.ts`, commit `694d493`). Then replaced the Shopify crawl with myGemma's **Awin product datafeed** (Google feed F512, 47,827 products → 1,331 bags + 1,331 licensed photos; adapter `sources/mygemma-awin.ts` + generic `load-listing-images.ts`, commit `c150914`). Old `mygemma-crawl.ts`+`mygemma.ts` deleted. Verified `/bag/589` renders photos + Awin links; daily cron passes in CI. Detail in memory [[mygemma-affiliate-wiring]].
+- ⏱️ **Two timeout crons fixed (commits `b3c6171`, `4ccd1c2` + migration `0056` APPLIED).** `data-health` freshness (leading-wildcard ilike → exact `.eq`), `grade-condition-fashionphile` (dropped a leading-wildcard `like`, 6.6s→0.2s), backlog counts → planner estimate. Migration 0056 = two `price_history` indexes (platform+observed_on; partial ungraded-FP) because indexed `.eq` still timed out under post-crawl write load. Both crons re-run green. [[supabase-statement-timeout]]
+- 🔄 **Fashionphile freshness un-frozen (commit `736f429`).** The daily price load was gated on `HOUR==05`, but the cron is `17 */3` (hits 0/3/6/…, never 05) → the load never fired; data frozen at 07-10 while runs still went green. Fixed with a dedicated daily cron `17 5 * * *` gated on `github.event.schedule` (delay-proof). Catch-up run loaded 12,891 rows; newest `observed_on` now today.
+- 🩹 **Prod 500 on /brand fixed (commit `fe76b6b`).** `/brand/[brandId]` had a 100% error rate in prod since ~07-13 (dev showed 200): ISR + `cookies()` (via `listByBrand`/`listByStyle`) = `DynamicServerError`. The exact bug `cbd702f` fixed for /bag+/articles, but /brand was MISSED. Restored `force-dynamic`; swept every ISR route (brand was the only straggler). Verified prod `/brand/*` 500→200. [[infra-free-tier-limits]]
+- ⬜ **YOUR TURN:** nothing blocking. Optional: `/photos/most-wanted` + the 15 other ISR routes are clean; Amazon Associates + Vivrelle items below still stand.
 
 ---
 
@@ -20,18 +31,6 @@
 - ⏱️ **Reconcile (commit `df07395`):** `reconcile-sold.ts` matched `platform` with a leading-wildcard `ilike('%name%')` that seq-scanned all ~138k `price_history` rows and tipped over the 8s limit. Now resolves the loose name to exact stored strings in-memory (`KNOWN_PLATFORMS`) and reads via `.in('platform', …)` so `price_history_status_platform_idx` does the work. Verified: step retired 73 rows and completed.
 - 🗄️ **Summary refresh (migration `0055`, APPLIED):** `refresh_variant_price_summary()` (MV rebuild over all rows) now takes ~7.3s and was intermittently crossing the same 8s wall even idle. Scoped `set statement_timeout = '180s'` onto that one function. Fixes every ingest workflow's final `summary:refresh` step **and** the `/api/cron/price-summary` twin, not just myGemma. Verified: RPC returns 204 in 7.3s; full myGemma run `29271266812` = success.
 - ✅ **Nothing pending.** Migration 0055 applied via the `db-migrate.yml` runner this session; no outward-facing items left.
-
----
-
-## TL;DR — The care shelf: OWN-state surface + dormant Amazon Associates channel (2026-07-13, on branch `claude/bag-adjacent-products-ypl7pc`, PR-ready)
-
-**Off the owner's "Amazon list of bag-adjacent products" idea. Built Option A: a `/care` hub + a material-aware bag-page module.** Serves the OWN state, which had no surface (the site covered want/buy/sell). Activates the parked Amazon Associates care/accessories revenue line from `docs/monetization-projections.md`. All green (tsc, lint, 860 tests; `next build` compiles + typechecks, prerender blocked only by the known DB-less-container `supabaseKey` limit, verified identical on a clean stash).
-- 🧴 **`/care` hub** (`src/app/care/page.tsx`): 18 curated products grouped by job (shape & store · clean & condition · hardware · display & use · travel), jump-nav, ItemList JSON-LD for GEO. Registry + material helpers in `src/lib/bag-care.ts`.
-- 👜 **Material-aware `CareModule`** on the bag page (after Where-to-sell): reads `exteriorMaterial` and shows the 2-3 items that fit that finish (suede brush for suede, no-solvents note for patent), routes to the hub.
-- 💰 **Amazon Associates, dormant + self-activating** (mirrors the eBay/CJ pattern in `affiliate.ts`): every product deep-links an Amazon SEARCH (never held ASINs/prices, so the live page shows the real current price). Plain search links until `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` is set, then commission-tagged, no code change. New `outbound_care_clicked` event is the channel's proxy.
-- 🛡️ **Factuality held:** no invented prices; brands framed "what I'd look at" (opinion); every surface-touching item carries "test on a hidden spot first" + the finish danger. Disclosure page + footer + sitemap updated.
-- 📝 **Companion article** drafted (owner asked): `docs/research-drafts/how-to-care-for-a-designer-bag-draft.md` (copywriter-drafted, on-voice; owner reviews + publishes).
-- ⬜ **YOUR TURN:** (1) **Sign up for Amazon Associates once traffic grows** (owner's call 2026-07-13), then set `NEXT_PUBLIC_AMAZON_ASSOCIATES_TAG` in Vercel and the channel earns. (2) Merge the PR (green gate runs in GitHub CI, which has the DB key this container lacks) or land from an interactive session via `land-to-main.sh`. (3) Review + publish the companion article. (4) Eyeball `/care` + a bag page; group order / product picks are one-line edits.
 
 ---
 

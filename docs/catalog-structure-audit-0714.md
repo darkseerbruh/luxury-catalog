@@ -146,6 +146,17 @@ only be as good as these fields. This is the existing attribute-capture pass
    rollback-chanel-comps.json. Three of the 14 (#69 Brooklyn Cabas, #76 Terrycloth,
    #138 Button On Top) had zero comps; five (#158, #189, #50, #153, #1288) now hold
    zero comps until fresh capture re-places clean ones.
+   - Root fix shipped with it: "Top Handle Rectangular Flap" is now its own
+     dictionary model (it was rolling into Classic Flap via "rectangular flap",
+     which is how #906's FP comps mis-resolved; handle-LESS square/rectangular
+     minis keep the 0709 Classic Flap roll-up). Regression-tested.
+   - Re-placement (replace-remapped-comps.ts, scoped promote-safe discipline —
+     never creates styles/variants): 6 of the 42 placed onto their real styles
+     (Classic Flap Jumbo + Maxi, Vanity Case ×2, Diana Flap Bag, LV Eva Clutch);
+     3 HELD on purpose (2 seasonal-on-icon tweed single flaps — the Hollywood
+     Boulevard precedent — + a Vanity phone holder for the accessory lane);
+     33 stay banked (21 unresolved by design, rest lack a clean size variant,
+     e.g. "Maxi 2.55" with no Maxi on 2.55 Reissue).
 8. ✅ Model-name year contamination FIXED (2026-07-14 night): the spec extractor
    read model names as production years — Jackie 1961 (511 rows), FF/Jacquard 1974
    (444), Re-Edition 2005 (357) / 2000 (90), Lauren 1980 (27) = 1,429 price rows
