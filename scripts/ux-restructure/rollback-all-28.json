@@ -1,0 +1,595 @@
+{
+  "movedVariants": [
+    {
+      "variantId": 239,
+      "oldStyleId": 19,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 258,
+      "oldStyleId": 24,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 279,
+      "oldStyleId": 34,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 338,
+      "oldStyleId": 62,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 234,
+      "oldStyleId": 16,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 317,
+      "oldStyleId": 55,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 324,
+      "oldStyleId": 57,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 262,
+      "oldStyleId": 25,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 299,
+      "oldStyleId": 46,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 330,
+      "oldStyleId": 58,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 952,
+      "oldStyleId": 531,
+      "oldSize": "Standard",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 959,
+      "oldStyleId": 538,
+      "oldSize": "Standard",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 966,
+      "oldStyleId": 545,
+      "oldSize": "Standard",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 967,
+      "oldStyleId": 546,
+      "oldSize": "Standard",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 975,
+      "oldStyleId": 552,
+      "oldSize": "GM",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 978,
+      "oldStyleId": 555,
+      "oldSize": "PM",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 979,
+      "oldStyleId": 556,
+      "oldSize": "PM",
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 83,
+      "oldStyleId": 80,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 87,
+      "oldStyleId": 84,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 92,
+      "oldStyleId": 89,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 117,
+      "oldStyleId": 114,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 397,
+      "oldStyleId": 108,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 421,
+      "oldStyleId": 132,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 384,
+      "oldStyleId": 100,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 420,
+      "oldStyleId": 131,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 424,
+      "oldStyleId": 325,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 428,
+      "oldStyleId": 329,
+      "oldSize": null,
+      "oldMaterialId": null
+    },
+    {
+      "variantId": 306,
+      "oldStyleId": 49,
+      "oldSize": null,
+      "oldMaterialId": null
+    }
+  ],
+  "repointed": [],
+  "deletedStyles": [
+    {
+      "style_id": 19,
+      "brand_id": 15,
+      "name": "Monogram Speedy 35",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Top Handle Bag\nFrom the 2005 Collection\nBrown Coated Canvas\nMonogram Pattern\nBrass Hardware\nLeather Trim\nRolled Handles\nCanvas Lining & Single Interior Pocket\nZip Closure at Top\nIncludes Dust Bag\nLight scuffs at trim; minor patina at handles.",
+      "created_at": "2026-06-19T17:22:44.786374+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 24,
+      "brand_id": 15,
+      "name": "Monogram Delightful MM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Hobo\nBrown Coated Canvas\nLV Monogram\nBrass Hardware\nLeather Trim\nFlat Handle\nLeather Trim Embellishment\nLogo Jacquard Lining & Single Interior Pocket\nClasp Closure at Top\nMinor fading throughout; minor patina at handles.",
+      "created_at": "2026-06-19T17:22:46.499637+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 34,
+      "brand_id": 15,
+      "name": "Epi Porte-Documents Voyage",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Briefcase\nFrom the 2006 Collection\nBlack Epi Leather\nSilver-Tone Hardware\nRolled Handles\nLeather Lining & Five Interior Pockets\nZip Closure at Top\nMinor residue at interior; light wear at exterior.",
+      "created_at": "2026-06-19T17:22:49.942741+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 62,
+      "brand_id": 15,
+      "name": "Epi Passy GM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Tote\nFrom the 2011 Collection\nRed Epi Leather\nSilver-Tone Hardware\nRolled Handles\nCanvas Lining & Three Interior Pockets\nClasp Closure at Top\nMinor scuffs at piping; minor wear at interior; minor spot at back.",
+      "created_at": "2026-06-19T17:22:59.684224+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 16,
+      "brand_id": 15,
+      "name": "Monogram Totally MM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Messenger Bag\nFrom the 2013 Collection\nBrown Coated Canvas\nMonogram Pattern\nBrass Hardware\nLeather Trim\nDual Shoulder Straps\nLeather Trim Embellishment & Dual Exterior Pockets\nCanvas Lining & Three Interior Pockets\nZip Closure at Top\nIncludes Dust Bag\nModerate patina at straps; moderate pilling at piping; light wear at interior; minor mark at pocket; slight tarnishing at hardware; minor pilling at side.",
+      "created_at": "2026-06-19T17:22:43.560875+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 55,
+      "brand_id": 15,
+      "name": "Monogram Speedy 40",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Top Handle Bag\nVintage\nBrown Coated Canvas\nLV Monogram\nBrass Hardware\nLeather Trim\nRolled Handles\nLeather Trim Embellishment\nCanvas Lining & Single Interior Pocket\nZip Closure at Top\nModerate tarnishing at hardware; moderate patina at vachetta.",
+      "created_at": "2026-06-19T17:22:57.282267+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 57,
+      "brand_id": 15,
+      "name": "Monogram Speedy 30",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Top Handle Bag\nFrom the 2000 Collection\nVintage\nBrown Coated Canvas\nLV Monogram\nBrass Hardware\nLeather Trim\nRolled Handles\nLeather Trim Embellishment\nCanvas Lining & Single Interior Pocket\nZip Closure at Top\nMinor patina at vachetta; minor tarnishing at hardware.",
+      "created_at": "2026-06-19T17:22:57.986778+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 25,
+      "brand_id": 15,
+      "name": "Epi Petit Bucket",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "special order\nLouis Vuitton Bucket Bag\nRed Epi Leather\nBrass Hardware\nDual Adjustable Shoulder Straps\nAlcantara Lining & Dual Interior Pockets\nOpen Top\nProtective Feet at Base\nIncludes Interior Zip Pouch\nShape has relaxed due to wear; light residue throughout.",
+      "created_at": "2026-06-19T17:22:46.843745+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 46,
+      "brand_id": 15,
+      "name": "Monogram Multicolore Pochette Accessoires",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Top Handle Bag\nFrom the 2003 Collection\nBlack Coated Canvas\nLV Monogram\nBrass Hardware\nFlat Handle\nStudded Accents\nSuede Lining\nZip Closure at Top\nIncludes Dust Bag\nModerate scratches at hardware.",
+      "created_at": "2026-06-19T17:22:54.200857+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 58,
+      "brand_id": 15,
+      "name": "Monogram Neverfull GM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Louis Vuitton Tote\nFrom the 2016 Collection\nBrown Coated Canvas\nMonogram Pattern\nBrass Hardware\nLeather Trim\nDual Shoulder Straps\nLeather Trim Embellishment\nJacquard Lining & Single Interior Pocket\nClasp Closure at Top\nMinor spot at interior; minor scuffs at corner; minor discoloration at handles.",
+      "created_at": "2026-06-19T17:22:58.324099+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 531,
+      "brand_id": 15,
+      "name": "Monogram Deauville",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:55:41.815299+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 538,
+      "brand_id": 15,
+      "name": "Monogram Musette Salsa",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:57:46.733789+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 545,
+      "brand_id": 15,
+      "name": "Monogram Musette Tango",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:57:52.743549+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 546,
+      "brand_id": 15,
+      "name": "Monogram Utility Crossbody",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:57:53.526079+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 552,
+      "brand_id": 15,
+      "name": "Monogram Looping GM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:57:59.610967+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 555,
+      "brand_id": 15,
+      "name": "Monogram Palermo PM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:58:01.950808+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 556,
+      "brand_id": 15,
+      "name": "Monogram Tivoli PM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": null,
+      "created_at": "2026-06-26T14:58:02.724128+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 80,
+      "brand_id": 4,
+      "name": "Togo Birkin 35",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Breadth record sourced from legacy 2022 reseller export.",
+      "created_at": "2026-06-19T17:23:05.926675+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 84,
+      "brand_id": 4,
+      "name": "Guilloche Tadelakt Birkin 35",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Breadth record sourced from legacy 2022 reseller export.",
+      "created_at": "2026-06-19T17:23:07.307598+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 89,
+      "brand_id": 4,
+      "name": "Clemence Birkin 35",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Breadth record sourced from legacy 2022 reseller export.",
+      "created_at": "2026-06-19T17:23:09.067565+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 114,
+      "brand_id": 4,
+      "name": "Ostrich Birkin 35",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Breadth record sourced from legacy 2022 reseller export.",
+      "created_at": "2026-06-19T17:23:17.649231+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 108,
+      "brand_id": 4,
+      "name": "Toile Herbag MM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nVintage\nNeutrals Toile H Canvas\nColorblock Pattern\nPalladium-Plated Hardware\nFlat Handles & Single Shoulder Strap\nUnlined\nOpen Top\nHeavy spots at closure; heavy wear at leather trim; minor scratches at closure; minor discoloration at interior.",
+      "created_at": "2026-06-19T17:23:15.611594+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 132,
+      "brand_id": 4,
+      "name": "Evercolor Lindy 30",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nNeutrals Evercolor Leather\nPalladium-Plated Hardware\nSingle Shoulder Strap\nDual Exterior Pockets\nLeather Lining & Dual Interior Pockets\nTurn-Lock Closure at Front\nIncludes Dust Bag\nMinor discoloration throughout.",
+      "created_at": "2026-06-19T17:23:23.856251+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 100,
+      "brand_id": 4,
+      "name": "Toile Fourre-Tout PM",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nBlue & Brown\nFlat Handles\nCanvas Lining & Single Interior Pocket\nSnap Closure at Top\nShape has relaxed due to wear; light fading throughout.",
+      "created_at": "2026-06-19T17:23:12.84309+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 131,
+      "brand_id": 4,
+      "name": "Clemence Lindy 30",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Shoulder Bag\nMalachite Clemence Leather\nPalladium-Plated Hardware\nRolled Handles & Single Shoulder Strap\nLeather Lining & Dual Interior Pockets\nTurn-Lock Closure at Front & Zip Closure at Top\nProtective Feet at Base\nIncludes Box & Dust Bag\nLight mark at interior; light scratches at hardware.",
+      "created_at": "2026-06-19T17:23:23.520786+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 325,
+      "brand_id": 4,
+      "name": "Toile Garden Party 50",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Weekender Bag\nMacassar & Naturel Toile Officier Canvas\nColorblock Pattern\nSilver-Tone Hardware\nRolled Handles\nToile Lining\nSnap Closure at Top\nShape has relaxed due to wear; moderate discoloration at interior; moderate marks at front; light mark at base; faint discoloration at handles; light discoloration at base.",
+      "created_at": "2026-06-20T16:52:14.339907+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 329,
+      "brand_id": 4,
+      "name": "Toile Herbag 31",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Hermès Top Handle Bag\nBleu Obscur, Rubis & Naturel\nColorblock Pattern\nSilver-Tone Hardware\nSingle Shoulder Strap\nCanvas Lining & Single Interior Pocket\nTurn-Lock Closure at Front\nModerate discoloration at exterior; minor discoloration at front flap; minor fading at base.",
+      "created_at": "2026-06-20T16:52:16.572463+00:00",
+      "has_protective_feet": null
+    },
+    {
+      "style_id": 49,
+      "brand_id": 1,
+      "name": "Caviar Medallion Tote",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Chanel Tote\nFrom the 2002 Collection by Karl Lagerfeld\nBlack Leather\nInterlocking CC Logo, Caviar Leather & Quilted Pattern\nGold-Tone Hardware\nRolled Handles\nSingle Exterior Pocket\nLeather Lining & Dual Interior Pockets\nZip Closure at Top\nMinor tarnishing at hardware.",
+      "created_at": "2026-06-19T17:22:55.225735+00:00",
+      "has_protective_feet": null
+    }
+  ]
+}
