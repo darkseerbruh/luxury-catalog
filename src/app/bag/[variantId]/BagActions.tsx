@@ -128,7 +128,7 @@ export default function BagActions({
 
   return (
     <section id="your-move" className="scroll-mt-4 border-t border-border pt-8">
-      <h2 className="mb-4 font-serif text-xl text-foreground">Make it yours, or move it on</h2>
+      <h2 className="mb-4 font-serif text-xl text-foreground">Add it to your closet</h2>
 
       {effectiveSignedIn ? (
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5">

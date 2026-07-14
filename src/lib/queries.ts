@@ -476,6 +476,8 @@ export interface VariantDetail {
     brandId: number;
     name: string;
     tier: string;
+    countryOfOrigin: string | null;
+    foundedYear: number | null;
   };
   exteriorMaterial: {
     name: string;
@@ -622,7 +624,7 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       created_at,
       style:style_id(
         style_id, name, silhouette, closure_type, year_introduced, description,
-        brand:brand_id(brand_id, name, tier)
+        brand:brand_id(brand_id, name, tier, country_of_origin, founded_year)
       ),
       exterior_material:exterior_material_id(
         name, material_type, water_resistance, scratch_resistance,
@@ -674,7 +676,10 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
   const style = (Array.isArray(data.style) ? data.style[0] : data.style) as {
     style_id: number; name: string; silhouette: string | null;
     closure_type: string | null; year_introduced: number | null; description: string | null;
-    brand: { brand_id: number; name: string; tier: string } | { brand_id: number; name: string; tier: string }[] | null;
+    brand:
+      | { brand_id: number; name: string; tier: string; country_of_origin: string | null; founded_year: number | null }
+      | { brand_id: number; name: string; tier: string; country_of_origin: string | null; founded_year: number | null }[]
+      | null;
   } | null;
 
   const brand = style ? (Array.isArray(style.brand) ? style.brand[0] : style.brand) : null;
@@ -722,7 +727,9 @@ export async function getVariantDetail(variantId: number): Promise<VariantDetail
       brandId: brand.brand_id,
       name: brand.name,
       tier: brand.tier,
-    } : { brandId: 0, name: "", tier: "" },
+      countryOfOrigin: brand.country_of_origin ?? null,
+      foundedYear: brand.founded_year ?? null,
+    } : { brandId: 0, name: "", tier: "", countryOfOrigin: null, foundedYear: null },
     exteriorMaterial: extMat ? {
       name: extMat.name,
       materialType: extMat.material_type,
