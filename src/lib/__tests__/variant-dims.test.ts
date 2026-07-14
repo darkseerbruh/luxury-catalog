@@ -112,16 +112,17 @@ describe("visibleDims", () => {
     expect(visibleDims(flap)[0].values).toEqual(["Small", "Medium (M/L)", "Jumbo", "Maxi"]);
   });
 
-  it("never offers the ingest catch-all 'Standard' beside real sizes", () => {
+  it("never offers the ingest catch-all 'Standard' BY NAME — it surfaces as the Unknown chip", () => {
     const kelly = [
       v(1, { sizeLabel: "28" }),
       v(2, { sizeLabel: "25" }),
       v(3, { sizeLabel: "Standard" }),
     ];
-    expect(visibleDims(kelly)[0].values).toEqual(["25", "28"]);
-    // Mixed numeric + named: numerics ascending, named after.
+    // Owner 2026-07-14: the size-unknown bucket is explicit, selectable state.
+    expect(visibleDims(kelly)[0].values).toEqual(["25", "28", "\u0000unknown"]);
+    // Mixed numeric + named: numerics ascending, named after, Unknown trailing.
     const kellyWithMini = [...kelly, v(4, { sizeLabel: "Mini" })];
-    expect(visibleDims(kellyWithMini)[0].values).toEqual(["25", "28", "Mini"]);
+    expect(visibleDims(kellyWithMini)[0].values).toEqual(["25", "28", "Mini", "\u0000unknown"]);
     // A style captured only as Standard has nothing to pick: no size axis.
     expect(visibleDims([v(1, { sizeLabel: "Standard" }), v(2, { sizeLabel: "Standard" })])).toEqual([]);
   });
@@ -138,5 +139,55 @@ describe("resolveTarget", () => {
 
   it("returns null when no variant carries the value", () => {
     expect(resolveTarget(neverfull, neverfull[0], dim("size"), "XXL")).toBeNull();
+  });
+});
+
+// ── The Unknown bucket (owner 2026-07-14) ────────────────────────────────────
+// A null value must be reachable + visible as explicit "Unknown", never silent.
+import { UNKNOWN_VALUE, dimValue } from "@/lib/variant-dims";
+
+describe("unknown bucket", () => {
+  const styleVars = [
+    v(1, { sizeLabel: "35", exteriorColorway: "Black" }),
+    v(2, { sizeLabel: "35", exteriorColorway: "Gold" }),
+    v(3, { sizeLabel: "30", exteriorColorway: null }),
+    v(4, { sizeLabel: "Standard", exteriorColorway: "Black" }),
+  ];
+
+  it("dimValue maps null and the Standard size bucket to UNKNOWN_VALUE", () => {
+    expect(dimValue(dim("color"), styleVars[2])).toBe(UNKNOWN_VALUE);
+    expect(dimValue(dim("size"), styleVars[3])).toBe(UNKNOWN_VALUE);
+    expect(dimValue(dim("size"), styleVars[0])).toBe("35");
+  });
+
+  it("visibleDims appends a trailing Unknown chip when some variants lack the value", () => {
+    const dims = visibleDims(styleVars);
+    const colour = dims.find((d) => d.dim.key === "color");
+    expect(colour?.values).toEqual(["Black", "Gold", UNKNOWN_VALUE]);
+    const size = dims.find((d) => d.dim.key === "size");
+    expect(size?.values).toEqual(["30", "35", UNKNOWN_VALUE]); // "Standard" folds into Unknown
+  });
+
+  it("never offers Unknown when every variant documents the value", () => {
+    // Same size across both so the colour axis isn't implied away by size.
+    const full = [
+      v(1, { sizeLabel: "35", exteriorColorway: "Black" }),
+      v(2, { sizeLabel: "35", exteriorColorway: "Gold" }),
+    ];
+    const colour = visibleDims(full).find((d) => d.dim.key === "color");
+    expect(colour?.values).toEqual(["Black", "Gold"]);
+  });
+
+  it("hides a dimension that is ALL unknown (no picking power)", () => {
+    const allNull = [
+      v(1, { sizeLabel: "35", exteriorColorway: null }),
+      v(2, { sizeLabel: "30", exteriorColorway: null }),
+    ];
+    expect(visibleDims(allNull).find((d) => d.dim.key === "color")).toBeUndefined();
+  });
+
+  it("resolveTarget lands on the not-yet-documented variant for UNKNOWN_VALUE", () => {
+    expect(resolveTarget(styleVars, styleVars[0], dim("color"), UNKNOWN_VALUE)).toBe(3);
+    expect(resolveTarget(styleVars, styleVars[0], dim("size"), UNKNOWN_VALUE)).toBe(4);
   });
 });
