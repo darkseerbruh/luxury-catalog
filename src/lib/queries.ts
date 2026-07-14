@@ -1484,6 +1484,24 @@ async function parseSearchQuery(query: string): Promise<SearchFilters | null> {
   }
 }
 
+/**
+ * Does this query actually need the LLM parse? A bare brand or style name
+ * ("birkin", "chanel 25", "louis vuitton speedy") is a plain name lookup — the
+ * structured parser adds a multi-second Claude round-trip and nothing else, which
+ * is what made the shop search feel broken (owner UX review 0714 #1). Only spend
+ * the LLM on genuinely natural-language queries: longer phrases, or ones carrying
+ * an attribute / price / comparison cue a name would never contain.
+ */
+const NL_CUE_RX =
+  /\b(under|over|below|above|less than|more than|between|cheap|budget|affordable|around|black|white|red|blue|green|pink|beige|brown|tan|grey|gray|gold|silver|burgundy|navy|small|mini|large|medium|micro|tiny|big|tote|crossbody|shoulder|clutch|backpack|satchel|hobo|bucket|leather|caviar|suede|canvas|quilted|smooth|textured|vintage|structured|soft|for)\b/i;
+function looksNaturalLanguage(query: string): boolean {
+  const q = query.trim();
+  const words = q.split(/\s+/);
+  if (words.length >= 4) return true; // a phrase, not a name
+  if (/\$|\d{3,}/.test(q)) return true; // a price / budget
+  return NL_CUE_RX.test(q);
+}
+
 function hasAttributeFilters(f: SearchFilters): boolean {
   return (
     f.styles.length > 0 || f.silhouettes.length > 0 || f.sizeCategories.length > 0 ||
@@ -1669,6 +1687,15 @@ async function logMiss(query: string): Promise<void> {
 export async function searchCatalog(query: string): Promise<SearchResults> {
   const q = query.trim();
   if (!q) return { brands: [], styles: [], interpreted: [], usedNaturalLanguage: false };
+
+  // Fast path: a plain name lookup skips the LLM entirely (the parse only helps
+  // natural-language queries). This is what makes "birkin" resolve instantly
+  // instead of waiting on a Claude round-trip first.
+  if (!looksNaturalLanguage(q)) {
+    const result = await legacySearch(q);
+    if (result.brands.length === 0 && result.styles.length === 0) await logMiss(q);
+    return result;
+  }
 
   const filters = await parseSearchQuery(q);
 

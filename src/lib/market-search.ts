@@ -80,6 +80,8 @@ export async function resolveMarketSearch(
     styles,
     brands: ranked.brands,
     interpreted,
-    usedNaturalLanguage: ranked.usedNaturalLanguage,
+    // A fired pin IS an interpretation ("Interpreted as: Hermès Birkin"), so show
+    // the chip for it even though the name fast-path skips the NL parser.
+    usedNaturalLanguage: pinned.length > 0 || ranked.usedNaturalLanguage,
   };
 }
