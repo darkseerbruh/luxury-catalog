@@ -3,30 +3,30 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-13",
+  "lastRun": "2026-07-14",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 3.7535189814814816,
-    "freshness-therealreal": 0.7535189814814814,
-    "freshness-tlc": 0.7535189814814814,
-    "freshness-ebay": 0.7535189814814814,
-    "capture-rows": 19280,
+    "freshness-fashionphile": 4.8887093055555555,
+    "freshness-therealreal": 1.8887093055555555,
+    "freshness-tlc": 0.8887093055555556,
+    "freshness-ebay": 1.8887093055555555,
+    "capture-rows": 19177,
     "ranking-count": 333,
     "ranking-near-floor": 47,
-    "coverage-condition": 30.33196840094827,
-    "coverage-condition-detail": 40.62172546280126,
-    "coverage-region": 44.10547038983223,
-    "coverage-production-year": 2.8039547777247,
-    "coverage-hardware": 35.96575035103719,
+    "coverage-condition": 29.371908760165006,
+    "coverage-condition-detail": 43.75699985391609,
+    "coverage-region": 42.50648099135415,
+    "coverage-production-year": 2.6290429849206673,
+    "coverage-hardware": 33.73169374431641,
     "coverage-style-description": 43.2712215320911,
     "coverage-style-year": 11.594202898550725,
-    "coverage-listing-images": 18.10896773927052,
-    "backlog-total": 67868,
+    "coverage-listing-images": 15.686555148045443,
+    "backlog-total": 77212,
     "contamination-trr": 7,
     "contamination-misattach": 47,
-    "contamination-size": 816,
-    "contamination-dupes": 1041,
-    "summary-staleness": 0.026904722222222222,
+    "contamination-size": 817,
+    "contamination-dupes": 317,
+    "summary-staleness": 0.9591183333333333,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 1
@@ -35,7 +35,8 @@
     25192,
     25661,
     24700,
-    19280
+    19280,
+    19177
   ],
   "findings": {
     "freshness-fashionphile": {
@@ -79,22 +80,22 @@
     {
       "id": "freshness-fashionphile",
       "title": "Data health: freshness-fashionphile is RED",
-      "body": "Fashionphile data is 3.8 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 3.8 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-07-13.md"
+      "body": "Fashionphile data is 4.9 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 4.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-07-14.md"
     },
     {
       "id": "contamination-misattach",
       "title": "Data health: contamination-misattach is RED",
-      "body": "47 accessories (card holders, pouches, shoes) landed on a real bag's variant in the last week, which is exactly what put wrong items on the deals rail; 174 more look like a different-model bag and want a manual review.\n\nCurrent value: 47 accessory + 174 wrong-model (review) of 35664 recent bag-variant rows\nSuggested action: Run supabase/ingest/detect-listing-discrepancies.ts (dry run to review, --write to re-point the accessories, --tag to label), and check why the ingest match let them onto a bag variant.\nReport: reports/data-health/2026-07-13.md"
+      "body": "47 accessories (card holders, pouches, shoes) landed on a real bag's variant in the last week, which is exactly what put wrong items on the deals rail; 174 more look like a different-model bag and want a manual review.\n\nCurrent value: 47 accessory + 174 wrong-model (review) of 37982 recent bag-variant rows\nSuggested action: Run supabase/ingest/detect-listing-discrepancies.ts (dry run to review, --write to re-point the accessories, --tag to label), and check why the ingest match let them onto a bag variant.\nReport: reports/data-health/2026-07-14.md"
     },
     {
       "id": "contamination-size",
       "title": "Data health: contamination-size is RED",
-      "body": "816 listings captured in the last week state a size that differs from the variant they landed on (e.g. a mini on the Medium page), which unpopulates the size selector and skews same-size pricing.\n\nCurrent value: 816 of 35664 recent sized rows sit on a different-size variant\nSuggested action: Run supabase/ingest/resize-variants.ts (dry run, then --write) to re-point them, and check the load-prices size guard.\nReport: reports/data-health/2026-07-13.md"
+      "body": "817 listings captured in the last week state a size that differs from the variant they landed on (e.g. a mini on the Medium page), which unpopulates the size selector and skews same-size pricing.\n\nCurrent value: 817 of 37982 recent sized rows sit on a different-size variant\nSuggested action: Run supabase/ingest/resize-variants.ts (dry run, then --write) to re-point them, and check the load-prices size guard.\nReport: reports/data-health/2026-07-14.md"
     },
     {
       "id": "contamination-dupes",
       "title": "Data health: contamination-dupes is RED",
-      "body": "1041 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 1041 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-13.md"
+      "body": "317 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 317 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-14.md"
     }
   ]
 }
