@@ -17,7 +17,7 @@
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "../seed/lib/client";
-import { buildSpecPrompt, parseSpecResponse, EMPTY_SPEC, type ItemSpec } from "../../src/lib/ingest/spec-extract";
+import { buildSpecPrompt, parseSpecResponse, stripModelNameYear, EMPTY_SPEC, type ItemSpec } from "../../src/lib/ingest/spec-extract";
 
 const MODEL = "claude-haiku-4-5-20251001"; // cheap, high-volume extraction
 
@@ -60,7 +60,10 @@ async function main() {
       messages: [{ role: "user", content: buildSpecPrompt(text) }],
     });
     const out = resp.content.map((c) => (c.type === "text" ? c.text : "")).join("");
-    const spec = parseSpecResponse(out);
+    const parsed = parseSpecResponse(out);
+    // Model-name years (Jackie 1961, FF 1974, Re-Edition 2005…) are the bag's NAME,
+    // not its birth year — strip them against the source text (2026-07-14 fix).
+    const spec = parsed ? stripModelNameYear(parsed, text) : null;
     if (!spec) {
       console.warn(`  price_id ${row.price_id}: unparseable response, skipping`);
       continue;

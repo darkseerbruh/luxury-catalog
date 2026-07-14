@@ -14,7 +14,7 @@ import { stripTags, extractDate } from "../ingest/html";
 import { buildBrowseSearchUrl, parseBrowseItems, normalizeEbayCondition } from "../ingest/ebay";
 import { parseTrrDescription } from "../ingest/trr";
 import { buildEnrichmentPrompt, parseEnrichmentResponse, buildDescriptionFactsPrompt, parseDescriptionFactsResponse } from "../ingest/enrich";
-import { buildSpecPrompt, parseSpecResponse } from "../ingest/spec-extract";
+import { buildSpecPrompt, parseSpecResponse, stripModelNameYear, EMPTY_SPEC } from "../ingest/spec-extract";
 import { mapConditionText, mapTrrItemCondition } from "../ingest/condition";
 
 const valid: PriceObservation = {
@@ -406,5 +406,22 @@ describe("shared condition normalizer", () => {
     expect(mapTrrItemCondition("NewCondition")).toBe("new");
     expect(mapTrrItemCondition("https://schema.org/UsedCondition")).toBeNull();
     expect(mapTrrItemCondition(null)).toBeNull();
+  });
+});
+
+describe("stripModelNameYear (model-name years are not production years)", () => {
+  const spec = (y: number | null) => ({ ...EMPTY_SPEC, production_year: y });
+  it("nulls a year that only appears inside a model-name phrase", () => {
+    expect(stripModelNameYear(spec(1961), "Calfskin Medium Jackie 1961 Hobo Camel").production_year).toBeNull();
+    expect(stripModelNameYear(spec(1974), "Fabric Jacquard FF 1974 Medium Baguette").production_year).toBeNull();
+    expect(stripModelNameYear(spec(2005), "Nylon Re-Edition 2005 Shoulder Bag").production_year).toBeNull();
+    expect(stripModelNameYear(spec(1980), "Suede Intrecciato The Lauren 1980 Clutch").production_year).toBeNull();
+  });
+  it("keeps the year when the text states it outside the phrase", () => {
+    expect(stripModelNameYear(spec(2005), "2005 production, Re-Edition 2005 line").production_year).toBe(2005);
+  });
+  it("keeps genuine years on unrelated bags", () => {
+    expect(stripModelNameYear(spec(1994), "Courchevel Kelly Sellier 32, 1994").production_year).toBe(1994);
+    expect(stripModelNameYear(spec(null), "Jackie 1961 Hobo").production_year).toBeNull();
   });
 });
