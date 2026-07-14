@@ -105,7 +105,39 @@ only be as good as these fields. This is the existing attribute-capture pass
    deals-rail lesson), colour needs ≥90% consensus, material/hardware ≥80%; mixed
    buckets stay NULL by design. Coverage: colour 45.2%→51%, material 24.8%→41%.
    Rollbacks: rollback-attr-enrich.json.
-5. Remaining: the 14 Chanel archivist rows, the 143 name-embeds judgment pass
-   (mostly "keep"), and fresh capture for the still-thin variants (433 had too
-   little evidence; 1,466 are genuine multi-colour buckets that want SPLITTING
-   into per-colour variants via the promotion pipeline, not filling).
+5. ✅ Name-embeds judgment pass DONE (second-wave, 2026-07-14 evening): the flagged
+   set is KEEP by default — verdicts locked so nobody re-litigates:
+   - KEEP (distinct models/lines, never merge): Kelly Pochette, Kelly/Constance To Go,
+     Picotin Lock, Petit Sac Plat, Petite Boîte Chapeau, all Ophidia/GG Marmont/
+     Gabrielle Backpack silhouettes, Saddle Pochette + Chain Pouch, Pillow Tabby,
+     Willow Tote, Speedy Soft, Keepall Bandoulière, Icare/Loulou Puffer/Lou Camera,
+     The Pouch Chain, Padded/Chain Cassette, Multi Pochette Accessoires, Félicie
+     Pochette + Strap & Go, Pearl Crush line, Vanity Case lines, Musette Salsa/Tango,
+     Loop Hobo, Marais/Petit Bucket, Bloomsbury (multi-variant), Birkin Touch.
+   - 11 hand-verified merges applied (second-wave-merges.ts): Picotin 22, Double
+     Sens 36, Garden Party 36, Herbag Zip 31, City Steamer MM, Travel Ligne ×3,
+     Cerf (Executive), Business Affinity Large, Gabrielle Hobo Medium.
+   - 1 un-merge: Neverfull Pochette Pouch back OUT of Neverfull (pouch = accessory,
+     restored as style 1288; the accessory-surface lane owns its future).
+6. ✅ Archivist naming pass DONE (2026-07-14 evening): all 14 Chanel rows identified
+   (research table + sources in the archivist run; apply-archivist-chanel.ts).
+   - 2 merges: Pink Tweed 19 → Chanel 19 (#425); Mini Top Handle → Top Handle
+     Rectangular Flap (#906).
+   - 8 sourced renames: Brooklyn Cabas (F/W 2007 — genuinely Chanel, NOT the LV
+     Brooklyn), Golden Class Double CC Flap (Cruise 2014), Fashion Therapy Bowling
+     Bag (2020), Mademoiselle Lock Flap, Denim Graffiti Flap (22P), Terrycloth
+     Flap (2021), Button On Top Flap (~2020), Quilted CC Belt Bag. These are
+     reseller/collector-consensus labels, not official Chanel names (Chanel
+     seasonal has only style codes) — keep that hedge in any page copy.
+   - 3 interim renames pending an image pass: Vintage Chevron Flap (#167),
+     Quilted Flap Shoulder Bag (#178), Caviar CC Tote (#189 — likely one of
+     GST/Medallion/PST/Cerf; the image decides).
+   - 1 untouched: #191 (tentative merge → Vintage Quilted Shoulder Bag #79, image
+     first). It is the single remaining seller-title row in the daily check.
+7. Follow-up found by the archivist: the price_history comps attached to those 14
+   variants are CONTAMINATED (unrelated eBay/TRR bags mapped onto them, e.g. a
+   "Novelty Drawstring" comp on the Chanel 19 row). Needs a comps-remap pass —
+   same discipline as the TRR mismap sweep.
+8. Remaining lanes: image pass for the 4 above · comps-remap for the 14 · fresh
+   capture for the 433 too-thin variants · the 1,466 multi-colour buckets =
+   the variant-levers colour-splitter lane (active elsewhere; do not duplicate).

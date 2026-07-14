@@ -32,6 +32,7 @@ export interface VariantLite {
   sizeLabel: string | null;
   exteriorColorway: string | null;
   exteriorMaterialId: number | null;
+  hardwareColor?: string | null;
 }
 
 /** Residual tokens that mark a DISTINCT model (never fold into the base). */
@@ -146,7 +147,7 @@ export interface StructureAudit {
   titleJunk: StyleLite[];
   dupGroups: StyleLite[][];
   /** Variant attribute coverage, percentages 0-100 against all variants. */
-  variantCoverage: { sizePct: number; colourPct: number; materialPct: number; total: number };
+  variantCoverage: { sizePct: number; colourPct: number; materialPct: number; hardwarePct: number; total: number };
 }
 
 export function auditCatalogStructure(styles: StyleLite[], variants: VariantLite[]): StructureAudit {
@@ -156,6 +157,7 @@ export function auditCatalogStructure(styles: StyleLite[], variants: VariantLite
   const withSize = variants.filter((v) => v.sizeLabel).length;
   const withColour = variants.filter((v) => v.exteriorColorway).length;
   const withMaterial = variants.filter((v) => v.exteriorMaterialId != null).length;
+  const withHardware = variants.filter((v) => v.hardwareColor).length;
   return {
     safePseudo: findSafePseudoStyles(styles, variantCountByStyle),
     titleJunk: findListingTitleStyles(styles),
@@ -165,6 +167,7 @@ export function auditCatalogStructure(styles: StyleLite[], variants: VariantLite
       sizePct: total === 0 ? 0 : (100 * withSize) / total,
       colourPct: total === 0 ? 0 : (100 * withColour) / total,
       materialPct: total === 0 ? 0 : (100 * withMaterial) / total,
+      hardwarePct: total === 0 ? 0 : (100 * withHardware) / total,
     },
   };
 }

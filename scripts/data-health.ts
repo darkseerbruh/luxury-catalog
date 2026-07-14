@@ -408,11 +408,12 @@ async function main() {
     size_label: string | null;
     exterior_colorway: string | null;
     exterior_material_id: number | null;
+    hardware_color: string | null;
   }>(
     () =>
       sb
         .from("variant")
-        .select("variant_id, style_id, size_label, exterior_colorway, exterior_material_id")
+        .select("variant_id, style_id, size_label, exterior_colorway, exterior_material_id, hardware_color")
         .order("variant_id", { ascending: true }),
     20000,
   );
@@ -424,6 +425,7 @@ async function main() {
       sizeLabel: v.size_label,
       exteriorColorway: v.exterior_colorway,
       exteriorMaterialId: v.exterior_material_id,
+      hardwareColor: v.hardware_color,
     })),
   );
   checks.push(
@@ -455,6 +457,7 @@ async function main() {
     { id: "coverage-variant-size", label: "Variant size coverage", pct: structure.variantCoverage.sizePct },
     { id: "coverage-variant-colour", label: "Variant colour coverage", pct: structure.variantCoverage.colourPct },
     { id: "coverage-variant-material", label: "Variant material coverage", pct: structure.variantCoverage.materialPct },
+    { id: "coverage-variant-hardware", label: "Variant hardware coverage", pct: structure.variantCoverage.hardwarePct },
   ]) {
     checks.push(
       scoreCoverageDelta(
