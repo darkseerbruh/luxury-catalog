@@ -1,0 +1,77 @@
+{
+  "renamed": [
+    {
+      "styleId": 189,
+      "oldName": "Caviar CC Tote"
+    },
+    {
+      "styleId": 191,
+      "oldName": "Chanel Black Leather Shoulder Flap Bag"
+    }
+  ],
+  "variants": [
+    {
+      "variantId": 470,
+      "prev": {
+        "style_id": 167
+      }
+    },
+    {
+      "variantId": 480,
+      "prev": {
+        "exterior_material_id": 44
+      }
+    }
+  ],
+  "deletedStyles": [
+    {
+      "style_id": 167,
+      "brand_id": 1,
+      "name": "Vintage Chevron Flap",
+      "style_family": null,
+      "silhouette": null,
+      "closure_type": null,
+      "year_introduced": null,
+      "redesigned": null,
+      "discontinued": false,
+      "year_discontinued": null,
+      "description": "Expertly designed, flaunt a Chanel bag this season. Elegance is what you can call this bag that is beautified with a splash of black color. Flaunt this fantastic-looking leather bag and give yourself a sophisticated look.",
+      "created_at": "2026-06-19T17:23:36.088191+00:00",
+      "has_protective_feet": null
+    }
+  ],
+  "movedComps": [
+    {
+      "price_id": 402048,
+      "variant_id": 480,
+      "platform": "eBay",
+      "condition": null,
+      "provenance_completeness": null,
+      "sale_price": 1170,
+      "currency": "USD",
+      "date_recorded": "2026-07-10",
+      "notes": "Auth Chanel Coco Mark Matelassé Lambskin Beige Chain Shoulder Bag W/B/D i040392",
+      "created_at": "2026-07-10T15:19:50.73653+00:00",
+      "source_url": "https://www.ebay.com/itm/168495301062",
+      "price_type": "sold",
+      "observed_on": "2026-07-04",
+      "confidence_level": "medium",
+      "colorway": null,
+      "material": null,
+      "hardware_color": null,
+      "production_year": null,
+      "season": null,
+      "condition_detail": "Pre-Owned · CHANEL",
+      "inclusions": null,
+      "region": "US",
+      "listing_ref": "168495301062",
+      "enrichment": {
+        "bids_count": 37,
+        "listing_type": "Auction"
+      },
+      "listing_status": null,
+      "delisted_on": null,
+      "item_class": null
+    }
+  ]
+}
