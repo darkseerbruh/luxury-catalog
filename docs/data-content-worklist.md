@@ -8,8 +8,11 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
-## VARIANT-SELECTOR levers — **62 styles faceted (through main d4b10a6, 2026-07-13)**
-*Latest batch (+Vanity Case 71v / Coussin / Galleria / Félicie / Dauphine / Trendy CC / Le Cagole). Remaining unfaceted are mostly <300 listings; the ≥300 icon set is essentially covered. Continuing = more archivist Firecrawl batches (owner spend) into a thinning tail — pace deliberately or stop here.*
+## VARIANT-SELECTOR levers — **68 styles faceted (through main 042ece3, 2026-07-14)** — CLEAN ICON FLOOR REACHED
+*Every clean single-brand icon is faceted. The remaining high-volume (≥220) unfaceted `style` rows are GENERIC/ambiguous — "Camera Bag" (522, 560), "Belt Bag" (485/1047), "Cabas" (489), "Padlock" (521) — that lump multiple brands into one row; they CANNOT take a single-brand production matrix and must first be split into per-brand styles (a taxonomy job, not faceting). So the faceting task has converged. Two owner decisions surfaced:*
+- ⬜ **DEDUP: Celine Luggage** — style 207 "Luggage" (578) + 484 "Luggage Tote" are duplicate rows for one model; pick a canonical id, fold the other's listings/aliases in.
+- ⬜ **TAXONOMY: generic style rows** — "Camera Bag"/"Belt Bag"/"Cabas"/"Padlock" lump brands; split into per-brand styles before they can be faceted (unlocks the next faceting tier).
+- 🛠️ Recurring gotcha logged: the colour splitter binds by production-size label; several styles had mis-parsed/bare DB size labels (Tabby "26", 30 Montaigne "30", Rogue "17/25/30/39") — align production_option size values to the DB labels (or relabel the variant) so colour splits. A generic size-label normalizer would remove this per-style friction.
 *Every high-volume icon across all major houses now has an Amazon-style Size/Material/Colour(/Construction/Hardware) selector, production-driven + archivist-sourced. Tooling: seed-color-variants-from-production, seed-material-keyword-variants, seed-lv-line-variants, seed-hermes-leather-variants, seed-lv-empreinte-colors. Matrices in docs/research-drafts/*-production-matrix.md. The <300-listing tail remains (owner-paced).*
 
 ### Original 8 units (2026-07-12, up to e940248): 11 styles + the tooling
