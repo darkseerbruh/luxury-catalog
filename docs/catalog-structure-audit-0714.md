@@ -134,10 +134,18 @@ only be as good as these fields. This is the existing attribute-capture pass
      GST/Medallion/PST/Cerf; the image decides).
    - 1 untouched: #191 (tentative merge → Vintage Quilted Shoulder Bag #79, image
      first). It is the single remaining seller-title row in the daily check.
-7. Follow-up found by the archivist: the price_history comps attached to those 14
-   variants are CONTAMINATED (unrelated eBay/TRR bags mapped onto them, e.g. a
-   "Novelty Drawstring" comp on the Chanel 19 row). Needs a comps-remap pass —
-   same discipline as the TRR mismap sweep.
-8. Remaining lanes: image pass for the 4 above · comps-remap for the 14 · fresh
-   capture for the 433 too-thin variants · the 1,466 multi-colour buckets =
-   the variant-levers colour-splitter lane (active elsewhere; do not duplicate).
+7. ✅ Comps-remap DONE (2026-07-14, follow-up the archivist found): the price_history
+   comps on those 14 variants were CONTAMINATED (unrelated eBay/TRR bags mapped onto
+   the old seller-title names, e.g. the "Novelty Drawstring" comp on the Chanel 19
+   row). Swept with the TRR-mismap discipline (`remap-chanel-comps.ts`): 62 rows
+   judged (notes-title first, slug fallback, accent-blind vs the dictionary), every
+   flagged row hand-reviewed (`chanel-comps-decisions.json`) — 20 kept (incl. the
+   Fashionphile "Mini Top Handle Rectangular Flap" rows the dictionary misreads as
+   Classic Flap: a dictionary gap, not a mismap), 42 moved preserve-then-delete to
+   discovered_listing with style_guess for re-promotion. Rollback:
+   rollback-chanel-comps.json. Three of the 14 (#69 Brooklyn Cabas, #76 Terrycloth,
+   #138 Button On Top) had zero comps; five (#158, #189, #50, #153, #1288) now hold
+   zero comps until fresh capture re-places clean ones.
+8. Remaining lanes: image pass for the 4 above · fresh capture for the 433 too-thin
+   variants · the 1,466 multi-colour buckets = the variant-levers colour-splitter
+   lane (active elsewhere; do not duplicate).
