@@ -24,14 +24,23 @@ if (!file) { console.error("Pass the rollback-*.json path."); process.exit(1); }
   const rb = JSON.parse(readFileSync(path.resolve(process.cwd(), file), "utf8"));
   console.log(`${APPLY ? "APPLY" : "DRY-RUN"} rollback of ${file}`);
   // 1. Recreate deleted pseudo-style rows first (so variants can point back).
+  //    style_id is GENERATED ALWAYS (identity) — the old id can't be re-inserted,
+  //    so each restored row gets a NEW id and the variant moves map onto it.
+  const newStyleId = new Map<number, number>();
   for (const s of rb.deletedStyles ?? []) {
-    console.log(`  restore style ${s.style_id} "${s.name}"`);
-    if (APPLY) await db.from("style").insert(s);
+    console.log(`  restore style "${s.name}" (old id ${s.style_id} → new id on apply)`);
+    if (APPLY) {
+      const { style_id: oldId, ...fields } = s;
+      const { data: ins, error } = await db.from("style").insert(fields).select("style_id").single();
+      if (error) { console.warn(`  ! restore "${s.name}": ${error.message}`); continue; }
+      newStyleId.set(oldId as number, ins.style_id);
+    }
   }
-  // 2. Restore each moved variant.
+  // 2. Restore each moved variant (remapped to the restored style's new id).
   for (const m of rb.movedVariants ?? []) {
-    console.log(`  variant ${m.variantId} -> style ${m.oldStyleId} (size=${m.oldSize}, mat=${m.oldMaterialId})`);
-    if (APPLY) await db.from("variant").update({ style_id: m.oldStyleId, size_label: m.oldSize, exterior_material_id: m.oldMaterialId }).eq("variant_id", m.variantId);
+    const target = newStyleId.get(m.oldStyleId) ?? m.oldStyleId;
+    console.log(`  variant ${m.variantId} -> style ${target} (size=${m.oldSize}, mat=${m.oldMaterialId})`);
+    if (APPLY) await db.from("variant").update({ style_id: target, size_label: m.oldSize, exterior_material_id: m.oldMaterialId }).eq("variant_id", m.variantId);
   }
   // 3. Restore re-pointed children.
   for (const r of rb.repointed ?? []) {
