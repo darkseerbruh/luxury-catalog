@@ -18,6 +18,7 @@ the cross-feed rules in §2 are binding on every scheduled run.*
 | **Content freshness** | quarterly re-review | `freshness-runbook.md` | `quarterly-content-freshness-review` | freshness report | ALL number changes (by design) |
 | **Venue terms refresh** (never-stale seller fees + buyer protections; hard dated facts) | `checkedAt` age in `where-to-sell.ts` / `where-to-buy.ts` (via `venue-terms-freshness.ts`) | `venue-terms-refresh.md` | `venue-terms-refresh.yml` (monthly 1st, report + issue) + cloud agent `venue-terms-refresh-monthly` (re-verify pages → PR) | `reports/venue-terms/` + `venue-terms` GitHub issue | Merge the value-change PR (never auto-merge a figure) |
 | **Market report** (monthly "State of the Resale Market") | DB `price_history` | factuality protocol (n-gated in `market-report-core.ts`) | `market-report-monthly` (1st): `npx tsx scripts/market-report.ts --write` | `docs/research-drafts/market-reports/` | ALL publishes (draft-only by design) |
+| **Vendor inbox** (tool/vendor mail → fix) | arielle@luxurycatalog.com Workspace inbox (Gmail connector) | `vendor-inbox-engine.md` | `vendor-inbox-scan` (twice daily) | `vendor-inbox-ledger.md` | Merge the PR; spend; rotate keys; reply |
 
 Still open, waiting on her: **comment engagement** (needs a non-Metricool pipe,
 e.g. Apify free tier), **GSC query data → article engine** (GSC itself IS connected: domain verified + sitemap submitted 2026-06-22, desktop-todo D1; what is missing is the queries pipe, via CSV export or API grant). *(Newsletter
@@ -41,6 +42,10 @@ sending/campaigns still to build with the first send.)*
    pulse the analyst keeps honest.
 6. **Every loop leaves a dated, n-carrying trail in its ledger** — the next
    run's first read. No verbal handoffs, no chat-only state.
+7. **Vendor mail → the right loop.** A vendor "terms/fee changed" email becomes a
+   due cell for the venue-terms loop; a "feed broke" email becomes a data-capture
+   fix. The vendor-inbox run routes it (with the sender + date as evidence) rather
+   than fixing outside its lane.
 
 ## §3 The shared safety line (never crossed by any engine)
 
