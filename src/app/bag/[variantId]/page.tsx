@@ -176,14 +176,38 @@ function InfoHint({ note }: { note: string }) {
   );
 }
 
-function SpecRow({ label, value }: { label: string; value: string | null | undefined }) {
-  if (!value) return null;
+/** The honest empty state for a core spec (owner 2026-07-14): a missing value is
+ *  stated as not-yet-documented and invites the correction, never a silent gap.
+ *  DB keeps NULL as the machine truth; this is render-layer only. */
+function UnknownSpecValue() {
+  return (
+    <span className="italic text-muted/70">
+      Not yet documented ·{" "}
+      <a href="#suggest-edit" className="not-italic text-gold/80 underline-offset-2 hover:underline">
+        know it? Tell us
+      </a>
+    </span>
+  );
+}
+
+function SpecRow({
+  label,
+  value,
+  unknownable = false,
+}: {
+  label: string;
+  value: string | null | undefined;
+  /** Core axes (size/colour/material/hardware) render an explicit unknown state
+   *  instead of hiding; minor fields keep hiding so the table stays scannable. */
+  unknownable?: boolean;
+}) {
+  if (!value && !unknownable) return null;
   return (
     <div className="flex gap-3 py-2 text-sm">
       <span className="w-36 shrink-0 text-muted">{label}</span>
       {/* Researched fields can carry editor provenance flags; translate at the
           shared renderer so no section leaks "Snippet-sourced" to a reader. */}
-      <span className="text-foreground">{translateProvenance(value)}</span>
+      {value ? <span className="text-foreground">{translateProvenance(value)}</span> : <UnknownSpecValue />}
     </div>
   );
 }
@@ -193,12 +217,22 @@ function LinkedSpecRow({
   label,
   value,
   query,
+  unknownable = false,
 }: {
   label: string;
   value: string | null | undefined;
   query?: string | null;
+  unknownable?: boolean;
 }) {
-  if (!value) return null;
+  if (!value && !unknownable) return null;
+  if (!value) {
+    return (
+      <div className="flex gap-3 py-2 text-sm">
+        <span className="w-36 shrink-0 text-muted">{label}</span>
+        <UnknownSpecValue />
+      </div>
+    );
+  }
   const q = query ?? value;
   return (
     <div className="flex gap-3 py-2 text-sm">
@@ -341,9 +375,15 @@ export default async function BagDetailPage({
   const seen = new Set(stylePosts.map((p) => p.postId));
   const bagPosts = [...stylePosts, ...brandPosts.filter((p) => !seen.has(p.postId))].slice(0, 4);
 
-  const variantTitle = [v.sizeLabel, v.exteriorColorway, v.hardwareColor ? `${v.hardwareColor} HW` : null]
+  // "Standard" is the ingest's size-unknown bucket, not a house size — the title
+  // never presents it as one (owner 2026-07-14: unknowns are stated, not dressed up).
+  const variantTitle = [
+    v.sizeLabel === "Standard" ? null : v.sizeLabel,
+    v.exteriorColorway,
+    v.hardwareColor ? `${v.hardwareColor} HW` : null,
+  ]
     .filter(Boolean)
-    .join(" · ") || "Variant";
+    .join(" · ") || "Spec not yet documented";
 
   // The style crumb lands on the style's own page — a bag page carrying the variant
   // selector — not a /search results page (owner UX review 0714 #16: clicking the
@@ -1096,11 +1136,14 @@ export default async function BagDetailPage({
       <div id="specifications" className="scroll-mt-4">
         <Section title="Specifications">
           <div className="divide-y divide-border rounded-xl border border-border bg-surface">
-            <SpecRow label="Size" value={v.sizeLabel} />
+            {/* Core axes state their unknowns out loud (owner 2026-07-14): a shopper
+                picking by colour/size/hardware must see "not yet documented", not a
+                missing row — and gets the one-tap path to tell us. */}
+            <SpecRow label="Size" value={v.sizeLabel === "Standard" ? null : v.sizeLabel} unknownable />
             <SpecRow label="Size category" value={v.sizeCategory} />
-            <LinkedSpecRow label="Exterior material" value={v.exteriorMaterial?.name ?? null} />
-            <SpecRow label="Colorway" value={v.exteriorColorway} />
-            <LinkedSpecRow label="Hardware color" value={v.hardwareColor} />
+            <LinkedSpecRow label="Exterior material" value={v.exteriorMaterial?.name ?? null} unknownable />
+            <SpecRow label="Colorway" value={v.exteriorColorway} unknownable />
+            <LinkedSpecRow label="Hardware color" value={v.hardwareColor} unknownable />
             <SpecRow label="Hardware type" value={v.hardwareType} />
             <SpecRow label="Strap type" value={v.strapType} />
             <SpecRow label="Strap attachment" value={v.strapAttachmentType} />
@@ -1703,12 +1746,15 @@ export default async function BagDetailPage({
         </Section>
       )}
 
-      {/* Structured suggest-an-edit (corrections) */}
-      <SuggestEdit
-        variantId={v.variantId}
-        signedIn={userState.signedIn}
-        fields={correctableFields}
-      />
+      {/* Structured suggest-an-edit (corrections). The id is the jump target for
+          every "Not yet documented · know it? Tell us" link in the specs table. */}
+      <div id="suggest-edit" className="scroll-mt-4">
+        <SuggestEdit
+          variantId={v.variantId}
+          signedIn={userState.signedIn}
+          fields={correctableFields}
+        />
+      </div>
 
       {/* User feedback */}
       <FeedbackWidget variantId={v.variantId} />

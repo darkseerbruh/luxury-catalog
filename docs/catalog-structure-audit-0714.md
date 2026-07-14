@@ -22,6 +22,12 @@ separate workstream.
 ## What we learned, on the three axes
 
 **Completeness** (live baseline 2026-07-14, n=4,305 variants)
+- **Unknowns are stated, never blank (owner rule 2026-07-14):** DB keeps NULL as the
+  machine truth (a sentinel string would poison ingest matching + fake coverage);
+  the UI surfaces every gap as explicit, selectable state — an "Unknown" chip on the
+  variant selector (incl. the "Standard" size bucket) and "Not yet documented ·
+  know it? Tell us" spec rows linking to Suggest-an-edit. `UNKNOWN_VALUE` in
+  `src/lib/variant-dims.ts`.
 - Variant size: **93.5%** filled · colour: **45.2%** · material: **24.8%**.
 - Colour/material gaps starve the bag-page axis selector; production-record axes
   stand in meanwhile. This is the attribute-capture lane, now delta-scored daily
