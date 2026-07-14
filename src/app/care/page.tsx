@@ -6,6 +6,7 @@ import {
   CARE_ITEMS,
 } from "@/lib/bag-care";
 import CareOutboundLink from "@/components/care/CareOutboundLink";
+import { careItemImageUrl } from "@/lib/affiliate";
 
 export const metadata: Metadata = {
   title: "How to care for a designer bag, and the shelf that helps",
@@ -77,11 +78,21 @@ export default function CarePage() {
           <p className="mt-1 max-w-2xl text-xs leading-relaxed text-muted">{group.blurb}</p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {careItemsByGroup(group.key).map((item) => (
+            {careItemsByGroup(group.key).map((item) => {
+              // Real Amazon product photo, once PA-API is live; null today, so the
+              // slot renders nothing and the card stays clean text (see affiliate.ts).
+              const imageUrl = careItemImageUrl(item.searchQuery);
+              return (
               <div
                 key={item.key}
                 className="flex flex-col rounded-xl border border-border p-4 transition-colors hover:border-gold"
               >
+                {imageUrl && (
+                  <div className="mb-3 aspect-[4/3] overflow-hidden rounded-lg bg-foreground/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={imageUrl} alt={item.name} loading="lazy" className="h-full w-full object-contain" />
+                  </div>
+                )}
                 <p className="font-medium text-foreground">{item.name}</p>
                 <p className="mt-1 text-xs leading-relaxed text-muted">{item.whatItDoes}</p>
                 <p className="mt-2 text-xs leading-relaxed text-muted">
@@ -101,7 +112,8 @@ export default function CarePage() {
                   Find on Amazon &rarr;
                 </CareOutboundLink>
               </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       ))}

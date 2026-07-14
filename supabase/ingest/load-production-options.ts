@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md; kelly-woc-saddle-chanel19-dionysus-horsebit-production-matrix.md; booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md; rockstud-kate-jodie-puzzle-bamboo-city-antigona-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -405,6 +405,416 @@ const LV_POCHETTE_METIS: Row[] = [
   { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
 ];
 
+// Hermès Kelly (style 5), archivist-sourced 2026-07-13 — leather-primary, encoded exactly like the
+// Birkin (leathers + colour anchors + codes reused from hermes.md). Size 20/25/28/32/35/40 (28
+// default, most liquid); Sellier vs Retourné construction toggle; Gold/Palladium hardware.
+const KELLY: Row[] = [
+  { axis: "size", value: "20", permanence: "seasonal", note: "Mini Kelly II, ~20 cm; Sellier-only, crossbody strap; the current grail, tightest allocation", sort_order: 1 },
+  { axis: "size", value: "25", permanence: "permanent", note: "~25 cm; Sellier or Retourné; strongest demand centre", sort_order: 2 },
+  { axis: "size", value: "28", permanence: "permanent", is_default: true, note: "~28 cm; the most versatile and most liquid Kelly size", sort_order: 3 },
+  { axis: "size", value: "32", permanence: "permanent", note: "~32 cm; the classic Grace Kelly proportion, vintage-collector following", sort_order: 4 },
+  { axis: "size", value: "35", permanence: "permanent", note: "~35 cm; work/substantial carry, lowest secondary premium of the core sizes", sort_order: 5 },
+  { axis: "size", value: "40", permanence: "seasonal", note: "~40 cm; travel size, rare in current production", sort_order: 6 },
+  { axis: "material", value: "Togo", permanence: "permanent", is_default: true, note: "Veau Togo; fine pebbled calf, the most common Retourné Kelly leather", sort_order: 1 },
+  { axis: "material", value: "Clemence", permanence: "permanent", note: "Veau Taurillon Clemence; soft flat-grained bull calf, relaxed; Retourné", sort_order: 2 },
+  { axis: "material", value: "Epsom", permanence: "permanent", note: "Veau Epsom; embossed rigid calf; the primary Sellier Kelly leather (replaced Courchevel 2004)", sort_order: 3 },
+  { axis: "material", value: "Swift", permanence: "permanent", note: "Veau Swift; soft near-smooth calf, takes colour brightly; smaller sizes + Kelly Pochette", sort_order: 4 },
+  { axis: "material", value: "Box Calf", permanence: "permanent", note: "Veau Box; smooth glossy heritage calf that patinates; the classic vintage Sellier Kelly leather", sort_order: 5 },
+  { axis: "material", value: "Chevre Mysore", permanence: "permanent", note: "bright-grained goat; more common on the Kelly (esp. small/Mini) than the Birkin", sort_order: 6 },
+  { axis: "material", value: "Barenia", permanence: "seasonal", note: "smooth saddle calf, patinas/darkens; heritage, highly sought", sort_order: 7 },
+  { axis: "material", value: "Lizard", permanence: "seasonal", note: "Lézard; tiny fine scales, high shine; mostly the Mini Kelly (cyclical exotic)", sort_order: 8 },
+  { axis: "material", value: "Ostrich", permanence: "seasonal", note: "Autruche; quill-bump exotic, cyclical", sort_order: 9 },
+  { axis: "material", value: "Niloticus Crocodile", permanence: "seasonal", note: "Nile croc exotic; two-dot blind stamp", sort_order: 10 },
+  { axis: "material", value: "Porosus Crocodile", permanence: "seasonal", note: "saltwater croc, smallest/most-prized scales; caret blind stamp", sort_order: 11 },
+  { axis: "material", value: "Alligator", permanence: "seasonal", note: "Alligator Mississippiensis exotic; square blind stamp", sort_order: 12 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "GHW; warm-tone (Palladium is co-equal; default is a judgment call)", sort_order: 1 },
+  { axis: "hardware", value: "Palladium", permanence: "permanent", note: "PHW; bright silver-tone, equally standard", sort_order: 2 },
+  { axis: "hardware", value: "Permabrass", permanence: "seasonal", note: "warm brushed-brass tone; intermittent, small Sellier Kellys", sort_order: 3 },
+  { axis: "hardware", value: "Ruthenium", permanence: "seasonal", note: "dark gunmetal tone; intermittent", sort_order: 4 },
+  { axis: "hardware", value: "Rose Gold", permanence: "seasonal", note: "limited", sort_order: 5 },
+  { axis: "hardware", value: "So Black", permanence: "seasonal", note: "all-black hardware, limited editions", sort_order: 6 },
+  { axis: "construction", value: "Retourne", permanence: "permanent", is_default: true, note: "stitched inward, softer silhouette; more-produced, broader leather+size range (Sellier is co-defining, so default is soft)", sort_order: 1 },
+  { axis: "construction", value: "Sellier", permanence: "permanent", note: "stitched outward, rigid trapezoid; the classic Grace Kelly image; Epsom/Box; runs 20-30% above Retourné", sort_order: 2 },
+  { axis: "color", value: "Noir", permanence: "permanent", is_default: true, note: "code 89; true black, the anchor", sort_order: 1 },
+  { axis: "color", value: "Etoupe", permanence: "permanent", note: "code 18; grey-brown taupe, the bestselling everyday neutral", sort_order: 2 },
+  { axis: "color", value: "Gold", permanence: "permanent", note: "code 06; warm camel-brown, the iconic Hermès tan (Or)", sort_order: 3 },
+  { axis: "color", value: "Etain", permanence: "permanent", note: "code 8F; mid-dark cool pewter grey", sort_order: 4 },
+  { axis: "color", value: "Craie", permanence: "permanent", note: "code 10; soft chalk off-white", sort_order: 5 },
+  { axis: "color", value: "Gris Tourterelle", permanence: "permanent", note: "code 81; soft taupe-grey, a perennial collector neutral", sort_order: 6 },
+  { axis: "color", value: "Rouge H", permanence: "permanent", note: "code 46; deep brown-red near-burgundy, since 1925", sort_order: 7 },
+  { axis: "color", value: "Orange H", permanence: "permanent", note: "code 93; the signature box orange (Feu)", sort_order: 8 },
+];
+
+// Chanel Wallet on Chain / WOC (style 427), archivist-sourced 2026-07-13 — colour-primary, one core
+// size + Mini. Chanel does NOT name seasonal colours (permanent palette only). Materials/quilting/
+// hardware/palette reused from the Classic Flap + chanel.md.
+const CHANEL_WOC: Row[] = [
+  { axis: "size", value: "Classic", permanence: "permanent", is_default: true, note: "~19 x 12 x 3.5 cm; the one core WOC size (a flap wallet on a long chain)", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "seasonal", note: "the smaller Mini WOC; recurring but not the standing core", sort_order: 2 },
+  { axis: "material", value: "Caviar", permanence: "permanent", is_default: true, note: "grained calfskin, holds shape; the most-requested WOC leather", sort_order: 1 },
+  { axis: "material", value: "Lambskin", permanence: "permanent", note: "smooth, more delicate", sort_order: 2 },
+  { axis: "material", value: "Patent", permanence: "seasonal", sort_order: 3 },
+  { axis: "material", value: "Tweed", permanence: "seasonal", sort_order: 4 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "python / lizard, historic", sort_order: 5 },
+  { axis: "construction", value: "Diamond", permanence: "permanent", is_default: true, sort_order: 1 },
+  { axis: "construction", value: "Chevron", permanence: "permanent", note: "genuine seasonal variation, same tier", sort_order: 2 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "the classic pairing", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "palladium-tone", sort_order: 2 },
+  { axis: "hardware", value: "Ruthenium", permanence: "seasonal", note: "dark aged tone; intermittent", sort_order: 3 },
+  { axis: "hardware", value: "Aged gold", permanence: "seasonal", note: "antiqued, on some seasonal WOCs", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black caviar + gold = most requested", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "clair/rosé, shifts by season", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. off-white/ivory", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "cherry to bordeaux", sort_order: 4 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "near-permanent, returns most years", sort_order: 5 },
+];
+
+// Dior Saddle (style 209), archivist-sourced 2026-07-13 — size × material × colour like the Lady Dior.
+// Oblique Jacquard signature; Dior NAMES its colours. No "Large" (unsourced, omitted).
+const DIOR_SADDLE: Row[] = [
+  { axis: "size", value: "Micro", permanence: "permanent", note: "~13.3 x 12 x 3.8 cm; SLG-scale, worn as a mini/charm", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~18.5 x 15 x 5 cm; the popular compact crossbody, comes with a strap", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~24 x 20 x 6.5 cm; the Classic reference Saddle", sort_order: 3 },
+  { axis: "size", value: "Saddle Pouch", permanence: "seasonal", note: "the flat pouch on a chain/strap; a per-season format, not a Saddle size", sort_order: 4 },
+  { axis: "size", value: "Belt Bag", permanence: "seasonal", note: "the Saddle-shaped belt bag; recurring seasonal format", sort_order: 5 },
+  { axis: "material", value: "Oblique Jacquard", permanence: "permanent", is_default: true, note: "the diagonal Dior monogram canvas; the signature Saddle (blue is the reference)", sort_order: 1 },
+  { axis: "material", value: "Calfskin", permanence: "permanent", note: "smooth calfskin; the polished leather Saddle, the colour-bearing surface", sort_order: 2 },
+  { axis: "material", value: "Grained Calfskin", permanence: "permanent", note: "grained/textured calfskin, sturdier", sort_order: 3 },
+  { axis: "material", value: "Ultramatte", permanence: "seasonal", note: "matte tonal calfskin with tonal hardware; recurring capsule", sort_order: 4 },
+  { axis: "material", value: "Toile de Jouy", permanence: "seasonal", note: "the pastoral printed/jacquard toile, from 2019", sort_order: 5 },
+  { axis: "material", value: "Embroidered", permanence: "seasonal", note: "Mizza / beaded / sequined editions, per-listing", sort_order: 6 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "croc / python / lizard / ostrich, limited runs", sort_order: 7 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; black leather + antique-gold = the reference leather Saddle", sort_order: 1 },
+  { axis: "color", value: "Blue", permanence: "permanent", note: "Dior's signature Saddle blue; recurring (permanence soft)", sort_order: 2 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Latte/nude; a standing Dior neutral (permanence soft)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Dior's recurring red; near-permanent (permanence soft)", sort_order: 4 },
+];
+
+// Chanel 19 (style 425), archivist-sourced 2026-07-13 — colour-primary. Soft lambskin/goatskin mixed
+// quilt; the signature mixed-metal gourmette chain (house-confirmed). Chanel does NOT name seasonal colours.
+const CHANEL_19: Row[] = [
+  { axis: "size", value: "Small", permanence: "permanent", note: "~26 cm; evening/day, crossbody or clutch", sort_order: 1 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~30 cm; the launch size, everyday reference (resellers also label 'Medium/Large')", sort_order: 2 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~36 cm; roomier day bag (reseller labels overlap the ~30 cm, verify per listing)", sort_order: 3 },
+  { axis: "size", value: "Maxi", permanence: "permanent", note: "~36+ cm; fits a small laptop/tablet", sort_order: 4 },
+  { axis: "size", value: "WOC", permanence: "permanent", note: "the 19 Wallet on Chain; the compact 19 format", sort_order: 5 },
+  { axis: "material", value: "Lambskin", permanence: "permanent", is_default: true, note: "the soft launch leather; the 19 mixes lambskin + goatskin in its quilt", sort_order: 1 },
+  { axis: "material", value: "Goatskin", permanence: "permanent", note: "the more durable co-primary 19 leather, same tier as lambskin", sort_order: 2 },
+  { axis: "material", value: "Caviar", permanence: "seasonal", note: "grained calfskin; produced but less common on the 19", sort_order: 3 },
+  { axis: "material", value: "Tweed", permanence: "seasonal", sort_order: 4 },
+  { axis: "material", value: "Denim", permanence: "seasonal", sort_order: 5 },
+  { axis: "material", value: "Iridescent", permanence: "seasonal", note: "iridescent/metallic calfskin", sort_order: 6 },
+  { axis: "construction", value: "Diamond (oversized)", permanence: "permanent", is_default: true, note: "the 19's signature large, puffy diamond quilt (not the tight Classic-Flap diamond)", sort_order: 1 },
+  { axis: "hardware", value: "Mixed", permanence: "permanent", is_default: true, note: "the signature 'gourmette' chain combining silver + ruthenium + aged gold; near-universal", sort_order: 1 },
+  { axis: "hardware", value: "So Black", permanence: "seasonal", note: "all-black hardware, limited seasonal", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "clair/rosé, shifts by season", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. off-white/ivory", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "cherry to bordeaux", sort_order: 4 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "near-permanent, returns most years", sort_order: 5 },
+];
+
+// Gucci Dionysus (style 201), archivist-sourced 2026-07-13 — size × material × colour, DESCRIPTOR
+// colours only (Gucci doesn't name). Tiger-head spur clasp fixed (no hardware axis).
+const GUCCI_DIONYSUS: Row[] = [
+  { axis: "size", value: "Super Mini", permanence: "permanent", note: "~16.5 x 10 x 4 cm; the smallest, chain-strap mini", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~20 x 16 x 6 cm; the popular chain mini", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~28 x 17 x 9 cm; the reference Dionysus, most cross-shopped", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~30 x 21.5 x 9 cm; the roomier shoulder size", sort_order: 4 },
+  { axis: "material", value: "GG Supreme Canvas", permanence: "permanent", is_default: true, note: "beige/ebony coated GG Supreme canvas with leather trim; the everyday Dionysus", sort_order: 1 },
+  { axis: "material", value: "Leather", permanence: "permanent", note: "smooth/pebbled calfskin; the polished leather version", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Velvet", permanence: "seasonal", note: "velvet, often embellished (crystals/pearls)", sort_order: 4 },
+  { axis: "material", value: "Embroidered / Print", permanence: "seasonal", note: "Blooms / GG print / embroidered + exotic editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "the GG Supreme beige/ebony + nude leather family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring Gucci red (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Pink", permanence: "permanent", note: "the recurring light-pink Dionysus (descriptor); near-permanent (permanence soft)", sort_order: 5 },
+];
+
+// Gucci Horsebit 1955 (style 447), archivist-sourced 2026-07-13 — size × material × colour, descriptor
+// colours only. Gold-tone horsebit fixed (no hardware axis); other 1955 silhouettes are per-listing.
+const GUCCI_HORSEBIT_1955: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~20.5 x 14.5 x 5 cm; the compact chain/shoulder mini", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~25 x 18 x 8 cm; the reference Horsebit 1955 shoulder bag (two straps), most cross-shopped", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~30 cm; the larger shoulder/tote proportion (less common; cm approximate)", sort_order: 3 },
+  { axis: "material", value: "GG Supreme Canvas", permanence: "permanent", is_default: true, note: "beige/ebony coated GG Supreme canvas + Web stripe option; the everyday 1955", sort_order: 1 },
+  { axis: "material", value: "Smooth Leather", permanence: "permanent", note: "smooth calfskin; the polished leather 1955, the colour-bearing surface", sort_order: 2 },
+  { axis: "material", value: "Exotic / Printed", permanence: "seasonal", note: "lizard / python / print + special editions, per-listing", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "the GG Supreme beige/ebony + nude leather family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory leather; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring Gucci red (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+];
+
+// Dior Book Tote (454), archivist-sourced 2026-07-13 — PRINT-primary (material = the embroidery).
+// Dior names colours. Open tote, no hardware axis.
+const DIOR_BOOK_TOTE: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~23 x 15 x 5 cm; the small/phone-scale mini, comes with a strap", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "~26.5 x 21 x 14 cm; the compact everyday tote", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~36 x 27.5 x 16.5 cm; the Classic reference Book Tote", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~41.5 x 35 x 18 cm; the roomiest carryall (cm approximate)", sort_order: 4 },
+  { axis: "size", value: "Vertical", permanence: "seasonal", note: "the North-South vertical Book Tote; a recurring format, not a core size", sort_order: 5 },
+  { axis: "material", value: "Oblique Embroidery", permanence: "permanent", is_default: true, note: "the diagonal Dior monogram embroidered canvas; the signature (blue is the reference)", sort_order: 1 },
+  { axis: "material", value: "Toile de Jouy", permanence: "permanent", note: "the pastoral toile embroidery; a Chiuri signature from ~2019", sort_order: 2 },
+  { axis: "material", value: "Plain Canvas / Macrocannage", permanence: "permanent", note: "solid-colour embroidered canvas ('DIOR' or Macrocannage relief), the colour-forward tote", sort_order: 3 },
+  { axis: "material", value: "D-Royaume / Animal", permanence: "seasonal", note: "zodiac / animal-motif embroidered editions, per-listing", sort_order: 4 },
+  { axis: "material", value: "Embroidered / Beaded", permanence: "seasonal", note: "other seasonal beaded/sequined/print embroideries + personalisation, per-listing", sort_order: 5 },
+  { axis: "color", value: "Blue", permanence: "permanent", is_default: true, note: "Dior's signature Oblique blue; the reference (Black is co-anchor, default is soft)", sort_order: 1 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "the grey Oblique neutral; a standing anchor", sort_order: 2 },
+  { axis: "color", value: "Black", permanence: "permanent", note: "black Oblique / plain-canvas; the minimalist anchor", sort_order: 3 },
+  { axis: "color", value: "Pink", permanence: "permanent", note: "the recurring Oblique/Toile pink (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Latte/natural on plain canvas; a standing Dior neutral (permanence soft)", sort_order: 5 },
+];
+
+// Fendi Peekaboo (205), archivist-sourced 2026-07-13 — size × material × colour, DESCRIPTOR colours
+// (Fendi doesn't name). Twin twist-locks + contrasting lining fixed (no hardware axis).
+const FENDI_PEEKABOO: Row[] = [
+  { axis: "size", value: "Nano", permanence: "seasonal", note: "~19 x 16 x 6 cm; the micro/charm Peekaboo, recent addition", sort_order: 1 },
+  { axis: "size", value: "Petite", permanence: "permanent", note: "the ISeeU Petite (~SLG-scale accordion); a centenary-era addition (~2024)", sort_order: 2 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~23 x 18 x 11 cm; the Iconic Mini, a top-selling size", sort_order: 3 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "~27 x 21 x 11 cm; the ISeeU Small (accordion); the popular structured crossbody", sort_order: 4 },
+  { axis: "size", value: "Regular", permanence: "permanent", is_default: true, note: "~33 x 25 x 12 cm; the Iconic Medium/Regular, the reference (Mini is co-popular, default is soft)", sort_order: 5 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~43 x 32 x 14 cm; the roomiest Iconic size, less common now", sort_order: 6 },
+  { axis: "material", value: "Smooth Calf", permanence: "permanent", is_default: true, note: "smooth/soft calf leather; the everyday Peekaboo, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Selleria", permanence: "permanent", note: "hand-saddle-stitched Cuoio Romano leather (contrast stitch, silver 1925 tag); the artisanal Peekaboo", sort_order: 2 },
+  { axis: "material", value: "FF / Zucca Canvas", permanence: "seasonal", note: "the interlocking-FF logo canvas / FF 1974 embossed body; recurring logo runs", sort_order: 3 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "crocodile / python / ostrich / lizard", sort_order: 4 },
+  { axis: "material", value: "Fur / Embellished", permanence: "seasonal", note: "shearling/'teddy' fur, beaded, sequined editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Brown", permanence: "permanent", note: "tobacco/chocolate brown family; descriptor", sort_order: 2 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/greige neutral (incl. Selleria naturals); descriptor", sort_order: 3 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory; descriptor", sort_order: 4 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "the recurring grey family; descriptor (permanence soft)", sort_order: 5 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring red family (descriptor); near-permanent (permanence soft)", sort_order: 6 },
+];
+
+// YSL Loulou (460), archivist-sourced 2026-07-13 — size × material × colour × hardware-tone. YSL names
+// permanents as plain descriptors (Noir/Blanc/Rouge); the Cassandre tone (gold/silver) is the real naming axis.
+const YSL_LOULOU: Row[] = [
+  { axis: "size", value: "Toy", permanence: "permanent", note: "~20 x 14 x 7 cm; the mini Loulou on a chain, the entry/evening size", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "~24 x 14 x 6 cm (ysl.com); the compact everyday shoulder, co-most-popular on resale", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~32 x 21 x 10 cm; the reference Medium Loulou Matelassé (Small is co-popular, default is soft)", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "~37 x 27 cm; the roomiest Loulou, less common (cm approximate)", sort_order: 4 },
+  { axis: "material", value: "Matelasse Lambskin", permanence: "permanent", is_default: true, note: "quilted chevron 'Y' lambskin; the softest/most common Loulou leather, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Matelasse Calfskin", permanence: "permanent", note: "chevron-quilted grain-de-poudre embossed calfskin; sturdier, holds shape", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Puffer", permanence: "seasonal", note: "the padded/pillow Loulou Puffer; a Vaccarello-era cult variant", sort_order: 4 },
+  { axis: "material", value: "Croc-Embossed / Exotic", permanence: "seasonal", note: "croc-embossed or exotic editions, per-listing", sort_order: 5 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone Cassandre; the classic pairing (hardware tone carries YSL's naming weight)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone Cassandre; equally standard", sort_order: 2 },
+  { axis: "hardware", value: "Aged / Brushed", permanence: "seasonal", note: "aged or brushed-tone Cassandre on some seasonal Loulous", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the definitive Loulou colour, the anchor (plain descriptor)", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Dark Beige / greige neutral; a YSL staple (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "Blanc / Crème neutral (descriptor)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Rouge; a recurring statement colour (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "Storm/grey neutral; a recurring core option (descriptor) (permanence soft)", sort_order: 5 },
+];
+
+// Fendi Baguette (204), archivist-sourced 2026-07-13 — MATERIAL-primary (1,000+ surface variations),
+// DESCRIPTOR colours. FF flap clasp fixed (no hardware axis); Chain formats per-listing.
+const FENDI_BAGUETTE: Row[] = [
+  { axis: "size", value: "Nano", permanence: "seasonal", note: "~11 x 6.5 x 2.5 cm; the micro/charm Baguette, part of the modern revival", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~19 x 11.5 x 4 cm; the small crossbody Baguette, a revival-era staple", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~27 x 15 x 6 cm; the Iconic/Regular Baguette, the reference SATC size", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "~32 x 17 cm; the oversized 'Baguette Large'/'Grande', less common (cm approximate)", sort_order: 4 },
+  { axis: "material", value: "Leather", permanence: "permanent", is_default: true, note: "smooth/soft nappa or calf leather; the everyday Baguette, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "FF / Zucca Canvas", permanence: "permanent", note: "the interlocking-FF 'Zucca' logo canvas / FF 1974 embossed; the heritage logomania Baguette", sort_order: 2 },
+  { axis: "material", value: "Selleria", permanence: "seasonal", note: "hand-saddle-stitched Cuoio Romano leather (silver 1925 tag); the artisanal Baguette", sort_order: 3 },
+  { axis: "material", value: "Sequins / Embellished", permanence: "seasonal", note: "the famous sequined + beaded + crystal Baguettes", sort_order: 4 },
+  { axis: "material", value: "Embroidered", permanence: "seasonal", note: "embroidered / brocade / tapestry editions, per-listing", sort_order: 5 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "crocodile / python / ostrich / lizard, limited runs", sort_order: 6 },
+  { axis: "material", value: "Fur", permanence: "seasonal", note: "shearling / fur-trimmed / 'teddy' editions, per-listing", sort_order: 7 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Brown", permanence: "permanent", note: "tobacco/chocolate brown (incl. the Tobacco Zucca); descriptor", sort_order: 2 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/greige neutral; descriptor", sort_order: 3 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory; descriptor", sort_order: 4 },
+  { axis: "color", value: "Pink", permanence: "permanent", note: "the recurring pink Baguette (descriptor); near-permanent (permanence soft)", sort_order: 5 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring red family (descriptor); near-permanent (permanence soft)", sort_order: 6 },
+];
+
+// Chanel 22 (431), archivist-sourced 2026-07-13 — colour-primary, 2022 Viard drawstring hobo. Chanel
+// does NOT name seasonal colours. Signature gold chain + '22' plate; oversized diamond quilt.
+const CHANEL_22: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~18 x 20 x 6.5 cm; the compact 22, added after launch; the crossbody format", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~29 x 32 x 7.5 cm; the everyday reference (reseller labels overlap Small/Medium, verify per listing)", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~35 x 37 x 7 cm; the mid drawstring hobo (labels overlap the Small)", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "permanent", note: "~42 x 39 x 8 cm; the oversized shopper, the launch statement size (cm approximate)", sort_order: 4 },
+  { axis: "material", value: "Shiny Calfskin", permanence: "permanent", is_default: true, note: "the soft shiny (glossy) calfskin; the launch leather + signature look of the 22", sort_order: 1 },
+  { axis: "material", value: "Grained Calfskin", permanence: "permanent", note: "grained/caviar-like calfskin, sturdier, holds shape", sort_order: 2 },
+  { axis: "material", value: "Tweed", permanence: "seasonal", note: "tweed body, recurring seasonal runs", sort_order: 3 },
+  { axis: "material", value: "Patent", permanence: "seasonal", note: "patent/shiny-crackled seasonal editions", sort_order: 4 },
+  { axis: "construction", value: "Diamond (oversized)", permanence: "permanent", is_default: true, note: "the 22's signature large diamond quilt; the defining look", sort_order: 1 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone chain + the '22' metal plate/charm; the signature, near-universal", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone chain + '22' plate; the co-standard finish", sort_order: 2 },
+  { axis: "hardware", value: "Aged gold", permanence: "seasonal", note: "antiqued gold on some seasonal 22s", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "clair/rosé, shifts by season", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. off-white/ivory", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "cherry to bordeaux", sort_order: 4 },
+  { axis: "color", value: "Navy", permanence: "permanent", note: "near-permanent, returns most years", sort_order: 5 },
+];
+
+// Gucci Diana (451), archivist-sourced 2026-07-13 — size × material × colour, DESCRIPTOR colours. Bamboo
+// handles + removable belts fixed (no hardware axis).
+const GUCCI_DIANA: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~20 x 16 x 10 cm; the compact bamboo-handle tote, a popular current size", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~27 x 24 x 11 cm; the reference Diana tote, most cross-shopped (cm approximate)", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~35 x 30 x 15 cm; the classic tote proportion (closest to Princess Diana's) (cm approximate)", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "~40 cm; the roomiest carryall, less common (cm approximate)", sort_order: 4 },
+  { axis: "material", value: "Leather", permanence: "permanent", is_default: true, note: "smooth calfskin; the everyday bamboo-handle Diana, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "GG Supreme Canvas", permanence: "permanent", note: "beige/ebony coated GG Supreme canvas with leather trim; the logo Diana", sort_order: 2 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body (the 1991 original debuted in beige suede); recurring runs", sort_order: 3 },
+  { axis: "material", value: "Exotic / Print", permanence: "seasonal", note: "lizard / python / print + special editions, per-listing", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "the GG Supreme beige/ebony + nude leather family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory leather; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring Gucci red (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Pink", permanence: "permanent", note: "the recurring light-pink Diana (descriptor); near-permanent (permanence soft)", sort_order: 5 },
+];
+
+// Valentino Rockstud (674), archivist-sourced 2026-07-13 — size × material × colour × stud-tone hardware.
+// Mostly descriptor colours + two named signatures (Rosso Valentino, Poudre). Spike/Lock/Loco = separate models.
+const VALENTINO_ROCKSTUD: Row[] = [
+  { axis: "size", value: "Small", permanence: "permanent", note: "~26 x 21 x 10 cm; the Small Shopper Tote / small crossbody, the entry size", sort_order: 1 },
+  { axis: "size", value: "Medium", permanence: "permanent", is_default: true, note: "~33 x 25 x 15 cm; the Medium Shopper Tote, the reference Rockstud", sort_order: 2 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "~51 x 28 x 15 cm; the Large Shopper Tote (often exotic), roomiest, less common (cm from an older guide)", sort_order: 3 },
+  { axis: "material", value: "Smooth Calf", permanence: "permanent", is_default: true, note: "smooth calfskin; the everyday Rockstud, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Grained Calf", permanence: "permanent", note: "grained/pebbled calfskin, sturdier, holds shape", sort_order: 2 },
+  { axis: "material", value: "Denim", permanence: "seasonal", note: "denim-body Rockstud shopper (a recurring seasonal run)", sort_order: 3 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "python / crocodile; the large shopper's signature exotic runs", sort_order: 4 },
+  { axis: "material", value: "Embellished", permanence: "seasonal", note: "crystal-covered / 'Pop' printed / Memetic editions, per-listing", sort_order: 5 },
+  { axis: "hardware", value: "Platino (pale gold)", permanence: "permanent", is_default: true, note: "the signature light/pale-gold pyramid studs; near-universal", sort_order: 1 },
+  { axis: "hardware", value: "Ruthenium", permanence: "seasonal", note: "dark gunmetal studs; the edgier finish", sort_order: 2 },
+  { axis: "hardware", value: "Rose Gold", permanence: "seasonal", note: "rose-gold studs; intermittent", sort_order: 3 },
+  { axis: "hardware", value: "Tonal", permanence: "seasonal", note: "matte tone-on-tone studs matching the leather (the all-black look); recurring", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Nero; the anchor (descriptor)", sort_order: 1 },
+  { axis: "color", value: "Poudre", permanence: "permanent", note: "Valentino's signature powder-pink nude; a genuine house name", sort_order: 2 },
+  { axis: "color", value: "Rosso Valentino", permanence: "permanent", note: "the house red; a genuine Valentino colour name", sort_order: 3 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/greige neutral; descriptor", sort_order: 4 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. ivory; descriptor", sort_order: 5 },
+];
+
+// YSL Kate (462), archivist-sourced 2026-07-13 — size × material × colour × hardware-tone (like the Loulou).
+// YSL names permanents as plain descriptors; the Cassandre tone (gold/silver) is the naming axis. Tassel = trim, not a size.
+const YSL_KATE: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~17 x 11.5 cm; the Kate Mini/Nano on a chain, the evening/entry size", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~20 x 12.5 x 5 cm; the everyday reference Kate, most liquid on resale", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~24 x 14.5 x 5 cm; the roomier shoulder Kate (cm approximate)", sort_order: 3 },
+  { axis: "material", value: "Grain de Poudre", permanence: "permanent", is_default: true, note: "the pebbled/embossed grain-de-poudre calfskin; the classic Kate leather, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Smooth Calf", permanence: "permanent", note: "smooth calfskin; the polished Kate", sort_order: 2 },
+  { axis: "material", value: "Matelasse", permanence: "permanent", note: "chevron/quilted matelassé lambskin (the Kate Chain quilted version)", sort_order: 3 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body (incl. the fringe/tassel suede Kates), recurring runs", sort_order: 4 },
+  { axis: "material", value: "Croc-Embossed / Exotic", permanence: "seasonal", note: "croc-embossed or exotic editions, per-listing", sort_order: 5 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", is_default: true, note: "gold-tone Cassandre; the classic pairing (hardware tone carries YSL's naming weight)", sort_order: 1 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", note: "silver/palladium-tone Cassandre; equally standard", sort_order: 2 },
+  { axis: "hardware", value: "Aged / Brushed", permanence: "seasonal", note: "aged or brushed-tone Cassandre on some seasonal Kates", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the definitive Kate colour, the anchor (plain descriptor)", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "Dark Beige / greige neutral; a YSL staple (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "Blanc / Crème neutral (descriptor)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "Rouge; a recurring statement colour (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "Storm/grey neutral; a recurring core option (descriptor) (permanence soft)", sort_order: 5 },
+];
+
+// Bottega Jodie (210), archivist-sourced 2026-07-13 — colour-primary, BV NAMES colours. Knotted Intrecciato hobo.
+const BV_JODIE: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", is_default: true, note: "~28 x 23 x 8 cm; the cult knotted Intrecciato hobo, the most liquid Jodie (default vs Small is soft)", sort_order: 1 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "~36 x 21 x 13 cm; formerly 'Teen Jodie' (BV renamed the run), the mid shoulder size", sort_order: 2 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "the larger everyday hobo (cm not cleanly pinned this run)", sort_order: 3 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "the original oversized knotted hobo (Lee's 2020 launch proportion), less common now (cm not sourced)", sort_order: 4 },
+  { axis: "material", value: "Intrecciato", permanence: "permanent", is_default: true, note: "the signature woven nappa/lambskin Intrecciato; the base Jodie weave", sort_order: 1 },
+  { axis: "material", value: "Padded Intrecciato", permanence: "permanent", note: "the puffy padded weave; a signature Jodie finish", sort_order: 2 },
+  { axis: "material", value: "Nappa", permanence: "permanent", note: "smooth nappa (non-woven) Jodie", sort_order: 3 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede / other seasonal finishes", sort_order: 4 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "lizard / crocodile / metallic special editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; Nero, the easiest Jodie to source", sort_order: 1 },
+  { axis: "color", value: "Parakeet", permanence: "seasonal", note: "BV's signature acid-green house colour (OFFICIAL, Daniel Lee 2021); recurs but rotates", sort_order: 2 },
+  { axis: "color", value: "Fondant", permanence: "seasonal", note: "deep warm chocolate; house-confirmed/reseller-attributed BV name (MEDIUM)", sort_order: 3 },
+  { axis: "color", value: "Barolo", permanence: "seasonal", note: "deep burgundy; reseller-attributed BV name (MEDIUM)", sort_order: 4 },
+  { axis: "color", value: "Travertine", permanence: "seasonal", note: "light olive-beige; house-confirmed BV name (MEDIUM)", sort_order: 5 },
+  { axis: "color", value: "Porridge", permanence: "seasonal", note: "ivory-beige neutral; reseller-attributed BV name (MEDIUM)", sort_order: 6 },
+];
+
+// Loewe Puzzle (504), archivist-sourced 2026-07-13 — size × material × colour. Anderson's 2015 origami box.
+// Loewe = MIDDLE naming case (publishes seasonal names but mostly descriptively). NO hardware axis.
+const LOEWE_PUZZLE: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~12.5 x 8.5 x 5.4 cm; the micro Puzzle, evening/charm scale", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~19 x 13 x 8 cm; the compact crossbody Puzzle", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~24 x 16 x 10.5 cm; the reference everyday Puzzle, most cross-shopped", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~28-29 x 19 x 14 cm; the roomier Puzzle", sort_order: 4 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "the largest Puzzle, less common (cm not cleanly pinned this run)", sort_order: 5 },
+  { axis: "material", value: "Classic Calfskin", permanence: "permanent", is_default: true, note: "smooth classic calfskin; the original folds-flat Puzzle, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Grained Calfskin", permanence: "permanent", note: "pebbled/grained calfskin, sturdier", sort_order: 2 },
+  { axis: "material", value: "Soft Grained", permanence: "permanent", note: "soft-grain calfskin (the lighter, slouchier Puzzle)", sort_order: 3 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede / satin-calf / metallic seasonal runs", sort_order: 4 },
+  { axis: "material", value: "Anagram / Jacquard", permanence: "seasonal", note: "embossed-Anagram or repeat-Anagram jacquard-canvas Puzzles", sort_order: 5 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "lizard / python / croc-embossed editions, per-listing", sort_order: 6 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor (Loewe names it descriptively 'Black')", sort_order: 1 },
+  { axis: "color", value: "Tan", permanence: "permanent", note: "the natural/tan Puzzle, a standing neutral (descriptor)", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. 'Soft White' (Loewe's house-named soft off-white); descriptor-leaning", sort_order: 3 },
+  { axis: "color", value: "Green", permanence: "permanent", note: "the recurring Loewe green (e.g. 'Emerald Green' SS24); descriptive house name (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Burgundy", permanence: "permanent", note: "the recurring oxblood/burgundy (e.g. 'Dark Burgundy' SS24); descriptive house name (permanence soft)", sort_order: 5 },
+];
+
+// Gucci Bamboo 1947 (449), archivist-sourced 2026-07-13 — size × material × colour, DESCRIPTOR colours.
+// Bamboo handle + piston lock fixed (no hardware axis).
+const GUCCI_BAMBOO_1947: Row[] = [
+  { axis: "size", value: "Super Mini", permanence: "seasonal", note: "~12 x 10 x 5.5 cm; the micro evening bamboo-handle, recent addition", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~17 x 12 x 7.6 cm; the popular compact top-handle", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~21 x 15 x 7 cm; the reference Bamboo 1947, most cross-shopped", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "the larger top-handle/tote proportion, less common (cm not cleanly pinned this run)", sort_order: 4 },
+  { axis: "material", value: "Leather", permanence: "permanent", is_default: true, note: "smooth calfskin; the everyday bamboo-handle 1947, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Suede", permanence: "seasonal", note: "suede body; recurring seasonal runs", sort_order: 2 },
+  { axis: "material", value: "Exotic / Print", permanence: "seasonal", note: "lizard / python / ostrich + print special editions, per-listing", sort_order: 3 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/beige neutral family; descriptor", sort_order: 2 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory; descriptor", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring Gucci red (descriptor); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "Brown", permanence: "permanent", note: "the tobacco/chocolate brown family; descriptor (permanence soft)", sort_order: 5 },
+];
+
+// Balenciaga City (568), archivist-sourced 2026-07-13 — size × material × colour × moto hardware. FINDING:
+// Balenciaga NAMES its colours richly (Bottega camp) — Black/White/Anthracite every season, the rest named-by-year per-listing.
+const BALENCIAGA_CITY: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~18.5 x 12 x 7 cm; the smallest City, worn as a mini crossbody", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~24 x 16 x 9 cm; the popular compact City", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", note: "the Small/'Classic City S'; the mid everyday size", sort_order: 3 },
+  { axis: "size", value: "City", permanence: "permanent", is_default: true, note: "~38 x 25 x 13 cm; the original/Classic City, the reference moto bag", sort_order: 4 },
+  { axis: "size", value: "Work", permanence: "seasonal", note: "the oversized 'Work' City (XL tote), less common", sort_order: 5 },
+  { axis: "material", value: "Lambskin", permanence: "permanent", is_default: true, note: "the signature 'Arena' distressed lambskin; the classic soft moto leather, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Goatskin / Chevre", permanence: "permanent", note: "grained goatskin; the sturdier, more-textured City leather", sort_order: 2 },
+  { axis: "material", value: "Grained Calf", permanence: "seasonal", note: "grained calfskin seasonal runs", sort_order: 3 },
+  { axis: "hardware", value: "Silver", permanence: "permanent", is_default: true, note: "the aged silver-tone moto studs + buckles (Regular Hardware); the signature", sort_order: 1 },
+  { axis: "hardware", value: "Gold", permanence: "permanent", note: "gold-tone moto hardware; a co-standard finish", sort_order: 2 },
+  { axis: "hardware", value: "Rose Gold", permanence: "seasonal", note: "rose-gold moto hardware; seasonal", sort_order: 3 },
+  { axis: "hardware", value: "Giant", permanence: "seasonal", note: "the oversized 'Giant' studs/buckles (vs 'Regular'); a real stud-size choice, in any tone", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Noir; the anchor, produced every season", sort_order: 1 },
+  { axis: "color", value: "White", permanence: "permanent", note: "produced every season (Balenciaga names it)", sort_order: 2 },
+  { axis: "color", value: "Anthracite", permanence: "permanent", note: "the near-black charcoal grey; a Balenciaga house name, produced every season", sort_order: 3 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "the recurring grey family (e.g. 'Gris'); named seasonally (permanence soft)", sort_order: 4 },
+];
+
+// Givenchy Antigona (585), archivist-sourced 2026-07-13 — size × material × colour, DESCRIPTOR colours
+// (DEFAULTED, unsourced naming). Structured winged trapezoid satchel. NO hardware axis.
+const GIVENCHY_ANTIGONA: Row[] = [
+  { axis: "size", value: "Nano", permanence: "seasonal", note: "the micro Antigona (mini crossbody/charm scale), recent addition (cm not cleanly pinned)", sort_order: 1 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~22-26 x 19-20 x 13 cm; the compact crossbody Antigona", sort_order: 2 },
+  { axis: "size", value: "Small", permanence: "permanent", is_default: true, note: "~28 x 24 x 14 cm; the reference Antigona, most cross-shopped (Small/Mini labels overlap)", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "~33 x 28 x 19 cm; the classic roomy satchel proportion", sort_order: 4 },
+  { axis: "size", value: "Large", permanence: "seasonal", note: "the oversized/'Shopper' Antigona, less common now (cm not cleanly pinned)", sort_order: 5 },
+  { axis: "material", value: "Grained Calf", permanence: "permanent", is_default: true, note: "grained/pebbled calfskin; the classic structured Antigona, the colour-bearing surface", sort_order: 1 },
+  { axis: "material", value: "Smooth Calf", permanence: "permanent", note: "smooth calfskin; the polished Antigona", sort_order: 2 },
+  { axis: "material", value: "Croc-Embossed", permanence: "seasonal", note: "croc-embossed calfskin; a recurring textured run", sort_order: 3 },
+  { axis: "material", value: "Soft", permanence: "seasonal", note: "the 'Antigona Soft' (the slouchier unstructured version); a distinct recurring line", sort_order: 4 },
+  { axis: "material", value: "Exotic / Print", permanence: "seasonal", note: "python / print / embellished special editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor (Givenchy naming defaulted, not sourced this run)", sort_order: 1 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "nude/greige neutral; descriptor (defaulted)", sort_order: 2 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "the recurring grey family; descriptor (defaulted)", sort_order: 3 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring red family; descriptor (defaulted); near-permanent (permanence soft)", sort_order: 4 },
+  { axis: "color", value: "White", permanence: "permanent", note: "incl. cream/ivory; descriptor (defaulted)", sort_order: 5 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
@@ -421,6 +831,25 @@ const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 446, name: "Jackie 1961", rows: GUCCI_JACKIE },
   { styleId: 561, name: "Artois", rows: GOYARD_ARTOIS },
   { styleId: 438, name: "Pochette Métis", rows: LV_POCHETTE_METIS },
+  { styleId: 5, name: "Kelly", rows: KELLY },
+  { styleId: 427, name: "Wallet on Chain", rows: CHANEL_WOC },
+  { styleId: 209, name: "Saddle", rows: DIOR_SADDLE },
+  { styleId: 425, name: "Chanel 19", rows: CHANEL_19 },
+  { styleId: 201, name: "Dionysus", rows: GUCCI_DIONYSUS },
+  { styleId: 447, name: "Horsebit 1955", rows: GUCCI_HORSEBIT_1955 },
+  { styleId: 454, name: "Book Tote", rows: DIOR_BOOK_TOTE },
+  { styleId: 205, name: "Peekaboo", rows: FENDI_PEEKABOO },
+  { styleId: 460, name: "Loulou", rows: YSL_LOULOU },
+  { styleId: 204, name: "Baguette", rows: FENDI_BAGUETTE },
+  { styleId: 431, name: "Chanel 22", rows: CHANEL_22 },
+  { styleId: 451, name: "Diana", rows: GUCCI_DIANA },
+  { styleId: 674, name: "Rockstud", rows: VALENTINO_ROCKSTUD },
+  { styleId: 462, name: "Kate", rows: YSL_KATE },
+  { styleId: 210, name: "Jodie", rows: BV_JODIE },
+  { styleId: 504, name: "Puzzle", rows: LOEWE_PUZZLE },
+  { styleId: 449, name: "Bamboo 1947", rows: GUCCI_BAMBOO_1947 },
+  { styleId: 568, name: "City", rows: BALENCIAGA_CITY },
+  { styleId: 585, name: "Antigona", rows: GIVENCHY_ANTIGONA },
 ];
 
 async function main() {

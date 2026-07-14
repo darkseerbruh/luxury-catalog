@@ -179,6 +179,27 @@ export function amazonAffiliateActive(): boolean {
   return Boolean(AMAZON_ASSOCIATES_TAG);
 }
 
+/**
+ * Product image for a care item, when we have one. Returns null TODAY by design:
+ * the care shelf ships as clean text with NO placeholder image (owner call
+ * 2026-07-13: an abstract icon "means nothing", so we show nothing until we can
+ * show a real product photo). This is the single seam where real photos plug in.
+ *
+ * The source is Amazon's Product Advertising API (PA-API). It unlocks only after
+ * the account clears 3 qualifying sales in its first 180 days, and access is
+ * revoked if sales lapse, so it cannot render on a pre-launch site. When it lands,
+ * implement here: resolve `searchQuery` to the top product via PA-API SearchItems
+ * server-side and return its image URL (cache it; PA-API is rate-limited). The
+ * card already reserves the slot, and img-src permits https image hosts, so this
+ * one function is the whole switch. Until then every care card renders text-only.
+ */
+export function careItemImageUrl(searchQuery: string): string | null {
+  // No image source wired yet (PA-API is gated on approval). Touch the arg so the
+  // seam stays lint-clean and future-ready; the real impl resolves it to a photo.
+  void searchQuery;
+  return null;
+}
+
 function applyAffiliate(url: string, platform: Platform): string {
   const code = AFFILIATE_CODES[platform.paramEnv];
   let finalUrl = url;
