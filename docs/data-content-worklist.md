@@ -8,7 +8,11 @@ transport; load-sold.ts; audit-coverage.ts) and `docs/research-drafts/poshmark-e
 
 Status key: ⬜ todo · 🔄 in progress · ✅ done (with result + date)
 
-## VARIANT-SELECTOR levers (2026-07-12: 8 units landed — see below)
+## VARIANT-SELECTOR levers — **62 styles faceted (through main d4b10a6, 2026-07-13)**
+*Latest batch (+Vanity Case 71v / Coussin / Galleria / Félicie / Dauphine / Trendy CC / Le Cagole). Remaining unfaceted are mostly <300 listings; the ≥300 icon set is essentially covered. Continuing = more archivist Firecrawl batches (owner spend) into a thinning tail — pace deliberately or stop here.*
+*Every high-volume icon across all major houses now has an Amazon-style Size/Material/Colour(/Construction/Hardware) selector, production-driven + archivist-sourced. Tooling: seed-color-variants-from-production, seed-material-keyword-variants, seed-lv-line-variants, seed-hermes-leather-variants, seed-lv-empreinte-colors. Matrices in docs/research-drafts/*-production-matrix.md. The <300-listing tail remains (owner-paced).*
+
+### Original 8 units (2026-07-12, up to e940248): 11 styles + the tooling
 ✅ 2026-07-12 (all on main, up to e940248): **11 styles now faceted.**
 - Neverfull MM canvas-in-colorway dedup (merge-lv-canvas-colorway.ts).
 - LV colours beyond Empreinte (production_option filled + Vernis added to the leather-colour split).
@@ -26,7 +30,10 @@ Parked follow-ons (bounded):
 - ✅ Templated the next tier: Book Tote, Peekaboo, Loulou, Baguette, Chanel 22, Diana. **27 styles faceted total** (through main 2da50d8).
 - ✅ Templated Rockstud/Kate/Jodie/Puzzle/Bamboo 1947/City/Antigona. **34 styles faceted total** (through main 765fd32) — this is EVERY icon with ≥500 listings across all major houses. New archive finding: Balenciaga NAMES its colours (Black/White/Anthracite permanent).
 - ✅ Multi-word MATERIAL sub-axis SOLVED: seed-material-keyword-variants.ts (keyword-scored, clear-winner-only) splits "Oblique Embroidery"/"Smooth Calf"/"Matelasse Lambskin"/"GG Supreme Canvas" etc. Applied across Book Tote/Peekaboo/Chanel22/Loulou/Cassette/Jackie/Saddle/Dionysus/Horsebit/Kate/Jodie/City/etc.
-- ⬜ NEXT (owner-paced): the <500-listing long tail (hundreds of styles, thinner facets) — same 1-archivist-pull-+-seed pattern, but lower value per style, so pace deliberately (e.g. only styles on the Vivrelle plan / by traffic, not all 768). Next notable ~300-500 tier: Celine Luggage (2 style rows), Prada Re-Edition 2005, Chanel WOC-Boy, Dior 30 Montaigne, LV Pochette Accessoires, Chloe Marcie/Paddington, Celine Belt, Mulberry Bayswater, etc.
+- ✅ Templated the next tier: Ophidia, Triomphe, Celine Luggage Tote, Coach Tabby, Soho Disco, Sac de Jour, Re-Edition 2005. **41 styles faceted total** (through main 5a2a908). New: seed-color/material splitters filter by production-size labels, so a style whose DB size_labels differ from the archivist's names (Tabby "26" vs "Tabby 26"; Re-Edition "Standard" vs "Re-Edition 2005") needs the production_option size VALUES aligned to the DB or colour won't split — fixed for both.
+- ✅ Templated Lou Camera, Le 5 à 7 (SL, DB attribution correct), Pochette Accessoires, Hourglass, Niki, Multi Pochette, 30 Montaigne. **55 styles faceted total** (through main 44f0a35; +Gabrielle/Capucines/Bumbag/Twist/Deauville/Blondie/Coco Handle). Selector dims verified end-to-end via visibleDims (Size/Colour/Material/Construction render correctly).
+- 🛠️ Tooling now in place for any style: seed-color-variants-from-production (colour) + seed-material-keyword-variants (multi-word material, keyword-scored, no junk) + seed-lv-line-variants (LV canvas lines) + seed-hermes-leather-variants (Hermès leather) + seed-lv-empreinte-colors (LV leather colour). Gotcha: colour splitter filters by production-size labels, so if a style's DB size_label differs (e.g. a mis-parsed "30"), align the production_option size value OR relabel the variant.
+- ⬜ NEXT (owner-paced): sub-380 long tail (hundreds of styles, thinner data + more taxonomy ambiguity — generic "Camera Bag"/"Belt Bag" style rows lump brands, vet before seeding). Lower GEO value per style; pace deliberately or stop at the 48-icon set.
 - ⬜ HARDWARE variant-split (all styles): production_option carries hardware axes (Kelly/Birkin GHW-PHW, Chanel/Rockstud/City/Kate/Loulou tones) but variants aren't split by hardware — title tells are sparse (~5% on Birkin), so deferred; would need a hardware-keyword pass with a low floor + heavy hedge.
 - ⬜ Data-quality: Dionysus (201) has a pre-existing junk material chip ("fabric lining (varies by version…)") from an earlier ingest — clean it in a material-name pass.
 - ⬜ Kelly/Birkin COLOUR axis stays deferred (Hermès named palette absent from generic listing colours).
