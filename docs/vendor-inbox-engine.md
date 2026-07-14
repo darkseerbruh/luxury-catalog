@@ -52,6 +52,13 @@ Work in `/Users/ariellecoambes/Documents/luxury-catalog`. Branch off `origin/mai
 (`git checkout -b ops/vendor-inbox-$(date +%m%d) origin/main`); never `git checkout
 main`. `npm ci` if node_modules is stale.
 
+- **Verify it is STILL broken first (never act on a stale alert).** Before any fix,
+  confirm the problem is live NOW: for a failed workflow check the latest run
+  (`gh run list --workflow=<name> -L 1`) is still failing; for a 500/route error load
+  the live page or check current Vercel status; for a key, check it is still expiring.
+  If it is already green/fixed (a later run passed, another lane's PR merged, the page
+  loads), ledger it as "already resolved, no action" and move on. This is what keeps a
+  backlog of old alerts from turning into noise PRs.
 - **Code fixes** (feed/adapter/CI/key-ref): make the change, run the gates
   (`npx tsc --noEmit`, `npx eslint src`, `npm test`), open a PR with `gh pr create`.
   Plain-language body: what broke, the email that flagged it (sender + date), the fix,
