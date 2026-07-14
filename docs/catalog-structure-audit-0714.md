@@ -105,7 +105,21 @@ only be as good as these fields. This is the existing attribute-capture pass
    deals-rail lesson), colour needs ≥90% consensus, material/hardware ≥80%; mixed
    buckets stay NULL by design. Coverage: colour 45.2%→51%, material 24.8%→41%.
    Rollbacks: rollback-attr-enrich.json.
-5. Remaining: the 14 Chanel archivist rows, the 143 name-embeds judgment pass
-   (mostly "keep"), and fresh capture for the still-thin variants (433 had too
-   little evidence; 1,466 are genuine multi-colour buckets that want SPLITTING
-   into per-colour variants via the promotion pipeline, not filling).
+5. ✅ Name-embeds judgment pass DONE (second-wave, 2026-07-14 evening): the flagged
+   set is KEEP by default — verdicts locked so nobody re-litigates:
+   - KEEP (distinct models/lines, never merge): Kelly Pochette, Kelly/Constance To Go,
+     Picotin Lock, Petit Sac Plat, Petite Boîte Chapeau, all Ophidia/GG Marmont/
+     Gabrielle Backpack silhouettes, Saddle Pochette + Chain Pouch, Pillow Tabby,
+     Willow Tote, Speedy Soft, Keepall Bandoulière, Icare/Loulou Puffer/Lou Camera,
+     The Pouch Chain, Padded/Chain Cassette, Multi Pochette Accessoires, Félicie
+     Pochette + Strap & Go, Pearl Crush line, Vanity Case lines, Musette Salsa/Tango,
+     Loop Hobo, Marais/Petit Bucket, Bloomsbury (multi-variant), Birkin Touch.
+   - 11 hand-verified merges applied (second-wave-merges.ts): Picotin 22, Double
+     Sens 36, Garden Party 36, Herbag Zip 31, City Steamer MM, Travel Ligne ×3,
+     Cerf (Executive), Business Affinity Large, Gabrielle Hobo Medium.
+   - 1 un-merge: Neverfull Pochette Pouch back OUT of Neverfull (pouch = accessory,
+     restored as style 1288; the accessory-surface lane owns its future).
+6. Remaining: the 14 Chanel archivist rows (naming research), fresh capture for the
+   433 too-thin variants, and the 1,466 multi-colour buckets — those want SPLITTING
+   into per-colour variants, which is the variant-levers colour-splitter lane
+   (active, batch-by-batch; do not duplicate).

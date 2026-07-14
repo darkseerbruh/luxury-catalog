@@ -137,7 +137,7 @@ describe("auditCatalogStructure", () => {
 
   it("returns zeroed coverage for an empty catalog", () => {
     const audit = auditCatalogStructure([], []);
-    expect(audit.variantCoverage).toEqual({ total: 0, sizePct: 0, colourPct: 0, materialPct: 0 });
+    expect(audit.variantCoverage).toEqual({ total: 0, sizePct: 0, colourPct: 0, materialPct: 0, hardwarePct: 0 });
     expect(audit.safePseudo).toEqual([]);
     expect(audit.titleJunk).toEqual([]);
     expect(audit.dupGroups).toEqual([]);
