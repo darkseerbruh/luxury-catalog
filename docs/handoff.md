@@ -1,5 +1,17 @@
 # Luxury Catalog — Handoff Document
-*Updated 2026-07-14 (all on `main`, all auto-deployed to prod: myGemma on its licensed Awin datafeed [buy-links + trust + real photos, Shopify crawl retired]; two ingest-timeout crons fixed + index migration 0056; Fashionphile freshness un-frozen; a 100%-since-07-13 prod 500 on /brand fixed). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+*Updated 2026-07-14 (all on `main`, all auto-deployed to prod: Chanel ex-seller-title lane CLOSED [comps decontaminated, dictionary root fix, image pass — seller-title check 0 🟢]; myGemma on its licensed Awin datafeed [buy-links + trust + real photos, Shopify crawl retired]; two ingest-timeout crons fixed + index migration 0056; Fashionphile freshness un-frozen; a 100%-since-07-13 prod 500 on /brand fixed). Current source of truth — read this first. Supersedes prior handoffs; carried-forward items (DNS, credentials, hero-research caveat) are preserved below.*
+
+---
+
+## TL;DR — Chanel ex-seller-title lane CLOSED: comps decontaminated + image pass, seller-title check 0 🟢 (2026-07-14 night, on `main`)
+
+**Finished the 0714 audit's class-2 lane end to end. Full ledger in `docs/catalog-structure-audit-0714.md` §7/§10 (every step has a rollback file in `scripts/ux-restructure/`).**
+- 🧹 **Comps-remap (the archivist's contamination find):** 62 price rows on the 14 ex-seller-title variants judged with the TRR-mismap discipline (`remap-chanel-comps.ts`), every flagged row hand-reviewed (`chanel-comps-decisions.json`) — 20 kept, 42 preserve-then-deleted to `discovered_listing`. The "Novelty Drawstring on Chanel 19" class is gone.
+- 📖 **Dictionary root fix:** "Top Handle Rectangular Flap" is its own model now (was rolling into Classic Flap — the cause of #906's mis-resolved FP comps); handle-less square/rectangular minis keep the 0709 roll-up. Regression-tested (29 green).
+- ♻️ **Re-placement:** 6 of the 42 placed onto their real styles (`replace-remapped-comps.ts`, scoped promote-safe rules, never creates styles/variants); 2 seasonal-on-icon flaps + 1 phone holder HELD (Hollywood Boulevard precedent); 33 stay banked for the regular promote pass.
+- 📸 **Image pass (all 4 held rows CLOSED):** seed photos recovered from the 2022 TLC export (`data/raw`, Photos column — memory [[seed-csv-photos-identity]]) and verified by eye. #167 chevron → merged into Classic Flap; #189 → "Vintage Front Pocket Tote" (none of the four guesses); #191 → "Vintage Full Flap" (merge into #79 REFUSED — #79's seed was a red zip-top); #178 → "Mademoiselle Turnlock Flap" via an archivist web pass (no consensus model name exists; year null; strap possibly aftermarket).
+- ✅ **Daily structure check: seller-title styles 0 🟢** (21 at baseline). Data-health otherwise stable; the reds (size-mismatch/dupes/foreign) are pipeline-wide capture issues, pre-existing.
+- ⬜ **YOUR TURN:** nothing blocking. The #79 red-bag identity fix is running as the spawned task you started; zero-comp ex-junk styles refill via the existing capture lanes.
 
 ---
 
