@@ -23,7 +23,7 @@ type Row = {
   sort_order: number;
 };
 
-const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md; kelly-woc-saddle-chanel19-dionysus-horsebit-production-matrix.md; booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md; rockstud-kate-jodie-puzzle-bamboo-city-antigona-production-matrix.md; ophidia-triomphe-luggage-tabby-sohodisco-sacdejour-reedition-production-matrix.md; loucamera-le5a7-pochetteacc-hourglass-niki-multipochette-30montaigne-production-matrix.md; gabrielle-capucines-bumbag-twist-deauville-blondie-cocohandle-production-matrix.md; vanitycase-coussin-galleria-felicie-dauphine-trendycc-lecagole-production-matrix.md";
+const SRC = "Archivist 2026-07-11/12/13; classic-flap-production-matrix.md; lv-alma-hermes-birkin-production-matrix.md; onthego-ladydior-saintlouis-jackie-production-matrix.md; cassette-jackie-artois-pochettemetis-production-matrix.md; kelly-woc-saddle-chanel19-dionysus-horsebit-production-matrix.md; booktote-peekaboo-loulou-baguette-chanel22-diana-production-matrix.md; rockstud-kate-jodie-puzzle-bamboo-city-antigona-production-matrix.md; ophidia-triomphe-luggage-tabby-sohodisco-sacdejour-reedition-production-matrix.md; loucamera-le5a7-pochetteacc-hourglass-niki-multipochette-30montaigne-production-matrix.md; gabrielle-capucines-bumbag-twist-deauville-blondie-cocohandle-production-matrix.md; vanitycase-coussin-galleria-felicie-dauphine-trendycc-lecagole-production-matrix.md; montsouris-rogue-sacplat-graceful-softtrunk-celineluggage-production-matrix.md";
 
 // Chanel Classic Flap (11.12), style_id 1. Sourced axis values; NOT a combination matrix
 // (Chanel makes most combos, and seasonal colours have no official names — those are captured
@@ -1297,6 +1297,97 @@ const BALENCIAGA_LE_CAGOLE: Row[] = [
   { axis: "color", value: "Beige", permanence: "permanent", note: "a standing neutral Cagole (Bal names it); permanence soft", sort_order: 3 },
 ];
 
+// LV Montsouris (686), archivist-sourced 2026-07-14 — canvas-primary backpack. Current run Mini/PM/MM (no BB).
+const LV_MONTSOURIS: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~24 x 25 x 12 cm (louisvuitton.com M11197); the smallest New Montsouris (no 'BB' in this line)", sort_order: 1 },
+  { axis: "size", value: "PM", permanence: "permanent", is_default: true, note: "~28 x 30 x 18 cm (louisvuitton.com); the compact everyday backpack, most cross-shopped (default vs MM soft)", sort_order: 2 },
+  { axis: "size", value: "MM", permanence: "permanent", note: "~35 x 38 x 21 cm (louisvuitton.com); the roomy everyday/work backpack", sort_order: 3 },
+  { axis: "size", value: "GM", note: "the large VINTAGE Montsouris (~37 x 31 x 13.5 cm); pre-relaunch, resale-only now", sort_order: 4 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, vachetta trim; the launch/core line; canvas takes no colour choice", sort_order: 1 },
+  { axis: "material", value: "Monogram Empreinte", permanence: "permanent", note: "embossed calfskin; the colour-bearing leather line", sort_order: 2 },
+  { axis: "material", value: "Monogram Reverse", permanence: "seasonal", note: "caramel/brown reverse-Monogram canvas; intermittent runs", sort_order: 3 },
+  { axis: "material", value: "Seasonal Print", permanence: "seasonal", note: "By-the-Pool / seasonal Monogram-print / capsule editions, per-listing", sort_order: 4 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
+// Coach Rogue (498), archivist-sourced 2026-07-14 — size × material × colour, DESCRIPTOR colours (size number ≈ cm width).
+const COACH_ROGUE: Row[] = [
+  { axis: "size", value: "17", permanence: "permanent", note: "Rogue 17: ~17 cm wide; the mini Rogue (crossbody/evening scale); cm approx", sort_order: 1 },
+  { axis: "size", value: "25", permanence: "permanent", is_default: true, note: "Rogue 25: ~25 x 20 x 13 cm; the reference everyday Rogue, most cross-shopped (default vs 30 soft)", sort_order: 2 },
+  { axis: "size", value: "30", permanence: "permanent", note: "Rogue 30/31: ~31 x 25 x 14 cm (essexfashionhouse); the original 2016 proportion, the roomy work satchel", sort_order: 3 },
+  { axis: "size", value: "39", permanence: "permanent", note: "Rogue 39: ~39 cm wide; the 'extra-spacious' large Rogue (coach.com); cm approx", sort_order: 4 },
+  { axis: "size", value: "Standard", permanence: "permanent", note: "size-unstated Rogue listings (catch-all base; hidden from the size chips)", sort_order: 5 },
+  { axis: "material", value: "Glovetanned Pebble", permanence: "permanent", is_default: true, note: "Coach's signature pebbled glovetanned leather; the default Rogue surface", sort_order: 1 },
+  { axis: "material", value: "Glovetanned", permanence: "permanent", note: "the smooth glovetanned leather (a coach.com MTO signature leather)", sort_order: 2 },
+  { axis: "material", value: "Natural Leather", permanence: "permanent", note: "the third coach.com MTO signature leather (natural/veg-tan finish)", sort_order: 3 },
+  { axis: "material", value: "Signature Canvas", permanence: "seasonal", note: "coated Signature-C jacquard canvas Rogue runs", sort_order: 4 },
+  { axis: "material", value: "Colorblock / Mixed", permanence: "seasonal", note: "the multi-panel colorblock + suede-trim Rogues, per-listing", sort_order: 5 },
+  { axis: "material", value: "Exotic / Embellished", permanence: "seasonal", note: "snakeskin / whipstitch / rivets / tea-rose applique special editions, per-listing", sort_order: 6 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; descriptor, not a house colour name", sort_order: 1 },
+  { axis: "color", value: "Chalk", permanence: "permanent", note: "off-white/ivory; Coach product-name descriptor", sort_order: 2 },
+  { axis: "color", value: "Saddle / Tan", permanence: "permanent", note: "the classic Coach mid-brown/tan; descriptor", sort_order: 3 },
+  { axis: "color", value: "Oxblood", permanence: "permanent", note: "the recurring deep wine-red/burgundy; descriptor (permanence soft)", sort_order: 4 },
+];
+
+// LV Sac Plat (714), archivist-sourced 2026-07-14 — canvas-primary flat tote (LV line model).
+const LV_SAC_PLAT: Row[] = [
+  { axis: "size", value: "Petit Sac Plat", permanence: "permanent", note: "~14 x 17 x 5 cm (louisvuitton.com M81295); the micro SLG-scale flat tote, worn crossbody", sort_order: 1 },
+  { axis: "size", value: "BB", permanence: "permanent", is_default: true, note: "~21.5 x 22 x 9 cm (louisvuitton.com M46265); the compact modern Sac Plat, most liquid on resale", sort_order: 2 },
+  { axis: "size", value: "24", permanence: "permanent", note: "the Sac Plat 24 (~24 cm wide, men's-line); exact cm not cleanly sourced this run", sort_order: 3 },
+  { axis: "size", value: "Sac Plat", permanence: "permanent", note: "36.5 x 38 x 9 cm (24s.com); the large classic flat vertical tote, the original iconic proportion", sort_order: 4 },
+  { axis: "size", value: "PM", note: "the smaller VINTAGE Sac Plat PM; historic/resale-only, not a confirmed current size", sort_order: 5 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, vachetta trim; the launch/core line; canvas takes no colour choice", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim (no vachetta)", sort_order: 2 },
+  { axis: "material", value: "Monogram Empreinte", permanence: "permanent", note: "embossed calfskin; the colour-bearing leather line (esp. on the BB)", sort_order: 3 },
+  { axis: "material", value: "Monogram Reverse", permanence: "seasonal", note: "caramel/brown reverse-Monogram canvas; intermittent runs", sort_order: 4 },
+  { axis: "material", value: "Seasonal / Print", permanence: "seasonal", note: "Epi + seasonal Monogram-print / capsule editions, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Empreinte 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
+// LV Graceful (524), archivist-sourced 2026-07-14 — CANVAS-ONLY hobo (Monogram/Damier), NO colour axis, NO hardware axis.
+const LV_GRACEFUL: Row[] = [
+  { axis: "size", value: "PM", permanence: "permanent", note: "35 x 30 x 11 cm (louisvuitton.com N42249); the lighter everyday hobo", sort_order: 1 },
+  { axis: "size", value: "MM", permanence: "permanent", is_default: true, note: "41 x 35 x 14 cm (louisvuitton.com N42233); the extra-roomy hobo, the more iconic proportion (default vs PM soft)", sort_order: 2 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas, vachetta trim; canvas-only model, takes no colour choice", sort_order: 1 },
+  { axis: "material", value: "Damier Ebene", permanence: "permanent", note: "brown check, dark leather trim (no vachetta)", sort_order: 2 },
+  { axis: "material", value: "Damier Azur", permanence: "permanent", note: "pale ivory/blue check, vachetta trim", sort_order: 3 },
+];
+
+// LV Soft Trunk (1055), archivist-sourced 2026-07-14 — canvas-primary trunk (Eclipse signature). Colour on Taurillon line.
+const LV_SOFT_TRUNK: Row[] = [
+  { axis: "size", value: "Mini", permanence: "permanent", is_default: true, note: "~18.5 x 13 x 8 cm (louisvuitton.com M55702/M25927); the crossbody Mini Soft Trunk, most liquid (default vs full soft)", sort_order: 1 },
+  { axis: "size", value: "Soft Trunk", permanence: "permanent", note: "the original 2018 full Soft Trunk (~25 x 18 x 10 cm, estimate); exact cm not cleanly sourced this run", sort_order: 2 },
+  { axis: "size", value: "PM", permanence: "seasonal", note: "the PM Soft Trunk proportion; cm not cleanly sourced this run", sort_order: 3 },
+  { axis: "size", value: "MM", permanence: "seasonal", note: "the larger MM Soft Trunk; cm not cleanly sourced this run", sort_order: 4 },
+  { axis: "material", value: "Monogram", permanence: "permanent", is_default: true, note: "coated Monogram canvas; canvas takes no colour choice", sort_order: 1 },
+  { axis: "material", value: "Monogram Eclipse", permanence: "permanent", note: "greyscale black/grey Monogram coated canvas; the Soft Trunk's men's-line signature", sort_order: 2 },
+  { axis: "material", value: "Taurillon", permanence: "permanent", note: "soft grained Taurillon calf; the colour-bearing leather line", sort_order: 3 },
+  { axis: "material", value: "Monogram Empreinte", permanence: "seasonal", note: "embossed calfskin; intermittent colour-bearing runs", sort_order: 4 },
+  { axis: "material", value: "Monogram Reverse", permanence: "seasonal", note: "caramel/brown reverse-Monogram canvas; intermittent runs", sort_order: 5 },
+  { axis: "material", value: "Seasonal / Print", permanence: "seasonal", note: "seasonal print / metallic / capsule editions, per-listing", sort_order: 6 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "Taurillon 'Noir'; the anchor; canvas lines take no colour choice", sort_order: 1 },
+];
+
+// Celine Luggage (207), archivist-sourced 2026-07-14 — encoded identically to style 484 (Philo 2010 winged tote,
+// discontinued March 2025, Nano<Micro<Mini). DEDUP FLAG: 207 + 484 look like duplicate style rows for one model (owner call).
+const CELINE_LUGGAGE_207: Row[] = [
+  { axis: "size", value: "Nano", permanence: "permanent", note: "~20 x 20 x 10 cm; the smallest winged Luggage, crossbody-scale; line discontinued March 2025", sort_order: 1 },
+  { axis: "size", value: "Micro", permanence: "permanent", is_default: true, note: "~26 x 26 x 15 cm; the most cross-shopped/most liquid Luggage size (default vs Nano soft)", sort_order: 2 },
+  { axis: "size", value: "Mini", permanence: "permanent", note: "~30 x 30 x 17 cm; counter-intuitively the BIGGEST of the three core sizes", sort_order: 3 },
+  { axis: "size", value: "Medium", permanence: "permanent", note: "the larger/original Luggage proportion, less common (cm not cleanly pinned)", sort_order: 4 },
+  { axis: "size", value: "Phantom", permanence: "permanent", note: "the open-top winged sister (no zip 'face'); a distinct format on the winged silhouette", sort_order: 5 },
+  { axis: "material", value: "Smooth Calfskin", permanence: "permanent", is_default: true, note: "smooth/polished calfskin; the classic colour-bearing Luggage surface", sort_order: 1 },
+  { axis: "material", value: "Grained Calfskin", permanence: "permanent", note: "pebbled/grained 'Drummed' calfskin; the sturdier finish", sort_order: 2 },
+  { axis: "material", value: "Suede / Nubuck", permanence: "seasonal", note: "suede or nubuck bodies + suede-wing contrast runs, per-listing", sort_order: 3 },
+  { axis: "material", value: "Felt / Textile", permanence: "seasonal", note: "felt, wool, or textile-body seasonal editions, per-listing", sort_order: 4 },
+  { axis: "material", value: "Exotic", permanence: "seasonal", note: "python / croc / lizard limited runs, per-listing", sort_order: 5 },
+  { axis: "color", value: "Black", permanence: "permanent", is_default: true, note: "the anchor; plain descriptor (Celine does not name its colours)", sort_order: 1 },
+  { axis: "color", value: "Tan", permanence: "permanent", note: "Celine's signature Tan/Camel neutral; descriptor", sort_order: 2 },
+  { axis: "color", value: "Grey", permanence: "permanent", note: "the recurring grey/anthracite neutral; descriptor", sort_order: 3 },
+  { axis: "color", value: "Beige", permanence: "permanent", note: "incl. Natural/Dune/off-white; descriptor", sort_order: 4 },
+  { axis: "color", value: "Red", permanence: "permanent", note: "the recurring red/bright family; descriptor (permanence soft)", sort_order: 5 },
+];
+
 const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 1, name: "Classic Flap", rows: CLASSIC_FLAP },
   { styleId: 424, name: "Boy", rows: BOY },
@@ -1360,6 +1451,12 @@ const STYLES: { styleId: number; name: string; rows: Row[] }[] = [
   { styleId: 441, name: "Dauphine", rows: LV_DAUPHINE },
   { styleId: 525, name: "Trendy CC", rows: CHANEL_TRENDY_CC },
   { styleId: 566, name: "Le Cagole", rows: BALENCIAGA_LE_CAGOLE },
+  { styleId: 686, name: "Montsouris", rows: LV_MONTSOURIS },
+  { styleId: 498, name: "Rogue", rows: COACH_ROGUE },
+  { styleId: 714, name: "Sac Plat", rows: LV_SAC_PLAT },
+  { styleId: 524, name: "Graceful", rows: LV_GRACEFUL },
+  { styleId: 1055, name: "Soft Trunk", rows: LV_SOFT_TRUNK },
+  { styleId: 207, name: "Luggage", rows: CELINE_LUGGAGE_207 },
 ];
 
 async function main() {
