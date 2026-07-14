@@ -177,7 +177,13 @@ only be as good as these fields. This is the existing attribute-capture pass
      leather strap vs #185's push-lock + chain: different bags). Variant material
      corrected lambskin → caviar per the photo; its one kept eBay comp
      ("…Lambskin…Chain Shoulder Bag") contradicted the sharpened identity and was
-     evicted to discovered_listing. Model name still open (archivist web pass).
+     evicted to discovered_listing. Archivist web pass (same night) closed the
+     name: NO consensus model name exists (HIGH confidence — FP/Yoogi's/TRR all
+     use descriptive "Mademoiselle Flap" labels; FP 552502 is the sister piece,
+     dated 2005 but that anchors the sister, not this bag → year stays null).
+     Renamed → "Mademoiselle Turnlock Flap" (the rotating turnlock objectively
+     distinguishes it from #185's push-lock; rollback-178-rename.json). The flat
+     leather strap may be aftermarket — never identify this piece by its strap.
    - #189 → "Vintage Front Pocket Tote": NONE of the four guesses (GST/Medallion/
      PST/Cerf) — it's the 90s caviar open-top shopper with the CC-turnlock front
      pocket. New name also stops baking material into the style name.
@@ -185,7 +191,7 @@ only be as good as these fields. This is the existing attribute-capture pass
      turnlock at the bottom edge). Tentative merge → #79 REFUSED: #79's own
      description is a RED ZIP-TOP chain bag — a different bag, and #79 itself is
      now flagged (junk listing-dump description, unverified identity, 0 comps).
-11. Remaining lanes: archivist web pass to name #178 · #79 identity/description fix
-   (flagged as a spawned task) · fresh capture for the 433 too-thin variants + the
-   zero-comp ex-junk styles · the 1,466 multi-colour buckets = the variant-levers
-   colour-splitter lane (active elsewhere; do not duplicate).
+11. Remaining lanes: #79 identity/description fix (flagged as a spawned task) ·
+   fresh capture for the 433 too-thin variants + the zero-comp ex-junk styles ·
+   the 1,466 multi-colour buckets = the variant-levers colour-splitter lane
+   (active elsewhere; do not duplicate).
