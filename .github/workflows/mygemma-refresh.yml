@@ -1,27 +1,25 @@
-name: Refresh myGemma handbag listings (Shopify feed)
+name: Refresh myGemma handbag listings (Awin feed)
 
-# Hands-off daily capture for myGemma (open-Shopify reseller). FREE, no Firecrawl/Apify —
-# the registry had it as a Firecrawl source, but /collections/handbags/products.json is open.
-# Each run: crawl the handbags collection -> map bags we can name (canonicalModel) with
-# condition GRADE + WRITE-UP -> load into price_history + bank unnamable bags to
-# discovered_listing -> retire sold -> refresh the per-variant summary. See
+# Hands-off daily capture for myGemma via its LICENSED Awin product datafeed (Google/
+# Enhanced format, feed F512) — the same shape TLC gets from CJ. Replaces the old Shopify
+# crawl: every listing now arrives with a feed-licensed image_link + Awin's tracked deep
+# link, so the bag-page rail shows a photo and each buy-link is commission-tracked.
+# Each run: fetch the feed -> map bags we can name (canonicalModel) with condition ->
+# load into price_history + bank unnamable bags to discovered_listing -> load listing
+# photos -> retire sold -> refresh the per-variant summary. See
 # docs/priority-reseller-capture-runbook.md.
 #
-# SECRETS: only SUPABASE_SERVICE_ROLE_KEY (already set). Supabase URL is public
-# (NEXT_PUBLIC_*), inlined as a fallback — mirrors redeluxe-refresh.yml.
+# SECRETS: SUPABASE_SERVICE_ROLE_KEY (set) + AWIN_MYGEMMA_FEED_URL (the Create-a-Feed
+# download URL; it embeds our Awin feed API key — same idea as TLC's CJ_API_TOKEN).
 
 on:
   schedule:
-    # Daily, 07:17 UTC, off the hour and staggered from the other Shopify feeds.
+    # Daily, 07:17 UTC, off the hour and staggered from the other feeds.
     - cron: "17 7 * * *"
   workflow_dispatch:
     inputs:
-      max_pages:
-        description: "Crawl page cap (safety ceiling)"
-        required: false
-        default: "200"
       write:
-        description: "Apply DB writes? false = crawl + report only (no load/reconcile)"
+        description: "Apply DB writes? false = fetch + map + report only (no load/reconcile)"
         required: false
         default: "true"
 
@@ -36,7 +34,7 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      MAX_PAGES: ${{ github.event.inputs.max_pages || '200' }}
+      AWIN_MYGEMMA_FEED_URL: ${{ secrets.AWIN_MYGEMMA_FEED_URL }}
       WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
     steps:
       - uses: actions/checkout@v4
@@ -46,16 +44,14 @@ jobs:
           cache: npm
       - run: npm ci
 
-      - name: Crawl myGemma handbags collection (writes raw dump + live snapshot)
-        run: npx tsx supabase/ingest/sources/mygemma-crawl.ts handbags --max-pages="$MAX_PAGES"
+      - name: Fetch the Awin datafeed + map bags into landing observations (+ images)
+        run: npx tsx supabase/ingest/sources/mygemma-awin.ts
 
-      - name: Map bags into landing observations
-        run: npx tsx supabase/ingest/sources/mygemma.ts --raw
-
-      - name: Load prices + bank discovered + retire sold + refresh summary
+      - name: Load prices + bank discovered + load photos + retire sold + refresh summary
         if: env.WRITE == 'true'
         run: |
           npm run load:prices -- mygemma --write
           npm run load:prices -- mygemma-discovered --discovered-only --write
+          npm run load:listing-images -- myGemma --write
           npm run reconcile:sold -- --platform=myGemma --snapshot=data/ingest/_raw/mygemma-live.json --write
           npm run summary:refresh
