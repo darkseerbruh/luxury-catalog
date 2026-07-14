@@ -23,7 +23,7 @@ import fs from "fs";
 import path from "path";
 import zlib from "zlib";
 import { parse } from "csv-parse/sync";
-import { canonicalBrand, canonicalModel } from "../../../src/lib/ingest/model-normalize";
+import { canonicalBrand, canonicalModel, isNonBagAccessory } from "../../../src/lib/ingest/model-normalize";
 import { extractDescriptionFacts, scrubPii } from "../../../src/lib/ingest/description-facts";
 import { parsePrice } from "../../../src/lib/ingest/tlc-feed";
 import { detectSizeLabel } from "./trr-jsonld";
@@ -59,6 +59,11 @@ const BAG_TYPE = /\b(bag|handbag|tote|clutch|crossbody|shoulder|satchel|hobo|bac
 const NOT_BAG = /\b(shoe|sneaker|pump|heel|flat|sandal|boot|loafer|jewel|jewelry|necklace|earring|bracelet|ring|watch|belt|scarf|sunglass|cufflink|brooch|pendant|charm)s?\b/i;
 
 function isBag(row: FeedRow): boolean {
+  // The shared classifier is AUTHORITATIVE and knows the edge cases the raw regex/category
+  // miss: it keeps Wallet-on-Chain, Vanity Case, The Pouch (real bags) but rejects Flap
+  // Wallet, Bag Charm, Bucket Hat. The feed's category is unreliable here — a wallet sits
+  // under "Handbags, Wallets & Cases" (matches "handbag") and "Bucket Hat" matches "bucket".
+  if (isNonBagAccessory(row.title)) return false;
   const cat = `${row.google_product_category ?? ""} ${row.product_type ?? ""}`.toLowerCase();
   if (cat) {
     if (BAG_TYPE.test(cat)) return true;
