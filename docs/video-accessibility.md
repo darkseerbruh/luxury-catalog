@@ -48,6 +48,15 @@ app UI paints on top of the frame; anything outside the safe box gets clipped.*
   TikTok unsafe zones (right rail + bottom strip) to confirm clearance. Evidence for
   this rule: two 2026-07-14 screenshots where bottom chips hid under the caption and
   the recap thumbnails sat under the right action rail.
+- **Never cover the subject.** Nothing (caption, headline, chip, graphic) sits on the
+  most important part of the frame: her FACE, and especially her MOUTH, when she is
+  talking; otherwise whatever the video is about. Her face moves shot to shot, so
+  sample the lean-in frames, find the LOWEST the chin drops, and place captions in the
+  band BELOW it (for the Chanel car footage the chin bottoms out ~y980, so captions
+  sit at y1010+, on the collarbone/chest). Body, chest, and hands are fine to overlay;
+  face and mouth are not. When two lower-band graphics would collide (captions + a
+  data card), SUPPRESS the caption for that beat rather than stack it onto her face.
+  Flagged 2026-07-14 (captions landed exactly on her mouth in the lean-in shots).
 
 ## 2. Format (the look)
 
