@@ -10,6 +10,9 @@ const SORTS: { value: ShopSort; label: string }[] = [
   { value: "price-asc", label: "Price: low to high" },
   { value: "price-desc", label: "Price: high to low" },
 ];
+// Relevance only makes sense against a text query — it orders by how well each bag
+// matches what was typed. Shown (and defaulted) only while searching.
+const RELEVANCE_SORT: { value: ShopSort; label: string } = { value: "relevance", label: "Most relevant" };
 
 const FEET_LABELS: Record<string, string> = {
   yes: "Has protective feet",
@@ -84,6 +87,29 @@ function OptionRow({
       {count != null && (
         <span className="shrink-0 text-[11px] tabular-nums text-muted/60">{count}</span>
       )}
+    </button>
+  );
+}
+
+/** One sort choice. A radio (filled dot), never a checkbox — sort is pick-one, so it
+ *  must not read as a toggle you can switch off (there's always an active sort). */
+function SortRow({ on, label, onClick }: { on: boolean; label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      role="radio"
+      aria-checked={on}
+      className="flex w-full items-center gap-2.5 py-1.5 text-left text-[13px] transition-colors"
+    >
+      <span
+        className={`grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
+          on ? "border-gold" : "border-border"
+        }`}
+      >
+        <span className={`h-2 w-2 rounded-full ${on ? "bg-gold" : "bg-transparent"}`} />
+      </span>
+      <span className={`min-w-0 flex-1 truncate ${on ? "text-foreground" : "text-muted"}`}>{label}</span>
     </button>
   );
 }
@@ -372,14 +398,16 @@ export default function ShopControls({
       <DealsToggle on={current.deals} onToggle={() => update({ deals: current.deals ? null : "1" })} />
 
       <FacetGroup label="Sort" count={1}>
-        {SORTS.map((s) => (
-          <OptionRow
-            key={s.value}
-            on={current.sort === s.value}
-            label={s.label}
-            onClick={() => update({ sort: s.value })}
-          />
-        ))}
+        <div role="radiogroup" aria-label="Sort">
+          {(query ? [RELEVANCE_SORT, ...SORTS] : SORTS).map((s) => (
+            <SortRow
+              key={s.value}
+              on={current.sort === s.value}
+              label={s.label}
+              onClick={() => update({ sort: s.value })}
+            />
+          ))}
+        </div>
       </FacetGroup>
 
       <FlatFacet label="Brand" value={current.brand} options={facets.brands} onToggle={(v) => update({ brand: v })} cap={8} />
