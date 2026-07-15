@@ -994,6 +994,7 @@ export default async function BagDetailPage({
           demandLabel={demand.label}
           retailTrendPct={retailChange}
           scopeLabel={valueScopeLabel}
+          subject={[v.brand.name, v.style.name, v.sizeLabel, v.exteriorColorway].filter(Boolean).join(" · ")}
           mixNote={(() => {
             const sold = recordedSales.filter((h) => h.priceType === "sold").length;
             const ask = recordedSales.length - sold;

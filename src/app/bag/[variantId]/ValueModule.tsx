@@ -64,6 +64,10 @@ export interface ValueModuleProps {
    * the collector persona's fastest trust-killer).
    */
   scopeLabel?: string;
+  /** The variant this range is FOR (e.g. "Fendi Baguette · Nano · Beige"), shown
+   *  under the heading so a scrolled reader never loses track (owner 2026-07-14:
+   *  "best/median/high — for what?"). */
+  subject?: string | null;
   /** e.g. "built from 320 asking + 106 sold prices" — labels the ask/sold mix. */
   mixNote?: string | null;
   /** M1 timing inputs — demand (from wants/watchers) + retail-hike catalyst. */
@@ -98,7 +102,7 @@ function eraNote(era: { productionYears: string | null; discontinued: boolean; v
     return `Vintage production${years}: no longer made, so condition and a complete set tend to matter more to value.`;
   }
   if (era.discontinued) {
-    return `Discontinued${years}: no longer in production, so resale is the only way to buy it.`;
+    return `No longer in production${years}, so resale is the only way to buy it.`;
   }
   return null;
 }
@@ -170,6 +174,7 @@ export default function ValueModule({
   byEra,
   eraCurrency,
   scopeLabel = "This exact variant",
+  subject = null,
   mixNote = null,
 }: ValueModuleProps) {
   const ladder = !!byCondition && byCondition.length >= 2;
@@ -215,6 +220,7 @@ export default function ValueModule({
     return (
       <div>
         <h2 className="font-serif text-xl text-foreground">{HEADINGS[effectiveFraming]}</h2>
+        {subject && <p className="mt-0.5 text-sm text-muted">{subject}</p>}
         <p className="mt-2 text-sm text-muted">
           No recorded resale data yet for this exact variant — we only show
           ranges built from real prices.
@@ -326,15 +332,18 @@ export default function ValueModule({
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 className="font-serif text-xl text-foreground">{HEADINGS[effectiveFraming]}</h2>
+        <div>
+          <h2 className="font-serif text-xl text-foreground">{HEADINGS[effectiveFraming]}</h2>
+          {subject && <p className="mt-0.5 text-sm text-muted">{subject}</p>}
+        </div>
         <div className="flex flex-wrap items-center gap-2">
+          {/* Vintage is a unique positive signal; keep it. The bare "Discontinued"
+              tag was removed (owner 2026-07-14: status was stated twice) — the
+              honest, sourced Status row below the value summary is the single
+              source of that fact, with the only tooltip. */}
           {era?.vintage ? (
             <span className="rounded-full border border-gold/40 px-2.5 py-0.5 text-xs text-gold">
               Vintage
-            </span>
-          ) : era?.discontinued ? (
-            <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted">
-              Discontinued
             </span>
           ) : null}
           <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted/80">
