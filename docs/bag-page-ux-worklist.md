@@ -70,8 +70,11 @@ they reflect what Fendi made, not our listing coverage.
 ## Bucket 2 — decisions (applying owner-recommended defaults)
 
 - [x] **14. Closet CTAs moved up** directly under the hero (want/have/had + buy/sell). DONE.
-- [ ] **15. Heart = wishlist, then reclassify.** OWNER-DEFERRED — she said "I need to explore
-  that." Needs the post-save prompt flow + closet reclassify UI (Have/Had), tied to #21. Not built.
+- [x] **15. Heart -> post-save reclassify (Option B).** DONE — after a wishlist save, the shared
+  `QuickSaveHeart` shows a small popover everywhere: "Saved to your wishlist. Already carry it?"
+  [Have it] [Had it], calling the closet actions and auto-dismissing (7s). Have it -> nudges the
+  wear review; Had it -> points to sell. Bridges the heart into the owner review flow (#21) +
+  consignor referral. Owner email follow-up stays hers.
 - [x] **16. Closet heading copy.** DONE — "Add it to your closet" (was "Make it yours, or move it
   on"). Alternatives if she prefers: "Track this bag" / "Your closet".
 
