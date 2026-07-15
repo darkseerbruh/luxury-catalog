@@ -18,12 +18,14 @@ they reflect what Fendi made, not our listing coverage.
   where we hold a measurement. Stripping real cm to look uniform hides good info (against canon);
   the archivist pull supplies the missing dims (Nano ~11cm, Mini ~19cm, Medium ~26-27cm). Load =
   owner-gated. File: `variant-label.ts` (data, not logic).
-- [ ] **3. "Mama" clears Colour.** ROOT CAUSE FOUND, not blind-patched: `colourApplies` in
-  `VariantSelector.tsx` hides Colour when the current material isn't in `colourBearingMaterials`
-  — a set derived from OUR listings. That's the canon violation (#13): it infers "single-colour"
-  from listing coverage. Correct fix needs a material `isPrintOnly` PRODUCTION flag (so Colour
-  hides only on genuine print canvas like LV Monogram, never on a Fendi material we're just thin
-  on). Not patched blind because ripping `colourApplies` out breaks the intended LV Monogram case.
+- [x] **3. "Mama" clears Colour.** FIXED. Root cause: `colourApplies` in `VariantSelector.tsx`
+  hid Colour when the selected material wasn't in `colourBearingMaterials` (materials that pair
+  with a colour in OUR rows). The Baguette's Mama (#1378) is `Canvas, colour=∅` and Small (#1669)
+  is `Lambskin, colour=∅`, so only "Leather" counted as colour-bearing → picking Mama hid all 10
+  colours. Pure canon violation (#13: inferring from coverage). Fix: removed the guard entirely —
+  `visibleDims` alone decides if Colour is a real axis (it already collapses a single-print style
+  like LV Monogram to one colourway, so no LV regression; 17 variant-dims tests green). Verified
+  on the live Mama page: Colour axis now shows (Beige/Black chips present).
 - [ ] **4. Wrong / broken images.** Micro thumb = jewelry; Nano-black + a crop aren't Baguettes.
   Image-QA DATA pass (wrong-bag + bad crops) — needs the image pipeline, not this page's code.
 - [ ] **5. Material as selectable axis.** ALREADY SUPPORTED in code (`DIMS` includes `material`);

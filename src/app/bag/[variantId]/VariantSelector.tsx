@@ -40,17 +40,18 @@ export default function VariantSelector({
   const router = useRouter();
   const current = variants.find((v) => v.variantId === currentVariantId) ?? variants[0];
 
-  // Dimensions that actually vary (≥2 distinct values) are the ones worth
-  // showing — minus any fully implied by a dimension already shown.
-  // Also hide the Colour axis on a PRINT-ONLY material (a canvas line like LV Monogram/Damier
-  // that never comes in a colour choice): a material is colour-bearing only if some variant
-  // pairs it with a colour, so on a material outside that set the colour row is irrelevant.
-  const colourBearingMaterials = new Set(
-    variants.filter((v) => v.exteriorColorway && v.exteriorMaterial).map((v) => v.exteriorMaterial),
-  );
-  const colourApplies =
-    !current.exteriorMaterial || colourBearingMaterials.size === 0 || colourBearingMaterials.has(current.exteriorMaterial);
-  const dims = visibleDims(variants).filter((d) => d.dim.key !== "color" || colourApplies);
+  // Dimensions that actually vary (≥2 distinct values), minus any fully implied
+  // by a dimension already shown. `visibleDims` alone decides whether Colour is a
+  // real axis for this style.
+  //
+  // We deliberately do NOT suppress the Colour axis based on the CURRENT material's
+  // coverage (owner 2026-07-14, canon #13): the old guard hid Colour whenever the
+  // selected material had no colourway in OUR rows, so picking the Fendi Baguette's
+  // "Canvas" Mama (colour not yet captured) made the whole Colour row vanish — even
+  // though Fendi makes the Baguette in many colours. "No listing" is not "never made".
+  // A genuinely single-print style (LV Monogram-only) already collapses to one
+  // colourway, so `visibleDims` hides Colour there on its own.
+  const dims = visibleDims(variants);
 
   // Prefetch the one-dimension-away neighbours so the common swaps feel instant.
   useEffect(() => {
