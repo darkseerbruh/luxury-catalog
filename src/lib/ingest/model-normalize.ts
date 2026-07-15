@@ -216,6 +216,20 @@ const MODELS: Record<string, ModelDef[]> = {
     // Classic Flap (size label carries Mini); Kelly Flap = the vintage Chanel Kelly.
     ["Kelly Flap", "kelly flap"], ["Urban Essentials", "urban essentials"],
     ["Pearl Crush", "pearl crush"], ["Uniform", "uniform"],
+    // Dictionary-gap report additions (2026-07-15): recurring unmatched models, each
+    // backed by real FP/TLC/TRR listing titles (docs/dictionary-gap-report.md). Filigree
+    // sits AFTER Vanity Case (line above) on purpose — a "Filigree Vanity Case" stays a
+    // Vanity Case; this def catches the Filigree backpack/waist/crossbody/round variants.
+    ["Mademoiselle", "mademoiselle"], ["Cambon", "cambon"], ["Filigree", "filigree"],
+    ["Accordion", "accordion"], ["Chocolate Bar", "chocolate bar"],
+    // Coco Preppy BEFORE Bowling so a "Preppy Coco … Bowling Bag" keeps the line, and
+    // Bowling catches the remaining (Coco Beach) bowling-shaped bags.
+    ["Coco Preppy", "coco preppy", "preppy coco"], ["Bowling", "bowling"],
+    ["Wild Stitch", "wild stitch"], ["CC In Love", "cc in love"],
+    ["Coco Cocoon", "coco cocoon"], ["Wavy CC", "wavy cc"],
+    ["Paris-Biarritz", "paris biarritz"], ["Funky Town", "funky town"],
+    ["Chic Pearls", "chic pearls"], ["Coco Base", "coco base"],
+    ["Twist Your Buttons", "twist your buttons"],
     // "Timeless" is TLC/reseller shorthand for Chanel's whole classic CC-turnlock LINE
     // (clutches, totes, shoppers, pochettes, phone cases), not just the flap bag — bare
     // "timeless" put a $966 handcuff clutch on the Classic Flap hero (2026-07-09). LAST
@@ -295,6 +309,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Cruiser", "cruiser"], ["Sablons", "sablons"], ["Petit Palais", "petit palais"],
     ["Ribera", "ribera"], ["Naviglio", "naviglio"], ["Berkeley", "berkeley"], ["Siena", "siena"],
     ["Daniel", "daniel"], ["Flore", "flore"], ["Mirage", "mirage"],
+    // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
+    ["Melrose Avenue", "melrose"], ["Bellevue", "bellevue"], ["Pleaty", "pleaty"],
   ],
   Gucci: [
     // Belt-bag veto (2026-07-09 round-3 audit): "gg marmont … belt bag" / "ophidia …
@@ -321,6 +337,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Neo Vintage", "neo vintage"], ["Belt Bag", "belt bag"], ["Luce", "luce"], ["Emblem", "emblem"],
     ["Retro Interlocking G", "retro interlocking"], ["Day Backpack", "day backpack"], ["Eden", "eden"],
     ["Savoy", "savoy"], ["Dome", "dome"], ["Petite GG", "petite gg"],
+    // Dictionary-gap report addition (2026-07-15): the Joy tote line (docs/dictionary-gap-report.md).
+    ["Joy", "joy"],
   ],
   Hermès: [
     // To Go variants BEFORE the parent models (first match wins).
@@ -368,6 +386,9 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Rive Gauche", "rive gauche"], ["Uptown", "uptown"], ["Bea", "bea"], ["Joe Backpack", "joe backpack"],
     ["Nolita", "nolita"], ["Becky", "becky"], ["Le Monogramme", "le monogramme"],
     ["Belle de Jour", "belle de jour"],
+    // Dictionary-gap report addition (2026-07-15): the Cabas / Y Cabas / Cabas ChYc line
+    // (docs/dictionary-gap-report.md). "y cabas"/"chyc" are the distinctive tokens.
+    ["Cabas", "y cabas", "cabas chyc", "chyc"],
   ],
   Dior: [
     ["Lady D-Lite", "d-lite", "lady d-lite"], ["Lady D-Joy", "d-joy", "d joy"], ["Lady Dior", "lady dior"],
@@ -383,6 +404,9 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Knot", "knot"], ["Hop", "hop"],
     // Residue-audit additions (2026-07-09)
     ["Wallace", "wallace"], ["Cabat", "cabat"],
+    // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
+    // "the point" (not bare "point") so it can't fire inside unrelated titles.
+    ["Nodini", "nodini"], ["Roma", "roma"], ["The Point", "the point"],
   ],
   Prada: [
     ["Re-Edition 2005", "re-edition 2005", "2005"], ["Galleria", "galleria"], ["Cleo", "cleo"],
@@ -392,6 +416,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Odette", "odette"], ["Promenade", "promenade"], ["Double Bag", "double bag"], ["Panier", "panier"],
     // Residue-audit additions (2026-07-09)
     ["Canapa", "canapa"], ["Triangle", "triangle"],
+    // Dictionary-gap report addition (2026-07-15): the nylon Vela line (docs/dictionary-gap-report.md).
+    ["Vela", "vela"],
   ],
   Fendi: [
     ["Baguette", "baguette"], ["Peekaboo", "peekaboo"], ["Mon Trésor", "mon tresor", "mon trésor"],
