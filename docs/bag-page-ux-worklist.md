@@ -36,10 +36,19 @@ they reflect what Fendi made, not our listing coverage.
   baguette, trunk, fendace, studded, flowerland, bloody, charm already); and strip Rebag's product
   id glued to the last word so size words stay detectable. Verified: Micro -> real micro baguette,
   Mama -> suede mama, charm/studded/mini-on-nano -> rejected. 34 listings-core tests green.
-- [ ] **5. Material as selectable axis.** ALREADY SUPPORTED in code (`DIMS` includes `material`);
-  it shows in the selector whenever variant rows vary by material. For the Baguette they don't
-  yet, so material falls to the read-only "Made in" block. Making it selectable = load variant
-  rows per finish (`seed-material-variants-from-production.ts`), which is owner-gated data.
+- [ ] **5. Material as selectable axis.** INVESTIGATED to the bottom (2026-07-14). Canon matrix is
+  IN (`docs/research-drafts/seasonal-archive/fendi-baguette-matrix.json`, 5 sizes × 10 materials +
+  20 sourced colour combos). BLOCKER found: the seed (`seed-material-variants-from-production.ts`)
+  splits a (size,colour) variant by materials that appear in its LISTINGS, matching
+  `price_history.material` against the `production_option` value by substring. But listings carry
+  coarse terms ("Canvas", "Tweed", "Patent", "Leather") that don't contain the canon names
+  ("FF / Zucca Canvas", "Sequins / Embellished", "Selleria"), so a dry-run for the Baguette (204)
+  only produced 18 **Leather**-only splits. Shipping that would REGRESS the honest "Made in" module
+  (which already lists all 7 canon materials) down to a "Leather / Unknown" axis. Real fix = a
+  material CLASSIFICATION pass that reads the listing TITLE/slug (rich: zucca/selleria/sequin/fur/
+  croc/jacquard/raffia) and maps to the canon taxonomy, THEN seeds. That's a dedicated data unit
+  with its own visual verification (per never-ship-a-wrong-image), not a fire-and-forget seed.
+  Reversible seed exists (`--reverse`). Recommend building the slug classifier next.
 - [x] **6. "Seasonal" label / "Made in" mimics a chip.** DONE — `ProductionRange` now renders as
   quiet read-only text, not selector-style pills; "Seasonal:" reads as a prefix, not a chip.
 - [x] **7. Cut the GEO filler line.** DONE — the lead box is hidden when it degrades to bare
