@@ -33,6 +33,7 @@ import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
 import CareModule from "./CareModule";
 import StickyActionBar from "./StickyActionBar";
+import StickyVariantBar from "./StickyVariantBar";
 import PhotoContributions from "./PhotoContributions";
 import RequestAuthentication from "./RequestAuthentication";
 import { hasActiveAuthenticators } from "@/lib/authentication";
@@ -799,6 +800,13 @@ export default async function BagDetailPage({
         hasPriceHistory={v.priceHistory.length > 0}
       />
       <AuthEngagementTracker variantId={v.variantId} />
+      {/* Scroll-reveal reminder of which variant this page is (owner 2026-07-14). */}
+      <StickyVariantBar
+        imageUrl={heroListing?.imageUrl ?? images[v.variantId] ?? null}
+        brand={v.brand.name}
+        styleName={v.style.name}
+        variantLabel={variantTitle}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-foreground">
@@ -822,8 +830,12 @@ export default async function BagDetailPage({
         <span className="text-foreground">{variantTitle}</span>
       </nav>
 
+      {/* Hero: text left, image right on wide screens so the top of the page
+          collapses instead of stacking a tall header above a centred photo
+          (owner 2026-07-14). Stacks on mobile. */}
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
       {/* Hero header */}
-      <header>
+      <header className="sm:min-w-0 sm:flex-1">
         <p className="text-sm uppercase tracking-widest text-muted">
           {v.brand.name} · {tierDisplay(v.brand.tier).label}
         </p>
@@ -861,8 +873,9 @@ export default async function BagDetailPage({
 
       {/* Hero visual — sourced photo when available, else a branded placeholder
           so the page reads as complete (never an AI-faked or unlicensed photo).
-          Kept compact (capped width, not full-bleed) so the value summary and
-          variant selector stay above the fold. */}
+          Capped width; sits to the right of the header on wide screens, centred
+          above the selector on mobile. */}
+      <div className="w-full max-w-xs shrink-0 self-center sm:w-72 sm:self-start">
       {heroListing ? (
         /* No first-party photo: a real live listing stands in. The header stays a
            CLEAN image — no marketplace caption/price band (owner call 2026-07-09:
@@ -874,7 +887,7 @@ export default async function BagDetailPage({
           href={heroListing.buyUrl}
           target="_blank"
           rel="noopener noreferrer nofollow sponsored"
-          className="group relative mx-auto block aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-border bg-white"
+          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-white"
         >
           <BagImage
             imageUrl={heroListing.imageUrl}
@@ -890,9 +903,11 @@ export default async function BagDetailPage({
           imageUrl={images[v.variantId]}
           brand={v.brand.name}
           alt={`${v.brand.name} ${v.style.name}`}
-          className="mx-auto aspect-[4/3] w-full max-w-xs rounded-2xl border border-border"
+          className="aspect-[4/3] w-full rounded-2xl border border-border"
         />
       )}
+      </div>
+      </div>
 
       {/* Amazon-style variant selector — placed at the very top, right under the
           title. Each option links to its own indexable /bag/[id] page. */}

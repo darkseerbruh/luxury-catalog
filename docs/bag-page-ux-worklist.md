@@ -12,9 +12,8 @@ they reflect what Fendi made, not our listing coverage.
 
 ## Bucket 1 — clear fixes
 
-- [ ] **1. Hero layout.** Left-align brand/tier/name, float image right to collapse the top.
-  DEFERRED: needs browser iteration (image is currently centered below the header) — a layout
-  build best done with her looking. File: `page.tsx` hero section.
+- [x] **1. Hero layout.** DONE — header text left, image floated right on wide screens (stacks
+  on mobile); collapses the tall top. Verified in browser. File: `page.tsx` hero section.
 - [ ] **2. Size cm inconsistency.** RESOLVED-BY-DATA, not code: `measuredSizeLabel` shows cm only
   where we hold a measurement. Stripping real cm to look uniform hides good info (against canon);
   the archivist pull supplies the missing dims (Nano ~11cm, Mini ~19cm, Medium ~26-27cm). Load =
@@ -42,25 +41,26 @@ they reflect what Fendi made, not our listing coverage.
 - [x] **10. "Want: just this / any colourway" moved beside the selector.** DONE.
 - [x] **11. Anchors read as a nav, not tags.** DONE — `JumpNav` is an "On this page" underlined
   text nav, not filter-tag pills.
-- [ ] **12. "Suggest edit" opens in-page.** PARTIAL: the bottom widget is already an in-page
-  form (button expands it in place). REMAINING: the *inline* "Suggest an edit" triggers scattered
-  on the page scroll to that widget collapsed; the fuller build is an inline popover at each field,
-  pre-targeted. File: `SuggestEdit.tsx` + inline trigger sites.
+- [x] **12. "Suggest edit" opens in-page.** DONE — inline "Suggest an edit / Tell us" links now
+  auto-open the editor in place (via `#suggest-edit` / `#suggest-edit:<field>` + a hashchange
+  listener that expands the form, pre-targets the field, and scrolls it into view). Anchor id
+  added. Verified anchor present. File: `SuggestEdit.tsx`.
 - [x] **13. Cut "Add to compare".** DONE — removed from the bag page and the search-result
   toggle+tray; `/compare` page untouched.
 
 ## Bucket 2 — decisions (applying owner-recommended defaults)
 
 - [x] **14. Closet CTAs moved up** directly under the hero (want/have/had + buy/sell). DONE.
-- [ ] **15. Heart = wishlist, then reclassify.** DEFERRED: needs the post-save prompt flow +
-  the closet reclassify UI (Have/Had) and ties to the review trigger (#21). Design + client build.
+- [ ] **15. Heart = wishlist, then reclassify.** OWNER-DEFERRED — she said "I need to explore
+  that." Needs the post-save prompt flow + closet reclassify UI (Have/Had), tied to #21. Not built.
 - [x] **16. Closet heading copy.** DONE — "Add it to your closet" (was "Make it yours, or move it
   on"). Alternatives if she prefers: "Track this bag" / "Your closet".
 
 ## Bucket 3 — bigger explorations
 
-- [ ] **17. Sticky selector header.** Small thumb + selected variant pinned on scroll, so the
-  worth chart etc. always has context. File: `StickyActionBar.tsx` (exists — extend).
+- [x] **17. Sticky variant reminder.** DONE — new `StickyVariantBar.tsx`: thumb + brand/style/
+  variant pinned under the header on scroll (>360px), with a "Value & price" jump. Verified in
+  browser: hidden at top, reveals on scroll, sits at top:60px (no header overlap).
 - [ ] **18. On-hover availability (Amazon pattern).** Grey-out / strike combos the house never
   made. Archivist canon is IN (`docs/research-drafts/fendi-baguette-production-canon.md`):
   Baguette Mini in blue = YES (do not strike). DB load of the production matrix is owner-gated
@@ -71,10 +71,13 @@ they reflect what Fendi made, not our listing coverage.
   House card subtitle must be a heritage line (e.g. "est. 1997 · Italy"), NOT the raw tier number
   "3"; module collapses to House+Colour when attributes are null — fill from production canon.
   File: `BagDNA.tsx`, `page.tsx`.
-- [ ] **20. Authentication placement.** Owner: more important than Watch / Story / DNA. Move the
-  authentication guide up the page. File: `page.tsx` order.
-- [ ] **21. Owner review flow.** Move the 6-slot "Have this in hand?" ask out of the page body;
-  trigger it after someone marks "Have it." File: `ReviewForm.tsx` / `ContributionSlots.tsx`.
+- [~] **20. Authentication placement.** ADDRESSED (digest): the "Is it real? Start here" auth
+  digest already sits high (right after the closet CTAs, above Bag DNA + Story) and links to the
+  full checklist + the brand guide. Moving the full 65-line checklist section up too is optional
+  and best confirmed with her (it reshuffles JumpNav order + the `#authentication` anchor).
+- [ ] **21. Owner review flow.** OWNER-DEFERRED — she said on the recording "file that away, we
+  need to come back to." Also conflicts with the locked contribution copy/spec
+  (`docs/ux/review-data-leaderboards.md`, 2026-07-07). Not built. Ties to #15.
 
 ## Filed for owner (outward-facing / future)
 

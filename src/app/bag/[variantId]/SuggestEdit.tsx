@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { submitCorrection } from "@/lib/correction-actions";
 import { track, EVENTS } from "@/lib/analytics/events";
@@ -34,6 +34,29 @@ export default function SuggestEdit({
 
   const selected = fields.find((f) => f.path === fieldPath) ?? null;
 
+  // Open in place when any inline "Suggest an edit / Tell us" link is clicked
+  // (owner 2026-07-14: clicking it should surface the editor right here, not just
+  // scroll to a collapsed button). Links use `#suggest-edit` or, to pre-target a
+  // field, `#suggest-edit:<field_path>`. Works on first load and on hashchange.
+  useEffect(() => {
+    function openFromHash() {
+      const raw = window.location.hash.replace(/^#/, "");
+      if (raw.split(":")[0] !== "suggest-edit") return;
+      setMode("open");
+      const target = raw.split(":")[1];
+      if (target) {
+        const decoded = decodeURIComponent(target);
+        if (fields.some((f) => f.path === decoded)) setFieldPath(decoded);
+      }
+      requestAnimationFrame(() =>
+        document.getElementById("suggest-edit")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      );
+    }
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, [fields]);
+
   function send() {
     setError(null);
     if (!suggested.trim()) {
@@ -59,7 +82,7 @@ export default function SuggestEdit({
 
   if (mode === "done") {
     return (
-      <section className="border-t border-border pt-8">
+      <section id="suggest-edit" className="scroll-mt-20 border-t border-border pt-8">
         <div className="rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-sm text-foreground">
           Thanks — your suggestion is in for review. We apply accepted edits once
           we&rsquo;ve verified them.
@@ -69,7 +92,7 @@ export default function SuggestEdit({
   }
 
   return (
-    <section className="border-t border-border pt-8">
+    <section id="suggest-edit" className="scroll-mt-20 border-t border-border pt-8">
       <h2 className="mb-4 font-serif text-xl text-foreground">Suggest an edit</h2>
 
       {mode === "idle" ? (
