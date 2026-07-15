@@ -1,0 +1,98 @@
+name: CJ token expiry alarm
+
+# The CJ Personal Access Token (CJ_API_TOKEN) powers the TLC + Rebag live-listing
+# feeds. It is a JWT with a built-in expiry date; when it lapses, CJ returns
+# "HTTP 403: Could not authenticate given token" and BOTH feeds go stale on bag
+# pages. CJ has no auto-refresh, so rotation is manual.
+#
+# This job reads the token's OWN expiry (no secret leaves CI, token never printed)
+# once a day and, when it is close, opens/updates a GitHub issue so the break is
+# SCHEDULED, never a surprise. The vendor-inbox engine sees that issue's email and
+# pings the phone at the critical threshold. Rotation runbook: docs/cj-token-rotation.md
+#
+# Thresholds: warn at 10 days, critical at 2 days (matches the vendor-inbox §5 "key
+# expires within 48h -> ping" line).
+
+on:
+  schedule:
+    # Daily, mid-morning UTC, off other jobs' :00 marks.
+    - cron: "17 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: cj-token-expiry
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - id: check
+        name: Read the CJ token's expiry (never prints the token)
+        env:
+          CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
+        run: npx tsx scripts/check-cj-token-expiry.ts --warn-days=10 --crit-days=2
+
+      - name: Open / update / close the expiry issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATUS: ${{ steps.check.outputs.status }}
+          DAYS_LEFT: ${{ steps.check.outputs.days_left }}
+          EXPIRY: ${{ steps.check.outputs.expiry }}
+        run: |
+          set -euo pipefail
+          title="CJ API token expires soon"
+          gh label create cj-token --force \
+            --description "Opened by the daily CJ token expiry alarm" \
+            --color B60205 >/dev/null 2>&1 || true
+
+          existing=$(gh issue list --label cj-token --state open --json number --limit 1 \
+            | jq -r '.[0].number // empty')
+
+          body="$(printf '%s\n' \
+            "**The CJ affiliate token expires ${EXPIRY} (${DAYS_LEFT} days left).** When it lapses, the \`Refresh TLC live listings\` and \`Refresh Rebag live listings\` Actions fail with a 403 and both feeds go stale on bag pages." \
+            "" \
+            "CJ has no auto-renew, so this needs a ~3-minute rotation from you (phone is fine):" \
+            "" \
+            "1. **CJ Developer Portal** (developers.cj.com) -> your account -> Personal Access Tokens -> generate a new token, revoke the old one. Pick the longest expiry offered." \
+            "2. Paste it into **GitHub -> repo Settings -> Secrets and variables -> Actions -> \`CJ_API_TOKEN\`**." \
+            "3. Paste the same value into **Vercel -> luxury-catalog -> Settings -> Environment Variables -> \`CJ_API_TOKEN\`**." \
+            "" \
+            "Then tell Claude \"CJ token rotated\" and it will re-run both feeds to confirm green. Full runbook: \`docs/cj-token-rotation.md\`.")"
+
+          case "$STATUS" in
+            warn|crit)
+              if [ -n "$existing" ]; then
+                gh issue comment "$existing" --body "Update ($(date -u +%F)): status **${STATUS}**, ${DAYS_LEFT} days left (expires ${EXPIRY})."
+                echo "Commented on existing #$existing (status=$STATUS)"
+              else
+                gh issue create --title "$title" --label cj-token --body "$body"
+                echo "Opened issue (status=$STATUS)"
+              fi
+              ;;
+            ok)
+              if [ -n "$existing" ]; then
+                gh issue close "$existing" --comment "Recovered $(date -u +%F): token now expires ${EXPIRY} (${DAYS_LEFT} days left). Rotation confirmed."
+                echo "Closed recovered #$existing"
+              else
+                echo "OK — ${DAYS_LEFT} days left, no open issue. Nothing to do."
+              fi
+              ;;
+            *)
+              echo "Status unknown (token missing or not a JWT) — leaving issues untouched."
+              ;;
+          esac

@@ -81,7 +81,10 @@ Ping (one line + a pointer) only when something is actively costing us now:
 
 1. A live data feed is broken (myGemma/TLC/TRR listings down) → revenue-surface pages
    go thin.
-2. A key expired or expires within 48h → a pipeline is about to stop.
+2. A key expired or expires within 48h → a pipeline is about to stop. The CJ token
+   has a standing alarm: a **`cj-token`-labelled GitHub issue** (from the daily
+   `cj-token-expiry` workflow) OR a live `CJ API HTTP 403` on the TLC/Rebag feeds →
+   ping and point at the phone runbook `docs/cj-token-rotation.md`.
 3. A GitHub Action / daily capture has failed 2+ runs.
 4. A provider outage is hitting a surface that is live to users.
 
