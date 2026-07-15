@@ -82,9 +82,13 @@ they reflect what Fendi made, not our listing coverage.
   section + RequestAuthentication up to right after the "Is it real? Start here" digest, above Bag
   DNA + The Story (owner ranking: auth > watch > story > DNA). Jump-nav reordered to match
   (Authentication before DNA). Verified in DOM: `#authentication` precedes `#dna`.
-- [ ] **21. Owner review flow.** OWNER-DEFERRED — she said on the recording "file that away, we
-  need to come back to." Also conflicts with the locked contribution copy/spec
-  (`docs/ux/review-data-leaderboards.md`, 2026-07-07). Not built. Ties to #15.
+- [~] **21. Owner review flow.** CORE DONE. The have→review bridge already existed in BagActions
+  ("How does it wear? Tell the next buyer" when owned). New: the big "Have this in hand? 0 of 6"
+  module is now GATED — the full ask shows only to people who HELD the bag (closet have/had) or
+  are already mid-contribution; everyone else gets a soft "Carried this one? Mark it as yours"
+  nudge to #your-move. Aligns with her recording AND the spec's "signed-in owners" (not a lock
+  conflict). `getContributionSlots` now returns `closetStatus`. REMAINING (design-y, deferred):
+  the post-heart popup (#15) and the owner email follow-up (outward-facing, hers).
 
 ## Filed for owner (outward-facing / future)
 

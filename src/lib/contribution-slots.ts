@@ -33,6 +33,10 @@ export interface ContributionSlot {
 
 export interface ContributionSlotState {
   signedIn: boolean;
+  /** The user's closet status for this bag (want/have/had) or null. The full
+   *  contribution ask is for people who have HELD the bag (have/had); everyone
+   *  else gets a soft nudge (owner 2026-07-14 + spec's "signed-in owners"). */
+  closetStatus: string | null;
   slots: ContributionSlot[];
   /** Count of filled slots. */
   filled: number;
@@ -53,15 +57,18 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
   // Signed-out: every slot is open, the invitation still shows (login-gated).
   if (!user) {
     const slots = buildSlots({ hasPhoto: false, hasReview: false, axisDone: 0, axisTotal: 5 });
-    return { signedIn: false, slots, filled: 0, total: slots.length, complete: false };
+    return { signedIn: false, closetStatus: null, slots, filled: 0, total: slots.length, complete: false };
   }
 
-  const [reviews, votes, hasPhoto, wear] = await Promise.all([
+  const supabase = await createServerSupabase();
+  const [reviews, votes, hasPhoto, wear, closetRes] = await Promise.all([
     getReviews(variantId).catch(() => null),
     getAxisVotes(variantId).catch(() => null),
     userHasPhoto(variantId, user.id).catch(() => false),
     getWear(variantId).catch(() => null),
+    supabase.from("closet_item").select("status").eq("variant_id", variantId).maybeSingle(),
   ]);
+  const closetStatus = (closetRes.data?.status as string | undefined) ?? null;
 
   const hasReview = !!reviews?.myReview;
   const axisTotal = votes?.axes.length ?? 5;
@@ -80,6 +87,7 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
   const filled = slots.filter((s) => s.filled).length;
   return {
     signedIn: true,
+    closetStatus,
     slots,
     filled,
     total: slots.length,

@@ -28,6 +28,28 @@ export default async function ContributionSlots({ variantId }: { variantId: numb
     );
   }
 
+  // The full 6-slot ask is for people who have HELD the bag (owner 2026-07-14:
+  // "once they establish they have it, then we ask" — the spec's "signed-in
+  // owners"). A signed-in non-owner who hasn't contributed anything yet gets a
+  // soft nudge to mark ownership first, not a form they can't honestly fill.
+  // Anyone already mid-contribution keeps the full surface (never hide progress).
+  const held = state.closetStatus === "have" || state.closetStatus === "had";
+  if (!held && state.filled === 0) {
+    return (
+      <section id="contribute" className="scroll-mt-4 border-t border-border pt-8">
+        <Header />
+        <p className="mt-4 text-sm text-muted">
+          Carried this one?{" "}
+          <a href="#your-move" className="text-gold hover:underline">
+            Mark it as yours
+          </a>{" "}
+          and tell the next buyer how it really wears. Owners&rsquo; takes are the reference we
+          can&rsquo;t research.
+        </p>
+      </section>
+    );
+  }
+
   // Everything filled: thank them and step back, don't keep asking.
   if (state.complete) {
     return (
