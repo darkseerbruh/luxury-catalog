@@ -42,29 +42,37 @@ jobs:
       - run: npm ci
 
       - id: check
-        name: Read the CJ token's expiry (never prints the token)
+        name: Check the CJ token (expiry if readable + liveness probe; never prints the token)
         env:
           CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
         run: npx tsx scripts/check-cj-token-expiry.ts --warn-days=10 --crit-days=2
 
-      - name: Open / update / close the expiry issue
+      - name: Open / update / close the CJ token issue
         env:
           GH_TOKEN: ${{ github.token }}
           STATUS: ${{ steps.check.outputs.status }}
+          REASON: ${{ steps.check.outputs.reason }}
           DAYS_LEFT: ${{ steps.check.outputs.days_left }}
           EXPIRY: ${{ steps.check.outputs.expiry }}
         run: |
           set -euo pipefail
-          title="CJ API token expires soon"
+          title="CJ API token needs rotation"
           gh label create cj-token --force \
-            --description "Opened by the daily CJ token expiry alarm" \
+            --description "Opened by the daily CJ token monitor" \
             --color B60205 >/dev/null 2>&1 || true
 
           existing=$(gh issue list --label cj-token --state open --json number --limit 1 \
             | jq -r '.[0].number // empty')
 
+          # Headline depends on WHY: dead now vs expiring soon.
+          if [ "$REASON" = "dead" ]; then
+            headline="**The CJ affiliate token is no longer authenticating (403).** The \`Refresh TLC live listings\` and \`Refresh Rebag live listings\` Actions are failing right now and both feeds are stale on bag pages."
+          else
+            headline="**The CJ affiliate token expires ${EXPIRY} (${DAYS_LEFT} days left).** When it lapses, both CJ feeds (TLC + Rebag) 403 and go stale on bag pages."
+          fi
+
           body="$(printf '%s\n' \
-            "**The CJ affiliate token expires ${EXPIRY} (${DAYS_LEFT} days left).** When it lapses, the \`Refresh TLC live listings\` and \`Refresh Rebag live listings\` Actions fail with a 403 and both feeds go stale on bag pages." \
+            "$headline" \
             "" \
             "CJ has no auto-renew, so this needs a ~3-minute rotation from you (phone is fine):" \
             "" \
@@ -77,22 +85,22 @@ jobs:
           case "$STATUS" in
             warn|crit)
               if [ -n "$existing" ]; then
-                gh issue comment "$existing" --body "Update ($(date -u +%F)): status **${STATUS}**, ${DAYS_LEFT} days left (expires ${EXPIRY})."
-                echo "Commented on existing #$existing (status=$STATUS)"
+                gh issue comment "$existing" --body "Update ($(date -u +%F)): **${REASON}** (status ${STATUS}). $( [ "$REASON" = "dead" ] && echo 'Token still rejected by CJ.' || echo "${DAYS_LEFT} days left, expires ${EXPIRY}." )"
+                echo "Commented on existing #$existing (status=$STATUS, reason=$REASON)"
               else
                 gh issue create --title "$title" --label cj-token --body "$body"
-                echo "Opened issue (status=$STATUS)"
+                echo "Opened issue (status=$STATUS, reason=$REASON)"
               fi
               ;;
             ok)
               if [ -n "$existing" ]; then
-                gh issue close "$existing" --comment "Recovered $(date -u +%F): token now expires ${EXPIRY} (${DAYS_LEFT} days left). Rotation confirmed."
+                gh issue close "$existing" --comment "Recovered $(date -u +%F): token authenticates again$( [ "$EXPIRY" != "unknown" ] && echo " (expires ${EXPIRY}, ${DAYS_LEFT} days left)" ). Rotation confirmed."
                 echo "Closed recovered #$existing"
               else
-                echo "OK — ${DAYS_LEFT} days left, no open issue. Nothing to do."
+                echo "OK — token healthy, no open issue. Nothing to do."
               fi
               ;;
             *)
-              echo "Status unknown (token missing or not a JWT) — leaving issues untouched."
+              echo "Status unknown (token missing, or unreadable and CJ unreachable) — leaving issues untouched."
               ;;
           esac
