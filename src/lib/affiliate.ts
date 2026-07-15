@@ -114,6 +114,18 @@ export function isTheLuxuryClosetUrl(url: string): boolean {
   }
 }
 
+/** True for a raw Rebag product URL (not yet CJ-tracked). Rebag joined our CJ
+ * account 2026-07-14 (advertiser 5749848), so — like TLC — its raw product links
+ * from the feed get wrapped in the same CJ deep link (our PID is advertiser-
+ * agnostic; CJ attributes by the destination domain). */
+export function isRebagUrl(url: string): boolean {
+  try {
+    return /(^|\.)rebag\.com$/i.test(new URL(url).hostname);
+  } catch {
+    return /rebag\.com/i.test(url);
+  }
+}
+
 /** Wrap a raw destination URL in a CJ automated deep link so the click is
  * attributed (verified: redirects to the target with a cjevent param).
  * Format: https://www.anrdoezrs.net/links/<PID>/type/dlg/<destination>. */
@@ -266,6 +278,8 @@ export function affiliateListingUrl(url: string, platformRaw: string | null): st
   // Raw The Luxury Closet product URL (from the CJ API feed): wrap in a CJ deep
   // link so the click is commission-tracked.
   if (isTheLuxuryClosetUrl(url)) return cjDeepLink(url);
+  // Raw Rebag product URL (from the CJ API feed): same CJ deep link as TLC.
+  if (isRebagUrl(url)) return cjDeepLink(url);
   // Raw myGemma product URL (from the Shopify feed): wrap in an Awin deep link.
   if (isMyGemmaUrl(url)) return awinDeepLink(url);
   const key = (platformRaw ?? "").toLowerCase().replace(/[^a-z]/g, "");

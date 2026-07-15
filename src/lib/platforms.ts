@@ -69,6 +69,14 @@ export const PLATFORMS: Record<string, PlatformInfo> = {
     returns: "14-day returns on items in original, unused condition",
     buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
   },
+  // Facts sourced from rebag.com + support.rebag.com 2026-07-14 (authentication +
+  // return-policy pages). Rebag joined our CJ account 2026-07-14.
+  rebag: {
+    key: "rebag", label: "Rebag", authenticates: "all",
+    authNote: "Every item expertly vetted in-house by Rebag's authenticators",
+    returns: "7-day returns for a full refund (outlet items final sale)",
+    buyerPremiumPct: 0, buyerProtectionPct: 0, typicalShippingUsd: 0,
+  },
 };
 
 export interface LandedCost {

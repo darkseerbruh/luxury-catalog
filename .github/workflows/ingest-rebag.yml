@@ -1,0 +1,80 @@
+name: Refresh Rebag live listings (CJ feed)
+
+# Pulls Rebag's CJ product feed via the GraphQL API (advertiser 5749848), matches
+# bags to our catalog, and loads them into price_history so they surface in the
+# bag-page "For sale right now" rail with CJ-tracked buy links. Runs on a schedule
+# AND on demand (Actions tab -> this workflow -> "Run workflow"). Mirrors
+# ingest-tlc.yml — Rebag is on the same CJ account (publisher CID 7997608).
+#
+# SECRETS (already set on this repo — shared with the TLC ingest):
+#   CJ_API_TOKEN = CJ Product Feed GraphQL API token
+#   SUPABASE_SERVICE_ROLE_KEY = already set; Supabase URL is public (inlined below).
+#
+# The adapter emits ONLY in-stock bags we can name and vetoes non-bag accessories
+# first, so Rebag's all-category feed (watches, jewellery, shoes, SLGs) never
+# pollutes the pipeline. Unmatched bags land in discovered_listing, not the rail.
+
+on:
+  schedule:
+    # Daily, 08:43 UTC — staggered from the TLC ingest (08:23) so the two CJ pulls
+    # don't overlap on the shared token/rate limit.
+    - cron: "43 8 * * *"
+  workflow_dispatch:
+    inputs:
+      write:
+        description: "Apply DB writes? false = fetch + parse + report only (dry run)"
+        required: false
+        default: "true"
+
+# Never let two refreshes overlap (they touch the same listings).
+concurrency:
+  group: ingest-rebag
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://pewmdztviyrtbhtebcct.supabase.co' }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # CJ Product Feed GraphQL API token (shared with the TLC ingest).
+      CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
+      # Scheduled runs always write; manual runs honour the dry-run toggle.
+      WRITE: ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.write }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Fail early if the CJ API token is missing
+        run: |
+          if [ -z "$CJ_API_TOKEN" ]; then
+            echo "::error::CJ_API_TOKEN not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+
+      - name: Pull + parse the Rebag feed (writes landing snapshot)
+        run: npx tsx supabase/ingest/sources/rebag.ts
+
+      - name: Load matched listings + photos into price_history
+        if: env.WRITE == 'true'
+        run: |
+          npm run load:prices -- rebag --write
+          npm run load:listing-images -- rebag --write
+          npm run summary:refresh
+
+      - name: Capture unknown-model bags to discovered_listing (raw evidence layer)
+        if: env.WRITE == 'true'
+        run: npm run load:prices -- rebag-discovered --discovered-only --write
+
+      - name: Retire sold Rebag listings (diff vs this run's live snapshot)
+        if: env.WRITE == 'true'
+        run: |
+          npm run reconcile:sold -- --platform="Rebag" --snapshot=data/ingest/_raw/rebag-live.json --write
+          npm run summary:refresh

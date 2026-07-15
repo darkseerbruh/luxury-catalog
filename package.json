@@ -21,6 +21,7 @@
     "ingest:auction": "tsx supabase/ingest/sources/auction.ts",
     "ingest:ebay": "tsx supabase/ingest/sources/ebay.ts",
     "ingest:tlc": "tsx supabase/ingest/sources/tlc.ts",
+    "ingest:rebag": "tsx supabase/ingest/sources/rebag.ts",
     "load:tlc-images": "tsx supabase/ingest/load-tlc-images.ts",
     "load:listing-images": "tsx supabase/ingest/load-listing-images.ts",
     "ingest:fashionphile:raw": "tsx supabase/ingest/sources/fashionphile.ts --raw",

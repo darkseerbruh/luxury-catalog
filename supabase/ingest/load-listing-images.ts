@@ -25,6 +25,7 @@ interface ImageRow { listing_ref: string; image_url: string }
 const DEFAULT_FILE: Record<string, string> = {
   mygemma: "data/ingest/_raw/mygemma-images.json",
   "the luxury closet": "data/ingest/_raw/tlc-images.json",
+  rebag: "data/ingest/_raw/rebag-images.json",
 };
 
 async function main(): Promise<void> {
