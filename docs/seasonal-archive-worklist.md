@@ -239,6 +239,39 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-15 (run 20)** — Did the standing "NEXT unit" flagged in every run log since run 12: the **HERMÈS
+  pre-2020 seasonal-colour deep archive + null-code backfill** (highest-GEO-value open gap). Output appended to
+  `hermes.{md,jsonl}` as **§5** (53 new jsonl lines: 1 meta + 22 code-fills + 14 new pre-2020 colours + 16
+  coded-archive colours). **Note the brief was slightly stale:** the 2020–2023 seasonal grid and the "null
+  neutral" codes it named (Gris Tourterelle 81, Nata I2, Béton 8L, Gris Meyer 0L) were ALREADY banked in the
+  run-3/backfill runs, so this run pushed into what was genuinely still open. **METHOD (cheap + auditable):** a
+  full **raw scrape (1 credit each, self-parsed)** of the **Lilac Blue** code chart (code→colour→leather, the
+  code workhorse) and **The Birkin's & Kelly's House** per-colour guide (single-site pre-2020 debut years);
+  greps extracted code+year pairs. **(A) 22 CODE-FILLS** for previously-null seasonal rows 2014–2023 (Beige Marfa
+  8Q, Sun B6, Bleu Zellige I7, Vert Yucca A8, Cassis N5, Vert Absinthe 7O, **Bleu Royale O8** [chart spells "Bleu
+  Royal"], Vert Fizz OS, Jaune Bourgeon R9, Rose Shocking 5R, Vert Jade U6, Bleu France 71, Jaune de Naples 9O,
+  Vert Amande 63, Rouge de Cœur S3, Bleu du Nord P3, Rose Lipstick U5, Toundra 6T, Rouge Tomate S5, Rose Azalée
+  8W, Orange Poppy 8V, Bamboo 7B) — all `medium` (single chart). **Rose Pop + Yuka codes did NOT surface → left
+  null.** **(B) 14 NEW pre-2020 archive colours 2011–2019** (Feu 2011/9J, Mykonos 2011/M5, Jaune d'Or 2011/9V,
+  Sanguine SS2011/9M, Capucine 2012/9T, Mango 2012/T2, Geranium 2012/D5, Rose Jaipur 2012/T5, Moutarde 2012/9U,
+  Soufre SS2013/C9, Terre Battue SS2016/R1, Cactus SS2019/1L, Bleu Outremer 2019/null, Beige de Weimar 2019/D0) —
+  year from B&K single-site so `low`, code from Lilac Blue. **(C) 16 coded-archive colours** name+code sourced,
+  season/year NOT sourced (`low`, year:null): the collector-tracked blues (Bleu Colvert 1P, Bleu Electrique 7T,
+  Bleu Izmir 7W, Bleu Paon 7F, Bleu Atoll 3P, Bleu Encre M3, Bleu Zanzibar B3, Bleu Agate R2) + Rose Pourpre L3,
+  Anémone P9, Ultraviolet 5L, Malachite 7J, Menthe 6W, Iris 9K, Rouge Grenat K1, Vert Vertigo U4. **CONFLICTS
+  FLAGGED not smoothed:** (1) **Feu** codes as standalone **9J** on Lilac Blue while RareCollection labels the
+  permanent Orange H **93** as "Orange H / Feu" — kept both, flagged; (2) **Mango** (B&K 2012, orange) vs Lilac
+  Blue's **T2 "Jaune Mango"** vs Christie's "Jaune Mango" listed among RECENT 2025–26 colours — possible rename
+  or two colours, code match kept `low`. **LEAD NOT BANKED (omit-not-invent):** Christie's snippet + an IG reel
+  named 2026 colours (Jaune Mango, Guimauve, Bai Brun, Wax Paper, Transformative Teal, Purple, Cocoa Powder,
+  Green Glow, Vert Loden) — out of scope + single/low source, queued for a future 2026 run, NOT stated as fact.
+  **Content-ideas:** appended #26 (the Hermès blue-code decoder / "which blue is which" GEO+engagement play now
+  that 8 named blues carry codes) and enriched #4/#18 with the deepened archive. **Tooling:** 3 firecrawl_search
+  (all refunded 2→1 via feedback within window = ~3 credits net) + 2 raw scrapes (Lilac Blue + B&K, self-parsed,
+  1 credit each) = ~5 credits net. No Apify, no Chrome, no logins (unattended). **Next unit: the 2026-season
+  Hermès colours (Jaune Mango/Guimauve/Bai Brun/Vert Loden — needs a PurseBop 2026 guide or owner-present Chrome
+  confirm before banking); OR year-anchoring the 16 coded-archive colours via PurseForum per-year charts / Christie's
+  lots; OR pre-2011 depth (the chart holds many more coded names with no year).**
 - **2026-07-14 (run 19)** — FENDI BAGUETTE production canon COMPLETED into a full loadable **SIZE × MATERIAL
   (× COLOUR) MATRIX** (owner directive: make Material a selectable axis; canon = what the HOUSE documented).
   Delivered `docs/research-drafts/seasonal-archive/fendi-baguette-matrix.json` (50 size×material cells + 20
@@ -722,7 +755,7 @@ technical block, or an outward-facing op. Checkpoint here, do not summarize-and-
 
 | House | Models done | Materials done | Colors: decades covered | Last touched | Next unit |
 |---|---|---|---|---|---|
-| Hermès | ⬜ | ✅ leathers + exotics (31, near-complete) | 🟨 permanent-core (codes partial) + seasonal 2024–2025 only | 2026-06-28 (run 3: ✅ → `hermes.{md,jsonl}`) | seasonal colors 2020–2023 + pre-2020; OCR/auction-catalog pass for null color codes |
+| Hermès | ⬜ | ✅ leathers + exotics (31, near-complete) | ✅ permanent-core + seasonal **2011–2025** (codes now largely filled: 22 null seasonal codes backfilled + 14 new pre-2020 archive colours 2011–2019 + 16 coded-archive colours year-null) | 2026-07-15 (run 20: pre-2020 deep archive + null-code backfill → `hermes.{md,jsonl}` §5) | 2026-season colours (Jaune Mango/Guimauve/Bai Brun etc., leads only) via Chrome/PurseBop; year-anchor the 16 coded-archive colours; PurseForum per-year charts for pre-2011 |
 | Chanel | ⬜ | ⬜ | ⬜ none | 2026-06-28 (run 2: ✅ season-code + serial-series map → `chanel.{md,jsonl}`) | seasonal colors per season code (use the map) — after Hermès |
 | Louis Vuitton | ✅ canon + heritage/discontinued (30 rows) | ✅ Monogram/Damier/Epi/Empreinte/Mahina/Taurillon/Taiga/Suhali families (19, well-dated) | 🟨 Vernis + Epi dated archive (sample, through ~2015) + Empreinte name list (undated); 2023–2026 season-labeled queued | 2026-06-28 (run 4: ✅ → `louis-vuitton.{md,jsonl}`) | 2023–2026 named Empreinte/Epi seasonal colors w/ house season labels (Chrome owner-present path; LV site Akamai-blocks Firecrawl) + confirm low-confidence model debut years |
 | Dior | ✅ canon + heritage/discontinued (20) | ✅ Cannage/Oblique/Toile de Jouy/Diorissimo + leathers (10, well-dated) | 🟨 named capsules + art editions (9: Lady Art #1/#2/#5/#10, ABCDior, Toile, Gradient, Dioramour, Graphic Cannage); per-season plain colors are descriptive not named (Dior doesn't name them) | 2026-06-28 (run 5: ✅ → `dior.{md,jsonl}`) | dior.com newsroom (95.22, craft, capsules) via owner-present Chrome path; Lady Art #3/#4/#6-#9 per-edition rows; confirm low-confidence model debut years |

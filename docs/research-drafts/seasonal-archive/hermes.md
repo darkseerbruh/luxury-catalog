@@ -241,6 +241,103 @@ site for old years, so I logged the clearest few in the jsonl at `low`–`medium
 manufacture a full pre-2015 season grid — the per-year granularity that exists for 2018–2023
 genuinely thins out before ~2013, and a hedged "appeared ~2007" beats a fake season label.
 
+---
+
+## 5. Pre-2020 deep archive + null-code backfill (run 20, 2026-07-15)
+
+*This run did the standing "NEXT unit": the pre-2020 deep archive plus the null seasonal-code
+backfill. Method: a full raw-parse of the **Lilac Blue** code chart (code → colour → leather;
+the workhorse for codes) and a full raw-parse of **The Birkin's & Kelly's House** per-colour
+guide (the single-site source for pre-2020 debut years). Codes from the single Lilac Blue chart
+are `medium`; single-site debut years are `medium`/`low`. Christie's used to cross-confirm where
+it names a colour. Nothing invented — where a code or year did not surface it stays null.*
+
+### 5a. Code fills for previously-null seasonal rows (2014–2023)
+
+These supersede the earlier null-code rows for the same colour (originals kept, per the
+non-destructive rule). All codes from the Lilac Blue chart, `medium`.
+
+| Season / year | Colour | Code | Leather (per chart) | Source | Confidence |
+|---|---|---|---|---|---|
+| FW 2023 | Beige Marfa | 8Q | Togo | lilacblue | medium |
+| 2023 | Sun | B6 | Evercolor | lilacblue | medium |
+| 2023 | Bleu Zellige | I7 | Epsom | lilacblue | medium |
+| 2023 | Vert Yucca | A8 | Epsom/Swift | lilacblue | medium |
+| SS 2022 | Cassis | N5 | Togo/Shiny | lilacblue | medium |
+| SS 2022 | Vert Absinthe | 7O | Evercolor | lilacblue | medium |
+| SS 2022 | Bleu Royale | O8 | Togo (chart: "Bleu Royal") | lilacblue | medium |
+| FW 2022 | Vert Fizz | OS | Epsom | lilacblue | medium |
+| SS 2021 | Jaune Bourgeon | R9 | Chèvre | lilacblue | medium |
+| SS 2021 | Rose Shocking | 5R | Chèvre | lilacblue | medium |
+| SS 2021 | Vert Jade | U6 | Epsom | lilacblue | medium |
+| 2021 | Bleu France | 71 | Togo | lilacblue | medium |
+| SS 2019 | Jaune de Naples | 9O | Clemence | lilacblue | medium |
+| 2019 | Vert Amande | 63 | Epsom | lilacblue | medium |
+| 2019 | Rouge de Cœur | S3 | Epsom/Togo/Lézard | lilacblue | medium |
+| SS 2019 | Bleu du Nord | P3 | Epsom/Swift | lilacblue | medium |
+| SS 2018 | Rose Lipstick | U5 | Togo/Chèvre | lilacblue | medium |
+| 2018 | Toundra | 6T | Epsom | lilacblue | medium |
+| 2016 | Rouge Tomate | S5 | Togo/Epsom/Clemence | lilacblue | medium |
+| FW 2015 | Rose Azalée | 8W | Epsom | lilacblue | medium |
+| 2015 | Orange Poppy | 8V | Togo/Clemence | lilacblue | medium |
+| 2014 | Bamboo (Bambou) | 7B | Togo/Epsom | lilacblue | medium |
+
+**Still null (code did not surface on the chart):** Rose Pop (SS2023), Yuka (2023). Left null,
+not guessed.
+
+### 5b. New pre-2020 archive colours (2011–2019)
+
+Year-anchored to The Birkin's & Kelly's House single-site guide (`medium`/`low`), code from
+Lilac Blue. These are net-new rows the archive did not hold before.
+
+| Season / year | Colour | Code | Identity (per source) | Source | Confidence |
+|---|---|---|---|---|---|
+| 2011 | Feu | 9J | Lively fiery orange. **Conflict flag:** distinct standalone code from permanent Orange H (93), though RareCollection labels 93 "Orange H / Feu" — flagged, not smoothed | birkin&kelly; lilacblue (9J) | low |
+| 2011 | Mykonos | M5 | Vivid Aegean blue | birkin&kelly; lilacblue (M5) | low |
+| 2011 | Jaune d'Or | 9V | Dazzling golden yellow | birkin&kelly; lilacblue (9V) | low |
+| SS 2011 | Sanguine | 9M | Daring orange-red | birkin&kelly; lilacblue (9M) | low |
+| 2012 | Capucine | 9T | Warm sunny orange (nasturtium) | birkin&kelly; lilacblue (9T) | low |
+| 2012 | Mango | T2 | Sunny orange. **Conflict flag:** Lilac Blue codes T2 as "Jaune Mango" and Christie's lists "Jaune Mango" among recent (2025–26) colours — possible rename or two colours | birkin&kelly; lilacblue (T2) | low |
+| 2012 | Geranium | D5 | Daring red with orange hints | birkin&kelly; lilacblue (D5) | low |
+| 2012 | Rose Jaipur | T5 | Vivid sunset pink | birkin&kelly; lilacblue (T5) | low |
+| 2012 | Moutarde | 9U | Mustard yellow | birkin&kelly; lilacblue (9U) | low |
+| SS 2013 | Soufre | C9 | Cheerful sulphur yellow | birkin&kelly; lilacblue (C9) | low |
+| SS 2016 | Terre Battue | R1 | Reddish-brown clay-court terracotta | birkin&kelly; lilacblue (R1) | low |
+| SS 2019 | Cactus | 1L | Spirited cactus green | birkin&kelly; lilacblue (1L) | low |
+| 2019 | Bleu Outremer | (null) | Deep ultramarine blue; code not surfaced | birkin&kelly | low |
+| 2019 | Beige de Weimar | D0 | Soft grey-beige | birkin&kelly; lilacblue (D0) | low |
+
+### 5c. Coded archive colours — name + code sourced, season/year NOT yet sourced
+
+The Lilac Blue chart carries dozens more named colours with official codes but no year. These
+enrich the lexicon (the GEO moat is the name→code resolution) and are logged honestly at `low`
+with `year: null` and season `(archive, year not sourced)`. Identity is from the established
+colour beat; a hedged "code sourced, season not yet sourced" beats a fabricated season label.
+
+| Colour | Code | Identity (from beat) |
+|---|---|---|
+| Bleu Colvert | 1P | Teal/mallard blue-green |
+| Bleu Electrique | 7T | Vivid electric blue |
+| Bleu Izmir | 7W | Bright cyan-turquoise blue |
+| Bleu Paon | 7F | Deep peacock blue |
+| Bleu Atoll | 3P | Bright tropical turquoise |
+| Bleu Encre | M3 | Deep ink/navy blue |
+| Bleu Zanzibar | B3 | Deep teal-green blue |
+| Bleu Agate | R2 | Soft grey-blue |
+| Rose Pourpre | L3 | Deep magenta-purple pink |
+| Anémone | P9 | Purple-magenta |
+| Ultraviolet | 5L | Vivid purple |
+| Malachite | 7J | Deep jewel green |
+| Menthe | 6W | Soft mint green |
+| Iris | 9K | Blue-leaning violet |
+| Rouge Grenat | K1 | Deep garnet red |
+| Vert Vertigo | U4 | Dark green |
+
+**Lead not banked (out of scope, low source):** Christie's snippet and an IG reel this run named
+2026 colours — Jaune Mango, Guimauve, Bai Brun, Wax Paper, Transformative Teal, Purple, Cocoa
+Powder, Green Glow, Vert Loden. These are 2026 (outside the 2020-2023/pre-2020 scope) and rest on
+a single/low source; queued for a future 2026-season run, deliberately NOT banked as fact.
+
 ## What I could not source this run (the honest gaps)
 
 - **Numeric color codes** — NOW LARGELY FILLED (this run) for the staple neutrals via the
