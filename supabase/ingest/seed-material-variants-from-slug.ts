@@ -101,8 +101,9 @@ async function main() {
       if (!targetId) {
         const { data: nv, error } = await db.from("variant").insert({ style_id: STYLE_ID, size_label: base.size_label, size_category: base.size_category ?? null, exterior_colorway: base.exterior_colorway, exterior_material_id: matId, market_availability: "resale" }).select("variant_id").single();
         if (error || !nv) { console.error(`      create failed: ${error?.message}`); continue; }
-        targetId = nv.variant_id; childByKey.set(key, targetId); created++;
+        targetId = nv.variant_id as number; childByKey.set(key, targetId); created++;
       } else reused++;
+      if (targetId == null) continue;
       for (let i = 0; i < ids.length; i += 500) {
         const chunk = ids.slice(i, i + 500);
         const { error: uerr } = await db.from("price_history").update({ variant_id: targetId }).in("price_id", chunk);
