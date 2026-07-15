@@ -6,18 +6,21 @@ fires you want this to be muscle memory, not a hunt.*
 ## Why this exists
 
 The **CJ affiliate token** (`CJ_API_TOKEN`) powers two live feeds: **The Luxury
-Closet** and **Rebag** listings, the "for sale right now" rails on bag pages. It is a
-JWT with a **built-in expiry date**, and CJ offers **no auto-renew** (their API only
-takes a static Personal Access Token, verified 2026-07-15 from developers.cj.com). So
-once it lapses, both feeds return `403: Could not authenticate given token` and go
-stale until you mint a fresh token by hand.
+Closet** and **Rebag** listings, the "for sale right now" rails on bag pages. CJ offers
+**no auto-renew** (their API takes a static Personal Access Token, verified 2026-07-15
+from developers.cj.com), and the token is an **opaque string** with no expiry date we
+can read off it (confirmed against the live token 2026-07-15). So when it stops working,
+both feeds return `403: Could not authenticate given token` and go stale until you mint
+a fresh one by hand.
 
-You never have to catch this by surprise:
+Because the expiry isn't readable, a daily monitor watches whether the token still
+works, rather than counting down to a date:
 
-- 🔔 A daily job (`.github/workflows/cj-token-expiry.yml`) reads the token's own expiry
-  date and opens a GitHub issue at **10 days left**.
-- 📲 At **2 days left** the vendor-inbox engine pings your phone.
-- Both point back here.
+- 🔎 A daily job (`.github/workflows/cj-token-expiry.yml`) makes one tiny authenticated
+  CJ request. If CJ rejects it (401/403), the token is dead and it opens a GitHub issue.
+- 📲 The vendor-inbox engine sees that issue and pings your phone.
+- Both point back here. (If CJ ever issues a token with a readable expiry, the job also
+  warns 10 days ahead automatically.)
 
 ## The rotation (do it from your phone, ~3 min)
 
