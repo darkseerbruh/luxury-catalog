@@ -14,10 +14,12 @@ they reflect what Fendi made, not our listing coverage.
 
 - [x] **1. Hero layout.** DONE — header text left, image floated right on wide screens (stacks
   on mobile); collapses the tall top. Verified in browser. File: `page.tsx` hero section.
-- [ ] **2. Size cm inconsistency.** RESOLVED-BY-DATA, not code: `measuredSizeLabel` shows cm only
-  where we hold a measurement. Stripping real cm to look uniform hides good info (against canon);
-  the archivist pull supplies the missing dims (Nano ~11cm, Mini ~19cm, Medium ~26-27cm). Load =
-  owner-gated. File: `variant-label.ts` (data, not logic).
+- [x] **2. Size cm inconsistency — was actually WRONG data.** FIXED. `SIZE_MEASURE` was a Chanel
+  table keyed by bare size word with NO brand scope, so "Small · 23 cm" / "Maxi · 33 cm" on the
+  Fendi Baguette were Chanel's widths bleeding onto Fendi (a spec error, ENFORCED #3). Made it
+  brand-scoped: a measurement prints only when the bag's brand has a sourced number for that size;
+  Fendi now shows plain size words (consistent, correct). Test added. Real per-style Fendi cm
+  (Nano ~11 / Mini ~19 / Medium ~26.5 from canon) belong in the production record (data task).
 - [x] **3. "Mama" clears Colour.** FIXED. Root cause: `colourApplies` in `VariantSelector.tsx`
   hid Colour when the selected material wasn't in `colourBearingMaterials` (materials that pair
   with a colour in OUR rows). The Baguette's Mama (#1378) is `Canvas, colour=∅` and Small (#1669)
@@ -63,11 +65,14 @@ they reflect what Fendi made, not our listing coverage.
 - [x] **17. Sticky variant reminder.** DONE — new `StickyVariantBar.tsx`: thumb + brand/style/
   variant pinned under the header on scroll (>360px), with a "Value & price" jump. Verified in
   browser: hidden at top, reveals on scroll, sits at top:60px (no header overlap).
-- [ ] **18. On-hover availability (Amazon pattern).** Grey-out / strike combos the house never
-  made. Archivist canon is IN (`docs/research-drafts/fendi-baguette-production-canon.md`):
-  Baguette Mini in blue = YES (do not strike). DB load of the production matrix is owner-gated
-  (migration = hers). Also flagged: Micro/Small/Large/Maxi/Midi are RESELLER labels, official
-  Fendi sizes are Nano/Mini/Baguette(Medium)/Chain Midi/Mamma — belongs in the alias layer.
+- [~] **18. On-hover availability (grey-out).** RESOLVED-BY-CANON, correctly NOT built. Greying a
+  value requires a SOURCED "never made" negative; the archivist canon explicitly asserts NO
+  negatives (it documents positives + "not yet sourced"). So there is no data to grey-out from,
+  and per canon #13 the right behavior is to keep everything selectable — which is exactly what
+  the selector now does after the #3 fix. Grey-out only becomes possible if/when we source
+  negative production evidence for a house. (Baguette Mini in blue = confirmed positive, stays
+  selectable.) Separate cleanup: Micro/Small/Large/Maxi/Midi are RESELLER size labels; official
+  Fendi sizes are Nano/Mini/Baguette(Medium)/Chain Midi/Mamma → alias-layer data task.
 - [ ] **19. Bag DNA reconcile.** Spec is `docs/ux/object-oriented-ux.md` + mockup
   `docs/ux/mockups/bagdna.png` (6-card grid: House/Leather/Hardware/Shape/Era/Designer). Fixes:
   House card subtitle must be a heritage line (e.g. "est. 1997 · Italy"), NOT the raw tier number

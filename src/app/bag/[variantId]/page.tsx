@@ -913,6 +913,7 @@ export default async function BagDetailPage({
           title. Each option links to its own indexable /bag/[id] page. */}
       <VariantSelector
         styleName={v.style.name}
+        brandName={v.brand.name}
         variants={styleVariants}
         currentVariantId={v.variantId}
         savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}

@@ -26,11 +26,15 @@ import { measuredSizeLabel } from "@/lib/variant-label";
 
 export default function VariantSelector({
   styleName,
+  brandName,
   variants,
   currentVariantId,
   savedVariantIds = [],
 }: {
   styleName: string;
+  /** The bag's house, so brand-scoped size measurements (e.g. Chanel widths) never
+   *  print on another brand's sizes. */
+  brandName?: string | null;
   variants: StyleVariantOption[];
   currentVariantId: number;
   /** Variant ids already on the user's want list, for the pre-filled heart. */
@@ -105,7 +109,7 @@ export default function VariantSelector({
                   const label = isUnknown
                     ? UNKNOWN_LABEL
                     : dim.key === "size"
-                      ? measuredSizeLabel(value) ?? value
+                      ? measuredSizeLabel(value, brandName) ?? value
                       : value;
                   const unknownTitle = isUnknown
                     ? `${dim.label} not yet documented for this one — tap to view it`
