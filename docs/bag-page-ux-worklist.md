@@ -12,48 +12,50 @@ they reflect what Fendi made, not our listing coverage.
 
 ## Bucket 1 — clear fixes
 
-- [ ] **1. Hero layout.** Text stack (brand / tier / name) is vertically wasteful. Left-align
-  the text block, float the bag image to its right so they sit side by side and collapse the
-  top of the page. Files: `page.tsx` hero section.
-- [ ] **2. Size cm inconsistency.** Only `Small · 23 cm` and `Maxi · 33 cm` show dimensions;
-  Micro/Nano/Mini/Medium/Large/Midi/Mama don't. Be consistent — show cm on every size we hold a
-  figure for, or none. File: `VariantSelector.tsx`.
-- [ ] **3. "Mama" clears Colour.** Selecting the Mama size drops the entire Colour axis. Bug in
-  axis-resolve. File: `VariantSelector.tsx`.
-- [ ] **4. Wrong / broken images.** Micro thumbnail is a ring/jewelry; a Nano-black + a cropped
-  shot aren't Baguettes. Image QA — wrong-bag + bad crops. (Data pass, not just code.)
-- [ ] **5. Material becomes a selectable axis.** Today it's a separate non-selectable "Made in"
-  block. Promote Material to a 4th "Choose your Baguette" axis (Size / Colour / Hardware /
-  Material). Files: `VariantSelector.tsx`, `page.tsx`.
-- [ ] **6. "Seasonal" label mimics a chip.** Non-interactive labels must not look clickable like
-  the material chips. Restyle. File: `VariantSelector.tsx`.
-- [ ] **7. Cut the GEO filler line.** "The Fendi Baguette Nano in Beige is a designer bag."
-  comes from `src/lib/geo.ts:88`. Keep GEO intent in page metadata; cut the generic visible
-  sentence (it's identical filler every time).
-- [ ] **8. De-dupe "Discontinued" + consolidate tooltips.** Status shows twice (tag + status row)
-  and two overlapping on-hover tooltips. One statement, one tooltip. File: `ValueModule.tsx` /
-  `page.tsx`.
-- [ ] **9. Worth chart needs its subject.** Best $795 / median $873 / high $950 with no label of
-  WHICH variant. Label the chart with the selected variant (pairs with sticky header, #17).
-  File: `ValueModule.tsx` / `PriceTrend.tsx` / `CompScale.tsx`.
-- [ ] **10. Move "Want: Just this one / Any beige / Any colourway" up next to Colour.** Today it
-  sits far below, detached from the colour choice it modifies. Files: `WantBreadth.tsx`, `page.tsx`.
-- [ ] **11. Anchors read as tags.** "The story / DNA / Specs / Resale prices…" (`JumpNav`) look
-  like tags, not jump-links — no web pattern signals "anchor." Redesign as a clear section nav or
-  remove. File: `JumpNav` (find component).
-- [ ] **12. "Suggest edit" opens in-page.** Make it a button that reveals an in-page editor right
-  where the user is, referencing the exact field, not a nav link. File: `SuggestEdit.tsx`.
-- [ ] **13. Cut "Add to compare"** from the bag page AND from search-result image cards (compare
-  is over-placed; not the primary use case). Files: `page.tsx` + search result card.
+- [ ] **1. Hero layout.** Left-align brand/tier/name, float image right to collapse the top.
+  DEFERRED: needs browser iteration (image is currently centered below the header) — a layout
+  build best done with her looking. File: `page.tsx` hero section.
+- [ ] **2. Size cm inconsistency.** RESOLVED-BY-DATA, not code: `measuredSizeLabel` shows cm only
+  where we hold a measurement. Stripping real cm to look uniform hides good info (against canon);
+  the archivist pull supplies the missing dims (Nano ~11cm, Mini ~19cm, Medium ~26-27cm). Load =
+  owner-gated. File: `variant-label.ts` (data, not logic).
+- [ ] **3. "Mama" clears Colour.** ROOT CAUSE FOUND, not blind-patched: `colourApplies` in
+  `VariantSelector.tsx` hides Colour when the current material isn't in `colourBearingMaterials`
+  — a set derived from OUR listings. That's the canon violation (#13): it infers "single-colour"
+  from listing coverage. Correct fix needs a material `isPrintOnly` PRODUCTION flag (so Colour
+  hides only on genuine print canvas like LV Monogram, never on a Fendi material we're just thin
+  on). Not patched blind because ripping `colourApplies` out breaks the intended LV Monogram case.
+- [ ] **4. Wrong / broken images.** Micro thumb = jewelry; Nano-black + a crop aren't Baguettes.
+  Image-QA DATA pass (wrong-bag + bad crops) — needs the image pipeline, not this page's code.
+- [ ] **5. Material as selectable axis.** ALREADY SUPPORTED in code (`DIMS` includes `material`);
+  it shows in the selector whenever variant rows vary by material. For the Baguette they don't
+  yet, so material falls to the read-only "Made in" block. Making it selectable = load variant
+  rows per finish (`seed-material-variants-from-production.ts`), which is owner-gated data.
+- [x] **6. "Seasonal" label / "Made in" mimics a chip.** DONE — `ProductionRange` now renders as
+  quiet read-only text, not selector-style pills; "Seasonal:" reads as a prefix, not a chip.
+- [x] **7. Cut the GEO filler line.** DONE — the lead box is hidden when it degrades to bare
+  filler (`leadIsSubstantive`); the string still feeds metadata/JSON-LD.
+- [x] **8. De-dupe "Discontinued" + tooltips.** DONE — dropped the bare pill; the sourced Status
+  row + its single tooltip is the one source; era note reworded so it doesn't echo.
+- [x] **9. Worth chart names its subject.** DONE — `ValueModule` shows the variant under the
+  heading (brand · style · size · colour).
+- [x] **10. "Want: just this / any colourway" moved beside the selector.** DONE.
+- [x] **11. Anchors read as a nav, not tags.** DONE — `JumpNav` is an "On this page" underlined
+  text nav, not filter-tag pills.
+- [ ] **12. "Suggest edit" opens in-page.** PARTIAL: the bottom widget is already an in-page
+  form (button expands it in place). REMAINING: the *inline* "Suggest an edit" triggers scattered
+  on the page scroll to that widget collapsed; the fuller build is an inline popover at each field,
+  pre-targeted. File: `SuggestEdit.tsx` + inline trigger sites.
+- [x] **13. Cut "Add to compare".** DONE — removed from the bag page and the search-result
+  toggle+tray; `/compare` page untouched.
 
 ## Bucket 2 — decisions (applying owner-recommended defaults)
 
-- [ ] **14. Closet CTAs move up** under the hero image (Want it / Have it / Had it / Alert me +
-  Where to buy / Where to sell). Default (b). Files: `BagActions.tsx`, `page.tsx`.
-- [ ] **15. Heart = wishlist, then reclassify.** Heart adds to wishlist; a post-save prompt offers
-  "already own it? → Have it," which is the natural bridge into the review ask. Default (a).
-- [ ] **16. "Make it yours, or move it on" copy.** Strike "move it on" (nobody says it). Rewrite
-  on-voice (2-3 options in-thread before commit).
+- [x] **14. Closet CTAs moved up** directly under the hero (want/have/had + buy/sell). DONE.
+- [ ] **15. Heart = wishlist, then reclassify.** DEFERRED: needs the post-save prompt flow +
+  the closet reclassify UI (Have/Had) and ties to the review trigger (#21). Design + client build.
+- [x] **16. Closet heading copy.** DONE — "Add it to your closet" (was "Make it yours, or move it
+  on"). Alternatives if she prefers: "Track this bag" / "Your closet".
 
 ## Bucket 3 — bigger explorations
 
