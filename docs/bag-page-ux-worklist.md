@@ -78,10 +78,10 @@ they reflect what Fendi made, not our listing coverage.
   House card subtitle must be a heritage line (e.g. "est. 1997 · Italy"), NOT the raw tier number
   "3"; module collapses to House+Colour when attributes are null — fill from production canon.
   File: `BagDNA.tsx`, `page.tsx`.
-- [~] **20. Authentication placement.** ADDRESSED (digest): the "Is it real? Start here" auth
-  digest already sits high (right after the closet CTAs, above Bag DNA + Story) and links to the
-  full checklist + the brand guide. Moving the full 65-line checklist section up too is optional
-  and best confirmed with her (it reshuffles JumpNav order + the `#authentication` anchor).
+- [x] **20. Authentication placement.** DONE — moved the full "How to authenticate this bag"
+  section + RequestAuthentication up to right after the "Is it real? Start here" digest, above Bag
+  DNA + The Story (owner ranking: auth > watch > story > DNA). Jump-nav reordered to match
+  (Authentication before DNA). Verified in DOM: `#authentication` precedes `#dna`.
 - [ ] **21. Owner review flow.** OWNER-DEFERRED — she said on the recording "file that away, we
   need to come back to." Also conflicts with the locked contribution copy/spec
   (`docs/ux/review-data-leaderboards.md`, 2026-07-07). Not built. Ties to #15.

@@ -756,12 +756,14 @@ export default async function BagDetailPage({
   );
 
   // Jump-nav: only link to sections that actually render.
+  // Order mirrors the page: authentication now sits above DNA/Story (owner
+  // 2026-07-14: auth matters more than the story or the DNA module).
   const jumpItems = [
+    authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
+    hasDna ? { id: "dna", label: "DNA" } : null,
     bagStory ? { id: "the-story", label: "The story" } : null,
     photos.length > 0 ? { id: "photos", label: "Photos" } : null,
-    hasDna ? { id: "dna", label: "DNA" } : null,
     { id: "specifications", label: "Specs" },
-    authChecks.length > 0 ? { id: "authentication", label: "Authentication" } : null,
     v.productionRecords.length > 0 ? { id: "production", label: "Production" } : null,
     recordedSales.length > 0 ? { id: "price-history", label: "Resale prices" } : null,
     retailHistory.length > 1 ? { id: "retail-history", label: "Retail history" } : null,
@@ -1107,6 +1109,77 @@ export default async function BagDetailPage({
         </div>
       )}
 
+      {/* How to authenticate — enumerated checklist built ONLY from real data. */}
+      {authChecks.length > 0 && (
+        <div id="authentication" className="scroll-mt-4">
+          <Section title="How to authenticate this bag">
+            <p className="mb-4 text-sm text-muted">
+              A checklist drawn from the catalogued production records, serial
+              tags, and authentication notes for this variant. These checks help
+              you know what to look for; they don&rsquo;t replace an in-hand
+              inspection by a qualified authenticator.
+            </p>
+            {(() => {
+              const allText = authChecks.map((c) => `${c.label} ${c.detail}`).join(" ");
+              const present = JARGON_GLOSSARY.filter((g) => g.rx.test(allText));
+              if (present.length === 0) return null;
+              return (
+                <p className="mb-4 rounded-xl border border-border/60 bg-surface/50 px-4 py-3 text-xs leading-relaxed text-muted">
+                  <span className="text-foreground">The words, in plain terms:</span>{" "}
+                  {present.map((g, i) => (
+                    <span key={g.term}>
+                      {i > 0 && " · "}
+                      <span className="text-gold-soft">{g.term}</span>: {g.def}
+                    </span>
+                  ))}
+                </p>
+              );
+            })()}
+            <ol className="flex flex-col gap-3">
+              {authChecks.map((c, i) => (
+                <li
+                  key={i}
+                  className="flex gap-3 rounded-xl border border-border bg-surface p-5"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold/40 text-xs font-medium text-gold">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{c.label}</p>
+                    <p className="mt-0.5 text-sm leading-relaxed text-muted">{c.detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-4 rounded-xl border border-border bg-surface/60 px-5 py-4">
+              <p className="text-sm font-medium text-foreground">How we source &amp; verify</p>
+              <p className="mt-1 text-sm leading-relaxed text-muted">
+                Every record above is research-sourced and{" "}
+                <span className="text-foreground">confidence-rated</span> (the{" "}
+                <span className="uppercase tracking-wide text-gold/80">low</span>/
+                <span className="uppercase tracking-wide text-gold/80">medium</span>/
+                <span className="uppercase tracking-wide text-gold/80">high</span>/
+                <span className="uppercase tracking-wide text-gold">verified</span>{" "}
+                badges shown on each section).
+                {sources.length > 0
+                  ? " The cited sources are listed at the foot of this page."
+                  : ""}{" "}
+                We do not guarantee authenticity; verify high-stakes details in person.
+              </p>
+              <Link
+                href={authGuideSlug ? `/articles/${authGuideSlug}` : "/authentication"}
+                className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
+              >
+                {authGuideSlug ? `Read the ${v.brand.name} authentication guide` : "Read our authentication guides"} &rarr;
+              </Link>
+            </div>
+          </Section>
+        </div>
+      )}
+
+      {/* Authentication-marketplace on-ramp (lead capture — no money on-platform). */}
+      <RequestAuthentication variantId={v.variantId} signedIn={userState.signedIn} live={authMarketplaceLive} />
+
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
 
@@ -1204,76 +1277,6 @@ export default async function BagDetailPage({
         </Section>
       </div>
 
-      {/* How to authenticate — enumerated checklist built ONLY from real data. */}
-      {authChecks.length > 0 && (
-        <div id="authentication" className="scroll-mt-4">
-          <Section title="How to authenticate this bag">
-            <p className="mb-4 text-sm text-muted">
-              A checklist drawn from the catalogued production records, serial
-              tags, and authentication notes for this variant. These checks help
-              you know what to look for; they don&rsquo;t replace an in-hand
-              inspection by a qualified authenticator.
-            </p>
-            {(() => {
-              const allText = authChecks.map((c) => `${c.label} ${c.detail}`).join(" ");
-              const present = JARGON_GLOSSARY.filter((g) => g.rx.test(allText));
-              if (present.length === 0) return null;
-              return (
-                <p className="mb-4 rounded-xl border border-border/60 bg-surface/50 px-4 py-3 text-xs leading-relaxed text-muted">
-                  <span className="text-foreground">The words, in plain terms:</span>{" "}
-                  {present.map((g, i) => (
-                    <span key={g.term}>
-                      {i > 0 && " · "}
-                      <span className="text-gold-soft">{g.term}</span>: {g.def}
-                    </span>
-                  ))}
-                </p>
-              );
-            })()}
-            <ol className="flex flex-col gap-3">
-              {authChecks.map((c, i) => (
-                <li
-                  key={i}
-                  className="flex gap-3 rounded-xl border border-border bg-surface p-5"
-                >
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold/40 text-xs font-medium text-gold">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{c.label}</p>
-                    <p className="mt-0.5 text-sm leading-relaxed text-muted">{c.detail}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-4 rounded-xl border border-border bg-surface/60 px-5 py-4">
-              <p className="text-sm font-medium text-foreground">How we source &amp; verify</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted">
-                Every record above is research-sourced and{" "}
-                <span className="text-foreground">confidence-rated</span> (the{" "}
-                <span className="uppercase tracking-wide text-gold/80">low</span>/
-                <span className="uppercase tracking-wide text-gold/80">medium</span>/
-                <span className="uppercase tracking-wide text-gold/80">high</span>/
-                <span className="uppercase tracking-wide text-gold">verified</span>{" "}
-                badges shown on each section).
-                {sources.length > 0
-                  ? " The cited sources are listed at the foot of this page."
-                  : ""}{" "}
-                We do not guarantee authenticity; verify high-stakes details in person.
-              </p>
-              <Link
-                href={authGuideSlug ? `/articles/${authGuideSlug}` : "/authentication"}
-                className="mt-2 inline-block text-sm font-medium text-gold transition-colors hover:text-gold-soft"
-              >
-                {authGuideSlug ? `Read the ${v.brand.name} authentication guide` : "Read our authentication guides"} &rarr;
-              </Link>
-            </div>
-          </Section>
-        </div>
-      )}
-
-      {/* Authentication-marketplace on-ramp (lead capture — no money on-platform). */}
-      <RequestAuthentication variantId={v.variantId} signedIn={userState.signedIn} live={authMarketplaceLive} />
 
       {/* Exterior material detail */}
       {v.exteriorMaterial && (
