@@ -229,7 +229,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Coco Cocoon", "coco cocoon"], ["Wavy CC", "wavy cc"],
     ["Paris-Biarritz", "paris biarritz"], ["Funky Town", "funky town"],
     ["Chic Pearls", "chic pearls"], ["Coco Base", "coco base"],
-    ["Twist Your Buttons", "twist your buttons"],
+    ["Twist Your Buttons", "twist your buttons"], ["Archetype", "archetype"],
     // "Timeless" is TLC/reseller shorthand for Chanel's whole classic CC-turnlock LINE
     // (clutches, totes, shoppers, pochettes, phone cases), not just the flap bag — bare
     // "timeless" put a $966 handcuff clutch on the Classic Flap hero (2026-07-09). LAST
@@ -311,6 +311,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Daniel", "daniel"], ["Flore", "flore"], ["Mirage", "mirage"],
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
     ["Melrose Avenue", "melrose"], ["Bellevue", "bellevue"], ["Pleaty", "pleaty"],
+    ["Wilshire", "wilshire"], ["Houston", "houston"],
   ],
   Gucci: [
     // Belt-bag veto (2026-07-09 round-3 audit): "gg marmont … belt bag" / "ophidia …
@@ -337,8 +338,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Neo Vintage", "neo vintage"], ["Belt Bag", "belt bag"], ["Luce", "luce"], ["Emblem", "emblem"],
     ["Retro Interlocking G", "retro interlocking"], ["Day Backpack", "day backpack"], ["Eden", "eden"],
     ["Savoy", "savoy"], ["Dome", "dome"], ["Petite GG", "petite gg"],
-    // Dictionary-gap report addition (2026-07-15): the Joy tote line (docs/dictionary-gap-report.md).
-    ["Joy", "joy"],
+    // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
+    ["Joy", "joy"], ["Deco", "deco"], ["Eclipse", "eclipse"],
   ],
   Hermès: [
     // To Go variants BEFORE the parent models (first match wins).
@@ -369,6 +370,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Frame Bag", "frame bag", "frame"], ["Big Bag", "big bag"], ["Nano Bucket", "nano bucket"],
     // Residue-audit additions (2026-07-09): FP lists the Classic Box as "Leather Classic <size>".
     ["Macadam", "macadam"],
+    // Dictionary-gap report addition (2026-07-15): the Camille 16 line (docs/dictionary-gap-report.md).
+    ["Camille", "camille"],
   ],
   "Saint Laurent": [
     ["Loulou", "loulou"], ["Niki", "niki"], ["College", "college"], ["Icare", "icare"],
@@ -397,6 +400,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Diorissimo", "diorissimo"],
     ["Malice", "malice"], ["Diorever", "diorever"], ["Be Dior", "be dior"], ["Miss Dior", "miss dior"],
     ["Panarea", "panarea"], ["Granville", "granville"], ["Boston", "boston"], ["Dior Vibe", "dior vibe", "d-vibe"], ["Dior Addict", "dior addict"],
+    // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
+    ["Lady 95.22", "lady 95.22", "95.22"], ["Honeycomb", "honeycomb"],
   ],
   "Bottega Veneta": [
     ["Andiamo", "andiamo"], ["Arco", "arco"], ["Jodie", "jodie"], ["Cassette", "cassette"],
@@ -494,6 +499,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Paraty", "paraty"], ["Woody", "woody"], ["Drew", "drew"], ["Nile", "nile"], ["Aby", "aby"],
     ["Edith", "edith"], ["Hudson", "hudson"], ["Darryl", "darryl"], ["Alphabet", "alphabet"],
     ["Juana", "juana"], ["Penelope", "penelope"], ["Marcie Hobo", "marcie hobo"],
+    // Dictionary-gap report addition (2026-07-15): the Elsie line (docs/dictionary-gap-report.md).
+    ["Elsie", "elsie"],
   ],
   Goyard: [
     ["Saint Louis", "saint louis", "st louis", "st. louis"], ["Artois", "artois"], ["Anjou", "anjou"],
