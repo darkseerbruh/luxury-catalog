@@ -1,91 +1,80 @@
-# Dictionary-gap report — 2026-07-10
+# Dictionary-gap report — 2026-07-15
 
 **What this is:** the handbag models that show up over and over in our banked listings but
 have no page yet, because the model dictionary (`src/lib/ingest/model-normalize.ts`) doesn't
-recognise them. Adding a recognised model is what lets those banked listings become real
+recognise them. Adding a recognised model is what turns those banked listings into real
 catalog pages. **This report only names candidates — it changes nothing.** Adding a model is your call.
 
 ## The 5 worth adding first
 
 | Model | Why it's the top pick |
 |---|---|
-| **Saint Laurent Cassandre** | 17 listings, 3 sellers, a core current YSL line we're missing entirely. |
-| **Chanel Chocolate Bar** | 24 listings across all 3 sellers — the single most-seen missing model. |
-| **Chanel Filigree** | 17 listings, 3 sellers — a real Chanel line (the Filigree vanity family). |
-| **Gucci Joy** | 16 listings, 3 sellers — a recognisable Gucci tote line, none catalogued. |
-| **Chanel Cambon** | 12 listings — an iconic early-2000s Chanel line buyers still search by name. |
+| **Chanel Mademoiselle** | 100 listings, 3 sellers — the single biggest gap, the vintage Mademoiselle flap line. |
+| **Chanel Cambon** | 79 listings, 3 sellers — iconic early-2000s line buyers search by name (repeat from last week). |
+| **Chanel Bowling** | 75 listings, 3 sellers, ~$5,660 median — high-value Coco Beach / Preppy Coco bowling bags. |
+| **Chanel Filigree** | 62 listings, 3 sellers — the Filigree family (repeat from last week; only the vanity variant is recognised today). |
+| **Gucci Joy** | 51 listings, 3 sellers — the top non-Chanel add, a recognisable Gucci tote line (repeat from last week). |
 
-Full ranked list of 25 below, then two cleanup notes (spelling variants to merge, and
-descriptor words to *not* add).
+Full ranked list of 25 below, then confidence flags and two cleanup notes.
 
-## How this was built
+## What changed since last week (2026-07-10)
 
-- Read all **41,266** unpromoted `discovered_listing` rows (paged, dedup'd by `listing_ref`).
-- Dropped rows we already recognise (a promotion backlog, not a gap) and accessories/apparel.
-- Grouped the rest by house + the distinctive part of each title (material, size and colour
-  words stripped), then ranked by how often it recurs, weighted up for higher-value houses.
-- **Every candidate below is backed by real listing titles** (shown as evidence). Where the
-  name might be a description rather than a true model, it's flagged LOW/MED — don't add those blind.
-- Sources: FP = Fashionphile, TRR = TheRealReal, TLC = The Luxury Closet. Median = listed price.
+- **The backlog more than doubled: ~41,300 → ~96,000 unpromoted listings.** More capture, more evidence, so counts are higher across the board.
+- **None of last week's top picks have been added to the dictionary yet** (Chocolate Bar, Filigree, Joy, Cambon all still read as unrecognised). They resurface here, now with larger counts.
+- **Saint Laurent Cassandre dropped off the ranked list.** It's still unrecognised, but this week its clean *bag* listings fell below the count floor — most current Cassandre rows are chain wallets (an accessory, filtered out). Worth keeping on the watch list, not promoting on this week's evidence alone.
+- **The list is Chanel-heavy** because Chanel is a top-value house with the widest un-catalogued back catalogue. The best non-Chanel adds are **Gucci Joy, Bottega Veneta Nodini, Saint Laurent Y Cabas, Prada Vela**.
 
 ## Top 25 candidate models
 
-| # | House | Proposed model | Listings | Sources | Median | Real model? | Evidence (sample titles) |
-|---|---|---|---|---|---|---|---|
-| 1 | Chanel | Chocolate Bar | 24 | FP13, TRR8, TLC3 | $1,485 | **HIGH** — real horizontal-quilt line | "Small Chocolate Bar Tote", "Medium Chocolate Bar Flap", "East West Chocolate Bar Flap" |
-| 2 | Saint Laurent | Cassandre | 17 | TRR15, TLC2 | $695 | **HIGH** — YSL Cassandre matelassé line | "Chevron Cassandre", "Patent Leather Cassandre", "Leather Cassandre 2025" |
-| 3 | Chanel | Filigree | 17 | FP10, TLC6, TRR1 | $3,585 | **HIGH** — Filigree vanity family | "Filigree Backpack", "Filigree Waist Bag", "CC Filigree Clutch With Chain" |
-| 4 | Gucci | Joy | 16 | TRR11, FP4, TLC1 | $410 | **HIGH** — Gucci Joy tote/messenger | "Monogram Joy Messenger", "GG Supreme Small Joy Tote", "Monogram Joy Messenger Black" |
-| 5 | Chanel | Wavy CC | 16 | FP11, TLC4, TRR1 | $4,365 | **HIGH** — recent Wavy CC hobo | "Small Wavy CC Hobo Black", "Wavy CC Hobo Beige", "Small Wavy CC Hobo White" |
-| 6 | Chanel | Coco Preppy | 16 | FP16 | $5,850 | **HIGH** — 2024 Coco Preppy line | "Mini Preppy Coco Shoulder Bag Light Blue" (×16, colour variants) |
-| 7 | Chanel | Bowling | 16 | TLC7, FP7, TRR2 | $5,660 | **HIGH** — Chanel Bowling Bag | "Chain Bowling Bag", "Beige Leather Bowling Bag", "Mini Bowling Bag Black" |
-| 8 | Saint Laurent | Cabas (Y Cabas) | 17 | TRR11, FP6 | $556 | **HIGH** — YSL Cabas / Y-line tote | "Y Cabas Medium", "Small Classic Y Cabas Black", "Small Classic Y Cabas Red" |
-| 9 | Chanel | Mademoiselle | 14 | TLC11, FP2, TRR1 | $3,754 | **HIGH** — vintage Mademoiselle lock | "Mademoiselle Flap Light Beige", "East West Mademoiselle Flap", "Mademoiselle Red Lambskin" |
-| 10 | Chanel | Coco Cocoon | 13 | FP6, TLC5, TRR2 | $1,327 | **HIGH** — Coco Cocoon line | "Large Coco Cocoon Tote", "Small Coco Cocoon Tote Black", "Coco Cocoon Bowler Black" |
-| 11 | Chanel | Wild Stitch | 13 | TLC8, FP4, TRR1 | $2,709 | **HIGH** — Wild Stitch line | "Wild Stitch Top Handle Bag", "Wild Stitch Large Flap", "Wild Stitch Large Top Handle Flap" |
-| 12 | Chanel | Cambon | 12 | FP12 | $1,895 | **HIGH** — iconic Cambon line | "Large Cambon Tote", "Small Cambon Bowler", "Cambon Large Bowler" |
-| 13 | Chanel | Archetype | 12 | FP12 | $8,995 | **HIGH** — 2024 Archetype shopping tote | "Archetype Small Shopping Tote Brown / Burgundy / Dark Burgundy" |
-| 14 | Chanel | Funky Town | 11 | FP8, TLC3 | $5,030 | **HIGH** — Funky Town flap line | "Medium Funky Town Flap", "Large CC Funky Town Flap", "Mini Funky Town Flap Pink" |
-| 15 | Chloé | Elsie | 11 | TLC11 | $584 | **HIGH** — Chloé Elsie | "Large Elsie Shoulder Bag", "Medium Elsie Chain Shoulder Bag", "Elsie Small Python" |
-| 16 | Chanel | Paris-Biarritz | 10 | TRR8, TLC2 | $800 | **HIGH** — Paris-Biarritz line | "Large Paris-Biarritz Tote", "Paris-Biarritz Bowler", "Paris-Biarritz Hobo" |
-| 17 | Dior | Lady 95.22 | 12 | TLC7, FP5 | $3,284 | **HIGH** — the 2022 Lady 95.22 (distinct from Lady Dior) | "Cannage Small The Lady 95.22 Beige / Black", "Lambskin Cannage The Lady 95.22" |
-| 18 | Louis Vuitton | Melrose Avenue | 10 | TLC6, TRR3, FP1 | $1,046 | **HIGH** — Vernis Melrose Avenue | "Monogram Vernis Melrose Avenue" (×10) |
-| 19 | Louis Vuitton | Pleaty | 9 | FP8, TLC1 | $2,465 | **HIGH** — Monogram Denim Pleaty | "Monogram Denim Mini Pleaty Blue / Fuchsia" |
-| 20 | Louis Vuitton | Wilshire | 9 | TRR7, FP1, TLC1 | $540 | **HIGH** — Vernis Wilshire | "Vernis Wilshire PM Amarante", "Monogram Vernis Wilshire PM / MM" |
-| 21 | Bottega Veneta | Nodini | 9 | TLC5, TRR4 | $790 | **HIGH** — BV Nodini crossbody | "Nodini Light Beige Intrecciato", "Nodini Dark Brown Intrecciato", "Nodini Metallic Grey" |
-| 22 | Bottega Veneta | Roma | 8 | TLC6, TRR2 | $1,145 | **HIGH** — BV Roma | "Mesh Roma Bag", "Roma Burgundy Intrecciato Tote", "Red Leather Mesh Roma Bag" |
-| 23 | Gucci | Deco | 8 | TLC8 | $1,390 | **HIGH** — 2023 Gucci Deco | "Deco Mini Shoulder Bag", "Deco Small Brown Quilted Shoulder Bag" |
-| 24 | Celine | Camille | 8 | FP7, TLC1 | $2,995 | **HIGH** — Celine Camille 16 Soft | "Medium Camille 16 Soft Bag Tan / Black", "Small Camille 16 Soft Bag Black" |
-| 25 | Dior | Honeycomb | 13 | TRR13 | $283 | **MED** — vintage Dior Honeycomb/Trotter; TRR-only, verify before adding | "Honeycomb Vintage", "Canvas Honeycomb Vintage" |
+Ranked by frequency × house value × source spread. Every row is backed by real listing titles.
+Sources: FP = Fashionphile, TRR = TheRealReal, TLC = The Luxury Closet (+ eBay where it appears). Median = listed ask (fixed-price sellers, so ask ≈ realised).
 
-**Runners-up (real, lower volume):** Chanel Accordion (9), Chanel In Love / CC-heart (18, seasonal novelty),
-Gucci Eclipse (8), LV Houston (8), LV Bellevue (8), LV Flower Tote (8), BV Point (7), Celine Clasp (8),
-Prada Vela (9), Chanel Retro Twist / Chic Pearls / Twist Your Buttons (8 each, runway one-offs).
+| # | Brand | Candidate model | Rows | Sources | Where it's seen | Median ask | Evidence (sample listing titles) |
+|---|---|---|---:|---:|---|---:|---|
+| 1 | Chanel | Mademoiselle | 100 | 3 | TLC67, FP27, TRR6 | $3,349 | "Patent Quilted Small Just Mademoiselle Light Khaki"; "Caviar Quilted Mademoiselle Flap Bag Light Beige"; "Sheepskin Quilted Vintage Mademoiselle Flap Beige" |
+| 2 | Chanel | Cambon | 79 | 3 | TLC48, FP27, TRR4 | $2,317 | "Calfskin Quilted Large Cambon Multipocket Reporter Black White"; "Calfskin Quilted Large Cambon Tote Black"; "Calfskin Quilted Small Cambon Multipocket Reporter Beige" |
+| 3 | Chanel | Bowling | 75 | 3 | FP43, TLC29, TRR3 | $5,660 | "Nylon Striped Quilted Coco Beach Large Bowling Bag Black Coral"; "Shiny Caviar Preppy Coco Small Bowling Bag Light Blue"; "Shiny Caviar Preppy Coco Small Bowling Bag Light Pink" |
+| 4 | Chanel | Filigree | 62 | 3 | FP33, TLC25, TRR4 | $2,938 | "Caviar Quilted Filigree Backpack Beige Black"; "Caviar Quilted Filigree Waist Bag Black"; "Caviar Quilted Round Filigree Crossbody Beige Black" |
+| 5 | Chanel | Accordion | 55 | 3 | FP24, TLC22, TRR9 | $1,975 | "Calfskin Bubble Quilt Accordion Flap Red"; "Calfskin Quilted Istanbul Accordion Flap Black"; "Lambskin Quilted Accordion Shopping Tote Dark Pink" |
+| 6 | Chanel | Chocolate Bar | 53 | 3 | FP30, TLC15, TRR8 | $2,275 | "Lambskin Calfskin Small Chocolate Bar Tote White Black"; "Patent Medium Chocolate Bar Flap Black"; "Lambskin East West Chocolate Bar Flap Black" |
+| 7 | Chanel | Coco Preppy | 48 | 3 | FP44, TLC3, TRR1 | $5,695 | "Shiny Caviar Mini Preppy Coco Shoulder Bag Light Blue"; "Shiny Crumpled Lambskin Quilted Small Preppy Pocket Clutch With Chain Beige"; "Shiny Caviar Mini Preppy Coco Shoulder Bag Dark Blue" |
+| 8 | Chanel | Wild Stitch | 44 | 3 | TLC35, FP6, TRR3 | $2,902 | "Calfskin Wild Stitch Top Handle Bag Black"; "Calfskin Quilted Wild Stitch Large Flap Light Blue"; "Wild Stitch Shoulder Bag" |
+| 9 | Chanel | CC In Love | 53 | 2 | TLC27, FP26 | $5,791 | "Lambskin Quilted CC In Love Heart Bag Black"; "Lambskin Quilted CC In Love Heart Clutch With Chain Light Pink"; "Lambskin Quilted CC In Love Heart Clutch With Chain Purple" |
+| 10 | Chanel | Coco Cocoon | 43 | 3 | TLC21, FP19, TRR3 | $1,370 | "Nylon Quilted Coco Cocoon Reversible Tote Grey"; "Nylon Quilted Small Coco Cocoon Tote Black"; "Lambskin Quilted Large Coco Cocoon Reversible Tote Black" |
+| 11 | Chanel | Wavy CC | 39 | 3 | FP28, TLC10, TRR1 | $4,365 | "Shiny Crumpled Calfskin Quilted Small Wavy CC Hobo Black"; "Caviar Quilted Wavy CC Hobo Beige"; "Shiny Crumpled Calfskin Quilted Small Wavy CC Hobo White" |
+| 12 | Gucci | Joy | 51 | 3 | FP23, TRR19, TLC9 | $525 | "GG Monogram Medium Joy Tote Peonia Flower"; "GG Plus Monogram Joy Vertical Tote Dark Brown"; "Imprime Monogram Medium Joy Tote Bordeaux" |
+| 13 | Chanel | Paris-Biarritz | 32 | 3 | TLC14, FP9, TRR9 | $1,527 | "Coated Canvas Quilted Paris Biarritz Bowler Black"; "Coated Canvas Quilted Large Paris Biarritz Tote Black"; "Large Paris-Biarritz Tote" |
+| 14 | Saint Laurent | Y Cabas | 43 | 3 | FP19, TRR15, TLC9 | $695 | "Leather Y Cabas Medium"; "Sheepskin Small Cabas ChYc Red"; "Calfskin Small Classic Y Cabas Black" |
+| 15 | Bottega Veneta | Nodini | 40 | 3 | TLC30, FP6, TRR4 | $790 | "Nappa Intrecciato Nodini Crossbody Messenger Red"; "Nappa Intrecciato Nodini Crossbody Messenger Noce"; "Nappa Intrecciato Nodini Crossbody Messenger Green" |
+| 16 | Louis Vuitton | Melrose Avenue | 34 | 3 | TLC30, TRR3, FP1 | $1,069 | "Monogram Vernis Melrose Avenue"; "Vernis Melrose Avenue Amarante" |
+| 17 | Bottega Veneta | Roma | 33 | 4 | TLC22, FP8, TRR2, eBay1 | $1,095 | "Ostrich Small Roma Tote Limestone"; "Nappa Intrecciato Small Roma Tote Red"; "Light Calf Intrecciato Small Roma Tote Light Tourmaline" |
+| 18 | Louis Vuitton | Bellevue | 29 | 3 | FP13, TLC9, TRR7 | $626 | "Vernis Bellevue PM Pomme D'Amour"; "Vernis Bellevue GM Violet"; "Vernis Bellevue PM Violet" |
+| 19 | Bottega Veneta | Point (The Point) | 42 | 2 | TLC33, FP9 | $992 | "Calfskin Small The Point Triangle Bag Black"; "Calfskin Small The Point Triangle Bag Cinnabar"; "Calfskin Medium The Point Triangle Bag Almond" |
+| 20 | Chanel | Funky Town | 27 | 2 | FP15, TLC12 | $5,030 | "Denim Quilted Medium Funky Town Flap Black"; "Lambskin Quilted Large CC Funky Town Flap Black"; "Lambskin Quilted Mini Funky Town Flap Pink" |
+| 21 | Chanel | Chic Pearls | 27 | 2 | FP15, TLC12 | $2,754 | "Goatskin Quilted Chic Pearls Flap Black"; "Lambskin Quilted Chic Pearls Flap Black"; "Goatskin Quilted Chic Pearls Flap Dark Pink" |
+| 22 | Chanel | Coco Base | 35 | 1 | FP35 | $9,735 | "Suede Calfskin Shiny Lambskin Quilted Small Coco Base Shopping Bag Beige Black"; "Suede Calfskin Shiny Lambskin Quilted Large Coco Base Shopping Bag Beige Black"; "Calfskin Quilted Small Coco Base Shopping Bag Khaki" |
+| 23 | Chanel | Twist Your Buttons | 21 | 3 | FP11, TLC8, TRR2 | $4,289 | "Caviar Quilted Mini Twist Your Buttons Flap Black"; "Caviar Quilted Small Twist Your Buttons Flap Black"; "Caviar Quilted Twist Your Buttons Mini Bucket Bag White" |
+| 24 | Prada | Vela | 39 | 2 | FP34, TRR5 | $665 | "Nylon Vela Saffiano Mini Bucket Crossbody Bag"; "Nylon Vela Saffiano Single Buckle Messenger Shoulder Bag Black"; "Nylon Vela Medium Backpack Black" |
+| 25 | Louis Vuitton | Pleaty | 23 | 3 | FP16, TLC6, TRR1 | $2,560 | "Monogram Denim Mini Pleaty Blue"; "Monogram Denim Mini Pleaty Fuchsia"; "Monogram Denim Pleaty Blue" |
 
-## Cleanup note 1 — spelling variants to MERGE, not add
+## Confidence flags — read before adding blind
 
-These aren't new models — they're a seller's spelling of a model we already have. Map them as aliases:
+Every candidate above is a real, verifiable model in the sample titles. A few need a judgment call:
 
-- **Celine "Triumph" (13, TLC) → Triomphe.** TLC mis-renders Triomphe as "Triumph"; 13 listings are landing as unmatched purely on spelling.
+- **Bowling (#3)** is a bag *shape* Chanel uses across sub-lines (Coco Beach, Preppy Coco). Adding it catalogues those bags, but decide whether you want one "Bowling" page or want it nested under the parent lines.
+- **Coco Preppy (#7)** overlaps **Bowling** and **Coco Beach** — the "Preppy Coco" listings appear under both. Add them together and decide the parent so the same bag doesn't land on two pages.
+- **Coco Base (#22)** is single-source (Fashionphile only) but the three titles are unambiguous, a real recent Chanel line. Fine to add; just note the one-seller evidence.
+- **CC In Love (#9)** and **Chic Pearls (#21)** include heart-shaped clutches-with-chain — bags, not accessories, but confirm you want the clutch variants catalogued.
 
-## Cleanup note 2 — descriptor words to IGNORE (not models)
+## Two cleanup notes (spelling variants to merge, words NOT to add)
 
-These clustered high but are **materials, prints, or shapes**, not model names. Don't add them:
+- **Merge, don't double-add:** "Funky Town" and "Funky Town Flap" are the same model (~45 rows combined), add one "Funky Town". Same for "Paris-Biarritz" / "Paris Biarritz" (hyphen vs space) and "Coco Base" / "Coco Base Shopping Bag".
+- **Do NOT add as models:** shape/material descriptors that cluster on their own, such as "Clutch with Chain", "Shopping Bag", "Reporter", "Triangle Bag". They're bag *types*, not model names; adding them would mis-file real bags.
 
-- **Chanel "round" / "square" / "rectangular" (24 / 16 / 11):** these are *shapes of the Classic Flap*, not separate models — route to Classic Flap sizing instead.
-- **Chanel "coco mark" (22, TLC):** Japanese-reseller shorthand for the CC logo, applied to many models.
-- **Chanel "matelasse":** French/JP for "quilted" — a finish, not a model.
-- **Gucci "Web" (31), "Guccissima" (11), Fendi "Zucca" (9), Prada "Vitello Daino" (13), BV "Nappa" (10), Dior "Oblique" (13) / "Cannage" (10), Saint Laurent "Grain de Poudre" (8):** these are canvas prints or leather types spanning many shapes, not single bags.
-- **"MICHAEL Michael Kors" parsed as model "michael" (26):** a parse artifact of the diffusion-line name.
+## How this was built
 
-## Finding for the pipeline (not a dictionary gap)
-
-**The Luxury Closet rows store a placeholder in `raw_name`** ("unmatched-model … captured for triage") and put the real title in `style_guess`. The matcher reads `raw_name`, so **every TLC row misses the dictionary even for models we already have** (Duma, Kelly, Timeless all surfaced here as false gaps until I also tested `style_guess`). Worth fixing in the TLC ingest so promotion can catch known models automatically. ~2,700 rows were recovered just by testing both fields.
-
----
-
-*n = 41,266 unpromoted `discovered_listing` rows as of 2026-07-10. Counts are distinct listings
-(dedup'd by `listing_ref`). Ranking = distinct-listing count × house-value weight. Read-only run:
-no dictionary edit, no promotion, no migration. Sources present in the backlog: Fashionphile,
-TheRealReal, The Luxury Closet (Redeluxe / Couture USA / Anns / MyGemma / eBay carried no ≥3-listing
-unmatched clusters this pass).*
+- Read all **~96,000** unpromoted `discovered_listing` rows (keyset-paged by id, retried through the DB statement timeout).
+- Dropped rows the dictionary already recognises (a promotion backlog, not a gap) and dropped accessories/apparel (wallets, belts, card holders, clothing).
+- Grouped the rest by house + the clean short model name in each listing, ranked by how often it recurs, weighted up for higher-value houses and wider source spread.
+- **Every candidate is backed by real listing titles** (shown as evidence). Where the name might be a shape/sub-line rather than a true model, it's flagged above, don't add those blind.
+- Report only. It does not edit the dictionary, promote, or migrate. Adding a model is the owner's call.
