@@ -239,6 +239,38 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-14 (run 18)** — FENDI BAGUETTE PRODUCTION-CANON pull (owner directive: canon = what the HOUSE
+  made per its OWN documentation, not what resale shows). Deepened the banked Baguette selector rows (STYLE 4 of
+  `booktote-...-production-matrix.md`) into a house-documentation-led production canon and ANSWERED the brief's
+  blue-Mini question. **KEY RESULT: the blue Mini is HOUSE-CONFIRMED** — fendi.com PDP **8BS017AVTAF0E2A**,
+  "Baguette Mini... blue and black sequins... FF motif... FF clasp" (Baguette Mini in a blue colourway, HIGH
+  confidence, Fendi's own site). **Official vs reseller size nomenclature resolved:** OFFICIAL Fendi terms =
+  **Baguette (Medium/standard, the 1997 original ~26-27cm), Mini (~19cm), Nano (~11cm charm), Baguette Chain /
+  Baguette Chain Midi / Chain Midi Soft (chain-strap FORMATS, "Midi" = Fendi's medium-with-chain, PDP-confirmed
+  14.5cm H jacquard), Mamma/Mama Baguette (SS2025 soft drawstring reissue — official NAME but a distinct
+  silhouette)**; RESELLER-INVENTED / unconfirmed = **"Pico"** (Rebag charm-below-Nano), **"Large"/"Grande"**
+  (Vogue/reseller descriptor for oversized runs — Fendi made oversized Baguettes but "Large" is not clean current
+  fendi.com nomenclature), **"Micro"** (used interchangeably with Nano). fendi.com currently filters the live
+  Baguette line to **Medium + Mini** only. **Multi-size structure is a REVIVAL-ERA (2019+) phenomenon** — the
+  1997-2000s run was essentially ONE standard shoulder size + a larger "Mamma", with variation living in the
+  SURFACE not the size. **Materials/lines house-documented** (Vogue Italia Vintage post + Hand in Hand book +
+  glamobserver + Christie's): leather (nappa/calf), Zucca/FF logo canvas + FF jacquard + FF 1974 embossed,
+  Selleria (Cuoio Romano hand-stitch), sequins/beaded/embroidered (the "1,000+ variations" signature), raffia,
+  exotic (croc/python/ostrich), fur/shearling, + brocade/tapestry/inlaid/denim per-listing. **Colour rule HELD:
+  Fendi does NOT name colours — descriptors only** (Black/Brown-Tobacco/Beige-Camelia/White/Pink/Red/Blue/Spring
+  Turquoise + multicolour sequin editions). **House-documentation sources this run:** fendi.com Baguette PDPs
+  (Mini blue-black sequin 8BS017AVTAF0E2A; Baguette Chain Midi 8BR793 jacquard 14.5cm) + collection page (current
+  sizes = Medium/Mini); the Rizzoli **Fendi Baguette book** (250pp) + the **"Hand in Hand" book** (30 Italian
+  artisans reinterpret the bag by craft, WWD + Wallpaper); Vogue Italia Vintage IG (Zucca + Selleria, 1997);
+  Christie's video (1,000+ iterations since 1997, "compact and rectangular"). **Tooling:** 4 firecrawl_search, all
+  refunded 2→1 via feedback within window (~4 credits net); no scrape of fendi.com wholesale (Akamai risk) — the
+  official PDP facts came via clean fendi.com SEARCH SNIPPETS. **HELD RIGOR:** did NOT assert any size×colour×
+  material combo as "never made" (the record does not support negatives — only presence is documented); "Pico"/
+  "Large"/"Micro" flagged reseller not promoted to official; the per-era size availability (which sizes existed
+  1997-2010 vs post-2019) is the one axis still under-documented from house primaries — best primary record would
+  be the Rizzoli Baguette book's plates + a fendi.com archive pass (owner-present Chrome, Akamai-walled for
+  Firecrawl). **Next unit: the HERMÈS seasonal-color backfill pre-2015 (highest-GEO-value open gap), or the
+  owner-present Chrome fendi.com/.com archive batch for per-era Baguette size + the Kan I/Kan U/Touch dating.**
 - **2026-07-13 (run 17)** — SELECTOR-SEED unit (not a naming pull), continuing the series after the
   kelly-woc-saddle-chanel19-dionysus-horsebit matrix. Extended the production-driven variant selector to
   SIX more styles: **Dior Book Tote (454)**, **Fendi Peekaboo (205)**, **YSL Loulou (460)**, **Fendi

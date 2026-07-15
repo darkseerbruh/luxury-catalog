@@ -14,7 +14,8 @@ import { slugify } from "@/lib/queries";
 export default function BagDNA({
   brandId,
   brandName,
-  brandTier,
+  brandFoundedYear,
+  brandCountry,
   leather,
   hardware,
   silhouette,
@@ -24,7 +25,8 @@ export default function BagDNA({
 }: {
   brandId: number;
   brandName: string;
-  brandTier: string | null;
+  brandFoundedYear: number | null;
+  brandCountry: string | null;
   leather: string | null;
   hardware: string | null;
   silhouette: string | null;
@@ -32,14 +34,20 @@ export default function BagDNA({
   yearStart: number | null;
   yearEnd: number | null;
 }) {
+  // House card subtitle = a heritage line ("est. 1925 · Italy"), never the raw
+  // House Standing tier number (owner 2026-07-14: "Fendi 3" meant nothing). Falls
+  // back to whichever half we hold, and to null when we hold neither.
+  const houseMeta =
+    [brandFoundedYear ? `est. ${brandFoundedYear}` : null, brandCountry].filter(Boolean).join(" · ") ||
+    null;
   const eraDecade = yearStart != null ? Math.floor(yearStart / 10) * 10 : null;
   const eraYears =
     yearStart != null ? (yearEnd != null ? `${yearStart}–${yearEnd}` : `${yearStart} to now`) : null;
   const dnaCards: (DnaCardProps | null)[] = [
     {
-      label: "Brand",
+      label: "House",
       value: brandName,
-      meta: brandTier ? brandTier.replace("-", " ") : null,
+      meta: houseMeta,
       href: `/brand/${brandId}`,
       initial: brandName.trim().charAt(0).toUpperCase() || "·",
     },
@@ -140,7 +148,7 @@ function DnaCard({ label, value, meta, href, swatch, initial }: DnaCardProps) {
       <span className="min-w-0">
         <span className="block text-[10px] uppercase tracking-wide text-muted">{label}</span>
         <span className="block truncate text-[15px] text-foreground">{value}</span>
-        {meta && <span className="block truncate text-[11px] capitalize text-muted">{meta}</span>}
+        {meta && <span className="block truncate text-[11px] text-muted">{meta}</span>}
       </span>
       <span aria-hidden className="absolute bottom-3 right-3 text-gold">
         &rsaquo;

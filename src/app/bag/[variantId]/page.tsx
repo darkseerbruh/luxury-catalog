@@ -60,7 +60,6 @@ import WantBreadth from "./WantBreadth";
 import { colorFamily } from "@/lib/listings-taxonomy";
 import { translateProvenance } from "@/lib/provenance";
 import { BagImage } from "@/components/BagImage";
-import CompareControls from "@/components/CompareControls";
 
 // Dynamic (per-request) render. This page was briefly switched to ISR
 // (`revalidate = 3600` + empty `generateStaticParams`) for the perf win, but its
@@ -278,16 +277,20 @@ function Collapsible({
 /** In-page jump navigation to the major sections (anchor links). */
 function JumpNav({ items }: { items: { id: string; label: string }[] }) {
   if (items.length === 0) return null;
+  // Reads as a page nav, not filter tags (owner 2026-07-14: the pill chips looked
+  // like selectable tags, and no web convention says "these are anchors"). A quiet
+  // "On this page" label + underlined text links carry the jump-to affordance.
   return (
     <nav
       aria-label="On this page"
-      className="flex flex-wrap gap-2 rounded-2xl border border-border bg-surface p-4"
+      className="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 border-y border-border py-3 text-sm"
     >
+      <span className="mr-1 text-xs uppercase tracking-wide text-muted/70">On this page</span>
       {items.map((it) => (
         <a
           key={it.id}
           href={`#${it.id}`}
-          className="rounded-full border border-border px-3 py-1 text-xs text-muted transition-colors hover:border-gold hover:text-gold"
+          className="text-muted underline decoration-border underline-offset-4 transition-colors hover:text-gold hover:decoration-gold"
         >
           {it.label}
         </a>
@@ -409,6 +412,18 @@ export default async function BagDetailPage({
       : "Not currently listed in production in our records — a best read, not the maker's word. Know otherwise? Suggest an edit below.";
 
   const leadAnswer = buildLeadAnswer(v);
+  // Only surface the GEO lead box when it carries a real fact. With no material,
+  // silhouette, year, price, dimensions or auth marker, buildLeadAnswer degrades
+  // to bare filler ("...is a designer bag."), which owner flagged 2026-07-14 as
+  // worthless on-page. The string still feeds metadata/JSON-LD regardless.
+  const leadIsSubstantive = Boolean(
+    v.exteriorMaterial?.name ||
+      v.style.silhouette ||
+      v.yearStart ||
+      v.retailPriceOriginal ||
+      v.authenticationMarkers ||
+      v.productionRecords.some((r) => r.dimensionsHCm || r.dimensionsWCm || r.dimensionsDCm),
+  );
   const faq = buildFaq(v);
   const updated = v.createdAt
     ? new Date(v.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
@@ -888,6 +903,33 @@ export default async function BagDetailPage({
         savedVariantIds={userState.closetStatus === "want" ? [v.variantId] : []}
       />
 
+      {/* Broaden a want across colourways — sits directly under the selector it
+          modifies (owner 2026-07-14: it was stranded far below the colour choice).
+          Only when the style actually has colour variation. */}
+      {(() => {
+        const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
+        if (colours.size < 2) return null;
+        return (
+          <WantBreadth
+            variantId={v.variantId}
+            colorFamily={colorFamily(v.exteriorColorway)}
+            initialBreadth={userState.closetStatus === "want" ? "exact" : null}
+          />
+        );
+      })()}
+
+      {/* Closet intent (want/have/had) + price watch + Buy/Sell CTAs, pulled up
+          directly under the hero so the save + money moments sit right below the
+          image, not 600 lines down (owner 2026-07-14). */}
+      <BagActions
+        variantId={v.variantId}
+        signedIn={userState.signedIn}
+        hasBuyLinks={hasBuyLinks}
+        hasSellLinks={hasSellLinks}
+        initialClosetStatus={userState.closetStatus}
+        initialWatching={userState.watching}
+      />
+
       {/* Produced-but-unlisted stub: this colourway/size exists, we just have no photo or
           price yet. Say so warmly + invite a photo (UGC), never a broken-looking empty page. */}
       {isDataStub && (
@@ -925,10 +967,13 @@ export default async function BagDetailPage({
         <SeasonalShades colourFamily={v.exteriorColorway} shades={recordedShades} />
       )}
 
-      {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote. */}
-      <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
-        {leadAnswer}
-      </p>
+      {/* Front-loaded answer (GEO): the fact-dense lead AI assistants can quote.
+          Hidden when it degrades to bare filler (see leadIsSubstantive). */}
+      {leadIsSubstantive && (
+        <p className="-mt-2 rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-base leading-relaxed text-foreground">
+          {leadAnswer}
+        </p>
+      )}
 
       {/* Above-the-fold decision summary: value range + key identity + retail. */}
       <section
@@ -949,6 +994,7 @@ export default async function BagDetailPage({
           demandLabel={demand.label}
           retailTrendPct={retailChange}
           scopeLabel={valueScopeLabel}
+          subject={[v.brand.name, v.style.name, v.sizeLabel, v.exteriorColorway].filter(Boolean).join(" · ")}
           mixNote={(() => {
             const sold = recordedSales.filter((h) => h.priceType === "sold").length;
             const ask = recordedSales.length - sold;
@@ -1009,23 +1055,6 @@ export default async function BagDetailPage({
         </section>
       )}
 
-      {/* Decision cluster at the value moment: closet intent (want/have/had) +
-          price watch + the Buy/Sell outbound CTAs — the monetization moments,
-          above the fold rather than 600 lines down. */}
-      <BagActions
-        variantId={v.variantId}
-        signedIn={userState.signedIn}
-        hasBuyLinks={hasBuyLinks}
-        hasSellLinks={hasSellLinks}
-        initialClosetStatus={userState.closetStatus}
-        initialWatching={userState.watching}
-      />
-
-      <CompareControls
-        variantId={v.variantId}
-        label={[v.brand.name, v.style.name, v.sizeLabel].filter(Boolean).join(" ")}
-      />
-
       {/* Authentication at a glance — the value read and the "is it real" read
           belong on the same screen (the two anxieties are answered together or
           the buyer bounces). A 3-marker digest; the full checklist is below. */}
@@ -1062,19 +1091,6 @@ export default async function BagDetailPage({
         </div>
       )}
 
-      {/* Broaden a want across colourways, when the style actually has colour variation. */}
-      {(() => {
-        const colours = new Set(styleVariants.map((sv) => sv.exteriorColorway).filter(Boolean));
-        if (colours.size < 2) return null;
-        return (
-          <WantBreadth
-            variantId={v.variantId}
-            colorFamily={colorFamily(v.exteriorColorway)}
-            initialBreadth={userState.closetStatus === "want" ? "exact" : null}
-          />
-        );
-      })()}
-
       {/* In-page jump navigation (progressive disclosure / mobile long-scroll). */}
       <JumpNav items={jumpItems} />
 
@@ -1082,7 +1098,8 @@ export default async function BagDetailPage({
       <BagDNA
         brandId={v.brand.brandId}
         brandName={v.brand.name}
-        brandTier={v.brand.tier || null}
+        brandFoundedYear={v.brand.foundedYear}
+        brandCountry={v.brand.countryOfOrigin}
         leather={v.exteriorMaterial?.name ?? null}
         hardware={v.hardwareColor}
         silhouette={v.style.silhouette}

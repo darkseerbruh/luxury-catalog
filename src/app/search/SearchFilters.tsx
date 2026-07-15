@@ -10,7 +10,6 @@ import type {
 import { track, EVENTS } from "@/lib/analytics/events";
 import { BagImage } from "@/components/BagImage";
 import { QuickSaveHeart } from "@/components/QuickSaveHeart";
-import { CompareToggle, CompareTray } from "@/components/CompareControls";
 import { tierDisplay } from "@/lib/house-standing";
 
 type SortKey = "relevance" | "az" | "count";
@@ -365,14 +364,6 @@ export default function SearchFilters({
                       <span className="text-muted">{variant.hardwareColor} hardware</span>
                     )}
                   </Link>
-                  <CompareToggle
-                    variantId={variant.variantId}
-                    label={[style.brandName, style.styleName, variant.sizeLabel]
-                      .filter(Boolean)
-                      .join(" ")}
-                    compact
-                    className="shrink-0"
-                  />
                   <QuickSaveHeart variantId={variant.variantId} source="search" className="shrink-0" />
                 </li>
               ))}
@@ -406,7 +397,6 @@ export default function SearchFilters({
           )}
         </div>
       ))}
-      <CompareTray />
     </div>
   );
 }

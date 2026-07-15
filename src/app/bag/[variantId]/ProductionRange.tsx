@@ -17,39 +17,38 @@ export default function ProductionRange({ axes }: { axes: ProductionAxis[] }) {
         What the house has produced this bag in, from our sourced records.
       </p>
 
-      <div className="mt-4 flex flex-col gap-4">
+      {/* Read-only reference, NOT the selector. Rendered as quiet inline text (no
+          pill chips) so it never reads as a clickable option the way the "Choose
+          your …" selector does (owner 2026-07-14: the pill chips looked selectable
+          and the "seasonal" label read like another chip). These become real
+          selector axes once we hold a variant row per finish. */}
+      <div className="mt-4 flex flex-col gap-3">
         {shown.map((axis) => {
           const permanent = axis.options.filter((o) => o.permanence === "permanent");
           const seasonal = axis.options.filter((o) => o.permanence !== "permanent");
           return (
-            <div key={axis.axis}>
-              <p className="mb-1.5 text-xs uppercase tracking-wide text-muted/70">{axis.label}</p>
-              <div className="flex flex-wrap items-center gap-2">
-                {permanent.map((o) => (
-                  <span
-                    key={o.value}
-                    title={o.note ?? undefined}
-                    className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-foreground"
-                  >
+            <div key={axis.axis} className="flex flex-col gap-0.5">
+              <p className="text-xs uppercase tracking-wide text-muted/70">{axis.label}</p>
+              <p className="text-sm leading-relaxed text-foreground">
+                {permanent.map((o, i) => (
+                  <span key={o.value} title={o.note ?? undefined}>
+                    {i > 0 && <span className="text-muted/50">, </span>}
                     {o.value}
                     {o.isDefault && <span className="ml-1 text-[10px] uppercase tracking-wide text-gold">default</span>}
                   </span>
                 ))}
-                {seasonal.length > 0 && (
-                  <>
-                    <span className="text-[11px] uppercase tracking-wide text-muted/60">seasonal</span>
-                    {seasonal.map((o) => (
-                      <span
-                        key={o.value}
-                        title={o.note ?? undefined}
-                        className="rounded-full border border-dashed border-border/70 px-3 py-1 text-sm text-muted"
-                      >
-                        {o.value}
-                      </span>
-                    ))}
-                  </>
-                )}
-              </div>
+              </p>
+              {seasonal.length > 0 && (
+                <p className="text-sm leading-relaxed text-muted">
+                  <span className="text-[11px] uppercase tracking-wide text-muted/60">Seasonal: </span>
+                  {seasonal.map((o, i) => (
+                    <span key={o.value} title={o.note ?? undefined}>
+                      {i > 0 && <span className="text-muted/40">, </span>}
+                      {o.value}
+                    </span>
+                  ))}
+                </p>
+              )}
             </div>
           );
         })}
