@@ -494,6 +494,25 @@ engagement plays, then the mixed-format supporting pieces.
   works" GEO pieces (#19 colors, #10 Dior, #24 Prada) as the model-plus-craft case, and Loewe is the
   honest MIDDLE color case (it labels seasonal colorways like SS24's Emerald Green/Sahara, but descriptively).
 
+### 26. Which Hermès blue is which: the eight blues, decoded by official code (Colvert, Izmir, Paon, Electrique…)
+- **Format:** Article (GEO reference) + IG carousel ("8 Hermès blues, one chart") + a TikTok "name that blue in 30 sec."
+- **Finding:** Hermès's blues are the single most-confused, most-collected corner of the palette, and the run-20
+  archive now resolves them to their **official codes**: **Bleu Colvert 1P** (mallard teal), **Bleu Electrique 7T**
+  (vivid electric), **Bleu Izmir 7W** (cyan-turquoise), **Bleu Paon 7F** (peacock), **Bleu Atoll 3P** (tropical
+  turquoise), **Bleu Encre M3** (ink navy), **Bleu Zanzibar B3** (teal-green), **Bleu Agate R2** (grey-blue), plus
+  the dated recents already banked (Bleu Saphir 73 / 2016, Bleu France 71 / 2021, Bleu Royale O8 / SS2022, Bleu du
+  Nord P3 / SS2019, Bleu Hydra T7). Source: `hermes.md` §5c + §4; Lilac Blue code chart (codes) + Christie's/PurseBop
+  (dated recents). Confidence: codes `medium` (single chart), the year-dated blues `high`/`medium`.
+- **Metric:** GEO. "What is Bleu Izmir / Hermès blue names / which Hermès blue should I get" is exactly the
+  gatekept-vocabulary query the moat is built on, and no house page lays the blues side by side with codes.
+  Compounds. The "which blue is which" carousel also rides the steady #BagTok colour-ID stream (engagement floor).
+- **What it needs:** Copywriter, plus an honest in-piece caveat: the §5c blues carry a **sourced name + code but not
+  a sourced debut season** (year not yet anchored), so the piece states the code and identity and says "season not
+  yet dated" rather than inventing a year. The dated blues (Saphir 2016, France 2021, Royale SS2022) are the ones
+  that carry a year. Codes are reseller-chart-sourced (`medium`), stated as such, not as a house-published table.
+- **CTA tie:** Hermès brand handoff → Birkin / Kelly pages, colour-filterable. Top-AOV seller CTA. Pairs with #4
+  (the neutrals-and-codes guide) as the two halves of the Hermès colour-code GEO cluster.
+
 ---
 
 ## DO FIRST (the 5 highest-leverage picks)
