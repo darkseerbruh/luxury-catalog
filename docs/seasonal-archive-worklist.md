@@ -239,6 +239,28 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-14 (run 19)** — FENDI BAGUETTE production canon COMPLETED into a full loadable **SIZE × MATERIAL
+  (× COLOUR) MATRIX** (owner directive: make Material a selectable axis; canon = what the HOUSE documented).
+  Delivered `docs/research-drafts/seasonal-archive/fendi-baguette-matrix.json` (50 size×material cells + 20
+  documented colour combos, each flagged `sourced:true/false` + source + confidence) and completed the grid in
+  `docs/research-drafts/fendi-baguette-production-canon.md`. **8 firecrawl_search (5 refunded 2→1, 3 window-expired
+  = ~11 credits net); all fendi.com facts arrived as clean SEARCH SNIPPETS/PDP titles, NO wholesale fendi.com
+  scrape (Akamai).** **KEY NEW HOUSE-DOCUMENTED CELLS (all fendi.com PDPs this run):** Nano×sequin/beaded
+  (7AS413 murrine charm, 3,780 beads+1,855 sequins); Mini×shearling (8BS017AW5R teddy); Medium×FF jacquard
+  (8BR600A6V5 brown), ×Selleria (8BR600ARBB cappuccino + 8BR600AVQQ mercury-blue, 612 topstitches), ×sequin
+  (8BR600AMP white), ×raffia (8BR600AWQ6 hazelnut + 8BR600AY5G multicolor ruffles), ×crocodile (8BR600AS77,
+  $28,400); Chain Midi Soft Trunk×Selleria (7VA565 black, 253 topstitches); Mamma/"Baguette Soft"×nappa
+  (8BR833AQ0D black/purple/blue/brown, 26.5×18×8.5cm) + ×shearling (8BR833AYCU beige); Medium×Denim/Artisan =
+  the official **Hand in Hand** project (fendi.com/sustainability + WWD book, ateliers reinterpret the Baguette).
+  **STYLE-CODE DECODER nailed (GEO-valuable):** 8BR600=Iconic/Medium · 8BS017=Mini · 8BR793=Chain Midi ·
+  8BR833=Mamma/Soft Medium · 7AS413=Nano Charm · 7VA565=Selleria Soft Trunk. **Mamma = officially "Baguette
+  Soft"** on fendi.com (not a separate model name in the PDP title). **HELD RIGOR:** ⬜ cells flagged
+  not-yet-sourced NOT never-made (no negatives); Mamma×raffia left ⬜ (a YouTuber reviews both a Mamma and a
+  raffia Baguette but no Mamma-raffia PDP — did not assert); denim-specific folded under Hand-in-Hand at
+  reseller confidence. **Thinnest axis still = per-era size availability (1997-2010 vs 2019+)** — best primary =
+  Rizzoli Baguette book + Hand-in-Hand book + owner-present fendi.com archive (Chrome). **Next unit: the HERMÈS
+  seasonal-color backfill pre-2015 (highest-GEO-value open gap), or the owner-present Chrome fendi.com archive
+  batch for the ⬜ Nano/Chain-Midi/Mamma material cells + per-era size dating.**
 - **2026-07-14 (run 18)** — FENDI BAGUETTE PRODUCTION-CANON pull (owner directive: canon = what the HOUSE
   made per its OWN documentation, not what resale shows). Deepened the banked Baguette selector rows (STYLE 4 of
   `booktote-...-production-matrix.md`) into a house-documentation-led production canon and ANSWERED the brief's

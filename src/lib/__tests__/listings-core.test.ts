@@ -279,6 +279,32 @@ describe("slugTitleFromUrl", () => {
     ).toBe("chanel green micro mini classic caviar single flap");
     expect(slugTitleFromUrl(null)).toBe("");
   });
+  it("strips a Rebag id glued to the last word so size stays detectable", () => {
+    // "…canvas mini4156311" must reduce to "…canvas mini", not "…canvas mini4156311".
+    expect(slugTitleFromUrl("https://shop.rebag.com/products/handbags-fendi-baguette-nm-bag-zucca-canvas-mini4319745"))
+      .toBe("handbags fendi baguette nm bag zucca canvas mini");
+    // A model number mid-title (FF 1974) is preserved; only the trailing id goes.
+    expect(slugTitleFromUrl("https://www.fashionphile.com/products/fendi-ff-1974-medium-baguette-black-1908574"))
+      .toBe("fendi ff 1974 medium baguette black");
+  });
+});
+
+describe("scoreListingFace — wrong bags never front a variant", () => {
+  const nanoBlack = { colorway: "Black", sizeLabel: "Nano", hardwareColor: null, styleName: "Baguette" };
+  it("penalizes a conflicting size (a Mini listing on a Nano variant)", () => {
+    expect(scoreListingFace("fendi baguette zucca canvas mini", nanoBlack)).toBeLessThan(0);
+  });
+  it("penalizes a novelty/embellished edition (studded / charm)", () => {
+    expect(scoreListingFace("fendi micro flowerland studded double baguette", nanoBlack)).toBeLessThan(0);
+    expect(scoreListingFace("fendi chain baguette charm bag patent nano", nanoBlack)).toBeLessThan(0);
+  });
+  it("penalizes a distinct sub-model (Double Baguette / Trunk / Fendace)", () => {
+    expect(scoreListingFace("fendi double baguette nano black", nanoBlack)).toBeLessThan(0);
+    expect(scoreListingFace("fendi baguette trunk nano", nanoBlack)).toBeLessThan(0);
+  });
+  it("rewards a correct same-size, same-colour Baguette", () => {
+    expect(scoreListingFace("fendi nano baguette black leather", nanoBlack)).toBeGreaterThan(0);
+  });
 });
 
 describe("faceLowPricePenalty", () => {

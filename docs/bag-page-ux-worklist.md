@@ -28,8 +28,14 @@ they reflect what Fendi made, not our listing coverage.
   `visibleDims` alone decides if Colour is a real axis (it already collapses a single-print style
   like LV Monogram to one colourway, so no LV regression; 17 variant-dims tests green). Verified
   on the live Mama page: Colour axis now shows (Beige/Black chips present).
-- [ ] **4. Wrong / broken images.** Micro thumb = jewelry; Nano-black + a crop aren't Baguettes.
-  Image-QA DATA pass (wrong-bag + bad crops) — needs the image pipeline, not this page's code.
+- [x] **4. Wrong / broken images.** FIXED at the source (the face picker). Root cause: candidates
+  are baguettes but the WRONG sub-variant (Double Baguette, charm bag, studded Bloody Mary, wrong
+  size), and the picker always took the top candidate even at a negative score. Fixes: added a
+  REJECTION FLOOR (best score must be >= 0, else the branded placeholder shows, never a wrong bag);
+  added Fendi sizes (nano/mama/midi) to the wrong-size veto; vetoed sub-models/novelty (double
+  baguette, trunk, fendace, studded, flowerland, bloody, charm already); and strip Rebag's product
+  id glued to the last word so size words stay detectable. Verified: Micro -> real micro baguette,
+  Mama -> suede mama, charm/studded/mini-on-nano -> rejected. 34 listings-core tests green.
 - [ ] **5. Material as selectable axis.** ALREADY SUPPORTED in code (`DIMS` includes `material`);
   it shows in the selector whenever variant rows vary by material. For the Baguette they don't
   yet, so material falls to the read-only "Made in" block. Making it selectable = load variant

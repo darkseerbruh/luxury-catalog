@@ -1075,7 +1075,12 @@ async function getAffiliateListingImages(
             (a.c.price || Infinity) - (b.c.price || Infinity) ||
             a.c.key.localeCompare(b.c.key),
         );
-      if (scored.length > 0) out.set(vid, scored[0].url);
+      // Rejection floor (owner 2026-07-14: "make them stop being wrong"). A net-
+      // negative best score means the only candidates tripped a veto — a different
+      // sub-model (Double Baguette / Trunk), a novelty/embellished edition, or a
+      // conflicting size. Better to show the branded placeholder than the wrong bag,
+      // so we only front a listing whose match is at least neutral.
+      if (scored.length > 0 && scored[0].score >= 0) out.set(vid, scored[0].url);
     }
     return out;
   } catch {

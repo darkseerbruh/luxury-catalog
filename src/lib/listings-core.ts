@@ -261,7 +261,7 @@ export interface FrontSpec {
   styleName?: string | null;
 }
 
-const SIZE_WORDS = ["micro", "mini", "small", "medium", "jumbo", "maxi", "large"];
+const SIZE_WORDS = ["micro", "nano", "mini", "small", "medium", "midi", "jumbo", "maxi", "large", "mama", "mamma"];
 
 /** Model-name fragments that, when present in a listing slug but NOT in the target style's
  *  name, mean the listing is a DIFFERENT model mislabeled into the style (owner 2026-07-12:
@@ -271,6 +271,12 @@ const SIZE_WORDS = ["micro", "mini", "small", "medium", "jumbo", "maxi", "large"
 const CROSS_MODEL_TOKENS = [
   "coco handle", "reissue", "2 55", "wallet on chain", "woc", "gabrielle",
   "boy", "top handle", "kelly", "diana", "vanity",
+  // Fendi sub-models / collabs that are their OWN product, not the plain Baguette
+  // they get titled near (a Double Baguette / Baguette Trunk / Fendace is a
+  // different bag; it must not front a plain Baguette variant). "double baguette"
+  // is the full phrase on purpose — bare "double" would veto Chanel's legit
+  // Double Flap.
+  "double baguette", "trunk", "fendace",
 ];
 
 /** Novelty/embellishment listings (charms, sequins, graffiti…) make honest comps but a
@@ -278,6 +284,7 @@ const CROSS_MODEL_TOKENS = [
 const NOVELTY_TOKENS = [
   "charm", "brooch", "embellish", "sequin", "graffiti", "crystal", "strass",
   "patch", "sticker", "pearl", "camellia", "valentine", "lucky",
+  "studded", "flowerland", "bloody",
 ];
 
 /**
@@ -335,7 +342,15 @@ export function scoreListingFace(titleOrSlug: string, spec: FrontSpec): number {
 export function slugTitleFromUrl(url: string | null | undefined): string {
   if (!url) return "";
   const seg = url.split("?")[0].replace(/\/+$/, "").split("/").pop() ?? "";
-  return seg.replace(/-p\d+$/i, "").replace(/[-_]+/g, " ").trim();
+  return seg
+    .replace(/-p\d+$/i, "")
+    .replace(/[-_]+/g, " ")
+    // Strip a trailing product-id digit run, incl. Rebag's id glued to the last
+    // word ("...canvas mini4156311" → "...canvas mini"), so size words at the end
+    // stay detectable by the \bword\b face matcher.
+    .replace(/(\D)(\d{4,})$/, "$1")
+    .replace(/\s*\d{4,}\s*$/, "")
+    .trim();
 }
 
 /** Median of a price list (empty → null). */
