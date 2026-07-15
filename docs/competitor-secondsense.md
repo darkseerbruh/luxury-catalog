@@ -4,7 +4,7 @@
 ## TL;DR (revised 2026-07-15)
 SECONDSENSE is a live, funded price-comparison engine for secondhand luxury handbags. We built the **same core** (aggregated listings + condition-graded comps + where-to-buy) for a fraction of the cost, on the **same affiliate networks and largely the same sources**.
 
-**The strategic correction:** do not concede the high-intent buy click. That is where the money is, and we already have the machine. Our depth (production canon, spot-the-fake, value read) is the **conversion multiplier on that transaction**, not an alternative to it. The one lever that unlocks live-listing breadth is **style-dictionary coverage for the top brands** (the promotion bottleneck), which is the same "develop the catalog" work we want to do anyway.
+**The strategic correction:** do not concede the high-intent buy click. That is where the money is, and we already have the machine. Our depth (production canon, spot-the-fake, value read) is the **conversion multiplier on that transaction**, not an alternative to it. The one lever that unlocks live-listing breadth is **draining the promotion backlog** (77,212 unpromoted rows, mostly resolvable and awaiting a promotion run; only ~7,852 need dictionary work), which is the same "develop the catalog" work we want to do anyway.
 
 Earlier drafts of this doc told us to cede price aggregation and lean on content/editorial. Both were wrong (evidence below). This version corrects them.
 
@@ -57,28 +57,15 @@ Not a different kind of data. Same asset class, largely the same feeds, same net
 - We **share 6 of their sources** (Fashionphile, TRR, Rebag, eBay, myGemma, Ann's) and hold sources they likely lack (The Luxury Closet is our biggest; plus Couture USA, Redeluxe).
 - Live-price breadth is **not a moat or a barrier**. It is throughput on feeds we already pull.
 
-## The money lever: the promotion bottleneck (live DB, 2026-07-15)
-Of 115,986 banked listings, only ~20,005 are live on bag pages. The blocker is **matching, not capture**.
+## The money lever: the promotion backlog (data-health scorecard, 2026-07-14)
+Of 115,986 banked listings, ~20,005 are live on bag pages. The authoritative gap is the scorecard's **`backlog-total`: 77,212 unpromoted rows**, and it **grew +9,344** since the prior run. The scorecard's own note: *"capture is outpacing promotion."* The blocker is **running promotion, not matching.**
 
-- **~111,687 are unmatched** to a catalog style, so they cannot promote.
-- Dominant reason is **catch_all**: brand is known, the specific style is missing from the dictionary. Concentrated in the top brands:
+- **Identity-blocked is small:** `no_brand ~1,316 · no_style ~4,327 · no_variant ~2,209` = **~7,852 total**. Only these need dictionary/matching work.
+- **The other ~69K are resolvable and just await a promotion run** (`promote-safe --create-new`). Capture has outpaced promotion, so the queue is backing up, not that matching is broken.
 
-| Brand | Banked but style-unmatched (catch_all) |
-|---|---|
-| Chanel | 20,695 |
-| Louis Vuitton | 16,362 |
-| Gucci | 7,709 |
-| Prada | 4,505 |
-| Hermès | ~4,557 |
-| Dior | 3,716 |
-| Saint Laurent | 3,505 |
-| Bottega Veneta | 2,680 |
-| Celine | 2,315 |
-| Fendi | 2,252 |
+**Correction (2026-07-15):** an earlier version of this section claimed ~111,687 unmatched with a per-brand "catch_all" table (Chanel 20,695, LV 16,362, ...). That was wrong. It read `unresolved_reason`, an ingest-time field set on 115,983 of 115,986 rows and never cleared on promotion, so it does not reflect current match state. The scorecard's `backlog-total` and reason split above supersede it.
 
-(no_style 5,617; no_brand 1,854 are the smaller buckets.)
-
-**So the single lever that unlocks live-listing breadth is style-dictionary coverage for the top brands.** Chanel + LV alone are ~37K banked listings waiting on styles. Expanding those dictionaries turns banked into matchable into promotable into live. It moves outbound conversion (more buy clicks on our page), organic acquisition (more real inventory indexed), and doubles as the GEO asset. It is exactly "develop the catalog," not content marketing.
+**So the lever is two moves, in order:** (1) run promotion (`promote-safe --create-new`) to drain the ~69K resolvable backlog, which is where most of the live-listing breadth is; (2) a smaller dictionary pass for the ~7,852 identity-blocked. Both move outbound conversion (more live listings = more buy clicks on our page) and organic acquisition, and double as the GEO asset. This is "develop the catalog," not content marketing. Separately, the scorecard flags Fashionphile capture stale ~4.9 days (a capture-cadence issue, not a matching one).
 
 ## Content is a weak lever (owner observation 2026-07-15 + evidence)
 Their data journalism is the best version of the play and pulls ~30 likes per TikTok. My take: content *about* the data is a weak growth lever; deprioritize it. The **catalog pages themselves** (structured, sourced, production-canon) are the content that earns search + AI citation. Keep a thin social presence for launch trust, not as the engine.
@@ -105,7 +92,7 @@ We win the decider by making the decision easier and the buy click happen on our
 **Open:** commission rates behind their standard-network links (not visible); price-over-time chart (none seen); their agent-commerce traction.
 
 ## Recommended path (rated, with the metric each moves)
-- **A. Own the buy click via catalog throughput (RECOMMENDED).** Fix the promotion bottleneck (dictionary coverage for top brands), turn on dark sources (Rebag/myGemma/Couture/Ann's/Redeluxe), keep depth on the bag page next to the buy button. *Moves: outbound conversion + organic acquisition.*
+- **A. Own the buy click via catalog throughput (RECOMMENDED).** Drain the 77,212-row promotion backlog (run `promote-safe --create-new` for the ~69K resolvable, a dictionary pass for the ~7,852 identity-blocked), keep promotion running ahead of capture, turn on dark sources (Rebag/myGemma/Couture/Ann's/Redeluxe), keep depth on the bag page next to the buy button. *Moves: outbound conversion + organic acquisition.*
 - **B. Compete on content/editorial.** *Moves: engagement weakly (their ~30 likes prove the ceiling). Not recommended.*
 - **C. Rebrand to "Second Sense."** Blocked; name is theirs.
 
