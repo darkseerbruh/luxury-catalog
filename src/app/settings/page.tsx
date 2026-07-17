@@ -63,6 +63,18 @@ export default async function SettingsPage() {
       </Section>
 
       <Section
+        title="Your data"
+        description="Download a copy of everything tied to your account as a JSON file."
+      >
+        <a
+          href="/api/me/export"
+          className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-gold hover:text-gold"
+        >
+          Download my data
+        </a>
+      </Section>
+
+      <Section
         title="Delete account"
         description="Permanently remove your account and all your data."
       >
