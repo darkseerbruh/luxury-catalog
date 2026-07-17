@@ -114,6 +114,19 @@ export async function deleteAccount(formData: FormData): Promise<SettingsResult>
 
   try {
     const admin = getSupabaseAdmin();
+
+    // Most user tables FK auth.users with ON DELETE CASCADE, so deleting the
+    // auth user clears them. Two do NOT cascade to erasure, so handle them here
+    // for a complete Art. 17 deletion:
+    //  - newsletter_subscriber is email-keyed with no FK to the account.
+    //  - thrift_find / bag_request are ON DELETE SET NULL (anonymized, not
+    //    removed); hard-delete this user's rows so nothing they wrote survives.
+    if (user.email) {
+      await admin.from("newsletter_subscriber").delete().eq("email", user.email);
+    }
+    await admin.from("thrift_find").delete().eq("user_id", user.id);
+    await admin.from("bag_request").delete().eq("user_id", user.id);
+
     const { error } = await admin.auth.admin.deleteUser(user.id);
     if (error) {
       console.error("deleteAccount error:", error);
