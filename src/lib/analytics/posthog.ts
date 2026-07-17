@@ -39,6 +39,30 @@ export function getConsentDecision(): ConsentDecision | null {
   }
 }
 
+/**
+ * True when the browser is sending a Global Privacy Control (GPC) opt-out signal.
+ * GPC is a legally-recognized "do not sell/share" signal, so we treat it as a
+ * standing opt-out of ALL analytics (baseline included), with no banner shown.
+ * This is what makes the privacy policy's "we honor GPC" promise real.
+ */
+export function gpcEnabled(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return (
+    (navigator as Navigator & { globalPrivacyControl?: boolean })
+      .globalPrivacyControl === true
+  );
+}
+
+/**
+ * The consent decision we actually enforce. GPC forces "denied" and cannot be
+ * overridden by a stored "granted", so a GPC visitor is never tracked. Absent a
+ * GPC signal, the stored decision (or null = undecided) applies.
+ */
+export function getEffectiveConsent(): ConsentDecision | null {
+  if (gpcEnabled()) return "denied";
+  return getConsentDecision();
+}
+
 function persistConsentDecision(decision: ConsentDecision): void {
   try {
     // The consent decision itself is functional/strictly-necessary storage.
@@ -86,6 +110,9 @@ function enableEnhancedLayer(ph: PostHog): void {
 /** Dynamically import + initialize posthog-js (cookieless baseline). Once. */
 function loadAndInit(): Promise<PostHog | null> {
   if (typeof window === "undefined" || !isAnalyticsEnabled) return Promise.resolve(null);
+  // A GPC signal or a stored "denied" is a full opt-out: never load the SDK, so
+  // not even the cookieless baseline runs. Only "granted" and undecided proceed.
+  if (getEffectiveConsent() === "denied") return Promise.resolve(null);
   if (client) return Promise.resolve(client);
   if (loading) return loading;
 
@@ -106,7 +133,7 @@ function loadAndInit(): Promise<PostHog | null> {
         disable_session_recording: true,
         loaded: () => {
           registerSessionAttribution(posthog);
-          if (getConsentDecision() === "granted") enableEnhancedLayer(posthog);
+          if (getEffectiveConsent() === "granted") enableEnhancedLayer(posthog);
         },
       });
       client = posthog;
@@ -186,7 +213,20 @@ export function grantEnhancedConsent(): void {
   else void loadAndInit();
 }
 
-/** Record opt-out. The cookieless baseline keeps working unchanged. */
+/**
+ * Record a full opt-out. This is a genuine "reject" of ALL analytics, not just
+ * the enhanced layer: if the SDK is already live we stop recording and opt it
+ * out of capturing entirely; if it never loaded, the "denied" decision keeps
+ * `loadAndInit` from ever starting the baseline.
+ */
 export function denyEnhancedConsent(): void {
   persistConsentDecision("denied");
+  if (client) {
+    try {
+      client.stopSessionRecording();
+      client.opt_out_capturing();
+    } catch {
+      /* SDK teardown is best-effort; the persisted decision is the guarantee */
+    }
+  }
 }

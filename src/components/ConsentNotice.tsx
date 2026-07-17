@@ -1,17 +1,18 @@
 "use client";
 
 /**
- * Minimal, non-blocking consent notice for the Tier-2 (enhanced) analytics layer
- * — session replay, surveys and cross-session identity. The cookieless baseline
- * runs regardless, so declining costs the visitor nothing in core analytics and
- * there is no full-screen interstitial.
+ * Minimal, non-blocking analytics consent notice. "Decline" is a genuine
+ * opt-out of ALL analytics (baseline included), and a Global Privacy Control
+ * (GPC) signal auto-declines with no notice shown. Until a visitor decides, only
+ * a cookieless, memory-only baseline runs (legitimate interest); nothing is
+ * written to the device and no cross-session identity is built.
  */
 import { useState, useSyncExternalStore } from "react";
 
 import { isAnalyticsEnabled } from "@/lib/analytics/config";
 import {
   denyEnhancedConsent,
-  getConsentDecision,
+  getEffectiveConsent,
   grantEnhancedConsent,
 } from "@/lib/analytics/posthog";
 
@@ -28,7 +29,8 @@ export function ConsentNotice() {
   const [dismissed, setDismissed] = useState(false);
 
   if (!mounted || dismissed || !isAnalyticsEnabled) return null;
-  if (getConsentDecision() !== null) return null;
+  // Decided already, or the browser is sending a GPC opt-out: no notice.
+  if (getEffectiveConsent() !== null) return null;
 
   return (
     <div
@@ -37,8 +39,9 @@ export function ConsentNotice() {
       className="fixed bottom-4 left-4 z-50 max-w-sm rounded-xl border border-border bg-surface/95 p-4 text-sm shadow-lg backdrop-blur"
     >
       <p className="text-muted">
-        We track anonymous, cookieless usage by default. Mind if we also turn on
-        session replay and short surveys to make the catalog better?
+        We use privacy-first, cookieless analytics to make the catalog better.
+        Allow it, plus optional session replay and short surveys? You can decline
+        and we will turn analytics off for you.
       </p>
       <div className="mt-3 flex gap-2">
         <button
