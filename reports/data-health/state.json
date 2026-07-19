@@ -3,30 +3,37 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-14",
+  "lastRun": "2026-07-19",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 4.8887093055555555,
-    "freshness-therealreal": 1.8887093055555555,
-    "freshness-tlc": 0.8887093055555556,
-    "freshness-ebay": 1.8887093055555555,
-    "capture-rows": 19177,
-    "ranking-count": 333,
-    "ranking-near-floor": 47,
-    "coverage-condition": 29.371908760165006,
-    "coverage-condition-detail": 43.75699985391609,
-    "coverage-region": 42.50648099135415,
-    "coverage-production-year": 2.6290429849206673,
-    "coverage-hardware": 33.73169374431641,
-    "coverage-style-description": 43.2712215320911,
-    "coverage-style-year": 11.594202898550725,
-    "coverage-listing-images": 15.686555148045443,
-    "backlog-total": 77212,
-    "contamination-trr": 7,
-    "contamination-misattach": 47,
-    "contamination-size": 817,
-    "contamination-dupes": 317,
-    "summary-staleness": 0.9591183333333333,
+    "freshness-fashionphile": 0.7104750115740741,
+    "freshness-therealreal": 0.7104750115740741,
+    "freshness-tlc": 0.7104750115740741,
+    "freshness-ebay": 6.710475011574074,
+    "capture-rows": 68388,
+    "ranking-count": 461,
+    "ranking-near-floor": 61,
+    "coverage-condition": 17.463216987762234,
+    "coverage-condition-detail": 56.69662799862286,
+    "coverage-region": 39.82178552324108,
+    "coverage-production-year": 1.1303809228863426,
+    "coverage-hardware": 28.127199527013712,
+    "coverage-style-description": 39.75026014568158,
+    "coverage-style-year": 12.278876170655566,
+    "coverage-listing-images": 100,
+    "backlog-total": 176170,
+    "contamination-trr": 127,
+    "contamination-misattach": 0,
+    "contamination-size": 0,
+    "contamination-dupes": 293,
+    "structure-pseudo": 1,
+    "structure-title-junk": 0,
+    "structure-accent-dupes": 0,
+    "coverage-variant-size": 94.4205035155364,
+    "coverage-variant-colour": 50.19278748015423,
+    "coverage-variant-material": 40.41732819233386,
+    "coverage-variant-hardware": 26.445906101156726,
+    "summary-staleness": 4.890790555555555,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 1
@@ -36,66 +43,72 @@
     25661,
     24700,
     19280,
-    19177
+    19177,
+    68388
   ],
   "findings": {
-    "freshness-fashionphile": {
-      "firstSeen": "2026-07-11",
-      "status": "red"
-    },
     "ranking-snapshot": {
       "firstSeen": "2026-07-10",
       "status": "yellow"
     },
-    "coverage-hardware": {
-      "firstSeen": "2026-07-11",
+    "coverage-condition": {
+      "firstSeen": "2026-07-19",
+      "status": "red"
+    },
+    "coverage-region": {
+      "firstSeen": "2026-07-19",
       "status": "yellow"
     },
-    "coverage-listing-images": {
+    "coverage-hardware": {
       "firstSeen": "2026-07-11",
+      "status": "red"
+    },
+    "coverage-style-description": {
+      "firstSeen": "2026-07-19",
       "status": "yellow"
     },
     "backlog-total": {
       "firstSeen": "2026-07-12",
-      "status": "yellow"
+      "status": "red"
     },
     "contamination-trr": {
       "firstSeen": "2026-07-10",
-      "status": "yellow"
-    },
-    "contamination-misattach": {
-      "firstSeen": "2026-07-12",
-      "status": "red"
-    },
-    "contamination-size": {
-      "firstSeen": "2026-07-12",
       "status": "red"
     },
     "contamination-dupes": {
       "firstSeen": "2026-07-10",
       "status": "red"
+    },
+    "structure-pseudo": {
+      "firstSeen": "2026-07-19",
+      "status": "yellow"
     }
   },
   "redFindings": [
     {
-      "id": "freshness-fashionphile",
-      "title": "Data health: freshness-fashionphile is RED",
-      "body": "Fashionphile data is 4.9 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 4.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-07-14.md"
+      "id": "coverage-condition",
+      "title": "Data health: coverage-condition is RED",
+      "body": "Condition coverage (listed rows) fell from 29.4% to 17.5% since the last run.\n\nCurrent value: 17.5%\nSuggested action: Run the condition backfill lane (condition-backfill.yml).\nReport: reports/data-health/2026-07-19.md"
     },
     {
-      "id": "contamination-misattach",
-      "title": "Data health: contamination-misattach is RED",
-      "body": "47 accessories (card holders, pouches, shoes) landed on a real bag's variant in the last week, which is exactly what put wrong items on the deals rail; 174 more look like a different-model bag and want a manual review.\n\nCurrent value: 47 accessory + 174 wrong-model (review) of 37982 recent bag-variant rows\nSuggested action: Run supabase/ingest/detect-listing-discrepancies.ts (dry run to review, --write to re-point the accessories, --tag to label), and check why the ingest match let them onto a bag variant.\nReport: reports/data-health/2026-07-14.md"
+      "id": "coverage-hardware",
+      "title": "Data health: coverage-hardware is RED",
+      "body": "Hardware-color coverage (all rows) fell from 33.7% to 28.1% since the last run.\n\nCurrent value: 28.1%\nSuggested action: Check the spec-extract vocab (src/lib/ingest/spec-extract.ts) against recent titles.\nReport: reports/data-health/2026-07-19.md"
     },
     {
-      "id": "contamination-size",
-      "title": "Data health: contamination-size is RED",
-      "body": "817 listings captured in the last week state a size that differs from the variant they landed on (e.g. a mini on the Medium page), which unpopulates the size selector and skews same-size pricing.\n\nCurrent value: 817 of 37982 recent sized rows sit on a different-size variant\nSuggested action: Run supabase/ingest/resize-variants.ts (dry run, then --write) to re-point them, and check the load-prices size guard.\nReport: reports/data-health/2026-07-14.md"
+      "id": "backlog-total",
+      "title": "Data health: backlog-total is RED",
+      "body": "The unpromoted backlog grew from 77212 to 176170 rows since the last run; capture is outpacing promotion.\n\nCurrent value: 176170 unpromoted rows\nSuggested action: Schedule a promotion session (promote-safe --create-new) or grow the dictionary coverage.\nReport: reports/data-health/2026-07-19.md"
+    },
+    {
+      "id": "contamination-trr",
+      "title": "Data health: contamination-trr is RED",
+      "body": "127 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in.\n\nCurrent value: 127 of 3576 recent TRR rows fail the handbag gate\nSuggested action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate.\nReport: reports/data-health/2026-07-19.md"
     },
     {
       "id": "contamination-dupes",
       "title": "Data health: contamination-dupes is RED",
-      "body": "317 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 317 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-14.md"
+      "body": "293 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 293 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-19.md"
     }
   ]
 }
