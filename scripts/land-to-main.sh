@@ -17,7 +17,14 @@
 #      — docs-only diffs (only *.md, docs/, .claude/, scripts/*.sh) skip the gate
 #   5. pushes your branch to origin main: `git push origin HEAD:main`
 #      — if another chat landed first, re-merges and retries (up to 3 tries)
-#   6. also pushes the session branch itself as a backup/visibility ref
+#   6. verifies HEAD actually reached origin/main before claiming success
+#   7. also pushes the session branch itself as a backup/visibility ref
+#
+# HOW TO READ THE OUTCOME: trust the final banner, not a piped `$?`.
+# Run it BARE (`bash scripts/land-to-main.sh`) — piping through tee/tail makes
+# `$?` report the pipe's last command (0), which once made a failed landing look
+# green. Success always ends with the "✅ landed on main" evidence block; ANY
+# failure ends with a "⛔⛔ … NOT LANDED ON MAIN" banner and a non-zero exit.
 set -euo pipefail
 
 MAX_PUSH_TRIES=3
@@ -31,6 +38,26 @@ branch="$(git branch --show-current)"
 cd "$top"
 
 fail() { printf '⛔ land-to-main: %s\n' "$1" >&2; exit 1; }
+
+# ---------- failure banner + lock release on ANY exit ----------
+# The banner (not the exit code) is the outcome contract: callers who pipe the
+# output lose `$?`, so every abnormal exit must be unmissable in the output too.
+lock=""; lock_owned=""
+release_lock() { [ -n "$lock_owned" ] && rm -rf "$lock"; lock_owned=""; return 0; }
+finish() {
+  local rc=$?
+  release_lock
+  if [ "$rc" -ne 0 ]; then
+    {
+      echo ""
+      echo "⛔⛔ LANDING ABORTED (exit $rc) — YOUR WORK WAS NOT LANDED ON MAIN ⛔⛔"
+      echo "⛔ origin/main does NOT have this session's commits. Fix the failure"
+      echo "⛔ above, then rerun: bash scripts/land-to-main.sh"
+    } >&2
+  fi
+  exit "$rc"
+}
+trap finish EXIT
 
 [ -n "$branch" ] || fail "detached HEAD — check out your session branch first."
 [ "$branch" != "main" ] && [ "$branch" != "main-land" ] || \
@@ -58,6 +85,13 @@ gate_scope() {
   fi
 }
 
+# Each step is checked explicitly (never rely on bare `set -e` alone) so a
+# failure names the step and always reaches the NOT-landed banner.
+gate_step() {
+  local name="$1"; shift
+  "$@" || fail "green gate FAILED at step: $name"
+}
+
 run_gate() {
   local scope; scope="$(gate_scope)"
   case "$scope" in
@@ -65,17 +99,16 @@ run_gate() {
     docs) echo "🟢 gate: docs/hooks-only diff — build gate skipped (cannot affect the app)." ;;
     full)
       echo "🔒 gate: full green gate (tsc, lint, build, test)…"
-      npx tsc --noEmit
-      npm run lint
-      npm run build
-      npm test
+      gate_step "tsc --noEmit" npx tsc --noEmit
+      gate_step "lint"         npm run lint
+      gate_step "build"        npm run build
+      gate_step "test"         npm test
       ;;
   esac
 }
 
 # ---------- 3. shared landing lock (serializes gate+push across all chats) ----------
 lock="$common/claude-land.lock"
-release_lock() { rm -rf "$lock"; }
 acquire_lock() {
   local waited=0
   while ! mkdir "$lock" 2>/dev/null; do
@@ -90,7 +123,7 @@ acquire_lock() {
     [ "$waited" -gt "$LOCK_WAIT_SECS" ] && fail "gave up waiting for the landing lock after $((LOCK_WAIT_SECS/60)) min. If no other chat is mid-landing, remove $lock and rerun."
   done
   printf 'branch=%s pid=%s at=%s\n' "$branch" "$$" "$(date '+%F %T')" > "$lock/info"
-  trap release_lock EXIT
+  lock_owned=1   # finish() now releases it on any exit
 }
 acquire_lock
 
@@ -108,11 +141,16 @@ until git push origin HEAD:main; do
     run_gate
   fi
 done
-release_lock; trap - EXIT
+release_lock
 
-# ---------- 5. push the session branch too, then show evidence ----------
+# ---------- 5. VERIFY the landing before claiming it ----------
+# Never trust the push's exit status alone: prove origin/main now contains HEAD.
+git fetch origin main
+git merge-base --is-ancestor HEAD origin/main || \
+  fail "push looked successful but origin/main does NOT contain HEAD — check 'git log origin/main' and rerun."
+
+# ---------- 6. push the session branch too, then show evidence ----------
 git push -u origin "$branch" >/dev/null 2>&1 || true
-git fetch origin main >/dev/null 2>&1 || true
 echo ""
 echo "✅ landed on main. Evidence:"
 git log --oneline -3 origin/main

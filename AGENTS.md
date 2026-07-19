@@ -66,8 +66,13 @@ so separate Claude sessions/chats don't drift into parallel copies.
       is where you *develop*; `main` is where verified work *lands*. The script is the
       ONLY sanctioned landing path: it merges `origin/main` into your branch, runs the
       green gate (`tsc --noEmit`, lint, `next build`, `npm test` — auto-skipped for
-      docs-only diffs), serializes with other chats via a lock, and pushes
-      `HEAD:main` with retry when another chat lands first. **Never `git checkout
+      docs-only diffs), serializes with other chats via a lock, pushes
+      `HEAD:main` with retry when another chat lands first, and verifies the push
+      actually reached `origin/main` before claiming success. **Run it bare and
+      read its final banner**: success ends with "✅ landed on main", any failure
+      with "⛔⛔ … NOT LANDED ON MAIN" plus a non-zero exit. Never pipe its output
+      through `tee`/`tail` and then trust `$?` — the pipe reports the pipe's exit
+      status (0), which once made a failed landing look green. **Never `git checkout
       main && git merge`** — main is held by the analyst worktree and the checkout
       fails, which is how work used to get stranded. Don't wait to be asked. **Only**
       skip the landing if the user explicitly says to hold it on the branch or to
