@@ -62,12 +62,14 @@ jobs:
       - name: Pull + parse the Rebag feed (writes landing snapshot)
         run: npx tsx supabase/ingest/sources/rebag.ts
 
+      # No summary:refresh here — the retire step below ends with one, and that single
+      # rebuild covers this load too. Refreshing twice per run doubled our share of the
+      # contention on variant_price_summary's exclusive lock for no freshness gain.
       - name: Load matched listings + photos into price_history
         if: env.WRITE == 'true'
         run: |
           npm run load:prices -- rebag --write
           npm run load:listing-images -- rebag --write
-          npm run summary:refresh
 
       - name: Capture unknown-model bags to discovered_listing (raw evidence layer)
         if: env.WRITE == 'true'

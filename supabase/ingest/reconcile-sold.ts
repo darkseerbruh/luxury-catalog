@@ -151,48 +151,60 @@ async function resolvePlatforms(loose: string): Promise<string[]> {
   ];
 }
 
-/** Page through every still-shown listed row for the resolved platform(s). */
-async function fetchAvailableRows(platforms: string[]): Promise<AvailRow[]> {
+type DatedRow = { platform: string | null; listing_ref: string | null; observed_on: string | null };
+
+/**
+ * Page every still-shown listed row for the resolved platform(s), KEYSET-style.
+ *
+ * WHY NOT .range(): PostgREST turns .range(from, from+999) into OFFSET/LIMIT. Postgres
+ * still has to walk and discard every row before the offset, so page N costs N times
+ * page 1 — and with no ORDER BY the window isn't even stable between pages. Fashionphile
+ * is our biggest platform (~20k+ listed rows = 20+ pages), so its deep offsets were the
+ * first to blow past Supabase's ~8s statement_timeout: the 57014 failures on the
+ * "Retire sold / pulled listings" step (11 of 39 market-refresh runs, 2026-07-12..19).
+ *
+ * Keyset paging seeks on the primary key instead (price_id > cursor, ordered, limit),
+ * so every page is a constant-cost index range read no matter how deep it goes. The
+ * ordering also makes the sweep stable, which the offset version never was.
+ */
+async function fetchRowsKeyset<T extends { price_id: number }>(
+  platforms: string[],
+  columns: string,
+): Promise<T[]> {
   if (platforms.length === 0) return [];
-  const all: AvailRow[] = [];
+  const all: T[] = [];
   const PAGE = 1000;
-  for (let from = 0; ; from += PAGE) {
+  let cursor = 0;
+  for (;;) {
     const { data, error } = await supabaseAdmin
       .from("price_history")
-      .select("platform, listing_ref")
+      .select(columns)
       .eq("price_type", "listed")
       .or(NOT_RETIRED)
       .in("platform", platforms)
-      .range(from, from + PAGE - 1);
+      .gt("price_id", cursor)
+      .order("price_id", { ascending: true })
+      .limit(PAGE);
     if (error) throw error;
-    const rows = (data ?? []) as AvailRow[];
+    const rows = (data ?? []) as unknown as T[];
     all.push(...rows);
     if (rows.length < PAGE) break;
+    cursor = rows[rows.length - 1].price_id;
   }
   return all;
 }
 
-type DatedRow = { platform: string | null; listing_ref: string | null; observed_on: string | null };
+/** Page through every still-shown listed row for the resolved platform(s). */
+async function fetchAvailableRows(platforms: string[]): Promise<AvailRow[]> {
+  return fetchRowsKeyset<AvailRow & { price_id: number }>(platforms, "price_id, platform, listing_ref");
+}
 
 /** Page every still-shown listed row for the resolved platform(s), WITH observed_on. */
 async function fetchDatedRows(platforms: string[]): Promise<DatedRow[]> {
-  if (platforms.length === 0) return [];
-  const all: DatedRow[] = [];
-  const PAGE = 1000;
-  for (let from = 0; ; from += PAGE) {
-    const { data, error } = await supabaseAdmin
-      .from("price_history")
-      .select("platform, listing_ref, observed_on")
-      .eq("price_type", "listed")
-      .or(NOT_RETIRED)
-      .in("platform", platforms)
-      .range(from, from + PAGE - 1);
-    if (error) throw error;
-    const rows = (data ?? []) as DatedRow[];
-    all.push(...rows);
-    if (rows.length < PAGE) break;
-  }
-  return all;
+  return fetchRowsKeyset<DatedRow & { price_id: number }>(
+    platforms,
+    "price_id, platform, listing_ref, observed_on",
+  );
 }
 
 /**

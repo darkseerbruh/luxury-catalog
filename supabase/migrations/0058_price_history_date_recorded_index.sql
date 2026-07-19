@@ -1,0 +1,21 @@
+-- Index the "rows added since yesterday" capture-sanity count (Daily data health).
+--
+-- scripts/data-health.ts:154 runs an EXACT head-count over price_history filtered by
+-- date_recorded >= yesterday. Nothing indexes date_recorded: every existing price_history
+-- index either leads with variant_id (0001/0021/0024/0053), with platform (0030/0056), or
+-- with listing_ref (0024). So the count has to sequential-scan the whole table, which has
+-- grown past what Supabase's ~8s statement_timeout allows — the run dies with
+-- "price_history count failed" (7 of 10 Daily data health runs, 2026-07-12..19).
+--
+-- 0056 fixed the OTHER two data-health paths (freshness lookup, ungraded-listing cursor)
+-- but not this one, because the failing count is on date_recorded, not observed_on.
+--
+-- A plain btree on date_recorded turns the filter into an index range scan. Kept as an
+-- exact count rather than switching to the planner estimate: rows-added is a SCORED
+-- metric, and the project rule is that scored metrics stay exact (info-only metrics are
+-- the ones allowed to use mode: "planned").
+--
+-- descending because every caller asks for the RECENT end (>= a cutoff), so the useful
+-- rows sit at the head of the index.
+create index if not exists price_history_date_recorded_idx
+  on price_history (date_recorded desc);
