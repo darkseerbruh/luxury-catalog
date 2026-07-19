@@ -3,6 +3,17 @@
 
 ---
 
+## TL;DR — Scheduled-run failure flood diagnosed + fixed; DB was UNRESPONSIVE during the session (2026-07-19)
+
+**The 35 failing-run emails (2026-07-12..19) were three DB defects, all fixed in one commit; while fixing, found the database itself unresponsive (project-level, not a Supabase platform incident — status page green, API layer answers in 0.07s, any real query hangs 40s+; /brands took 30s for visitors, cached pages fine).**
+- 🐛 **Root cause 1 — offset pagination (18 of the 35):** `reconcile-sold.ts` + `backfill-fashionphile.ts` paged with PostgREST `.range()` = OFFSET/LIMIT, so page N costs N× page 1; Fashionphile (~20k+ rows) tipped past the ~8s statement timeout first, which is why the 2 FP workflows were the top failures. Both now keyset-paginate on `price_id` (constant cost per page).
+- 🔁 **Root cause 2 — summary-refresh lock collisions (7):** 14 workflow steps rebuild `variant_price_summary` (exclusive lock) and the crons cluster 06:41→08:43 UTC; 0055's 180s timeout widened the collision window. `refresh-summary.ts` now backs off + retries (waiting = same fresh data); dropped the duplicate mid-run refresh from ingest-tlc + ingest-rebag.
+- 📇 **Root cause 3 — missing index (7 data-health runs):** the rows-added count filters `price_history.date_recorded`, which nothing indexed (0056 covered `observed_on`, not this). **Migration `0058`** adds the btree; count stays exact (scored metric).
+- ⬜ **YOUR TURN (2):** ① check the Supabase dashboard for project `pewmdztviyrtbhtebcct` — why the DB is/was unresponsive (my suspect: Disk IO budget exhaustion, matches the throttle-to-a-crawl symptom; unverified, needs the dashboard). ② once healthy, Actions → "Apply database migrations" → Run workflow (applies 0058).
+- 🚧 **Landing status:** the fix commit was blocked from `main` ONLY by the outage itself (green-gate `next build` pre-renders DB-backed pages; they timed out ×3). A recovery watch re-lands it the moment the DB answers; if this session ended first, land branch `worktree-ops-workflow-db-contention-0719` via `bash scripts/land-to-main.sh`.
+
+---
+
 ## TL;DR — Supabase security finding CLOSED: RLS enabled on the 2 exposed tables + convention codified (2026-07-14, on `main`, migration 0057 APPLIED)
 
 **The Supabase advisor email (rls_disabled_in_public, 2026-07-12) was real: `lc_index_snapshot` (0049) and `production_option` (0054) shipped without RLS, and Supabase default privileges gave the public anon key FULL write on both. Fixed, verified, and made unrepeatable.**
