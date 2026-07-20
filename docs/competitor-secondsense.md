@@ -33,7 +33,7 @@ Earlier drafts of this doc told us to cede price aggregation and lean on content
 ## The 8 verification answers (first-hand, 2026-07-14)
 1. **Signup gate: gated in practice.** Server HTML is open, but the signup wall is injected client-side after hydration (scroll-truncation). Logged-out browsing is walled. *(Corrected from an earlier "fully public" call that came from a server fetch, which cannot see a client wall.)*
 2. **Market number = condition-adjusted SOLD comps.** Verbatim: *"Benchmarked against recent sales data for leather Classic Double Flaps in Size Medium, Good condition."* No price-over-time chart. Note: ask-vs-sold is not a real distinction here (most sources are fixed-price, so ask == sold); it is not a lever for us.
-3. **Coverage: 18 resellers** per their UCP endpoint (incl. Vestiaire). On one Chanel page, listings came from TRR, Fashionphile, Farfetch, WGACA, eBay, Rebag, MyGemma, plus eBay marketplace sellers.
+3. **Coverage: 17 named sources** per their agent API (`api.secondsense.co/ucp/mcp` tools/list description, fetched 2026-07-19; their marketing copy says 18): Fashionphile, The RealReal, Vestiaire Collective, Rebag, MyGemma, WGACA, Ann's Fabulous Finds, Lux Lair, A Retro Tale, The Luxury Closet, 17th St NYC, ThredUp, eBay, Farfetch, Bloomingdale's, FWRD, Gilt. Our overlap: **7 shared** (Fashionphile, TRR, Rebag, eBay, myGemma, Ann's, The Luxury Closet) + Farfetch in outreach + **2 recommended adds** (A Retro Tale, FWRD Renew) + the rest skipped with reasons — see `data-collection-handoff.md` §11 merchant sweep #3. On one Chanel page, listings came from TRR, Fashionphile, Farfetch, WGACA, eBay, Rebag, MyGemma, plus eBay marketplace sellers.
 4. **Authentication: none in-house.** Verbatim: *"Authenticity Guaranteed. All items authenticated. Includes eBay Money Back Guarantee."* Per-source badges passed through ("Expert Authenticated" = TRR's own). Their own schema marks Authentication Status "reserved."
 5. **Monetization: standard affiliate networks, not custom deals.** Followed two links: eBay to eBay Partner Network (`campid=5339126403`); The RealReal to Impact Radius (`utm_source=impactradius&clickid=...`). Source roster also includes MyGemma (Awin) and Rebag (CJ). All public networks any approved publisher can join. No paywall, no ads. The `/ucp/go/` cloak is hygiene, not evidence of exclusivity.
 6. **Product UX: transactional.** NL search + deep filters + condition tabs + price breakdown (tax/duty) + SMS concierge. No taste/identity/closet layer.
@@ -49,7 +49,7 @@ Not a different kind of data. Same asset class, largely the same feeds, same net
 | Live listings | ~1,394,375 | ~20,005 promoted live |
 | Captured/banked | (not shown) | 115,986 banked |
 | Price observations | (not shown) | 177,408 |
-| Sources | ~18 | 9 |
+| Sources | 17 named (their API, 2026-07-19) | 9 |
 | Networks | Impact, EPN, CJ, Awin | Same (CJ, Awin, EPN via TLC/myGemma/Rebag/eBay) |
 
 **Our sources (banked / live), 2026-07-15:** The Luxury Closet 53,285 / 755; Fashionphile 36,462 / 15,723; The RealReal 9,041 / 3,523; Rebag 3,972 / 0; eBay 2,835 / 4; myGemma 1,751 / few; Couture USA 981 / 0; Ann's 571 / 0; Redeluxe 388 / 0.

@@ -513,6 +513,32 @@ Verdicts (all evidence fetched 2026-07-09 unless noted):
   platform credit (not real affiliate). Lampoo = EU/clothing-skewed (FlexOffers ~6%), low priority.
   LXRandCo was **acquired by Fashionphile (Nov 2023)** → covered by that lane. Bella Bag likely defunct.
 
+**Merchant sweep #3 (2026-07-19, SecondSense source-roster vet).** SecondSense's agent API
+(`api.secondsense.co/ucp/mcp`, tools/list description, fetched 2026-07-19) enumerates **17 sources**
+(their marketing copy says 18; the API says 17): Fashionphile, The RealReal, Vestiaire Collective,
+Rebag, MyGemma, What Goes Around Comes Around, Ann's Fabulous Finds, Lux Lair, A Retro Tale, The
+Luxury Closet, 17th St NYC, ThredUp, eBay, Farfetch, Bloomingdale's, FWRD, Gilt. New verdicts (all
+evidence fetched 2026-07-19):
+- 🎯 **A Retro Tale — APPLY.** Stockholm vintage-luxury boutique (aretrotale.com), in-house
+  authentication, own affiliate program at `/en-us/affiliate-signup`: **10% commission, ~$1,300 AOV,
+  30-day cookie**, and "website information and data feeds are available" per the signup page. Owner
+  signs up (their own portal; applicant email ariellecoambes@gmail.com). Status as of 2026-07-19:
+  not yet applied.
+- 🎯 **FWRD (FWRD Renew pre-owned dept) — APPLY via CJ.** CJ cid **2954830**, **6% commission,
+  ~$400 AOV, 7-day cookie**; real pre-owned bag inventory verified (Hermès So Kelly, Gucci Diana,
+  Bottega Jodie live on `fwrd.com/category-bags-preowned` 2026-07-19). Gate ingest to the pre-owned
+  department only (same pattern as the TRR URL-dept gate). Status as of 2026-07-19: not yet
+  applied — owner needs to Join in the CJ dashboard (publisher 7997608).
+- ❌ **17th St NYC** (17th-st.com, 18 E 17th St NYC) — no affiliate program exists on any network or
+  their site; park as direct-outreach-only (same shape as Atlanta Luxury Bags).
+- ❌ **ThredUp — skip.** FlexOffers ~4%, mass-market secondhand, thin luxury depth, on a network
+  we're not on.
+- ❌ **Bloomingdale's — skip.** Rakuten ~2% base, new-retail department store, off-direction.
+- ❌ **Gilt — skip.** FlexOffers, off-price new flash sales, off-direction (same call as Lux Lair).
+- Already covered/vetted elsewhere on this board: **WGACA** avoid-verdict stands; **Lux Lair**
+  off-direction stands; **Vestiaire** blocked until the Skimlinks reapply (~2026-09-25);
+  **Farfetch** outreach email sent 2026-07-19 to affiliates@farfetch.com.
+
 **Product feeds = licensed images (the real photo pipeline; researched 2026-06-24).** This is how we
 get **real product images compliantly** — the locked image rule's "licensed affiliate galleries." CJ,
 Awin, and Impact all provide **product data feeds** (images + price + description + deep link, refreshed

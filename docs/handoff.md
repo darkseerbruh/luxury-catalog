@@ -3,7 +3,7 @@
 
 ---
 
-## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, branch `claude/gdpr-data-security-review-ckqpbj`)
+## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, landed on `main` 2026-07-20)
 
 **Audited GDPR compliance + password/data storage. Storage posture is strong; the compliance layer had real gaps; fixed all 6.**
 - 🔐 **Storage = strong, no changes needed:** passwords fully delegated to Supabase Auth (bcrypt, app never stores raw); service-role key walled off (`import "server-only"`); per-user RLS on every user table; admin routes fail closed; cron gated by `CRON_SECRET`; no IDOR; no committed secrets.
@@ -13,6 +13,16 @@
 - 🗑️ **Fix 4 (erasure + retention):** `deleteAccount` now also hard-deletes the email-keyed newsletter row + the user's `thrift_find`/`bag_request` rows (were only anonymized); new monthly `cron/retention` purges anonymous logs > 24 months.
 - ✅ **Gate:** tsc clean, 0 lint errors, 898/898 tests pass. `next build` fails ONLY on this sandbox's missing `NEXT_PUBLIC_SUPABASE_ANON_KEY` (prerender), identical on the pre-change base commit, so it is environmental, not a regression.
 - ⬜ **YOUR TURN:** (1) confirm migrations `0029`+`0057` are applied in prod (RLS is the only wall behind the public anon key); (2) enable PostHog "Cookieless server hash mode" + set analytics retention there; (3) optional attorney pass on the policy copy.
+---
+
+## TL;DR — Scheduled-run failure flood diagnosed + fixed; DB was UNRESPONSIVE during the session (2026-07-19)
+
+**The 35 failing-run emails (2026-07-12..19) were three DB defects, all fixed in one commit; while fixing, found the database itself unresponsive (project-level, not a Supabase platform incident — status page green, API layer answers in 0.07s, any real query hangs 40s+; /brands took 30s for visitors, cached pages fine).**
+- 🐛 **Root cause 1 — offset pagination (18 of the 35):** `reconcile-sold.ts` + `backfill-fashionphile.ts` paged with PostgREST `.range()` = OFFSET/LIMIT, so page N costs N× page 1; Fashionphile (~20k+ rows) tipped past the ~8s statement timeout first, which is why the 2 FP workflows were the top failures. Both now keyset-paginate on `price_id` (constant cost per page).
+- 🔁 **Root cause 2 — summary-refresh lock collisions (7):** 14 workflow steps rebuild `variant_price_summary` (exclusive lock) and the crons cluster 06:41→08:43 UTC; 0055's 180s timeout widened the collision window. `refresh-summary.ts` now backs off + retries (waiting = same fresh data); dropped the duplicate mid-run refresh from ingest-tlc + ingest-rebag.
+- 📇 **Root cause 3 — missing index (7 data-health runs):** the rows-added count filters `price_history.date_recorded`, which nothing indexed (0056 covered `observed_on`, not this). **Migration `0058`** adds the btree; count stays exact (scored metric).
+- ⬜ **YOUR TURN (2):** ① check the Supabase dashboard for project `pewmdztviyrtbhtebcct` — why the DB is/was unresponsive (my suspect: Disk IO budget exhaustion, matches the throttle-to-a-crawl symptom; unverified, needs the dashboard). ② once healthy, Actions → "Apply database migrations" → Run workflow (applies 0058).
+- 🚧 **Landing status:** the fix commit was blocked from `main` ONLY by the outage itself (green-gate `next build` pre-renders DB-backed pages; they timed out ×3). A recovery watch re-lands it the moment the DB answers; if this session ended first, land branch `worktree-ops-workflow-db-contention-0719` via `bash scripts/land-to-main.sh`.
 
 ---
 

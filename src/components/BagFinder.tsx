@@ -57,6 +57,16 @@ interface Props {
    * populate-on-focus popular grid).
    */
   browseFooter?: React.ReactNode;
+  /** Replace the input's default styling (desktop nav renders it as the nav pill). */
+  inputClassName?: string;
+  /**
+   * Desktop nav: render everything below the input inside a dropdown panel with
+   * this class (positioned by the host) instead of inline. The input stays put —
+   * it IS the nav field — and only the panel opens/closes via `panelOpen`.
+   */
+  panelClassName?: string;
+  /** With panelClassName: whether the dropdown panel is shown. */
+  panelOpen?: boolean;
 }
 
 const HINT = "   (start typing →)";
@@ -73,6 +83,9 @@ export function BagFinder({
   onViewAll,
   collapsedUntilFocus = false,
   browseFooter,
+  inputClassName,
+  panelClassName,
+  panelOpen = false,
 }: Props) {
   const router = useRouter();
   const [q, setQ] = useState("");
@@ -192,10 +205,18 @@ export function BagFinder({
             (mode === "nav" ? `Chanel flap, black caviar${HINT}` : `Which bag are you adding?${HINT}`)
           }
           aria-label="Find a bag"
-          className="w-full rounded-full border border-gold bg-surface py-2 pl-10 pr-4 text-base text-foreground placeholder:text-muted focus:outline-none sm:text-sm"
+          className={
+            inputClassName ??
+            "w-full rounded-full border border-gold bg-surface py-2 pl-10 pr-4 text-base text-foreground placeholder:text-muted focus:outline-none sm:text-sm"
+          }
         />
       </div>
 
+      {/* Panel hosts (desktop nav) drop everything below the field into a
+          positioned dropdown; everyone else keeps the inline flow (`contents`
+          keeps the wrapper layout-neutral). */}
+      {panelClassName && !panelOpen ? null : (
+        <div className={panelClassName ?? "contents"}>
       {!engaged ? null : focus ? (
         <div className="mt-3">
           <button
@@ -321,6 +342,8 @@ export function BagFinder({
               Can&apos;t find it? Ask us to add it
             </button>
           )}
+        </div>
+      )}
         </div>
       )}
     </div>

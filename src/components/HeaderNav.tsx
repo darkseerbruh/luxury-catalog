@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "@/components/AuthProvider";
 import { BagFinder } from "@/components/BagFinder";
 
@@ -62,18 +62,6 @@ function Caret() {
   );
 }
 
-function SearchIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="M21 21l-4.3-4.3" />
-    </svg>
-  );
-}
-
 /**
  * Header navigation (IA rework 2026-06-30).
  *
@@ -101,7 +89,24 @@ export default function HeaderNav({
   // "Typing" = opened with intent to search (click / focus), so the field autofocuses
   // and a mouse-leave won't yank the panel. A pure hover just browses the brands.
   const [searchTyping, setSearchTyping] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  // Typing mode closes on a click OUTSIDE the search area. A document listener
+  // (not a fixed overlay) because the header's backdrop-blur makes it the
+  // containing block for fixed children — an "inset-0" overlay would only ever
+  // cover the header bar. This also lets the outside click land normally.
+  useEffect(() => {
+    if (!searchTyping) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+        setSearchTyping(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [searchTyping]);
 
   useEffect(() => {
     if (!open && !searchOpen) return;
@@ -236,65 +241,43 @@ export default function HeaderNav({
           </Link>
         )}
 
-        {/* Search — pinned rightmost. ONE panel (owner 2026-07-11): hovering opens it
-            showing "browse by brand"; clicking the field types immediately (no second
-            click, no jump to a different panel); typed matches stack ABOVE the brands. */}
+        {/* Search — pinned rightmost. ONE field (owner 2026-07-19): the nav slot IS
+            the text input — click it and type right there. Hovering opens the panel
+            BELOW the field (never covering the rest of the nav) with browse-by-brand;
+            typed matches stack above the brands. Mouse leaving closes a hover-open;
+            once she's clicked into the field it takes a click outside (or Esc). */}
         <div
+          ref={searchRef}
           className="group relative flex items-center"
           onMouseEnter={() => setSearchOpen(true)}
           onMouseLeave={() => {
             if (!searchTyping) setSearchOpen(false);
           }}
-          onFocusCapture={() => setSearchTyping(true)}
+          onFocusCapture={() => {
+            setSearchTyping(true);
+            setSearchOpen(true);
+          }}
         >
-          {/* The pill is ALWAYS mounted, so the nav slot keeps a fixed width and the
-              row never reflows when the panel opens (owner UX review 0714 #3: no more
-              jittery pop-out). When open, the panel overlays anchored to the pill's own
-              right edge, so it reads as the field expanding in place. */}
-          <button
-            type="button"
-            onClick={() => {
-              setSearchOpen(true);
-              setSearchTyping(true);
-            }}
-            aria-label="Search bags"
-            aria-expanded={searchOpen}
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors ${
-              searchOpen ? "border-gold text-gold" : "border-border bg-surface text-muted hover:border-gold hover:text-gold"
-            }`}
-          >
-            <SearchIcon className="flex-shrink-0" />
-            <span>Search bags</span>
-            <Caret />
-          </button>
-          {searchOpen && (
-            <>
-              {/* Click-away layer so a tile click (navigation) wins over a blur race. */}
-              <div
-                className="fixed inset-0 z-20"
-                aria-hidden="true"
-                onClick={() => {
+          <div className="relative z-30 w-48">
+            <BagFinder
+              mode="nav"
+              placeholder="Search bags"
+              inputClassName="w-full rounded-full border border-border bg-surface py-1.5 pl-9 pr-4 text-sm text-muted transition-colors placeholder:text-muted hover:border-gold hover:text-gold focus:border-gold focus:text-gold focus:outline-none"
+              panelOpen={searchOpen}
+              panelClassName="absolute right-0 top-full z-30 mt-2 w-[32rem] max-w-[92vw] rounded-2xl border border-border bg-bg/95 p-3 shadow-lg backdrop-blur-sm"
+              onNavigate={() => {
+                setSearchOpen(false);
+                setSearchTyping(false);
+              }}
+              onSubmitQuery={(term) => {
+                const t = term.trim();
+                if (t) {
+                  router.push(`/shop?q=${encodeURIComponent(t)}`);
                   setSearchOpen(false);
                   setSearchTyping(false);
-                }}
-              />
-              <div className="absolute right-0 top-0 z-30 w-[32rem] max-w-[92vw] rounded-2xl border border-border bg-bg/95 p-3 shadow-lg backdrop-blur-sm">
-                <BagFinder
-                  mode="nav"
-                  autoFocus={searchTyping}
-                  onNavigate={() => {
-                    setSearchOpen(false);
-                    setSearchTyping(false);
-                  }}
-                  onSubmitQuery={(term) => {
-                    const t = term.trim();
-                    if (t) {
-                      router.push(`/shop?q=${encodeURIComponent(t)}`);
-                      setSearchOpen(false);
-                      setSearchTyping(false);
-                    }
-                  }}
-                  browseFooter={
+                }
+              }}
+              browseFooter={
                     // Pre-search: browse by tier only. "Shop the market / Deals only"
                     // dropped from here (owner UX review 0714 #4) — someone who opened
                     // search came to type, not to be handed two other destinations.
@@ -326,11 +309,9 @@ export default function HeaderNav({
                         </Link>
                       </div>
                     ) : null
-                  }
-                />
-              </div>
-            </>
-          )}
+              }
+            />
+          </div>
         </div>
       </nav>
 

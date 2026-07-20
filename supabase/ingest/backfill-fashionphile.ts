@@ -28,21 +28,33 @@ type PHRow = {
   region: string | null; hardware_color: string | null; enrichment: Record<string, unknown> | null;
 };
 
-/** Page through every Fashionphile row, indexed by listing_ref (its SKU). */
+/**
+ * Page through every Fashionphile row, indexed by listing_ref (its SKU).
+ *
+ * KEYSET, not .range(): PostgREST's .range() is OFFSET/LIMIT, so Postgres walks and
+ * discards every row before the offset — page N costs N times page 1. Fashionphile is
+ * ~20k+ rows (21+ pages) and each row drags a jsonb `enrichment` blob, so the deep
+ * offsets tipped past Supabase's ~8s statement_timeout and this loader died with 57014
+ * before it processed anything (7 of 10 enrichment runs, 2026-07-12..19). Seeking on the
+ * price_id primary key makes every page a constant-cost index range read.
+ */
 async function loadFpRows(): Promise<Map<string, PHRow>> {
   const byRef = new Map<string, PHRow>();
-  let from = 0;
+  let cursor = 0;
   for (;;) {
     const { data, error } = await db
       .from("price_history")
       .select("price_id,listing_ref,condition,region,hardware_color,enrichment")
       .eq("platform", "Fashionphile")
-      .range(from, from + 999);
+      .gt("price_id", cursor)
+      .order("price_id", { ascending: true })
+      .limit(1000);
     if (error) throw error;
-    if (!data || data.length === 0) break;
-    for (const r of data as PHRow[]) if (r.listing_ref) byRef.set(r.listing_ref, r);
-    if (data.length < 1000) break;
-    from += 1000;
+    const rows = (data ?? []) as PHRow[];
+    if (rows.length === 0) break;
+    for (const r of rows) if (r.listing_ref) byRef.set(r.listing_ref, r);
+    if (rows.length < 1000) break;
+    cursor = rows[rows.length - 1].price_id;
   }
   return byRef;
 }
