@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-3xl text-foreground">Privacy policy</h1>
-      <p className="mt-2 text-sm text-muted">Last updated July 17, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated July 20, 2026</p>
 
       <div className="mt-8 space-y-6 text-sm leading-relaxed text-muted">
         <p>
@@ -161,8 +161,9 @@ export default function PrivacyPage() {
               returned no result): kept up to 24 months, then purged automatically.
             </li>
             <li>
-              <span className="text-foreground">Analytics:</span> retained by our analytics provider
-              under its own limits.
+              <span className="text-foreground">Analytics:</span> session recordings are deleted
+              after 30 days. Other analytics events are held by our analytics provider, PostHog,
+              under its plan limits.
             </li>
           </ul>
         </section>
