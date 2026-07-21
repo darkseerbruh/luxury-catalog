@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-20",
+  "lastRun": "2026-07-21",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.5389649421296296,
-    "freshness-therealreal": 1.5389649421296296,
-    "freshness-tlc": 0.5389649421296296,
-    "freshness-ebay": 7.538964942129629,
-    "capture-rows": 81690,
-    "ranking-count": 461,
-    "ranking-near-floor": 61,
-    "coverage-condition": 16.603806325502585,
-    "coverage-condition-detail": 57.52486768706268,
-    "coverage-region": 39.622255195128545,
-    "coverage-production-year": 1.0965316940125527,
-    "coverage-hardware": 27.809641289044034,
+    "freshness-fashionphile": 0.5083741550925925,
+    "freshness-therealreal": 0.5083741550925925,
+    "freshness-tlc": 0.5083741550925925,
+    "freshness-ebay": 1.5083741550925927,
+    "capture-rows": 81655,
+    "ranking-count": 465,
+    "ranking-near-floor": 59,
+    "coverage-condition": 15.961482952511806,
+    "coverage-condition-detail": 58.22170394060801,
+    "coverage-region": 39.51905137978002,
+    "coverage-production-year": 1.0688001465050532,
+    "coverage-hardware": 27.528986253705547,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 196599,
+    "backlog-total": 218126,
     "contamination-trr": 127,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 208,
+    "contamination-dupes": 235,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,7 +33,7 @@
     "coverage-variant-colour": 50.19278748015423,
     "coverage-variant-material": 40.41732819233386,
     "coverage-variant-hardware": 26.445906101156726,
-    "summary-staleness": 1.4447380555555556,
+    "summary-staleness": 1.3343527777777777,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 1
@@ -45,7 +45,8 @@
     19280,
     19177,
     68388,
-    81690
+    81690,
+    81655
   ],
   "findings": {
     "ranking-snapshot": {
@@ -73,12 +74,12 @@
     {
       "id": "contamination-trr",
       "title": "Data health: contamination-trr is RED",
-      "body": "127 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in.\n\nCurrent value: 127 of 3571 recent TRR rows fail the handbag gate\nSuggested action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate.\nReport: reports/data-health/2026-07-20.md"
+      "body": "127 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in.\n\nCurrent value: 127 of 3577 recent TRR rows fail the handbag gate\nSuggested action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate.\nReport: reports/data-health/2026-07-21.md"
     },
     {
       "id": "contamination-dupes",
       "title": "Data health: contamination-dupes is RED",
-      "body": "208 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 208 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-20.md"
+      "body": "235 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 235 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-07-21.md"
     }
   ]
 }
