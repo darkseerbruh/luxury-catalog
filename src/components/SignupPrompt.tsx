@@ -6,13 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAuthState } from "@/components/AuthProvider";
 import { track, EVENTS } from "@/lib/analytics/events";
 import { getEffectiveConsent } from "@/lib/analytics/posthog";
-import {
-  markDismissed,
-  markShown,
-  readState,
-  shouldPrompt,
-  writeState,
-} from "@/lib/signup-prompt";
+import { markShown, readState, shouldPrompt, writeState } from "@/lib/signup-prompt";
 
 /** Breathing room after the bag page settles, so the card never lands mid-read. */
 const APPEAR_DELAY_MS = 2500;
@@ -44,7 +38,8 @@ export default function SignupPrompt() {
     (reason: "dismissed" | "accepted") => {
       setOpen(false);
       if (reason === "dismissed") {
-        writeState(markDismissed(readState()));
+        // No state change: markShown already started the cooldown, and a
+        // dismissal must not buy permanent quiet. We ask again in a day.
         track(EVENTS.signupPromptDismissed, { ask, bag_views: bagViews, trigger: "bag_views" });
       } else {
         track(EVENTS.signupPromptAccepted, { ask, bag_views: bagViews, trigger: "bag_views" });
@@ -75,11 +70,11 @@ export default function SignupPrompt() {
         if (!shouldPrompt(fresh, Date.now())) return;
         writeState(markShown(fresh, Date.now()));
         setAsk(fresh.shows + 1);
-        setBagViews(fresh.seen.length);
+        setBagViews(fresh.views);
         setOpen(true);
         track(EVENTS.signupPromptShown, {
           ask: fresh.shows + 1,
-          bag_views: fresh.seen.length,
+          bag_views: fresh.views,
           trigger: "bag_views",
         });
       }, APPEAR_DELAY_MS);
@@ -122,8 +117,10 @@ export default function SignupPrompt() {
         className="pointer-events-auto w-full max-w-sm rounded-2xl border border-border bg-surface p-5 shadow-lg"
       >
         <div className="flex items-start justify-between gap-3">
+          {/* Never implies ownership (owner call, 2026-07-25): they are
+              tracking these bags, not keeping them. */}
           <p className="font-serif text-lg leading-snug text-foreground">
-            Keep the ones you love
+            Keep track of the bags you want
           </p>
           <button
             type="button"
