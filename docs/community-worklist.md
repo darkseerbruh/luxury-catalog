@@ -55,7 +55,39 @@ destination. No "Reviews" nav item unless it earns one.*
   Apify; YouTube creator handles must be captured for attribution).
 - ⏸️ **Owner judgement on the PoC** → then decide scope (icons-first vs. deeper tail),
   format (prose beats vs. character bars), refresh cadence, minimum-source bar.
-- 🔄 **VERIFY THE AXES (owner challenge, 2026-07-25)** — are the 7 `bag_axis` values
+- ✅ 2026-07-25 **AXES RE-DERIVED FROM EVIDENCE + SHIPPED TO THE BRANCH.**
+  6 bags across tiers, ~100 sources → `research-drafts/axis-evidence-2026-07.md`.
+  **OUT:** `versatility` (5 of 6 passes: ambiguous, means three different things),
+  `roomy_vs_compact` (measures the variant, not the bag), plus `holds_value` and
+  `worth_the_price` (already excluded in code; evidence confirms).
+  **IN:** `structure`, `formality`, `access`, `upkeep`, `presence` — each in all
+  six passes, each mapping to nothing in the old set.
+  **The split:** 3 unipolar "rate" axes + 5 polar "describe" axes. Polar render as
+  a marker on a track, never a fill bar (a fill would turn "slouchy" into a low
+  score). Polar axes are also the ones web-consensus can honestly seed, which is
+  what makes the Reputation layer share one scale with UGC.
+  Files: migration `0059`, `src/lib/axes.ts`, `votes.ts`, `AxisVotes.tsx`,
+  `ClosetAddFlow.tsx`, `contribution-slots.ts`. Gate green (tsc, lint 0 errors,
+  898/898); verified rendering on `/bag/589`.
+- ⏸️ **YOUR TURN: apply migration 0059** (Actions → "Apply database migrations" →
+  Run workflow). Until then the app offers axis names the DB enum does not have,
+  so a vote cast on a new axis would fail. Display is unaffected (0 votes).
+- ⬜ **Follow-up surfaced:** `review.durability_rating` and a "how it ages" axis
+  ask the same question. Kept durability_rating (it feeds the Most durable
+  leaderboard) and did NOT add a duplicate axis. Unify the two into one system,
+  or leave the split as build-quality-on-arrival + durability-over-time.
+- 🅿️ **Also surfaced, not built:** capture ownership status + purchase year/channel
+  (+ optionally height) alongside each vote, or aggregates are noise. Evidence: a
+  vintage Flap buyer (~$2k) and a boutique-today buyer (~$10.8k) rate the same bag
+  differently, and the two highest-engagement Birkin threads are from non-owners.
+  Ownership can be DERIVED from `closet_item` at read time (no new column, no
+  added friction) — that is the cheap first move.
+- 🅿️ **Brand-level home needed** for acquisition friction, SA attitude, returns/
+  duties, repairability, counterfeit density. Real decision drivers, but per-bag
+  they would pollute every model a house makes.
+
+### Superseded: the original axis-verification question
+- ✅ **VERIFY THE AXES (owner challenge, 2026-07-25)** — are the 7 `bag_axis` values
   the RIGHT ones? They were an a-priori adaptation of Fragrantica's model (0012's own
   header cites `ux-research-brief.md` §F); nobody checked them against what handbag
   people actually compare on. **Now is the moment: `bag_axis_vote` has 0 rows, so
