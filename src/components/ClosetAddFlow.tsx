@@ -94,7 +94,6 @@ export function ClosetAddFlow() {
   const [body, setBody] = useState("");
   const [worthIt, setWorthIt] = useState<boolean | null>(null);
   const [occasion, setOccasion] = useState<string | null>(null);
-  const [durability, setDurability] = useState(0);
   const [axisValues, setAxisValues] = useState<Record<string, number>>({});
 
   const [saving, setSaving] = useState(false);
@@ -108,7 +107,6 @@ export function ClosetAddFlow() {
     setBody("");
     setWorthIt(null);
     setOccasion(null);
-    setDurability(0);
     setAxisValues({});
     setError(null);
     setStep("find");
@@ -142,7 +140,8 @@ export function ClosetAddFlow() {
       body: body || undefined,
       worthIt,
       occasion: occasion ?? undefined,
-      durabilityRating: durability > 0 ? durability : null,
+      // durability_rating is superseded by the wears_well axis (0059): one
+      // rating system, not two. It is collected with the other axes below.
     });
     // Opinion axes are optional and best-effort: a failed axis vote never blocks
     // the saved review. One upsert per axis the reviewer actually set.
@@ -275,8 +274,6 @@ export function ClosetAddFlow() {
               ))}
             </div>
           </div>
-
-          <Stars value={durability} onChange={setDurability} label="How's it holding up? (optional)" />
 
           {/* Describe first: polar scales have no wrong answer, so they are the
               easiest thing to hand us and they warm people up for the ratings. */}

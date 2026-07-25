@@ -67,9 +67,14 @@ interface Agg {
 async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards> {
   try {
     const sb = getSupabase();
-    const { data, error } = await sb
-      .from("review")
-      .select("variant_id, rating, worth_it, durability_rating, occasion");
+    // "How it ages" moved off review.durability_rating and onto the wears_well
+    // AXIS in 0059 (one rating system, not two). The Most durable board reads it
+    // from bag_axis_vote now; the review column is retained but no longer read.
+    const [reviewRes, wearsRes] = await Promise.all([
+      sb.from("review").select("variant_id, rating, worth_it, occasion"),
+      sb.from("bag_axis_vote").select("variant_id, value").eq("axis", "wears_well"),
+    ]);
+    const { data, error } = reviewRes;
     if (error || !data || data.length === 0) return EMPTY;
 
     // Aggregate per variant in JS (the supabase-js client has no group-by),
@@ -79,7 +84,6 @@ async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards>
       variant_id: number;
       rating: number | null;
       worth_it: boolean | null;
-      durability_rating: number | null;
       occasion: string | null;
     }[]) {
       let a = byVariant.get(r.variant_id);
@@ -109,14 +113,34 @@ async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards>
           a.occasion.set(occ, o);
         }
       }
-      if (typeof r.durability_rating === "number") {
-        a.durabilitySum += r.durability_rating;
-        a.durabilityCount += 1;
-      }
       if (typeof r.worth_it === "boolean") {
         a.worthItCount += 1;
         if (r.worth_it) a.worthItYes += 1;
       }
+    }
+
+    // Fold in the wears_well axis votes. A bag can carry ageing votes without a
+    // written review, so this creates an aggregate for variants the review pass
+    // never saw. Those rank on the durability board only, which is correct: the
+    // other boards genuinely need a review behind them.
+    for (const v of (wearsRes.data ?? []) as { variant_id: number; value: number | null }[]) {
+      if (typeof v.value !== "number") continue;
+      let a = byVariant.get(v.variant_id);
+      if (!a) {
+        a = {
+          variantId: v.variant_id,
+          ratingSum: 0,
+          ratingCount: 0,
+          durabilitySum: 0,
+          durabilityCount: 0,
+          worthItYes: 0,
+          worthItCount: 0,
+          occasion: new Map(),
+        };
+        byVariant.set(v.variant_id, a);
+      }
+      a.durabilitySum += v.value;
+      a.durabilityCount += 1;
     }
 
     const aggs = [...byVariant.values()];

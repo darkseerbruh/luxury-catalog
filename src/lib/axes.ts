@@ -39,16 +39,19 @@
 /**
  * Unipolar judgements: one end is better.
  *
- * "How it ages" is NOT here on purpose. Every pass wanted build_quality split
- * into craft-as-it-arrived vs how-it-survives, and that split is real — but
- * `review.durability_rating` already captures how-it-survives and already feeds
- * the "Most durable" leaderboard. A `wears_well` axis would ask the same question
- * twice and split the signal across two tables. So: build_quality = as it
- * arrived (here), durability_rating = over time (on review). Unifying them is a
- * live follow-up.
+ * `wears_well` is the "how it ages" signal. It used to live on its own as
+ * `review.durability_rating` (a second star-rating in a different table from
+ * every other scale), which meant two parallel rating systems in one form.
+ * Owner call 2026-07-25: one system, not several. 0059 migrates those ratings
+ * into this axis and the "Most durable" leaderboard now reads from here.
+ *
+ * The evidence for splitting it out of build_quality is strong: all six passes
+ * separate how well a bag was MADE from how well it SURVIVES, and the entire
+ * "X years later" review genre is about the latter.
  */
 export const RATE_AXES = [
   "build_quality",
+  "wears_well",
   "comfort",
   "everyday_wearability",
 ] as const;
@@ -122,7 +125,7 @@ export const AXIS_META: Record<Axis, AxisMeta> = {
   upkeep: {
     label: "Upkeep",
     low: "Baby it",
-    high: "Beat it",
+    high: "Live in it",
     kind: "describe",
     hint: "Do you have to be careful with it, or can you stop thinking about it?",
   },
@@ -141,6 +144,13 @@ export const AXIS_META: Record<Axis, AxisMeta> = {
     high: "Tank-like",
     kind: "rate",
     hint: "How it was made, as it arrived. Stitching, hardware, finishing.",
+  },
+  wears_well: {
+    label: "How it ages",
+    low: "Shows every mark",
+    high: "Ages beautifully",
+    kind: "rate",
+    hint: "How it has held up over time, not how it looked on day one.",
   },
   comfort: {
     label: "Comfort to carry",

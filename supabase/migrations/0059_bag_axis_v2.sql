@@ -40,18 +40,29 @@
 --                                across tiers: recognisability at the luxury end,
 --                                ubiquity at the accessible end (the Neverfull's
 --                                largest single theme).
+--   ADDED    wears_well        — how it ages, split out of build_quality. All six
+--                                passes separate how well a bag was MADE from how
+--                                well it SURVIVES, and the "X years later" review
+--                                genre is entirely the latter. This axis ABSORBS
+--                                review.durability_rating (see below).
 --   KEPT     build_quality (rescoped to "as it arrived"), comfort (rescoped to
 --            on-the-body carry), everyday_wearability (now the outcome axis).
 --
--- ONE EVIDENCE-BACKED AXIS DELIBERATELY *NOT* ADDED: "how it ages". All six
--- passes wanted build_quality split into craft-as-it-arrived vs how-it-survives,
--- and that split is real. But `review.durability_rating` (0003) ALREADY captures
--- how-it-survives and already powers the "Most durable" homepage leaderboard
--- (src/lib/leaderboards.ts). Adding a `wears_well` axis would ask the same
--- question twice in the same form and split the signal across two tables. So the
--- split ships as: build_quality = as it arrived (here) + durability_rating = over
--- time (on review). Unifying the two into one system is a live follow-up, not a
--- silent breaking change.
+-- ONE RATING SYSTEM, NOT SEVERAL (owner call, 2026-07-25). Subjective 1-5 scales
+-- were split across two tables: the axes here, and `review.durability_rating`
+-- (0003), which rendered as a SECOND star-rating in the same form. That is the
+-- confusing duplication. This migration folds durability_rating into the
+-- `wears_well` axis, and src/lib/leaderboards.ts now reads the "Most durable"
+-- board from bag_axis_vote. The review column is NOT dropped: the data is COPIED,
+-- not moved, so the change stays reversible. The app stops writing it and reads
+-- the axis instead.
+--
+-- Still deliberately outside the axis set, and correctly so: `review.rating` (the
+-- overall star summary, a headline rather than a sub-scale), `review.worth_it`
+-- (boolean, the kept worth signal), `review.occasion` and `bag_wear.carry`
+-- (categorical), `bag_wear.fits_note` (free text). `bag_wear.weight_feel` is the
+-- one remaining scale-shaped tap outside the axes; folding it in is a flagged
+-- follow-up, not done here.
 --
 -- The rate/describe split (unipolar judgement vs polar description) lives in
 -- src/lib/axes.ts, not here: it is display + capture semantics, not storage.
@@ -85,6 +96,7 @@ end $$;
 create type bag_axis_v2 as enum (
   -- Rate it (unipolar: one end is better)
   'build_quality',
+  'wears_well',
   'comfort',
   'everyday_wearability',
   -- Describe it (polar: neither end is better)
@@ -102,5 +114,29 @@ alter table bag_axis_vote
 
 drop type bag_axis;
 alter type bag_axis_v2 rename to bag_axis;
+
+-- ---- Fold review.durability_rating into the wears_well axis ----
+-- One rating system, not two. Every durability star becomes a wears_well vote by
+-- the same user on the same variant, preserving its original timestamps. COPY,
+-- not move: the source column is left intact so this is reversible. `on conflict
+-- do nothing` makes the migration safe to re-run and lets an existing axis vote
+-- win over the older review field.
+do $$
+declare
+  moved_count bigint;
+begin
+  insert into bag_axis_vote (user_id, variant_id, axis, value, created_at, updated_at)
+  select user_id, variant_id, 'wears_well'::bag_axis, durability_rating, created_at, updated_at
+    from review
+   where durability_rating is not null
+  on conflict (user_id, variant_id, axis) do nothing;
+  get diagnostics moved_count = row_count;
+  raise notice 'bag_axis v2: copied % durability rating(s) into the wears_well axis.', moved_count;
+end $$;
+
+comment on column review.durability_rating is
+  'SUPERSEDED 2026-07-25 by the wears_well axis on bag_axis_vote (migration 0059). '
+  'Retained for reversibility; the app no longer writes it and the "Most durable" '
+  'leaderboard now reads bag_axis_vote. Do not add new readers.';
 
 commit;
