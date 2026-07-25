@@ -3,6 +3,16 @@
 
 ---
 
+## TL;DR — Community/UGC workstream ESTABLISHED (2026-07-25, branch `ops/community-workstream-0725`)
+
+**New lane: revamp the community/UGC experience for findability + clear value props — the reviews moat (price aggregators can copy comps, not what owners say). Strategy + plan: `docs/community-workstream.md`; live queue: `docs/community-worklist.md`.**
+- 🔎 **Diagnosis (two codebase audits, 2026-07-25):** the UGC engine is broadly BUILT (reviews, owner axis-votes, wear notes, photos+moderation+XP, corrections, closet follows, `/feed`, expert Journal, 2 leaderboards) — but scattered, gated shut, and un-advertised.
+- 🧱 **Three problems:** (1) axis-votes (0012), wear notes (0046), photos (0016) sit behind human-gated migrations → may be DARK in prod, VERIFY FIRST; (2) cold-start trap — boards hide until 25 reviews/25 wants, so the contribute-CTAs that would create review #1 are hidden too; (3) no findability — no `/community` or `/reviews` hub, nothing in primary nav, brand pages carry zero UGC, positioning asserted nowhere.
+- 🧭 **The unlock:** split the gate lifecycle into **Seed** (invite CTAs + founder-first reviews show BEFORE threshold) → **Populated** (boards auto-reveal, already wired). Keeps the honest-reveal rule; adds the missing first state.
+- ⬜ **YOUR TURN (3 decisions, in the workstream doc §5):** (1) ratify promoting "what owners say" to headline differentiator; (2) build the pre-gate Seed phase y/n; (3) hub shape — one `/community` hub vs. distributed vs. both. Plus Phase 0 may surface a migration to apply.
+
+---
+
 ## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, landed on `main` 2026-07-20)
 
 **Audited GDPR compliance + password/data storage. Storage posture is strong; the compliance layer had real gaps; fixed all 6.**
