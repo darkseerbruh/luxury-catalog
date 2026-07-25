@@ -6,7 +6,7 @@ import { saveToCloset } from "@/lib/collection-actions";
 import { submitReview } from "@/lib/review-actions";
 import { castAxisVote } from "@/lib/vote-actions";
 import { OCCASIONS } from "@/lib/occasions";
-import { AXES, AXIS_META } from "@/lib/axes";
+import { DESCRIBE_AXES, RATE_AXES, AXIS_META } from "@/lib/axes";
 
 /**
  * Adding a bag to your closet IS reviewing it (docs/ux/unified-search-and-review-spec.md).
@@ -278,10 +278,32 @@ export function ClosetAddFlow() {
 
           <Stars value={durability} onChange={setDurability} label="How's it holding up? (optional)" />
 
+          {/* Describe first: polar scales have no wrong answer, so they are the
+              easiest thing to hand us and they warm people up for the ratings. */}
           <div>
-            <p className="mb-3 text-sm text-muted">How it wears <span className="text-muted/60">optional</span></p>
+            <p className="mb-1 text-sm text-muted">
+              What kind of bag is it? <span className="text-muted/60">optional</span>
+            </p>
+            <p className="mb-3 text-xs text-muted/70">Neither end is better.</p>
             <div className="flex flex-col gap-4">
-              {AXES.map((axis) => (
+              {DESCRIBE_AXES.map((axis) => (
+                <AxisPips
+                  key={axis}
+                  meta={AXIS_META[axis]}
+                  value={axisValues[axis] ?? 0}
+                  onChange={(n) => setAxisValues((prev) => ({ ...prev, [axis]: n }))}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-muted">
+              How well does it hold up? <span className="text-muted/60">optional</span>
+            </p>
+            <p className="mb-3 text-xs text-muted/70">Here, higher is better.</p>
+            <div className="flex flex-col gap-4">
+              {RATE_AXES.map((axis) => (
                 <AxisPips
                   key={axis}
                   meta={AXIS_META[axis]}

@@ -1,32 +1,159 @@
 /**
- * Opinion-axis vocabulary + display copy (0012 `bag_axis`). Kept in its OWN
+ * Opinion-axis vocabulary + display copy (0059 `bag_axis`). Kept in its OWN
  * server-free module so client components (the closet-add review sheet, the
  * bag-page vote control) can import the axes without pulling votes.ts, which
  * imports server-only Supabase. votes.ts re-exports these for existing callers.
  *
- * The votable set is a SUBSET of the DB enum: `holds_value` (a market fact from
- * price_history, not an opinion) and `worth_the_price` (duplicates the review
- * `worth_it` boolean) are deliberately excluded. See docs/ux/review-data-leaderboards.md.
+ * The vocabulary is EVIDENCE-DERIVED, not assumed. A 2026-07-25 pass across six
+ * bags spanning tiers (~100 owner-voice sources) established which dimensions
+ * people actually compare bags on. Working: docs/research-drafts/axis-evidence-2026-07.md.
+ *
+ * THE RATE / DESCRIBE SPLIT — the load-bearing idea here:
+ *
+ *   "rate"     unipolar. One end is better. A judgement, higher effort, and
+ *              prone to ceiling effects (everyone scores a Birkin 5 on build
+ *              quality, so it carries little signal at the top tier).
+ *
+ *   "describe" polar. NEITHER end is better. Low effort, no wrong answer, so it
+ *              has a much lower posting floor (the Letterboxd principle: no
+ *              downvotes, no minimum). These also travel across tiers where the
+ *              unipolar ones ceiling out.
+ *
+ * Why the split matters beyond UI: the polar axes are the ones a synthesized
+ * web-consensus read can honestly populate. "The consensus reads this as dressy"
+ * fairly summarizes what people wrote; "the web scores build quality 4/5" would
+ * be an invention. So `describe` axes are the shared scale between scraped
+ * reputation and first-party votes, and `rate` axes stay owner-only.
+ *
+ * DELIBERATELY NOT AXES:
+ *   - Weight, dimensions, strap drop, pocket count, carry modes → MEASURABLE.
+ *     Catalog data, never a vote (the locked "a thing we can measure from data is
+ *     never a subjective vote" rule). Weight was previously being absorbed by
+ *     both comfort and roomy_vs_compact, muddying both.
+ *   - Vibe, colourway, material, era → CATEGORICAL. Descriptors, not scales.
+ *   - Acquisition friction, SA attitude, returns/duties, repairability,
+ *     counterfeit density → real drivers, but they belong to the BRAND. Attaching
+ *     them per-bag would pollute every model a house makes.
  */
-export const AXES = [
+
+/**
+ * Unipolar judgements: one end is better.
+ *
+ * "How it ages" is NOT here on purpose. Every pass wanted build_quality split
+ * into craft-as-it-arrived vs how-it-survives, and that split is real — but
+ * `review.durability_rating` already captures how-it-survives and already feeds
+ * the "Most durable" leaderboard. A `wears_well` axis would ask the same question
+ * twice and split the signal across two tables. So: build_quality = as it
+ * arrived (here), durability_rating = over time (on review). Unifying them is a
+ * live follow-up.
+ */
+export const RATE_AXES = [
   "build_quality",
-  "everyday_wearability",
-  "roomy_vs_compact",
   "comfort",
-  "versatility",
+  "everyday_wearability",
 ] as const;
 
+/** Polar descriptions: neither end is better. */
+export const DESCRIBE_AXES = [
+  "structure",
+  "formality",
+  "access",
+  "upkeep",
+  "presence",
+] as const;
+
+/**
+ * Full votable set. Describe-first: the polar taps have no wrong answer, so they
+ * warm a contributor up before the harder judgements.
+ */
+export const AXES = [...DESCRIBE_AXES, ...RATE_AXES] as const;
+
 export type Axis = (typeof AXES)[number];
+export type AxisKind = "rate" | "describe";
 
 export function isAxis(value: string): value is Axis {
   return (AXES as readonly string[]).includes(value);
 }
 
-/** Display copy per axis. For roomy_vs_compact the scale is bipolar (low→high). */
-export const AXIS_META: Record<Axis, { label: string; low: string; high: string }> = {
-  build_quality: { label: "Build quality", low: "Flimsy", high: "Tank-like" },
-  everyday_wearability: { label: "Everyday wearability", low: "Occasion-only", high: "Daily driver" },
-  roomy_vs_compact: { label: "Roomy vs compact", low: "Compact", high: "Roomy" },
-  comfort: { label: "Comfort to carry", low: "Awkward", high: "Effortless" },
-  versatility: { label: "Versatility", low: "One-note", high: "Goes with anything" },
+export function axisKind(axis: Axis): AxisKind {
+  return (DESCRIBE_AXES as readonly string[]).includes(axis) ? "describe" : "rate";
+}
+
+export interface AxisMeta {
+  label: string;
+  low: string;
+  high: string;
+  kind: AxisKind;
+  /** One line on what the axis is asking, so two raters mean the same thing. */
+  hint: string;
+}
+
+/**
+ * Display copy per axis. `low` and `high` are the 1 and 5 ends.
+ *
+ * Every `hint` exists because the evidence showed unscoped axes collect
+ * different questions from different raters. The Jodie is the clearest case:
+ * crook-of-arm comfort is excellent and shoulder comfort is poor on the SAME
+ * bag, so an unscoped "comfort" averages to a meaningless 3.
+ */
+export const AXIS_META: Record<Axis, AxisMeta> = {
+  // ---- Describe it (polar: neither end is better) ----
+  structure: {
+    label: "Structure",
+    low: "Slouchy",
+    high: "Structured",
+    kind: "describe",
+    hint: "Does it melt into you, or stand on its own?",
+  },
+  formality: {
+    label: "Dress code",
+    low: "Casual",
+    high: "Dressy",
+    kind: "describe",
+    hint: "Where does it feel right, errands or evening?",
+  },
+  access: {
+    label: "Getting in",
+    low: "Locked down",
+    high: "Reach right in",
+    kind: "describe",
+    hint: "How easily do you get into it, and how secure does that leave it?",
+  },
+  upkeep: {
+    label: "Upkeep",
+    low: "Baby it",
+    high: "Beat it",
+    kind: "describe",
+    hint: "Do you have to be careful with it, or can you stop thinking about it?",
+  },
+  presence: {
+    label: "Presence",
+    low: "Quiet",
+    high: "Everyone knows it",
+    kind: "describe",
+    hint: "Does it stay under the radar, or get recognised?",
+  },
+
+  // ---- Rate it (unipolar: one end is better) ----
+  build_quality: {
+    label: "Build quality",
+    low: "Flimsy",
+    high: "Tank-like",
+    kind: "rate",
+    hint: "How it was made, as it arrived. Stitching, hardware, finishing.",
+  },
+  comfort: {
+    label: "Comfort to carry",
+    low: "Awkward",
+    high: "Effortless",
+    kind: "rate",
+    hint: "On the body. Straps, handles, and how the load sits.",
+  },
+  everyday_wearability: {
+    label: "Everyday wearability",
+    low: "Occasion-only",
+    high: "Daily driver",
+    kind: "rate",
+    hint: "Do you actually still reach for it?",
+  },
 };

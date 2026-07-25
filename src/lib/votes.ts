@@ -15,14 +15,35 @@ function hasSupabase(): boolean {
 // client components can import them without pulling this server module. Imported
 // for use below AND re-exported so existing callers (vote-actions, AxisVoteControl)
 // keep their `@/lib/votes` import path.
-import { AXES, isAxis, AXIS_META, type Axis } from "./axes";
-export { AXES, isAxis, AXIS_META, type Axis };
+import {
+  AXES,
+  RATE_AXES,
+  DESCRIBE_AXES,
+  isAxis,
+  axisKind,
+  AXIS_META,
+  type Axis,
+  type AxisKind,
+} from "./axes";
+export {
+  AXES,
+  RATE_AXES,
+  DESCRIBE_AXES,
+  isAxis,
+  axisKind,
+  AXIS_META,
+  type Axis,
+  type AxisKind,
+};
 
 export interface AxisAggregate {
   axis: Axis;
   label: string;
   low: string;
   high: string;
+  /** "rate" = unipolar (one end is better); "describe" = polar (neither is). */
+  kind: AxisKind;
+  hint: string;
   /** Average 1..5 (1 dp), or null when no votes. */
   average: number | null;
   count: number;
@@ -43,6 +64,8 @@ function emptySummary(signedIn: boolean): AxisVoteSummary {
       label: AXIS_META[axis].label,
       low: AXIS_META[axis].low,
       high: AXIS_META[axis].high,
+      kind: AXIS_META[axis].kind,
+      hint: AXIS_META[axis].hint,
       average: null,
       count: 0,
       myValue: null,
@@ -93,6 +116,8 @@ export async function getAxisVotes(variantId: number): Promise<AxisVoteSummary> 
       label: AXIS_META[axis].label,
       low: AXIS_META[axis].low,
       high: AXIS_META[axis].high,
+      kind: AXIS_META[axis].kind,
+      hint: AXIS_META[axis].hint,
       average,
       count: agg?.count ?? 0,
       myValue: mine.get(axis) ?? null,
