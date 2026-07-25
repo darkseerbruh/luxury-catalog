@@ -55,6 +55,23 @@ destination. No "Reviews" nav item unless it earns one.*
   Apify; YouTube creator handles must be captured for attribution).
 - ⏸️ **Owner judgement on the PoC** → then decide scope (icons-first vs. deeper tail),
   format (prose beats vs. character bars), refresh cadence, minimum-source bar.
+- 🔄 **VERIFY THE AXES (owner challenge, 2026-07-25)** — are the 7 `bag_axis` values
+  the RIGHT ones? They were an a-priori adaptation of Fragrantica's model (0012's own
+  header cites `ux-research-brief.md` §F); nobody checked them against what handbag
+  people actually compare on. **Now is the moment: `bag_axis_vote` has 0 rows, so
+  changing the enum is free. Once votes exist, `alter type ... add value` is easy but
+  removing/renaming an axis orphans data.**
+  Running dimension-discovery across 6 bags spanning tiers (Birkin, Classic Flap,
+  Neverfull, BV Jodie, Polène/Telfar mid-tier, Lady Dior) to derive the axes from
+  evidence. Each pass classifies every dimension `SUBJECTIVE` (vote-able) vs
+  `MEASURABLE` (catalog data, never a vote) vs `CATEGORICAL` (descriptor, not a scale)
+  and flags polar vs unipolar.
+  *Priors to test (recorded before results, 2026-07-25):* the Chanel 19 PoC alone
+  suggested gaps in **structure/slouch over time**, **formality (casual↔dressy)**, and
+  **vulnerability/colour transfer**; and the "vibe" dimension the owner cares about
+  most is CATEGORICAL, so it may not belong on a 1-5 axis at all. Also suspect
+  `worth_the_price` and `holds_value` partly collapse, and that `holds_value` may be
+  near-meaningless in the mid-tier conversation.
 - ⬜ Build the pipeline + storage if the PoC clears the bar (synthesis-only, sourced, dated).
 - ⬜ Ship the per-bag Reputation block with attribution + "my experience differs" contribute prompt.
 
