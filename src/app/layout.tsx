@@ -11,6 +11,7 @@ import PendingSaveFlusher from "@/components/PendingSaveFlusher";
 import HeaderNav from "@/components/HeaderNav";
 import FooterAccountLinks from "@/components/FooterAccountLinks";
 import { FirstAlertNudge } from "@/components/FirstAlertNudge";
+import SignupPrompt from "@/components/SignupPrompt";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import "./globals.css";
 
@@ -84,6 +85,7 @@ export default async function RootLayout({
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
         <FirstAlertNudge />
+        <SignupPrompt />
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto max-w-5xl">
             <div className="max-w-xs">

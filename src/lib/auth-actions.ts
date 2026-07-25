@@ -72,6 +72,14 @@ export async function signUp(
     return { message: "Check your email to confirm your account, then log in." };
   }
 
+  // Stitch anonymous → identified at SIGN-UP, not just sign-in. Without this a
+  // new account stayed anonymous in PostHog until its owner's second visit, so
+  // the whole signup funnel was unreadable. There's no profile yet (persona is
+  // set during onboarding), so the person properties fill in at first sign-in.
+  if (data.user) {
+    identifyUserToPostHog(data.user.id, {}).catch(() => undefined); // never block signup
+  }
+
   revalidatePath("/", "layout");
   // Carry an intended destination (e.g. the bag they tried to save) through
   // onboarding so the save resumes after the account exists.

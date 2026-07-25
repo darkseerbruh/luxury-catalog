@@ -5,6 +5,11 @@ import { sanitizeMotivations, type Motivation } from "./maturity";
 export interface CurrentUser {
   id: string;
   email: string | null;
+  /** ISO timestamp the auth account was created. Used to detect a brand-new
+   *  account on the first post-signup landing (the `account_created` event). */
+  createdAt: string | null;
+  /** Sign-up method: "email" for password, or the OAuth provider ("google"). */
+  provider: string | null;
 }
 
 export interface SocialLinks {
@@ -57,7 +62,12 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  return { id: user.id, email: user.email ?? null };
+  return {
+    id: user.id,
+    email: user.email ?? null,
+    createdAt: user.created_at ?? null,
+    provider: (user.app_metadata?.provider as string | undefined) ?? null,
+  };
 }
 
 const EMPTY_PROFILE = (id: string): UserProfile => ({

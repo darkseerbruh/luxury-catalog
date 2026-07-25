@@ -82,6 +82,20 @@ export const EVENTS = {
    *  Carries `source` = the placement that captured it (footer,
    *  articles_index, homepage, taste_page). The owned-audience growth signal. */
   newsletterSubscribed: "newsletter_subscribed",
+  /**
+   * An account was created. Fires once per account, on the first landing after
+   * signup (email or OAuth). This is the denominator every capture experiment
+   * is scored against — before it existed, a new user was invisible until
+   * their SECOND visit, because identify only ran on sign-in.
+   * Carries `method` (password | oauth) and, when we know it, `trigger`.
+   */
+  accountCreated: "account_created",
+  /** The signed-out signup card was shown (carries `trigger` + `bag_views` + `ask`). */
+  signupPromptShown: "signup_prompt_shown",
+  /** They took the signup card up on it (same props as the shown event). */
+  signupPromptAccepted: "signup_prompt_accepted",
+  /** They dismissed the signup card. The honest denominator for the ask. */
+  signupPromptDismissed: "signup_prompt_dismissed",
   /** The homepage hero search box was engaged (focused or submitted) — the success
    *  metric for the home_headline copy test. Carries `flag`, `variant`, `kind`. */
   homeSearchEngaged: "home_search_engaged",
