@@ -31,11 +31,15 @@ destination. No "Reviews" nav item unless it earns one.*
 ## Phase 2 — Seed the cold start
 
 ### 2A. Reputation layer ("what's this bag's reputation?") — owner idea 2026-07-25
-- 🔄 **Proof of concept: Chanel 19** — synthesize public consensus (YouTube owner
-  reviews / "what's in my bag" / collection videos, Reddit, PurseForum, blogs) into a
-  site-ready hedged block + sourcing table. Tests quality, sourceability, defensibility.
-- ⬜ Judge the PoC → decide scope (icons-first vs. deeper tail), format (prose beats vs.
-  character bars), refresh cadence.
+- ✅ 2026-07-25 **Proof of concept: Chanel 19** — CLEARED THE BAR. 11 sources
+  (4 community, 3 commercial, 4 YouTube owner reviews) → a specific, honest,
+  hedged ~250-word block. Full artifact + sourcing table:
+  `research-drafts/reputation-poc-chanel-19.md`. Surfaced 3 pipeline requirements
+  (commercial-vs-community source tagging; a mandatory "where owners disagree"
+  beat; a recency stamp) and 2 transport facts (Reddit blocks Firecrawl → route via
+  Apify; YouTube creator handles must be captured for attribution).
+- ⏸️ **Owner judgement on the PoC** → then decide scope (icons-first vs. deeper tail),
+  format (prose beats vs. character bars), refresh cadence, minimum-source bar.
 - ⬜ Build the pipeline + storage if the PoC clears the bar (synthesis-only, sourced, dated).
 - ⬜ Ship the per-bag Reputation block with attribution + "my experience differs" contribute prompt.
 
