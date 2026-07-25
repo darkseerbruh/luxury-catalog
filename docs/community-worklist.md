@@ -19,12 +19,27 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done · ⏸️ blocked (needs ow
   migrations" → Run workflow. Only if the probe finds a table missing.
 
 ## Phase 1 — Findability spine
-- ⬜ Decide + build the community destination (hub vs. distributed vs. both — owner decision #3).
-- ⬜ Primary-nav entry to community/reviews (currently nothing in the desktop nav).
-- ⬜ Value-prop line wherever UGC lives (bag page, brand page, hub) — no walls of text.
+*Reframed 2026-07-25 per the locked UX principle: reviews are reached THROUGH a bag,
+so this is about making the owner-voice unmissable in context, NOT building a browse
+destination. No "Reviews" nav item unless it earns one.*
+- ⬜ Make the owner-voice unmissable ON the bag page (placement, prominence, value-prop line).
+- ⬜ Reasons to reach bag pages: social-proof cues on cards/search results (once counts exist).
 - ⬜ Clarify mislabeled surfaces (`/coveted-closets` titled "Leaderboards"; feed/closet buried).
+- 🅿️ Community "pulse" hub — secondary showcase, NOT review-browse. Decide after the above.
+- 🅿️ Primary-nav entry — parked pending the positioning decision.
 
 ## Phase 2 — Seed the cold start
+
+### 2A. Reputation layer ("what's this bag's reputation?") — owner idea 2026-07-25
+- 🔄 **Proof of concept: Chanel 19** — synthesize public consensus (YouTube owner
+  reviews / "what's in my bag" / collection videos, Reddit, PurseForum, blogs) into a
+  site-ready hedged block + sourcing table. Tests quality, sourceability, defensibility.
+- ⬜ Judge the PoC → decide scope (icons-first vs. deeper tail), format (prose beats vs.
+  character bars), refresh cadence.
+- ⬜ Build the pipeline + storage if the PoC clears the bar (synthesis-only, sourced, dated).
+- ⬜ Ship the per-bag Reputation block with attribution + "my experience differs" contribute prompt.
+
+### 2B. First-party seeding
 - ⬜ Split the gates: add a Seed-phase **Invite** state below threshold (keeps the honest reveal).
 - ⬜ Founder-first reviews as the visible floor (owner reviews bags she has carried).
 - ⬜ One-tap rating / status from any card (Goodreads/Letterboxd Log-sheet pattern).

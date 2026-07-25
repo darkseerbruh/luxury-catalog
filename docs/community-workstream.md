@@ -24,6 +24,21 @@ UGC as *reference data* and keep the social mechanics bounded exactly as
 `engagement-strategy.md` locks them: no open DMs, no free-form posting, no vanity
 metrics. Structured community, never PurseForum chaos.
 
+### Locked UX principle (owner, 2026-07-25)
+
+**Reviews are an attribute of a bag, accessed contextually THROUGH the bag, not a
+standalone browse destination.** You reach owner intelligence by looking up a
+specific bag (the IMDb / Fragrantica model), not by navigating to "Reviews." So:
+
+- **The bag page is the primary review surface.** Findability = making the
+  owner-voice unmissable there + giving people reasons to reach bag pages.
+- **The moat can be the headline without being a nav tab.** "The place to find
+  what others say" is asserted ON bag pages, BETWEEN bags (brand-level aggregate,
+  social-proof cues on cards), and in marketing/GEO — not via a "Reviews" nav item.
+- **A community hub, if built, is a "pulse" showcase** (leaderboards, activity,
+  most-reviewed) that signals liveness + trust and aids discovery. It is NOT where
+  you read reviews, and it is secondary.
+
 **How it pays off (engagement → monetization):**
 - UGC → return visits + session depth → **affiliate clicks (Rev #1)**
 - UGC → deeper, unique data → **SEO/GEO → organic traffic → affiliate**
@@ -104,6 +119,61 @@ UGC lives. Rename/clarify the mislabeled surfaces.
 **Moves:** UGC-surface impressions → contribution rate; return visits.
 
 ### Phase 2 — Seed the cold start
+
+#### 2A. The Reputation layer — "what's this bag's reputation?" *(owner idea, 2026-07-25)*
+
+**The single highest-leverage seed asset.** Synthesize the *general consensus* on
+each bag from publicly-posted opinion across the open web, and render it as a
+per-bag **Reputation** block.
+
+**Why it matters:** it answers the question people actually have and no price
+aggregator touches. Prices say what a bag costs. Reputation says what carrying it
+means and whether it works in real life. Owner examples: the Chanel 19 reads edgy
+and modern, a mix of workhorse and fashion; the Classic Flap is the "clean girl"
+bag, the mother of luxury bags; the Birkin is members-only, Soho House.
+
+**What it solves:** founder-first reviews are n=1. This puts a populated, genuinely
+useful owner-voice block on **every** bag page on day one, with zero fabrication,
+which is what escapes the cold-start trap. It also gives a visitor the strongest
+possible prompt to contribute: "my experience differs."
+
+**Dimensions to synthesize per bag:**
+- **Vibe / reputation** — how people characterize the look and what it signals.
+- **Who it's for** — the persona and use case described.
+- **How it carries** — lived-experience function: capacity, everyday wearability,
+  comfort, wear and durability.
+- **What owners love** / **common gripes** — including honest negatives.
+- **Comparisons** — only where sources actually make them.
+
+**Sources (prioritize first-hand owner content):** YouTube owner reviews,
+"what's in my bag," collection videos, and "one year later" wear reviews;
+Reddit threads; PurseForum/PurseBlog; handbag blogs; publicly accessible
+Instagram; and where they exist, reviews on purchase channels (e.g. Amazon for
+affiliated mid-tier brands).
+
+**Guardrails (non-negotiable):**
+1. **Synthesis, never republication.** Express consensus in our own words. No
+   verbatim copying. Attribute and link out to sources.
+2. **Every theme traces to named sources** with rough counts, so it is
+   defensible. Where opinion is genuinely **divided, say so** rather than
+   smoothing it into a false consensus.
+3. **Hedged, never verdict.** "Owners commonly describe it as," "the consensus
+   leans," never "this bag is." Reputation is taste and opinion.
+4. **Date it.** Reputation shifts. Stamp the synthesis and note where chatter
+   has moved since launch.
+5. **Complementary to UGC, not a substitute.** This is the seed layer; our own
+   reviews remain the moat and should visibly stack on top of it.
+
+**Moves:** session depth + the reason-to-visit on every bag page (SEO/GEO gold,
+since this is unique text no aggregator has) → affiliate; and it is the strongest
+prompt to contribute a first-party review.
+
+**Open questions:** build order vs. the rest of Phase 2; how far down the catalog
+tail it can run (icons first, clearly); refresh cadence; whether it renders as
+prose beats or Fragrantica-style character bars (or prose now, bars once our own
+axis-votes populate).
+
+#### 2B. First-party seeding
 Build the Seed-phase invite states; found-first reviews as the visible floor
 (owner reviews every bag she has carried, per `idea_founder_first_reviews`);
 one-tap rating/status from any card.
@@ -139,15 +209,25 @@ we replace.
 
 ---
 
-## 5. Decisions the owner owns
+## 5. Decisions — status
 
-1. **Positioning promotion.** Promote "what owners say / reviews" to a headline
-   differentiator (top-nav destination + asserted sitewide), vs. keep it a
-   bounded supporting layer. *Signaled yes on 2026-07-25; ratify into canon.*
-2. **Seed phase.** Build the pre-gate invite states + founder-first seeding, vs.
-   keep everything hard-gated until real users arrive.
-3. **Hub shape.** One `/community` hub, distribute value-props across existing
-   surfaces, or both.
+**DECIDED (owner, 2026-07-25):**
+- ✅ **Seed phase: BUILD IT.** Add the pre-threshold Invite state + seeding, so
+  the contribute-CTAs stop being hidden by the same gate they need to clear.
+- ✅ **Reputation layer (§2A): pursue.** Synthesized public consensus per bag as
+  the day-one seed asset.
+- 🟡 **Hub: open to it, not convinced.** "Doesn't hurt to have one, but it feels
+  counterintuitive." Resolution: the hub is NOT a review-browse destination. If
+  built, it is a secondary **community pulse** surface (leaderboards, activity,
+  most-reviewed) that signals liveness and aids discovery. Decide after Phase 1.
+
+**STILL OPEN:**
+1. **Positioning.** Not ready to call. Her objection is well-founded: reviews are
+   reached THROUGH a bag, so a "Reviews" nav item may be wrong. See the locked UX
+   principle in §0 — the moat can headline without a nav tab. Revisit once the
+   bag-page owner-voice surface is real and we can see what it deserves.
+2. **Reputation build order + scope** — where it slots in Phase 2, how far down
+   the catalog tail, refresh cadence, prose vs. character bars (§2A open questions).
 
 ---
 
