@@ -168,10 +168,35 @@ affiliated mid-tier brands).
 since this is unique text no aggregator has) → affiliate; and it is the strongest
 prompt to contribute a first-party review.
 
-**Open questions:** build order vs. the rest of Phase 2; how far down the catalog
-tail it can run (icons first, clearly); refresh cadence; whether it renders as
-prose beats or Fragrantica-style character bars (or prose now, bars once our own
-axis-votes populate).
+#### Rendering: same axes as UGC, honestly different mark *(owner decision, 2026-07-25)*
+
+**Locked:** web-sourced findings render on the **same axes we ask UGC reviewers to
+rate**, so a reader can hold both in their head at once. Consistency aids
+comprehension.
+
+The axes already exist in `bag_axis` (migration 0012): `build_quality`,
+`everyday_wearability`, `holds_value`, `roomy_vs_compact`, `comfort`,
+`versatility`, `worth_the_price`. Note `roomy_vs_compact` is genuinely **bipolar**
+(neither end is better) while the rest are "more is better" — render the two kinds
+distinctly.
+
+**The honesty problem, and the fix.** Scoring a bag on an axis from synthesized web
+opinion is an **inference**, not a tally. Rendering it identically to UGC bars
+would imply precision we do not have. So:
+
+| Layer | Mark | Label |
+|---|---|---|
+| Owner reviews (UGC) | Solid bar at the aggregate | "42 owners" |
+| Web consensus | **Outlined band showing the spread** | "our read from 11 sources, Jul 2026" |
+
+Same axes, same left-to-right polarity, visibly different mark. **Where sources
+agree the band is tight; where owners are split it is wide.** This turns the
+mandatory "where owners disagree" beat into a visual instead of a sentence, and it
+makes false precision structurally impossible to render.
+
+**Open questions:** how far down the catalog tail it can run (icons first,
+clearly); the minimum-source bar before a block may publish; refresh cadence;
+whether prose beats ship alongside the bars or the bars carry it alone.
 
 #### 2B. First-party seeding
 Build the Seed-phase invite states; found-first reviews as the visible floor

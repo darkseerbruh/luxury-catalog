@@ -9,14 +9,29 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done · ⏸️ blocked (needs ow
 
 ---
 
-## Phase 0 — Verify & unblock *(do first)*
-- ⬜ **Probe prod for the 3 at-risk tables** — confirm `bag_axis_vote` (0012),
-  `bag_wear` (0046), `bag_photo` (0016) + the `bag-photos` storage bucket exist
-  and return rows via the anon key. If any 404s, the surface is DARK in prod.
-  (Method: copy `.env.local` from the main tree per `[[land-from-fresh-worktree]]`,
-  run a tsx probe against the REST API.)
-- ⏸️ **Apply any missing migration** (owner action) — Actions → "Apply database
-  migrations" → Run workflow. Only if the probe finds a table missing.
+## Phase 0 — Verify & unblock ✅ CLEARED 2026-07-25
+- ✅ **Prod probe: every UGC table is LIVE.** All 8 answered HTTP 200 via the anon
+  key (`review`, `bag_axis_vote`, `bag_wear`, `bag_photo`, `correction`,
+  `closet_favorite`, `post`, `closet_item`) and the `bag-photos` storage bucket
+  lists 200. The human-gated migrations (0012, 0016, 0046) WERE applied. **Nothing
+  is structurally dark; no migration needed.**
+- ✅ **The real finding — the corpus is empty, not broken:**
+
+  | Table | Rows | Gate |
+  |---|---|---|
+  | `review` | **0** | 0/25 → every review board hidden |
+  | `closet_item` status=want | **0** | 0/25 → coveted rankings + nav hidden |
+  | `bag_axis_vote` | 0 | owner bars render nothing |
+  | `bag_wear` | 0 | carry/weight render nothing |
+  | `bag_photo` | 1 | gallery ~empty |
+  | `closet_favorite` | 0 | feed has no follow graph |
+  | `post` (published) | **39** | ✅ the expert Journal IS populated |
+
+  So the entire community layer is built, applied, and sitting at zero. This is
+  purely a **cold-start/seeding problem**, which makes Phase 2 (Reputation +
+  seeding) the whole game, not a supporting phase.
+- 📌 Asset worth using: **39 published Journal posts** already exist. That is real
+  expert content the community surfaces can lean on today.
 
 ## Phase 1 — Findability spine
 *Reframed 2026-07-25 per the locked UX principle: reviews are reached THROUGH a bag,
