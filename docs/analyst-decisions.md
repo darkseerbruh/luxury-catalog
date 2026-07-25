@@ -11,6 +11,96 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 
 ---
 
+### 2026-07-25 DECISION: Do NOT ship a view-count signup trigger yet — the behavior it would tax does not exist
+
+- **Evidence:** All figures PostHog, prod host only (`www.luxurycatalog.com`), 30d window ending 2026-07-25T21:11Z. n = 597 sessions / 596 distinct persons.
+  - **Bag pages per person, 30d:** 0 → 485 people (81%); 1 → 99; 2 → 5; 3 → 2; 4 → 1; 5 → 1; 6 → 1; then two outliers at 56 and 78. The two outliers viewed those pages in 2 minutes and 7 minutes respectively (2026-07-12 and 2026-07-14, both `$direct`, Chrome/US) — machine pacing, not browsing. **Excluding them, exactly 9 people in 30 days viewed 2 or more bag pages, and 0 viewed more than 6.**
+  - **Return behavior:** sessions per person, 30d = 1 for 595 of 596 people; 1 person had 2. Returning-visitor share ≈ 0.2% (n=1).
+  - **Session quality:** median session duration 5 seconds (p90 = 85s, n=680 sessions); 534 of 597 sessions (89%) were a single pageview.
+  - **What "capture" holds today (Supabase, read 2026-07-25):** `profile` = **8 rows all-time**; `closet_item` = **2 rows all-time**; `newsletter_subscriber` = **0 rows**.
+  - Any threshold she'd pick (3, 5, 10 bag pages) would fire on roughly 2 to 9 people per month, most of them her, previews, or crawlers.
+- **Options:**
+  | Option | What it costs / gains | Rating vs her stored preferences |
+  |---|---|---|
+  | **(Recommended) Hold the gate. Ship non-gated capture at the value moment instead** (email capture on the bag page + the existing logged-out save heart), and revisit a soft prompt only after ~500 organic sessions/week with a measured multi-page rate | Zero acquisition cost, zero GEO risk, and it builds the list now. The list is the thing premium (lane 5) converts against | Best. Consistent with "Catalog stays free forever" (`monetization-projections.md:30`) and "she hates walling results behind a signup" (`preferences.md:252`) |
+  | Ship a soft, dismissible prompt after N views now (no content blocked) | Low harm, but unmeasurable: there is no signup event, so she cannot tell whether it worked. Also fires on ~9 people/month | Premature. Revisit once signup is instrumented and traffic is real |
+  | Ship a hard gate (content blocked after N views) | Directly contradicts the GEO bet: an interstitial on a page a crawler or an AI assistant reads is a soft-404 risk, and the bet is that bag pages are the compounding asset | Do not choose |
+- **Moves:** Acquisition (Bet 1, GEO) and the Intent funnel step. The gate would tax the top of the funnel to protect a capture step that currently receives ~9 humans a month.
+- **Confidence:** High on the behavioral read — this is a count, not an inference, and every count is far below any plausible threshold. The leaning, not a verdict, is on the *future*: I cannot tell you what real organic visitors will do, because none have arrived at volume yet. Revisit the question with data, not now.
+- **Class:** OWNER (strategy fork; touches the account value prop and the GEO bet).
+- **Status:** OPEN
+
+---
+
+### 2026-07-25 DECISION: Instrument account creation before ANY capture experiment — signup is 100% dark
+
+- **Evidence:** `src/lib/analytics/events.ts` defines 41 events (read 2026-07-25). **None of them is a signup, registration, or account-created event.** `src/app/signup/page.tsx` fires no `track()` call. PostHog prod, 90d to 2026-07-25: `$identify` **never fired** (only `$autocapture`, n=1,602, appears in the auth-signal query), so no session has ever been tied to a logged-in identity on prod. Meanwhile `/signup` is the **#2 most-viewed path** in 30d (43 views, 43 distinct people) and `/login` is #5 (21 views, 21 people) — every one of those people had a single pageview, which reads as path-probing, not intent. Net: the funnel step she wants to optimize has no numerator and no denominator.
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Add `account_created` (with `source` + `trigger` props) fired on successful signup, and `$identify` on session start for logged-in users** | Makes signup rate, and therefore any capture experiment, measurable at all. Cheap, in-repo, reversible | Best. Matches her locked pattern: measurement ships with the feature |
+  | Add the event only when/if a gate ships | The first real signups go unmeasured and set no baseline | Do not choose — same mistake as the quiz (2026-07-13 decision) |
+  | Rely on Supabase `profile` row counts | Gives a total but no source, no funnel, no per-surface attribution | Insufficient alone |
+- **Moves:** Every lane indirectly; directly it makes lane 5 (premium tools, "converting a few % of registered users") measurable. Today that modeled lever has no observable denominator.
+- **Confidence:** Deterministic. Confirmed by reading the taxonomy file and by a 90d PostHog query returning no `$identify`. Not a judgment call.
+- **Class:** AUTO (in-repo, reversible, no published number, no nav, no strategy doc touched).
+- **Status:** OPEN
+
+---
+
+### 2026-07-25 DECISION: Filter bot traffic out of the pulse — "596 visitors" is roughly 30 human sessions
+
+- **Evidence:** PostHog prod, 30d to 2026-07-25 (n=597 sessions):
+  - **Geography:** United States 266 sessions, then Germany 67, Sweden 66, **Singapore 64**, Austria 35, Netherlands 27, **Luxembourg 16**. There is no marketing, no social, and no content aimed at any of those markets.
+  - **Client:** Chrome on **Linux = 93 sessions** (16%), the second-largest OS after macOS. Desktop 501 vs mobile 96 — inverted for a luxury-resale consumer audience.
+  - **Shape:** 92% `$direct` (547/597); 89% single-pageview; median session 5 seconds; 1.00 sessions per person.
+  - **Real external human traffic, 30d:** organic search referrers total **8 sessions** (google.com 4, cn.bing.com 2, duckduckgo 1, yahoo 1), AI referral **2** (chatgpt.com), social **23** (l.instagram.com 15, m.facebook.com 6, www.facebook.com 2). That is ~33 sessions of identifiable outside humans in a month.
+  - The pulse currently reports `real_visitors_30d: 636` and `wow_change_pct: 20`. Every baseline note in this feed since 2026-07-10 quotes those numbers.
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Add a bot/low-quality filter to the pulse** (exclude sessions with duration < 2s AND 1 pageview; report Linux-desktop-direct separately) and report "identified human sessions" alongside the raw count | Stops a WoW swing in crawler volume from reading as audience growth or collapse; makes the 2026-08-10 GEO check-in honest | Best. This is exactly the §1 "a broken tracker reads as demand" failure, inverted |
+  | Report raw counts with a standing caveat line | Cheaper, but every future reader re-derives the caveat, and the urgent thresholds still fire on bot swings | Acceptable fallback |
+  | Leave it | The 2026-08-10 GEO call gets made against an inflated denominator, which biases the organic-share ratio **downward** and could false-FAIL the bet | Do not choose |
+- **Moves:** Acquisition read (Bet 1) and every §3 urgent threshold, all of which are denominated in visitors.
+- **Confidence:** My read is that the majority of the 596 is automated. The signature (datacenter geos, Chrome/Linux share, 5s median session, 1.00 sessions/person, 92% direct) is consistent and mutually reinforcing. I cannot prove it per-session without IP/UA data PostHog does not expose here, so treat it as a strong leaning, not a verdict — the fix is defensive either way.
+- **Class:** AUTO (in-repo change to `scripts/analytics-pulse.ts`; adds a field, does not remove the raw one).
+- **Status:** OPEN
+
+---
+
+### 2026-07-25 DECISION: Verify the newsletter write path, then put email capture on the bag page
+
+- **Evidence:** `newsletter_subscribed` has fired **2 times all-time** (last 2026-06-22T20:49Z), and the event only fires inside the `result.ok` branch of `subscribeNewsletter` (`src/components/NewsletterSignup.tsx:39-41`). The `newsletter_subscriber` table returns **0 rows** (Supabase, read 2026-07-25). Two successful client-side subscribes and zero stored rows is either a deleted test pair or a silent write failure; it is worth two minutes to know which, because this is the surface I am recommending she scale. Separately: the form is mounted on `/` (`src/app/page.tsx:194`), the footer (`src/app/layout.tsx:134`), `/articles` (`:542`) and `/taste` (`:142`) — **not on the bag page**, which is where the depth actually happens (30d: `variant_viewed` 109 people, `value_module_viewed` 109, `price_history_viewed` 103).
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Drive one live subscribe end-to-end, confirm a row lands, then add the capture to the bag page at the value moment** (price-alert framing, no gate, no blocked content) | Turns the deepest engagement surface into the one capture point that costs nothing in acquisition. Any reader-facing copy runs through `brand-voice` first | Best |
+  | Verify the write path only, defer placement | Half the value; the bag page stays capture-less | Partial |
+  | Scale placement without verifying the write | Risks building a funnel into a table that never receives rows | Do not choose |
+- **Moves:** Intent step → the owned-audience asset the projections lean on ("a registered-user base premium converts against", `monetization-projections.md:16`). Email is the only capture channel that does not tax GEO.
+- **Confidence:** The 0-rows-vs-2-events gap is a fact; my read on *why* is genuinely uncertain (deleted test rows is at least as likely as a bug). Sending is still blocked (no Resend), so this builds a list she cannot yet mail — that is the correct order, not a blocker.
+- **Class:** OWNER (needs a live submit from a real session; the placement half is AUTO once the write path is confirmed).
+- **Status:** OPEN
+
+---
+
+### 2026-07-25 DECISION: Act on indexing before the 2026-08-10 GEO check-in — 4,030 bag URLs submitted, ~0 indexed
+
+- **Evidence:** `https://www.luxurycatalog.com/sitemap.xml` (fetched 2026-07-25) contains **4,152 URLs, of which 4,030 are `/bag/…`** and 49 are `/brand/…`. A `site:luxurycatalog.com` query against DuckDuckGo (Bing-backed index, same 2026-07-25) surfaces **9 distinct URLs**: `/`, `/about`, `/articles`, one article, `/authentication`, `/how-we-tier`, `/login`, `/rankings`, `/shop`. **No `/bag/` page and no `/brand/` page appears.** `robots.txt` is permissive (`Allow: /`, only `/admin` disallowed), so this is not a blocking problem — it is a crawl-budget/indexation problem. Consistent with behavior: 8 organic-search sessions and 2 AI-referral sessions in 30d.
+- **Options:**
+  | Option | Effect | Rating |
+  |---|---|---|
+  | **(Recommended) Open Bing Webmaster Tools + Google Search Console now and read actual index coverage** (submitted vs indexed, crawl errors, discovered-not-indexed), rather than waiting for 2026-08-10 to read it off referrer share | The 8/10 trigger tests the *symptom*. Index coverage tests the *cause*, and it is available today. If bag pages are "discovered, currently not indexed," the fix is content/internal-linking, not patience | Best |
+  | Wait for 2026-08-10 as decided | Keeps the existing discipline but spends 16 more days not knowing whether the asset is even in the index | Acceptable, weaker |
+  | Reduce the sitemap to a high-quality subset and grow it | A real lever if coverage confirms crawl-budget dilution across 4,030 thin URLs; do not act on it without the coverage data | Conditional on option 1 |
+- **Moves:** Acquisition, Bet 1 (GEO is the lead channel) — the spine feeding all five lanes. This outranks any capture question by an order of magnitude: capture rate on ~30 human sessions a month is worth roughly nothing; indexation of 4,030 pages is the whole model.
+- **Confidence:** The sitemap count is exact. The index count is a **weak proxy** — `site:` results are truncated and deduplicated by the engine, and DuckDuckGo is not authoritative for Google. Read this as "no evidence bag pages are indexed," not "proof they are not." The authoritative source is Search Console, which is why the recommendation is to go look.
+- **Class:** OWNER (needs her logins to Search Console / Bing Webmaster Tools).
+- **Status:** OPEN
+
+---
+
 ### 2026-07-13 DECISION: Verify the `item_saved` flow before launch — 7 wired call sites, zero fires all-time
 
 - **Evidence:** `item_saved` is wired at seven call sites (`BagActions.tsx` ×2, `StickyActionBar.tsx` ×2, `ReviewForm.tsx`, `QuickSaveHeart.tsx`, `PendingSaveFlusher.tsx`) yet the pulse shows `count_all_time` = 0, `last_seen` = null (2026-07-13, all-time). Over the 30d prod journey (to 2026-07-13): variant_viewed 91 → price_history_viewed 84 → value_module_viewed 86 → **item_saved 0**. Depth engagement is strong (94% of bag-page viewers reach the value module), but the save-intent step is completely dark. The design even has a logged-out stash-and-flush path (`PendingSaveFlusher` fires `item_saved` after signup), so a save firing zero across 91 bag views and all history is more consistent with a break than with "no one saved."
