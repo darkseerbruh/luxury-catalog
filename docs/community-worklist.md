@@ -9,6 +9,44 @@ Status key: ⬜ todo · 🔄 in progress · ✅ done · ⏸️ blocked (needs ow
 
 ---
 
+## ⚡ ACTIVE: bag-page community build (from `ux/bag-page-build-plan.md`)
+*Owner said "do them all" then "Start. Keep going." on 2026-07-26. Autonomous run.
+Commit after each unit. Resume from the first ⬜.*
+
+- ✅ **Unit 1 — spec columns + promote spec facts** (`c8b4065`)
+  Migration `0060` (weight_g, closure_type, pocket_count) + `promote-spec-facts.ts`.
+  Dry-run yield: **closure 1,485 variants (~34%)**, dims 285 (~6.5%), 4,336 strings
+  refused as unit-ambiguous. 13 new tests.
+  ⏸️ **HER TURN: apply 0060, then run `npx tsx supabase/ingest/promote-spec-facts.ts --write`**
+- ✅ **Unit 2 — shelf counts shown to everyone** (`9e90937`)
+  `getShelfCounts` + `ShelfCountsPanel` under the save action. Counts public, action
+  gated. Self-hides below 5 total. 5 new tests. Verified hidden on /bag/589 (prod
+  closet is empty); populated state unverified for want of data.
+- ✅ **Unit 3 — the six owner scales** (`cc0136c`)
+  describe: structure · holds_up · dress_code · worth_it_where
+  rate: access · price_value. `wears_well` merged into holds_up; Most-durable board
+  now reads the axis. Verified all six render on /bag/589.
+  ⏸️ **HER TURN: apply 0059** (rewritten to the six; still unapplied)
+- ⬜ **Unit 4 — votable Reputation claims** (cold start + top engagement)
+- ⬜ **Unit 5 — "reminds me of" three rails** (derived pass first)
+- ⬜ **Unit 6 — shelf states + reasons** (add `tried`; `had` reason: sold/returned/
+  gifted/rented/lost)
+- ⬜ **Unit 7 — most-worn periodic check-in** (never a daily log)
+- ⬜ **Unit 8 — one canvas + purchase context** (year/channel/price as a private note)
+- ⬜ **Unit 9 — photo surfaces** (wear-and-tear timeline, what-fits)
+- ⬜ **Unit 10 — age + trend scales** ⚠️ needs design + a copywriter pass first
+  (ageism risk on youthful/grown-up; trend stored as a TIME SERIES)
+- ⬜ **Unit 11 — repair referral surface** (no affiliate found; owner open to a
+  custom partnership)
+
+**Owner-held:** build quality (parked, has no derived source and was cut as an ask).
+
+**Known gap, logged not hidden:** dimension coverage stays ~6.5% because only
+myGemma's licensed feed states measurements. Full coverage needs a dedicated capture
+pass against house or reseller product pages. Its own unit, not yet scheduled.
+
+---
+
 ## Phase 0 — Verify & unblock ✅ CLEARED 2026-07-25
 - ✅ **Prod probe: every UGC table is LIVE.** All 8 answered HTTP 200 via the anon
   key (`review`, `bag_axis_vote`, `bag_wear`, `bag_photo`, `correction`,
