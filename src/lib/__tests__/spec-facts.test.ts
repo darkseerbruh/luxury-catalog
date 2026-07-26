@@ -47,6 +47,26 @@ describe("parseMeasurements", () => {
   it("accepts inch marks as a unit signal", () => {
     expect(parseMeasurements('10" x 8" x 4"')).toEqual({ h: 25.4, w: 20.3, d: 10.2 });
   });
+
+  // The failures below are the real myGemma strings that produced 285 bad rows on
+  // 2026-07-26, all reverted. Depth is essentially always a handbag's smallest
+  // dimension, and a big first number is usually a strap length leaking in.
+  it("refuses a string whose depth is not the smallest dimension", () => {
+    // Gucci Blondie Medium: source "5.5 x 8 x 32" wrote a 32cm depth on a 5.5cm bag.
+    expect(parseMeasurements("5.5 x 8 x 32")).toBeNull();
+  });
+
+  it("refuses a strap length leaking into the first slot", () => {
+    // Prada Symbole MINI: "25 x 7 x 3.2 in" made a mini bag 63.5cm tall.
+    expect(parseMeasurements("25 x 7 x 3.2 in")).toBeNull();
+    // Balenciaga Hourglass XS: same shape of error.
+    expect(parseMeasurements("25 x 6.5 x 4 in")).toBeNull();
+  });
+
+  it("still accepts a genuinely large bag whose axes are all plausible", () => {
+    // A big tote: tall AND wide, so nothing looks like a stray strap figure.
+    expect(parseMeasurements("55 x 40 x 20 cm")).toEqual({ h: 55, w: 40, d: 20 });
+  });
 });
 
 describe("consensus", () => {

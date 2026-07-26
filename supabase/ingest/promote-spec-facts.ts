@@ -36,6 +36,17 @@ import { supabaseAdmin as db } from "../seed/lib/client";
 
 const WRITE = process.argv.includes("--write");
 
+/**
+ * Dimension writes are OFF until a trustworthy source exists.
+ *
+ * Turning this on again needs a source that states axes in a known order. The
+ * candidates are house product pages and reseller product pages (Fashionphile and
+ * TRR both show structured measurements on the PAGE, though not in the feed text
+ * we currently ingest). Closure is unaffected and keeps writing: it is
+ * categorical, consensus-voted across distinct listings, and was verified correct.
+ */
+const DIMENSIONS_TRUSTED = false;
+
 /** Minimum distinct listings agreeing before we write a closure. */
 const CLOSURE_MIN_VOTES = 2;
 /** Winning closure must hold at least this share of the votes. */
@@ -66,7 +77,16 @@ export interface Dims { h: number; w: number; d: number }
 
 /**
  * Parse a measurement string into centimetres. Returns null unless the unit is
- * stated or unambiguously inferable.
+ * stated or unambiguously inferable AND the result is a plausible handbag.
+ *
+ * DIMENSIONS ARE CURRENTLY DISABLED (see DIMENSIONS_TRUSTED below). A 2026-07-26
+ * write ran, was audited, and was reverted: the only source that states
+ * measurements (myGemma's Awin feed) is unreliable in ORDER and in MEANING.
+ * Four different "Mini" bags all parsed to exactly 63.5cm tall because their
+ * strings lead with a strap length in inches ("25 x 7 x 3.2" for a Prada Symbole
+ * Mini), and one Gucci string was "75 x 5.2", a strap length in cm plus one
+ * dimension. The checks below catch the worst of it, but catching *most* bad rows
+ * is not good enough for a number we would print on a bag page.
  *
  * Inference rule, deliberately conservative: with no stated unit, a largest
  * dimension under 30 reads as inches (a 25cm bag would be tiny in inches but is a
@@ -95,8 +115,18 @@ export function parseMeasurements(raw: string | null | undefined): Dims | null {
   }
 
   const dims = { h: +(a * toCm).toFixed(1), w: +(b * toCm).toFixed(1), d: +(c * toCm).toFixed(1) };
+
   // Sanity envelope: a handbag between 5cm and 100cm on every axis.
   if (![dims.h, dims.w, dims.d].every((n) => n >= 5 && n <= 100)) return null;
+
+  // Depth is essentially always the smallest dimension on a handbag. When it is
+  // not, the source listed the axes in some other order and we cannot know which.
+  if (dims.d > Math.min(dims.h, dims.w)) return null;
+
+  // A stated dimension over 50cm on a bag whose others are small is the strap
+  // length leaking into the first slot (the myGemma failure mode above).
+  if (Math.max(dims.h, dims.w) > 50 && Math.min(dims.h, dims.w) < 25) return null;
+
   return dims;
 }
 
@@ -221,6 +251,14 @@ async function main() {
     else ok += 1;
   }
   console.log(`\nclosure written: ${ok}/${closureWrites.length}`);
+
+  if (!DIMENSIONS_TRUSTED) {
+    console.log(
+      `\ndims NOT written: the only source that states measurements is unreliable in ` +
+      `order and meaning (audited + reverted 2026-07-26). ${dimWrites.length} rows withheld.`,
+    );
+    return;
+  }
 
   let ok2 = 0;
   for (const w of dimWrites) {
