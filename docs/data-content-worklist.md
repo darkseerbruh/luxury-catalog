@@ -665,9 +665,9 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: The monthly cron fires on the 1st (CRON_SECRET verified set in Vercel prod, 2026-07-10); to backfill now, curl /api/cron/lc-index-snapshot with the Bearer secret. (first seen 2026-07-10, last seen 2026-07-22, yellow)
-- ⬜ [dh:contamination-trr] 127 TRR rows captured in the last week would fail today's non-bag filter, so non-bag items are leaking back in. Action: Run the TRR non-bag cleanup scripts (cleanup-trr-nonbag.ts) and check the ingest gate. (first seen 2026-07-10, last seen 2026-07-22, red)
-- ⬜ [dh:contamination-dupes] 256 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-07-10, last seen 2026-07-22, red)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-07-22, yellow)
-- ✅ [dh:backlog-total] resolved 2026-07-22 (Discovered-listing backlog is back to normal)
+- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: The monthly cron fires on the 1st (CRON_SECRET verified set in Vercel prod, 2026-07-10); to backfill now, curl /api/cron/lc-index-snapshot with the Bearer secret. (first seen 2026-07-10, last seen 2026-07-26, yellow)
+- ⬜ [dh:backlog-total] The unpromoted backlog grew from 239414 to 326857 rows since the last run; capture is outpacing promotion. Action: Schedule a promotion session (promote-safe --create-new) or grow the dictionary coverage. (first seen 2026-07-26, last seen 2026-07-26, red)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-07-26, yellow)
+- ✅ [dh:contamination-trr] resolved 2026-07-26 (TRR non-bag leak-back (last 7 days) is back to normal)
+- ✅ [dh:contamination-dupes] resolved 2026-07-26 (Same-day duplicate listing rows (last ~24h) is back to normal)
 <!-- data-health:end -->
