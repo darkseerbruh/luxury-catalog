@@ -431,22 +431,44 @@ async function loadPreviousRanks(): Promise<Record<number, number>> {
   }
 }
 
-/** The whole computed index, cached hourly (the underlying signals move slowly). */
-export const getLcIndex = unstable_cache(
-  async (): Promise<LcIndexData> => {
-    const [signals, previous] = await Promise.all([loadStyleSignals(), loadPreviousRanks()]);
-    const data = computeLcIndex(signals);
-    if (Object.keys(previous).length > 0) {
-      for (const r of data.ranked) {
-        const prev = previous[r.styleId];
-        if (prev != null) r.previousRank = prev;
-      }
+/** Build the index from scratch. No caching — see getLcIndex below. */
+async function buildLcIndex(): Promise<LcIndexData> {
+  const [signals, previous] = await Promise.all([loadStyleSignals(), loadPreviousRanks()]);
+  const data = computeLcIndex(signals);
+  if (Object.keys(previous).length > 0) {
+    for (const r of data.ranked) {
+      const prev = previous[r.styleId];
+      if (prev != null) r.previousRank = prev;
     }
-    return data;
-  },
-  ["lc-index"],
-  { revalidate: 3600 },
-);
+  }
+  return data;
+}
+
+/** The computed index, cached hourly (the underlying signals move slowly). */
+const getCachedLcIndex = unstable_cache(buildLcIndex, ["lc-index"], { revalidate: 3600 });
+
+/**
+ * The whole computed index.
+ *
+ * WHY THIS WRAPPER EXISTS (2026-07-26): loadStyleSignals() swallows any DB error
+ * and returns [], which is deliberate (a blank module beats a 500). But that empty
+ * result then got CACHED for an hour, so one transient failure blanked every
+ * surface at once — /rankings fell back to "The Index is warming up" and no bag
+ * page could render a Standing card. That is exactly how the LC Index sat empty
+ * for four days in July 2026 while only a nightly workflow complained.
+ *
+ * An empty index is never a legitimate steady state (482 styles cleared the floor
+ * on 2026-07-26), so treat it as a poisoned entry rather than an answer: fall back
+ * to one uncached read instead of serving a blank Index until the hour is up. The
+ * RPC now reads a materialized view (migration 0060) and answers in ~0.3s, so the
+ * fallback is cheap, and it self-heals on the very next request instead of needing
+ * a redeploy to clear the cache.
+ */
+export async function getLcIndex(): Promise<LcIndexData> {
+  const cached = await getCachedLcIndex();
+  if (cached.ranked.length > 0) return cached;
+  return buildLcIndex();
+}
 
 /** One style's standing, or null when the style is unranked / unknown. */
 export async function getStyleStanding(styleId: number): Promise<Standing | null> {
