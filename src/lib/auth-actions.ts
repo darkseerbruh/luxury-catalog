@@ -41,6 +41,19 @@ function readCredentials(formData: FormData) {
   return { email, password };
 }
 
+/**
+ * Turnstile token from the form, or undefined when the widget isn't configured.
+ *
+ * Passed to Supabase as `options.captchaToken`, which is ignored while the
+ * project's captcha setting is off. That's what lets the code ship before the
+ * dashboard toggle: no key means no field, no field means no token, and
+ * Supabase carries on exactly as before.
+ */
+function readCaptcha(formData: FormData): string | undefined {
+  const token = String(formData.get("captchaToken") ?? "").trim();
+  return token.length > 0 ? token : undefined;
+}
+
 function validate(email: string, password: string): string | null {
   if (!email || !email.includes("@")) return "Enter a valid email address.";
   if (password.length < 8) return "Password must be at least 8 characters.";
@@ -63,13 +76,24 @@ export async function signUp(
     password,
     // Land Supabase's DEFAULT (free-tier, unedited-template) confirmation email
     // on our /auth/confirm route, which handles the ?code= PKCE exchange.
-    options: { emailRedirectTo: `${origin}/auth/confirm` },
+    options: {
+      emailRedirectTo: `${origin}/auth/confirm`,
+      captchaToken: readCaptcha(formData),
+    },
   });
   if (error) return { error: error.message };
 
   // When email confirmation is on, there's no active session yet.
   if (!data.session) {
     return { message: "Check your email to confirm your account, then log in." };
+  }
+
+  // Stitch anonymous → identified at SIGN-UP, not just sign-in. Without this a
+  // new account stayed anonymous in PostHog until its owner's second visit, so
+  // the whole signup funnel was unreadable. There's no profile yet (persona is
+  // set during onboarding), so the person properties fill in at first sign-in.
+  if (data.user) {
+    identifyUserToPostHog(data.user.id, {}).catch(() => undefined); // never block signup
   }
 
   revalidatePath("/", "layout");
@@ -88,7 +112,11 @@ export async function signIn(
   if (!email || !password) return { error: "Email and password are required." };
 
   const supabase = await createServerSupabase();
-  const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data: signInData, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+    options: { captchaToken: readCaptcha(formData) },
+  });
   if (error) return { error: "Incorrect email or password." };
 
   // Stitch anonymous → identified in PostHog and write persona as a person

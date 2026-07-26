@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { signIn, signUp, signInWithProvider, type AuthFormState } from "@/lib/auth-actions";
+import TurnstileField from "@/components/TurnstileField";
 
 const initial: AuthFormState = {};
 
@@ -62,6 +63,9 @@ export default function AuthForm({ mode, next }: { mode: "login" | "signup"; nex
           placeholder={mode === "signup" ? "At least 8 characters" : "••••••••"}
         />
       </label>
+
+      {/* Renders nothing until NEXT_PUBLIC_TURNSTILE_SITE_KEY is set. */}
+      <TurnstileField />
 
       {state.error && <p className="text-sm text-red-400">{state.error}</p>}
       {state.message && <p className="text-sm text-gold">{state.message}</p>}

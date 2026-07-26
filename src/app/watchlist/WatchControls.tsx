@@ -15,17 +15,20 @@ export default function WatchControls({
   initialAlert,
   initialMode = "pct_below_median",
   initialPct = 10,
+  initialNotifyOnListing = true,
 }: {
   variantId: number;
   initialTarget: number | null;
   initialAlert: boolean;
   initialMode?: AlertMode;
   initialPct?: number | null;
+  initialNotifyOnListing?: boolean;
 }) {
   const [mode, setMode] = useState<AlertMode>(initialMode);
   const [pct, setPct] = useState<number>(initialPct ?? 10);
   const [target, setTarget] = useState(initialTarget != null ? String(initialTarget) : "");
   const [alert, setAlert] = useState(initialAlert);
+  const [onListing, setOnListing] = useState(initialNotifyOnListing);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
@@ -56,6 +59,27 @@ export default function WatchControls({
       if (res.ok) track(EVENTS.alertUpdated, { variant_id: variantId, mode: "absolute", target: parsed });
       if (res.ok) flash();
       else setError(res.error ?? "Something went wrong.");
+    });
+  }
+
+  /**
+   * The availability floor. It sits UNDER the price rule rather than replacing
+   * it: someone hunting a discontinued colourway wants to know one surfaced
+   * even when they also set a target price.
+   */
+  function toggleOnListing() {
+    setError(null);
+    const next = !onListing;
+    setOnListing(next);
+    startTransition(async () => {
+      const res = await updateWatch({ variantId, notifyOnListing: next });
+      if (res.ok) {
+        track(EVENTS.alertUpdated, { variant_id: variantId, notify_on_listing: next });
+        flash();
+      } else {
+        setOnListing(!next);
+        setError(res.error ?? "Something went wrong.");
+      }
     });
   }
 
@@ -133,6 +157,17 @@ export default function WatchControls({
         <label className="flex cursor-pointer items-center gap-2 text-muted">
           <input type="checkbox" checked={alert} onChange={toggleAlert} className="accent-gold" />
           Alerts on
+        </label>
+
+        <label className="flex cursor-pointer items-center gap-2 text-muted">
+          <input
+            type="checkbox"
+            checked={onListing}
+            onChange={toggleOnListing}
+            disabled={!alert}
+            className="accent-gold disabled:opacity-40"
+          />
+          Tell me when one comes up, at any price
         </label>
 
         {saved && <span className="text-gold">Saved</span>}

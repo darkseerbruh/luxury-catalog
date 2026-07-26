@@ -214,6 +214,8 @@ export async function updateWatch(input: {
   alertEnabled?: boolean;
   alertMode?: AlertMode;
   alertPct?: number | null;
+  /** Availability floor (0059): ping me when one turns up, at any price. */
+  notifyOnListing?: boolean;
 }): Promise<ActionResult> {
   if (!validVariant(input.variantId)) return { ok: false, error: "Invalid item." };
   const user = await getCurrentUser();
@@ -233,6 +235,9 @@ export async function updateWatch(input: {
   const patch: Record<string, unknown> = { ...legacyPatch };
   if (input.alertMode !== undefined) patch.alert_mode = input.alertMode;
   if (input.alertPct !== undefined) patch.alert_pct = clampPct(input.alertPct);
+  // Added by 0059. Rides the same missing-column fallback as the 0033 columns,
+  // so the UI still saves the rest if the migration hasn't run yet.
+  if (input.notifyOnListing !== undefined) patch.notify_on_listing = input.notifyOnListing;
   if (Object.keys(patch).length === 0) return { ok: true };
 
   const supabase = await createServerSupabase();

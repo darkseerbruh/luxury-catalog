@@ -11,6 +11,7 @@ import PendingSaveFlusher from "@/components/PendingSaveFlusher";
 import HeaderNav from "@/components/HeaderNav";
 import FooterAccountLinks from "@/components/FooterAccountLinks";
 import { FirstAlertNudge } from "@/components/FirstAlertNudge";
+import SignupPrompt from "@/components/SignupPrompt";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import "./globals.css";
 
@@ -39,6 +40,19 @@ export const metadata: Metadata = {
   title: "Luxury Catalog",
   description:
     "The reference for designer handbags: Production history, authentication markers, and what they actually resell for, brand by brand.",
+  // Search Console / Bing Webmaster ownership tags.
+  //
+  // Both tools offer an HTML-tag verification method that avoids touching DNS.
+  // Wired to env vars so claiming a property is a Vercel setting, not a code
+  // change: paste the token from the tool into GOOGLE_SITE_VERIFICATION or
+  // BING_SITE_VERIFICATION, redeploy, click Verify. Omitted entirely when
+  // unset, so nothing renders until there is a real token.
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : undefined,
+  },
 };
 
 export default async function RootLayout({
@@ -84,6 +98,7 @@ export default async function RootLayout({
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
         <FirstAlertNudge />
+        <SignupPrompt />
         <footer className="border-t border-border px-5 py-8 text-sm text-muted print:hidden">
           <div className="mx-auto max-w-5xl">
             <div className="max-w-xs">

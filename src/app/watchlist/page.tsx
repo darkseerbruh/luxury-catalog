@@ -80,6 +80,7 @@ export default async function WatchlistPage() {
                   initialAlert={w.alertEnabled}
                   initialMode={w.alertMode}
                   initialPct={w.alertPct}
+                  initialNotifyOnListing={w.notifyOnListing}
                 />
               </li>
             );

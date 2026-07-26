@@ -3,6 +3,7 @@ import { getCurrentUser, getProfile } from "@/lib/auth";
 import { completeOnboarding } from "@/lib/profile-actions";
 import { safeNext } from "@/lib/safe-next";
 import { MOTIVATIONS } from "@/lib/maturity";
+import TrackAccountCreated from "./TrackAccountCreated";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,13 @@ export default async function OnboardingPage({
 
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col px-5 py-16">
+      {/* Account age is judged in the client effect, not here: reading the
+          clock during a Server Component render is an impure call. */}
+      <TrackAccountCreated
+        userId={user.id}
+        createdAt={user.createdAt}
+        method={user.provider}
+      />
       <h1 className="font-serif text-3xl text-foreground">Welcome to the catalog</h1>
       <p className="mt-2 mb-8 text-muted">
         Two quick questions so what you see fits how you shop. Change them any
