@@ -4,6 +4,7 @@ import {
   parseMeasure,
   parseLabelledDimensions,
   agreeDimension,
+  extractFashionphileRows,
 } from "../ingest/labelled-dimensions";
 
 describe("mapLabel — the cross-source trap", () => {
@@ -122,5 +123,54 @@ describe("agreeDimension", () => {
     // The probe found the same Speedy 30 at 8.25in and 10.75in, one slumped and one
     // stood up. Two listings that far apart are not a measurement.
     expect(agreeDimension([21.0, 27.3])).toBeNull();
+  });
+});
+
+describe("extractFashionphileRows", () => {
+  // The exact markup from a live page (Balenciaga Nano City, fetched 2026-07-26),
+  // wrapped in the storefront JavaScript that also appears on every FP page.
+  const REAL = `
+    <script>if (Width >= 768) { var Drop = 1; } var Height; var Depth;</script>
+    <div class="product__accordion">
+      <p><span class="metafield-multi_line_text_field">Length: 8 in<br />
+Width: 3.5 in<br />
+Height: 6 in<br />
+Drop: 3.5 in<br />
+Drop: 21.5 in</span></p>
+    </div>`;
+
+  it("reads only inside the metafield, never the page JavaScript", () => {
+    // A document-wide search matches minified script (`Width >= 768`) and yields junk.
+    const rows = extractFashionphileRows(REAL);
+    expect(rows).toEqual([
+      { label: "Length", value: "8 in" },
+      { label: "Width", value: "3.5 in" },
+      { label: "Height", value: "6 in" },
+      { label: "Drop", value: "3.5 in" },
+      { label: "Drop", value: "21.5 in" },
+    ]);
+  });
+
+  it("produces dimensions that match the real bag", () => {
+    // A Nano City is roughly 20 x 14 x 9 cm, and FP's Width is its DEPTH.
+    const d = parseLabelledDimensions("fashionphile", extractFashionphileRows(REAL));
+    expect(d).toEqual({
+      widthCm: 20.3,
+      heightCm: 15.2,
+      depthCm: 8.9,
+      strapDropCm: 8.9,
+      convention: "base",
+    });
+  });
+
+  it("ignores non-measurement rows sharing the metafield", () => {
+    const rows = extractFashionphileRows(
+      `<span class="metafield-multi_line_text_field">Material: Lambskin<br />Height: 6 in</span>`,
+    );
+    expect(rows).toEqual([{ label: "Height", value: "6 in" }]);
+  });
+
+  it("returns nothing on a page with no metafield", () => {
+    expect(extractFashionphileRows("<html><body>no size block</body></html>")).toEqual([]);
   });
 });

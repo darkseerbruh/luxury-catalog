@@ -185,3 +185,43 @@ export function agreeDimension(
 
   return result;
 }
+
+/**
+ * Pull the labelled rows out of a Fashionphile product page.
+ *
+ * The figures live in a Shopify metafield inside the "Size" accordion, as plain
+ * `Label: value` lines separated by `<br />`:
+ *
+ *   <span class="metafield-multi_line_text_field">Length: 8 in<br />
+ *   Width: 3.5 in<br />Height: 6 in<br />Drop: 3.5 in<br />Drop: 21.5 in</span>
+ *
+ * SCOPED ON PURPOSE. The page also ships storefront JavaScript containing the bare
+ * words `Width`, `Height`, `Depth` and `Drop` (things like `Width >= 768`), so a
+ * document-wide search for a label matches minified script and produces nonsense.
+ * We read only inside the metafield spans.
+ *
+ * The Shopify `/products/<handle>.js` endpoint does NOT carry these, so the page
+ * itself has to be fetched. That is free for us: grade-condition-fashionphile.ts
+ * already downloads this exact HTML daily for condition grading.
+ */
+export function extractFashionphileRows(html: string): LabelledRow[] {
+  const rows: LabelledRow[] = [];
+  const spans = html.matchAll(
+    /<span class="metafield-multi_line_text_field">([\s\S]*?)<\/span>/gi,
+  );
+  for (const span of spans) {
+    const text = span[1]
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/gi, " ");
+    for (const line of text.split("\n")) {
+      const m = line.match(/^\s*([A-Za-z][A-Za-z ]{2,20}?)\s*:\s*(.+?)\s*$/);
+      if (!m) continue;
+      // Only keep lines whose value actually looks like a measurement, so a
+      // "Material: Lambskin" row in the same metafield never reaches the mapper.
+      if (!/\d/.test(m[2])) continue;
+      rows.push({ label: m[1].trim(), value: m[2].trim() });
+    }
+  }
+  return rows;
+}
