@@ -108,7 +108,12 @@ echo ""
 echo "🔎 Smoke-checking the live site…"
 SMOKE_FAILED=0
 for path in "/" "/rankings" "/shop"; do
-  code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "${SMOKE_URL}${path}" || echo 000)"
+  # `cmd || echo 000` APPENDS on failure (curl prints "200", then the fallback adds
+  # "000" -> "200000", seen on the first real run 2026-07-26). Replace, don't append.
+  # 60s because a cold /shop render legitimately exceeds 30s right after a deploy.
+  if ! code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 60 "${SMOKE_URL}${path}")"; then
+    code="000"
+  fi
   if [ "$code" = "200" ]; then
     printf '   ✅ %-12s %s\n' "$path" "$code"
   else
