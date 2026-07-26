@@ -79,6 +79,40 @@ Commit after each unit. Resume from the first ⬜.*
   because reputation heats and cools (Celine Luggage, Boy). Store trend as a TIME
   SERIES, never a static average.
 
+### 🔬 Archivist findings on size eras (2026-07-26) — `research-drafts/chanel-flap-size-eras.md`
+The pull answered the question and then reframed it. **The ambiguity is roughly 30%
+era and 70% naming plus measurement convention**, and both of those are fixable
+without new data.
+- 🏷️ **"Large" and "Jumbo" are Chanel's word and the collector's word for ONE bag.**
+  Checked against our catalog: the Classic Flap (style 1) is clean, it only uses
+  Jumbo. But **3 styles carry both labels** and need a look:
+  `[423] Chanel 2.55 Reissue` (likely a genuine double-count, same house convention),
+  `[448] Gucci Ophidia` and `[1047] Gucci Belt Bag` (Gucci does not use Jumbo
+  officially, so these smell like seller-title contamination).
+  ⚠️ NOT fixed here: merging variants is destructive and lands in the same table the
+  identification lane is working in. Flagged for that lane or for an owner call.
+- 🚪 **The era gate is FLAP COUNT, not a dimension.** Jumbo and Maxi were
+  single-flap until 2010 and double-flap after, alongside a grommet-layout change.
+  Binary, sourced, visible in listing photos, and already written into most reseller
+  titles. That is a far better disambiguator than millimetres, and it wants to be an
+  axis in the production matrix.
+- 📏 **Only the Jumbo (~2cm height) and Maxi (~2-3cm width) are era-resolvable by
+  measurement at all.** Medium and Small sit at 25-26cm wide from 1996 to 2026 with
+  no trend; lot-to-lot variation within one year matches the variation between
+  decades. The vintage Maxi is wider AND flatter, effectively a different silhouette.
+- ⚠️ **This independently confirms why the myGemma dimension write had to be
+  reverted.** Sources use different conventions: Rebag publishes BASE length,
+  Christie's uses W x H x D, Miss Bugis uses L x H x W. Ingest a size string without
+  knowing the axis order and you swap height and depth on roughly a third of rows.
+- 📐 **Schema recommendation from the pull:** store a RANGE plus a convention tag
+  (`overall` / `base` / `unknown`) plus a `measured` vs `guide` flag. Never a point
+  value. Our 0065 columns are point values, so they need extending before any
+  dimension load. Decide once the reseller capture probe reports.
+- 🕳️ Documented gaps kept honest: 1983-1989 blank entirely, Jumbo 1998-2009 and Maxi
+  1995-2009 blank. Chanel publishes no historical spec archive. A June 2020 drop of
+  ~0.5cm in chanel.com's PUBLISHED figures is a spec-sheet change, not a bag change,
+  and must never be written up as "the bag got smaller".
+
 ### Dimensions: the design changed (owner insight, 2026-07-26)
 Brand specs are CURRENT-SEASON, so they cannot tell a 2005 "Large" Classic Flap from a
 2024 "Large". **Seller-measured dimensions are the disambiguator**, so the two sources

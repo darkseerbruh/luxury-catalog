@@ -239,6 +239,50 @@ time, commit after each, never stop to ask. Stops allowed only at: queue empty, 
 technical block, or an outward-facing op. Checkpoint here, do not summarize-and-halt.
 
 **Run log**
+- **2026-07-26 (run 21)** — HISTORICAL DIMENSION ARCHIVE unit (a new artifact type: per-era measurements, not names).
+  Target: **Chanel Classic Flap 11.12 / A01112**, the catalog's most contentious sizing. Output
+  `docs/research-drafts/chanel-flap-size-eras.md` (naming layer + Table A era-dated dimensions + Table B change
+  timeline + documented gaps + a resolvability assessment). **THE HEADLINE FINDING: "Large" and "Jumbo" are the
+  SAME BAG** — Large is Chanel's own boutique/site word, Jumbo is the collector word (Rebag *The Vault* prints the
+  row literally as "Jumbo / Large"). Same collapse applies to Medium = M/L = **Sac Classique**, Jumbo = **Grand Sac
+  Classique**, Maxi = **Maxi Sac Classique** (French names via Miss Bugis 2020-07-02). If the catalog holds Large
+  and Jumbo as separate sizes it is double-counting one bag — flagged as the highest-value immediate fix.
+  **SECOND HEADLINE: the era gate is FLAP COUNT, not a dimension** — the Jumbo and Maxi were **single-flap until
+  2010** and double-flap from 2010, when Chanel added the second flap, changed the grommet layout from one row of 4
+  to two rows of 2, and took a ~$900 price rise (Boutique Patina via PurseBop 2022-09-01, dealer of 19 yrs).
+  Binary, sourced, visible in listing photos, and already written into most reseller titles per
+  `chanel-flap-reseller-decode.md`. **AUCTION-GRADE ERA MEASUREMENTS (Christie's, measured lots, HIGH):** vintage
+  **Maxi single flap 1991-1994 = 36 w x 22 h x 10 d cm** vs modern Maxi 33-34 x 23-24 (wider AND flatter — a
+  different silhouette, the biggest documented era gap on the bag); vintage **Jumbo single flap 1994-1996 = 31 x 22
+  x 9** vs modern double-flap Jumbo **30 x 20 x 9-10** (dated lot "CHANEL, 2020"); Medium dated lots 1996-97
+  (26x17x7, denim), 1997-99 (25x16x6), 2004-05 (25x15x6), modern (25.5x15.5x6.5 HK lot). **HONEST NEGATIVE RESULT
+  (the assessment the brief asked for): the Medium and Small are NOT era-resolvable from dimensions** — 25-26 W /
+  15-17 H across 1996-2026 with no trend, inside measurement noise. Only Jumbo (~2cm height) and Maxi (~2-3cm width)
+  resolve, and only from a MEASURED source. **CONVENTION PROBLEM ISOLATED (the real cause of catalog ambiguity, more
+  than eras):** Rebag publishes **base length** (Small base 20.3cm vs 23cm overall); Christie's uses w x h x d;
+  Miss Bugis uses **L x H x W** (third number is depth); Saclab's prose and its own table contradict each other.
+  Recommend storing dimensions as a **range + convention tag (`overall`/`base`/`unknown`) + `measured` vs `guide`
+  flag**, never a point value. **CHANGES BANKED WITH DATES:** ~1992 Maxi introduced FIRST (13in, before the Jumbo);
+  1993 Jumbo introduced (vertical Mademoiselle quilt only); 1994 diamond-quilt Jumbo; 1996-97 one-year "intermediary"
+  Jumbo (black-only, black interior); 1998 CC turnlock shrinks; 1999 silver HW on Jumbo; 2005 Jumbo reproportioned;
+  2008 24k gold plating ends; 2010 double flap + East-West discontinued; 2018 exotics announced ending; **June 2020
+  chanel.com's PUBLISHED dimensions drop ~0.5cm regionally (US + Canada, NOT Europe) — flagged as a SPEC change,
+  physical change UNPROVEN**; spring 2021 officially renamed 11.12. **HELD RIGOR / omit-not-invent:** 1983-1989 left
+  entirely blank (no dated lot pre-1989 surfaced, Chanel publishes no historical spec archive at all); Jumbo
+  1998-2009 and Maxi 1995-2009 left blank; the vintage caviar chevron Maxi's "slightly larger" logged as sourced but
+  **unquantified**; "XL"/"XXL"/"Maxi XL" logged as `community` LABELS with no measurement, NOT size rows. **CONFLICT
+  FLAGGED not smoothed:** Sotheby's says the Mini Flap was introduced 2010, Christie's has dated mini lots at
+  1989-1991 and 1991-1994 — both authoritative, left unresolved. **Tooling:** 10 firecrawl_search (9 refunded 2→1
+  via feedback in-window, 1 returned 0 results at 0 credits) + 4 raw self-parsed scrapes (PurseForum thread 1029368
+  = the June-2020 spec-change primary; PurseBop/Boutique Patina "Three Decade Journey" = the ERA-CHRONOLOGY
+  WORKHORSE; Rebag *The Vault* 11.12 = the Jumbo/Large synonymy + base-length convention; Miss Bugis = the French
+  names + full cm table) = ~23 credits net. **chanel.com NOT scraped (Akamai)** — its Large figure (7.7 x 11.8 x
+  3.9 in) is a second-hand r/BagArchive quotation, flagged `medium`. Content-ideas: appended **#27** (the size-word
+  decoder + how to date a flap without the serial; pairs with #17 as a "how to date your Chanel" cluster).
+  **Next unit: the owner-present Chrome capture of the four chanel.com Classic Handbag PDPs (Small / Classic /
+  Large / Maxi) to promote the official dimension rows from medium to high; OR a targeted Christie's sweep for
+  dated 1998-2009 Jumbo and 1989-1994 Medium lots to close the two biggest measurement gaps; OR the still-standing
+  HERMÈS 2026-season colours unit from run 20.**
 - **2026-07-15 (run 20)** — Did the standing "NEXT unit" flagged in every run log since run 12: the **HERMÈS
   pre-2020 seasonal-colour deep archive + null-code backfill** (highest-GEO-value open gap). Output appended to
   `hermes.{md,jsonl}` as **§5** (53 new jsonl lines: 1 meta + 22 code-fills + 14 new pre-2020 colours + 16
