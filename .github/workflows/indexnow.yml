@@ -38,13 +38,21 @@ jobs:
 
       - run: npm ci
 
+      # Exit 75 (EX_TEMPFAIL) means "key not verified by Bing yet", which is the
+      # expected answer until it fetches the key file. Treat it as a pass so the
+      # daily run does not page us over something that clears on its own; a real
+      # failure still exits 1 and fails the job.
       - name: Submit changed URLs
         if: ${{ github.event.inputs.all != 'true' }}
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: npx tsx scripts/indexnow-submit.ts --days 2
+        run: |
+          npx tsx scripts/indexnow-submit.ts --days 2 || \
+            { code=$?; [ "$code" -eq 75 ] && echo "::notice::IndexNow key not verified by Bing yet; will retry tomorrow." || exit "$code"; }
 
       - name: Submit every sitemap URL (manual only)
         if: ${{ github.event.inputs.all == 'true' }}
-        run: npx tsx scripts/indexnow-submit.ts --all
+        run: |
+          npx tsx scripts/indexnow-submit.ts --all || \
+            { code=$?; [ "$code" -eq 75 ] && echo "::notice::IndexNow key not verified by Bing yet; will retry tomorrow." || exit "$code"; }

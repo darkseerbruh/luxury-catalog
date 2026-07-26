@@ -106,9 +106,23 @@ async function main() {
 
   const text = await res.text();
   console.log(`response: ${res.status} ${res.statusText}${text ? ` ${text}` : ""}`);
-  // 200 accepted, 202 accepted-pending-key-validation. Anything else is a real
-  // failure and should fail the workflow rather than pass quietly.
-  if (res.status !== 200 && res.status !== 202) process.exit(1);
+
+  // 200 accepted, 202 accepted-pending-key-validation.
+  if (res.status === 200 || res.status === 202) return;
+
+  // 403 SiteVerificationNotCompleted is the expected FIRST-submission answer:
+  // the key file is live but Bing has not fetched it yet. It clears on its own,
+  // so say what is happening rather than failing as if something is broken.
+  if (res.status === 403 && /SiteVerificationNotCompleted/i.test(text)) {
+    console.log(
+      "\nThis is normal on a first submission. The key file is live and Bing has " +
+        "not fetched it yet; it usually clears within a few hours. The daily " +
+        "workflow will keep trying, so no action is needed.",
+    );
+    process.exit(75); // EX_TEMPFAIL: retryable, distinct from a real failure.
+  }
+
+  process.exit(1);
 }
 
 main().catch((e) => {
