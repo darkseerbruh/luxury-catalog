@@ -1,0 +1,137 @@
+{
+  "bag": "Louis Vuitton Alma (style 434)",
+  "styleId": 434,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Pass focused on what owners actually argue about: whether the structure survives, Vernis coating failure versus Epi longevity, the BB against the PM, how it wears crossbody, the base studs, and whether the silhouette reads dated in 2025 and 2026. Reddit comment bodies pulled via the Apify reddit-post-comments scraper on 2026-07-26; forum and YouTube transcripts via Firecrawl. Claims hang off the STYLE because they describe the Alma across materials, not one colourway.",
+  "sources": [
+    {
+      "label": "r/Louisvuitton: Alma BB, tell me all the pros and cons",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/wp5ji7/alma_bb_worth_it_tell_me_all_the_pros_and_cons/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: Alma BB reviews, strap and zip complaints",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1j05pw1/alma_bb_reviews/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: Alma BB dilemma, Epi or Vernis",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1h217hj/alma_bb_dilemma_epi_or_vernis/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: anyone still using and loving their Alma PM in 2025",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1po7q26/anyone_still_using_and_loving_there_alma_pm_in/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: Alma BB in Epi leather, would you recommend it",
+      "url": "https://www.reddit.com/r/handbags/comments/14252uj/i_have_my_eye_on_the_louis_vuitton_alma_bb_in_epi/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Alma PM in Epi versus Brea MM, opening and durability",
+      "url": "https://forum.purseblog.com/threads/alma-pm-in-epi-versus-brea-mm-in-epi-pros-and-cons.924656/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Vernis peeling, ordinary wear and tear?",
+      "url": "https://forum.purseblog.com/threads/vernis-peeling-ordinary-wear-tear.752793/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: disappointed after seeing my dream bag in real life, Vernis Alma",
+      "url": "https://forum.purseblog.com/threads/disappointed-after-seeing-my-dream-bag-in-real-life.912650/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: what can I do about peeling Vernis",
+      "url": "https://forum.purseblog.com/threads/what-can-i-do-about-peeling-vernis.1075820/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, @Sanecyndy, Alma BB and PM after ten years",
+      "url": "https://www.youtube.com/watch?v=pHrYpodcEFE",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, @50plusluxurystyle, Alma BB Vernis after two years",
+      "url": "https://www.youtube.com/watch?v=h_jh1uPwYQQ",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "Epi is the material owners bet on for the long run. Pieces a decade and more old turn up with no corner wear, and one owner's 1994 Epi bag still reads as new.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [2, 3, 9]
+    },
+    {
+      "body": "The structure genuinely survives. Ten-year-old examples still hold the Art Deco shape, which owners contrast with the Speedy, a bag that creases and softens into something else entirely.",
+      "stance": "pro",
+      "axisHint": "structure",
+      "sourceIdx": [1, 9, 10]
+    },
+    {
+      "body": "The four studs on the base are not decoration. The bag stands up on its own and the underside stays unscuffed, and the strap comes off completely for a clean top-handle look.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 9, 10]
+    },
+    {
+      "body": "It moves between registers without effort. Owners take the same bag to a work meeting, to dinner and out with jeans, and call it quiet by Louis Vuitton standards.",
+      "stance": "pro",
+      "axisHint": "dress_code",
+      "sourceIdx": [3, 4, 9]
+    },
+    {
+      "body": "Vernis is the opposite bet. The coating rubs off at the corners and can turn sticky with age and heat, and Louis Vuitton has treated that peeling as ordinary wear rather than a repairable fault.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [6, 7, 8]
+    },
+    {
+      "body": "Getting in and out is the standing complaint. The top tapers, the zip is stiff enough that some owners need two hands, and more than one has scraped a knuckle on the opening.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [0, 1, 4, 5]
+    },
+    {
+      "body": "It holds less than the silhouette suggests, and overfilling pulls the zip line out of shape, so owners learn to pack it deliberately rather than throw things in.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [0, 4]
+    },
+    {
+      "body": "Worn crossbody it perches rather than sits. The strap clips to the handles instead of the body, so the bag rides on the hip and the handles pull crooked. One owner calls it a wrecking ball.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 1]
+    },
+    {
+      "body": "Pale colourways need thought. Owners report transfer from dark denim, and one had the handles go yellow from sunscreen before she got the staining out.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [3, 4]
+    },
+    {
+      "body": "BB against PM splits on what you actually carry. The BB takes essentials and is the easier crossbody, the PM opens wider, swallows a small laptop and flats, and costs less preloved.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [3, 5, 9]
+    },
+    {
+      "body": "Vernis owners genuinely disagree. Some report peeling and stickiness, others log a decade including tropical heat with no damage and say the dark shades wipe clean and hide transfer.",
+      "stance": "neutral",
+      "axisHint": "holds_up",
+      "sourceIdx": [7, 9, 10]
+    },
+    {
+      "body": "Owners concede the shape is not what is trending, then mostly treat that as the argument for it. A minority quietly sell theirs because it never became the bag they reach for.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 3]
+    }
+  ]
+}

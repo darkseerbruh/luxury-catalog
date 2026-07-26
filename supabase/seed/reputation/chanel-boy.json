@@ -1,0 +1,142 @@
+{
+  "bag": "Chanel Boy (style 424)",
+  "styleId": 424,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Researched fresh for the Boy (not reused from the Classic Flap pass). Owner-voice corpus: 5 Reddit threads with comment trees pulled via Apify (Reddit blocks Firecrawl), 3 PurseForum threads, 2 YouTube owner reviews with transcripts including one sell-it review, 2 long-term blog reviews. Claims hang off the STYLE; where the old medium, new medium and small diverge the size is named in the claim body.",
+  "sources": [
+    {
+      "label": "r/chanel: is it stupid to buy a Boy bag in 2025?",
+      "url": "https://www.reddit.com/r/chanel/comments/1k317he/is_it_stupid_to_buy_a_boy_bag_in_2025/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: I love my new Boy bag, but does it look outdated?",
+      "url": "https://www.reddit.com/r/chanel/comments/1at1d62/i_love_my_new_chanel_boy_bag_but_is_it_true_that/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: will the Boy bag come back into fashion?",
+      "url": "https://www.reddit.com/r/chanel/comments/1kf1u4u/do_you_think_the_boy_bag_will_come_back_into/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: Boy or Classic Flap as a daily errands bag",
+      "url": "https://www.reddit.com/r/chanel/comments/1jird32/which_is_better_as_a_dailyerrands_bag_boy_vs_cf/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: is the Chanel Boy bag worth it?",
+      "url": "https://www.reddit.com/r/handbags/comments/12bw8xq/is_the_chanel_boy_bag_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Classic Flap or Le Boy",
+      "url": "https://forum.purseblog.com/threads/chanel-classic-flap-or-le-boy.974911/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: selling my jumbo for a medium, advice please",
+      "url": "https://forum.purseblog.com/threads/selling-my-jumbo-for-a-m-l-advice-please.954760/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: which Chanel purchase did you regret?",
+      "url": "https://forum.purseblog.com/threads/which-chanel-purchase-s-did-you-regret.266607/page-86",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, Amber Ashleigh: Boy bag review, pros, cons and what fits",
+      "url": "https://www.youtube.com/watch?v=r2ErQ-48eBc",
+      "kind": "commercial"
+    },
+    {
+      "label": "YouTube, Britt Lathrece: why I sold my dream Boy bag",
+      "url": "https://www.youtube.com/watch?v=nnsB2JJTFQg",
+      "kind": "commercial"
+    },
+    {
+      "label": "Love, Monnii: Boy bag two-year review",
+      "url": "https://monnibee.blog/2022/09/14/is-it-still-worth-it-in-2022-chanel-boy-bag-2-year-review/",
+      "kind": "commercial"
+    },
+    {
+      "label": "With Love, Vienna Lyn: honest Boy bag review",
+      "url": "https://withloveviennalyn.com/my-honest-review-chanel-boy-bag/",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "The live argument is whether it reads dated. Owners split cleanly: one camp calls it a permanent Chanel classic, the other says it is visibly mid-2010s and is quietly waiting for the cycle to turn.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2]
+    },
+    {
+      "body": "Weight is the one thing owners flatly contradict each other on. Some call the chain punishing and sold over it; others who also own a jumbo flap describe the Boy as the lighter, easier bag of the two.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [2, 4, 5, 6, 10]
+    },
+    {
+      "body": "It is the Chanel people wear with jeans. Owners describe it as the edgier, more androgynous option and the one they grab for errands, while the Classic Flap waits for a dressier day.",
+      "stance": "pro",
+      "axisHint": "dress_code",
+      "sourceIdx": [0, 1, 3, 5]
+    },
+    {
+      "body": "One flap, not two. Buyers who find the Classic Flap's double flap fiddly name this as the reason they chose a Boy, and the softer lambskin versions open more easily than the stiff caviar ones.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [0, 2, 4]
+    },
+    {
+      "body": "The strap genuinely adjusts, so short shoulder, long shoulder and crossbody are all real options. Petite owners in particular say the crossbody drop lands better than any Classic Flap size.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [3, 6, 8]
+    },
+    {
+      "body": "It carries more than its face suggests. Owners fit phone, wallet, keys and cosmetics with room left, and those who own both say the old medium takes more than a same-era medium Classic Flap.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [3, 6, 8, 11]
+    },
+    {
+      "body": "The depth is the loudest complaint. It stands off the body worn crossbody, owners describe knocking it into things, and more than one sold theirs purely over how boxy it felt against them.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [3, 8, 9, 10]
+    },
+    {
+      "body": "The chain links and the strap adjusters catch long hair, and it hurts. It comes up often enough that the clear-elastic workaround is standard advice, and some owners only carry it with their hair up.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 3, 8, 9, 10]
+    },
+    {
+      "body": "The push clasp has to be squeezed to shut, which is awkward one-handed with the bag on your shoulder. Daily carriers say it becomes muscle memory; others say it never stopped irritating them.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [3, 8]
+    },
+    {
+      "body": "Worn on the shoulder the chain slides off. Owners report it happening across fabrics with no fix they could find, which pushes most of them to carry it crossbody by default.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [5, 9, 10]
+    },
+    {
+      "body": "The corners sit exposed and the hardware marks. Owners flag faster corner wear than on a Reissue, and the large clasp and aged gold plates picking up scratches with ordinary use.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [5, 8, 9, 11]
+    },
+    {
+      "body": "Resale runs well below the Classic Flap and owners who have sold say so from experience. The same people point out that this is exactly what makes it the smart Chanel to buy preloved.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 2, 3, 7]
+    }
+  ]
+}

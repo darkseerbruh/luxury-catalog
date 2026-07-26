@@ -1,0 +1,137 @@
+{
+  "bag": "Louis Vuitton Keepall (style 440)",
+  "styleId": 440,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Travel-duffle pass: the conversation is about airport handling, cabin fit by size (45/50/55), the Bandouliere strap, whether it holds shape packed, and how the vachetta ages over decades. Reddit comment bodies pulled via the Apify reddit-post-comments scraper on 2026-07-26; forum, blog and YouTube transcripts via Firecrawl. Claims hang off the STYLE because they describe the Keepall line rather than one size or canvas.",
+  "sources": [
+    {
+      "label": "r/Louisvuitton: is the Keepall worth it?",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/ut5ycz/is_the_keepall_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: Keepall Bandouliere 50 as a flight carry-on",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/11oymu0/keepall_bandouli%C3%A8re_50_does_anyone_use_it_as/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: Keepall size questions, under-seat fit",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1fby4ro/keepall_size_questions/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: what size is your Keepall, 45/50/55?",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/10sjz7a/what_size_is_your_keepall_455055_whats_the/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Keepall Bandouliere shoulder pad cracking and tearing",
+      "url": "https://forum.purseblog.com/threads/new-keepall-shoulder-pad-cracking-tearing.791585/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: how to stop cracking on vachetta leather, plus LV repair quote",
+      "url": "https://forum.purseblog.com/threads/how-to-stop-cracking-on-vachetta-leather.959987/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: help me decide, Keepall Bandouliere 45 or 50",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1eaccno/help_me_decide_keepall_bandouliere_45_or_50/",
+      "kind": "community"
+    },
+    {
+      "label": "Gentleman's Gazette teardown, Keepall Bandouliere 55, is it worth it",
+      "url": "https://www.gentlemansgazette.com/is-it-worth-it-lv-keepall-bag/",
+      "kind": "commercial"
+    },
+    {
+      "label": "YouTube owner review, @DonnaIsabella, Keepall Bandouliere 55 bought preloved",
+      "url": "https://www.youtube.com/watch?v=NEsgSb_A1ms",
+      "kind": "commercial"
+    },
+    {
+      "label": "Conde Nast Traveler, Keepall 55 as weekender luggage",
+      "url": "https://www.cntraveler.com/story/louis-vuitton-keepall",
+      "kind": "commercial"
+    },
+    {
+      "label": "Annie Fairfax blog, Keepall Bandouliere 55 bought secondhand",
+      "url": "https://anniewearsit.com/louis-vuitton-keepall-bandouliere-55-monogram-duffle-bag-review/",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "The coated canvas is close to indestructible. Owners describe bags from the early 1990s still in service, one thrown down flights of airport stairs, with the canvas itself unmarked.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 3, 8]
+    },
+    {
+      "body": "Capacity lands about where the numbers suggest. A 45 covers two or three nights if you skip extra shoes, a 55 takes most of a week for a light packer.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 8, 10]
+    },
+    {
+      "body": "The Bandouliere strap is the difference between a usable bag and an ornament. The top handles are too short to get over a shoulder, so loaded it is a two-hand carry without it.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [0, 7, 8]
+    },
+    {
+      "body": "Buying preloved is the widely held view. The canvas survives, so condition is really priced on the vachetta, and reviewers who paid full price say they would not again.",
+      "stance": "pro",
+      "axisHint": "worth_it_where",
+      "sourceIdx": [8, 10]
+    },
+    {
+      "body": "The vachetta is the part that fails. Handles and straps dry out and crack, and Louis Vuitton replaces rather than repairs, with one owner quoted several hundred dollars for a single handle.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [5, 8]
+    },
+    {
+      "body": "The leather straps wrap under the base and there are no feet or reinforced corners, so putting the bag on an airport floor puts bare vachetta on the ground.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [7, 8]
+    },
+    {
+      "body": "Packed full it is genuinely heavy to walk an airport with. A striking number of owners have retired theirs to car and train trips, or perch it on a rolling case.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2, 3]
+    },
+    {
+      "body": "The strap is not comfortable for long stretches even when it fits. The sliding shoulder pad has also split at the strap opening within weeks for some owners.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [3, 4]
+    },
+    {
+      "body": "Inside is one open compartment with little more than a single small pocket, so anything small disappears unless you add an organiser or packing cubes.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [8, 9]
+    },
+    {
+      "body": "Under-packed it collapses in on itself. Owners either fill the corners with soft items first or buy a base shaper, partly because the folded straps crease and crack at the midpoint.",
+      "stance": "con",
+      "axisHint": "structure",
+      "sourceIdx": [1, 8]
+    },
+    {
+      "body": "Size is where the room genuinely splits. The 45 is the only one that reliably slides under a seat, the 50 is the usual compromise, and the 55 is loved for road trips and called a nightmare for flights.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [1, 2, 3, 6]
+    },
+    {
+      "body": "Owners disagree on what the monogram signals at an airport. Some read it as the 1990s travel icon, others say it flags your luggage to thieves or gets mistaken for a counterfeit.",
+      "stance": "neutral",
+      "axisHint": "dress_code",
+      "sourceIdx": [0, 7, 9]
+    }
+  ]
+}

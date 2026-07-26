@@ -1,0 +1,137 @@
+{
+  "bag": "Gucci Ophidia (style 448)",
+  "styleId": 448,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Claims hang off the STYLE, not a variant: they describe the GG Supreme Ophidia across the dome, camera, small shoulder and tote shapes, and note where a shape-specific difference matters. Nine of eleven sources are unpaid owner voices; the two commercial ones are an affiliate-linked review (The Gals Guide) and a handbag repair house (Artbag).",
+  "sources": [
+    {
+      "label": "PurseForum: anyone have Gucci Ophidia quality issues?",
+      "url": "https://forum.purseblog.com/threads/anyone-have-gucci-ophidia-quality-issues.985759/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: I want an Ophidia, help me choose (dome versus camera)",
+      "url": "https://forum.purseblog.com/threads/i-want-a-gucci-ophidia-bag-help-me-choose-pls.1014022/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: is the Ophidia shoulder bag worth it? (coating fault out of the box)",
+      "url": "https://www.reddit.com/r/handbags/comments/1i8edyg/is_the_gucci_ophidia_shoulder_bag_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: is Gucci Ophidia worth it?",
+      "url": "https://www.reddit.com/r/handbags/comments/1cjdq8b/is_gucci_ophidia_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: thoughts on Gucci Ophidia?",
+      "url": "https://www.reddit.com/r/handbags/comments/1lyfw4i/thoughts_on_gucci_ophidia/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: anyone have the Ophidia double-handle tote?",
+      "url": "https://www.reddit.com/r/handbags/comments/1bvpuie/anyone_have_the_gucci_ophidia_tote_w_double_handle/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, french manila, small shoulder bag after five years",
+      "url": "https://www.youtube.com/watch?v=6KdJxlMpxA8",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Real Boring Housewife, small GG Supreme tote",
+      "url": "https://www.youtube.com/watch?v=42hkPzqawOo",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Ms. Sophia, small shoulder bag as a first Gucci",
+      "url": "https://www.youtube.com/watch?v=1YRRb7wk98o",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube review, The Gals Guide, small shoulder bag (affiliate links)",
+      "url": "https://www.youtube.com/watch?v=85LyvnsrlDk",
+      "kind": "commercial"
+    },
+    {
+      "label": "Artbag repair house, why Gucci coated canvas peels",
+      "url": "https://www.artbag.com/blogs/gucci-canvas-coating-peeling-causes-solutions/",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "GG Supreme is coated canvas, not leather, and for a lot of owners that is the appeal. It wipes clean, handles rain, and a five-year owner reports no real wear to the canvas itself.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [2, 6, 7]
+    },
+    {
+      "body": "It reads vintage Gucci rather than new Gucci. The web stripe and the small oval logo carry it, and owners say it makes jeans and a shirt look considered without shouting a label.",
+      "stance": "pro",
+      "axisHint": "dress_code",
+      "sourceIdx": [4, 6]
+    },
+    {
+      "body": "Three ways to carry it. Shoulder on the chain, crossbody on the adjustable web strap, or tuck the chain inside and it works as a clutch.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [6, 8, 9]
+    },
+    {
+      "body": "It is light for the size. Owners who say they cannot carry a heavy bag single this one out, loaded and worn crossbody all day without their shoulder complaining.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [7, 9]
+    },
+    {
+      "body": "Corners are the weak point. Owners report the coating lifting at an edge after two or three wears, and the dome shape gets singled out because its folded corners take the friction.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 1]
+    },
+    {
+      "body": "The coating fails by chemistry as well as by knocks. A repair house that restores these says heat and humidity break the polymer down, and that sunscreen and hand sanitiser dissolve it on contact.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 10]
+    },
+    {
+      "body": "The QC lottery is real on this line. One buyer went through four pieces for glued lining, crooked panels and unstitched web, and others rejected a lopsided logo or a lumpy patch in the coating on arrival.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 2]
+    },
+    {
+      "body": "The leather trim gives out before the canvas does. Owners report the brown trim rubbing off a tote's bottom corners within a few months, and discolouring on the trim over longer ownership.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [1, 5]
+    },
+    {
+      "body": "The chain has no leather pad. On the shoulder it starts to dig in over a long day, so owners treat it as a going-out strap and use the web strap for anything that involves walking.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [6, 9]
+    },
+    {
+      "body": "The ceiling is daytime. Even fans call it a casual bag, and one long-time owner says neither the dome nor the camera shape really goes day to night.",
+      "stance": "con",
+      "axisHint": "dress_code",
+      "sourceIdx": [1, 9]
+    },
+    {
+      "body": "Owners disagree on which shape to buy. The dome is the prettier one and the one people worry about at the corners, while the camera and small shoulder shapes trade some looks for fewer exposed edges.",
+      "stance": "neutral",
+      "axisHint": "structure",
+      "sourceIdx": [0, 1, 4]
+    },
+    {
+      "body": "The canvas-for-this-money argument never settles. Some owners find it plasticky and dull in person or rate LV's coating above it, others point at a thirty-year-old Gucci canvas tote still going strong.",
+      "stance": "neutral",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 3, 5]
+    }
+  ]
+}

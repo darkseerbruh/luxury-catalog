@@ -1,0 +1,132 @@
+{
+  "bag": "Hermès Evelyne (style 412)",
+  "styleId": 412,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Sources read 2026-07-26. Nine of ten are unpaid owner voices (two YouTube owner reviews with full transcripts, one PurseForum thread, six Reddit threads pulled with comment trees via Apify); the PurseBlog review carries an affiliate disclosure and is marked commercial. Claims hang off the STYLE: the TPM/16, PM/29 and GM/33 diverge on capacity and strap fit, so size is named inside the claim wherever owners split on it.",
+  "sources": [
+    {
+      "label": "PurseBlog review, Megs Mahoney Dusil on her Evelyne TPM (plus 37 reader comments)",
+      "url": "https://www.purseblog.com/reviews/hermes-evelyne-tpm/",
+      "kind": "commercial"
+    },
+    {
+      "label": "YouTube owner review, Isabelle's Style on the mini after three years",
+      "url": "https://www.youtube.com/watch?v=WFA7DPUjWls",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Gina Miller on the Evelyne III PM and what fits",
+      "url": "https://www.youtube.com/watch?v=Fte2TJCYXJQ",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: the Evelyne strap thread",
+      "url": "https://forum.purseblog.com/threads/evelyne-strap.873802/page-2",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: controversial opinion, the Evelyne is boring",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1onxuzc/controversial_opinion_i_think_the_evelyne_is_the/",
+      "kind": "community"
+    },
+    {
+      "label": "r/luxurypurses: is the Evelyne 29 worth it?",
+      "url": "https://www.reddit.com/r/luxurypurses/comments/1mk1ngz/is_evelyne29_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: larger than I thought, should I keep her? (PM sizing)",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1hsxt93/larger_than_i_thought_should_i_keep_her/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: mini Evelyne, keep or list on secondhand sites?",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1o3805u/mini_evelyn_keep_or_list_on_secondhand_sites/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: Evelyne TPM new short strap",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1k7ma8h/evelyne_tpm_new_short_strap/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: Evelyne experts help, 16 versus 29",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1mhdcsn/evelyne_experts_help/",
+      "kind": "community"
+    }
+  ],
+  "claims": [
+    {
+      "body": "One snap and you are in. No flap to fight and the top opens wide, which is the first thing owners name when they call it their grab and go bag.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [1, 4, 5, 7]
+    },
+    {
+      "body": "Security is the trade. A single snap holds it shut, and owners report the contents tipping out when the bag falls over in a car.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [1, 5]
+    },
+    {
+      "body": "There is no lining and no interior pocket, so small things sink to the bottom. A felt organiser is close to a default purchase among owners.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [1, 2, 5, 6]
+    },
+    {
+      "body": "Strap length is the recurring complaint. Owners around five foot two to five foot four shorten it at a cobbler, hack it adjustable, or buy an aftermarket strap.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [1, 3, 8]
+    },
+    {
+      "body": "It is light and unlined, so it lies flat against you instead of swinging, and the wide canvas strap spreads the load without cutting into your shoulder.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2]
+    },
+    {
+      "body": "It is a casual bag and owners are firm about that. The canvas strap and saddle shape do not carry into an evening or a formal room.",
+      "stance": "con",
+      "axisHint": "dress_code",
+      "sourceIdx": [1, 4, 5]
+    },
+    {
+      "body": "The leather relaxes with use. Owners see the shape soften within a few years, and well used larger sizes start to bulge at the sides.",
+      "stance": "con",
+      "axisHint": "structure",
+      "sourceIdx": [1, 6]
+    },
+    {
+      "body": "It takes hard use. Owners at seven years and at twenty years describe theirs as close to new, helped by rounded edges that resist corner scuffing.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [1, 4, 7]
+    },
+    {
+      "body": "The design genuinely divides people. The loudest thread calls the perforated H boring for the money. Owners answer that boring is the point, and it is the bag they reach for daily.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 4, 5]
+    },
+    {
+      "body": "The perforated H was meant to face your body, not the street. It began in 1978 as a grooming bag and the holes let brushes dry, so plenty of owners still wear it turned in.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 2, 4, 5]
+    },
+    {
+      "body": "Owners disagree on resale. Some say it holds better than most non quota Hermès. Others say the market is saturated and a quick sale loses money once fees come out.",
+      "stance": "neutral",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 2, 5, 7]
+    },
+    {
+      "body": "It is the usual first Hermès and often the most used one. Owners with a Birkin or a Kelly in the closet describe reaching for the Evelyne instead.",
+      "stance": "pro",
+      "axisHint": "worth_it_where",
+      "sourceIdx": [0, 2, 4, 7]
+    }
+  ]
+}

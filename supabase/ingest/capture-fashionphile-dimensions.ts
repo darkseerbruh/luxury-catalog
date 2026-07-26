@@ -75,11 +75,25 @@ async function main() {
   // Only variants that still lack dimensions, so a re-run costs nothing on rows we
   // already resolved. Keyset-paginated on price_id (never .range(), per the offset
   // pagination that caused the 07-19 timeout flood).
-  const { data: needy } = await db
-    .from("variant")
-    .select("variant_id")
-    .is("dimensions_h_cm", null);
-  const needyIds = new Set((needy ?? []).map((v: { variant_id: number }) => v.variant_id));
+  // Keyset-paginated: a bare .select() silently caps at 1000 rows in PostgREST,
+  // which quietly limited an earlier run to a quarter of the catalogue.
+  const needyIds = new Set<number>();
+  let vCursor = 0;
+  for (;;) {
+    const { data, error } = await db
+      .from("variant")
+      .select("variant_id")
+      .is("dimensions_h_cm", null)
+      .gt("variant_id", vCursor)
+      .order("variant_id", { ascending: true })
+      .limit(1000);
+    if (error) throw new Error(error.message);
+    if (!data || data.length === 0) break;
+    for (const v of data as { variant_id: number }[]) {
+      needyIds.add(v.variant_id);
+      vCursor = v.variant_id;
+    }
+  }
   console.log(`variants missing dimensions: ${needyIds.size}`);
 
   const listings: Row[] = [];
