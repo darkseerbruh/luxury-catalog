@@ -28,6 +28,8 @@ export interface WatchlistEntry extends SavedBag {
   alertMode: "absolute" | "pct_below_median";
   /** Percent below the typical resale price, when alertMode is pct_below_median. */
   alertPct: number | null;
+  /** Availability floor (0059): ping me when one turns up, at any price. */
+  notifyOnListing: boolean;
   /** Most recent recorded sale price, for "is it near my target?" context. */
   latestSalePrice: number | null;
 }
@@ -150,7 +152,9 @@ export async function getWatchlist(): Promise<WatchlistEntry[]> {
   // Try the 0033 columns; fall back to the legacy select if the migration is unapplied.
   let { data, error } = await supabase
     .from("watchlist")
-    .select(`target_price, currency, alert_enabled, alert_mode, alert_pct, ${variantJoin}`)
+    .select(
+      `target_price, currency, alert_enabled, alert_mode, alert_pct, notify_on_listing, ${variantJoin}`,
+    )
     .order("created_at", { ascending: false });
 
   if (error && (error.code === "42703" || /column .* does not exist/i.test(error.message ?? ""))) {
@@ -172,7 +176,11 @@ export async function getWatchlist(): Promise<WatchlistEntry[]> {
     const prices = (v.price_history ?? [])
       .filter((p) => p.sale_price != null)
       .sort((a, b) => b.date_recorded.localeCompare(a.date_recorded));
-    const r = row as typeof row & { alert_mode?: string | null; alert_pct?: number | null };
+    const r = row as typeof row & {
+      alert_mode?: string | null;
+      alert_pct?: number | null;
+      notify_on_listing?: boolean | null;
+    };
     return [
       {
         ...baseSaved(v),
@@ -180,6 +188,8 @@ export async function getWatchlist(): Promise<WatchlistEntry[]> {
         alertEnabled: Boolean(r.alert_enabled),
         alertMode: r.alert_mode === "pct_below_median" ? ("pct_below_median" as const) : ("absolute" as const),
         alertPct: r.alert_pct != null ? Number(r.alert_pct) : null,
+        // Pre-0059 the column is absent, and the floor is on by default.
+        notifyOnListing: r.notify_on_listing !== false,
         latestSalePrice: prices[0]?.sale_price != null ? Number(prices[0].sale_price) : null,
       },
     ];

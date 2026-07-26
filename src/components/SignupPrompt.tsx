@@ -145,9 +145,13 @@ export default function SignupPrompt() {
             <Bullet />
             <span>Save any bag to your closet, so your shortlist is in one place.</span>
           </li>
+          {/* Availability FIRST, price second (owner call, 2026-07-25). The
+              collector's trigger is a grail surfacing at all, and she will pay
+              over median to get it. Backed by the 0059 availability floor, so
+              this is a promise the alert job can actually keep. */}
           <li className="flex items-start gap-2.5">
             <Bullet />
-            <span>Hear about it when one turns up below the typical resale price.</span>
+            <span>Hear the moment one comes up for sale, even the rare ones.</span>
           </li>
           <li className="flex items-start gap-2.5">
             <Bullet />

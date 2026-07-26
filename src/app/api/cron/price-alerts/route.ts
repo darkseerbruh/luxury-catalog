@@ -4,6 +4,8 @@ import { captureServer } from "@/lib/analytics/server";
 import { sendEmail } from "@/lib/email";
 import { isOptedIn } from "@/lib/notifications";
 import { matchSpecAlert, type AlertSpec, type SpecCandidate } from "@/lib/price-alert-match";
+import { pickNewListing, watchCutoff, type ListingRow } from "@/lib/listing-alert";
+import { fetchAllRows } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -90,6 +92,152 @@ function median(nums: number[]): number {
 function isMissingColumn(error: { code?: string; message?: string } | null): boolean {
   if (!error) return false;
   return error.code === "42703" || /column .* does not exist/i.test(error.message ?? "");
+}
+
+type AvailabilityWatch = {
+  watch_id: number;
+  user_id: string;
+  variant_id: number;
+  last_listing_notified_at: string | null;
+  created_at: string | null;
+};
+
+/**
+ * Availability pass: tell a watcher when one turns up AT ALL (migration 0059).
+ *
+ * Runs as a floor UNDER the price rules, not as a third mode. The price modes
+ * both need price data to work, and `pct_below_median` goes silent below 5
+ * comps, so on rare bags the alert was dead exactly where our catalogue is
+ * most differentiated. A collector's trigger is "a grail became available",
+ * not "a grail got cheaper".
+ *
+ * Degrades to a no-op (and says so in the log) until 0059 is applied, so this
+ * can merge and deploy before the migration runs.
+ */
+async function runAvailabilityAlerts(
+  admin: ReturnType<typeof getSupabaseAdmin>,
+  alreadyPinged: Set<number>,
+  now: string,
+): Promise<number> {
+  const { data, error } = await admin
+    .from("watchlist")
+    .select("watch_id, user_id, variant_id, last_listing_notified_at, created_at")
+    .eq("alert_enabled", true)
+    .eq("notify_on_listing", true);
+
+  if (isMissingColumn(error)) {
+    console.warn("availability alerts skipped: migration 0059 not applied yet");
+    return 0;
+  }
+  if (error) {
+    console.error("availability watch query error:", error);
+    return 0;
+  }
+
+  const watches = ((data ?? []) as AvailabilityWatch[]).filter(
+    (w) => !alreadyPinged.has(w.watch_id),
+  );
+  if (watches.length === 0) return 0;
+
+  // One read for the whole batch rather than a query per watch. Bounded by the
+  // earliest cutoff in the batch so we never scan the full price history.
+  const variantIds = [...new Set(watches.map((w) => w.variant_id))];
+  const cutoffs = watches
+    .map((w) => watchCutoff(w))
+    .filter((c): c is string => !!c)
+    .map((c) => Date.parse(c))
+    .filter((n) => Number.isFinite(n));
+  const earliest = cutoffs.length > 0 ? new Date(Math.min(...cutoffs)) : null;
+
+  const listings = await fetchAllRows<ListingRow>(() => {
+    let q = admin
+      .from("price_history")
+      .select("variant_id, sale_price, currency, observed_on, date_recorded, listing_ref, platform")
+      .in("variant_id", variantIds)
+      .eq("listing_status", "available");
+    if (earliest) q = q.gte("observed_on", earliest.toISOString().slice(0, 10));
+    return q.order("observed_on", { ascending: false });
+  });
+
+  const byVariant = new Map<number, ListingRow[]>();
+  for (const l of listings) {
+    const bucket = byVariant.get(l.variant_id);
+    if (bucket) bucket.push(l);
+    else byVariant.set(l.variant_id, [l]);
+  }
+
+  let fired = 0;
+  for (const watch of watches) {
+    const hit = pickNewListing(byVariant.get(watch.variant_id) ?? [], watchCutoff(watch));
+    if (!hit) continue;
+
+    // Same opt-out governs both kinds of watched-bag alert.
+    if (!(await isOptedIn(watch.user_id, "price_alert"))) continue;
+
+    const { data: v } = await admin
+      .from("variant")
+      .select("style:style_id(name, brand:brand_id(name))")
+      .eq("variant_id", watch.variant_id)
+      .single();
+    const { styleName, brandName } = nameOf((v as { style?: unknown } | null)?.style);
+    const name = [brandName, styleName].filter(Boolean).join(" ");
+
+    const title = `Now available: ${name}`;
+    const where = hit.platform ? ` on ${hit.platform}` : "";
+    const price = hit.price ? ` at ${money(hit.price, hit.currency)}` : "";
+    const also =
+      hit.alsoCount > 1 ? ` ${hit.alsoCount - 1} more came up too.` : "";
+    // Availability first, price second. Never frames it as a deal: the whole
+    // point is that a collector wants to know it exists at any price.
+    const body = `One came up${where}${price}.${also}`;
+
+    const { error: insErr } = await admin.from("notification").insert({
+      user_id: watch.user_id,
+      type: "listing_alert",
+      title,
+      body,
+      variant_id: watch.variant_id,
+    });
+    if (insErr) {
+      console.error("listing notification insert error:", insErr);
+      continue;
+    }
+
+    await admin
+      .from("watchlist")
+      .update({ last_listing_notified_at: now })
+      .eq("watch_id", watch.watch_id);
+
+    try {
+      const emailOptIn = await isOptedIn(watch.user_id, "email");
+      const { data: userRes } = await admin.auth.admin.getUserById(watch.user_id);
+      const email = userRes?.user?.email;
+      if (email && emailOptIn) {
+        await sendEmail({
+          to: email,
+          subject: title,
+          html: `<p>${body}</p><p><a href="https://luxurycatalog.com/bag/${watch.variant_id}">See it →</a></p>`,
+        });
+      }
+    } catch (e) {
+      console.error("listing alert email lookup failed:", e);
+    }
+
+    await captureServer({
+      distinctId: watch.user_id,
+      event: "listing_alert_triggered",
+      properties: {
+        variant_id: watch.variant_id,
+        platform: hit.platform,
+        price: hit.price,
+        new_listings: hit.alsoCount,
+      },
+    });
+
+    fired++;
+  }
+
+  return fired;
 }
 
 /** Style name + brand off the messy nested join. */
@@ -209,6 +357,9 @@ export async function GET(request: NextRequest) {
   }
 
   let triggered = 0;
+  // Watches that already got a price-drop ping this run. They don't also get an
+  // availability ping for the same bag in the same minute.
+  const pricedVariants = new Set<number>();
   const now = new Date().toISOString();
 
   for (const row of rows) {
@@ -297,7 +448,14 @@ export async function GET(request: NextRequest) {
     });
 
     triggered++;
+    pricedVariants.add(row.watch_id);
   }
 
-  return NextResponse.json({ checked: rows.length, triggered });
+  const availability = await runAvailabilityAlerts(admin, pricedVariants, now);
+
+  return NextResponse.json({
+    checked: rows.length,
+    triggered,
+    availability_triggered: availability,
+  });
 }
