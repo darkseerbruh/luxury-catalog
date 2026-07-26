@@ -170,6 +170,9 @@ const BRAND_ALIASES: [test: RegExp, canonical: string][] = [
   [/proenza\s*schouler/i, "Proenza Schouler"],
   [/mansur\s*gavriel/i, "Mansur Gavriel"],
   [/furla/i, "Furla"],
+  // Backlog demand 2026-07-26: 7,487 DKNY + 3,904 Kate Spade unpromoted rows had no
+  // dictionary entry at all. "Donna Karan" and "DONNA KARAN DKNY" both appear in titles.
+  [/\bdkny\b|donna\s*karan/i, "DKNY"],
 ];
 
 /** Resolve any raw brand/sub-brand/collab string to a canonical brand. */
@@ -628,6 +631,81 @@ const MODELS: Record<string, ModelDef[]> = {
   ],
   Furla: [
     ["Metropolis", "metropolis"], ["1927", "1927"], ["Miastella", "miastella"], ["Sofia", "sofia"],
+  ],
+  // ── Added 2026-07-26, archivist-verified (docs/seller-title-grammar.md). ──────────
+  // DKNY names models directly (<Name> <Silhouette>): "Paige Satchel", "Bryar Large
+  // Satchel". Bryant Park and Gansevoort are LINES spanning silhouettes, the same shape
+  // as Michael Kors "Jet Set", so they are models here too.
+  // REJECTED as non-models: "signature" (the logo coated canvas, and the single biggest
+  // string at 727 rows), "pinstripe" (the quilting on the Gansevoort), "lizard" and
+  // "saffia" (truncated Saffiano) as materials, plus zip/dome/envelope/turnlock/padlock
+  // descriptors. Left out as UNSOURCED: bryant (bare), allen, chelsea, dixie, beekman,
+  // greenwhich — several look like cross-brand bleed (Kate Spade owns Allen Street,
+  // Coach owns Chelsea, Michael Kors owns Greenwich).
+  DKNY: [
+    ["Bryant Park", "bryant park"], ["Gansevoort", "gansevoort"], ["Paige", "paige"],
+    ["Delphine", "delphine"],
+    // Current models straight off dkny.com product/collection pages.
+    ["Bryar", "bryar"], ["Willa", "willa"], ["Nell", "nell"], ["Nessa", "nessa"],
+    ["Brady", "brady"], ["Hadlee", "hadlee"], ["Paula", "paula"], ["Capri", "capri"],
+    ["Jenny", "jenny"], ["Remy", "remy"], ["Giselle", "giselle"], ["Foster", "foster"],
+    ["Elicia", "elicia"], ["Tinsley", "tinsley"], ["Avril", "avril"], ["Riona", "riona"],
+    ["Josie", "josie"], ["Millie", "millie"], ["Carter", "carter"], ["Barrett", "barrett"],
+    ["Raya", "raya"],
+  ],
+  // Kate Spade has TWO naming eras and needs both shapes.
+  //   pre-2018:  <Collection> <Silhouette-name>  e.g. "Cedar Street Maise"
+  //   post-2018: a single name                   e.g. "Margaux"
+  // The collection (Cedar Street, Cameron Street…) is the MATERIAL line, confirmed on
+  // katespade.com: "the Cameron Street collection… wipe-away crosshatched leather".
+  // The person name is the SILHOUETTE and travels across collections (Cedar Street Maise
+  // / Cameron Street Maise / Matthews Street Maise), so it is structurally LV: Maise is
+  // the Speedy, Cedar Street is the Damier.
+  // KEY ON THE PAIR, never either half alone: bare "Loden" is a style name that
+  // katespade.com sells on an IVORY bag (so it would poison colorway), and bare
+  // "Cameron Street" covers six different silhouettes (Candace, Lucie, Maise, Sarah,
+  // Lottie, Byrdie). Pairs are listed FIRST so they win; bare collections are a
+  // deliberate roll-up fallback LAST, for the titles that carry no person name.
+  "Kate Spade": [
+    // Pairs (specific) — first.
+    ["Grove Street Millie", "grove street millie"],
+    ["Cameron Street Candace", "cameron street candace"],
+    ["Cameron Street Dody", "cameron street dody"],
+    ["Reese Park Marci", "reese park marci"],
+    ["Greenwood Place Rita", "greenwood place rita"],
+    ["Mulberry Street Pyper", "mulberry street pyper"],
+    ["Cedar Street Jensen", "cedar street jensen"],
+    ["Cobble Hill Leslie", "cobble hill leslie"],
+    ["Cobble Hill Clarke", "cobble hill clarke"],
+    ["Hayes Street Hayzel", "hayes street hayzel"],
+    ["Newbury Lane Sally", "newbury lane sally"],
+    // "Loden" is the STYLE name, not the colour, despite how it reads. Seller
+    // misspelling "newberry" carried as an alias token.
+    ["Newbury Lane Loden", "newbury lane loden", "newberry lane loden"],
+    ["Oliver Street Lilly", "oliver street lilly"],
+    ["Elliot Place Carmina", "elliot place carmina"],
+    ["Beacon Court Angelica", "beacon court angelica"],
+    // Seller strings truncate these two: the collections are GOLD Coast and NEW Bond
+    // Street. Both spellings carried.
+    ["Gold Coast Maryanne", "gold coast maryanne", "coast maryanne"],
+    ["New Bond Street Florence", "new bond street florence", "bond street florence"],
+    ["Briar Lane Emelyn", "briar lane emelyn", "emelyn"],
+    // Post-2018 single names.
+    ["Margaux", "margaux"], ["Knott", "knott"], ["Marti", "marti"], ["Reegan", "reegan"],
+    ["Spencer", "spencer"],
+    // Bare-collection roll-up — LAST, so every pair above claims its rows first.
+    ["Cameron Street", "cameron street"], ["Cedar Street", "cedar street"],
+    ["Grove Street", "grove street"], ["Mulberry Street", "mulberry street"],
+    ["Cove Street", "cove street"], ["Grand Street", "grand street"],
+    ["Jackson Street", "jackson street"], ["Thompson Street", "thompson street"],
+    ["Chester Street", "chester street"], ["Matthews Street", "matthews street"],
+    ["Allen Street", "allen street"], ["Newbury Lane", "newbury lane"],
+    ["Reese Park", "reese park"], ["Greenwood Place", "greenwood place"],
+    ["Hayes Street", "hayes street"], ["Cobble Hill", "cobble hill"],
+    ["Oliver Street", "oliver street"], ["Elliot Place", "elliot place"],
+    ["Beacon Court", "beacon court"], ["Gold Coast", "gold coast"],
+    ["New Bond Street", "new bond street"], ["Wellesley", "wellesley"],
+    ["Briar Lane", "briar lane"], ["Love Shack", "love shack"],
   ],
 };
 
