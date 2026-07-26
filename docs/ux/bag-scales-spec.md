@@ -60,11 +60,11 @@ Rules that keep it honest:
 | Opening | Narrow ↔ Wide | `opening_width_cm` | ⚠️ column exists, 0% filled |
 | Strap drop | Short ↔ Long, plus "clears a coat" | `strap_drop_length_cm` | ⚠️ column exists, 0% filled |
 | Built structure | Soft ↔ Rigid | `rigidity` | ⚠️ 0.4% filled |
-| **Recognisability** | **Quiet ↔ Loud** | logo prominence + icon status | ⚠️ needs a source pass |
+| **Recognisability** | **IYKYK ↔ Recognisable** | logo prominence + icon status | ⚠️ needs a source pass |
 | Ubiquity | Rare ↔ Everywhere | our listing volume + closet counts | ✅ computable today |
 | Value retention | Falls ↔ Holds | `price_history` vs original retail | ✅ computable today |
 
-Recognisability is **quiet ↔ loud**, deliberately non-judgmental: buyers actively
+Recognisability is **IYKYK ↔ Recognisable** (owner, 2026-07-26: "loud" reads as an insult): buyers actively
 choose both ends. It is derived, not asked, because it barely varies by owner.
 
 ### 👜 Owner scales (asked, and seeded by the web)
@@ -134,7 +134,7 @@ One list. Grouped by what a reader is asking, not by where the data came from.
 > 🏷 Taken to: work · everyday · travel
 >
 > **How it reads**
-> 📐 Quiet ————● Loud · interlocking CCs, prominent
+> 📐 IYKYK ————● Recognisable · interlocking CCs, prominent
 > 📐 Rare ———●— Everywhere · 412 listings tracked
 
 Empty owner scales render identically, with an invitation in place of the marker:
