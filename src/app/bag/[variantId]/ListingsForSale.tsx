@@ -78,7 +78,7 @@ export default async function ListingsForSale({ variantId }: { variantId: number
               src={offer.imageUrl}
               alt={`${data.brandName} ${data.styleName} at ${offer.platformLabel}`}
               loading="lazy"
-              className="h-16 w-16 shrink-0 rounded-lg border border-border object-cover"
+              className="h-16 w-16 shrink-0 rounded-lg border border-border bg-white object-contain"
             />
           )}
           <div className="min-w-0 flex-1">
