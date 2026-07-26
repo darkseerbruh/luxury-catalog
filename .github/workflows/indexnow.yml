@@ -1,0 +1,50 @@
+name: IndexNow submit
+
+# Tells Bing / Yandex / Seznam / Naver which bag pages changed, every day.
+#
+# Why it exists: 4,030 bag URLs sit in the sitemap and indexation is the
+# bottleneck on the whole GEO bet. IndexNow needs no account and no credentials
+# (only the key file in public/), so unlike Search Console this can run
+# unattended. Bing also feeds ChatGPT's web results.
+#
+# Google has no equivalent open endpoint, so Search Console stays a manual job.
+
+on:
+  schedule:
+    # 06:20 UTC, after the overnight price-ingest lanes have landed their rows.
+    - cron: "20 6 * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Submit EVERY sitemap URL instead of just changed ones. Use for first-time discovery only."
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Submit changed URLs
+        if: ${{ github.event.inputs.all != 'true' }}
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npx tsx scripts/indexnow-submit.ts --days 2
+
+      - name: Submit every sitemap URL (manual only)
+        if: ${{ github.event.inputs.all == 'true' }}
+        run: npx tsx scripts/indexnow-submit.ts --all
