@@ -35,6 +35,7 @@ config({ path: ".env.local" });
 const argv = process.argv.slice(2);
 const TOP = Number(argv.find((a) => a.startsWith("--top="))?.slice(6) ?? 25);
 const PLATFORM = argv.find((a) => a.startsWith("--platform="))?.slice(11) ?? null;
+const BRAND = argv.find((a) => a.startsWith("--brand="))?.slice(8)?.toLowerCase() ?? null;
 
 const sb = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -166,20 +167,17 @@ async function main() {
   for (const r of rows) {
     const brand = canonicalBrand((r.brandGuess ?? "").trim());
     if (!brand) { bucket.noBrand++; continue; }
+    if (BRAND && brand.toLowerCase() !== BRAND) continue;
     const title = realTitle(r);
     if (canonicalModel(brand, title)) { bucket.matched++; continue; }
     if (isNonBagAccessory(title)) { bucket.slg++; continue; }
-    if (!known.has(brand.toLowerCase())) {
-      bucket.brandMissing++;
-      brandGap.set(brand, (brandGap.get(brand) ?? 0) + 1);
-    } else {
-      bucket.modelMissing++;
-      brandGap.set(brand, (brandGap.get(brand) ?? 0) + 1);
-      const cand = candidateModel(r);
-      if (cand) {
-        const k = `${brand} :: ${cand}`;
-        candidates.set(k, (candidates.get(k) ?? 0) + 1);
-      }
+    if (!known.has(brand.toLowerCase())) bucket.brandMissing++;
+    else bucket.modelMissing++;
+    brandGap.set(brand, (brandGap.get(brand) ?? 0) + 1);
+    const cand = candidateModel(r);
+    if (cand) {
+      const k = `${brand} :: ${cand}`;
+      candidates.set(k, (candidates.get(k) ?? 0) + 1);
     }
     const pm = brandPlatforms.get(brand) ?? new Map<string, number>();
     pm.set(r.platform ?? "(null)", (pm.get(r.platform ?? "(null)") ?? 0) + 1);
@@ -205,7 +203,7 @@ async function main() {
     console.log(`  ${b.padEnd(24)} ${String(n).padStart(7)}  ${bar(n, maxB)} ${inDict}`);
   }
 
-  const topCands = [...candidates.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP * 2);
+  const topCands = [...candidates.entries()].sort((a, b) => b[1] - a[1]).slice(0, BRAND ? TOP * 3 : TOP * 2);
   console.log(`\n\nTOP CANDIDATE MODEL NAMES TO ADD (brand already in the dictionary)`);
   console.log("-".repeat(78));
   for (const [k, n] of topCands) console.log(`  ${String(n).padStart(6)}  ${k}`);

@@ -239,6 +239,12 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Classic Flap", "timeless&flap",
       "!clutch", "!tote", "!pochette", "!phone", "!handcuff", "!bucket", "!hobo",
       "!backpack", "!bowler", "!boston", "!duffel", "!duffle", "!briefcase", "!top handle"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    // RESELLER-CANONICAL, not house-official: Chanel does not name its vintage and
+    // seasonal pieces, so these are the names the market settled on for real produced
+    // bags. Last in the block so every house-official model above claims its rows first
+    // — in particular Kelly Flap / Kelly Shopper, which bare "kelly" would swallow.
+    ["Chanel Kelly", "kelly"], ["CC Dome", "cc dome"],
   ],
   "Louis Vuitton": [
     ["Neverfull", "neverfull"], ["Speedy", "speedy"], ["Alma", "alma"], ["Capucines", "capucines"],
@@ -312,6 +318,11 @@ const MODELS: Record<string, ModelDef[]> = {
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
     ["Melrose Avenue", "melrose"], ["Bellevue", "bellevue"], ["Pleaty", "pleaty"],
     ["Wilshire", "wilshire"], ["Houston", "houston"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Flower Hobo", "flower hobo"], ["Flower Tote", "flower tote", "flower zipped"],
+    ["Utility Crossbody", "utility crossbody", "utility harness"],
+    // AFTER City Steamer above, which would otherwise be swallowed by bare "steamer".
+    ["Steamer", "steamer"],
   ],
   Gucci: [
     // Belt-bag veto (2026-07-09 round-3 audit): "gg marmont … belt bag" / "ophidia …
@@ -340,6 +351,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Savoy", "savoy"], ["Dome", "dome"], ["Petite GG", "petite gg"],
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
     ["Joy", "joy"], ["Deco", "deco"], ["Eclipse", "eclipse"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Softbit", "softbit"],
   ],
   Hermès: [
     // To Go variants BEFORE the parent models (first match wins).
@@ -354,6 +367,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Berline", "berline"], ["Fourre-Tout", "fourre-tout", "fourre tout"], ["Haut à Courroies", "haut à courroies", "haut a courroies"],
     // Residue-audit additions (2026-07-09)
     ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Cabas H en Biais", "cabas h en biais", "h en biais"],
   ],
   Celine: [
     // Phantom veto (2026-07-09 round-3 audit): the Phantom is its own model (catalog
@@ -363,7 +378,7 @@ const MODELS: Record<string, ModelDef[]> = {
     // Cabas veto (2026-07-09 round-3 audit): "triomphe cabas" / "cuir triomphe … cabas"
     // titles (12 TLC rows) are Cabas totes wearing the Triomphe canvas/finish — identical
     // titles already sit correctly on Cabas. Shape beats line.
-    ["Triomphe", "triomphe", "!cabas"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
+    ["Triomphe", "triomphe", "triumph", "!cabas"], ["Cabas", "cabas"], ["Belt Bag", "belt bag"], ["Ava", "ava"],
     ["Classic Box", "classic box", "box bag", "classic"], ["Sangle", "sangle"], ["Conti", "conti"],
     ["Trio", "trio"], ["Tabou", "tabou"], ["Besace", "besace"],
     ["Trapeze", "trapeze"], ["Nino", "nino"], ["Phantom", "phantom"], ["Boogie", "boogie"],
@@ -377,7 +392,7 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Loulou", "loulou"], ["Niki", "niki"], ["College", "college"], ["Icare", "icare"],
     ["Sac de Jour", "sac de jour"], ["Lou Camera", "lou camera", "lou bag"], ["Cassandre Envelope", "envelope"],
     ["Le 5 à 7", "5 à 7", "5 a 7"], ["Manhattan", "manhattan"], ["Solferino", "solferino"],
-    ["Kate", "kate"], ["Sunset", "sunset"], ["Jamie", "jamie"],
+    ["Kate", "kate", "classic monogram tassel", "monogram tassel"], ["Sunset", "sunset"], ["Jamie", "jamie"],
     ["Cassandra", "cassandra"], ["Emmanuelle", "emmanuelle"], ["Gaby", "gaby"], ["Muse", "muse"],
     ["Downtown", "downtown"], ["Roady", "roady"], ["Betty", "betty"], ["Puffer", "puffer"],
     // Residue-audit additions (2026-07-09)
@@ -412,13 +427,15 @@ const MODELS: Record<string, ModelDef[]> = {
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
     // "the point" (not bare "point") so it can't fire inside unrelated titles.
     ["Nodini", "nodini"], ["Roma", "roma"], ["The Point", "the point"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Olimpia", "olimpia"],
   ],
   Prada: [
-    ["Re-Edition 2005", "re-edition 2005", "2005"], ["Galleria", "galleria"], ["Cleo", "cleo"],
+    ["Re-Edition 2005", "re-edition 2005", "2005"], ["Galleria", "galleria", "double zip lux", "lux double zip"], ["Cleo", "cleo"],
     ["Symbole", "symbole"], ["Re-Edition", "re-edition", "re edition"], ["Moon", "moon"],
     ["Arqué", "arque", "arqué"], ["Re-Nylon Backpack", "re-nylon backpack"],
     ["Cahier", "cahier"], ["Diagramme", "diagramme"], ["Sidonie", "sidonie"], ["Matinée", "matinee", "matinée"],
-    ["Odette", "odette"], ["Promenade", "promenade"], ["Double Bag", "double bag"], ["Panier", "panier"],
+    ["Odette", "odette"], ["Promenade", "promenade"], ["Double Bag", "double bag", "cuir double"], ["Panier", "panier"],
     // Residue-audit additions (2026-07-09)
     ["Canapa", "canapa"], ["Triangle", "triangle"],
     // Dictionary-gap report addition (2026-07-15): the nylon Vela line (docs/dictionary-gap-report.md).
@@ -429,6 +446,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Sunshine Shopper", "sunshine"], ["C'mon", "c'mon", "cmon"], ["First", "first"],
     ["By the Way", "by the way"], ["Fendigraphy", "fendigraphy"],
     ["Kan I", "kan i"], ["Kan U", "kan u"], ["Dotcom", "dotcom"], ["2Jours", "2jours"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["3Jours", "3jours", "3 jours"],
     // Selleria is a CONSTRUCTION line (hand-stitched cuoio romano), not a model —
     // verified 2026-07-09: all 31 "selleria peekaboo/baguette" TLC rows are real
     // Peekaboos/Baguettes and correctly keep the shape model above. Keep this def
@@ -448,6 +467,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Knight", "knight"], ["Frances", "frances"], ["Note", "note bag"], ["Pocket Bag", "pocket bag"],
     ["Title", "title bag"], ["Banner", "banner"],
     ["DK88", "dk88"], ["Bridle", "bridle"], ["Elizabeth", "elizabeth"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Macken", "macken"],
     // Residue-audit additions (2026-07-09)
     ["Lorne", "lorne"], ["Sonny", "sonny"],
   ],
@@ -482,6 +503,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Cassie", "cassie"], ["Jet Set", "jet set"], ["Hamilton", "hamilton"], ["Selma", "selma"],
     ["Mercer", "mercer"], ["Bedford", "bedford"], ["Bradshaw", "bradshaw"], ["Voyager", "voyager"],
     ["Whitney", "whitney"], ["Greenwich", "greenwich"], ["Sloan", "sloan"], ["Soho", "soho"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Cynthia", "cynthia"],
   ],
   Coach: [
     ["Tabby", "tabby"], ["Willow", "willow"], ["Rogue", "rogue"], ["Dinky", "dinky"],
@@ -509,9 +532,13 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Petit Flot", "petit flot"],
     ["Sénat", "senat", "sénat"], ["Bellechasse", "bellechasse"], ["Villette", "villette"],
     ["Grenelle", "grenelle"], ["Plumet", "plumet"], ["Cap-Vert", "cap-vert", "cap vert"],
+  // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["Hirondelle", "hirondelle"], ["Coursier", "coursier"], ["Beluga", "beluga"],
   ],
   Givenchy: [
     ["Antigona", "antigona"], ["Pandora", "pandora"], ["Nightingale", "nightingale"], ["GV3", "gv3"],
+      // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
+    ["G Tote", "g-tote", "g tote"],
     ["Whip", "whip"], ["Mystic", "mystic"], ["Kenny", "kenny"], ["Voyou", "voyou"], ["4G", "4g bag", "4g"],
     ["Pocket", "pocket bag"], ["ID", "id bag"], ["Cut Out", "cut out"], ["Moon Cut Out", "moon cut"],
   ],
