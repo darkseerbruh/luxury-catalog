@@ -40,6 +40,19 @@ export const metadata: Metadata = {
   title: "Luxury Catalog",
   description:
     "The reference for designer handbags: Production history, authentication markers, and what they actually resell for, brand by brand.",
+  // Search Console / Bing Webmaster ownership tags.
+  //
+  // Both tools offer an HTML-tag verification method that avoids touching DNS.
+  // Wired to env vars so claiming a property is a Vercel setting, not a code
+  // change: paste the token from the tool into GOOGLE_SITE_VERIFICATION or
+  // BING_SITE_VERIFICATION, redeploy, click Verify. Omitted entirely when
+  // unset, so nothing renders until there is a real token.
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : undefined,
+  },
 };
 
 export default async function RootLayout({
