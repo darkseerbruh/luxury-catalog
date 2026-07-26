@@ -20,6 +20,8 @@
  *   npx tsx supabase/ingest/promote-discovered.ts [--min=N] [--write]
  *     --min=N   cluster size threshold to be "promotable" (default 5)
  *     --write   actually persist (find-or-create style/variant, re-point rows)
+ *     --matched-only  promote ONLY clusters already resolved to an existing style,
+ *                     so no new style name is ever invented from a seller title
  *
  * The grouping/threshold core (groupDiscovered / promotableClusters) is a PURE
  * exported function, unit-tested against in-memory fixtures (no DB).
@@ -171,12 +173,14 @@ export function promotableClusters(rows: DiscoveredRow[], minCount = 5): Discove
 interface Flags {
   minCount: number;
   write: boolean;
+  matchedOnly: boolean;
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { minCount: 5, write: false };
+  const flags: Flags = { minCount: 5, write: false, matchedOnly: false };
   for (const a of argv) {
     if (a === "--write") flags.write = true;
+    else if (a === "--matched-only") flags.matchedOnly = true;
     else if (a.startsWith("--min=")) {
       const n = Number(a.slice("--min=".length));
       if (Number.isFinite(n) && n > 0) flags.minCount = n;
@@ -268,12 +272,31 @@ async function main() {
   // BAG GATE: only promote clusters that name a real bag model. A recurring
   // garment/shoe title (from the FP/TRR catch-all capture) must never become a
   // catalog style. The clean canonical model name becomes the style name.
-  const promotable = atThreshold.filter((c) => bagModelName(c) != null);
-  const excludedNonBag = atThreshold.length - promotable.length;
+  const bagClusters = atThreshold.filter((c) => bagModelName(c) != null);
+  const excludedNonBag = atThreshold.length - bagClusters.length;
   console.log(
     `${clusters.length} distinct cluster(s); ${atThreshold.length} ≥ ${flags.minCount}; ` +
-      `${promotable.length} are bags (promotable), ${excludedNonBag} non-bag excluded.`,
+      `${bagClusters.length} are bags (promotable), ${excludedNonBag} non-bag excluded.`,
   );
+
+  // MATCHED-ONLY GATE (--matched-only): promote only clusters the dictionary already
+  // resolved to an EXISTING style. Without it, a cluster with no matched_style_id makes
+  // persistPromotions() mint a brand-new style from the seller's title — and most seller
+  // titles bake material/colour/hardware into the name ("Aged Calfskin Quilted Mini
+  // Reissue Wallet On Chain WOC So Black"), which is exactly the pseudo-style junk the
+  // data-health check flags and the merge tooling exists to undo. On 2026-07-26 only
+  // 329 of 2,982 promotable clusters were matched, so the unfiltered run would have
+  // minted ~2,653 junk styles. Attaching listings to styles that already exist is
+  // always safe; inventing style names from seller copy is not.
+  const promotable = flags.matchedOnly
+    ? bagClusters.filter((c) => c.matchedStyleId != null)
+    : bagClusters;
+  if (flags.matchedOnly) {
+    console.log(
+      `--matched-only: ${promotable.length} cluster(s) resolve to an existing style; ` +
+        `${bagClusters.length - promotable.length} held back (would have minted a new style name).`,
+    );
+  }
 
   if (promotable.length === 0) {
     console.log("No promotable bag clusters yet — keep capturing (run normalize:discovered first).");
