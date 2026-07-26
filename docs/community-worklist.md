@@ -60,7 +60,35 @@ Commit after each unit. Resume from the first ⬜.*
   commercial, so we surface the bias rather than gate on it.)
 - **Dimensions:** chase reseller product pages (Fashionphile/TRR show structured
   measurements on the PAGE in a known order, unlike the feed text).
-- **Still parked by her:** build quality.
+- **Build quality: DROPPED, not parked** (owner: "a nice to have, not required right
+  now, or even not valuable to add"). It ceilings out at the top tier and partly
+  measures price resentment, so there is no strong case to revisit.
+- **Re-run the spec promote pass at the end:** approved.
+
+### 🔖 DO NOT LOSE — explicitly deferred, owner asked to be reminded
+- **"Who clocks it" (quiet ↔ recognisable).** Owner: *"We can do who clocks it later,
+  but don't let me forget."* NOT a review ask, because the answer barely varies by
+  owner, so asking every reviewer collects the same value repeatedly. Build it as a
+  DERIVED display: logo prominence + icon status are catalog facts, and ubiquity is
+  computable from our own listing and closet volume. Her framing to preserve: Hermès
+  has a tiny logo yet everyone clocks the bag (the orange box is the mass-market
+  signal), Chanel stacks CCs, LV's monogram is loudest, Bottega has none. Do NOT call
+  either end "loud" — that reads as an insult. Use IYKYK ↔ recognisable.
+- **Age + trend scales (unit 10).** Needs a copywriter pass first: real ageism risk in
+  youthful ↔ grown-up, and the owner flagged that trendy ↔ timeless "needs more work"
+  because reputation heats and cools (Celine Luggage, Boy). Store trend as a TIME
+  SERIES, never a static average.
+
+### Dimensions: the design changed (owner insight, 2026-07-26)
+Brand specs are CURRENT-SEASON, so they cannot tell a 2005 "Large" Classic Flap from a
+2024 "Large". **Seller-measured dimensions are the disambiguator**, so the two sources
+do different jobs:
+- **Archivist / house** = canon. What the house called each size, per era.
+- **Seller listing** = measured evidence for that specific bag.
+Cluster the seller measurements and the clusters REVEAL the size eras; anchor those
+clusters to archivist canon. That means storing dimensions **per listing**, not only
+per variant. Capture target: Fashionphile + TRR product PAGES (structured
+measurements in a known order; the feed text has none).
 
 **Coordination (another lane is identifying unmapped rows):** next free migration is
 **0066** and the collision failure is SILENT, so re-check `origin/main` immediately
