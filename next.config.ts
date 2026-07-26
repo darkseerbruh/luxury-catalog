@@ -19,6 +19,10 @@ const cspDirectives: Record<string, string[]> = {
     // (also needed for impact's ownership verification) and Skimlinks.
     "https://*.impactcdn.com",
     "https://s.skimresources.com",
+    // Cloudflare Turnstile (signup/login bot protection). Omit this and the
+    // widget script is blocked with no visible error, which is exactly how a
+    // third-party tag has silently died here before.
+    "https://challenges.cloudflare.com",
   ],
   "style-src": ["'self'", "'unsafe-inline'"],
   "img-src": ["'self'", "data:", "blob:", "https:"],
@@ -29,6 +33,8 @@ const cspDirectives: Record<string, string[]> = {
     "https://www.youtube.com",
     "https://www.instagram.com",
     "https://www.facebook.com",
+    // Turnstile renders its challenge inside an iframe.
+    "https://challenges.cloudflare.com",
   ],
   "connect-src": [
     "'self'",
@@ -42,6 +48,8 @@ const cspDirectives: Record<string, string[]> = {
     "https://*.impactcdn.com",
     "https://*.impactradius-event.com",
     "https://*.skimresources.com",
+    // Turnstile posts the solved challenge back to Cloudflare.
+    "https://challenges.cloudflare.com",
   ],
   "frame-ancestors": ["'self'"],
   "base-uri": ["'self'"],
