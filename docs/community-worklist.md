@@ -27,10 +27,22 @@ Commit after each unit. Resume from the first ⬜.*
   rate: access · price_value. `wears_well` merged into holds_up; Most-durable board
   now reads the axis. Verified all six render on /bag/589.
   ⏸️ **HER TURN: apply 0059** (rewritten to the six; still unapplied)
-- ⬜ **Unit 4 — votable Reputation claims** (cold start + top engagement)
+- ✅ **Unit 4 — votable Reputation claims** (`675800d`)
+  Migration `0062` (reputation_claim + votes, RLS, trigger-kept tallies) +
+  `claims.ts` / `claim-actions.ts` / `ReputationClaims.tsx` / `ClaimVote.tsx`.
+  Honesty enforced in schema: sources NOT NULL and non-empty, community-vs-
+  commercial counts stored and surfaced, every claim dated, stale votes retire a
+  claim. Service-role write only. 9 new tests. Renders above the owner scales.
+  ⏸️ **HER TURN: apply 0062.** Then the synthesis pipeline can seed claims.
+  ⬜ **Next in this unit:** the seeding pipeline that turns a Reputation research
+  pass (the Chanel 19 PoC shape) into claim rows.
 - ⬜ **Unit 5 — "reminds me of" three rails** (derived pass first)
-- ⬜ **Unit 6 — shelf states + reasons** (add `tried`; `had` reason: sold/returned/
-  gifted/rented/lost)
+- ✅ **Unit 6 — shelf states + reasons** (`6c2398f`)
+  Migration `0061` adds `tried` + optional `had_reason`. New shared
+  `closet-states.ts` (the vocabulary was trapped in a use-server module, so
+  components kept redefining it). `hasLivedWithIt()` marks who can speak to the
+  longitudinal axes. 5 new tests.
+  ⏸️ **HER TURN: apply 0061.**
 - ⬜ **Unit 7 — most-worn periodic check-in** (never a daily log)
 - ⬜ **Unit 8 — one canvas + purchase context** (year/channel/price as a private note)
 - ⬜ **Unit 9 — photo surfaces** (wear-and-tear timeline, what-fits)
