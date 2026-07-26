@@ -184,7 +184,47 @@ name the sources, date it, link out.
 
 ---
 
-## Still to check, signed in
-- Does the module set change, or only the write affordances?
-- What exactly the signup modal lists as member-only.
-- Whether personal state (my vote, my shelves) renders inline in the same scales.
+## Signed-in diff (observed 2026-07-26, owner's account, read-only)
+
+### What appears only when signed in
+
+| Module | Detail |
+|---|---|
+| **Ownership shelf** | **I have it 41.5K · I had it 10.6K · I want it 30.5K**, as three labelled bars |
+| **Tools row** | For Test · Currently Wearing · Add Note · My votes · Tracking Perfumes · Customize |
+| **Currently wearing** (rail) | Shows the fragrance you are wearing, with an edit control and **Open calendar** |
+| **Recently viewed by you** (rail) | Personal browse history |
+| Header | My profile, avatar |
+
+### What does NOT change
+
+Every voting module renders **identically** signed out and signed in. Rating,
+when-to-wear, performance, demographics and value, pros and cons, the pyramid, the
+similarity graph: same layout, same counts, same bars. The slider simply reads
+"no vote" until you cast one, and the write action is what gets gated.
+
+**So the page is not two designs. It is one design with the write path unlocked.**
+That is the right call and we should copy it: build one layout, gate the action.
+
+### ⚠️ The mistake worth not repeating
+
+**The ownership shelf is hidden entirely from logged-out visitors.** A first-time
+reader never learns that **41.5K people own this and 30.5K want it**, which is the
+single strongest piece of social proof on the page. It is visible only to members,
+who need it least.
+
+**Our rule: show the counts to everyone, gate only the action.** A visitor seeing
+"312 owners" is exactly who that number should persuade.
+
+### The personal layer worth stealing
+
+**Currently wearing + Open calendar** is a scent diary: a dated log of what you
+wore, distinct from a passive "I own it". That is the Letterboxd diary mechanic,
+and the dated entry is what generates personal stats. For bags the equivalent is a
+carry log, which would also produce genuinely new data (rotation, seasonality,
+which bag actually gets used) that no competitor holds.
+
+**Add Note** is a private per-item note, the Discogs collection-note pattern.
+**Tracking Perfumes** is a watchlist. **My votes** is a personal record of
+everything you have rated, which is the "my contributions" surface that makes
+contributing feel cumulative.
