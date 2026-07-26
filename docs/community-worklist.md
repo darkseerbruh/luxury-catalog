@@ -51,7 +51,22 @@ Commit after each unit. Resume from the first ⬜.*
 - ⬜ **Unit 11 — repair referral surface** (no affiliate found; owner open to a
   custom partnership)
 
-**Owner-held:** build quality (parked, has no derived source and was cut as an ask).
+### Owner decisions, 2026-07-26
+- **Deploy:** HOLD until the units are finished, then one deploy.
+- **Reputation scope:** icons first, ~25 bags.
+- **Minimum sources per claim: 5. A community source is NOT required.** (I had
+  recommended requiring one, since paid reviewers skew positive. Her call is
+  coherent with what shipped: the claim block already DISCLOSES when sources lean
+  commercial, so we surface the bias rather than gate on it.)
+- **Dimensions:** chase reseller product pages (Fashionphile/TRR show structured
+  measurements on the PAGE in a known order, unlike the feed text).
+- **Still parked by her:** build quality.
+
+**Coordination (another lane is identifying unmapped rows):** next free migration is
+**0066** and the collision failure is SILENT, so re-check `origin/main` immediately
+before dispatching. My closure values are grouped by `variant_id`, so a listing
+remap makes them stale (not wrong); re-run `promote-spec-facts.ts` once at the end
+to repair. Code-only units run now; DB-heavy passes wait.
 
 **Known gap, logged not hidden:** dimension coverage stays ~6.5% because only
 myGemma's licensed feed states measurements. Full coverage needs a dedicated capture
