@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
 import { getVariantDemand, getShelfCounts } from "@/lib/demand";
 import ShelfCountsPanel from "./ShelfCounts";
+import ReputationClaims from "./ReputationClaims";
 import { listByBrand, listByStyle, getBrandAuthGuideSlug } from "@/lib/posts";
 import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
@@ -1744,6 +1745,11 @@ export default async function BagDetailPage({
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
 
       {/* Multi-axis owner ratings (Fragrantica-style character bars) */}
+      {/* Synthesised claims sit ABOVE the owner scales: the page should already be
+          informative before we ask for anything, and a reader who has just seen a
+          claim they disagree with is the likeliest person to rate. */}
+      <ReputationClaims variantId={v.variantId} styleId={v.style.styleId} path={`/bag/${v.variantId}`} />
+
       <AxisVotes variantId={v.variantId} />
 
       {/* Lived carry + weight-feel taps (renders only once 0046 is migrated) */}
