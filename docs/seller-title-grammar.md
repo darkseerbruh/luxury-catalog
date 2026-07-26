@@ -122,20 +122,31 @@ npx tsx supabase/ingest/promote-discovered.ts --min=5 --matched-only --write
 Steps 3 and 4 also run from **Actions → "Promote discovered bags into the catalogue"**.
 Scheduled runs are always dry-run; a manual run with `write=true` persists.
 
-### Current worklist (top gaps, 2026-07-26)
+### ⛔ Step 2 needs a human (or the archivist). Never paste the report in.
 
-| Rows | Brand | Missing model |
-|---|---|---|
-| 871 | Chanel | Matelassé |
-| 848 | Gucci | GG |
-| 774 | Saint Laurent | Grain de Poudre Chevron |
-| 552 | Goyard | Hirondelle |
-| 490 | Chanel | CC Dome Zip |
-| 452 | Bottega Veneta | Intrecciato |
-| 437 | Saint Laurent | Classic Tassel |
-| 402 | Givenchy | G-Tote |
-| 283 | Salvatore Ferragamo | Gancini |
-| 255 | Celine | Triomphe (sellers misspell it "Triumph") |
+The report ranks **candidate** strings, not verified models. The residue after stripping
+is frequently a technique, a material or a descriptor, and adding one of those to `MODELS`
+creates exactly the junk page `--matched-only` exists to prevent.
+
+Real examples from the top of the 2026-07-26 list that must **not** be added:
+
+| Candidate | What it actually is |
+|---|---|
+| Chanel :: matelasse | quilting technique |
+| Bottega Veneta :: intrecciato | the woven leather treatment |
+| Gucci :: gg / gg supreme | monogram canvas |
+| Prada :: tessuto nylon | the nylon fabric |
+| Saint Laurent :: grain de poudre | a leather finish |
+| Michael Kors :: michael | diffusion sub-brand |
+| Chanel :: cc / round / full / around | extraction noise |
+
+**Rule: every candidate gets verified as a real produced model before it goes in the
+dictionary.** Ask the `archivist` subagent, which owns the house naming archive. It returns
+a verdict per candidate (MODEL / TECHNIQUE / MATERIAL / DESCRIPTOR / SUB-BRAND / UNSURE)
+plus the canonical spelling. Anything UNSURE stays out.
+
+Sellers also misspell: Céline's **Triomphe** shows up as "triumph" 255 times. Add the
+canonical name with the misspelling as a match token, never as its own style.
 
 Biggest brand gaps overall: **Chanel 47,593 rows**, Louis Vuitton, Gucci, Prada, Dior.
 Two brands have **no dictionary entry at all**: **DKNY** (7,487) and **Kate Spade** (3,904).

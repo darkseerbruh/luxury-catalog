@@ -96,7 +96,7 @@ async function loadUnpromoted(): Promise<Row[]> {
  * catch-all ingest parks a placeholder in raw_name and puts the actual title in
  * style_guess. Anything reading raw_name first is matching against literal boilerplate.
  */
-const PLACEHOLDER_RX = /^unmatched-model|captured for triage/i;
+const PLACEHOLDER_RX = /^unmatched-model|captured for triage|fabulous finds discovered/i;
 function realTitle(r: Row): string | null {
   const raw = r.rawName;
   if (raw && !PLACEHOLDER_RX.test(raw)) return raw;
@@ -125,12 +125,14 @@ const GENERIC = new Set(
 
 /** Subtract brand, already-parsed attributes, and generic words. What's left is the
  *  candidate model name the dictionary is missing. */
+const foldAccents = (x: string) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 function candidateModel(r: Row): string {
-  let t = ` ${(realTitle(r) ?? "").toLowerCase()} `;
+  let t = ` ${foldAccents((realTitle(r) ?? "").toLowerCase())} `;
   // Subtract values we ALREADY parsed into columns (the per-seller ingest did this work).
   for (const v of [r.brandGuess, r.material, r.colorway, r.hardware, r.size]) {
     if (!v) continue;
-    for (const word of v.toLowerCase().split(/[\s/,()-]+/).filter((w) => w.length > 2)) {
+    for (const word of foldAccents(v.toLowerCase()).split(/[\s/,()-]+/).filter((w) => w.length > 2)) {
       t = t.split(` ${word} `).join(" ");
     }
   }
