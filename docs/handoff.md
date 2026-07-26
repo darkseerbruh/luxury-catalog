@@ -3,7 +3,7 @@
 
 ---
 
-## TL;DR — the daily failure emails were a SILENTLY EMPTY LC Index; precomputed it (2026-07-26, migration 0060 PENDING)
+## TL;DR — the daily failure emails were a SILENTLY EMPTY LC Index; precomputed it (2026-07-26, migration 0060 APPLIED, run `30213339440`)
 
 **"Daily data health" failed 4 days running (07-23..26); every other workflow was green. The email was the only symptom of a bigger fault: the live LC Index had gone empty.**
 - 🐛 **Root cause:** `style_index_signals()` grew past the ~8s statement timeout. Measured against prod 2026-07-26: **57-67s** to return 928 rows over a `price_history` now at **644,972 rows, +~41k/day**.
@@ -13,7 +13,9 @@
 - 🔁 **Refresh path:** `refresh-summary.ts` now refreshes both views, so all 14 ingest workflows pick it up with no per-workflow edit. It **skips with a log** if the RPC is absent (PGRST202/42883), so landing the code before the migration is applied cannot break those workflows. Vercel's `/api/cron/price-summary` twin deliberately left alone (adding a 7s call risks a serverless timeout; the 14 daily workflows are the real path).
 - 🔢 **Latent cap fixed:** 928 priced styles vs PostgREST's hard 1000-row response cap — both the site and the health script read the RPC **unpaged**, so the board was about to truncate silently. Both now use `fetchAllRows`; data-health probes for a real RPC error first so a breakage throws instead of reading as "zero ranked styles".
 - ✅ **Gate:** tsc clean, 0 lint errors, 927/927 tests pass. Migration dry-run against prod inside a rolled-back transaction: **928 rows, built in <8s, unique index held, nothing left behind**.
-- ⬜ **YOUR TURN (2):** ① Actions → "Apply database migrations" → Run workflow (applies 0060). ② `vercel --prod` to ship the paging fix and bust the 1-hour `unstable_cache` on the index.
+- ✅ **APPLIED + VERIFIED LIVE (2026-07-26):** migration run `30213339440` green. MV populated (928 rows, `ispopulated`), refresh fn present, unique index created. RPC through PostgREST: **0.33s for 928 rows, both service-role and anon** (was 57-67s). `refresh_style_index_signals()` returns 204 in **5.3s**. Daily data health run `30213521858` **GREEN** (first since 07-22); report shows "Styles ranked by the LC Index 🟢 482 clear the floor ▲+17". `/rankings` is live again with real bags (Roulis, Chanel Mini Rectangular Flap, Birkin, Kelly) — "The Index is warming up" is gone.
+- ⚠️ **Known transient, watch it:** the FIRST post-migration health run (`30213388058`) still failed, on the NEXT full-table scan along (`price_history` exact count, empty error message, ~12s in) — I had run a manual `REFRESH ... CONCURRENTLY` ~2 min earlier, and these counts take 2.4-4.2s each when the DB is quiet. Re-run with a quiet DB was green, and the script passes locally end to end. Same class as 0056/0058: an exact count over 645k rows is fine idle and marginal under write load. **If data-health starts failing on `price_history count failed` again, the fix is to collapse section D's ~10 separate full-table counts into ONE aggregate RPC** (one scan instead of ten), not planner estimates — coverage is delta-scored, so estimates would fire false alarms.
+- ⬜ **YOUR TURN (1):** `vercel --prod`. `/rankings` (prerendered) already recovered on its own, but the DYNAMIC routes `/bag/[id]` and `/shop` still render no Standing card / rank badge for ranked styles (checked `/bag/83`, Birkin, ranked #3, `x-vercel-cache: MISS` so it is not page cache). Consistent with the shared `unstable_cache(["lc-index"], 3600)` entry still holding the empty array cached during the broken window. A deploy drops the Data Cache; it should otherwise clear within the hour. **Verify after deploying: `/bag/83` should show a "Where it stands" section.**
 
 ---
 
