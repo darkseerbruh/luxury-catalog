@@ -17,6 +17,22 @@
 
 ---
 
+## TL;DR — Signup moment shipped, availability alerts live, 6 bot accounts purged (2026-07-26, on `main`)
+
+**Started from "people use the data and never sign up"; ended with a pushy signup ask, a collector-grade alert the product never had, and the discovery that 6 of our 8 "accounts" were bots.**
+
+- 🔢 **The real baseline (verified 2026-07-26, not estimated):** **2 accounts**, not 8. One is Arielle. One is a genuine stranger: `mr052599` / handle `marlener123`, Google OAuth, signed up 07-24, completed onboarding, self-selected persona **`collector`**, 0 closet items. That is the entire real user base. PostHog over the prior 30d: ~33 identifiable outside-human sessions, 9 people viewing 2+ bag pages, median session 5s, most of the 596 "people" bot traffic.
+- 🤖 **6 bot registrations deleted.** Dotted-gmail addresses (`a.b.e.vi.nih.iro.2.4.5@`, `pu.l.u.zo.f.a.q.i.3.3@`, …), machine-generated local parts, **none confirmed, none ever signed in**, one every few days 07-10→07-23. Each one made Supabase send a confirmation email to an address we don't control (sender-reputation cost before the first real send). Backup of all 6 rows kept in the session scratchpad before deletion.
+- 🙋 **Signup ask (owner-tuned, pushy on purpose):** every **5 distinct bag pages, no ceiling**, 1-day cooldown, dismissal buys a day not permanent quiet, only an account stops it. Client-side card, bottom-right, never an interstitial or content swap (crawler HTML byte-identical, verified). Engine `src/lib/signup-prompt.ts` + `SignupPrompt.tsx`. Rationale: *"a visitor who won't convert does nothing for me until ads are viable."*
+- 🗣️ **Copy locked:** headline **"Keep track of the bags you want"** (never imply ownership; "Keep the ones you love" was rejected for that). Pitch is THEIR value; community give-back is one secondary line, never the headline.
+- 🔔 **Availability alerts (migration `0059` APPLIED 2026-07-26, run `30212492200`).** Both old alert modes are price-conditioned and `pct_below_median` goes silent under 5 comps, so **690 of 4,409 summarised variants (15.6%) could never fire any alert, 417 with zero comps** — dead exactly on the rare bags a collector chases, while `personas.md:139` already named Diane's trigger as *"a grail becoming available."* Now a **floor** under the price rules: `watchlist.notify_on_listing` (default true) + `last_listing_notified_at` on its own clock + `listing_alert` on the notification enum. Logic in `src/lib/listing-alert.ts` (dedupes by `listing_ref`, cutoff falls back to watch `created_at` so a new watch never floods). Currently idle: **0 watchlist rows exist**.
+- 📈 **Instrumentation hole closed:** there was NO signup event at all, and identify ran only on sign-IN, so a new account was invisible until its owner's second visit. Added `account_created` + `signup_prompt_shown/accepted/dismissed`, and identify now runs at sign-UP.
+- 🔐 **Turnstile CAPTCHA wired but INERT.** Widget + token pass-through + CSP allow-list for `challenges.cloudflare.com` (script/frame/connect) all shipped; renders nothing until `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is set. Verified with Cloudflare's test key: script loads, widget solves, hidden field populates, no CSP violations.
+- ⬜ **YOUR TURN (3):** ① create a Cloudflare Turnstile site, set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` in Vercel, THEN enable captcha in Supabase → Authentication → Attack Protection (**that order — toggling Supabase first with no key breaks every signup**). ② Google Search Console + Bing: verify the property, submit `sitemap.xml`, send the **Pages → "why pages aren't indexed"** list (sitemap has 4,030 bag URLs; robots/canonical/TTFB/redirects all verified clean, so discovery is the suspect). ③ nothing else blocking.
+- 🔭 **Open questions parked:** should availability alerts cover breadth-spec wants ("any green one", currently exact-variant only); should Claude apply additive migrations unprompted (ENFORCED #7 currently says migrations are hers).
+
+---
+
 ## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, landed on `main` 2026-07-20)
 
 **Audited GDPR compliance + password/data storage. Storage posture is strong; the compliance layer had real gaps; fixed all 6.**
