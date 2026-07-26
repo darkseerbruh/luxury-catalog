@@ -3,6 +3,20 @@
 
 ---
 
+## TL;DR — the daily failure emails were a SILENTLY EMPTY LC Index; precomputed it (2026-07-26, migration 0060 PENDING)
+
+**"Daily data health" failed 4 days running (07-23..26); every other workflow was green. The email was the only symptom of a bigger fault: the live LC Index had gone empty.**
+- 🐛 **Root cause:** `style_index_signals()` grew past the ~8s statement timeout. Measured against prod 2026-07-26: **57-67s** to return 928 rows over a `price_history` now at **644,972 rows, +~41k/day**.
+- 🕳️ **Why nobody saw it:** `loadStyleSignals()` catches the timeout and returns `[]`, so nothing errored — it just emptied. `/rankings` served "The Index is warming up" and no bag page could render a Standing card. Confirmed live 07-26. The health workflow was the only thing that failed loudly.
+- 🐌 **Fault A — bad plan:** `random_page_cost = 1.1` on this instance, so the planner picked a nested loop index-scanning `price_history` per variant (~106k blocks / ~830MB random heap reads on throttled Micro disk). Forcing the seq-scan plan: **57s → 7.1s, same query**.
+- 📐 **Fault B — wrong shape:** even at 7s it is 645k rows in / 928 out on every uncached render, and it re-crosses 8s within weeks. **Migration `0060`** precomputes it into materialized view `style_index_signal_summary` + `refresh_style_index_signals()` (180s timeout, planner knobs scoped to the function), mirroring `variant_price_summary`/0055. The RPC keeps its name and signature, so no caller changed.
+- 🔁 **Refresh path:** `refresh-summary.ts` now refreshes both views, so all 14 ingest workflows pick it up with no per-workflow edit. It **skips with a log** if the RPC is absent (PGRST202/42883), so landing the code before the migration is applied cannot break those workflows. Vercel's `/api/cron/price-summary` twin deliberately left alone (adding a 7s call risks a serverless timeout; the 14 daily workflows are the real path).
+- 🔢 **Latent cap fixed:** 928 priced styles vs PostgREST's hard 1000-row response cap — both the site and the health script read the RPC **unpaged**, so the board was about to truncate silently. Both now use `fetchAllRows`; data-health probes for a real RPC error first so a breakage throws instead of reading as "zero ranked styles".
+- ✅ **Gate:** tsc clean, 0 lint errors, 927/927 tests pass. Migration dry-run against prod inside a rolled-back transaction: **928 rows, built in <8s, unique index held, nothing left behind**.
+- ⬜ **YOUR TURN (2):** ① Actions → "Apply database migrations" → Run workflow (applies 0060). ② `vercel --prod` to ship the paging fix and bust the 1-hour `unstable_cache` on the index.
+
+---
+
 ## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, landed on `main` 2026-07-20)
 
 **Audited GDPR compliance + password/data storage. Storage posture is strong; the compliance layer had real gaps; fixed all 6.**

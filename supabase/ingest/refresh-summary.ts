@@ -1,8 +1,12 @@
 /**
- * Rebuild the variant_price_summary materialized view from the CLI (the local
- * twin of /api/cron/price-summary). Run after load:prices so newly loaded rows
- * surface in the per-variant summary. Optional [variant_id] prints that row to
- * verify. Needs .env.local with the service-role key. Requires migration 0021.
+ * Rebuild the derived materialized views from the CLI (the local twin of
+ * /api/cron/price-summary). Run after load:prices so newly loaded rows surface in both
+ * the per-variant summary and the LC Index board. Optional [variant_id] prints that
+ * variant's summary row to verify. Needs .env.local with the service-role key.
+ *
+ * Two views, refreshed in this order:
+ *   • variant_price_summary      (migration 0021) — per-variant price rollup
+ *   • style_index_signal_summary (migration 0060) — per-style LC Index signals
  *
  *   npx tsx supabase/ingest/refresh-summary.ts [variant_id]
  */
@@ -25,26 +29,38 @@ import { supabaseAdmin } from "../seed/lib/client";
  */
 const LOCK_TIMEOUT = "55P03";
 const STATEMENT_TIMEOUT = "57014";
+/**
+ * The refresh RPC is absent until its migration is applied. PostgREST reports an unknown
+ * function as PGRST202; a direct call reports 42883. Treat both as "skip, not fail" so
+ * this script keeps working on the deploys that sit between a merge and the migration
+ * button being pressed — otherwise landing the code would break all fourteen workflows.
+ */
+const NO_SUCH_FUNCTION = ["PGRST202", "42883"];
 const MAX_ATTEMPTS = 5;
 const BACKOFF_MS = [15_000, 30_000, 60_000, 120_000];
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function refreshWithRetry(): Promise<void> {
+async function refreshWithRetry(rpc: string, view: string): Promise<void> {
   for (let attempt = 1; ; attempt++) {
-    const { error } = await supabaseAdmin.rpc("refresh_variant_price_summary");
+    const { error } = await supabaseAdmin.rpc(rpc);
     if (!error) {
-      console.log(`Refreshed variant_price_summary${attempt > 1 ? ` (attempt ${attempt})` : ""}.`);
+      console.log(`Refreshed ${view}${attempt > 1 ? ` (attempt ${attempt})` : ""}.`);
       return;
     }
 
     const code = (error as { code?: string }).code;
+    if (code && NO_SUCH_FUNCTION.includes(code)) {
+      console.log(`Skipped ${view}: ${rpc}() is not in the database yet (migration pending).`);
+      return;
+    }
+
     const contended = code === LOCK_TIMEOUT || code === STATEMENT_TIMEOUT;
     if (!contended || attempt >= MAX_ATTEMPTS) throw error;
 
     const waitMs = BACKOFF_MS[Math.min(attempt - 1, BACKOFF_MS.length - 1)];
     console.log(
-      `variant_price_summary busy (${code}) — another refresh holds the view. ` +
+      `${view} busy (${code}) — another refresh holds the view. ` +
         `Attempt ${attempt}/${MAX_ATTEMPTS}, retrying in ${waitMs / 1000}s.`,
     );
     await sleep(waitMs);
@@ -54,7 +70,8 @@ async function refreshWithRetry(): Promise<void> {
 async function main() {
   const variantId = process.argv[2] ? Number(process.argv[2]) : null;
 
-  await refreshWithRetry();
+  await refreshWithRetry("refresh_variant_price_summary", "variant_price_summary");
+  await refreshWithRetry("refresh_style_index_signals", "style_index_signal_summary");
 
   if (variantId != null) {
     const { data, error: qErr } = await supabaseAdmin

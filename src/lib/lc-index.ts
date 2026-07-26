@@ -19,7 +19,7 @@
  */
 
 import { unstable_cache } from "next/cache";
-import { getSupabase } from "./supabase";
+import { fetchAllRows, getSupabase } from "./supabase";
 
 // Legacy string tiers + the numbered House Standing tiers ("1" highest → "5").
 // Both are tolerated through the rollout; see docs/ux/tier-formula-spec.md.
@@ -359,12 +359,17 @@ interface RawSignalRow {
 
 const VALID_TIERS: BrandTier[] = ["thrift", "mid", "premium", "ultra-luxury", "1", "2", "3", "4", "5"];
 
-/** Fetch raw per-style signals from the RPC. Resilient: [] on any missing env / error. */
+/**
+ * Fetch raw per-style signals from the RPC. Resilient: [] on any missing env / error.
+ *
+ * PAGED. Every PostgREST response caps at 1000 rows, and a bare .rpc() takes that cap
+ * silently — the board would just stop at style 1000 with no error. 928 styles priced as
+ * of 2026-07-26, so this was about to start truncating.
+ */
 async function loadStyleSignals(): Promise<StyleSignals[]> {
   try {
-    const { data, error } = await getSupabase().rpc("style_index_signals");
-    if (error || !Array.isArray(data)) return [];
-    return (data as RawSignalRow[]).map((r) => {
+    const data = await fetchAllRows<RawSignalRow>(() => getSupabase().rpc("style_index_signals"));
+    return data.map((r) => {
       const tier = r.tier && VALID_TIERS.includes(r.tier as BrandTier) ? (r.tier as BrandTier) : null;
       const median = r.resale_median == null ? null : Number(r.resale_median);
       return {
