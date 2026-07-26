@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getReviews } from "@/lib/reviews";
 import { getAxisVotes } from "@/lib/votes";
+import { AXES } from "@/lib/axes";
 import { getWear } from "@/lib/wear";
 
 /**
@@ -56,7 +57,7 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
 
   // Signed-out: every slot is open, the invitation still shows (login-gated).
   if (!user) {
-    const slots = buildSlots({ hasPhoto: false, hasReview: false, axisDone: 0, axisTotal: 5 });
+    const slots = buildSlots({ hasPhoto: false, hasReview: false, axisDone: 0, axisTotal: AXES.length });
     return { signedIn: false, closetStatus: null, slots, filled: 0, total: slots.length, complete: false };
   }
 
@@ -71,7 +72,7 @@ export async function getContributionSlots(variantId: number): Promise<Contribut
   const closetStatus = (closetRes.data?.status as string | undefined) ?? null;
 
   const hasReview = !!reviews?.myReview;
-  const axisTotal = votes?.axes.length ?? 5;
+  const axisTotal = votes?.axes.length ?? AXES.length;
   const axisDone = votes?.axes.filter((a) => a.myValue != null).length ?? 0;
 
   const slots = buildSlots({
@@ -128,8 +129,8 @@ export function buildSlots(input: {
     },
     {
       key: "wears",
-      label: "Rate how it wears",
-      hint: "Tap the bars: comfort, everyday, build.",
+      label: "Say what kind of bag it is",
+      hint: "Tap the scales: dress code, structure, upkeep, and how it carries.",
       anchor: "#owner-ratings",
       // The bars slot counts as filled once you have rated at least one axis.
       filled: input.axisDone > 0,

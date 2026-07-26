@@ -10,15 +10,35 @@ bag-page leaderboards, data-viz, and a contribution loop. Pairs with
 `rating` 1-5 · `worth_it` boolean · `occasion` *(free text)* · `durability_rating`
 1-5 · `title`/`body` free text.
 
-**Multi-axis votes (`0012_bag_axis_votes.sql`, APPLIED — verified live 2026-07-08:
-`bag_axis_vote` exists and holds data; `<AxisVotes>` renders on every bag page):**
-Fragrantica-style 1-5 votes on a fixed enum, rendered as "character bars":
-`build_quality, everyday_wearability, holds_value, roomy_vs_compact, comfort,
-versatility, worth_the_price`. Votable subset (opinion-only) lives in `src/lib/axes.ts`;
-`holds_value` + `worth_the_price` stay excluded (see correction below). Owners can now
-also set these axes inline from the closet-add review sheet, not just the bag page.
+**Multi-axis votes (`0012_bag_axis_votes.sql` applied; vocabulary REPLACED by
+`0059_bag_axis_v2.sql` on 2026-07-25):** 1-5 votes on a fixed enum, rendered as
+character bars. `<AxisVotes>` renders on every bag page and owners can also set the
+axes inline from the closet-add review sheet.
 
-## Correction to the 0012 axis vocabulary (decided 2026-06-23)
+> ⚠️ **Correction to an earlier claim in this doc:** it previously said
+> `bag_axis_vote` "holds data" as of 2026-07-08. A direct prod probe on 2026-07-25
+> found **0 rows** in `bag_axis_vote` (and 0 in `review`, 0 in `closet_favorite`).
+> The table exists; the corpus is empty. That is what made the 0059 enum swap free.
+
+**➡️ The current axis vocabulary and the reasoning behind it live in
+`src/lib/axes.ts`. The evidence it was derived from is
+`docs/research-drafts/axis-evidence-2026-07.md`.** Do not re-derive it from the
+list below, which is superseded.
+
+## Superseded: the 0012 vocabulary and its first correction
+
+*Kept for provenance. The 2026-06-23 correction below was RIGHT and its rule still
+binds; the axis list it operated on has since been re-derived from evidence (0059).*
+
+The original 0012 enum was `build_quality, everyday_wearability, holds_value,
+roomy_vs_compact, comfort, versatility, worth_the_price` — an a-priori adaptation of
+Fragrantica's model (`ux-research-brief.md` §F), never checked against what handbag
+owners actually compare on. The 2026-07-25 pass across six bags found six dimensions
+missing from it in *every* pass, and retired `versatility` (ambiguous: it means
+carry-modes AND occasion-range AND outfit-matching) and `roomy_vs_compact` (it
+measures which variant the voter bought, not the bag).
+
+### Correction to the 0012 axis vocabulary (decided 2026-06-23)
 
 Owner caught that **`holds_value` is not an opinion — it's a market fact** we
 already compute from `price_history` (e.g. 87.7% retention on the Classic Flap).

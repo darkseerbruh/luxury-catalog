@@ -6,7 +6,7 @@ import { saveToCloset } from "@/lib/collection-actions";
 import { submitReview } from "@/lib/review-actions";
 import { castAxisVote } from "@/lib/vote-actions";
 import { OCCASIONS } from "@/lib/occasions";
-import { AXES, AXIS_META } from "@/lib/axes";
+import { DESCRIBE_AXES, RATE_AXES, AXIS_META } from "@/lib/axes";
 
 /**
  * Adding a bag to your closet IS reviewing it (docs/ux/unified-search-and-review-spec.md).
@@ -94,7 +94,6 @@ export function ClosetAddFlow() {
   const [body, setBody] = useState("");
   const [worthIt, setWorthIt] = useState<boolean | null>(null);
   const [occasion, setOccasion] = useState<string | null>(null);
-  const [durability, setDurability] = useState(0);
   const [axisValues, setAxisValues] = useState<Record<string, number>>({});
 
   const [saving, setSaving] = useState(false);
@@ -108,7 +107,6 @@ export function ClosetAddFlow() {
     setBody("");
     setWorthIt(null);
     setOccasion(null);
-    setDurability(0);
     setAxisValues({});
     setError(null);
     setStep("find");
@@ -142,7 +140,8 @@ export function ClosetAddFlow() {
       body: body || undefined,
       worthIt,
       occasion: occasion ?? undefined,
-      durabilityRating: durability > 0 ? durability : null,
+      // durability_rating is superseded by the wears_well axis (0063): one
+      // rating system, not two. It is collected with the other axes below.
     });
     // Opinion axes are optional and best-effort: a failed axis vote never blocks
     // the saved review. One upsert per axis the reviewer actually set.
@@ -276,12 +275,32 @@ export function ClosetAddFlow() {
             </div>
           </div>
 
-          <Stars value={durability} onChange={setDurability} label="How's it holding up? (optional)" />
+          {/* Describe first: polar scales have no wrong answer, so they are the
+              easiest thing to hand us and they warm people up for the ratings. */}
+          <div>
+            <p className="mb-1 text-sm text-muted">
+              What kind of bag is it? <span className="text-muted/60">optional</span>
+            </p>
+            <p className="mb-3 text-xs text-muted/70">Neither end is better.</p>
+            <div className="flex flex-col gap-4">
+              {DESCRIBE_AXES.map((axis) => (
+                <AxisPips
+                  key={axis}
+                  meta={AXIS_META[axis]}
+                  value={axisValues[axis] ?? 0}
+                  onChange={(n) => setAxisValues((prev) => ({ ...prev, [axis]: n }))}
+                />
+              ))}
+            </div>
+          </div>
 
           <div>
-            <p className="mb-3 text-sm text-muted">How it wears <span className="text-muted/60">optional</span></p>
+            <p className="mb-1 text-sm text-muted">
+              How well does it hold up? <span className="text-muted/60">optional</span>
+            </p>
+            <p className="mb-3 text-xs text-muted/70">Here, higher is better.</p>
             <div className="flex flex-col gap-4">
-              {AXES.map((axis) => (
+              {RATE_AXES.map((axis) => (
                 <AxisPips
                   key={axis}
                   meta={AXIS_META[axis]}

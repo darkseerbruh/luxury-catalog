@@ -4,12 +4,12 @@
   "weeklyDow": 1,
   "greenStreak": 0,
   "lastRun": "2026-07-26",
-  "overall": "red",
+  "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.7456999074074074,
-    "freshness-therealreal": 1.7456999074074073,
-    "freshness-tlc": 0.7456999074074074,
-    "freshness-ebay": 6.745699907407407,
+    "freshness-fashionphile": 0.9172654976851852,
+    "freshness-therealreal": 1.9172654976851853,
+    "freshness-tlc": 0.9172654976851852,
+    "freshness-ebay": 6.917265497685185,
     "capture-rows": 83450,
     "ranking-count": 482,
     "ranking-near-floor": 60,
@@ -33,7 +33,7 @@
     "coverage-variant-colour": 50.19278748015423,
     "coverage-variant-material": 40.41732819233386,
     "coverage-variant-hardware": 26.445906101156726,
-    "summary-staleness": 7.393421388888889,
+    "summary-staleness": 11.510995555555555,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 1
@@ -48,6 +48,7 @@
     81690,
     81655,
     82029,
+    83450,
     83450
   ],
   "findings": {
@@ -55,20 +56,10 @@
       "firstSeen": "2026-07-10",
       "status": "yellow"
     },
-    "backlog-total": {
-      "firstSeen": "2026-07-26",
-      "status": "red"
-    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
     }
   },
-  "redFindings": [
-    {
-      "id": "backlog-total",
-      "title": "Data health: backlog-total is RED",
-      "body": "The unpromoted backlog grew from 239414 to 326857 rows since the last run; capture is outpacing promotion.\n\nCurrent value: 326857 unpromoted rows\nSuggested action: Schedule a promotion session (promote-safe --create-new) or grow the dictionary coverage.\nReport: reports/data-health/2026-07-26.md"
-    }
-  ]
+  "redFindings": []
 }

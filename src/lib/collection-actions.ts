@@ -5,6 +5,7 @@ import { createServerSupabase } from "./supabase/server";
 import { getCurrentUser } from "./auth";
 import { notifyFollowersOfActivity } from "./notifications";
 import type { WantSpec } from "./want-spec";
+import { CLOSET_STATUSES, type ClosetStatus } from "./closet-states";
 
 /** A short "@handle" / display-name label for the acting user, for notifications. */
 async function actorLabel(userId: string): Promise<string> {
@@ -24,11 +25,9 @@ export interface ActionResult {
   error?: string;
 }
 
-const CLOSET_STATUSES = ["want", "have", "had"] as const;
-type ClosetStatus = (typeof CLOSET_STATUSES)[number];
-
-// Local only: a "use server" module may export async functions exclusively, so
-// keep the type + constant un-exported (WatchControls defines its own copies).
+// Vocabulary lives in the server-free ./closet-states so the UI can share it: a
+// "use server" module may export async functions exclusively, which is why copies
+// used to be redefined per component.
 type AlertMode = "absolute" | "pct_below_median";
 /** Default percent-below-median for a fresh watch (editable per bag). */
 const DEFAULT_ALERT_PCT = 10;

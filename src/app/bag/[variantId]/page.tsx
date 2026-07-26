@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVariantDetail, getResourcesForStyle, getStyleVariants, getVariantImages, getVariantEraComps } from "@/lib/queries";
-import { getVariantDemand } from "@/lib/demand";
+import { getVariantDemand, getShelfCounts } from "@/lib/demand";
+import ShelfCountsPanel from "./ShelfCounts";
+import ReputationClaims from "./ReputationClaims";
 import { listByBrand, listByStyle, getBrandAuthGuideSlug } from "@/lib/posts";
 import { ArticleList } from "@/components/ArticleList";
 import { buildResaleLinks, buildConsignmentLinks } from "@/lib/affiliate";
@@ -331,7 +333,7 @@ export default async function BagDetailPage({
   // here they run concurrently (owner reported "crazy" bag-page load 2026-07-11).
   const [
     resources, styleVariants, images, photos, authMarketplaceLive, stylePosts, brandPosts, flapFamily, flapLines,
-    demand, standingView, eraCompsRaw, bagStory, authGuideSlug, productionAxes,
+    demand, shelfCounts, standingView, eraCompsRaw, bagStory, authGuideSlug, productionAxes,
   ] = await Promise.all([
     getResourcesForStyle(v.style.styleId, v.variantId),
     getVariants(v.style.styleId),
@@ -343,6 +345,7 @@ export default async function BagDetailPage({
     getFamily(v.style.styleId),
     getLines(v.style.styleId),
     getVariantDemand(v.variantId),
+    getShelfCounts(v.variantId),
     getStyleStandingView(v.style.styleId),
     getVariantEraComps(v.variantId),
     getBagStory(v.style.name, v.brand.name),
@@ -947,6 +950,12 @@ export default async function BagDetailPage({
         initialClosetStatus={userState.closetStatus}
         initialWatching={userState.watching}
       />
+
+      {/* Shelf counts, directly under the save action so the social proof sits with
+          the decision. Shown to EVERYONE: the counts are public, only setting your
+          own state needs an account (build-plan principle 3). Self-hides below a
+          floor, because a thin count is worse than none. */}
+      <ShelfCountsPanel counts={shelfCounts} />
 
       {/* Produced-but-unlisted stub: this colourway/size exists, we just have no photo or
           price yet. Say so warmly + invite a photo (UGC), never a broken-looking empty page. */}
@@ -1736,6 +1745,11 @@ export default async function BagDetailPage({
       <Reviews variantId={v.variantId} inCloset={userState.closetStatus !== null} />
 
       {/* Multi-axis owner ratings (Fragrantica-style character bars) */}
+      {/* Synthesised claims sit ABOVE the owner scales: the page should already be
+          informative before we ask for anything, and a reader who has just seen a
+          claim they disagree with is the likeliest person to rate. */}
+      <ReputationClaims variantId={v.variantId} styleId={v.style.styleId} path={`/bag/${v.variantId}`} />
+
       <AxisVotes variantId={v.variantId} />
 
       {/* Lived carry + weight-feel taps (renders only once 0046 is migrated) */}

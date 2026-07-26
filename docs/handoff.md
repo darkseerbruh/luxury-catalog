@@ -38,6 +38,22 @@
 
 ---
 
+## TL;DR — Community/UGC lane: 5 units built, 4 migrations APPLIED (2026-07-26, branch `ops/community-workstream-0725`)
+
+**The reviews moat: price aggregators can copy comps, they cannot copy what owners say. Strategy `docs/community-workstream.md`; queue `docs/community-worklist.md`; the field-by-field reasoning `docs/review-ask-inventory.md`.**
+- 🔎 **Diagnosis (two codebase audits + a 6-bag research pass, ~100 owner sources):** the UGC engine was broadly BUILT but scattered, gated shut, and un-advertised — and the corpus was EMPTY (0 reviews, 0 wants). Purely a cold-start problem.
+- 🧪 **The axes were an a-priori guess and are now evidence-derived.** Dimension discovery across Birkin / Classic Flap / Neverfull / Lady Dior / BV Jodie / Polène-Telfar killed `versatility` (5 of 6 passes: it means three different things at once), `roomy_vs_compact` (measures the variant, not the bag) and `build_quality` (ceilings out at the top tier). Final six: structure · holds_up · dress_code · worth_it_where · access · price_value.
+- 🎯 **The filter (owner):** ask reviewers ONLY what we cannot learn anywhere else. Something can matter on the bag page without being worth asking. Everything derivable is derived.
+- 🚢 **Shipped:** spec columns + a promote pass (**closure 1,485 variants ~34%**), shelf counts shown to everyone (Fragrantica hides theirs from logged-out visitors, which wastes the best social proof), the six owner scales, votable **Reputation claims** (we draft from published sources, the crowd ratifies — the cold-start fix and the top engagement mechanic in one), and a `tried it` shelf state + a reason for `had it`.
+- 🗄️ **Migrations 0061, 0062, 0063, 0064 APPLIED 2026-07-26.** ⚠️ **Trap worth knowing: a green migration run does NOT mean your migration ran.** Numbers 0059/0060 collided with this lane's own watchlist + LC-Index migrations; Supabase tracks by numeric prefix, recorded them as done and silently SKIPPED mine while reporting success. Caught only by probing the schema directly. Renumbered to 0063/0064. **Read the dry-run step's list, not the check mark.**
+- ⬜ **Still queued:** the claim-seeding pipeline, "reminds me of" rails, most-worn check-in, photo surfaces, repair referral. Age/trend scales need a copy pass first (ageism risk).
+
+---
+
+
+
+---
+
 ## TL;DR — GDPR/security review + all 6 gaps fixed (2026-07-17, landed on `main` 2026-07-20)
 
 **Audited GDPR compliance + password/data storage. Storage posture is strong; the compliance layer had real gaps; fixed all 6.**

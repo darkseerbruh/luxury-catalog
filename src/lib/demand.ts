@@ -43,3 +43,55 @@ export async function getVariantDemand(variantId: number): Promise<VariantDemand
     return demandLevel(0, 0); // degrade gracefully — demand is a nice-to-have
   }
 }
+
+/**
+ * The full shelf: how many people want / have / had this bag.
+ *
+ * Shown to EVERYONE, signed in or not (docs/ux/bag-page-build-plan.md principle 3).
+ * Fragrantica hides its equivalent from logged-out visitors, so a first-time reader
+ * never learns that 41.5K people own the thing they are considering. That wastes the
+ * strongest social proof on the page on the audience that needs it least. The COUNTS
+ * are public; only setting your own state needs an account.
+ *
+ * Same privacy posture as getVariantDemand: aggregated with the service-role client
+ * because closet rows are RLS-owned, and we expose only counts, never who.
+ */
+export interface ShelfCounts {
+  want: number;
+  have: number;
+  had: number;
+  /** Total people with any relationship to this bag. */
+  total: number;
+  /**
+   * Wants per owner. A bag many covet and few own reads very differently from the
+   * reverse. Null when nobody owns it (the ratio would be meaningless, not infinite).
+   */
+  covetRatio: number | null;
+}
+
+export function shelfCountsFrom(want: number, have: number, had: number): ShelfCounts {
+  return {
+    want,
+    have,
+    had,
+    total: want + have + had,
+    covetRatio: have > 0 ? +(want / have).toFixed(2) : null,
+  };
+}
+
+export async function getShelfCounts(variantId: number): Promise<ShelfCounts> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return shelfCountsFrom(0, 0, 0);
+  try {
+    const admin = getSupabaseAdmin();
+    const count = (status: string) =>
+      admin
+        .from("closet_item")
+        .select("closet_id", { count: "exact", head: true })
+        .eq("variant_id", variantId)
+        .eq("status", status);
+    const [want, have, had] = await Promise.all([count("want"), count("have"), count("had")]);
+    return shelfCountsFrom(want.count ?? 0, have.count ?? 0, had.count ?? 0);
+  } catch {
+    return shelfCountsFrom(0, 0, 0); // degrade to silence, never to a wrong number
+  }
+}
