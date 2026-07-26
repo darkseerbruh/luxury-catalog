@@ -1,0 +1,125 @@
+{
+  "bag": "Chanel 19 (style 425)",
+  "styleId": 425,
+  "asOf": "2026-07-25",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Research pass: docs/research-drafts/reputation-poc-chanel-19.md. Claims hang off the STYLE, not a variant, because they describe the 19 in general rather than one colourway.",
+  "sources": [
+    {
+      "label": "PurseForum: how long will the Chanel 19 stay relevant?",
+      "url": "https://forum.purseblog.com/threads/how-long-do-you-think-the-chanel-19-will-stay-relevant.1062699/",
+      "kind": "community"
+    },
+    {
+      "label": "Lauren Kay Sims, Chanel 19 flap bag review",
+      "url": "https://laurenkaysims.com/2021/03/chanel-19-flap-bag-review/",
+      "kind": "commercial"
+    },
+    {
+      "label": "Luxury Evermore, Chanel 19 review",
+      "url": "https://luxuryevermore.com/blogs/article/chanel-19-bag-review",
+      "kind": "commercial"
+    },
+    {
+      "label": "r/chanel: is the Chanel 19 still worth it?",
+      "url": "https://www.reddit.com/r/chanel/comments/137cea1/is_chanel_19_still_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: Chanel 19, classic or already dated?",
+      "url": "https://www.reddit.com/r/handbags/comments/1ihfwn3/chanel_19_classic_or_already_dated/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: is the Chanel 19 a great bag to add?",
+      "url": "https://www.reddit.com/r/chanel/comments/122yllc/is_chanel19_a_great_bag_to_add_to_your_collection/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, eight months of wear",
+      "url": "https://www.youtube.com/watch?v=dU3XDDXdvmY",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Chanel 19 Small after a year",
+      "url": "https://www.youtube.com/watch?v=SxPMa66v9hc",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, lambskin versus goatskin wear",
+      "url": "https://www.youtube.com/watch?v=s8r41OhJeIQ",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube comparison, Classic Flap versus Chanel 19",
+      "url": "https://www.youtube.com/watch?v=-lZugx80bPo",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: lambskin wear and tear",
+      "url": "https://forum.purseblog.com/threads/lambskin-classic-flap-wear-and-tear-question.988963/",
+      "kind": "community"
+    }
+  ],
+  "claims": [
+    {
+      "body": "Reads as the relaxed, modern Chanel. Softer and slouchier than the Classic Flap, with an oversized quilt that lands closer to casual-luxe than dressy.",
+      "stance": "pro",
+      "axisHint": "structure",
+      "sourceIdx": [0, 1, 2, 4]
+    },
+    {
+      "body": "Owners describe it as a Chanel they genuinely carry. Errands through dinner, jeans through a dress, hands-free when they need it.",
+      "stance": "pro",
+      "axisHint": "dress_code",
+      "sourceIdx": [1, 2, 5, 7]
+    },
+    {
+      "body": "Three ways to wear it, and the soft body opens wide enough to find things without digging.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [2, 5, 7]
+    },
+    {
+      "body": "The lambskin holds up better than its reputation suggests. One blogger logged hundreds of wears with the shape intact.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [1, 5, 8, 10]
+    },
+    {
+      "body": "The triple chain adds real weight, and more so in the larger sizes. It is the most common complaint by some distance.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 2, 6, 9]
+    },
+    {
+      "body": "The unstructured base slouches and softens with age. Owners are split on whether that is the flaw or the entire point.",
+      "stance": "con",
+      "axisHint": "structure",
+      "sourceIdx": [0, 2, 7]
+    },
+    {
+      "body": "Pale colourways pick up transfer from dark denim, so the light shades need more thought than the neutrals.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [2, 8]
+    },
+    {
+      "body": "A vocal minority finds the chunky triple chain too loud for their taste, separately from its weight.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 4]
+    },
+    {
+      "body": "Opinion is genuinely split on staying power. Many expect it to settle where the Boy bag sits, well liked and past its peak; a few already call it dated.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 3, 4, 9]
+    },
+    {
+      "body": "The read has cooled since the launch-era buzz of 2019 to 2021, so older reviews describe a warmer room than the current one.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 3, 4]
+    }
+  ]
+}

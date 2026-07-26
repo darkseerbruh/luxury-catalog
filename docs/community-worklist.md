@@ -83,7 +83,15 @@ Commit after each unit. Resume from the first ⬜.*
 Brand specs are CURRENT-SEASON, so they cannot tell a 2005 "Large" Classic Flap from a
 2024 "Large". **Seller-measured dimensions are the disambiguator**, so the two sources
 do different jobs:
-- **Archivist / house** = canon. What the house called each size, per era.
+- **Archivist / house documentation** = per-ERA canon, including historical.
+  ⚠️ I earlier wrote that an archivist pull "can only get current season". **That was
+  wrong**, and the owner corrected it: I was describing brand.com, not archivist
+  research. The archivist's remit is the seasonal archive going back ~30 years
+  (house documentation, press material, lookbooks, archive references), which is
+  precisely the historical-disambiguation capability. The real caveat is COVERAGE,
+  not capability: houses did not always publish dimensions historically and
+  measurement conventions shifted, so expect some eras to resolve and others to
+  come up empty.
 - **Seller listing** = measured evidence for that specific bag.
 Cluster the seller measurements and the clusters REVEAL the size eras; anchor those
 clusters to archivist canon. That means storing dimensions **per listing**, not only
