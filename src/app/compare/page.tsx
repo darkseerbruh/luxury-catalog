@@ -127,7 +127,11 @@ export default async function ComparePage({
                 <th key={b.variantId} className="min-w-[160px] p-3 align-top">
                   <Link href={`/bag/${b.variantId}`} className="block group">
                     <span className="block aspect-square w-full overflow-hidden rounded-xl border border-border bg-surface">
-                      <BagImage imageUrl={b.imageUrl} alt={`${b.brandName} ${b.styleName}`} />
+                      <BagImage
+                        imageUrl={b.imageUrl}
+                        alt={`${b.brandName} ${b.styleName}`}
+                        className="h-full w-full"
+                      />
                     </span>
                     <span className="mt-2 block text-left font-medium text-foreground group-hover:text-gold">
                       {b.brandName} {b.styleName}

@@ -886,20 +886,21 @@ export default async function BagDetailPage({
            CLEAN image — no marketplace caption/price band (owner call 2026-07-09:
            the "For sale right now" rail below carries the platform context). The
            quiet link keeps the photo tethered to the live listing it promotes
-           (affiliate image rights) and still monetizes the click. contain-fit on
-           white: the 4/3 cover-crop was cutting studio shots off at the clasp. */
+           (affiliate image rights) and still monetizes the click. Square box +
+           contain-fit on white: the 4/3 cover-crop was cutting studio shots off at
+           the handles, and bag photos are square-to-portrait, so a square frame
+           wastes the least room around them. */
         <a
           href={heroListing.buyUrl}
           target="_blank"
           rel="noopener noreferrer nofollow sponsored"
-          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-white"
+          className="group relative block aspect-square w-full overflow-hidden rounded-2xl border border-border bg-white"
         >
           <BagImage
             imageUrl={heroListing.imageUrl}
             brand={v.brand.name}
             alt={`${v.brand.name} ${v.style.name}`}
             invite={false}
-            fit="contain"
             className="h-full w-full"
           />
         </a>
@@ -908,7 +909,7 @@ export default async function BagDetailPage({
           imageUrl={images[v.variantId]}
           brand={v.brand.name}
           alt={`${v.brand.name} ${v.style.name}`}
-          className="aspect-[4/3] w-full rounded-2xl border border-border"
+          className="aspect-square w-full rounded-2xl border border-border"
         />
       )}
       </div>
