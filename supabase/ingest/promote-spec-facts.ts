@@ -29,7 +29,7 @@
  *   npx tsx supabase/ingest/promote-spec-facts.ts            # dry run, reports yield
  *   npx tsx supabase/ingest/promote-spec-facts.ts --write    # apply
  *
- * Requires migration 0060 (weight_g / closure_type / pocket_count) for the closure
+ * Requires migration 0064 (weight_g / closure_type / pocket_count) for the closure
  * write; the dimension write only needs 0001's columns.
  */
 import { supabaseAdmin as db } from "../seed/lib/client";
@@ -42,7 +42,7 @@ const CLOSURE_MIN_VOTES = 2;
 const CLOSURE_MIN_SHARE = 0.6;
 
 /**
- * Raw listing phrasings → the closed set in migration 0060. Sourced from the actual
+ * Raw listing phrasings → the closed set in migration 0064. Sourced from the actual
  * vocabulary in prod (counts from a full scan, 2026-07-26), not invented.
  */
 const CLOSURE_MAP: Record<string, string> = {

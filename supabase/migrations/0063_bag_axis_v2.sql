@@ -135,7 +135,7 @@ begin
 end $$;
 
 comment on column review.durability_rating is
-  'SUPERSEDED 2026-07-25 by the holds_up axis on bag_axis_vote (migration 0059). '
+  'SUPERSEDED 2026-07-25 by the holds_up axis on bag_axis_vote (migration 0063). '
   'Retained for reversibility; the app no longer writes it and the "Most durable" '
   'leaderboard now reads bag_axis_vote. Do not add new readers.';
 

@@ -140,7 +140,7 @@ export function ClosetAddFlow() {
       body: body || undefined,
       worthIt,
       occasion: occasion ?? undefined,
-      // durability_rating is superseded by the wears_well axis (0059): one
+      // durability_rating is superseded by the wears_well axis (0063): one
       // rating system, not two. It is collected with the other axes below.
     });
     // Opinion axes are optional and best-effort: a failed axis vote never blocks

@@ -1,5 +1,5 @@
 /**
- * Opinion-axis vocabulary + display copy (0059 `bag_axis`). Kept in its OWN
+ * Opinion-axis vocabulary + display copy (0063 `bag_axis`). Kept in its OWN
  * server-free module so client components (the closet-add review sheet, the
  * bag-page vote control) can import the axes without pulling votes.ts, which
  * imports server-only Supabase. votes.ts re-exports these for existing callers.

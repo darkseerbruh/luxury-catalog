@@ -51,7 +51,7 @@ house, not the bag · `CONTEXT` captured silently, never a question.
 | 18 | `versatility` | **CUT** | Flagged ambiguous by 5 of 6 passes: it means carry-modes AND occasion-range AND outfit-matching at once. |
 | 19 | `worth_the_price` | **CUT** | Duplicates the stars. Already excluded in code. |
 
-## 3. The axes I proposed in 0059
+## 3. The axes I proposed in 0063
 
 | # | Axis | Verdict | Reasoning |
 |---|---|---|---|
@@ -61,7 +61,7 @@ house, not the bag · `CONTEXT` captured silently, never a question.
 | 23 | `upkeep` | **COMBINE** → *How it holds up* | Cause-and-effect with ageing. One question. |
 | 24 | `presence` | **DERIVE** (split) | Conflated two things. **Recognisability** (loud monogram vs logo-free) is a catalog fact. **Ubiquity** ("everyone has one") is derivable from our own listing and closet volume. Neither needs asking. |
 | 25 | `wears_well` / how it ages | **ASK** → *How it holds up* | The strongest ask in the whole set. Purely longitudinal, and unknowable without years of ownership. |
-| 26-28 | build_quality, comfort, everyday_wearability (kept in 0059) | see above | |
+| 26-28 | build_quality, comfort, everyday_wearability (kept in 0063) | see above | |
 
 ## 4. Surfaced by the research, never built
 

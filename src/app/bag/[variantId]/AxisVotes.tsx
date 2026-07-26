@@ -2,7 +2,7 @@ import { getAxisVotes, type AxisAggregate } from "@/lib/votes";
 import AxisVoteControl from "./AxisVoteControl";
 
 /**
- * "What owners say" — the per-bag opinion axes (0059 vocabulary).
+ * "What owners say" — the per-bag opinion axes (0063 vocabulary).
  *
  * Two groups, two visual treatments, because they are two different kinds of
  * question (full reasoning in src/lib/axes.ts):

@@ -68,7 +68,7 @@ async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards>
   try {
     const sb = getSupabase();
     // "How it ages" moved off review.durability_rating and onto the holds_up
-    // AXIS in 0059 (one rating system, not two). The Most durable board reads it
+    // AXIS in 0063 (one rating system, not two). The Most durable board reads it
     // from bag_axis_vote now; the review column is retained but no longer read.
     const [reviewRes, wearsRes] = await Promise.all([
       sb.from("review").select("variant_id, rating, worth_it, occasion"),

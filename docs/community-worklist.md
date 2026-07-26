@@ -26,7 +26,7 @@ Commit after each unit. Resume from the first ⬜.*
   describe: structure · holds_up · dress_code · worth_it_where
   rate: access · price_value. `wears_well` merged into holds_up; Most-durable board
   now reads the axis. Verified all six render on /bag/589.
-  ⏸️ **HER TURN: apply 0059** (rewritten to the six; still unapplied)
+  ⏸️ **HER TURN: apply 0063** (rewritten to the six; still unapplied)
 - ✅ **Unit 4 — votable Reputation claims** (`675800d`)
   Migration `0062` (reputation_claim + votes, RLS, trigger-kept tallies) +
   `claims.ts` / `claim-actions.ts` / `ReputationClaims.tsx` / `ClaimVote.tsx`.
@@ -116,10 +116,10 @@ destination. No "Reviews" nav item unless it earns one.*
   a marker on a track, never a fill bar (a fill would turn "slouchy" into a low
   score). Polar axes are also the ones web-consensus can honestly seed, which is
   what makes the Reputation layer share one scale with UGC.
-  Files: migration `0059`, `src/lib/axes.ts`, `votes.ts`, `AxisVotes.tsx`,
+  Files: migration `0063`, `src/lib/axes.ts`, `votes.ts`, `AxisVotes.tsx`,
   `ClosetAddFlow.tsx`, `contribution-slots.ts`. Gate green (tsc, lint 0 errors,
   898/898); verified rendering on `/bag/589`.
-- ⏸️ **YOUR TURN: apply migration 0059** (Actions → "Apply database migrations" →
+- ⏸️ **YOUR TURN: apply migration 0063** (Actions → "Apply database migrations" →
   Run workflow). Until then the app offers axis names the DB enum does not have,
   so a vote cast on a new axis would fail. Display is unaffected (0 votes).
 - ⬜ **Follow-up surfaced:** `review.durability_rating` and a "how it ages" axis
