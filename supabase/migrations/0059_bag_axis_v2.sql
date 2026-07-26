@@ -1,5 +1,5 @@
 -- Luxury Catalog: re-derive the opinion-axis vocabulary from evidence, then cut
--- it to the four things only an owner can tell us.
+-- it to the six things only an owner can tell us.
 --
 -- WHY: the original 0012 set was an a-priori adaptation of Fragrantica's model
 -- (ux-research-brief.md §F), never checked against what handbag owners actually
@@ -15,7 +15,7 @@
 -- earns a slot only if it is longitudinal, bodily, behavioural, or social.
 -- Properties of the object get derived from the catalog instead.
 --
--- THE FOUR THAT SURVIVED, and what each absorbed:
+-- THE SIX THAT SURVIVED, and what each absorbed:
 --   access       Fussy to get into ↔ Easy in and out.
 --                Top functional complaint in the corpus (11 of 11 Lady Dior
 --                sources; present in all six passes). Most Birkin owners carry
@@ -39,6 +39,16 @@
 --                no real maintenance regime beyond occasional leather cleaner).
 --                Absorbs review.durability_rating, weather anxiety (can I set it
 --                on a wet sink), and colour transfer from dark denim.
+--   price_value  Way overpriced ↔ Great value.
+--                Reinstated after being cut. The cut was right about OUR version
+--                (a boolean duplicating the star rating) and wrong about the
+--                question. Fragrantica's live data settles it: 3.76/5 overall while
+--                5.5k members call the same fragrance "way overpriced" and 399 call
+--                it great value. Those are demonstrably different opinions.
+--   worth_it_where  Only worth it preloved ↔ Worth it at full retail.
+--                Bag-native, no perfume equivalent, and arguably the most useful
+--                value question in the category. Polar: "only worth it preloved" is
+--                useful guidance, not a demerit.
 --   dress_code   Casual ↔ Dressy.
 --                5 of 6 passes and never resolved in any of them. A Neverfull
 --                owner sold hers in five months because "it was a tote, not a
@@ -79,7 +89,8 @@ declare
   removed_count bigint;
 begin
   delete from bag_axis_vote
-   where axis::text not in ('access', 'structure', 'holds_up', 'dress_code');
+   where axis::text not in ('access', 'structure', 'holds_up', 'dress_code',
+                            'price_value', 'worth_it_where');
   get diagnostics removed_count = row_count;
   if removed_count > 0 then
     raise notice 'bag_axis v2: deleted % vote(s) on retired axes.', removed_count;
@@ -92,7 +103,9 @@ create type bag_axis_v2 as enum (
   'access',
   'structure',
   'holds_up',
-  'dress_code'
+  'dress_code',
+  'price_value',
+  'worth_it_where'
 );
 
 alter table bag_axis_vote

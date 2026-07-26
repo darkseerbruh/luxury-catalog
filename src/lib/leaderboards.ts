@@ -67,12 +67,12 @@ interface Agg {
 async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards> {
   try {
     const sb = getSupabase();
-    // "How it ages" moved off review.durability_rating and onto the wears_well
+    // "How it ages" moved off review.durability_rating and onto the holds_up
     // AXIS in 0059 (one rating system, not two). The Most durable board reads it
     // from bag_axis_vote now; the review column is retained but no longer read.
     const [reviewRes, wearsRes] = await Promise.all([
       sb.from("review").select("variant_id, rating, worth_it, occasion"),
-      sb.from("bag_axis_vote").select("variant_id, value").eq("axis", "wears_well"),
+      sb.from("bag_axis_vote").select("variant_id, value").eq("axis", "holds_up"),
     ]);
     const { data, error } = reviewRes;
     if (error || !data || data.length === 0) return EMPTY;
@@ -119,7 +119,7 @@ async function loadReviewLeaderboards(perBoard = 5): Promise<ReviewLeaderboards>
       }
     }
 
-    // Fold in the wears_well axis votes. A bag can carry ageing votes without a
+    // Fold in the holds_up axis votes. A bag can carry ageing votes without a
     // written review, so this creates an aggregate for variants the review pass
     // never saw. Those rank on the durability board only, which is correct: the
     // other boards genuinely need a review behind them.

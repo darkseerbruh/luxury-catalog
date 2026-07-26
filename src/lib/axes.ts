@@ -37,32 +37,24 @@
  */
 
 /**
- * Unipolar judgements: one end is better.
+ * Unipolar judgements: one end is better, so these render as a proportional fill.
  *
- * `wears_well` is the "how it ages" signal. It used to live on its own as
- * `review.durability_rating` (a second star-rating in a different table from
- * every other scale), which meant two parallel rating systems in one form.
- * Owner call 2026-07-25: one system, not several. 0059 migrates those ratings
- * into this axis and the "Most durable" leaderboard now reads from here.
- *
- * The evidence for splitting it out of build_quality is strong: all six passes
- * separate how well a bag was MADE from how well it SURVIVES, and the entire
- * "X years later" review genre is about the latter.
+ * Deliberately only two. Most of what people discuss about a bag is either a
+ * property we can derive (weight, dimensions, closure) or a description with no
+ * better end. Judgements that ceiling out at the top tier were cut: build quality
+ * scores 5 on every Hermès, which carries no signal.
  */
 export const RATE_AXES = [
-  "build_quality",
-  "wears_well",
-  "comfort",
-  "everyday_wearability",
+  "access",
+  "price_value",
 ] as const;
 
 /** Polar descriptions: neither end is better. */
 export const DESCRIBE_AXES = [
   "structure",
-  "formality",
-  "access",
-  "upkeep",
-  "presence",
+  "holds_up",
+  "dress_code",
+  "worth_it_where",
 ] as const;
 
 /**
@@ -103,67 +95,46 @@ export const AXIS_META: Record<Axis, AxisMeta> = {
   // ---- Describe it (polar: neither end is better) ----
   structure: {
     label: "Structure",
-    low: "Slouchy",
-    high: "Structured",
+    low: "Slouches",
+    high: "Holds its shape",
     kind: "describe",
-    hint: "Does it melt into you, or stand on its own?",
+    hint: "Does it collapse and mould to you, or stand on its own?",
   },
-  formality: {
+  holds_up: {
+    label: "How it holds up",
+    low: "Baby it",
+    high: "Live in it",
+    kind: "describe",
+    hint: "Do you have to be careful with it, or can you stop thinking about it?",
+  },
+  dress_code: {
     label: "Dress code",
     low: "Casual",
     high: "Dressy",
     kind: "describe",
     hint: "Where does it feel right, errands or evening?",
   },
-  access: {
-    label: "Getting in",
-    low: "Locked down",
-    high: "Reach right in",
+  worth_it_where: {
+    label: "Worth it where",
+    low: "Only preloved",
+    high: "Worth full retail",
     kind: "describe",
-    hint: "How easily do you get into it, and how secure does that leave it?",
-  },
-  upkeep: {
-    label: "Upkeep",
-    low: "Baby it",
-    high: "Live in it",
-    kind: "describe",
-    hint: "Do you have to be careful with it, or can you stop thinking about it?",
-  },
-  presence: {
-    label: "Presence",
-    low: "Quiet",
-    high: "Everyone knows it",
-    kind: "describe",
-    hint: "Does it stay under the radar, or get recognised?",
+    hint: "Would you pay boutique price, or only buy this one secondhand?",
   },
 
   // ---- Rate it (unipolar: one end is better) ----
-  build_quality: {
-    label: "Build quality",
-    low: "Flimsy",
-    high: "Tank-like",
+  access: {
+    label: "Getting in",
+    low: "Fussy",
+    high: "Easy in and out",
     kind: "rate",
-    hint: "How it was made, as it arrived. Stitching, hardware, finishing.",
+    hint: "How easily do you get at your things? How secure it is comes from the closure, not this.",
   },
-  wears_well: {
-    label: "How it ages",
-    low: "Shows every mark",
-    high: "Ages beautifully",
+  price_value: {
+    label: "Price value",
+    low: "Way overpriced",
+    high: "Great value",
     kind: "rate",
-    hint: "How it has held up over time, not how it looked on day one.",
-  },
-  comfort: {
-    label: "Comfort to carry",
-    low: "Awkward",
-    high: "Effortless",
-    kind: "rate",
-    hint: "On the body. Straps, handles, and how the load sits.",
-  },
-  everyday_wearability: {
-    label: "Everyday wearability",
-    low: "Occasion-only",
-    high: "Daily driver",
-    kind: "rate",
-    hint: "Do you actually still reach for it?",
+    hint: "What it costs against what you get. Not whether you like it.",
   },
 };
