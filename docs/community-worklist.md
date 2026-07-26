@@ -36,6 +36,30 @@ Commit after each unit. Resume from the first ⬜.*
   ⏸️ **HER TURN: apply 0062.** Then the synthesis pipeline can seed claims.
   ⬜ **Next in this unit:** the seeding pipeline that turns a Reputation research
   pass (the Chanel 19 PoC shape) into claim rows.
+- ✅ **Reputation seeding COMPLETE for the icons batch** (`85cb1c8` + follow-ups)
+  **154 claims across 13 bags** live in prod: Chanel 19 / Boy / Classic Flap,
+  Birkin / Kelly / Evelyne, Lady Dior, Speedy / Neverfull / Alma / Keepall,
+  Ophidia / GG Marmont. Stance mix 45 pro · 68 con · 41 neutral — cons
+  outnumbering pros is the healthy signal that the research found real criticism.
+  Seed files in `supabase/seed/reputation/*.json`, all validator-passed.
+  - 🔍 **Cross-contamination audit run and clean.** One agent hit an Apify run that
+    returned ANOTHER session's dataset (Keepall/Alma threads it never requested,
+    a parallel pull colliding). It caught and re-ran. I then audited all 13 files
+    for sources naming a different bag: the 4 hits are legitimate comparison
+    sources ("Classic Flap vs Chanel 19", "should I buy a Boy instead"). No bad
+    data reached the database. **For future passes: always spot-check the first
+    page of an Apify dataset against your own input before trusting it.**
+  - 🕵️ One agent found a well-ranked "why the Kelly is no longer my dream bag"
+    review and DROPPED it after establishing the creator was reviewing a REPLICA
+    sent by a rep factory. Real observations, wrong object.
+  - 🔧 Transport notes for the next pass: Reddit is closed on every free path
+    except Apify (WebFetch blocked, Firecrawl refuses it, .json returns 403).
+    Firecrawl no longer returns YouTube transcripts directly; scrape
+    `youtubetotranscript.com/transcript?v=<id>` with `includeTags:["#transcript"]`
+    for the same 1 credit. PurseForum parses clean on Firecrawl.
+- 🔄 **Fashionphile dimension capture RUNNING** (background, ~5-6h)
+  3,151 candidate variants. Writes flush every 25 rather than at the end, so a
+  crash cannot lose the run. Verified landing. Zero credits (plain GETs).
 - ⬜ **Unit 5 — "reminds me of" three rails** (derived pass first)
 - ✅ **Unit 6 — shelf states + reasons** (`6c2398f`)
   Migration `0061` adds `tried` + optional `had_reason`. New shared

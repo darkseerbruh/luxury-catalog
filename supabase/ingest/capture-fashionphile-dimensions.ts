@@ -136,6 +136,26 @@ async function main() {
   let fetched = 0;
   let parsed = 0;
   let resolved = 0;
+  let written = 0;
+
+  async function flush(batch: typeof writes) {
+    for (const x of batch) {
+      const { variant_id, ...cols } = x;
+      const { error } = await db
+        .from("variant")
+        .update({
+          ...cols,
+          // Provenance travels with the number, so a bad source can be retracted
+          // wholesale and nothing is ever averaged across conventions.
+          dimensions_convention: "base",
+          dimensions_measured: true,
+          dimensions_source: "fashionphile",
+        })
+        .eq("variant_id", variant_id);
+      if (error) console.error(`  variant ${variant_id}: ${error.message}`);
+      else written += 1;
+    }
+  }
   const writes: {
     variant_id: number;
     dimensions_w_cm: number;
@@ -176,7 +196,13 @@ async function main() {
       strap_drop_cm: agreeDimension(drop),
     });
 
-    if (resolved % 25 === 0) console.log(`  …${resolved} resolved (${fetched} pages fetched)`);
+    // Flush incrementally. Collecting thousands of rows and writing once at the end
+    // means a crash three hours in loses everything, and this run spans 4,600+
+    // variants. Writing as we go also makes progress observable in the database.
+    if (WRITE && writes.length >= 25) {
+      await flush(writes.splice(0, writes.length));
+    }
+    if (resolved % 25 === 0) console.log(`  …${resolved} resolved (${fetched} pages fetched, ${written} written)`);
   }
 
   console.log(`\npages fetched   : ${fetched}`);
@@ -195,24 +221,8 @@ async function main() {
     return;
   }
 
-  let ok = 0;
-  for (const x of writes) {
-    const { variant_id, ...cols } = x;
-    const { error } = await db
-      .from("variant")
-      .update({
-        ...cols,
-        // Provenance travels with the number, so a bad source can be retracted
-        // wholesale and nothing is ever averaged across conventions.
-        dimensions_convention: "base",
-        dimensions_measured: true,
-        dimensions_source: "fashionphile",
-      })
-      .eq("variant_id", variant_id);
-    if (error) console.error(`  variant ${variant_id}: ${error.message}`);
-    else ok += 1;
-  }
-  console.log(`\nwritten: ${ok}/${writes.length}`);
+  if (writes.length) await flush(writes);
+  console.log(`\nwritten: ${written}`);
 }
 
 const invokedDirectly =
