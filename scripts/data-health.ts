@@ -155,10 +155,16 @@ async function main() {
   checks.push(scoreRowsAdded(rowsAdded, prev.rowsAddedHistory));
 
   // ── C. Ranking health ────────────────────────────────────────────────────
-  const { data: signals, error: sigErr } = await sb.rpc("style_index_signals");
-  if (sigErr) throw new Error(`style_index_signals failed: ${sigErr.message}`);
+  // PAGED: the RPC is one row per priced style (928 as of 2026-07-26) and every PostgREST
+  // response caps at 1000, so a bare .rpc() would silently under-count the ranked total
+  // the moment the catalogue crosses that line — and this is a SCORED metric.
   type SignalRow = { resale_median: unknown; price_count: unknown; source_count?: unknown };
-  const rows = (signals ?? []) as SignalRow[];
+  // Probe first so a real RPC failure still throws. fetchAllRows returns [] on error,
+  // which would read as "zero ranked styles" rather than "the ranking query is broken" —
+  // precisely the swallowed error that hid the empty LC Index for four days (07-23..26).
+  const { error: sigErr } = await sb.rpc("style_index_signals").range(0, 0);
+  if (sigErr) throw new Error(`style_index_signals failed: ${sigErr.message}`);
+  const rows = await fetchAllRows<SignalRow>(() => sb.rpc("style_index_signals"));
   const ranked = rows.filter(
     (r) =>
       r.resale_median != null &&
