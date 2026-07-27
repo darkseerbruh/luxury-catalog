@@ -17,7 +17,7 @@ export function BagImage({
   alt,
   className = "",
   invite = true,
-  fit = "cover",
+  fit = "contain",
 }: {
   imageUrl?: string | null;
   brand?: string | null;
@@ -32,9 +32,11 @@ export function BagImage({
    */
   invite?: boolean;
   /**
-   * "cover" crops to fill (grid tiles). "contain" shows the WHOLE bag — use on the
-   * bag-page hero, where a fixed-ratio crop was cutting studio shots off at the
-   * clasp; pair with a light background so the letterbox reads as studio white.
+   * "contain" (the default, everywhere) shows the WHOLE bag — a fixed-ratio crop
+   * was lopping studio shots off at the handles and the base. The photo sits on a
+   * white backdrop so the letterbox reads as studio white, not a hole. "cover"
+   * crops to fill and is opt-in only, for a surface where the frame matters more
+   * than the object.
    */
   fit?: "cover" | "contain";
 }) {
@@ -48,7 +50,7 @@ export function BagImage({
         alt={alt ?? (brand ? `${brand} bag` : "bag")}
         loading="lazy"
         onError={() => setFailed(true)}
-        className={`${fit === "contain" ? "object-contain" : "object-cover"} ${className}`}
+        className={`${fit === "contain" ? "bg-white object-contain" : "object-cover"} ${className}`}
       />
     );
   }

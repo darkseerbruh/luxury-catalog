@@ -46,6 +46,29 @@ async function loadAll(): Promise<Row[]> {
   return out;
 }
 
+/**
+ * The seller's ACTUAL title.
+ *
+ * raw_name is documented as "the listing title, verbatim", and for Fashionphile / TRR /
+ * eBay it is. But the catch-all ingest parks a placeholder there — "unmatched-model
+ * (dictionary miss) — captured for triage" — and puts the real title in style_guess.
+ * Measured 2026-07-26: that placeholder covers 97.2% of The Luxury Closet rows and 99.3%
+ * of Rebag, i.e. 60.4% of the whole 316,986-row backlog.
+ *
+ * Reading raw_name first therefore ran canonicalModel() against literal boilerplate for
+ * most of the backlog, so those rows could never match no matter what the dictionary
+ * said. That makes this a PRECONDITION for dictionary work: without it, adding "matelasse"
+ * to Chanel does nothing for the 149k Luxury Closet rows that need it.
+ *
+ * Ann's Fabulous Finds parks its own placeholder ("… discovered") the same way.
+ */
+const PLACEHOLDER_RX = /^unmatched-model|captured for triage|fabulous finds discovered/i;
+export function sellerTitle(r: Pick<Row, "raw_name" | "style_guess">): string | null {
+  const raw = r.raw_name;
+  if (raw && !PLACEHOLDER_RX.test(raw)) return raw;
+  return r.style_guess ?? raw;
+}
+
 async function main() {
   const rows = await loadAll();
   console.log(`normalize-discovered: ${rows.length} unpromoted rows${WRITE ? " (WRITE)" : " (DRY RUN)"}`);
@@ -56,7 +79,7 @@ async function main() {
 
   for (const r of rows) {
     const brand = canonicalBrand((r.brand_guess ?? "").trim());
-    const model = canonicalModel(brand, r.raw_name ?? r.style_guess);
+    const model = canonicalModel(brand, sellerTitle(r));
     if (!model) continue;
     matched++;
     if (norm(r.style_guess) !== norm(model)) updates.push({ id: r.discovered_id, style: model });
