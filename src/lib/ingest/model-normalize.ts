@@ -63,6 +63,49 @@ const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
  *  dictionary entry accent-blind instead of per-entry accent dupes. */
 const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+/**
+ * Decode the HTML entities that survive into stored listing titles.
+ *
+ * The Luxury Closet serves entity-encoded titles and our ingest stores them verbatim:
+ * "Herm&egrave;s", "Chlo&eacute;", "Bandouli&egrave;re", "Matelass&eacute;". Measured
+ * 2026-07-26: 2,934 unpromoted rows, ALL from that one seller.
+ *
+ * This silently broke every ACCENTED name, which is most of the French and Italian house
+ * vocabulary — Boétie, Étoile, Sénat, Vendôme, Bohème, Saïgon, Arqué, Matinée. The matcher
+ * previously decoded only &amp;, so "Bandouli&egrave;re" could never reach the token
+ * "bandouliere" no matter how the dictionary was written.
+ *
+ * Decode BEFORE fold(): fold strips the diacritic, so "&egrave;" -> "è" -> "e" and the
+ * unaccented dictionary tokens match. Numeric entities are handled too (&#8203; is a
+ * zero-width space that would otherwise split a word mid-token).
+ */
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&", quot: '"', apos: "'", nbsp: " ", deg: "°",
+  rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', ndash: "-", mdash: "-", hellip: "…",
+  eacute: "é", egrave: "è", ecirc: "ê", euml: "ë",
+  agrave: "à", aacute: "á", acirc: "â", auml: "ä", aring: "å", atilde: "ã",
+  iacute: "í", igrave: "ì", icirc: "î", iuml: "ï",
+  oacute: "ó", ograve: "ò", ocirc: "ô", ouml: "ö", otilde: "õ", oslash: "ø",
+  uacute: "ú", ugrave: "ù", ucirc: "û", uuml: "ü",
+  ccedil: "ç", ntilde: "ñ", yacute: "ý", yuml: "ÿ", szlig: "ß",
+  aelig: "æ", oelig: "œ",
+};
+
+export function decodeEntities(input: string): string {
+  return input.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (whole, body: string) => {
+    const b = body.toLowerCase();
+    if (b.startsWith("#")) {
+      const code = b.startsWith("#x") ? parseInt(b.slice(2), 16) : parseInt(b.slice(1), 10);
+      if (!Number.isFinite(code)) return whole;
+      // Zero-width and other format characters would split a token mid-word.
+      if (code === 0x200b || code === 0x200c || code === 0x200d || code === 0xfeff) return "";
+      try { return String.fromCodePoint(code); } catch { return whole; }
+    }
+    return NAMED_ENTITIES[b] ?? whole;
+  });
+}
+
+
 /** Space, hyphen, dot and slash are interchangeable separators: URL-slug titles come
  *  back with every separator flattened to a space ("d-lite" -> "d lite") or dropped
  *  entirely between digits ("2.55" -> "255", "24/24" -> "2424"), so a literal token
@@ -100,7 +143,7 @@ function has(hay: string, token: string): boolean {
  * non-handbag department (e.g. accessories/wallets) is still banked when its title is
  * one of these. Accent-blind, same fold as canonicalModel. */
 export function titleHasBagOverride(title: string | null | undefined): boolean {
-  const hay = fold((title ?? "").toLowerCase()).replace(/&amp;/g, "&");
+  const hay = fold(decodeEntities((title ?? "").toLowerCase()));
   return hasBagOverride(hay);
 }
 
@@ -761,8 +804,7 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
   // donate a model word. Anchored to an extras vocabulary because a bare " w " is
   // also the slug form of E/W ("e w shopping tote") where truncating would eat the
   // model.
-  const hay = fold((rawName ?? "").toLowerCase())
-    .replace(/&amp;/g, "&")
+  const hay = fold(decodeEntities((rawName ?? "").toLowerCase()))
     .replace(
       /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
       "",
@@ -825,8 +867,7 @@ const STRONG_SLG_NOUNS = [
 /** Same hay preprocessing canonicalModel uses (fold accents, decode &amp;, drop a
  *  trailing bundled "w/ <extra>" so an add-on never trips the accessory gate). */
 function accessoryHay(rawName: string | null | undefined): string {
-  return fold((rawName ?? "").toLowerCase())
-    .replace(/&amp;/g, "&")
+  return fold(decodeEntities((rawName ?? "").toLowerCase()))
     .replace(
       /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
       "",
