@@ -182,6 +182,90 @@ L and XL. The leather is the name.
 
 ---
 
+## 🎃 Fendi's monogram has two names and neither is a bag
+
+**Zucca** is Italian for pumpkin. **Zucchino** is little pumpkin. They are the **large** and
+**small** scale of the same FF monogram, and Fendi picks the scale by bag size.
+
+Together they account for **1,686 listings in our data** that look like models and are not.
+
+⚠️ The common belief that "Zucca is coated canvas, Zucchino is fabric" is **wrong**. Both
+come in jacquard and in coated canvas.
+
+*Sourced 2026-07-27.*
+
+### Mama has one m. Mamma has two. They are different bags.
+
+- **Mamma Baguette** (two m's) is the taller Baguette.
+- **Mama Forever** (one m) is a separate early-2000s shoulder bag, style code 8R205.
+
+Our corpus has 68 "Mama Forever" and **zero** "Mamma". Search the wrong spelling and you
+find neither.
+
+### Fendi's "Strap You" is a strap
+
+**243 listings** in our data, priced like bags, filed like bags. Not one is a bag. It is the
+interchangeable shoulder strap you buy for a Baguette.
+
+The cleanest "you are not buying what you think you are buying" story in the dataset.
+
+---
+
+## 🍽️ Hermès named bags after a tray and a dinner plate
+
+**Vide-Poches** is the little dish by the front door you empty your pockets into. Hermès put
+the name on a shoulder bag and sells it as the Vide-Poches bag (H088914CK18). **354 listings**
+in our data read like homeware until you check.
+
+**Mosaïque au 24** is a porcelain tableware pattern, a silk scarf design, and a bag. The "24"
+is 24 Faubourg Saint-Honoré, the address. One name, three product categories, one of them
+leather.
+
+**Arçon** is the saddle bow. The equestrian house named a crescent bag after the part of the
+saddle it resembles, and sizes it by diminutive: the Arçon and the **P'tit Arçon**.
+
+*Sourced 2026-07-27, hermes.com.*
+
+---
+
+## 🐆 Dior's Mizza is a leopard, not a bag
+
+Named for **Mitzah Bricard**, Christian Dior's muse, who wore leopard constantly. It is an
+embroidery motif applied to pouches and vanity cases.
+
+Same trap as Cannage being a chair. It nearly became a catalogue page.
+
+---
+
+## 🧵 Burberry has seven names for one check, and uses almost none of them
+
+Nova. Supernova. House. Haymarket. Beat. Vintage. Mega. Smoked.
+
+Burberry's own corporate page calls the whole thing simply **"The Burberry Check."**
+
+- **Haymarket** carries the equestrian knight.
+- **Nova** is the diagonal.
+- **Horseferry** is not a check at all. It is a printed logo, named for Horseferry Road,
+  Burberry's London headquarters.
+
+Our read: the market names are era labels, not an official house taxonomy. Not house-confirmed.
+
+**And TB is both the bag and the wallpaper.** TB is the Thomas Burberry monogram print and
+the name of a 2018 bag. A "TB Monogram Nylon Backpack" is not a TB Bag.
+
+*Sourced 2026-07-27.*
+
+---
+
+## 🏘️ Coach Madison is a neighbourhood, not a bag
+
+Madison is a **collection** containing Phoebe, Lindsey, Maggie and Sophia. Exactly the Kate
+Spade "Cedar Street Maise" structure.
+
+**316 listings** in our data are filed under a name that identifies nothing on its own.
+
+---
+
 ## 🎭 Words that look like models and aren't
 
 The single most common mistake, and the one we nearly shipped into the catalogue.
@@ -234,6 +318,8 @@ First names get reused constantly across brands, so a bare name is never enough.
 | Allen Street | Kate Spade |
 | **Deauville** | **Louis Vuitton** (Monogram doctor bag) and **Chanel** (the canvas tote) |
 | **Soho** | **Louis Vuitton** (Damier backpack) and **Gucci** (the Disco) |
+| **Ava** | **Coach** (tote), **Michael Kors** (top-handle), **Céline** (shoulder bag) |
+| **Madison** | **Bottega Veneta** (a bag) and **Coach** (a collection) |
 
 **Why a collector cares:** searching a first name alone returns four houses. And sellers get
 this wrong too: we found **40 listings** filed as DKNY "Robinson", which is a Tory Burch line.
@@ -251,6 +337,8 @@ this wrong too: we found **40 listings** filed as DKNY "Robinson", which is a To
 | **Saffiano** | "Saffia" (truncated) | 22 |
 | LV **Montsouris** (the Paris park) | "Monsuri" | 93 |
 | Dior **Lady D-Lite** | "D-Light" | 22 |
+| Balenciaga **Bazar** (one "a") | "Bazaar" | ~78 |
+| Balenciaga **Le Cagole** | "Le Cagol" | ~293 |
 
 Three more that read like typos and are the **real** names: LV's **LockMeTo**, **MyLockMe**
 and Dior's **Dioraddict**. All three are written as one word by the house, which is exactly
@@ -278,3 +366,23 @@ Each entry is a byproduct of the dictionary loop in
 [seller-title-grammar.md](seller-title-grammar.md). When the archivist adjudicates a batch
 of candidate model names, the rejections and corrections are the interesting part. Bank
 them here rather than losing them to a commit message.
+
+---
+
+## 🔤 Encoding damage deletes bags
+
+Not a naming quirk, but it belongs here because of what it cost.
+
+Rebag's scraper read UTF-8 as Latin-1, so `Goyard Bonbonnière` sat in our data for months as
+`GOYARD BonbonniÃ¨re`. Unreadable, unmatchable, invisible.
+
+**Bonbonnière is a real Goyard model, and it was missing from the catalogue entirely.**
+
+The Luxury Closet had a different flavour of the same problem: HTML entities left undecoded,
+so `Saint Laurent Le 5 &Agrave; 7` could never match **Le 5 à 7**. That one hit 58 listings.
+Hermès took the worst of it at 836 damaged titles, because accented French names are exactly
+where it bites.
+
+**The lesson:** encoding damage does not just break search. It removes bags from existence.
+
+*Measured 2026-07-27. Both now repaired.*

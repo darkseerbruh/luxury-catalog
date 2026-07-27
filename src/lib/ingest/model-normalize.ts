@@ -18,6 +18,9 @@ const SLG_TOKENS = [
   "wallet", "card holder", "cardholder", "card case", "coin", "purse on chain",
   "pouch", "pochette accessoires", "pochette accessories", "key pouch", "key case", "agenda", "passport",
   "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau", "trousse",
+  // "strap you" is Fendi's interchangeable replacement STRAP (243 rows, priced and
+  // filed like bags). Exact string only: a bare "strap" token would be catastrophic.
+  "strap you",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
   "bag charm", "phone holder", "phone case", "airpod", "earring", "necklace", "brooch", "cuff",
   "belt", "watch", "wristwatch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
@@ -63,6 +66,83 @@ const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
  *  dictionary entry accent-blind instead of per-entry accent dupes. */
 const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+/**
+ * Decode the HTML entities that survive into stored listing titles.
+ *
+ * The Luxury Closet serves entity-encoded titles and our ingest stores them verbatim:
+ * "Herm&egrave;s", "Chlo&eacute;", "Bandouli&egrave;re", "Matelass&eacute;". Measured
+ * 2026-07-26: 2,934 unpromoted rows, ALL from that one seller.
+ *
+ * This silently broke every ACCENTED name, which is most of the French and Italian house
+ * vocabulary — Boétie, Étoile, Sénat, Vendôme, Bohème, Saïgon, Arqué, Matinée. The matcher
+ * previously decoded only &amp;, so "Bandouli&egrave;re" could never reach the token
+ * "bandouliere" no matter how the dictionary was written.
+ *
+ * Decode BEFORE fold(): fold strips the diacritic, so "&egrave;" -> "è" -> "e" and the
+ * unaccented dictionary tokens match. Numeric entities are handled too (&#8203; is a
+ * zero-width space that would otherwise split a word mid-token).
+ */
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&", quot: '"', apos: "'", nbsp: " ", deg: "°",
+  rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', ndash: "-", mdash: "-", hellip: "…",
+  eacute: "é", egrave: "è", ecirc: "ê", euml: "ë",
+  agrave: "à", aacute: "á", acirc: "â", auml: "ä", aring: "å", atilde: "ã",
+  iacute: "í", igrave: "ì", icirc: "î", iuml: "ï",
+  oacute: "ó", ograve: "ò", ocirc: "ô", ouml: "ö", otilde: "õ", oslash: "ø",
+  uacute: "ú", ugrave: "ù", ucirc: "û", uuml: "ü",
+  ccedil: "ç", ntilde: "ñ", yacute: "ý", yuml: "ÿ", szlig: "ß",
+  aelig: "æ", oelig: "œ",
+};
+
+/**
+ * Repair mojibake: UTF-8 bytes read as Latin-1 at scrape time.
+ *
+ * Rebag stores "GOYARD BonbonniÃ¨re Bag" and "FENDI OâLock Strap You" (48 rows measured
+ * 2026-07-27). decodeEntities() cannot help — these are not entities, they are the UTF-8
+ * byte pairs shown as individual Latin-1 characters.
+ *
+ * This is not cosmetic. Bonbonnière is a real Goyard model that sat unreadable in the
+ * corpus and was therefore missing from the catalogue entirely. Encoding damage does not
+ * just break matching, it deletes bags.
+ *
+ * Also repairs the DOUBLE-encoded degree sign: "N&Acirc;&deg;7" decodes to "Nâ°7", not
+ * "N°7" (the LV N°7 Wheel Box, 20 rows).
+ */
+const MOJIBAKE: [RegExp, string][] = [
+  [/\u00c3\u00a8/g, "è"], [/\u00c3\u00a9/g, "é"], [/\u00c3\u00aa/g, "ê"], [/\u00c3\u00ab/g, "ë"],
+  [/\u00c3\u00a0/g, "à"], [/\u00c3\u00a2/g, "â"], [/\u00c3\u00a7/g, "ç"], [/\u00c3\u00b4/g, "ô"],
+  [/\u00c3\u00b6/g, "ö"], [/\u00c3\u00bc/g, "ü"], [/\u00c3\u00af/g, "ï"], [/\u00c3\u00b1/g, "ñ"],
+  [/\u00c3\u00b2/g, "ò"], [/\u00c3\u00b3/g, "ó"], [/\u00c3\u00ad/g, "í"], [/\u00c3\u00a1/g, "á"],
+  // Curly punctuation arrives as "â" + two bytes.
+  [/\u00e2\u0080\u0099/g, "'"], [/\u00e2\u0080\u009c/g, '"'], [/\u00e2\u0080\u009d/g, '"'],
+  [/\u00e2\u0080\u0093/g, "-"], [/\u00e2\u0080\u0094/g, "-"],
+  // Stray "â" left in front of a degree sign by double encoding.
+  [/\u00e2\u00b0/g, "°"], [/\u00e2(?=\u00b0)/g, ""],
+];
+
+/** Must run BEFORE toLowerCase(): "Ã" lowercases to "ã" and the table keys on the
+ *  original UTF-8-as-Latin-1 byte. Getting this order wrong silently no-ops it. */
+export function repairMojibake(input: string): string {
+  let out = input;
+  for (const [re, to] of MOJIBAKE) out = out.replace(re, to);
+  return out;
+}
+
+export function decodeEntities(input: string): string {
+  return input.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (whole, body: string) => {
+    const b = body.toLowerCase();
+    if (b.startsWith("#")) {
+      const code = b.startsWith("#x") ? parseInt(b.slice(2), 16) : parseInt(b.slice(1), 10);
+      if (!Number.isFinite(code)) return whole;
+      // Zero-width and other format characters would split a token mid-word.
+      if (code === 0x200b || code === 0x200c || code === 0x200d || code === 0xfeff) return "";
+      try { return String.fromCodePoint(code); } catch { return whole; }
+    }
+    return NAMED_ENTITIES[b] ?? whole;
+  });
+}
+
+
 /** Space, hyphen, dot and slash are interchangeable separators: URL-slug titles come
  *  back with every separator flattened to a space ("d-lite" -> "d lite") or dropped
  *  entirely between digits ("2.55" -> "255", "24/24" -> "2424"), so a literal token
@@ -100,7 +180,7 @@ function has(hay: string, token: string): boolean {
  * non-handbag department (e.g. accessories/wallets) is still banked when its title is
  * one of these. Accent-blind, same fold as canonicalModel. */
 export function titleHasBagOverride(title: string | null | undefined): boolean {
-  const hay = fold((title ?? "").toLowerCase()).replace(/&amp;/g, "&");
+  const hay = fold(decodeEntities(repairMojibake(title ?? "").toLowerCase()));
   return hasBagOverride(hay);
 }
 
@@ -345,6 +425,14 @@ const MODELS: Record<string, ModelDef[]> = {
     // its plain totes have no name at all (Mahina XS/L/XL).
     ["Beaubourg", "beaubourg"], ["Selene", "selene"], ["Surya", "surya"],
     ["Cirrus", "cirrus"], ["Why Knot", "why knot"], ["Onatah", "onatah"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    ["Backup", "backup"], ["Bergamo", "bergamo"], ["Archy", "archy"],
+    // !kors veto: cheap insurance against a mis-branded Michael Kors row.
+    ["Michael", "michael", "!kors"],
+    // PAIRED: bare "outdoor" matches "great for outdoor use"; bare "w tote" matches
+    // "Speedy 30 w tote bag included". Both verified against the corpus.
+    ["Outdoor", "outdoor messenger", "outdoor sling", "outdoor bumbag", "outdoor backpack"],
+    ["W Tote", "w tote&pm", "w tote&gm"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Flower Hobo", "flower hobo"], ["Flower Tote", "flower tote", "flower zipped"],
     ["Utility Crossbody", "utility crossbody", "utility harness"],
@@ -380,6 +468,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Joy", "joy"], ["Deco", "deco"], ["Eclipse", "eclipse"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Softbit", "softbit"],
+    // PAIRED: bare "nice" matches "in nice condition". Verified.
+    ["Nice", "nice top handle", "nice tote", "nice small", "nice medium"],
   ],
   Hermès: [
     // To Go variants BEFORE the parent models (first match wins).
@@ -396,6 +486,14 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Herline", "herline"], ["Hac à Dos", "hac a dos"], ["Sac à Dépêches", "sac a depeches"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Cabas H en Biais", "cabas h en biais", "h en biais"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    // P'tit Arçon FIRST or bare "arcon" swallows it (Grand Chiquito precedent).
+    ["P'tit Arçon", "p'tit arcon", "ptit arcon"], ["Arçon", "arcon"],
+    ["Vide-Poches", "videpoches", "vide poches"], ["Aline", "aline"],
+    ["Cinhétic", "cinhetic"], ["Mosaïque au 24", "mosaique au 24", "mosaique au"],
+    ["Cabasellier", "cabasellier"],
+    // PAIRED: bare "course" matches "of course". Verified.
+    ["Petite Course", "petite course"],
   ],
   Celine: [
     // Phantom veto (2026-07-09 round-3 audit): the Phantom is its own model (catalog
@@ -457,6 +555,12 @@ const MODELS: Record<string, ModelDef[]> = {
     // Dior put parentheses INSIDE a product name; resellers de-punctuate it.
     ["Dio(r)evolution", "dio(r)evolution", "diorevolution", "dio r evolution"],
     ["Scarab", "scarab"],
+    ["Diorcamp", "diorcamp"], ["Gallop", "gallop"], ["Rider", "rider"],
+    ["Detective", "detective"],
+    // PAIRED: bare "roller" collides with luggage.
+    ["Roller", "roller bag", "roller mini"],
+    // AFTER Malice above: "Street Chic Malice" exists and Malice is the specific bag.
+    ["Street Chic", "street chic"],
   ],
   "Bottega Veneta": [
     ["Andiamo", "andiamo"], ["Arco", "arco"], ["Jodie", "jodie"], ["Cassette", "cassette"],
@@ -469,6 +573,13 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Nodini", "nodini"], ["Roma", "roma"], ["The Point", "the point"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Olimpia", "olimpia"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    ["Ciao Ciao", "ciao ciao"], ["Mount", "mount"], ["Piazza", "piazza"], ["Patti", "patti"],
+    ["Beak", "beak"],
+    // PAIRED: bare "shell" hits shell cordovan (a leather); bare "drop" hits
+    // "handle drop 4 inch" and "drop shoulder" (a garment cut). Both verified.
+    ["The Shell", "the shell", "shell bag", "shell tote"],
+    ["Drop", "drop bag", "drop bucket", "drop shoulder bag"],
   ],
   Prada: [
     ["Re-Edition 2005", "re-edition 2005", "2005"],
@@ -493,6 +604,10 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Kan I", "kan i"], ["Kan U", "kan u"], ["Dotcom", "dotcom"], ["2Jours", "2jours"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["3Jours", "3jours", "3 jours"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    // Zucca (large FF) and Zucchino (small FF) are print SCALES, not models —
+    // 1,686 rows that look like models. These two are the real bags in that pile.
+    ["Demi Jour", "demi jour"], ["Mama Forever", "mama forever"],
     // Selleria is a CONSTRUCTION line (hand-stitched cuoio romano), not a model —
     // verified 2026-07-09: all 31 "selleria peekaboo/baguette" TLC rows are real
     // Peekaboos/Baguettes and correctly keep the shape model above. Keep this def
@@ -511,14 +626,23 @@ const MODELS: Record<string, ModelDef[]> = {
     ["TB Bag", "tb bag"], ["Lola", "lola"], ["Olympia", "olympia"], ["Catherine", "catherine"],
     ["Knight", "knight"], ["Frances", "frances"], ["Note", "note bag"], ["Pocket Bag", "pocket bag"],
     ["Title", "title bag"], ["Banner", "banner"],
+    // "note bag" matched 0 of 162 Note rows: every one reads "Note Crossbody Bag".
+    ["Note", "note bag", "note crossbody"],
     ["DK88", "dk88"], ["Bridle", "bridle"], ["Elizabeth", "elizabeth"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Macken", "macken"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    ["Canterbury", "canterbury"], ["Rocking Horse", "rocking horse"], ["Ashby", "ashby"],
+    ["Freya", "freya"], ["Orchard", "orchard"], ["Lowry", "lowry"], ["Dryden", "dryden"],
+    // PAIRED ONLY: "TB" is also the Thomas Burberry monogram PRINT, and bare "buckle"
+    // is hardware. The check names (Nova/Supernova/House/Haymarket/Beat) are canvases.
+    ["TB Bag", "tb bag", "tb shoulder", "tb camera"],
+    ["Buckle Bag", "buckle bag", "buckle tote", "buckle flap"],
     // Residue-audit additions (2026-07-09)
     ["Lorne", "lorne"], ["Sonny", "sonny"],
   ],
   Balenciaga: [
-    ["Hourglass", "hourglass"], ["Le Cagole", "cagole"], ["Neo Classic", "neo classic"],
+    ["Hourglass", "hourglass"], ["Le Cagole", "cagole", "cagol"], ["Neo Classic", "neo classic"],
     ["Ville", "ville"], ["Papier", "papier"], ["Rodeo", "rodeo"], ["City", "city bag", "classic city", "le city", "city"],
     ["Hardware", "hardware bag"], ["Downtown", "downtown"],
     ["Bel Air", "bel air"], ["Everyday", "everyday"], ["Monaco", "monaco"], ["Crush", "crush bag"],
@@ -526,6 +650,15 @@ const MODELS: Record<string, ModelDef[]> = {
     ["First", "first"], ["Town", "town"],
     // TRR sweep addition (2026-07-10)
     ["Velo", "velo"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    // Bare "crush" (not "crush bag") — \b keeps it clear of "crushed calfskin",
+    // verified, and "crush bag" was missing 412 "Crush Chain Bag" rows.
+    ["Crush", "crush"], ["Duty Free", "duty free"], ["Mary-Kate", "mary kate", "mary-kate"],
+    ["Explorer", "explorer"], ["Sharp", "sharp"],
+    // The house spells it Bazar with one "a"; half the market writes Bazaar.
+    ["Bazar", "bazar", "bazaar"],
+    // PAIRED: bare "soft" hits "Metallic Soft Textured Calfskin". Verified.
+    ["BB Soft Flap", "bb soft"],
   ],
   // TRR sweep additions (2026-07-10): TRR titles name these verbatim ("leather le
   // chiquito mini") but the brand had no dictionary block. Specific before general.
@@ -550,12 +683,25 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Whitney", "whitney"], ["Greenwich", "greenwich"], ["Sloan", "sloan"], ["Soho", "soho"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Cynthia", "cynthia"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    ["Fulton", "fulton"], ["Mott", "mott"], ["Sandrine", "sandrine"], ["Astrid", "astrid"],
+    ["Savannah", "savannah"], ["Ava", "ava"], ["Sutton", "sutton"],
   ],
   Coach: [
     ["Tabby", "tabby"], ["Willow", "willow"], ["Rogue", "rogue"], ["Dinky", "dinky"],
     ["Swagger", "swagger"], ["Brooklyn", "brooklyn"], ["Cassie", "cassie"], ["Hutton", "hutton"],
     ["Pillow", "pillow"], ["Nolita", "nolita"], ["Kacey", "kacey"], ["Bandit", "bandit"],
     ["Georgie", "georgie"], ["Lana", "lana"], ["Field Tote", "field tote"],
+    // Gap-report round 4 (2026-07-27), archivist-verified: docs/seller-title-grammar.md.
+    ["Bennett", "bennett"], ["Christie Carryall", "christie"], ["Kristin", "kristin"],
+    ["Klare", "klare"], ["Cora", "cora"], ["Kelsey", "kelsey"], ["Prairie", "prairie"],
+    ["Penelope", "penelope"], ["Ava", "ava"], ["Brooke Carryall", "brooke"],
+    // The Madison COLLECTION members, before Madison itself — otherwise "Madison
+    // Phoebe" resolves to the collection and 316 different bags share one style.
+    ["Phoebe", "phoebe"], ["Lindsey", "lindsey"], ["Maggie", "maggie"], ["Sophia", "sophia"],
+    // LAST: Madison is a COLLECTION (Phoebe, Lindsey, Maggie, Sophia), not a bag —
+    // the Kate Spade "Cedar Street" structure. 316 rows would cluster into one style.
+    ["Madison", "madison"],
   ],
   "Tory Burch": [
     ["Reva", "reva"], ["Robinson", "robinson"], ["Fleming", "fleming"], ["Kira", "kira"],
@@ -579,6 +725,8 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Grenelle", "grenelle"], ["Plumet", "plumet"], ["Cap-Vert", "cap-vert", "cap vert"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Hirondelle", "hirondelle"], ["Coursier", "coursier"], ["Beluga", "beluga"],
+    // Was invisible behind Rebag mojibake ("BonbonniÃ¨re") until the repair landed.
+    ["Bonbonnière", "bonbonniere"],
   ],
   Givenchy: [
     ["Antigona", "antigona"], ["Pandora", "pandora"], ["Nightingale", "nightingale"], ["GV3", "gv3"],
@@ -761,8 +909,7 @@ export function canonicalModel(brand: string, rawName: string | null | undefined
   // donate a model word. Anchored to an extras vocabulary because a bare " w " is
   // also the slug form of E/W ("e w shopping tote") where truncating would eat the
   // model.
-  const hay = fold((rawName ?? "").toLowerCase())
-    .replace(/&amp;/g, "&")
+  const hay = fold(decodeEntities(repairMojibake(rawName ?? "").toLowerCase()))
     .replace(
       /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
       "",
@@ -825,8 +972,7 @@ const STRONG_SLG_NOUNS = [
 /** Same hay preprocessing canonicalModel uses (fold accents, decode &amp;, drop a
  *  trailing bundled "w/ <extra>" so an add-on never trips the accessory gate). */
 function accessoryHay(rawName: string | null | undefined): string {
-  return fold((rawName ?? "").toLowerCase())
-    .replace(/&amp;/g, "&")
+  return fold(decodeEntities(repairMojibake(rawName ?? "").toLowerCase()))
     .replace(
       /\s(?:w\/?|with)\s+(?:[a-z0-9'&-]+\s+){0,3}(?:tags?|pouch(?:es)?|straps?|belts?|box|dust\s*bag|charms?|scarf|twilly|mirror|kit|receipt|cards?|chains?|wallet|coin\s*purse|accessories)\b.*$/,
       "",
