@@ -18,13 +18,13 @@ describe("describeTrend", () => {
     const t = describeTrend(s(["2026-08-01", 40], ["2026-09-01", 25]));
     expect(t.direction).toBe("climbing");
     expect(t.placesMoved).toBe(15);
-    expect(t.label).toBe("Up 15 places over 2 months");
+    expect(t.label).toBe("Heating up, up 15 places over 2 months");
   });
 
   it("calls a rising rank number cooling", () => {
     const t = describeTrend(s(["2026-08-01", 12], ["2026-09-01", 30]));
     expect(t.direction).toBe("cooling");
-    expect(t.label).toBe("Down 18 places over 2 months");
+    expect(t.label).toBe("Cooling off, down 18 places over 2 months");
   });
 
   it("ignores movement under the noise floor", () => {
@@ -32,7 +32,7 @@ describe("describeTrend", () => {
     // going out of fashion.
     const t = describeTrend(s(["2026-08-01", 20], ["2026-09-01", 22]));
     expect(t.direction).toBe("steady");
-    expect(t.label).toBe("Holding steady across 2 months");
+    expect(t.label).toBe("Steady, across 2 months");
   });
 
   it("sorts an out-of-order series before reading direction", () => {

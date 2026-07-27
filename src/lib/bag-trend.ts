@@ -32,6 +32,22 @@ export const TREND_NOISE_FLOOR = 3;
 
 export type TrendDirection = "climbing" | "steady" | "cooling" | "unknown";
 
+/**
+ * On-page copy. The module is "Attention over time", and the hedge is load-bearing:
+ * this is a read on ATTENTION, not on price. Readers conflate the two instantly if
+ * you let them, and we hold real price data elsewhere that would contradict it.
+ */
+export const TREND_MODULE_LABEL = "Attention over time";
+export const TREND_HEDGE = "Which way the conversation is moving. A read on attention, not on price.";
+export const TREND_EMPTY = "Not enough reads yet. Tell us how this one feels right now.";
+
+/** Reader-facing word per direction. "Steady" is a real third answer, not a midpoint. */
+export const TREND_WORD: Record<Exclude<TrendDirection, "unknown">, string> = {
+  climbing: "Heating up",
+  steady: "Steady",
+  cooling: "Cooling off",
+};
+
 export interface BagTrend {
   direction: TrendDirection;
   /** Positive means the bag moved UP the ranking (toward rank 1). */
@@ -77,12 +93,14 @@ export function describeTrend(series: { month: string; rank: number }[]): BagTre
 
   const n = Math.abs(placesMoved);
   const span = sorted.length;
+  // Lead with the reader-facing word, then the evidence behind it. Never an arrow
+  // or a percentage on its own: a bare ▲ implies a precision this does not have.
   const label =
     direction === "steady"
-      ? `Holding steady across ${span} months`
+      ? `${TREND_WORD.steady}, across ${span} months`
       : direction === "climbing"
-        ? `Up ${n} places over ${span} months`
-        : `Down ${n} places over ${span} months`;
+        ? `${TREND_WORD.climbing}, up ${n} places over ${span} months`
+        : `${TREND_WORD.cooling}, down ${n} places over ${span} months`;
 
   return {
     direction,

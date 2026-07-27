@@ -55,6 +55,7 @@ export const DESCRIBE_AXES = [
   "holds_up",
   "dress_code",
   "worth_it_where",
+  "lineage",
 ] as const;
 
 /**
@@ -120,6 +121,26 @@ export const AXIS_META: Record<Axis, AxisMeta> = {
     high: "Worth full retail",
     kind: "describe",
     hint: "Would you pay boutique price, or only buy this one secondhand?",
+  },
+  /**
+   * Traditional or inventive. Describes the DESIGN, never the person carrying it.
+   *
+   * The first draft was "Youthful / Grown-up" and it was wrong: both are person
+   * words, so the scale ended up commenting on the buyer's age. Moving the
+   * reference point onto the object removes the harm and keeps the dimension,
+   * which all six research passes found people genuinely use ("very grandma" is a
+   * real and previously homeless read).
+   *
+   * PRODUCT CONSTRAINT: never segment, filter or recommend on this by rater age.
+   * "Bags for your age" would reintroduce through the product exactly what the
+   * copy pass removed.
+   */
+  lineage: {
+    label: "Traditional or inventive",
+    low: "Traditional",
+    high: "Inventive",
+    kind: "describe",
+    hint: "Does the design follow the classic template, or break it?",
   },
 
   // ---- Rate it (unipolar: one end is better) ----
