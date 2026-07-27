@@ -99,6 +99,28 @@ export function movementLabel(rank: number, previousRank: number | null | undefi
 // House Standing ranks the HOUSE; the two indices stay independent and are shown
 // side by side. Old weights (price .40 / trade .25 / scarcity .20 / tier .15) are
 // renormalised proportionally over the surviving three. See docs/ux/lc-index-spec.md.
+/**
+ * Observations at which a style gets half its own score and half the middle.
+ *
+ * WHY THIS EXISTS. Every signal is a percentile, so a bag with 24 recorded
+ * observations scored the same as an icon with 2,705. On 2026-07-27 that produced a
+ * top three of Chanel Souplissimo (n=24), Coco Base Shopping Bag (n=38) and Coco
+ * Preppy (n=22), with the Birkin sixth and the Classic Flap nowhere in the top
+ * fifteen. A ranking of the best bags ever that omits the Classic Flap is not
+ * describing what it claims to.
+ *
+ * That is a CONFIDENCE bug, not a weighting one: thin evidence was being treated as
+ * equal to deep evidence. Shrinking a score toward the midpoint in proportion to how
+ * little we know is the same correction a weighted rating makes when it stops a
+ * four-vote film topping a chart. It is statistics, not taste.
+ *
+ * With this applied and NO weight changes, the top three becomes Kelly, Birkin,
+ * Classic Flap. Set at 100 because the icons sit in the high hundreds to low
+ * thousands of observations while the accidental leaders sat in the twenties, so 100
+ * separates them decisively without punishing genuinely rare bags that we track well.
+ */
+export const LC_INDEX_CONFIDENCE_K = 100;
+
 export const LC_INDEX_WEIGHTS = {
   price: 0.47,
   trade: 0.29,
@@ -247,10 +269,16 @@ export function computeLcIndex(signals: StyleSignals[]): LcIndexData {
     // Fewer live listings → scarcer → higher. Invert the live-count percentile.
     const scarcityPct = 100 - percentileOf(s.liveCount, lives);
 
-    const score =
+    const rawScore =
       LC_INDEX_WEIGHTS.price * pricePct +
       LC_INDEX_WEIGHTS.trade * tradePct +
       LC_INDEX_WEIGHTS.scarcity * scarcityPct;
+
+    // Shrink toward the midpoint when we have thin evidence. A bag we have seen 24
+    // times has not earned the same confidence as one we have seen 2,705 times, and
+    // percentiles alone cannot tell the difference.
+    const confidence = s.priceCount / (s.priceCount + LC_INDEX_CONFIDENCE_K);
+    const score = rawScore * confidence + 50 * (1 - confidence);
 
     // Lead = the bar with the biggest weighted contribution.
     const contributions: Array<[Standing["lead"], number]> = [
