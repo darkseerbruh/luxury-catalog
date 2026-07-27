@@ -1,0 +1,36 @@
+-- Luxury Catalog: the `lineage` axis. Traditional or inventive.
+--
+-- WHAT IT CAPTURES: whether a bag's design follows the classic template or breaks
+-- it. Evidence: register questions surfaced in all six bag passes across ~100 owner
+-- sources (2026-07-25, docs/research-drafts/axis-evidence-2026-07.md). Chanel
+-- Classic Flap owners calling their own bag "very grandma" is the clearest example,
+-- and until now that read had nowhere to live.
+--
+-- WHY THE OBVIOUS WORDING WAS REJECTED. The first draft was "Youthful ↔ Grown-up".
+-- The owner flagged the ageism and a copy pass confirmed the diagnosis: both of
+-- those are PERSON words. They map the bag onto whoever is carrying it, which means
+-- the scale ends up commenting on the buyer's age rather than the object's design.
+--
+-- The fix is to move the reference point. "Traditional ↔ Inventive" describes the
+-- design and nothing else, so a 25-year-old choosing traditional and a 60-year-old
+-- choosing inventive are both simply describing a bag. The dimension was never the
+-- problem; the wording was.
+--
+-- IT IS A DESCRIBE AXIS, deliberately. That makes it polar, so it inherits the
+-- "Neither end is better" line already rendering above the describe block, and it
+-- renders as a marker on a track rather than a fill (a fill would turn "traditional"
+-- into a low score, which is exactly the judgement we are avoiding).
+--
+-- ⚠️ PRODUCT CONSTRAINT, NOT A COPY ONE: never segment, filter or recommend on this
+-- axis by the rater's age. The moment "bags for your age" appears in a rail or a
+-- filter, the harm the copy pass removed comes straight back in through the product.
+--
+-- Distinct from the six shipped axes, checked one by one: it is not Dress code (a
+-- Speedy is traditional AND casual; a Bottega Knot is inventive AND dressy), not
+-- Structure, not How it holds up, not Worth it where, not Getting in, not Price
+-- value.
+--
+-- Additive: `alter type ... add value` cannot run in the same transaction that uses
+-- it, so this stands alone. Safe to re-run behind `if not exists`.
+
+alter type bag_axis add value if not exists 'lineage';
