@@ -75,6 +75,113 @@ The name tells you what the market calls it, not what it is.
 
 ---
 
+## 🏛️ Prada mostly does not name its bags
+
+The strongest one we have found, and nobody seems to say it out loud.
+
+**"Prada Double Zip Lux Tote" is not a Prada name.** Saffiano Lux is the leather, double
+zip is the fitting, tote is the shape. The house's actual name for that bag is **Galleria**,
+after the Galleria Vittorio Emanuele II in Milan.
+
+Prada only started giving its bags proper names recently:
+
+| Name | Introduced |
+|---|---|
+| Galleria | 2011 |
+| Cahier | 2016 |
+| Cleo | 2020 |
+| Symbole | 2022 |
+| Arqué | 2023 |
+
+Before that, a Prada bag was described, not named: material, then fitting, then silhouette.
+
+**Why a collector cares:** you cannot search older Prada by model, because there often
+isn't one. You search by leather and closure, which is why the same bag appears under four
+different titles across four resellers.
+
+*Sourced 2026-07-26.*
+
+### Half of Prada's mystique is Italian for the obvious
+
+| Prada says | It means |
+|---|---|
+| Tessuto | fabric |
+| Vitello | calf |
+| Daino | deer |
+| Cuir | leather (French) |
+| Cinghiale | boar |
+| **Pattina** | **the flap** |
+
+That last one is the joke. A "Pattina Flap Shoulder Bag" is a Flap Flap Shoulder Bag.
+
+**And the raffia bags are not raffia.** Prada's own material string is "raffia-effect
+yarn": a synthetic yarn crocheted to look like raffia.
+
+*Sourced 2026-07-26.*
+
+---
+
+## 👜 There are five Dior "Lady" bags
+
+Only one of them is the Lady Dior.
+
+- Lady Dior
+- Lady D-Lite
+- Lady D-Joy
+- Lady D-Sire
+- Lady 95.22
+
+Meanwhile resellers drop the "Dior" entirely: **552 listings in our data just say "Lady
+Bag"**. And one large reseller consistently misspells D-Lite as "D-Light".
+
+**Why a collector cares:** if a listing says "Lady", you do not know which bag you are
+buying, and those five are not close in price.
+
+*Sourced 2026-07-26.*
+
+### Dior's Cannage is a chair
+
+**Cannage** is named for the caned seats of the Napoleon III chairs Christian Dior used at
+30 Avenue Montaigne. It is the quilting, not the bag.
+
+Same trap as matelassé. And **Trotter** and **Oblique** are both canvases, not models.
+
+### Dio(r)evolution
+
+Dior put parentheses inside a product name. Every scraper breaks on it, and the market has
+quietly renamed it "Dior Revolution."
+
+---
+
+## 🌙 Louis Vuitton's Mahina bags are named for the sky
+
+Mahina is Hawaiian for moon. The models in the line: **Selene** (Greek moon goddess),
+**Surya** (Hindu sun god), **Onatah** (Iroquois earth goddess), **Cirrus**, **Asteria**,
+**Stellar**.
+
+That reading is our take on an unmistakable pattern, not something LV has published.
+
+**The twist:** the plainest Mahina bags have no name at all. The totes are just Mahina XS,
+L and XL. The leather is the name.
+
+*Sourced 2026-07-26.*
+
+### Three more LV oddities
+
+- **"Very" is a bag, not an adverb.** The 2016 Very line (Very Chain Bag, Very Tote, Very
+  Hobo) is the worst-behaved model name in luxury for anyone searching text. The near-miss
+  is perfect: "disco**very**" contains it.
+- **"NM" means Nouveau Modèle,** the redesigned version (Boetie NM, Mick NM). Buyers read it
+  as a condition grade or a typo. It is a date marker.
+- **LV named a bag Chalk, and its actual chalk colour is Craie.** Chalk Nano and Chalk Sling
+  are Virgil Abloh-era models. Craie is simply French for chalk and is LV's long-running
+  neutral. Two different things, one word.
+- **Malletage** is LV's name for the diamond quilting on the GO-14, from *malle*, meaning
+  trunk. The house frames it as the padded lining of its own trunks. A quilt named after
+  luggage, not bedding.
+
+---
+
 ## 🎭 Words that look like models and aren't
 
 The single most common mistake, and the one we nearly shipped into the catalogue.
@@ -125,6 +232,8 @@ First names get reused constantly across brands, so a bare name is never enough.
 | Millie | Kate Spade, DKNY |
 | Robinson | Tory Burch |
 | Allen Street | Kate Spade |
+| **Deauville** | **Louis Vuitton** (Monogram doctor bag) and **Chanel** (the canvas tote) |
+| **Soho** | **Louis Vuitton** (Damier backpack) and **Gucci** (the Disco) |
 
 **Why a collector cares:** searching a first name alone returns four houses. And sellers get
 this wrong too: we found **40 listings** filed as DKNY "Robinson", which is a Tory Burch line.
@@ -140,6 +249,12 @@ this wrong too: we found **40 listings** filed as DKNY "Robinson", which is a To
 | Céline **Triomphe** | "Triumph" | 255 |
 | **Newbury** Lane | "Newberry" | 22 |
 | **Saffiano** | "Saffia" (truncated) | 22 |
+| LV **Montsouris** (the Paris park) | "Monsuri" | 93 |
+| Dior **Lady D-Lite** | "D-Light" | 22 |
+
+Three more that read like typos and are the **real** names: LV's **LockMeTo**, **MyLockMe**
+and Dior's **Dioraddict**. All three are written as one word by the house, which is exactly
+why our own matcher had never found them.
 
 **Why a collector cares:** misspelled listings get less traffic, so they sit longer. Searching
 the wrong spelling on purpose is a real tactic.
