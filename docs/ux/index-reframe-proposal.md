@@ -58,7 +58,38 @@ Measured in prod, 2026-07-27:
 signals or owner votes would rank 931 bags on zero data. Saying so is more useful
 than shipping a formula that looks collector-native and is actually still price.
 
-### Attention: viable, but small and it must be curated
+### Attention: NOT VIABLE. Tested and abandoned 2026-07-27.
+
+The API works and is free. The coverage does not exist.
+
+Exactly **5 bags of 931** have their own English Wikipedia article: Birkin bag,
+Kelly bag, Chanel 2.55, Lady Dior, Baguette (bag). Everything else resolves to a
+brand page, an unrelated subject, or nothing.
+
+The near-misses are the reason this is not worth salvaging, because they fail
+silently and confidently:
+
+| Bag | Resolves to | What that would have measured |
+|---|---|---|
+| Dior Saddle | "Saddlebag" | Bags attached to horse saddles |
+| Longchamp Le Pliage | "Longchamp (company)" | The whole brand |
+| Chanel Boy | "Chanel Boy" | A Lil Uzi Vert single |
+| Mulberry Alexa | "Alexa Chung" | The person |
+| Hermès Constance | (search) | A children's literature festival |
+
+A validator that required the article to mention a bag still passed the horse
+saddlebag and the brand page. Attention on five bags is not a product, and the
+cost of getting it wrong is publishing a confident number about the wrong thing.
+
+**Google Trends was tested first and is hard-blocked**: its unofficial endpoint
+answers the explore step but returns 429 on the data step, from a residential IP
+and from a GitHub Actions runner alike, with cookie warmup and backoff.
+
+**Conclusion: there is no free attention source worth shipping.** If attention
+matters later it needs a paid transport, and it should be judged on whether it
+beats the signal we will have by then, which is our own want and claim data.
+
+### Superseded: the earlier "curate the titles" plan
 
 Wikipedia pageviews is a free official API and it works (Birkin averages ~42,100
 views a month over the year to 2026-06; Kelly ~9,100).
