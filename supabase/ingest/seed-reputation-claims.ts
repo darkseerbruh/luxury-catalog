@@ -11,9 +11,10 @@
  *   * A CLAIM needs >= 2 sources. Corroboration, without demanding 5 per sentence —
  *     the Chanel 19 pass had 11 sources for the bag but individual claims sat at 2 to
  *     6, so a 5-per-claim rule would have left only the blandest statements.
- *   * A community source is NOT required (owner call). Paid reviewers do skew
- *     positive, so instead of excluding them the bag page DISCLOSES when a bag's
- *     sources lean commercial. Surface the bias, do not gate on it.
+ *   * Every CLAIM needs at least one UNPAID source. This tightened on 2026-07-27,
+ *     overriding the original "disclose, do not gate" call, after a re-sourcing
+ *     pass found half the paid-only claims were unsupportable. See
+ *     REQUIRE_COMMUNITY_SOURCE below for the evidence.
  *
  * Everything is validated before a single write, and the whole file is rejected if
  * any claim fails. A half-seeded bag is worse than an unseeded one.
@@ -31,6 +32,27 @@ const FILE = process.argv.find((a) => a.endsWith(".json"));
 export const MIN_SOURCES_PER_BAG = 5;
 /** A single claim needs this many sources backing it. */
 export const MIN_SOURCES_PER_CLAIM = 2;
+
+/**
+ * Every claim needs at least one UNPAID source.
+ *
+ * This overrides the original "community not required" call, and the evidence is
+ * why. Four claims shipped resting only on commercial sources. A re-sourcing pass
+ * on 2026-07-27 found TWO of the four were unsupportable:
+ *
+ *  - A Kelly claim that corner wear scales with size had zero unpaid support across
+ *    six threads. Its only source was a page carrying affiliate links to the very
+ *    bag. Owners argue sellier versus retourne, never 25 versus 28.
+ *  - A Keepall claim about the base was one publisher's sentence reworded, plus an
+ *    inference that publisher never made. The only unpaid voice on that construction
+ *    said the opposite: the wrapping leather is why the bag is tough.
+ *
+ * A fifty percent failure rate among paid-only claims is not a coincidence, it is
+ * the mechanism. Paid reviewers repeat the marketing, and with no unpaid voice in
+ * the room there is nothing to contradict it. Disclosure was not enough, because a
+ * reader cannot tell a reworded press release from a finding.
+ */
+export const REQUIRE_COMMUNITY_SOURCE = true;
 
 export interface SeedSource {
   label: string;
@@ -94,6 +116,16 @@ export function validatePass(p: SeedPass): Validation {
   if (!p.claims?.length) errors.push(`${p.bag}: no claims.`);
   (p.claims ?? []).forEach((c, i) => {
     const n = new Set(c.sourceIdx ?? []).size;
+    if (REQUIRE_COMMUNITY_SOURCE) {
+      const hasUnpaid = [...new Set(c.sourceIdx ?? [])].some(
+        (idx) => p.sources?.[idx]?.kind === "community",
+      );
+      if (!hasUnpaid) {
+        errors.push(
+          `claim[${i}] rests only on paid sources, which is how marketing gets reworded into a finding: "${c.body.slice(0, 50)}…"`,
+        );
+      }
+    }
     if (n < MIN_SOURCES_PER_CLAIM) {
       errors.push(`claim[${i}] has ${n} source(s), needs ${MIN_SOURCES_PER_CLAIM}: "${c.body.slice(0, 50)}…"`);
     }
