@@ -148,6 +148,16 @@ plus the canonical spelling. Anything UNSURE stays out.
 Sellers also misspell: Céline's **Triomphe** shows up as "triumph" 255 times. Add the
 canonical name with the misspelling as a match token, never as its own style.
 
+### 📝 Bank the rejections — they are content
+
+The archivist's **rejections and corrections are more interesting than its approvals**, and
+they are the kind of thing a new collector actively wants to know. Matelassé is quilting,
+not a model. Kate Spade's street name is the leather and the person name is the shape.
+Céline's Triomphe is misspelled "Triumph" 255 times.
+
+After every batch, add the new quirks to [naming-quirks.md](naming-quirks.md) with their
+source and date. Do not leave them in a commit message.
+
 Biggest brand gaps overall: **Chanel 47,593 rows**, Louis Vuitton, Gucci, Prada, Dior.
 Two brands have **no dictionary entry at all**: **DKNY** (7,487) and **Kate Spade** (3,904).
 

@@ -17,7 +17,7 @@
 const SLG_TOKENS = [
   "wallet", "card holder", "cardholder", "card case", "coin", "purse on chain",
   "pouch", "pochette accessoires", "pochette accessories", "key pouch", "key case", "agenda", "passport",
-  "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau",
+  "cosmetic", "compact", "sunglass", "scarf", "twilly", "bandeau", "trousse",
   "loafer", "sandal", "sneaker", "mule", "pump", "espadrille", "slide", "shoe", "boot",
   "bag charm", "phone holder", "phone case", "airpod", "earring", "necklace", "brooch", "cuff",
   "belt", "watch", "wristwatch", "hat", "gloves", "sock", "tights", "swimsuit", "bikini",
@@ -264,7 +264,12 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Petit Sac Plat", "petit sac plat"], ["Bella", "bella"], ["Diane", "diane"],
     ["CarryAll", "carryall", "carry all"], ["Marellini", "marellini"], ["Loop", "loop"],
     // Backlog-verified recurring models (Fashionphile/TRR titles, ≥10 occurrences).
-    ["Pallas", "pallas"], ["Lockme", "lockme"], ["Montsouris", "montsouris"], ["Musette", "musette"],
+    ["Pallas", "pallas"],
+    // Word boundaries silently dropped every CONCATENATED house name: \blockme\b
+    // never reached MyLockMe (121 rows) or LockMeTo (83). Montsouris is misspelled
+    // "Monsuri" in 93 Luxury Closet rows.
+    ["Lockme", "lockme", "lockmeto", "mylockme"],
+    ["Montsouris", "montsouris", "monsuri", "montsuri"], ["Musette", "musette"],
     ["Odéon", "odeon", "odéon"], ["Papillon", "papillon"], ["Boîte Chapeau", "boite chapeau", "boîte chapeau"],
     ["Totally", "totally"], ["Ellipse", "ellipse"], ["Looping", "looping"], ["Pont-Neuf", "pont-neuf", "pont neuf"],
     ["Berri", "berri"], ["Louise", "louise"], ["Luco", "luco"], ["Triana", "triana"],
@@ -321,6 +326,25 @@ const MODELS: Record<string, ModelDef[]> = {
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
     ["Melrose Avenue", "melrose"], ["Bellevue", "bellevue"], ["Pleaty", "pleaty"],
     ["Wilshire", "wilshire"], ["Houston", "houston"],
+    // Dictionary-gap report additions (2026-07-26 round 3), archivist-verified.
+    ["Discovery", "discovery"], ["Josh", "josh"], ["GO-14", "go-14", "go14"],
+    ["Pont 9", "pont 9"], ["Boétie", "boetie"], ["Mick", "mick"], ["Takeoff", "takeoff"],
+    ["Soho", "soho"], ["Rivington", "rivington"], ["Deauville", "deauville"],
+    ["Sperone", "sperone"],
+    // Étoile Exotique stays PAIRED: bare "etoile" is the canvas name and would
+    // swallow the Étoile Shopper / Bowling / City.
+    ["Étoile Exotique", "etoile exotique"],
+    // NEVER a bare "very" — one "very good condition" title and we mint a Very.
+    // Paired tokens catch 277 of 281 rows and cannot misfire.
+    ["Very Chain Bag", "very chain"], ["Very Tote", "very tote", "very zipped"],
+    ["Very Messenger", "very messenger"], ["Very One Handle", "very one handle"],
+    ["Very Hobo", "very hobo"],
+    // Chalk (Virgil-era) paired too; "Logo Story" is the printed canvas, not a model.
+    ["Chalk", "chalk nano", "chalk sling", "chalk slingbag", "chalk backpack", "chalk pouch", "chalk bag"],
+    // Mahina models. Mahina itself is the perforated calfskin LINE, not a model —
+    // its plain totes have no name at all (Mahina XS/L/XL).
+    ["Beaubourg", "beaubourg"], ["Selene", "selene"], ["Surya", "surya"],
+    ["Cirrus", "cirrus"], ["Why Knot", "why knot"], ["Onatah", "onatah"],
   // Dictionary-gap report additions (2026-07-26), archivist-verified: docs/seller-title-grammar.md.
     ["Flower Hobo", "flower hobo"], ["Flower Tote", "flower tote", "flower zipped"],
     ["Utility Crossbody", "utility crossbody", "utility harness"],
@@ -412,14 +436,27 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Cabas", "y cabas", "cabas chyc", "chyc"],
   ],
   Dior: [
-    ["Lady D-Lite", "d-lite", "lady d-lite"], ["Lady D-Joy", "d-joy", "d joy"], ["Lady Dior", "lady dior"],
+    // ORDER IS LOAD-BEARING: "cannage&lady" is a CO-OCCURRENCE token, so it ignores
+    // word order and would fire on "Cannage Medium The Lady 95.22 White". Every other
+    // Lady variant must be checked BEFORE Lady Dior. Dior has five "Lady" bags and
+    // resellers drop the "Dior" from 552 of them.
+    ["Lady D-Lite", "d-lite", "d-light", "lady d-lite"], ["Lady D-Joy", "d-joy", "d joy"],
+    ["Lady 95.22", "lady 95.22", "95.22"], ["Lady D-Sire", "d-sire"],
+    ["Lady Dior", "lady dior", "lady bag", "cannage&lady"],
     ["Saddle", "saddle"], ["Book Tote", "book tote", "book"], ["30 Montaigne", "30 montaigne", "montaigne"],
     ["Caro", "caro"], ["Bobby", "bobby"], ["Dior Toujours", "toujours"], ["Diorama", "diorama"], ["Dior Key", "dior key"],
     ["Diorissimo", "diorissimo"],
     ["Malice", "malice"], ["Diorever", "diorever"], ["Be Dior", "be dior"], ["Miss Dior", "miss dior"],
-    ["Panarea", "panarea"], ["Granville", "granville"], ["Boston", "boston"], ["Dior Vibe", "dior vibe", "d-vibe"], ["Dior Addict", "dior addict"],
+    ["Panarea", "panarea"], ["Granville", "granville"], ["Boston", "boston"], ["Dior Vibe", "dior vibe", "d-vibe"], ["Dior Addict", "dior addict", "dioraddict"],
     // Dictionary-gap report additions (2026-07-15): docs/dictionary-gap-report.md.
-    ["Lady 95.22", "lady 95.22", "95.22"], ["Honeycomb", "honeycomb"],
+    ["Honeycomb", "honeycomb"],
+    // Dictionary-gap report additions (2026-07-26 round 3), archivist-verified.
+    ["J'Adior", "j'adior", "jadior"],
+    // Concatenated only: "dior travel" would false-hit "Oblique Travel Vanity".
+    ["DiorTravel", "diortravel"],
+    // Dior put parentheses INSIDE a product name; resellers de-punctuate it.
+    ["Dio(r)evolution", "dio(r)evolution", "diorevolution", "dio r evolution"],
+    ["Scarab", "scarab"],
   ],
   "Bottega Veneta": [
     ["Andiamo", "andiamo"], ["Arco", "arco"], ["Jodie", "jodie"], ["Cassette", "cassette"],
@@ -434,7 +471,12 @@ const MODELS: Record<string, ModelDef[]> = {
     ["Olimpia", "olimpia"],
   ],
   Prada: [
-    ["Re-Edition 2005", "re-edition 2005", "2005"], ["Galleria", "galleria", "double zip lux", "lux double zip"], ["Cleo", "cleo"],
+    ["Re-Edition 2005", "re-edition 2005", "2005"],
+    // Dictionary-gap report additions (2026-07-26 round 3), archivist-verified.
+    // Before Galleria on purpose: a "Gardener's Double Zip Lux" title would otherwise
+    // resolve to Galleria.
+    ["Gardener's Tote", "gardener"], ["Emblème", "embleme"],
+    ["Galleria", "galleria", "double zip lux", "lux double zip"], ["Cleo", "cleo"],
     ["Symbole", "symbole"], ["Re-Edition", "re-edition", "re edition"], ["Moon", "moon"],
     ["Arqué", "arque", "arqué"], ["Re-Nylon Backpack", "re-nylon backpack"],
     ["Cahier", "cahier"], ["Diagramme", "diagramme"], ["Sidonie", "sidonie"], ["Matinée", "matinee", "matinée"],

@@ -60,9 +60,18 @@ async function loadAll(): Promise<Row[]> {
  * said. That makes this a PRECONDITION for dictionary work: without it, adding "matelasse"
  * to Chanel does nothing for the 149k Luxury Closet rows that need it.
  *
- * Ann's Fabulous Finds parks its own placeholder ("… discovered") the same way.
+ * FIVE MORE sellers do the same with a DATED placeholder, found 2026-07-26 by grouping
+ * raw_name shapes with digits collapsed:
+ *   myGemma              "myGemma feed discovered <date>" / "myGemma discovered <date>"
+ *   Couture USA          "Couture USA discovered <date>" / "… crawl <date>"
+ *   Ann's Fabulous Finds "Ann's Fabulous Finds discovered <date>" / "… crawl <date>"
+ *   Redeluxe             "Redeluxe discovered <date>" / "… crawl <date>"
+ *   eBay                 "eBay sold sweep <date>; auction final …"
+ * Because each carries a DATE, they never collapse into one string — every capture day
+ * ranked as its own fake model in the gap report. All four of those sellers measured 0%
+ * model detection before this, which is why. ~11,400 rows.
  */
-const PLACEHOLDER_RX = /^unmatched-model|captured for triage|fabulous finds discovered/i;
+const PLACEHOLDER_RX = /^unmatched-model|captured for triage|\b(?:discovered|crawl|sweep)\s+\d{4}-\d{2}-\d{2}/i;
 export function sellerTitle(r: Pick<Row, "raw_name" | "style_guess">): string | null {
   const raw = r.raw_name;
   if (raw && !PLACEHOLDER_RX.test(raw)) return raw;
