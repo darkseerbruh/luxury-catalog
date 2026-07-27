@@ -97,7 +97,7 @@ async function loadUnpromoted(): Promise<Row[]> {
  * catch-all ingest parks a placeholder in raw_name and puts the actual title in
  * style_guess. Anything reading raw_name first is matching against literal boilerplate.
  */
-const PLACEHOLDER_RX = /^unmatched-model|captured for triage|fabulous finds discovered/i;
+const PLACEHOLDER_RX = /^unmatched-model|captured for triage|\b(?:discovered|crawl|sweep)\s+\d{4}-\d{2}-\d{2}/i;
 function realTitle(r: Row): string | null {
   const raw = r.rawName;
   if (raw && !PLACEHOLDER_RX.test(raw)) return raw;
