@@ -71,7 +71,7 @@ async function loadAll(): Promise<Row[]> {
  * ranked as its own fake model in the gap report. All four of those sellers measured 0%
  * model detection before this, which is why. ~11,400 rows.
  */
-const PLACEHOLDER_RX = /^unmatched-model|captured for triage|\b(?:discovered|crawl|sweep)\s+\d{4}-\d{2}-\d{2}/i;
+const PLACEHOLDER_RX = /^unmatched-model|captured for triage|^on sale from\b|\b(?:discovered|crawl|sweep)\s+\d{4}-\d{2}-\d{2}/i;
 export function sellerTitle(r: Pick<Row, "raw_name" | "style_guess">): string | null {
   const raw = r.raw_name;
   if (raw && !PLACEHOLDER_RX.test(raw)) return raw;
