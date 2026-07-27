@@ -2,8 +2,12 @@ import { getClaims, type ReputationClaim } from "@/lib/claims";
 import ClaimVote from "./ClaimVote";
 
 /**
- * "What people say about this one" — claims we synthesised from published reviews,
- * which owners here then confirm or push back on.
+ * "Word of mouth" — claims we synthesised from published reviews, which owners here
+ * then confirm or push back on.
+ *
+ * The name matters. "What people say about this one" described the mechanic; word of
+ * mouth is what the thing actually IS, and it is how people already talk about
+ * knowing a bag's reputation before they buy.
  *
  * Why this exists: a bag page is useless before anyone contributes, and writing a
  * review is a high bar. Agreeing with a sentence is not. So we draft from real
@@ -26,11 +30,11 @@ export default async function ReputationClaims({
   if (view.pros.length === 0 && view.cons.length === 0) return null;
 
   return (
-    <section id="what-people-say" className="border-t border-border pt-8">
-      <h2 className="font-serif text-xl text-foreground">What people say about this one</h2>
+    <section id="word-of-mouth" className="border-t border-border pt-8">
+      <h2 className="font-serif text-xl text-foreground">Word of mouth</h2>
       <p className="mt-1 text-sm text-muted">
-        Drawn from published reviews and owner discussion. Tell us where your
-        experience differs.
+        What gets said about this one, drawn from published reviews and owner
+        discussion. Tell us where your experience differs.
       </p>
 
       <div className="mt-5 grid gap-5 md:grid-cols-2">
