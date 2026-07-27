@@ -33,12 +33,22 @@ export const TREND_NOISE_FLOOR = 3;
 export type TrendDirection = "climbing" | "steady" | "cooling" | "unknown";
 
 /**
- * On-page copy. The module is "Attention over time", and the hedge is load-bearing:
- * this is a read on ATTENTION, not on price. Readers conflate the two instantly if
- * you let them, and we hold real price data elsewhere that would contradict it.
+ * On-page copy.
+ *
+ * ⚠️ NAMED FOR WHAT IT ACTUALLY MEASURES. This was briefly labelled "Attention over
+ * time", which was wrong: it reads LC Index rank, and the index is price 0.47 /
+ * trade 0.29 / scarcity 0.24. That is MARKET STANDING, not attention. Publishing it
+ * as attention would have been a quiet lie on every bag page.
+ *
+ * A real attention series was investigated and is NOT viable on a free path. Google
+ * Trends has no official API; its unofficial endpoint answers the "explore" step but
+ * returns 429 on the data step from a residential IP AND from a GitHub Actions
+ * runner (both probed 2026-07-27). Getting genuine attention data needs a paid
+ * transport (an Apify Trends actor, or SerpAPI). Until that exists, this module
+ * describes standing and says so.
  */
-export const TREND_MODULE_LABEL = "Attention over time";
-export const TREND_HEDGE = "Which way the conversation is moving. A read on attention, not on price.";
+export const TREND_MODULE_LABEL = "Where it stands, over time";
+export const TREND_HEDGE = "How its place in the index has moved. A read on the market, not on how many people are talking about it.";
 export const TREND_EMPTY = "Not enough reads yet. Tell us how this one feels right now.";
 
 /** Reader-facing word per direction. "Steady" is a real third answer, not a midpoint. */
