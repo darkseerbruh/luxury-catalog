@@ -1,0 +1,127 @@
+{
+  "bag": "Gucci GG Marmont (style 200)",
+  "styleId": 200,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Claims hang off the STYLE, not a variant: they describe the matelasse GG Marmont chain bag across sizes rather than one colourway. Eight of nine sources are unpaid owner voices; the one commercial source (YotaStyle) carries affiliate links to the bag.",
+  "sources": [
+    {
+      "label": "r/handbags: why is the Gucci Marmont so heavily disliked?",
+      "url": "https://www.reddit.com/r/handbags/comments/1bdpslh/why_is_the_gucci_marmont_so_heavily_disliked/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: what are your thoughts on the Marmont small?",
+      "url": "https://www.reddit.com/r/handbags/comments/12o814t/what_are_your_thoughts_on_the_gucci_marmont_small/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: is the Marmont camera bag still a thing?",
+      "url": "https://www.reddit.com/r/handbags/comments/1i3tmun/is_the_gucci_marmont_camera_bag_still_a_thing/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: creases on the Marmont flap, Gucci declined to replace",
+      "url": "https://forum.purseblog.com/threads/creases-on-gucci-marmont-flap-gucci-refuses-to-replace.1006511/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: do you think the Marmont is a trend?",
+      "url": "https://forum.purseblog.com/threads/do-you-think-the-gucci-marmont-bag-is-a-trend.964914/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, MissPaoPal, small after four and a half years",
+      "url": "https://www.youtube.com/watch?v=1IUELJrWlzU",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, GISELLEJ, medium after three years",
+      "url": "https://www.youtube.com/watch?v=oc712oUxsiA",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Fashion with Fatima Zahra, small after three years",
+      "url": "https://www.youtube.com/watch?v=QcMlyBILbjw",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, YotaStyle, large after two years (affiliate links)",
+      "url": "https://www.youtube.com/watch?v=ijd_6SVFSzk",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "The sliding chain earns its keep. Doubled up it is a shoulder or top-handle bag, let all the way out it is a crossbody, and owners say that one switch takes it from errands to dinner.",
+      "stance": "pro",
+      "axisHint": "dress_code",
+      "sourceIdx": [1, 5, 7]
+    },
+    {
+      "body": "It holds more than the measurements suggest, because the soft leather gives. A long wallet fits the small if you edit around it, and the medium takes one without a fight.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [5, 6]
+    },
+    {
+      "body": "The leather wears better than the discourse suggests. Owners at two and three years report no corner wear and scratches you have to hunt for, on bags they say they never babied.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [7, 8]
+    },
+    {
+      "body": "It works as a first serious bag. Owners describe reaching for it over pricier Dior and Chanel pieces, and the black with antique gold goes with most of a wardrobe.",
+      "stance": "pro",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 1]
+    },
+    {
+      "body": "One soft flap and almost no internal structure. Owners store it stuffed, and several report the front flattening and the top going pointy after a few years of wear.",
+      "stance": "con",
+      "axisHint": "structure",
+      "sourceIdx": [5, 6, 7]
+    },
+    {
+      "body": "Creasing is the complaint that lands first. One owner found creases on the flap out of the box and Gucci assessed them as external, not a fault. Others report folds that will not buff out.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [3, 5]
+    },
+    {
+      "body": "The antique gold does not stay perfect. Owners report fading on the chain by year three and black speckling on the front GG logo by year four, on the part of the bag everyone looks at.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [5, 7]
+    },
+    {
+      "body": "Resale is the soft spot. Owners and reviewers describe it trading like a trend piece, and the pre-loved market is deep enough that buyers walk in expecting a discount.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [1, 4, 5]
+    },
+    {
+      "body": "It is one of the most copied bags on the market. Owners say the fakes read close enough that strangers assume a dupe, which is its own kind of tax on carrying the real one.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 1]
+    },
+    {
+      "body": "Owners split on the chain. Some find the flat links and the leather shoulder panel genuinely comfortable, others say wearing it crossbody on the single strap marks the leather underneath.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [5, 6]
+    },
+    {
+      "body": "The oversized GG and the heart on the back are the two details people argue about. Plenty of owners love both. A vocal group calls the logo too loud and the heart childish.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 1]
+    },
+    {
+      "body": "Whether it reads dated is the live argument. It saturated hard from roughly 2016 to 2020, and owners are split between calling it past its prime and calling it a classic shape people over-corrected on.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2, 4]
+    }
+  ]
+}

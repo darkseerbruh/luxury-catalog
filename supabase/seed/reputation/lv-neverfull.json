@@ -1,0 +1,142 @@
+{
+  "bag": "Louis Vuitton Neverfull (style 218)",
+  "styleId": 218,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted, never closely paraphrased. Research pass 2026-07-26: 8 unpaid owner sources (4 Reddit threads read via the Apify Reddit comment scraper, 4 PurseForum threads read via Firecrawl) plus 4 commercial sources, all marked. Themes cross-checked against the Pass 6 corpus in docs/research-drafts/axis-evidence-2026-07.md. Claims hang off the STYLE because they describe the Neverfull in general; where a claim is canvas-specific (Damier Ebene strap cracking, monogram vachetta) that is stated in the claim body rather than split to a variant.",
+  "sources": [
+    {
+      "label": "r/handbags: talk me in or out of buying the Neverfull",
+      "url": "https://www.reddit.com/r/handbags/comments/1hvr8z1/talk_me_in_or_out_of_buying_the_lv_neverfull/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: tried the Neverfull on and was not a fan",
+      "url": "https://www.reddit.com/r/handbags/comments/1i3iua8/unpopular_opinion_tried_on_the_neverfull_and/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: why does the Neverfull have so many haters",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/xo7btv/why_neverfull_have_so_much_haters/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: has the Neverfull lost its popularity",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1ijfryv/i_think_the_neverfull_has_lost_its_popularity/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: is the Neverfull tacky",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/v19dnk/is_the_neverfull_tacky/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: should I sell my Neverfull MM",
+      "url": "https://forum.purseblog.com/threads/should-i-sell-my-neverfull-mm.977588/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: the Neverfull as a baby bag",
+      "url": "https://forum.purseblog.com/threads/the-neverfull-mm-gm-as-a-babybag.1038563/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Delightful versus Damier Ebene Neverfull",
+      "url": "https://forum.purseblog.com/threads/pros-and-cons-delightful-vs-de-neverfull.748191/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: anyone still use their classic Speedy (Neverfull sightings)",
+      "url": "https://forum.purseblog.com/threads/anyone-still-use-their-classic-speedy.1041413/",
+      "kind": "community"
+    },
+    {
+      "label": "The Feathered Nester, Neverfull review (affiliate)",
+      "url": "https://thefeatherednester.com/louis-vuitton-neverfull/",
+      "kind": "commercial"
+    },
+    {
+      "label": "Tanner Leatherstein, Neverfull teardown in Empreinte leather",
+      "url": "https://www.tannerleatherstein.com/blogs/product-brand-reviews/the-secrets-beneath-the-surface-the-real-value-of-the-louis-vuitton-neverfull",
+      "kind": "commercial"
+    },
+    {
+      "label": "Armcandy Bag Co, reseller walkthrough of a preloved Neverfull MM",
+      "url": "https://www.youtube.com/watch?v=cBdStq42sJg",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "It swallows a work laptop, a lunch and a gym kit and still weighs close to nothing empty. Owners reach for it on flights, on school runs and on errand days for exactly that reason.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 2, 3, 11]
+    },
+    {
+      "body": "The coated canvas takes real abuse. Owners six and ten years in still have theirs in weekly rotation, and the wear they report is scuffed corners rather than anything structural.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 2, 9]
+    },
+    {
+      "body": "Two details owners rate more than they expected: The side laces change the silhouette in seconds, and the clip-in zip pouch works as a small bag on its own.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [2, 7, 9, 11]
+    },
+    {
+      "body": "The straps are thin, flat and unpadded. Add a laptop and owners describe them cutting into the shoulder, which is the most repeated complaint about this bag by a wide margin.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2, 6, 7, 9]
+    },
+    {
+      "body": "The weak points are specific. Corners scuff, Damier Ebene strap leather is the one owners flag for cracking and peeling, and monogram vachetta darkens and water-spots if it is left untreated.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 7, 9]
+    },
+    {
+      "body": "One flat pocket and nothing else. Owners call it a bottomless pit and most end up buying an insert to make it usable, so budget the organizer as part of the purchase.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [0, 2, 9]
+    },
+    {
+      "body": "Saturation is the live anxiety here, not craftsmanship. Owners describe airports where it feels like one in five women has one, and being quietly assumed to be carrying a fake.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 1, 2, 3, 4]
+    },
+    {
+      "body": "Value is the sorest subject. Owners compare what they paid years ago with current retail, work out that the increases outran inflation, and say they would not buy it new again at today's number.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 1, 9, 10]
+    },
+    {
+      "body": "Owners genuinely disagree about the straps. Some find thin ones stay put where wide ones slide off, and several report the monogram straps softer on the shoulder than the Damier Ebene.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 2, 5, 7]
+    },
+    {
+      "body": "Access and security are the same tradeoff. The open top is the reason people love it and the reason others refuse to travel with it, and both camps are describing the bag accurately.",
+      "stance": "neutral",
+      "axisHint": "access",
+      "sourceIdx": [0, 1, 2, 7, 11]
+    },
+    {
+      "body": "It reads casual and owners hold that line themselves. Work, airport, errands and the pram, yes. Most say it looks wrong at dinner or an evening out, whatever it cost.",
+      "stance": "neutral",
+      "axisHint": "dress_code",
+      "sourceIdx": [2, 3, 4]
+    },
+    {
+      "body": "Where to buy it is where owners agree most: Preloved. They are plentiful secondhand in good condition, and regulars say the older production runs feel better made than the current ones.",
+      "stance": "neutral",
+      "axisHint": "worth_it_where",
+      "sourceIdx": [0, 5, 9]
+    }
+  ]
+}

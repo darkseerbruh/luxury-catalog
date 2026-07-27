@@ -1,0 +1,137 @@
+{
+  "bag": "Chanel Classic Flap (style 1)",
+  "styleId": 1,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Owner-voice corpus: 5 PurseForum threads, 4 Reddit threads (comment trees pulled via Apify, Reddit blocks Firecrawl), 1 YouTube owner review with transcript, 1 independent long-term blog review. Themes carried over from docs/research-drafts/axis-evidence-2026-07.md Pass 5 and re-verified against fresh sources. Claims hang off the STYLE because they describe the Classic Flap in general; size-specific notes are named inside the claim body since the medium, jumbo and small diverge sharply.",
+  "sources": [
+    {
+      "label": "PurseForum: is Classic Flap quality really that bad?",
+      "url": "https://forum.purseblog.com/threads/chanel-classic-flap-quality.1072325/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: small Classic Flap, do you love it or not?",
+      "url": "https://forum.purseblog.com/threads/small-classic-flap-does-anybody-have-it-and-love-it-or-not-opinions-and-thoughts.1019741/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: selling my jumbo for a medium, advice please",
+      "url": "https://forum.purseblog.com/threads/selling-my-jumbo-for-a-m-l-advice-please.954760/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Classic Flap or Le Boy",
+      "url": "https://forum.purseblog.com/threads/chanel-classic-flap-or-le-boy.974911/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: which Chanel purchase did you regret?",
+      "url": "https://forum.purseblog.com/threads/which-chanel-purchase-s-did-you-regret.266607/page-86",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: pros and cons, choosing a first Chanel",
+      "url": "https://www.reddit.com/r/chanel/comments/1hvxtvp/pros_and_cons/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: Boy or Classic Flap as a daily errands bag",
+      "url": "https://www.reddit.com/r/chanel/comments/1jird32/which_is_better_as_a_dailyerrands_bag_boy_vs_cf/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: is it stupid to buy a Boy bag in 2025?",
+      "url": "https://www.reddit.com/r/chanel/comments/1k317he/is_it_stupid_to_buy_a_boy_bag_in_2025/",
+      "kind": "community"
+    },
+    {
+      "label": "r/chanel: will the Boy bag come back into fashion?",
+      "url": "https://www.reddit.com/r/chanel/comments/1kf1u4u/do_you_think_the_boy_bag_will_come_back_into/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, Amelia Rose's Closet: nine reasons not to buy the Classic Flap",
+      "url": "https://www.youtube.com/watch?v=4lk8RIen-yE",
+      "kind": "commercial"
+    },
+    {
+      "label": "The Career Edit: medium Classic Flap, three years in",
+      "url": "https://thecareeredit.co/2024/09/22/chanel-medium-classic-flap-bag-review-3-years-in/",
+      "kind": "community"
+    }
+  ],
+  "claims": [
+    {
+      "body": "Every thread eventually becomes an argument about the current price. Owners who bought a decade ago at a fraction of it say plainly they would not buy one new today, and would shop preloved instead.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [0, 4, 9, 10]
+    },
+    {
+      "body": "The second flap is the icon and the tax. It eats interior volume and adds a step to every reach, so the medium holds barely more than a mini and owners who moved to single-flap Chanels rarely go back.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [1, 2, 7, 8, 9]
+    },
+    {
+      "body": "The woven chain digs in once the bag is loaded. One jumbo owner describes real pain after an hour of walking, and several say the double flap is noticeably heavier than the single.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [2, 3, 10]
+    },
+    {
+      "body": "Strap drop is the regret nobody sees coming. Petite owners find the medium too short crossbody, tall owners find the jumbo too long, and several pay a specialist to lengthen the chain after the fact.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [1, 2, 3, 9]
+    },
+    {
+      "body": "Wear shows in three specific places first: the leather strip woven through the chain, the flap zip scuffing the leather beneath it, and the CC turnlock picking up scratches.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 9, 10]
+    },
+    {
+      "body": "Caviar is the workhorse choice. Owners report black caviar flaps looking close to new after years of steady use, while lambskin marks faster and gets saved for gentler days.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 3, 10]
+    },
+    {
+      "body": "It keeps its shape. Decade-old flaps are described as still standing up on their own, and owners credit the double flap construction for holding the structure over time.",
+      "stance": "pro",
+      "axisHint": "structure",
+      "sourceIdx": [0, 1, 10]
+    },
+    {
+      "body": "The classic itself is rarely the regret. In a long-running Chanel regret thread the flaps people sold were seasonal, tweed, or the wrong size for their frame, not the plain caviar classic.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 4, 5]
+    },
+    {
+      "body": "The quality complaint is real but contested. Newer buyers post wonky flaps and misaligned stitching; buyers of twenty years say they have never had one and that scrutiny simply scales with price.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 5, 9]
+    },
+    {
+      "body": "Owners split hard on era. One camp swears the older bags are better made and hunts vintage; the other says the difference is nostalgia plus lighter use, not craft, and rates recent bags as solid.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 5, 10]
+    },
+    {
+      "body": "Nobody agrees whether it is a daily bag or an occasion bag. Some carry it to errands, museums and city trips; others call it too dressy for weekdays and reach for a Boy or a mini instead.",
+      "stance": "neutral",
+      "axisHint": "dress_code",
+      "sourceIdx": [3, 5, 6, 10]
+    },
+    {
+      "body": "How it makes you feel cuts both ways. Owners describe genuine pride carrying it, and in the same breath describe turning the clasp inward or picking their moments because of what it now costs.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [3, 9, 10]
+    }
+  ]
+}

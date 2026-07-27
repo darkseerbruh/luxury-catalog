@@ -36,6 +36,30 @@ Commit after each unit. Resume from the first ⬜.*
   ⏸️ **HER TURN: apply 0062.** Then the synthesis pipeline can seed claims.
   ⬜ **Next in this unit:** the seeding pipeline that turns a Reputation research
   pass (the Chanel 19 PoC shape) into claim rows.
+- ✅ **Reputation seeding COMPLETE for the icons batch** (`85cb1c8` + follow-ups)
+  **154 claims across 13 bags** live in prod: Chanel 19 / Boy / Classic Flap,
+  Birkin / Kelly / Evelyne, Lady Dior, Speedy / Neverfull / Alma / Keepall,
+  Ophidia / GG Marmont. Stance mix 45 pro · 68 con · 41 neutral — cons
+  outnumbering pros is the healthy signal that the research found real criticism.
+  Seed files in `supabase/seed/reputation/*.json`, all validator-passed.
+  - 🔍 **Cross-contamination audit run and clean.** One agent hit an Apify run that
+    returned ANOTHER session's dataset (Keepall/Alma threads it never requested,
+    a parallel pull colliding). It caught and re-ran. I then audited all 13 files
+    for sources naming a different bag: the 4 hits are legitimate comparison
+    sources ("Classic Flap vs Chanel 19", "should I buy a Boy instead"). No bad
+    data reached the database. **For future passes: always spot-check the first
+    page of an Apify dataset against your own input before trusting it.**
+  - 🕵️ One agent found a well-ranked "why the Kelly is no longer my dream bag"
+    review and DROPPED it after establishing the creator was reviewing a REPLICA
+    sent by a rep factory. Real observations, wrong object.
+  - 🔧 Transport notes for the next pass: Reddit is closed on every free path
+    except Apify (WebFetch blocked, Firecrawl refuses it, .json returns 403).
+    Firecrawl no longer returns YouTube transcripts directly; scrape
+    `youtubetotranscript.com/transcript?v=<id>` with `includeTags:["#transcript"]`
+    for the same 1 credit. PurseForum parses clean on Firecrawl.
+- 🔄 **Fashionphile dimension capture RUNNING** (background, ~5-6h)
+  3,151 candidate variants. Writes flush every 25 rather than at the end, so a
+  crash cannot lose the run. Verified landing. Zero credits (plain GETs).
 - ⬜ **Unit 5 — "reminds me of" three rails** (derived pass first)
 - ✅ **Unit 6 — shelf states + reasons** (`6c2398f`)
   Migration `0061` adds `tried` + optional `had_reason`. New shared
@@ -51,7 +75,92 @@ Commit after each unit. Resume from the first ⬜.*
 - ⬜ **Unit 11 — repair referral surface** (no affiliate found; owner open to a
   custom partnership)
 
-**Owner-held:** build quality (parked, has no derived source and was cut as an ask).
+### Owner decisions, 2026-07-26
+- **Deploy:** HOLD until the units are finished, then one deploy.
+- **Reputation scope:** icons first, ~25 bags.
+- **Minimum sources per claim: 5. A community source is NOT required.** (I had
+  recommended requiring one, since paid reviewers skew positive. Her call is
+  coherent with what shipped: the claim block already DISCLOSES when sources lean
+  commercial, so we surface the bias rather than gate on it.)
+- **Dimensions:** chase reseller product pages (Fashionphile/TRR show structured
+  measurements on the PAGE in a known order, unlike the feed text).
+- **Build quality: DROPPED, not parked** (owner: "a nice to have, not required right
+  now, or even not valuable to add"). It ceilings out at the top tier and partly
+  measures price resentment, so there is no strong case to revisit.
+- **Re-run the spec promote pass at the end:** approved.
+
+### 🔖 DO NOT LOSE — explicitly deferred, owner asked to be reminded
+- **"Who clocks it" (quiet ↔ recognisable).** Owner: *"We can do who clocks it later,
+  but don't let me forget."* NOT a review ask, because the answer barely varies by
+  owner, so asking every reviewer collects the same value repeatedly. Build it as a
+  DERIVED display: logo prominence + icon status are catalog facts, and ubiquity is
+  computable from our own listing and closet volume. Her framing to preserve: Hermès
+  has a tiny logo yet everyone clocks the bag (the orange box is the mass-market
+  signal), Chanel stacks CCs, LV's monogram is loudest, Bottega has none. Do NOT call
+  either end "loud" — that reads as an insult. Use IYKYK ↔ recognisable.
+- **Age + trend scales (unit 10).** Needs a copywriter pass first: real ageism risk in
+  youthful ↔ grown-up, and the owner flagged that trendy ↔ timeless "needs more work"
+  because reputation heats and cools (Celine Luggage, Boy). Store trend as a TIME
+  SERIES, never a static average.
+
+### 🔬 Archivist findings on size eras (2026-07-26) — `research-drafts/chanel-flap-size-eras.md`
+The pull answered the question and then reframed it. **The ambiguity is roughly 30%
+era and 70% naming plus measurement convention**, and both of those are fixable
+without new data.
+- 🏷️ **"Large" and "Jumbo" are Chanel's word and the collector's word for ONE bag.**
+  Checked against our catalog: the Classic Flap (style 1) is clean, it only uses
+  Jumbo. But **3 styles carry both labels** and need a look:
+  `[423] Chanel 2.55 Reissue` (likely a genuine double-count, same house convention),
+  `[448] Gucci Ophidia` and `[1047] Gucci Belt Bag` (Gucci does not use Jumbo
+  officially, so these smell like seller-title contamination).
+  ⚠️ NOT fixed here: merging variants is destructive and lands in the same table the
+  identification lane is working in. Flagged for that lane or for an owner call.
+- 🚪 **The era gate is FLAP COUNT, not a dimension.** Jumbo and Maxi were
+  single-flap until 2010 and double-flap after, alongside a grommet-layout change.
+  Binary, sourced, visible in listing photos, and already written into most reseller
+  titles. That is a far better disambiguator than millimetres, and it wants to be an
+  axis in the production matrix.
+- 📏 **Only the Jumbo (~2cm height) and Maxi (~2-3cm width) are era-resolvable by
+  measurement at all.** Medium and Small sit at 25-26cm wide from 1996 to 2026 with
+  no trend; lot-to-lot variation within one year matches the variation between
+  decades. The vintage Maxi is wider AND flatter, effectively a different silhouette.
+- ⚠️ **This independently confirms why the myGemma dimension write had to be
+  reverted.** Sources use different conventions: Rebag publishes BASE length,
+  Christie's uses W x H x D, Miss Bugis uses L x H x W. Ingest a size string without
+  knowing the axis order and you swap height and depth on roughly a third of rows.
+- 📐 **Schema recommendation from the pull:** store a RANGE plus a convention tag
+  (`overall` / `base` / `unknown`) plus a `measured` vs `guide` flag. Never a point
+  value. Our 0065 columns are point values, so they need extending before any
+  dimension load. Decide once the reseller capture probe reports.
+- 🕳️ Documented gaps kept honest: 1983-1989 blank entirely, Jumbo 1998-2009 and Maxi
+  1995-2009 blank. Chanel publishes no historical spec archive. A June 2020 drop of
+  ~0.5cm in chanel.com's PUBLISHED figures is a spec-sheet change, not a bag change,
+  and must never be written up as "the bag got smaller".
+
+### Dimensions: the design changed (owner insight, 2026-07-26)
+Brand specs are CURRENT-SEASON, so they cannot tell a 2005 "Large" Classic Flap from a
+2024 "Large". **Seller-measured dimensions are the disambiguator**, so the two sources
+do different jobs:
+- **Archivist / house documentation** = per-ERA canon, including historical.
+  ⚠️ I earlier wrote that an archivist pull "can only get current season". **That was
+  wrong**, and the owner corrected it: I was describing brand.com, not archivist
+  research. The archivist's remit is the seasonal archive going back ~30 years
+  (house documentation, press material, lookbooks, archive references), which is
+  precisely the historical-disambiguation capability. The real caveat is COVERAGE,
+  not capability: houses did not always publish dimensions historically and
+  measurement conventions shifted, so expect some eras to resolve and others to
+  come up empty.
+- **Seller listing** = measured evidence for that specific bag.
+Cluster the seller measurements and the clusters REVEAL the size eras; anchor those
+clusters to archivist canon. That means storing dimensions **per listing**, not only
+per variant. Capture target: Fashionphile + TRR product PAGES (structured
+measurements in a known order; the feed text has none).
+
+**Coordination (another lane is identifying unmapped rows):** next free migration is
+**0066** and the collision failure is SILENT, so re-check `origin/main` immediately
+before dispatching. My closure values are grouped by `variant_id`, so a listing
+remap makes them stale (not wrong); re-run `promote-spec-facts.ts` once at the end
+to repair. Code-only units run now; DB-heavy passes wait.
 
 **Known gap, logged not hidden:** dimension coverage stays ~6.5% because only
 myGemma's licensed feed states measurements. Full coverage needs a dedicated capture

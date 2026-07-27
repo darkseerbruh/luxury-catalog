@@ -513,6 +513,25 @@ engagement plays, then the mixed-format supporting pieces.
 - **CTA tie:** Hermès brand handoff → Birkin / Kelly pages, colour-filterable. Top-AOV seller CTA. Pairs with #4
   (the neutrals-and-codes guide) as the two halves of the Hermès colour-code GEO cluster.
 
+### 27. "Large" and "Jumbo" are the same Chanel bag (the size-word decoder, plus how to date a flap without the serial)
+- **Format:** Article (GEO reference) + IG carousel ("one bag, three names") + a TikTok "single flap or double? that's the 2010 line."
+- **Finding:** Chanel's own word is **Large**; **Jumbo** is the collector/reseller word for the identical bag
+  (Rebag *The Vault* prints the row as "Jumbo / Large"). Same for **Medium = M/L = Sac Classique**, **Jumbo = Grand
+  Sac Classique**, **Maxi = Maxi Sac Classique** (Miss Bugis, 2020-07-02). And the era gate nobody states plainly:
+  the **Jumbo and Maxi were single-flap until 2010**, double-flap from 2010, when Chanel added the second flap and
+  changed the grommet layout (Boutique Patina via PurseBop, 2022-09-01). Auction-measured proof of the size drift:
+  the vintage Maxi is **36 x 22 x 10 cm** (Christie's, CHANEL 1991-1994) versus the modern **33 x 23 x 10** — wider
+  and flatter, effectively a different silhouette. Source row: `docs/research-drafts/chanel-flap-size-eras.md`
+  §1, §3, Table A. Confidence: high on the Christie's measurements, medium on the dealer chronology.
+- **Metric:** GEO. "Is Chanel Large the same as Jumbo", "how to tell if a Chanel flap is vintage", and
+  "Chanel flap sizes in cm" are high-intent buyer queries with no clean answer anywhere, because Chanel publishes
+  no historical spec at all. Compounds. Also the cleanest possible demonstration of the naming moat.
+- **What it needs:** Copywriter. Hold two hedges: (a) the June 2020 chanel.com dimension drop is a **published-spec**
+  change, not a proven physical one, so never write "the bag got smaller"; (b) guide figures disagree by up to 2 cm
+  because of measurement convention (base versus overall), so state ranges, not point values.
+- **CTA tie:** Chanel Classic Flap bag pages, size-filterable. Highest-AOV model in the catalog. Pairs with the
+  existing #17 (the 2021 microchip cutover) as a two-part "how to date your Chanel" cluster.
+
 ---
 
 ## DO FIRST (the 5 highest-leverage picks)

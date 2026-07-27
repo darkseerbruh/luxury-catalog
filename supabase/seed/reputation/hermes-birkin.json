@@ -1,0 +1,137 @@
+{
+  "bag": "Hermès Birkin (style 4)",
+  "styleId": 4,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Owner-voice pass 2026-07-26, extending the Pass 3 corpus in docs/research-drafts/axis-evidence-2026-07.md: 2 PurseForum threads, 6 Reddit threads (comment bodies pulled via Apify clearpath/reddit-post-comments-bulk-scraper, 255 items), 3 YouTube owner reviews with transcripts. One source marked commercial (Chic and Stylish by Lena carries a Fashionphile affiliate). Claims hang off the STYLE; the 25 vs 30 split is flagged inside the claims rather than pinned to a variant. Exactly one brand-level claim is included (pre-spend), because owners name it as the thing they weigh when judging the bag.",
+  "sources": [
+    {
+      "label": "PurseForum: does anyone regret not having a shoulder strap on their Birkin?",
+      "url": "https://forum.purseblog.com/threads/does-anyone-regret-not-having-a-shoulder-strap-on-their-birkin.1034703/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: the Hermès repair and refurbish thread (the spa)",
+      "url": "https://forum.purseblog.com/threads/hermes-repair-refurbish-policy-official-spa-thread.7303/page-152",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: Birkin 25 vs 30",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1bqrxgi/birkin_25_vs_30/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: using a Birkin or Kelly daily",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1anlt3z/using_birkinkelly_daily/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: functionality of the Birkin and the Kelly",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1djdgmr/functionality_of_the_bk/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: why are people obsessed with Birkins?",
+      "url": "https://www.reddit.com/r/handbags/comments/1mncc4q/why_are_people_obsessed_with_birkins_i_just_dont/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: if not for the label, would you still buy a Birkin?",
+      "url": "https://www.reddit.com/r/handbags/comments/1m2csso/if_not_for_the_label_would_you_still_buy_a_birkin/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: why are Hermès clasps always left open?",
+      "url": "https://www.reddit.com/r/handbags/comments/zlhy95/hermes_open_clasps/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, @luxuryandlifeinthemiddle: Birkin 30 in Togo, one year on",
+      "url": "https://www.youtube.com/watch?v=Rj88viwJIUk",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, @YvetteSojourner: Birkin 25 vs 30, what fits, pros and cons",
+      "url": "https://www.youtube.com/watch?v=uTKiO37vSbs",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, @Chicandstylishbylena: Birkin pros and cons after three of them",
+      "url": "https://www.youtube.com/watch?v=b8aCf3N_wPc",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "Empty weight is the shock. A Birkin 30 in Togo lands just under two pounds with nothing inside, and owners say a loaded one turns taxing on the arm within a couple of hours.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [3, 8, 9]
+    },
+    {
+      "body": "There is no shoulder strap and owners are firm that there should not be. It is hand or crook of the elbow only, and a few who came from shoulder bags stopped carrying theirs over it.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 4, 8, 10]
+    },
+    {
+      "body": "Handle drop is the most argued spec. On the 25 plenty of owners cannot get an arm through at all, and a coat, thick sleeves or a bracelet stack settle the question for them.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 2, 9, 10]
+    },
+    {
+      "body": "Carried the way almost everyone actually carries it, hanging open, it is effortless. One big compartment, no flap to fight, reach in and go.",
+      "stance": "pro",
+      "axisHint": "access",
+      "sourceIdx": [7, 8, 10]
+    },
+    {
+      "body": "Doing it up properly takes two hands, somewhere to set the bag down and real time. Security and convenience are a straight trade on this one.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [7, 8, 10]
+    },
+    {
+      "body": "Size is the whole argument. The 30 is the consensus daily pick on capacity and handle drop, while the 25 wins on weight and evenings and gets called a toy by its own owners.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [2, 9, 10]
+    },
+    {
+      "body": "Leather sets the structure. Togo stays soft and relaxes into a lived-in slump where Epsom holds its lines, and the larger the size the sooner the shape gives.",
+      "stance": "neutral",
+      "axisHint": "structure",
+      "sourceIdx": [8, 9]
+    },
+    {
+      "body": "It takes a beating well. A year of regular carry left one owner with no corner scuffs and unmarked hardware, and the room mostly agrees it looks better broken in than pristine.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [5, 6, 8]
+    },
+    {
+      "body": "Repairability is the argument owners actually make for the price. Handles, hardware and the resin on the handles can be replaced at the Hermès spa, though cracked leather cannot be brought back.",
+      "stance": "pro",
+      "axisHint": "price_value",
+      "sourceIdx": [1, 6]
+    },
+    {
+      "body": "The room is genuinely split on the object itself. Critics read it as a briefcase or a grandmother bag; owners answer that it is the best tote ever made and mean that as praise.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 5, 6]
+    },
+    {
+      "body": "Attention comes with it. Owners describe feeling flashy on ordinary days, and one says she feels close to embarrassed when strangers clock what she is carrying.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [4, 5, 6]
+    },
+    {
+      "body": "Most owners spend at the brand for a while before one is offered. Several say that pre-spend, not the shelf price, is what they are really weighing when they ask whether it was worth it.",
+      "stance": "neutral",
+      "axisHint": "price_value",
+      "sourceIdx": [4, 5, 6]
+    }
+  ]
+}

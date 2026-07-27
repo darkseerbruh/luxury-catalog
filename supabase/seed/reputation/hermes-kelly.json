@@ -1,0 +1,137 @@
+{
+  "bag": "Hermès Kelly (style 5)",
+  "styleId": 5,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Owner-voice pass 2026-07-26: 3 PurseForum threads, 5 Reddit threads (comment bodies pulled via Apify clearpath/reddit-post-comments-bulk-scraper, 255 items), 3 YouTube owner reviews with transcripts. Sources marked commercial where the creator carries affiliate links to bag sales (I am G.P.S. links preloved Kellys; Je suis Lou carries a Redeluxe affiliate). Claims hang off the STYLE because they describe the Kelly as a line; the size-specific and sellier-vs-retourné splits are flagged inside the claims rather than pinned to a variant.",
+  "sources": [
+    {
+      "label": "PurseForum: Kelly 28, any regrets?",
+      "url": "https://forum.purseblog.com/threads/kelly-28-any-regrets.895060/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: if you could only have one Kelly, sellier or retourné?",
+      "url": "https://forum.purseblog.com/threads/if-you-were-to-have-only-one-kelly-sellier-or-retourne.1040944/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: the Hermès repair and refurbish thread (the spa)",
+      "url": "https://forum.purseblog.com/threads/hermes-repair-refurbish-policy-official-spa-thread.7303/page-152",
+      "kind": "community"
+    },
+    {
+      "label": "r/Hermes_lovers: is the Kelly's clasp hard to use?",
+      "url": "https://www.reddit.com/r/Hermes_lovers/comments/1t0z8zu/do_you_find_the_kellys_clasp_hard_to_use_the/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: why are Hermès clasps always left open?",
+      "url": "https://www.reddit.com/r/handbags/comments/zlhy95/hermes_open_clasps/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: Kelly Pochette or Kelly 25?",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1gcdqpz/kelly_pochette_or_kelly_25/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: functionality of the Birkin and the Kelly",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1djdgmr/functionality_of_the_bk/",
+      "kind": "community"
+    },
+    {
+      "label": "r/TheHermesGame: using a Birkin or Kelly daily",
+      "url": "https://www.reddit.com/r/TheHermesGame/comments/1anlt3z/using_birkinkelly_daily/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, @mrsleyva: Kelly 25 retourné, brutally honest review",
+      "url": "https://www.youtube.com/watch?v=K7xv7P0Hqw0",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, @IamGPS: five reasons not to buy the Kelly, a Kelly 35 at six years",
+      "url": "https://www.youtube.com/watch?v=cZY7oF47Ewk",
+      "kind": "commercial"
+    },
+    {
+      "label": "YouTube, @JesuisLou: Mini Kelly vs Kelly 25 vs Kelly 28, what fits",
+      "url": "https://www.youtube.com/watch?v=wLvxxGQqpk4",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "The closure is the loudest complaint by some distance. Turn the lock, unhook both sangles, lift the flap. It needs two hands and usually somewhere to set the bag down.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [3, 4, 8, 9]
+    },
+    {
+      "body": "Most owners never fully fasten it. They leave the sangles loose and use the turn lock alone, or carry it open, which some find chic and others think ruins the line entirely.",
+      "stance": "neutral",
+      "axisHint": "access",
+      "sourceIdx": [4, 6, 8, 9]
+    },
+    {
+      "body": "Owners disagree on which build is easier to live with. Some say the rigid sellier opens more cleanly, others that a soft retourné gives while a stiff Epsom sellier fights you.",
+      "stance": "neutral",
+      "axisHint": "structure",
+      "sourceIdx": [1, 3, 9]
+    },
+    {
+      "body": "Retourné softens with wear and the bigger sizes can slump. Owners lean on third-party inserts to hold the line, since leather and hardware can be refreshed but the silhouette cannot.",
+      "stance": "con",
+      "axisHint": "structure",
+      "sourceIdx": [1, 8, 9]
+    },
+    {
+      "body": "It ages slowly. Owners years in report handles and hardware still close to new, and edge paint, handles and hardware can all be redone at the Hermès spa.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 2, 9]
+    },
+    {
+      "body": "Corner wear scales with size. The 28 scuffs at the corners faster than the 25, and lighter leathers show handle discolouration first.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [9, 10]
+    },
+    {
+      "body": "The strap is thin, fixed at 85cm and not adjustable. It works as a shoulder carry for some and as a crossbody for almost nobody, so a second strap is a common purchase.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [6, 9, 10]
+    },
+    {
+      "body": "That strap is still why many owners pick it over the Birkin. Hands free mattered more than they expected, and several call it the Hermès they actually reach for.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [3, 5, 6, 7]
+    },
+    {
+      "body": "Size splits the room. Light packers call the 28 plenty, one owner sold hers as too small and prissy, and the 32 is the size people name as the true everyday Kelly.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 3, 6]
+    },
+    {
+      "body": "Capacity is smaller than the footprint suggests. The body tapers and the flap has to close over it, so you fill it about halfway before the front starts to bulge.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [8, 9, 10]
+    },
+    {
+      "body": "The larger sizes get heavy once loaded. Owners of the 28 and up report shoulder and arm fatigue on a long day out.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [3, 10]
+    },
+    {
+      "body": "It reads as the elegant one. Sellier gets called formal and evening, and even retourné owners say it sits above most of what they actually wear day to day.",
+      "stance": "neutral",
+      "axisHint": "dress_code",
+      "sourceIdx": [0, 1, 6]
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "bag": "Louis Vuitton Speedy (style 433)",
+  "styleId": 433,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted, never closely paraphrased. Research pass 2026-07-26: 3 Reddit threads read via the Apify Reddit comment scraper, 3 PurseForum threads and 3 YouTube owner reviews (transcripts) read via Firecrawl, plus 1 commercial resale newsletter. Claims hang off the STYLE because they describe the Speedy line in general; where a claim is size- or canvas-specific (the 30 as an in-between size, Damier Ebene as the rain bag) that is stated in the claim body rather than split to a variant. Prices deliberately not quoted: we hold our own price data and the market moves.",
+  "sources": [
+    {
+      "label": "r/Louisvuitton: my big disappointment about the Speedy (no feet)",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1sdwzly/my_big_disappointment_about_the_speedy_style/",
+      "kind": "community"
+    },
+    {
+      "label": "r/Louisvuitton: Speedys are back, or did they ever leave",
+      "url": "https://www.reddit.com/r/Louisvuitton/comments/1klfeux/speedys_are_back_or_did_they_ever_leave/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: is the Speedy B 30 in monogram worth it",
+      "url": "https://www.reddit.com/r/handbags/comments/10zzx73/lv_speedy_b_30_in_mono_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Speedy 30, is it comfortable",
+      "url": "https://forum.purseblog.com/threads/speedy-30-is-it-comfortable.596711/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Speedy 30 in 2023, keep it or sell it",
+      "url": "https://forum.purseblog.com/threads/speedy-30-in-2023.1057938/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: anyone still use their classic Speedy",
+      "url": "https://forum.purseblog.com/threads/anyone-still-use-their-classic-speedy.1041413/",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, Jill Maurer (@JillMaurer), a negative Speedy 30 review",
+      "url": "https://www.youtube.com/watch?v=jJesqqWGtvQ",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, HopeYouLikeIt (@HopeYouLikeIt), Speedy 30 after two years",
+      "url": "https://www.youtube.com/watch?v=xBX1hKwVS3M",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube, KaylaJane (@KaylaJane1), Speedy 30B four years in",
+      "url": "https://www.youtube.com/watch?v=RmFiCM-fzJo",
+      "kind": "community"
+    },
+    {
+      "label": "Haute Copy, why I am considering selling my Speedy 30 (affiliate)",
+      "url": "https://hautecopy.substack.com/p/why-im-considering-selling-my-lv",
+      "kind": "commercial"
+    }
+  ],
+  "claims": [
+    {
+      "body": "Canvas Speedys outlive their owners' interest in them. People in these threads are still carrying bags from 1984, 1989 and 1998, and the wear that turns up is at the corners and handles, not the body.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 2, 5]
+    },
+    {
+      "body": "It is a wipe-and-go bag. Coated canvas shrugs off spilled coffee and rain, the empty body weighs almost nothing, and owners describe genuinely throwing it around rather than babying it.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 7, 8]
+    },
+    {
+      "body": "Resale is dependable and preloved is the usual advice. Owners routinely find near-new secondhand ones for a real saving, and several think the older production runs are the better made ones.",
+      "stance": "pro",
+      "axisHint": "worth_it_where",
+      "sourceIdx": [2, 4, 7, 9]
+    },
+    {
+      "body": "Top handle only, and it shows. The handles bite into your hand and wrist when the bag is loaded, you cannot go hands free, and parents say it stops working the day you have a toddler.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [3, 4, 5, 6]
+    },
+    {
+      "body": "One open pocket inside and a fabric lining that stains. Owners keep everything in pouches or buy an organizer, and treat that insert as part of what the bag costs.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [6, 7, 8]
+    },
+    {
+      "body": "The coating can crack where the canvas creases, and reviewers describe that as damage nobody can undo. It turns up often enough that owners check for it when buying secondhand.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [6, 7]
+    },
+    {
+      "body": "Vachetta is the care burden on monogram and Azur. It darkens unevenly and marks in rain, which is why several owners keep a Damier Ebene Speedy as the bad-weather bag instead.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [5, 6, 8]
+    },
+    {
+      "body": "Retail has climbed faster than inflation by owners' own accounting. People who bought a decade or more ago quote what they paid and say plainly they would not buy the same bag new today.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [4, 6, 7]
+    },
+    {
+      "body": "It has no feet and it slouches, and owners split hard on both. Some will not set it down anywhere. Others point out it was built to fold flat, so feet would sit off the ground anyway.",
+      "stance": "neutral",
+      "axisHint": "structure",
+      "sourceIdx": [0, 3, 6, 7, 8]
+    },
+    {
+      "body": "How common it feels depends on when you asked. A 2019 reviewer called it inescapable. Forum regulars since about 2021 say they see Neverfulls constantly and classic Speedys rarely.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [5, 6]
+    },
+    {
+      "body": "Sizing is the actual decision. The 25 opening reads tight to some, the 30 can land awkwardly between an everyday bag and a work bag, and owner height flips the verdict either way.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [1, 3, 9]
+    },
+    {
+      "body": "The revival framing is contested by the people who own it. The design has been in production since 1930, and longtime owners read the current wave as attention returning rather than a trend arriving.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [1, 4, 9]
+    }
+  ]
+}

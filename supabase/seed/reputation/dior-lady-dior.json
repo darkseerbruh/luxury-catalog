@@ -1,0 +1,132 @@
+{
+  "bag": "Dior Lady Dior (style 208)",
+  "styleId": 208,
+  "asOf": "2026-07-26",
+  "_note": "Claims synthesised in our own words from the sources below; never quoted. Sources read 2026-07-26. All ten are unpaid owner voices (two YouTube owner reviews with full transcripts, one independent leather-artisan teardown, two PurseForum threads, five Reddit threads pulled with comment trees via Apify). Claims hang off the STYLE, not a variant: they describe the Lady Dior line, with size and closure-generation differences called out inside the claim text where owners disagree by size.",
+  "sources": [
+    {
+      "label": "YouTube owner review, Amelia Rose's Closet on the small and mini",
+      "url": "https://www.youtube.com/watch?v=OYIwtBjiwOA",
+      "kind": "community"
+    },
+    {
+      "label": "YouTube owner review, Abbi Hau pros and cons after a year",
+      "url": "https://www.youtube.com/watch?v=VLenHVmHBtU",
+      "kind": "community"
+    },
+    {
+      "label": "I Make Leather Handbags, a leatherworker's construction teardown",
+      "url": "https://theleathercrafter.wordpress.com/2023/02/03/dior-lady-bag-honest-review/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: newbie question on the Lady Dior flap",
+      "url": "https://forum.purseblog.com/threads/newbie-question-on-lady-dior.1052326/",
+      "kind": "community"
+    },
+    {
+      "label": "PurseForum: Lady Dior new or preloved",
+      "url": "https://forum.purseblog.com/threads/lady-dior-new-or-preloved.1040217/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: Lady Dior worth it?",
+      "url": "https://www.reddit.com/r/handbags/comments/xqd118/lady_dior_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: disillusioned with the Lady Dior",
+      "url": "https://www.reddit.com/r/handbags/comments/15l89xb/disillusioned_w_the_lady_dior/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: Lady Dior, worth it? (medium sizing thread)",
+      "url": "https://www.reddit.com/r/handbags/comments/13ntxah/lady_dior_worth_it/",
+      "kind": "community"
+    },
+    {
+      "label": "r/handbags: the mini is 9% of my annual salary",
+      "url": "https://www.reddit.com/r/handbags/comments/1bikxwg/the_lady_dior_mini_is_about_9_of_my_annual_salary/",
+      "kind": "community"
+    },
+    {
+      "label": "r/dior: need an opinion on buying a Lady Dior",
+      "url": "https://www.reddit.com/r/dior/comments/1iz4kz7/need_opinion_on_buying_a_lady_dior/",
+      "kind": "community"
+    }
+  ],
+  "claims": [
+    {
+      "body": "The interior flap does not come out. You hold it back with one hand and dig with the other, which is why owners are clear this is not a grab and go bag.",
+      "stance": "con",
+      "axisHint": "access",
+      "sourceIdx": [0, 3, 4, 5]
+    },
+    {
+      "body": "Capacity is the thing owners flatly disagree on. Some say it swallows more than a Chanel flap the same size. Others describe playing Tetris to load it.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [1, 5, 7]
+    },
+    {
+      "body": "The top handles are squared rather than rolled, so they press into your hand, and they stay sticking up instead of folding flat when you set the bag down.",
+      "stance": "con",
+      "axisHint": null,
+      "sourceIdx": [0, 3, 5, 7]
+    },
+    {
+      "body": "Lambskin dents easily, the corners grey out first, and the fixed charms leave small scratches on their ring and on each other.",
+      "stance": "con",
+      "axisHint": "holds_up",
+      "sourceIdx": [0, 1, 9]
+    },
+    {
+      "body": "The DIOR letter charms are fixed and they knock together as you walk. Some owners never notice them. Others call it a wind chime they cannot switch off.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [0, 5]
+    },
+    {
+      "body": "Most owners land on it as an occasion bag. It is heavy for its size, awkward to hang off a chair back, and the leather wants babying.",
+      "stance": "con",
+      "axisHint": "dress_code",
+      "sourceIdx": [3, 5, 6, 9]
+    },
+    {
+      "body": "Build quality splits the room. Some rate the lambskin and stitching above Chanel. Others point to glue marks on new bags and to machine stitching at a hand sewn price.",
+      "stance": "neutral",
+      "axisHint": null,
+      "sourceIdx": [2, 6, 8]
+    },
+    {
+      "body": "It does not hold value and owners say so bluntly. Expect a real gap between the boutique price and what a resale buyout returns.",
+      "stance": "con",
+      "axisHint": "price_value",
+      "sourceIdx": [4, 5, 7, 8]
+    },
+    {
+      "body": "The standing advice is buy preloved. Excellent condition bags turn up well under boutique pricing, and several owners bought theirs that way and did not look back.",
+      "stance": "pro",
+      "axisHint": "worth_it_where",
+      "sourceIdx": [1, 5, 7]
+    },
+    {
+      "body": "Almost nobody argues it is practical. They argue it is beautiful enough not to care, and that is how owners describe deciding to keep theirs.",
+      "stance": "pro",
+      "axisHint": null,
+      "sourceIdx": [0, 4, 5]
+    },
+    {
+      "body": "Dior's repair service is part of the maths for owners. Corners can be repainted and scratched hardware swapped, which softens how the lambskin wears over time.",
+      "stance": "pro",
+      "axisHint": "holds_up",
+      "sourceIdx": [1, 7]
+    },
+    {
+      "body": "The closure changed generations. Older bags use a zip, current ones an interior flap, with both in stores around 2017 and 2018. Owners who hate one shop the other era on purpose.",
+      "stance": "neutral",
+      "axisHint": "access",
+      "sourceIdx": [2, 3, 6]
+    }
+  ]
+}
