@@ -3,25 +3,25 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-27",
+  "lastRun": "2026-07-28",
   "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.5624649305555556,
-    "freshness-therealreal": 0.5624649305555556,
-    "freshness-tlc": 0.5624649305555556,
-    "freshness-ebay": 0.5624649305555556,
-    "capture-rows": 84623,
-    "ranking-count": 489,
+    "freshness-fashionphile": 0.518440324074074,
+    "freshness-therealreal": 1.518440324074074,
+    "freshness-tlc": 0.518440324074074,
+    "freshness-ebay": 1.518440324074074,
+    "capture-rows": 85009,
+    "ranking-count": 492,
     "ranking-near-floor": 56,
-    "coverage-condition": 13.546495474021322,
-    "coverage-condition-detail": 60.58918152172323,
-    "coverage-region": 38.94769288032289,
-    "coverage-production-year": 0.9811219801565608,
-    "coverage-hardware": 26.552958486966837,
+    "coverage-condition": 13.278431793858907,
+    "coverage-condition-detail": 60.86674462519989,
+    "coverage-region": 38.82101040985998,
+    "coverage-production-year": 0.9708471864336196,
+    "coverage-hardware": 26.41575602652672,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 323516,
+    "backlog-total": 338109,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -29,11 +29,11 @@
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
-    "coverage-variant-size": 91.6955017301038,
-    "coverage-variant-colour": 47.858996539792386,
-    "coverage-variant-material": 38.53806228373703,
-    "coverage-variant-hardware": 25.216262975778548,
-    "summary-staleness": 1.5074105555555555,
+    "coverage-variant-size": 91.67206040992448,
+    "coverage-variant-colour": 47.745415318230854,
+    "coverage-variant-material": 38.44660194174757,
+    "coverage-variant-hardware": 25.156418554476808,
+    "summary-staleness": 1.3870733333333334,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
     "cadence-tlc": 1
@@ -50,7 +50,8 @@
     82029,
     83450,
     83450,
-    84623
+    84623,
+    85009
   ],
   "findings": {
     "ranking-snapshot": {
@@ -59,14 +60,6 @@
     },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
-      "status": "yellow"
-    },
-    "coverage-variant-size": {
-      "firstSeen": "2026-07-27",
-      "status": "yellow"
-    },
-    "coverage-variant-colour": {
-      "firstSeen": "2026-07-27",
       "status": "yellow"
     }
   },

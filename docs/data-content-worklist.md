@@ -665,8 +665,8 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: The monthly cron fires on the 1st (CRON_SECRET verified set in Vercel prod, 2026-07-10); to backfill now, curl /api/cron/lc-index-snapshot with the Bearer secret. (first seen 2026-07-10, last seen 2026-07-27, yellow)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-07-27, yellow)
-- ⬜ [dh:coverage-variant-size] Variant size coverage fell from 94.4% to 91.7% since the last run. Action: Attribute-capture lane (docs/data-content-worklist.md); production-record axes cover the selector meanwhile. (first seen 2026-07-27, last seen 2026-07-27, yellow)
-- ⬜ [dh:coverage-variant-colour] Variant colour coverage fell from 50.2% to 47.9% since the last run. Action: Attribute-capture lane (docs/data-content-worklist.md); production-record axes cover the selector meanwhile. (first seen 2026-07-27, last seen 2026-07-27, yellow)
+- ⬜ [dh:ranking-snapshot] No LC Index snapshot exists yet, so the ranking movement pills have nothing to compare against. Action: The monthly cron fires on the 1st (CRON_SECRET verified set in Vercel prod, 2026-07-10); to backfill now, curl /api/cron/lc-index-snapshot with the Bearer secret. (first seen 2026-07-10, last seen 2026-07-28, yellow)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-07-28, yellow)
+- ✅ [dh:coverage-variant-size] resolved 2026-07-28 (Variant size coverage is back to normal)
+- ✅ [dh:coverage-variant-colour] resolved 2026-07-28 (Variant colour coverage is back to normal)
 <!-- data-health:end -->
