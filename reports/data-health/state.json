@@ -3,25 +3,25 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-29",
+  "lastRun": "2026-07-31",
   "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.5237470601851851,
-    "freshness-therealreal": 0.5237470601851851,
-    "freshness-tlc": 0.5237470601851851,
-    "freshness-ebay": 2.523747060185185,
-    "capture-rows": 83868,
-    "ranking-count": 498,
-    "ranking-near-floor": 61,
-    "coverage-condition": 13.085968795227965,
-    "coverage-condition-detail": 61.18709445455481,
-    "coverage-region": 38.695940657187435,
-    "coverage-production-year": 0.9605366149507809,
-    "coverage-hardware": 26.238770844888627,
+    "freshness-fashionphile": 0.5223904513888888,
+    "freshness-therealreal": 2.522390451388889,
+    "freshness-tlc": 0.5223904513888888,
+    "freshness-ebay": 4.522390451388889,
+    "capture-rows": 85761,
+    "ranking-count": 501,
+    "ranking-near-floor": 59,
+    "coverage-condition": 12.676470588235293,
+    "coverage-condition-detail": 61.576751816264355,
+    "coverage-region": 38.53580479885423,
+    "coverage-production-year": 0.9465683398782151,
+    "coverage-hardware": 26.06025334348791,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 358602,
+    "backlog-total": 401267,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,8 +33,8 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.387016111111111,
-    "cadence-fashionphile": 2,
+    "summary-staleness": 1.3089630555555556,
+    "cadence-fashionphile": 3,
     "cadence-therealreal": 16,
     "cadence-tlc": 2
   },
@@ -52,11 +52,16 @@
     83450,
     84623,
     85009,
-    83868
+    83868,
+    85761
   ],
   "findings": {
     "ranking-snapshot": {
       "firstSeen": "2026-07-10",
+      "status": "yellow"
+    },
+    "backlog-total": {
+      "firstSeen": "2026-07-31",
       "status": "yellow"
     },
     "structure-pseudo": {
