@@ -195,45 +195,99 @@ async function main() {
   checks.push(scoreSnapshotAge((snap?.[0]?.captured_month as string | undefined) ?? null, today));
 
   // ── D. Attribute coverage (delta-scored) ─────────────────────────────────
-  const phTotal = await count(sb, "price_history", (q) => q);
-  const listedTotal = await count(sb, "price_history", (q) => q.eq("price_type", "listed"));
+  //
+  // These SEVEN numbers used to be seven separate full-table counts. At ~928k rows
+  // (2026-08-02) the first one alone took 8.5s and died on Supabase's 8s statement
+  // timeout, which failed the entire health run and sent a failure email every morning.
+  //
+  // Now: one aggregate RPC (0070, carries its own 120s timeout). Two fallbacks behind it,
+  // because a health check that dies is worse than one that reports a gap:
+  //   1. price_history_coverage() — fast + exact, once 0070 is applied
+  //   2. the old per-column counts — correct, works before 0070 lands
+  //   3. degrade to an info row — the OTHER 30-odd checks still report
   const coverage: Array<{ id: string; label: string; pct: number; action: string }> = [];
-  const phPct = async (col: string, base: number, listedOnly: boolean) => {
-    const n = await count(sb, "price_history", (q) =>
-      listedOnly ? q.eq("price_type", "listed").not(col, "is", null) : q.not(col, "is", null),
-    );
-    return base === 0 ? 0 : (100 * n) / base;
+  type Coverage = {
+    total: number; listedTotal: number; condition: number; conditionDetail: number;
+    region: number; productionYear: number; hardwareColor: number;
   };
-  coverage.push({
-    id: "coverage-condition",
-    label: "Condition coverage (listed rows)",
-    pct: await phPct("condition", listedTotal, true),
-    action: "Run the condition backfill lane (condition-backfill.yml).",
-  });
-  coverage.push({
-    id: "coverage-condition-detail",
-    label: "Condition-detail coverage (listed rows)",
-    pct: await phPct("condition_detail", listedTotal, true),
-    action: "Check the per-listing enrichment paths (eBay item details, FP enrich).",
-  });
-  coverage.push({
-    id: "coverage-region",
-    label: "Region coverage (all rows)",
-    pct: await phPct("region", phTotal, false),
-    action: "Check the feed country-tag mapping in the Fashionphile backfill.",
-  });
-  coverage.push({
-    id: "coverage-production-year",
-    label: "Production-year coverage (all rows)",
-    pct: await phPct("production_year", phTotal, false),
-    action: "Data-limited by sources; investigate only if this DROPPED (a loader regression).",
-  });
-  coverage.push({
-    id: "coverage-hardware",
-    label: "Hardware-color coverage (all rows)",
-    pct: await phPct("hardware_color", phTotal, false),
-    action: "Check the spec-extract vocab (src/lib/ingest/spec-extract.ts) against recent titles.",
-  });
+  let cov: Coverage | null = null;
+
+  const { data: covRows, error: covErr } = await sb.rpc("price_history_coverage");
+  const covRow = (covRows as Record<string, unknown>[] | null)?.[0];
+  if (!covErr && covRow) {
+    cov = {
+      total: Number(covRow.total), listedTotal: Number(covRow.listed_total),
+      condition: Number(covRow.condition_n), conditionDetail: Number(covRow.condition_detail_n),
+      region: Number(covRow.region_n), productionYear: Number(covRow.production_year_n),
+      hardwareColor: Number(covRow.hardware_color_n),
+    };
+  } else {
+    // 0070 not applied yet (or the RPC failed): try the original per-column counts.
+    try {
+      const total = await count(sb, "price_history", (q) => q);
+      const listedTotal = await count(sb, "price_history", (q) => q.eq("price_type", "listed"));
+      const nOf = (col: string, listedOnly: boolean) =>
+        count(sb, "price_history", (q) =>
+          listedOnly ? q.eq("price_type", "listed").not(col, "is", null) : q.not(col, "is", null),
+        );
+      cov = {
+        total, listedTotal,
+        condition: await nOf("condition", true), conditionDetail: await nOf("condition_detail", true),
+        region: await nOf("region", false), productionYear: await nOf("production_year", false),
+        hardwareColor: await nOf("hardware_color", false),
+      };
+    } catch {
+      cov = null;
+    }
+  }
+
+  const pctOf = (n: number, base: number) => (base === 0 ? 0 : (100 * n) / base);
+  // Only report these when we actually HAVE the numbers. Pushing 0% on a failed read
+  // would look like a total collapse and flag RED on a delta-scored check.
+  if (cov) {
+    coverage.push({
+      id: "coverage-condition",
+      label: "Condition coverage (listed rows)",
+      pct: pctOf(cov?.condition ?? 0, cov?.listedTotal ?? 0),
+      action: "Run the condition backfill lane (condition-backfill.yml).",
+    });
+    coverage.push({
+      id: "coverage-condition-detail",
+      label: "Condition-detail coverage (listed rows)",
+      pct: pctOf(cov?.conditionDetail ?? 0, cov?.listedTotal ?? 0),
+      action: "Check the per-listing enrichment paths (eBay item details, FP enrich).",
+    });
+    coverage.push({
+      id: "coverage-region",
+      label: "Region coverage (all rows)",
+      pct: pctOf(cov?.region ?? 0, cov?.total ?? 0),
+      action: "Check the feed country-tag mapping in the Fashionphile backfill.",
+    });
+    coverage.push({
+      id: "coverage-production-year",
+      label: "Production-year coverage (all rows)",
+      pct: pctOf(cov?.productionYear ?? 0, cov?.total ?? 0),
+      action: "Data-limited by sources; investigate only if this DROPPED (a loader regression).",
+    });
+    coverage.push({
+      id: "coverage-hardware",
+      label: "Hardware-color coverage (all rows)",
+      pct: pctOf(cov?.hardwareColor ?? 0, cov?.total ?? 0),
+      action: "Check the spec-extract vocab (src/lib/ingest/spec-extract.ts) against recent titles.",
+    });
+  }
+
+  if (!cov) {
+    checks.push({
+      id: "coverage-unavailable",
+      label: "price_history attribute coverage",
+      status: "info",
+      value: "not read this run (price_history count exceeded the statement timeout)",
+      previous: null,
+      plainEnglish:
+        "The coverage percentages were skipped so the rest of the scorecard could still run. Apply migration 0070 (price_history_coverage) to restore them.",
+    });
+  }
 
   const styleTotal = await count(sb, "style", (q) => q);
   const styleDesc = await count(sb, "style", (q) => q.not("description", "is", null));

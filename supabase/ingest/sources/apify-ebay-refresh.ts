@@ -11,7 +11,8 @@
  *
  * Runs `memo23/ebay-search-scraper-ppe` (mode=active) once per brand — eBay blocks
  * ACTIVE-listing scraping harder than sold, and this actor is the one that reliably
- * gets past it (the sold actor, automation-lab/ebay-sold-scraper, can't do active).
+ * gets past it. NOTE 2026-08-02: automation-lab/ebay-sold-scraper was unpublished by its
+ * developer, so SOLD sweeps now use this same memo23 actor in sold mode.
  * Normalizes each row to the shape ebay-sold-apify.ts --live reads (itemId/title/price/
  * url/condition) and writes data/ingest/_raw/ebay-live-midtier.json. The load stamps
  * today's observed_on on every live listing = the "last seen" signal reconcile:sold

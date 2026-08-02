@@ -27,9 +27,21 @@ name: Refresh market listings (The RealReal)
 # Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
 
 on:
-  schedule:
-    # Every 2 days, 04:31 UTC. Tune up/down here.
-    - cron: "31 4 */2 * *"
+  # SCHEDULE PAUSED 2026-08-02 (owner cost review).
+  #
+  # WHY: this job was 69% of the Apify bill ($68.99 of $100.01 in July, across the two
+  # TRR actors) and TRR is ~1.2% of the data we add each month. Fashionphile, The Luxury
+  # Closet and Rebag already cover the same high end through FREE affiliate feeds. The
+  # TRR affiliate (Impact) is not active yet, so we can neither earn from these listings
+  # nor use their photos.
+  #
+  # It was also FAILING daily: with the budget exhausted, Apify returns
+  # "max-items-must-be-greater-than-zero" and the run dies, which is where the failure
+  # emails came from.
+  #
+  # TO RESUME: uncomment the two lines below. Manual runs still work via workflow_dispatch.
+  # schedule:
+  #   - cron: "31 4 */2 * *"
   workflow_dispatch:
     inputs:
       write:

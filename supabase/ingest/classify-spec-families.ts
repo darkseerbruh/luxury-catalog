@@ -41,24 +41,37 @@ interface OverridesFile {
 
 const norm = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
 
-/** Distinct non-empty values of a price_history column, keyed normalized → original casing. */
+/**
+ * Distinct non-empty values of a price_history column, keyed normalized → original casing.
+ *
+ * KEYSET pagination on the primary key, never .range(). OFFSET pagination makes Postgres
+ * walk and discard every row before the offset, so cost grows with depth: at ~928k rows
+ * (2026-08-02) the deep pages blew straight through Supabase's 8s statement_timeout and
+ * this job failed with 57014 every run. Keyset reads a fixed-size slice at constant cost
+ * no matter how far in we are.
+ */
 async function distinctValues(column: "colorway" | "material"): Promise<Map<string, string>> {
   const out = new Map<string, string>();
   const PAGE = 1000;
-  for (let from = 0; ; from += PAGE) {
+  let cursor = 0;
+  for (;;) {
     const { data, error } = await supabaseAdmin
       .from("price_history")
-      .select(column)
+      .select(`price_id, ${column}`)
       .not(column, "is", null)
-      .range(from, from + PAGE - 1);
+      .gt("price_id", cursor)
+      .order("price_id", { ascending: true })
+      .limit(PAGE);
     if (error) throw error;
     if (!data || data.length === 0) break;
-    for (const r of data as Record<string, string | null>[]) {
-      const raw = r[column];
-      if (!raw) continue;
-      const k = norm(raw);
-      if (k && !out.has(k)) out.set(k, raw.trim());
+    for (const r of data as Record<string, string | number | null>[]) {
+      const raw = r[column] as string | null;
+      if (raw) {
+        const k = norm(raw);
+        if (k && !out.has(k)) out.set(k, raw.trim());
+      }
     }
+    cursor = Number((data[data.length - 1] as Record<string, unknown>).price_id);
     if (data.length < PAGE) break;
   }
   return out;
