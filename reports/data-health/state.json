@@ -3,25 +3,20 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-07-31",
-  "overall": "yellow",
+  "lastRun": "2026-08-03",
+  "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.5223904513888888,
-    "freshness-therealreal": 2.522390451388889,
-    "freshness-tlc": 0.5223904513888888,
-    "freshness-ebay": 4.522390451388889,
-    "capture-rows": 85761,
-    "ranking-count": 501,
-    "ranking-near-floor": 59,
-    "coverage-condition": 12.676470588235293,
-    "coverage-condition-detail": 61.576751816264355,
-    "coverage-region": 38.53580479885423,
-    "coverage-production-year": 0.9465683398782151,
-    "coverage-hardware": 26.06025334348791,
+    "freshness-fashionphile": 0.5630120023148149,
+    "freshness-therealreal": 5.563012002314815,
+    "freshness-tlc": 0.5630120023148149,
+    "freshness-ebay": 7.563012002314815,
+    "capture-rows": 83622,
+    "ranking-count": 503,
+    "ranking-near-floor": 56,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 401267,
+    "backlog-total": 464505,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,8 +28,8 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.3089630555555556,
-    "cadence-fashionphile": 3,
+    "summary-staleness": 1.4656352777777777,
+    "cadence-fashionphile": 6,
     "cadence-therealreal": 16,
     "cadence-tlc": 2
   },
@@ -53,12 +48,13 @@
     84623,
     85009,
     83868,
-    85761
+    85761,
+    83622
   ],
   "findings": {
-    "ranking-snapshot": {
-      "firstSeen": "2026-07-10",
-      "status": "yellow"
+    "freshness-therealreal": {
+      "firstSeen": "2026-08-03",
+      "status": "red"
     },
     "backlog-total": {
       "firstSeen": "2026-07-31",
@@ -69,5 +65,11 @@
       "status": "yellow"
     }
   },
-  "redFindings": []
+  "redFindings": [
+    {
+      "id": "freshness-therealreal",
+      "title": "Data health: freshness-therealreal is RED",
+      "body": "TheRealReal data is 5.6 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 5.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-03.md"
+    }
+  ]
 }
