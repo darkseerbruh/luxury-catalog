@@ -665,8 +665,7 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:freshness-therealreal] TheRealReal data is 5.6 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-03, red)
-- ⬜ [dh:backlog-total] The unpromoted backlog grew from 401267 to 464505 rows since the last run; capture is outpacing promotion. Action: Schedule a promotion session (promote-safe --create-new) or grow the dictionary coverage. (first seen 2026-07-31, last seen 2026-08-03, yellow)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-03, yellow)
-- ✅ [dh:ranking-snapshot] resolved 2026-08-03 (LC Index monthly snapshot is back to normal)
+- ⬜ [dh:freshness-therealreal] TheRealReal data is 6.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-04, red)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-04, yellow)
+- ✅ [dh:backlog-total] resolved 2026-08-04 (Discovered-listing backlog is back to normal)
 <!-- data-health:end -->
