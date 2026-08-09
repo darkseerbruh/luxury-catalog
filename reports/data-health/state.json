@@ -3,20 +3,20 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-08-06",
+  "lastRun": "2026-08-09",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.5210811111111111,
-    "freshness-therealreal": 8.521081111111112,
-    "freshness-tlc": 0.5210811111111111,
-    "freshness-ebay": 10.521081111111112,
-    "capture-rows": 89846,
-    "ranking-count": 507,
-    "ranking-near-floor": 57,
+    "freshness-fashionphile": 0.4676899421296296,
+    "freshness-therealreal": 11.46768994212963,
+    "freshness-tlc": 0.4676899421296296,
+    "freshness-ebay": 13.46768994212963,
+    "capture-rows": 86712,
+    "ranking-count": 517,
+    "ranking-near-floor": 63,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
-    "coverage-listing-images": 15.391195442192462,
-    "backlog-total": 531548,
+    "coverage-listing-images": 15.041727126855072,
+    "backlog-total": 595559,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -28,10 +28,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.478308888888889,
+    "summary-staleness": 1.7959836111111112,
     "cadence-fashionphile": 2,
     "cadence-therealreal": 16,
-    "cadence-tlc": 2
+    "cadence-tlc": 5
   },
   "rowsAddedHistory": [
     25192,
@@ -52,16 +52,17 @@
     83622,
     82762,
     88640,
-    89846
+    89846,
+    86712
   ],
   "findings": {
     "freshness-therealreal": {
       "firstSeen": "2026-08-03",
       "status": "red"
     },
-    "coverage-listing-images": {
-      "firstSeen": "2026-08-06",
-      "status": "red"
+    "backlog-total": {
+      "firstSeen": "2026-08-09",
+      "status": "yellow"
     },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
@@ -72,12 +73,7 @@
     {
       "id": "freshness-therealreal",
       "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 8.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 8.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-06.md"
-    },
-    {
-      "id": "coverage-listing-images",
-      "title": "Data health: coverage-listing-images is RED",
-      "body": "Listing photos (rebag, myGemma, The Luxury Closet) fell from 100% to 15.4% since the last run.\n\nCurrent value: 15.4%\nSuggested action: Check the feed ingest's image upsert (listing_image) in the TLC action.\nReport: reports/data-health/2026-08-06.md"
+      "body": "TheRealReal data is 11.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 11.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-09.md"
     }
   ]
 }
