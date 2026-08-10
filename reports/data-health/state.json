@@ -3,20 +3,20 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-08-09",
+  "lastRun": "2026-08-10",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.4676899421296296,
-    "freshness-therealreal": 11.46768994212963,
-    "freshness-tlc": 0.4676899421296296,
-    "freshness-ebay": 13.46768994212963,
-    "capture-rows": 86712,
+    "freshness-fashionphile": 0.4826275,
+    "freshness-therealreal": 12.4826275,
+    "freshness-tlc": 0.4826275,
+    "freshness-ebay": 0.4826275,
+    "capture-rows": 86541,
     "ranking-count": 517,
     "ranking-near-floor": 63,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
-    "coverage-listing-images": 15.041727126855072,
-    "backlog-total": 595559,
+    "coverage-listing-images": 100,
+    "backlog-total": 616496,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -28,10 +28,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.7959836111111112,
-    "cadence-fashionphile": 2,
-    "cadence-therealreal": 16,
-    "cadence-tlc": 5
+    "summary-staleness": 1.5148127777777778,
+    "cadence-fashionphile": 1,
+    "cadence-therealreal": 15,
+    "cadence-tlc": 7
   },
   "rowsAddedHistory": [
     25192,
@@ -53,16 +53,13 @@
     82762,
     88640,
     89846,
-    86712
+    86712,
+    86541
   ],
   "findings": {
     "freshness-therealreal": {
       "firstSeen": "2026-08-03",
       "status": "red"
-    },
-    "backlog-total": {
-      "firstSeen": "2026-08-09",
-      "status": "yellow"
     },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
@@ -73,7 +70,7 @@
     {
       "id": "freshness-therealreal",
       "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 11.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 11.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-09.md"
+      "body": "TheRealReal data is 12.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 12.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-10.md"
     }
   ]
 }
