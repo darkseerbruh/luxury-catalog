@@ -665,7 +665,7 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:freshness-therealreal] TheRealReal data is 12.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-10, red)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-10, yellow)
-- ✅ [dh:backlog-total] resolved 2026-08-10 (Discovered-listing backlog is back to normal)
+- ⬜ [dh:freshness-therealreal] TheRealReal data is 13.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-11, red)
+- ⬜ [dh:coverage-listing-images] Listing photos (rebag, myGemma, The Luxury Closet) fell from 100% to 14.4% since the last run. Action: Check the feed ingest's image upsert (listing_image) in the TLC action. (first seen 2026-08-11, last seen 2026-08-11, red)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-11, yellow)
 <!-- data-health:end -->

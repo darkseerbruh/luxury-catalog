@@ -3,20 +3,20 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-08-10",
+  "lastRun": "2026-08-11",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.4826275,
-    "freshness-therealreal": 12.4826275,
-    "freshness-tlc": 0.4826275,
-    "freshness-ebay": 0.4826275,
-    "capture-rows": 86541,
+    "freshness-fashionphile": 0.48062336805555556,
+    "freshness-therealreal": 13.480623368055555,
+    "freshness-tlc": 0.48062336805555556,
+    "freshness-ebay": 1.4806233680555556,
+    "capture-rows": 85777,
     "ranking-count": 517,
     "ranking-near-floor": 63,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
-    "coverage-listing-images": 100,
-    "backlog-total": 616496,
+    "coverage-listing-images": 14.369641097766888,
+    "backlog-total": 637681,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -28,7 +28,7 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.5148127777777778,
+    "summary-staleness": 1.8237105555555555,
     "cadence-fashionphile": 1,
     "cadence-therealreal": 15,
     "cadence-tlc": 7
@@ -54,11 +54,16 @@
     88640,
     89846,
     86712,
-    86541
+    86541,
+    85777
   ],
   "findings": {
     "freshness-therealreal": {
       "firstSeen": "2026-08-03",
+      "status": "red"
+    },
+    "coverage-listing-images": {
+      "firstSeen": "2026-08-11",
       "status": "red"
     },
     "structure-pseudo": {
@@ -70,7 +75,12 @@
     {
       "id": "freshness-therealreal",
       "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 12.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 12.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-10.md"
+      "body": "TheRealReal data is 13.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 13.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-11.md"
+    },
+    {
+      "id": "coverage-listing-images",
+      "title": "Data health: coverage-listing-images is RED",
+      "body": "Listing photos (rebag, myGemma, The Luxury Closet) fell from 100% to 14.4% since the last run.\n\nCurrent value: 14.4%\nSuggested action: Check the feed ingest's image upsert (listing_image) in the TLC action.\nReport: reports/data-health/2026-08-11.md"
     }
   ]
 }
