@@ -3,25 +3,20 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-08-12",
+  "lastRun": "2026-08-13",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.4805627199074074,
-    "freshness-therealreal": 14.480562719907407,
-    "freshness-tlc": 0.4805627199074074,
-    "freshness-ebay": 2.4805627199074074,
-    "capture-rows": 85564,
-    "ranking-count": 519,
-    "ranking-near-floor": 63,
-    "coverage-condition": 11.257157607332298,
-    "coverage-condition-detail": 63.39725947712656,
-    "coverage-region": 37.476817917520364,
-    "coverage-production-year": 0.8920479838294553,
-    "coverage-hardware": 25.087689534821337,
+    "freshness-fashionphile": 0.4796961574074074,
+    "freshness-therealreal": 15.479696157407407,
+    "freshness-tlc": 0.4796961574074074,
+    "freshness-ebay": 3.4796961574074072,
+    "capture-rows": 85976,
+    "ranking-count": 521,
+    "ranking-near-floor": 66,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
-    "coverage-listing-images": 100,
-    "backlog-total": 658938,
+    "coverage-listing-images": 14.212909122593631,
+    "backlog-total": 680287,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,10 +28,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.7133963888888888,
+    "summary-staleness": 1.6885547222222221,
     "cadence-fashionphile": 1,
     "cadence-therealreal": 15,
-    "cadence-tlc": 8
+    "cadence-tlc": 9
   },
   "rowsAddedHistory": [
     25192,
@@ -61,11 +56,16 @@
     86712,
     86541,
     85777,
-    85564
+    85564,
+    85976
   ],
   "findings": {
     "freshness-therealreal": {
       "firstSeen": "2026-08-03",
+      "status": "red"
+    },
+    "coverage-listing-images": {
+      "firstSeen": "2026-08-13",
       "status": "red"
     },
     "structure-pseudo": {
@@ -77,7 +77,12 @@
     {
       "id": "freshness-therealreal",
       "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 14.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 14.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-12.md"
+      "body": "TheRealReal data is 15.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 15.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-13.md"
+    },
+    {
+      "id": "coverage-listing-images",
+      "title": "Data health: coverage-listing-images is RED",
+      "body": "Listing photos (rebag, myGemma, The Luxury Closet) fell from 100% to 14.2% since the last run.\n\nCurrent value: 14.2%\nSuggested action: Check the feed ingest's image upsert (listing_image) in the TLC action.\nReport: reports/data-health/2026-08-13.md"
     }
   ]
 }
