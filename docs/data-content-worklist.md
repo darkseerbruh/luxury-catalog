@@ -665,7 +665,8 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:freshness-therealreal] TheRealReal data is 16.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-14, red)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-14, yellow)
-- ✅ [dh:coverage-listing-images] resolved 2026-08-14 (Listing photos (myGemma) is back to normal)
+- ⬜ [dh:freshness-fashionphile] Fashionphile data is 1.5 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs. (first seen 2026-08-25, last seen 2026-08-25, yellow)
+- ⬜ [dh:freshness-therealreal] TheRealReal data is 27.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-25, red)
+- ⬜ [dh:backlog-total] The unpromoted backlog grew from 700204 to 892821 rows since the last run; capture is outpacing promotion. Action: Schedule a promotion session (promote-safe --create-new) or grow the dictionary coverage. (first seen 2026-08-25, last seen 2026-08-25, red)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-25, yellow)
 <!-- data-health:end -->
