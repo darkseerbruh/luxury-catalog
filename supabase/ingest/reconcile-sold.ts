@@ -155,41 +155,22 @@ type DatedRow = { platform: string | null; listing_ref: string | null; observed_
 /**
  * Every DISTINCT live listing for the resolved platform(s), newest observation each.
  *
- * WHY AN RPC AND NOT MORE PAGING: 0070 indexed the keyset walk and it does now complete
- * on an idle DB (Fashionphile 33 pages / 71.6s, Rebag 656 pages / 160.5s, measured
- * 2026-08-27). But the worst single page was 7626ms against PostgREST's hard ~8s ceiling,
- * and reconcile runs right after the crawl's write burst — which is where Fashionphile
- * still 57014'd on run 33120050378. No index raises that ceiling. Doing the work inside a
- * function with its own statement_timeout does (0071).
+ * ONE CALL, ONE PASS. 0071 tried this as a keyset-paged table function and was slower
+ * than what it replaced: paging over a GROUP BY re-runs the whole aggregate per page
+ * (Fashionphile 7 pages / 194.6s; Rebag failed at 120s). 0072 returns a single jsonb
+ * value instead — one row, so PostgREST's 1000-row cap cannot truncate it, so there is
+ * nothing to page.
  *
- * WHY IT IS ALSO LESS WORK: both reconcile modes need only the distinct listing_refs, but
- * a live listing accumulates one available row per day it is observed, so reading rows to
- * derive refs grew daily for a result that barely moves — 655,786 Rebag rows in for
- * ~18,800 refs out. reconcile_available_listings() dedupes in the DB instead.
- *
- * PAGED ANYWAY: every PostgREST response caps at 1000 rows regardless of limit, so an
- * unpaged .rpc() would silently under-read and under-retire. Keyset on listing_ref, one
- * platform per call so the cursor stays a single column.
+ * WHY A FUNCTION AT ALL: reconcile runs straight after the crawl's write burst, and
+ * PostgREST's hard ~8s ceiling is what no index can raise. 0070's index made each page
+ * cheaper and the walk still 57014'd there (run 33120050378). The function carries its
+ * own statement_timeout, which is the part that actually fixes it.
  */
 async function fetchLiveListings(platforms: string[]): Promise<DatedRow[]> {
-  const all: DatedRow[] = [];
-  const PAGE = 1000;
-  for (const platform of platforms) {
-    let after = "";
-    for (;;) {
-      const { data, error } = await supabaseAdmin.rpc("reconcile_available_listings", {
-        p_platforms: [platform],
-        p_after: after,
-        p_limit: PAGE,
-      });
-      if (error) throw error;
-      const rows = (data ?? []) as Array<{ platform: string | null; listing_ref: string | null; last_seen: string | null }>;
-      for (const r of rows) all.push({ platform: r.platform, listing_ref: r.listing_ref, observed_on: r.last_seen });
-      if (rows.length < PAGE) break;
-      after = rows[rows.length - 1].listing_ref as string;
-    }
-  }
-  return all;
+  const { data, error } = await supabaseAdmin.rpc("reconcile_live_listings", { p_platforms: platforms });
+  if (error) throw error;
+  const rows = (data ?? []) as Array<{ platform: string | null; listing_ref: string | null; last_seen: string | null }>;
+  return rows.map((r) => ({ platform: r.platform, listing_ref: r.listing_ref, observed_on: r.last_seen }));
 }
 
 /**
@@ -319,7 +300,7 @@ async function main() {
     console.log("\nNothing to retire (every available listing is still in the live snapshot).");
     return;
   }
-  // Like-for-like since 0071: both sides are now DISTINCT listings. This guard used to
+  // Like-for-like since 0071/0072: both sides are now DISTINCT listings. This guard used to
   // divide distinct gone refs by total available ROWS, and with a live listing holding one
   // row per day observed (655,786 Rebag rows behind ~18,800 refs on 2026-08-27) the ratio
   // could never reach 0.5 — a broken crawl would have sailed straight past it.
