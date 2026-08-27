@@ -4,24 +4,24 @@
   "weeklyDow": 1,
   "greenStreak": 0,
   "lastRun": "2026-08-27",
-  "overall": "red",
+  "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 3.9229468518518518,
-    "freshness-therealreal": 29.92294685185185,
-    "freshness-tlc": 0.9229468518518519,
-    "freshness-ebay": 3.9229468518518518,
-    "capture-rows": 63559,
-    "ranking-count": 535,
-    "ranking-near-floor": 66,
-    "coverage-condition": 10.963714901913708,
-    "coverage-condition-detail": 67.20634135437321,
-    "coverage-region": 34.119540616865564,
-    "coverage-production-year": 0.7947962327732615,
-    "coverage-hardware": 22.342438824391447,
+    "freshness-fashionphile": 0.9571356134259259,
+    "freshness-therealreal": 29.957135613425926,
+    "freshness-tlc": 0.9571356134259259,
+    "freshness-ebay": 3.957135613425926,
+    "capture-rows": 77623,
+    "ranking-count": 536,
+    "ranking-near-floor": 65,
+    "coverage-condition": 10.884505056897806,
+    "coverage-condition-detail": 66.72079389802369,
+    "coverage-region": 34.593350664210746,
+    "coverage-production-year": 0.8081875835934589,
+    "coverage-hardware": 22.726245103582837,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 922191,
+    "backlog-total": 930992,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,9 +33,8 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 0.20871,
-    "cadence-fashionphile": 17,
-    "cadence-therealreal": 16,
+    "summary-staleness": 0.06291555555555556,
+    "cadence-fashionphile": 10,
     "cadence-tlc": 21
   },
   "rowsAddedHistory": [
@@ -66,32 +65,14 @@
     84845,
     71948,
     63744,
-    63559
+    63559,
+    77623
   ],
   "findings": {
-    "freshness-fashionphile": {
-      "firstSeen": "2026-08-25",
-      "status": "red"
-    },
-    "freshness-therealreal": {
-      "firstSeen": "2026-08-03",
-      "status": "red"
-    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
     }
   },
-  "redFindings": [
-    {
-      "id": "freshness-fashionphile",
-      "title": "Data health: freshness-fashionphile is RED",
-      "body": "Fashionphile data is 3.9 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 3.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-08-27.md"
-    },
-    {
-      "id": "freshness-therealreal",
-      "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 29.9 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 29.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-27.md"
-    }
-  ]
+  "redFindings": []
 }
