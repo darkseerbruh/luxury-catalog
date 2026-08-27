@@ -154,8 +154,13 @@ jobs:
             exit 0
           fi
           git commit -m "chore(${{ steps.pick.outputs.engine }}): run $(date -u +%F)"
+          # Push EXPLICITLY to main. An engine brief may have moved us onto its
+          # own working branch, in which case a bare `git push` dies with
+          # "upstream branch does not match" (exit 128). That is what killed the
+          # first real agent-engines run on 2026-08-27 after the engine itself
+          # had succeeded.
           for i in 1 2 3; do
-            if git push; then exit 0; fi
-            git pull --rebase
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main && git rebase origin/main || true
           done
-          git push
+          git push origin HEAD:main

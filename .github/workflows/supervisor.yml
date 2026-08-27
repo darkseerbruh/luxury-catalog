@@ -143,11 +143,13 @@ jobs:
             exit 0
           fi
           git commit -m "chore(supervisor): run $(date -u +%F-%H%M)"
+          # Explicit HEAD:main for the same reason as agent-engines.yml: the
+          # supervisor lands fixes on branches, so it will not always be on main.
           for i in 1 2 3; do
-            if git push; then exit 0; fi
-            git pull --rebase
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main && git rebase origin/main || true
           done
-          git push
+          git push origin HEAD:main
 
       - name: Surface a failed supervisor loudly
         if: failure()
