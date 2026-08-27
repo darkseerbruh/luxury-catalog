@@ -18,8 +18,14 @@
 -- 'Rebag' (found 2026-08-27; the old exact-match count silently returned 0 for Rebag).
 --
 -- HUMAN-GATED.
+--
+-- DROP first: this changes the return type (image_count -> with_photo_count), and
+-- `create or replace function` cannot do that — it fails with 42P13, which is exactly how
+-- the first attempt at this migration died. Nothing outside data-health calls it.
 
 set statement_timeout = '600s';
+
+drop function if exists listing_photo_coverage();
 
 create or replace function listing_photo_coverage()
 returns table (
