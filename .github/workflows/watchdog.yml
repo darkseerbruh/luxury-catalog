@@ -81,12 +81,58 @@ jobs:
             fi
           done
 
+      - name: Probe every credential (never prints a secret)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          AWIN_MYGEMMA_FEED_URL: ${{ secrets.AWIN_MYGEMMA_FEED_URL }}
+        run: npx tsx scripts/credential-radar.ts --write
+
+      - name: Open / close credential issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          state=reports/credentials/state.json
+          today=$(jq -r '.lastRun' "$state")
+          gh label create credential --force \
+            --description "A credential is dead or missing and only a human can rotate it" \
+            --color D93F0B >/dev/null 2>&1 || true
+
+          open_json=$(gh issue list --label credential --state open --json title,number --limit 100)
+
+          jq -c '.redFindings[]' "$state" | while read -r finding; do
+            title=$(echo "$finding" | jq -r '.title')
+            body=$(echo "$finding" | jq -r '.body')
+            existing=$(echo "$open_json" | jq -r --arg t "$title" '.[] | select(.title == $t) | .number' | head -1)
+            if [ -n "$existing" ]; then
+              echo "Already open: #$existing ($title)"
+            else
+              gh issue create --title "$title" --label credential --body "$body"
+              echo "Opened issue: $title"
+            fi
+          done
+
+          echo "$open_json" | jq -r '.[] | "\(.number)\t\(.title)"' | while IFS=$'\t' read -r num title; do
+            still=$(jq -r --arg t "$title" '.redFindings[] | select(.title == $t) | .id' "$state" | head -1)
+            if [ -z "$still" ]; then
+              gh issue close "$num" --comment "Probing live again as of ${today}."
+              echo "Closed recovered #$num ($title)"
+            fi
+          done
+
       - name: Commit the watchdog report (rebase-retry against racing pushes)
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add reports/watchdog
+          git add reports/watchdog reports/credentials
           if git diff --cached --quiet; then
             echo "Nothing to commit."
             exit 0
