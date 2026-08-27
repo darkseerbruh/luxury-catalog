@@ -665,9 +665,8 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:freshness-fashionphile] Fashionphile data is 2.5 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs. (first seen 2026-08-25, last seen 2026-08-26, red)
-- ⬜ [dh:freshness-therealreal] TheRealReal data is 28.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-26, red)
-- ⬜ [dh:contamination-dupes] 5109 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-08-26, last seen 2026-08-26, red)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-26, yellow)
-- ✅ [dh:backlog-total] resolved 2026-08-26 (Discovered-listing backlog is back to normal)
+- ⬜ [dh:freshness-fashionphile] Fashionphile data is 3.9 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs. (first seen 2026-08-25, last seen 2026-08-27, red)
+- ⬜ [dh:freshness-therealreal] TheRealReal data is 29.9 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs. (first seen 2026-08-03, last seen 2026-08-27, red)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-08-27, yellow)
+- ✅ [dh:contamination-dupes] resolved 2026-08-27 (Same-day duplicate listing rows (last ~24h) is back to normal)
 <!-- data-health:end -->

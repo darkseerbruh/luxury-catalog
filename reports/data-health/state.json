@@ -3,24 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-08-26",
+  "lastRun": "2026-08-27",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 2.467595289351852,
-    "freshness-therealreal": 28.467595289351852,
-    "freshness-tlc": 0.46759528935185185,
-    "freshness-ebay": 2.467595289351852,
-    "capture-rows": 63744,
+    "freshness-fashionphile": 3.9229468518518518,
+    "freshness-therealreal": 29.92294685185185,
+    "freshness-tlc": 0.9229468518518519,
+    "freshness-ebay": 3.9229468518518518,
+    "capture-rows": 63559,
     "ranking-count": 535,
-    "ranking-near-floor": 67,
+    "ranking-near-floor": 66,
+    "coverage-condition": 10.963714901913708,
+    "coverage-condition-detail": 67.20634135437321,
+    "coverage-region": 34.119540616865564,
+    "coverage-production-year": 0.7947962327732615,
+    "coverage-hardware": 22.342438824391447,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 909759,
+    "backlog-total": 922191,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 5109,
+    "contamination-dupes": 0,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -28,8 +33,8 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 2.0202702777777777,
-    "cadence-fashionphile": 10,
+    "summary-staleness": 0.20871,
+    "cadence-fashionphile": 17,
     "cadence-therealreal": 16,
     "cadence-tlc": 21
   },
@@ -60,7 +65,8 @@
     85976,
     84845,
     71948,
-    63744
+    63744,
+    63559
   ],
   "findings": {
     "freshness-fashionphile": {
@@ -69,10 +75,6 @@
     },
     "freshness-therealreal": {
       "firstSeen": "2026-08-03",
-      "status": "red"
-    },
-    "contamination-dupes": {
-      "firstSeen": "2026-08-26",
       "status": "red"
     },
     "structure-pseudo": {
@@ -84,17 +86,12 @@
     {
       "id": "freshness-fashionphile",
       "title": "Data health: freshness-fashionphile is RED",
-      "body": "Fashionphile data is 2.5 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 2.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-08-26.md"
+      "body": "Fashionphile data is 3.9 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 3.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-08-27.md"
     },
     {
       "id": "freshness-therealreal",
       "title": "Data health: freshness-therealreal is RED",
-      "body": "TheRealReal data is 28.5 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 28.5 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-26.md"
-    },
-    {
-      "id": "contamination-dupes",
-      "title": "Data health: contamination-dupes is RED",
-      "body": "5109 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 5109 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-08-26.md"
+      "body": "TheRealReal data is 29.9 days old but its schedule promises a refresh every 2 day(s), so the capture likely stopped running.\n\nCurrent value: 29.9 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the TheRealReal refresh workflow's recent runs.\nReport: reports/data-health/2026-08-27.md"
     }
   ]
 }
