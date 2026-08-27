@@ -31,21 +31,26 @@ export default function SignupPrompt() {
   const [open, setOpen] = useState(false);
   const [ask, setAsk] = useState(0);
   const [bagViews, setBagViews] = useState(0);
+  const [articleReads, setArticleReads] = useState(0);
+  // Which surface earned this ask. Kept on the fired events so the two channels
+  // can be told apart in PostHog, since they convert nothing alike.
+  const [trigger, setTrigger] = useState<"bag_views" | "article_read">("bag_views");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const close = useCallback(
     (reason: "dismissed" | "accepted") => {
       setOpen(false);
+      const payload = { ask, bag_views: bagViews, article_reads: articleReads, trigger };
       if (reason === "dismissed") {
         // No state change: markShown already started the cooldown, and a
         // dismissal must not buy permanent quiet. We ask again in a day.
-        track(EVENTS.signupPromptDismissed, { ask, bag_views: bagViews, trigger: "bag_views" });
+        track(EVENTS.signupPromptDismissed, payload);
       } else {
-        track(EVENTS.signupPromptAccepted, { ask, bag_views: bagViews, trigger: "bag_views" });
+        track(EVENTS.signupPromptAccepted, payload);
       }
     },
-    [ask, bagViews],
+    [ask, bagViews, articleReads, trigger],
   );
 
   useEffect(() => {
@@ -53,7 +58,7 @@ export default function SignupPrompt() {
     // returning member doesn't get a flash of the ask.
     if (!ready || signedIn) return;
 
-    function evaluate() {
+    function evaluate(source: "bag_views" | "article_read") {
       // Never stack two asks. While the analytics consent notice is still
       // undecided it owns the bottom of the screen, so we wait our turn and
       // re-evaluate on the next bag view. A GPC browser resolves to "denied"
@@ -70,20 +75,32 @@ export default function SignupPrompt() {
         if (!shouldPrompt(fresh, Date.now())) return;
         writeState(markShown(fresh, Date.now()));
         setAsk(fresh.shows + 1);
-        setBagViews(fresh.views);
+        setBagViews(fresh.bagViews);
+        setArticleReads(fresh.articleReads);
+        setTrigger(source);
         setOpen(true);
         track(EVENTS.signupPromptShown, {
           ask: fresh.shows + 1,
-          bag_views: fresh.views,
-          trigger: "bag_views",
+          bag_views: fresh.bagViews,
+          article_reads: fresh.articleReads,
+          trigger: source,
         });
       }, APPEAR_DELAY_MS);
     }
 
-    evaluate();
-    window.addEventListener("lc:bag-viewed", evaluate);
+    const onBag = () => evaluate("bag_views");
+    const onArticle = () => evaluate("article_read");
+
+    // The mount pass reports the surface the reader is standing on, so an ask
+    // that was already earned but never shown is attributed where it happened
+    // rather than defaulting to bags.
+    evaluate(window.location.pathname.startsWith("/articles/") ? "article_read" : "bag_views");
+
+    window.addEventListener("lc:bag-viewed", onBag);
+    window.addEventListener("lc:article-read", onArticle);
     return () => {
-      window.removeEventListener("lc:bag-viewed", evaluate);
+      window.removeEventListener("lc:bag-viewed", onBag);
+      window.removeEventListener("lc:article-read", onArticle);
       if (timer.current) {
         clearTimeout(timer.current);
         timer.current = null;

@@ -1,11 +1,16 @@
 import { describe, it, expect } from "vitest";
 import {
+  ARTICLE_WEIGHT,
   COOLDOWN_DAYS,
+  READ_DEPTH,
+  READ_DWELL_MS,
   VIEW_INTERVAL,
   emptyState,
+  hasFinishedReading,
   markShown,
   markSilenced,
   parseState,
+  recordArticleRead,
   recordView,
   shouldPrompt,
 } from "./signup-prompt";
@@ -125,6 +130,97 @@ describe("parseState", () => {
 
   it("round-trips a real state", () => {
     const original = markShown(viewed(7), T0);
+    expect(parseState(JSON.stringify(original))).toEqual(original);
+  });
+});
+
+// --- Articles (added 2026-08-27) ---------------------------------------------
+
+describe("recordArticleRead", () => {
+  it("counts a finished guide as a full interval, so one read earns the ask", () => {
+    const s = recordArticleRead(emptyState(), "prada-authentication");
+    expect(s.articleReads).toBe(1);
+    expect(s.views).toBe(ARTICLE_WEIGHT);
+    // The whole point of the change: a single guide read is now askable.
+    expect(shouldPrompt(s, T0)).toBe(true);
+  });
+
+  it("ignores a re-read of the same guide", () => {
+    let s = recordArticleRead(emptyState(), "goyard-authentication");
+    s = recordArticleRead(s, "goyard-authentication");
+    s = recordArticleRead(s, "goyard-authentication");
+    expect(s.seenArticles).toEqual(["goyard-authentication"]);
+    expect(s.articleReads).toBe(1);
+  });
+
+  it("ignores an empty slug", () => {
+    expect(recordArticleRead(emptyState(), "")).toEqual(emptyState());
+  });
+
+  it("returns the SAME object on a no-op, so the caller can skip the event", () => {
+    const before = recordArticleRead(emptyState(), "dior-authentication");
+    expect(recordArticleRead(before, "dior-authentication")).toBe(before);
+  });
+
+  it("adds up with bag views on one counter", () => {
+    // Three bags is short of the ask alone; a finished guide carries it past.
+    let s = viewed(3);
+    expect(shouldPrompt(s, T0)).toBe(false);
+    s = recordArticleRead(s, "how-to-authenticate-a-coach-bag");
+    expect(s.views).toBe(3 + ARTICLE_WEIGHT);
+    expect(s.bagViews).toBe(3);
+    expect(s.articleReads).toBe(1);
+    expect(shouldPrompt(s, T0)).toBe(true);
+  });
+
+  it("still respects the one-day cooldown", () => {
+    const shown = markShown(recordArticleRead(emptyState(), "a"), T0);
+    const second = recordArticleRead(shown, "b");
+    expect(shouldPrompt(second, T0 + DAY / 2)).toBe(false);
+    expect(shouldPrompt(second, T0 + DAY + 1)).toBe(true);
+  });
+});
+
+describe("hasFinishedReading", () => {
+  it("needs BOTH depth and dwell", () => {
+    expect(hasFinishedReading(READ_DEPTH, READ_DWELL_MS)).toBe(true);
+    // Deep but instant: the signature of a bot, not a reader.
+    expect(hasFinishedReading(1, 200)).toBe(false);
+    // Parked a long while at the very top.
+    expect(hasFinishedReading(0.1, READ_DWELL_MS * 10)).toBe(false);
+  });
+
+  it("rejects non-finite inputs rather than throwing", () => {
+    expect(hasFinishedReading(Number.NaN, READ_DWELL_MS)).toBe(false);
+    expect(hasFinishedReading(1, Number.POSITIVE_INFINITY)).toBe(false);
+  });
+});
+
+describe("parseState (articles)", () => {
+  it("reads a pre-article state without losing its bag history", () => {
+    // Shape shipped before 2026-08-27: no seenArticles, no bagViews.
+    const legacy = JSON.stringify({
+      seen: [1, 2, 3],
+      views: 3,
+      shows: 0,
+      lastShownAt: null,
+      silenced: false,
+    });
+    const s = parseState(legacy);
+    expect(s.views).toBe(3);
+    // Every point it holds came from a bag, so bagViews must not read back 0.
+    expect(s.bagViews).toBe(3);
+    expect(s.articleReads).toBe(0);
+    expect(s.seenArticles).toEqual([]);
+  });
+
+  it("drops junk slugs", () => {
+    const s = parseState(JSON.stringify({ seenArticles: ["ok", "", null, 7, "fine"] }));
+    expect(s.seenArticles).toEqual(["ok", "fine"]);
+  });
+
+  it("round-trips a mixed bag-and-article state", () => {
+    const original = markShown(recordArticleRead(viewed(4), "chanel-guide"), T0);
     expect(parseState(JSON.stringify(original))).toEqual(original);
   });
 });
