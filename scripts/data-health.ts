@@ -305,22 +305,22 @@ async function main() {
     action: "Queue a page-depth batch; hold unsourced years null (never invent).",
   });
 
-  // Image coverage: photos per live listing, both halves from ONE function (0073).
-  // It used to sample the platform set from an unordered listing_image .limit(1000), so
-  // the set changed between calls and the numerator (ALL photos) was divided by a
-  // denominator covering only the sampled platforms — the 2026-08-27 report read
-  // "Listing photos (myGemma) 100% green", clamped by Math.min. A check that cannot go
-  // below green is not a check.
+  // Image coverage: share of LIVE listings we can show a photo for (0074).
+  // Two bugs preceded this. It sampled its platform set from an unordered listing_image
+  // .limit(1000), so the set changed between calls; and it divided ALL photos by live
+  // listings, which are different populations (listing_image keeps a row after the
+  // listing sells) — 44,656 / 28,408 = 157.2%, clamped to 100% by a Math.min. Now it is
+  // a real join on (platform, listing_ref), bounded 0-100 by construction.
   const { data: photoRows, error: photoErr } = await sb.rpc("listing_photo_coverage");
   if (photoErr) throw new Error(`listing_photo_coverage failed: ${photoErr.message}`);
-  const photo = (photoRows as Array<{ platforms: string[] | null; image_count: number; live_listing_count: number }> | null)?.[0];
+  const photo = (photoRows as Array<{ platforms: string[] | null; live_listing_count: number; with_photo_count: number }> | null)?.[0];
   const photoPlatforms = photo?.platforms ?? [];
   if (photoPlatforms.length > 0) {
     const live = Number(photo?.live_listing_count ?? 0);
     coverage.push({
       id: "coverage-listing-images",
       label: `Listing photos (${photoPlatforms.join(", ")})`,
-      pct: live === 0 ? 0 : Math.min(100, (100 * Number(photo?.image_count ?? 0)) / live),
+      pct: live === 0 ? 0 : (100 * Number(photo?.with_photo_count ?? 0)) / live,
       action: "Check the feed ingest's image upsert (listing_image) in the TLC action.",
     });
   }
