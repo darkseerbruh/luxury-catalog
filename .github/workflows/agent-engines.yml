@@ -95,7 +95,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run the engine
+      - id: run
+        name: Run the engine
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ github.token }}
@@ -116,18 +117,29 @@ jobs:
             --permission-mode bypassPermissions \
             --output-format text \
             2>&1 | tee "engine-$engine.log"
-          echo "Engine exited ${PIPESTATUS[0]}"
+          # Same false-green trap as the supervisor: the exit code must survive
+          # the pipe, or a crashed engine writes a green heartbeat and the
+          # watchdog is satisfied by a corpse.
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo "Engine exited $code"
+          exit "$code"
 
-      - name: Write the engine's heartbeat (always, pass or fail)
+      - name: Write the engine's heartbeat (always, and truthfully)
         if: always()
+        env:
+          CODE: ${{ steps.run.outputs.exit_code }}
         run: |
           engine="${{ steps.pick.outputs.engine }}"
+          result="failure"
+          [ "${CODE:-1}" = "0" ] && result="success"
           mkdir -p reports/heartbeat
           cat > "reports/heartbeat/$engine.json" <<EOF
           {
             "at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "engine": "$engine",
-            "result": "${{ job.status }}",
+            "result": "$result",
+            "exitCode": ${CODE:-null},
             "run": "${{ github.run_id }}"
           }
           EOF

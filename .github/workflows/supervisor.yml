@@ -64,6 +64,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
@@ -77,7 +78,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run the supervisor
+      - id: run
+        name: Run the supervisor
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ github.token }}
@@ -92,26 +94,44 @@ jobs:
           AWIN_MYGEMMA_FEED_URL: ${{ secrets.AWIN_MYGEMMA_FEED_URL }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
+          # The exit code MUST survive the pipe. Piping into tee and then
+          # trusting $? reports the PIPE's status, which is the exact "false
+          # green" bug that made a failed landing look successful in July, and
+          # which the supervisor's own first run caught here. A self-repair loop
+          # that cannot see its own failure is worse than no loop at all.
           set -uo pipefail
           claude -p "$(cat .github/supervisor-prompt.md)" \
             --model opus \
             --permission-mode bypassPermissions \
             --output-format text \
             2>&1 | tee supervisor-run.log
-          echo "Supervisor exited ${PIPESTATUS[0]}"
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo "Supervisor exited $code"
+          exit "$code"
 
-      - name: Write the heartbeat (always, pass or fail)
+      - name: Write the heartbeat (always, and truthfully)
         if: always()
+        env:
+          # The supervisor's OWN exit code, not job.status. job.status is
+          # 'success' while the job is still running, so it reported green for a
+          # crashed run. A heartbeat that lies is the failure this whole layer
+          # exists to prevent.
+          CODE: ${{ steps.run.outputs.exit_code }}
         run: |
           mkdir -p reports/heartbeat
+          result="failure"
+          [ "${CODE:-1}" = "0" ] && result="success"
           cat > reports/heartbeat/supervisor.json <<EOF
           {
             "at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "engine": "supervisor",
-            "result": "${{ job.status }}",
+            "result": "$result",
+            "exitCode": ${CODE:-null},
             "run": "${{ github.run_id }}"
           }
           EOF
+          cat reports/heartbeat/supervisor.json
 
       - name: Commit whatever the run produced
         if: always()

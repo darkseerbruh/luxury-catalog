@@ -152,70 +152,78 @@ const ENGINES: Engine[] = [
     kind: "heartbeat",
     maxSilentHours: 36,
     matters:
-      "Twice daily. Reads vendor mail and acts on breakage. Went silent 2026-08-17 and nobody knew for 10 days.",
+      "Twice daily. Reads vendor mail and acts on breakage. BLOCKED on the Gmail connector, which needs a one-time human OAuth consent; it cannot run in CI until then.",
   },
   {
     id: "analyst-daily-scan",
     label: "Analyst daily scan",
     kind: "heartbeat",
     maxSilentHours: 60,
-    matters: "Daily strategy scan. Silent since 2026-08-17.",
+    matters:
+      "Daily strategy scan. Cloud-hosted in agent-engines.yml since 2026-08-27; a red here means the Actions run failed, not a closed laptop.",
   },
   {
     id: "analyst-weekly-brief",
     label: "Analyst weekly brief",
     kind: "heartbeat",
     maxSilentHours: 240,
-    matters: "Weekly brief + auto-implements AUTO-class decisions. Silent since 2026-08-17.",
+    matters:
+      "Weekly brief + auto-implements AUTO-class decisions. BLOCKED on the Gmail connector for delivery; needs a one-time human OAuth consent.",
   },
   {
     id: "social-engine-weekly",
     label: "Social engine (weekly)",
     kind: "heartbeat",
     maxSilentHours: 240,
-    matters: "Builds the draft runway. Silent since 2026-08-17.",
+    matters:
+      "Builds the draft runway. BLOCKED on the Metricool + Notion connectors; needs a one-time human OAuth consent.",
   },
   {
     id: "social-engine-pulse",
     label: "Social engine (pulse)",
     kind: "heartbeat",
     maxSilentHours: 240,
-    matters: "Monday breakout check. Silent since 2026-08-17.",
+    matters:
+      "Monday breakout check. BLOCKED on the Metricool + Notion connectors; needs a one-time human OAuth consent.",
   },
   {
     id: "article-engine-weekly",
     label: "Article engine",
     kind: "heartbeat",
     maxSilentHours: 240,
-    matters: "Writes article drafts. Silent since 2026-08-17.",
+    matters:
+      "Writes article drafts. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
   {
     id: "dictionary-gap-report",
     label: "Dictionary gap report",
     kind: "heartbeat",
     maxSilentHours: 240,
-    matters: "Ranks missing models; promotion is the catalog bottleneck. Silent since 2026-08-17.",
+    matters:
+      "Ranks missing models; promotion is the catalog bottleneck. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
   {
     id: "archivist-monthly-pull",
     label: "Archivist standing pull",
     kind: "heartbeat",
     maxSilentHours: 408,
-    matters: "1st + 15th. Feeds the article + social backlogs.",
+    matters:
+      "1st + 15th. Feeds the article + social backlogs. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
   {
     id: "market-report-monthly",
     label: "Monthly market report",
     kind: "heartbeat",
     maxSilentHours: 816,
-    matters: "Monthly. Last ran 2026-08-02.",
+    matters: "Monthly. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
   {
     id: "venue-terms-refresh-monthly",
     label: "Venue terms refresh",
     kind: "heartbeat",
     maxSilentHours: 816,
-    matters: "Re-verifies published seller fees. Stale fees are a factual claim going wrong.",
+    matters:
+      "Re-verifies published seller fees; a stale fee is a factual claim going wrong. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
 
   // ---- the autonomy layer watching itself ----
