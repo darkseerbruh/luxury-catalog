@@ -217,6 +217,24 @@ const ENGINES: Engine[] = [
     maxSilentHours: 816,
     matters: "Re-verifies published seller fees. Stale fees are a factual claim going wrong.",
   },
+
+  // ---- the autonomy layer watching itself ----
+  {
+    id: "supervisor",
+    label: "Supervisor (self-repair loop)",
+    kind: "heartbeat",
+    maxSilentHours: 18,
+    matters:
+      "Runs every 6h and repairs everything else. If IT goes quiet nothing gets fixed and no alarm fires, so this is the tightest window on the board.",
+  },
+  {
+    id: "weekly-digest",
+    label: "Weekly digest",
+    kind: "heartbeat",
+    maxSilentHours: 240,
+    matters:
+      "The owner's single scheduled contact with the system. Silence here means she hears nothing and assumes fine.",
+  },
 ];
 
 interface Finding {

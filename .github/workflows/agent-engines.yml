@@ -1,0 +1,149 @@
+name: Agent engines (cloud-hosted)
+
+# The engines that used to run on the owner's Mac. On 2026-08-17 all twelve
+# stopped because the machine closed, and nothing said so for ten days, while
+# every cloud workflow kept running through the same month. The host was the
+# bug, so the connector-free engines live here now.
+#
+# One workflow, many crons: the step below maps the firing cron to an engine and
+# runs its brief from .github/engines/<id>.md, wrapped in _preamble.md which
+# overrides the local-path and MCP assumptions in the original briefs.
+#
+# NOT ported, because they need an interactively-authorized MCP connector that
+# does not exist in CI: vendor-inbox-scan (Gmail), social-engine-weekly and
+# social-engine-pulse (Metricool + Notion), analyst-weekly-brief (Gmail).
+# Those stay in docs/escalation-queue.md until the owner authorizes the
+# connectors, which is a genuinely human-only step.
+
+on:
+  schedule:
+    - cron: "10 12 * * *"      # analyst-daily-scan          — daily
+    - cron: "0 13 * * 2"       # article-engine-weekly       — Tuesdays
+    - cron: "0 13 * * 3"       # dictionary-gap-report       — Wednesdays
+    - cron: "0 11 1 * *"       # market-report-monthly       — 1st
+    - cron: "0 14 1 * *"       # venue-terms-refresh-monthly — 1st
+    - cron: "30 13 1,15 * *"   # archivist-monthly-pull      — 1st + 15th
+    - cron: "0 15 * * 0"       # weekly-digest               — Sundays
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: "Engine id to run (matches .github/engines/<id>.md)"
+        required: true
+        type: choice
+        options:
+          - analyst-daily-scan
+          - article-engine-weekly
+          - dictionary-gap-report
+          - market-report-monthly
+          - venue-terms-refresh-monthly
+          - archivist-monthly-pull
+          - weekly-digest
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  # Serialized on purpose: two engines landing on main at once is how the
+  # migration-prefix collision happened in July.
+  group: agent-engines
+  cancel-in-progress: false
+
+jobs:
+  run-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: pick
+        name: Map the firing cron to an engine
+        run: |
+          set -euo pipefail
+          case "${{ github.event.schedule }}" in
+            "10 12 * * *")    engine=analyst-daily-scan ;;
+            "0 13 * * 2")     engine=article-engine-weekly ;;
+            "0 13 * * 3")     engine=dictionary-gap-report ;;
+            "0 11 1 * *")     engine=market-report-monthly ;;
+            "0 14 1 * *")     engine=venue-terms-refresh-monthly ;;
+            "30 13 1,15 * *") engine=archivist-monthly-pull ;;
+            "0 15 * * 0")     engine=weekly-digest ;;
+            *)                engine="${{ inputs.engine }}" ;;
+          esac
+          if [ -z "$engine" ] || [ ! -f ".github/engines/$engine.md" ]; then
+            echo "::error::No brief for engine '$engine'"
+            exit 1
+          fi
+          echo "engine=$engine" >> "$GITHUB_OUTPUT"
+          echo "Running engine: $engine"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Configure git for the bot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run the engine
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          CJ_API_TOKEN: ${{ secrets.CJ_API_TOKEN }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          AWIN_MYGEMMA_FEED_URL: ${{ secrets.AWIN_MYGEMMA_FEED_URL }}
+        run: |
+          set -uo pipefail
+          engine="${{ steps.pick.outputs.engine }}"
+          cat .github/engines/_preamble.md ".github/engines/$engine.md" > /tmp/brief.md
+          claude -p "$(cat /tmp/brief.md)" \
+            --model opus \
+            --permission-mode bypassPermissions \
+            --output-format text \
+            2>&1 | tee "engine-$engine.log"
+          echo "Engine exited ${PIPESTATUS[0]}"
+
+      - name: Write the engine's heartbeat (always, pass or fail)
+        if: always()
+        run: |
+          engine="${{ steps.pick.outputs.engine }}"
+          mkdir -p reports/heartbeat
+          cat > "reports/heartbeat/$engine.json" <<EOF
+          {
+            "at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "engine": "$engine",
+            "result": "${{ job.status }}",
+            "run": "${{ github.run_id }}"
+          }
+          EOF
+
+      - name: Commit whatever the engine produced
+        if: always()
+        run: |
+          set -euo pipefail
+          git add reports docs 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(${{ steps.pick.outputs.engine }}): run $(date -u +%F)"
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            git pull --rebase
+          done
+          git push

@@ -1,0 +1,10 @@
+
+You are running the Luxury Catalog ARCHIVIST MONTHLY STANDING PULL. Unattended scheduled run, no memory of prior conversations; work fully autonomously.
+
+Work in a fresh temp worktree off origin/main: from /Users/ariellecoambes/Documents/luxury-catalog-analyst run `git worktree add /tmp/archivist-pull-$(date +%s) origin/main` and work there. Remove it at the end. Doc-only output; land via `bash scripts/land-to-main.sh`.
+
+1. Read docs/seasonal-archive-worklist.md and pick the next 2-3 open (⬜) items, oldest/highest-priority first.
+2. Invoke the `archivist` subagent (subagent_type: "archivist") with those items: "Work these seasonal-archive worklist items per your standing method. Free-tier paths only (Firecrawl free tier, WebSearch; no paid scrapers, no logins). Every name/date/claim carries its source + capture date; never invent a seasonal name — omit and mark unverified instead. Write findings into docs/research-drafts/seasonal-archive/ following the existing file conventions, tick the worklist items, and return: a 3-line summary + a list of NEW content ideas your findings unlock (each with the evidence pointer)." If the archivist subagent's web tools fail in this unattended session, do the pulls yourself in the main session (Firecrawl MCP / WebSearch) and hand the raw material to the archivist for structuring; if no web path works at all, log the skip in the worklist and stop.
+3. CROSS-FEED the returned ideas: append article-shaped ones to docs/article-backlog.md (signal = "archivist pull $(date +%F)" + evidence pointer, status 💡); add social-shaped ones to the Notion Content Pipeline (Source: Archivist, status 💡 Spark) if Notion is reachable, else to the ledger's "Pending Notion sync" in docs/social-performance-ledger.md.
+4. Land all doc changes with `bash scripts/land-to-main.sh` (docs-only diffs skip the build gate).
+5. Stay silent: no push, no email. The article + social engines pick the ideas up on their own schedules. Only exception: if a finding is genuinely urgent brand-risk material, one push line.
