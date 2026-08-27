@@ -11,16 +11,31 @@ import { useEffect, useRef, useState } from "react";
  * send a confirmation email to an address we don't control, which is a sender-
  * reputation cost we pay before the first real newsletter send.
  *
- * Inert until `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is set: renders nothing and
- * submits no token, so the forms keep working exactly as they do today until
- * the key exists AND Supabase is set to require it. That ordering matters. Turn
- * the Supabase toggle on first with no key here and every signup breaks.
+ * Ordering still matters in one direction: turn the Supabase captcha toggle on
+ * BEFORE this widget is live in prod and every signup breaks, because Supabase
+ * would demand a token the page cannot yet mint. Widget first, toggle second.
  *
  * The script host is allow-listed in next.config.ts (script-src, frame-src,
  * connect-src). Without that, prod blocks it silently while dev looks fine.
  */
 
-const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+/**
+ * The Cloudflare widget for www.luxurycatalog.com, luxurycatalog.com and
+ * localhost (created 2026-08-27, "Luxury Catalog auth forms", Managed mode).
+ *
+ * In code, not an env var, because a Turnstile SITE key is public by design:
+ * it is rendered into the HTML of every page carrying the widget, so there is
+ * nothing here to leak. Its partner SECRET key is the real credential, and that
+ * one lives only in the Supabase dashboard. Keeping the public half in code
+ * follows the house rule (non-secret config in code, secrets in the Vercel or
+ * Supabase UI) and means a deploy is all it takes to turn the widget on.
+ *
+ * The env var still wins if set, which is the escape hatch for rotating the key
+ * or pointing a preview build at a different widget.
+ */
+const DEFAULT_SITE_KEY = "0x4AAAAAAEeQ3P0isTCTt6jP";
+
+const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || DEFAULT_SITE_KEY;
 const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 const SCRIPT_ID = "cf-turnstile-script";
 
