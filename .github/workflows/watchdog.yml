@@ -1,0 +1,99 @@
+name: Watchdog (alarms on silence)
+
+# Alarms when an engine STOPS, which failure alarms structurally cannot do: a
+# job that never starts never fails. Built 2026-08-27 after the twelve local
+# scheduled tasks went quiet on 2026-08-17 and sent nothing for ten days, while
+# the cloud workflows failed loudly the whole time and were noticed immediately.
+#
+# Runs twice a day so a missed heartbeat surfaces within hours, not weeks.
+# Opens one deduped issue per silent engine and closes it on recovery, reusing
+# the data-health issue convention so there is one pattern to learn, not two.
+#
+# Logic + the cadence registry: scripts/watchdog.ts
+
+on:
+  schedule:
+    # 06:05 and 18:05 UTC, off the :00 mark and away from the capture cluster.
+    - cron: "5 6,18 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: watchdog
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Check every engine for silence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npx tsx scripts/watchdog.ts --write
+
+      - name: Open / close silence issues (deduped by exact title + label)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          state=reports/watchdog/state.json
+          today=$(jq -r '.lastRun' "$state")
+          gh label create watchdog --force \
+            --description "Opened by the watchdog when an engine goes silent" \
+            --color 5319E7 >/dev/null 2>&1 || true
+
+          open_json=$(gh issue list --label watchdog --state open --json title,number --limit 100)
+
+          jq -c '.redFindings[]' "$state" | while read -r finding; do
+            title=$(echo "$finding" | jq -r '.title')
+            body=$(echo "$finding" | jq -r '.body')
+            existing=$(echo "$open_json" | jq -r --arg t "$title" '.[] | select(.title == $t) | .number' | head -1)
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body "Still silent on ${today}."
+              echo "Commented on existing #$existing ($title)"
+            else
+              gh issue create --title "$title" --label watchdog --body "$body"
+              echo "Opened issue: $title"
+            fi
+          done
+
+          # Close anything that has started reporting again.
+          echo "$open_json" | jq -r '.[] | "\(.number)\t\(.title)"' | while IFS=$'\t' read -r num title; do
+            still=$(jq -r --arg t "$title" '.redFindings[] | select(.title == $t) | .id' "$state" | head -1)
+            if [ -z "$still" ]; then
+              gh issue close "$num" --comment "Reporting again as of ${today}."
+              echo "Closed recovered #$num ($title)"
+            fi
+          done
+
+      - name: Commit the watchdog report (rebase-retry against racing pushes)
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/watchdog
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(watchdog): report $(date -u +%F)"
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            git pull --rebase
+          done
+          git push

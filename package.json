@@ -12,6 +12,7 @@
     "analytics:digest": "tsx scripts/analytics-digest.ts",
     "analytics:pulse": "tsx scripts/analytics-pulse.ts",
     "health:check": "tsx scripts/data-health.ts",
+    "watchdog": "tsx scripts/watchdog.ts",
     "analyze:deals": "tsx supabase/ingest/analyze-deal-spread.ts",
     "classify:families": "tsx supabase/ingest/classify-spec-families.ts",
     "import:images": "tsx supabase/seed/import-variant-images.ts",
