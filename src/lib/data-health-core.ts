@@ -123,6 +123,12 @@ export interface SourceConfig {
   configuredIntervalDays: number | null;
   /** Spend consequence of running this source faster (shown with cadence findings). */
   costNote: string;
+  /**
+   * Why this source is exempt from scoring (thresholds null). Shown verbatim on the
+   * scorecard so an exempt source explains ITSELF: "paused" and "permanent by design"
+   * are both info-only, but they mean opposite things and want opposite responses.
+   */
+  exemptReason?: string;
 }
 
 export const SOURCES: SourceConfig[] = [
@@ -141,10 +147,18 @@ export const SOURCES: SourceConfig[] = [
     label: "TheRealReal",
     platformMatch: "%realreal%",
     platform: "The RealReal",
-    greenMaxDays: 3,
-    yellowMaxDays: 5,
-    configuredIntervalDays: 2,
+    // EXEMPT because the capture is deliberately paused, not broken. The schedule was
+    // pulled 2026-08-02 in the owner's cost review (69% of July's Apify bill, $68.99 of
+    // $100.01, for ~1.2% of monthly rows). Scored thresholds made the scorecard go RED
+    // every single day for a decision that was made on purpose — on 2026-08-27 it read
+    // "the capture likely stopped running" at 29.9 days. A scorecard that is permanently
+    // red for a known reason trains you to stop reading it.
+    // TO UNPAUSE: restore the cron in trr-refresh.yml AND restore 3 / 5 / 2 below.
+    greenMaxDays: null,
+    yellowMaxDays: null,
+    configuredIntervalDays: null,
     costNote: "paid Apify actor, faster raises the monthly Apify spend",
+    exemptReason: "capture paused 2026-08-02 (owner cost review); not a failure",
   },
   {
     id: "tlc",
@@ -165,6 +179,7 @@ export const SOURCES: SourceConfig[] = [
     yellowMaxDays: null,
     configuredIntervalDays: null, // dispatch-only: exempt from the cadence audit
     costNote: "Apify credits per run; sold comps are permanent, cadence is a spend choice",
+    exemptReason: "dispatch-only by design (sold comps are permanent)",
   },
 ];
 
@@ -213,7 +228,14 @@ export function scoreFreshness(source: SourceConfig, ageDays: number | null): Ch
   }
   const value = `${round1(ageDays)} day(s) since the newest listing observation`;
   if (source.greenMaxDays == null) {
-    return { id, label: `${source.label} freshness`, status: "info", value, metric: ageDays, plainEnglish: "" };
+    return {
+      id,
+      label: `${source.label} freshness`,
+      status: "info",
+      value: source.exemptReason ? `${value} — ${source.exemptReason}` : value,
+      metric: ageDays,
+      plainEnglish: "",
+    };
   }
   let status: CheckStatus = "green";
   if (ageDays > (source.yellowMaxDays as number)) status = "red";
@@ -542,7 +564,7 @@ export function scoreCadenceAudit(source: SourceConfig, lifetimesDays: number[])
       id,
       label,
       status: "info",
-      value: "dispatch-only by design (sold comps are permanent)",
+      value: source.exemptReason ?? "dispatch-only by design (sold comps are permanent)",
       plainEnglish: "",
     };
   }

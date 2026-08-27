@@ -305,31 +305,22 @@ async function main() {
     action: "Queue a page-depth batch; hold unsourced years null (never invent).",
   });
 
-  // Image coverage: listing_image is per live listing (platform, listing_ref),
-  // populated only by feed sources, so measure against the DISTINCT live listings
-  // on the platforms that actually have images.
-  const { data: imgPlatformRows, error: imgErr } = await sb.from("listing_image").select("platform").limit(1000);
-  if (imgErr) throw new Error(`listing_image read failed: ${imgErr.message}`);
-  const imgPlatforms = [...new Set((imgPlatformRows ?? []).map((r) => r.platform as string))];
-  if (imgPlatforms.length > 0) {
-    const imgTotal = await count(sb, "listing_image", (q) => q);
-    // DISTINCT live listings, via RPC (0071). The old per-platform row counts were the
-    // last price_history read still dying on the ~8s timeout after 0070 landed — 8155ms
-    // for The Luxury Closet, which took down run 33120047086. They were also wrong twice
-    // over: they counted price_history ROWS (one per day a listing is observed) against
-    // listing_image rows (one per listing), so the ratio sank a little further every day
-    // on its own; and they matched platform exactly, while listing_image stores 'rebag'
-    // where price_history stores 'Rebag' — so Rebag silently counted 0 and dropped out of
-    // the denominator entirely.
-    const { data: liveCount, error: liveErr } = await sb.rpc("price_history_live_listing_count", {
-      p_platforms: imgPlatforms,
-    });
-    if (liveErr) throw new Error(`price_history_live_listing_count failed: ${liveErr.message}`);
-    const liveOnImgPlatforms = Number(liveCount ?? 0);
+  // Image coverage: photos per live listing, both halves from ONE function (0073).
+  // It used to sample the platform set from an unordered listing_image .limit(1000), so
+  // the set changed between calls and the numerator (ALL photos) was divided by a
+  // denominator covering only the sampled platforms — the 2026-08-27 report read
+  // "Listing photos (myGemma) 100% green", clamped by Math.min. A check that cannot go
+  // below green is not a check.
+  const { data: photoRows, error: photoErr } = await sb.rpc("listing_photo_coverage");
+  if (photoErr) throw new Error(`listing_photo_coverage failed: ${photoErr.message}`);
+  const photo = (photoRows as Array<{ platforms: string[] | null; image_count: number; live_listing_count: number }> | null)?.[0];
+  const photoPlatforms = photo?.platforms ?? [];
+  if (photoPlatforms.length > 0) {
+    const live = Number(photo?.live_listing_count ?? 0);
     coverage.push({
       id: "coverage-listing-images",
-      label: `Listing photos (${imgPlatforms.join(", ")})`,
-      pct: liveOnImgPlatforms === 0 ? 0 : Math.min(100, (100 * imgTotal) / liveOnImgPlatforms),
+      label: `Listing photos (${photoPlatforms.join(", ")})`,
+      pct: live === 0 ? 0 : Math.min(100, (100 * Number(photo?.image_count ?? 0)) / live),
       action: "Check the feed ingest's image upsert (listing_image) in the TLC action.",
     });
   }

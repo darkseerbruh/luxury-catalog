@@ -37,6 +37,7 @@ const TODAY = "2026-07-10";
 const fp = SOURCES.find((s) => s.id === "fashionphile")!;
 const trr = SOURCES.find((s) => s.id === "therealreal")!;
 const ebay = SOURCES.find((s) => s.id === "ebay")!;
+const tlc = SOURCES.find((s) => s.id === "tlc")!;
 
 function check(id: string, status: CheckResult["status"], metric?: number): CheckResult {
   return { id, label: id, status, value: String(metric ?? ""), metric, plainEnglish: status === "green" ? "" : `${id} problem.`, action: "fix it" };
@@ -61,9 +62,17 @@ describe("scoreFreshness", () => {
     expect(scoreFreshness(fp, 1).status).toBe("green");
     expect(scoreFreshness(fp, 2).status).toBe("yellow");
     expect(scoreFreshness(fp, 3).status).toBe("red");
-    expect(scoreFreshness(trr, 3).status).toBe("green");
-    expect(scoreFreshness(trr, 5).status).toBe("yellow");
-    expect(scoreFreshness(trr, 6).status).toBe("red");
+    expect(scoreFreshness(tlc, 2).status).toBe("green");
+    expect(scoreFreshness(tlc, 3).status).toBe("yellow");
+    expect(scoreFreshness(tlc, 4).status).toBe("red");
+  });
+  it("a paused source is info-only and says why, so it stops crying wolf", () => {
+    // TRR's capture was pulled 2026-08-02 in the cost review. Scoring it made the
+    // scorecard RED daily for a deliberate decision.
+    expect(scoreFreshness(trr, 30).status).toBe("info");
+    expect(scoreFreshness(trr, null).status).toBe("info");
+    expect(scoreFreshness(trr, 30).value).toContain("paused");
+    expect(scoreCadenceAudit(trr, []).value).toContain("paused");
   });
   it("eBay is info-only regardless of age", () => {
     expect(scoreFreshness(ebay, 400).status).toBe("info");
