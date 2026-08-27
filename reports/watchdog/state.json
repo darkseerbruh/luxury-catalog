@@ -1,0 +1,97 @@
+{
+  "lastRun": "2026-08-27",
+  "checked": 23,
+  "redFindings": [
+    {
+      "id": "trr-refresh",
+      "title": "Watchdog: TRR capture has gone silent",
+      "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 29d\n- Last success 2026-07-29 07:20 UTC, 29d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 712.0902758333333,
+      "allowedHours": 120
+    },
+    {
+      "id": "vendor-inbox-scan",
+      "title": "Watchdog: Vendor inbox engine has gone silent",
+      "body": "**Vendor inbox engine** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 36h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Twice daily. Reads vendor mail and acts on breakage. Went silent 2026-08-17 and nobody knew for 10 days.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 36
+    },
+    {
+      "id": "analyst-daily-scan",
+      "title": "Watchdog: Analyst daily scan has gone silent",
+      "body": "**Analyst daily scan** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Daily strategy scan. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 60
+    },
+    {
+      "id": "analyst-weekly-brief",
+      "title": "Watchdog: Analyst weekly brief has gone silent",
+      "body": "**Analyst weekly brief** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Weekly brief + auto-implements AUTO-class decisions. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    },
+    {
+      "id": "social-engine-weekly",
+      "title": "Watchdog: Social engine (weekly) has gone silent",
+      "body": "**Social engine (weekly)** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Builds the draft runway. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    },
+    {
+      "id": "social-engine-pulse",
+      "title": "Watchdog: Social engine (pulse) has gone silent",
+      "body": "**Social engine (pulse)** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Monday breakout check. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    },
+    {
+      "id": "article-engine-weekly",
+      "title": "Watchdog: Article engine has gone silent",
+      "body": "**Article engine** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Writes article drafts. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    },
+    {
+      "id": "dictionary-gap-report",
+      "title": "Watchdog: Dictionary gap report has gone silent",
+      "body": "**Dictionary gap report** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Ranks missing models; promotion is the catalog bottleneck. Silent since 2026-08-17.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    },
+    {
+      "id": "archivist-monthly-pull",
+      "title": "Watchdog: Archivist standing pull has gone silent",
+      "body": "**Archivist standing pull** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 408h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: 1st + 15th. Feeds the article + social backlogs.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 408
+    },
+    {
+      "id": "market-report-monthly",
+      "title": "Watchdog: Monthly market report has gone silent",
+      "body": "**Monthly market report** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 816h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Monthly. Last ran 2026-08-02.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 816
+    },
+    {
+      "id": "venue-terms-refresh-monthly",
+      "title": "Watchdog: Venue terms refresh has gone silent",
+      "body": "**Venue terms refresh** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 816h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Re-verifies published seller fees. Stale fees are a factual claim going wrong.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 816
+    },
+    {
+      "id": "supervisor",
+      "title": "Watchdog: Supervisor (self-repair loop) has gone silent",
+      "body": "**Supervisor (self-repair loop)** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 18h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Runs every 6h and repairs everything else. If IT goes quiet nothing gets fixed and no alarm fires, so this is the tightest window on the board.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 18
+    },
+    {
+      "id": "weekly-digest",
+      "title": "Watchdog: Weekly digest has gone silent",
+      "body": "**Weekly digest** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: The owner's single scheduled contact with the system. Silence here means she hears nothing and assumes fine.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
+      "silentHours": null,
+      "allowedHours": 240
+    }
+  ]
+}
