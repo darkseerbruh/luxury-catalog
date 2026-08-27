@@ -92,7 +92,6 @@ function readLiveRefs(snapshotPath: string): Set<string> {
   return refs;
 }
 
-type AvailRow = { platform: string | null; listing_ref: string | null };
 
 // A listed row counts as "currently shown" unless we've already retired it: status
 // 'available' OR null (legacy rows loaded before 0030 — the existing backlog we want
@@ -154,57 +153,43 @@ async function resolvePlatforms(loose: string): Promise<string[]> {
 type DatedRow = { platform: string | null; listing_ref: string | null; observed_on: string | null };
 
 /**
- * Page every still-shown listed row for the resolved platform(s), KEYSET-style.
+ * Every DISTINCT live listing for the resolved platform(s), newest observation each.
  *
- * WHY NOT .range(): PostgREST turns .range(from, from+999) into OFFSET/LIMIT. Postgres
- * still has to walk and discard every row before the offset, so page N costs N times
- * page 1 — and with no ORDER BY the window isn't even stable between pages. Fashionphile
- * is our biggest platform (~20k+ listed rows = 20+ pages), so its deep offsets were the
- * first to blow past Supabase's ~8s statement_timeout: the 57014 failures on the
- * "Retire sold / pulled listings" step (11 of 39 market-refresh runs, 2026-07-12..19).
+ * WHY AN RPC AND NOT MORE PAGING: 0070 indexed the keyset walk and it does now complete
+ * on an idle DB (Fashionphile 33 pages / 71.6s, Rebag 656 pages / 160.5s, measured
+ * 2026-08-27). But the worst single page was 7626ms against PostgREST's hard ~8s ceiling,
+ * and reconcile runs right after the crawl's write burst — which is where Fashionphile
+ * still 57014'd on run 33120050378. No index raises that ceiling. Doing the work inside a
+ * function with its own statement_timeout does (0071).
  *
- * Keyset paging seeks on the primary key instead (price_id > cursor, ordered, limit),
- * so every page is a constant-cost index range read no matter how deep it goes. The
- * ordering also makes the sweep stable, which the offset version never was.
+ * WHY IT IS ALSO LESS WORK: both reconcile modes need only the distinct listing_refs, but
+ * a live listing accumulates one available row per day it is observed, so reading rows to
+ * derive refs grew daily for a result that barely moves — 655,786 Rebag rows in for
+ * ~18,800 refs out. reconcile_available_listings() dedupes in the DB instead.
+ *
+ * PAGED ANYWAY: every PostgREST response caps at 1000 rows regardless of limit, so an
+ * unpaged .rpc() would silently under-read and under-retire. Keyset on listing_ref, one
+ * platform per call so the cursor stays a single column.
  */
-async function fetchRowsKeyset<T extends { price_id: number }>(
-  platforms: string[],
-  columns: string,
-): Promise<T[]> {
-  if (platforms.length === 0) return [];
-  const all: T[] = [];
+async function fetchLiveListings(platforms: string[]): Promise<DatedRow[]> {
+  const all: DatedRow[] = [];
   const PAGE = 1000;
-  let cursor = 0;
-  for (;;) {
-    const { data, error } = await supabaseAdmin
-      .from("price_history")
-      .select(columns)
-      .eq("price_type", "listed")
-      .or(NOT_RETIRED)
-      .in("platform", platforms)
-      .gt("price_id", cursor)
-      .order("price_id", { ascending: true })
-      .limit(PAGE);
-    if (error) throw error;
-    const rows = (data ?? []) as unknown as T[];
-    all.push(...rows);
-    if (rows.length < PAGE) break;
-    cursor = rows[rows.length - 1].price_id;
+  for (const platform of platforms) {
+    let after = "";
+    for (;;) {
+      const { data, error } = await supabaseAdmin.rpc("reconcile_available_listings", {
+        p_platforms: [platform],
+        p_after: after,
+        p_limit: PAGE,
+      });
+      if (error) throw error;
+      const rows = (data ?? []) as Array<{ platform: string | null; listing_ref: string | null; last_seen: string | null }>;
+      for (const r of rows) all.push({ platform: r.platform, listing_ref: r.listing_ref, observed_on: r.last_seen });
+      if (rows.length < PAGE) break;
+      after = rows[rows.length - 1].listing_ref as string;
+    }
   }
   return all;
-}
-
-/** Page through every still-shown listed row for the resolved platform(s). */
-async function fetchAvailableRows(platforms: string[]): Promise<AvailRow[]> {
-  return fetchRowsKeyset<AvailRow & { price_id: number }>(platforms, "price_id, platform, listing_ref");
-}
-
-/** Page every still-shown listed row for the resolved platform(s), WITH observed_on. */
-async function fetchDatedRows(platforms: string[]): Promise<DatedRow[]> {
-  return fetchRowsKeyset<DatedRow & { price_id: number }>(
-    platforms,
-    "price_id, platform, listing_ref, observed_on",
-  );
 }
 
 /**
@@ -221,7 +206,7 @@ async function ageReconcile(platform: string, ageDays: number, write: boolean, f
     console.error(`\nABORT: no listed rows match platform "${platform}" — nothing to reconcile.`);
     process.exit(1);
   }
-  const rows = await fetchDatedRows(platforms);
+  const rows = await fetchLiveListings(platforms);
   const today = new Date();
   const cutoff = new Date(today.getTime() - ageDays * 86_400_000).toISOString().slice(0, 10);
   const todayStr = today.toISOString().slice(0, 10);
@@ -313,7 +298,7 @@ async function main() {
     console.error(`\nABORT: no listed rows match platform "${flags.platform}" — nothing to reconcile.`);
     process.exit(1);
   }
-  const rows = await fetchAvailableRows(platforms);
+  const rows = await fetchLiveListings(platforms);
   const today = new Date().toISOString().slice(0, 10);
 
   // Gone = currently available, keyed, but absent from the fresh live set.
@@ -323,7 +308,7 @@ async function main() {
   console.log(`\nReconcile resale listings — ${flags.write ? "WRITE" : "DRY RUN"}`);
   console.log(`  platform match: "${flags.platform}" -> [${platforms.join(", ")}]`);
   console.log(`  live in snapshot: ${liveRefs.size}`);
-  console.log(`  available in DB:  ${rows.length}`);
+  console.log(`  live listings in DB: ${rows.length}`);
   console.log(`  would retire:     ${goneRefs.length}`);
 
   if (liveRefs.size === 0) {
@@ -334,6 +319,10 @@ async function main() {
     console.log("\nNothing to retire (every available listing is still in the live snapshot).");
     return;
   }
+  // Like-for-like since 0071: both sides are now DISTINCT listings. This guard used to
+  // divide distinct gone refs by total available ROWS, and with a live listing holding one
+  // row per day observed (655,786 Rebag rows behind ~18,800 refs on 2026-08-27) the ratio
+  // could never reach 0.5 — a broken crawl would have sailed straight past it.
   if (!flags.force && rows.length > 0 && goneRefs.length / rows.length > flags.maxRetireFrac) {
     console.error(
       `\nABORT: would retire ${goneRefs.length}/${rows.length} (> ${Math.round(

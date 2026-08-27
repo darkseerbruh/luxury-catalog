@@ -306,19 +306,26 @@ async function main() {
   });
 
   // Image coverage: listing_image is per live listing (platform, listing_ref),
-  // populated only by feed sources (TLC today), so measure against live listed
-  // rows on the platforms that actually have images.
+  // populated only by feed sources, so measure against the DISTINCT live listings
+  // on the platforms that actually have images.
   const { data: imgPlatformRows, error: imgErr } = await sb.from("listing_image").select("platform").limit(1000);
   if (imgErr) throw new Error(`listing_image read failed: ${imgErr.message}`);
   const imgPlatforms = [...new Set((imgPlatformRows ?? []).map((r) => r.platform as string))];
   if (imgPlatforms.length > 0) {
     const imgTotal = await count(sb, "listing_image", (q) => q);
-    let liveOnImgPlatforms = 0;
-    for (const p of imgPlatforms) {
-      liveOnImgPlatforms += await count(sb, "price_history", (q) =>
-        q.eq("price_type", "listed").or("listing_status.is.null,listing_status.eq.available").eq("platform", p),
-      );
-    }
+    // DISTINCT live listings, via RPC (0071). The old per-platform row counts were the
+    // last price_history read still dying on the ~8s timeout after 0070 landed — 8155ms
+    // for The Luxury Closet, which took down run 33120047086. They were also wrong twice
+    // over: they counted price_history ROWS (one per day a listing is observed) against
+    // listing_image rows (one per listing), so the ratio sank a little further every day
+    // on its own; and they matched platform exactly, while listing_image stores 'rebag'
+    // where price_history stores 'Rebag' — so Rebag silently counted 0 and dropped out of
+    // the denominator entirely.
+    const { data: liveCount, error: liveErr } = await sb.rpc("price_history_live_listing_count", {
+      p_platforms: imgPlatforms,
+    });
+    if (liveErr) throw new Error(`price_history_live_listing_count failed: ${liveErr.message}`);
+    const liveOnImgPlatforms = Number(liveCount ?? 0);
     coverage.push({
       id: "coverage-listing-images",
       label: `Listing photos (${imgPlatforms.join(", ")})`,
