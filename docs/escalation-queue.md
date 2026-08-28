@@ -213,3 +213,204 @@ live run.
   `discovered_listing` in Supabase instead of the raw dumps, or commit/publish the
   dumps somewhere CI can fetch. Until then, treat alias aggregation as a manual
   step on the Mac.
+
+---
+
+## 2026-08-28 00:32 UTC — supervisor run (DRY_RUN=false)
+
+**Read this one first. The supervisor cannot land code.** It found and wrote six
+fixes and could not ship a single one of them, for three reasons that have
+nothing to do with the fixes. The mandate is "fix it, do not ask", and the
+machinery to do that does not currently exist. That is the finding of this run;
+the six fixes are secondary.
+
+### The board, verified
+
+Capture is healthy. Fashionphile, TLC, Rebag, myGemma, Redeluxe, Couture USA and
+Ann's all green, no holes in the price record. Credentials: 8 checked, 0 red.
+Every "still open" item from the 2026-08-27 dry run was re-checked against the
+tree rather than trusted, and four were already closed overnight by `9b2ce35`
+and `0b5a819` — those were not fixed twice. Details under "verified" below.
+
+### The three blockers
+
+**B1. The green gate cannot run in CI. (NOT AUTOMATED YET — P0)**
+
+`scripts/land-to-main.sh` runs `next build`. The build prerenders `/social`,
+which reads Supabase through `src/lib/supabase.ts:15` and needs
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`. `supervisor.yml`'s env block passes nine
+secrets and that is not one of them, so the build dies:
+
+```
+Error: supabaseKey is required.
+Export encountered an error on /social/page: /social, exiting the build.
+⛔ land-to-main: green gate FAILED at step: build
+```
+
+The gate has only ever run on the owner's Mac, where `.env.local` supplies it.
+Nothing in Actions has ever executed `next build`, so this has been true since
+the supervisor was written and only surfaced now, on the first run that tried to
+land something.
+
+Consequence: the supervisor can land **docs only**. `gate_scope` in
+`land-to-main.sh` skips the gate for `*.md`, `docs/`, `.claude/` and
+`scripts/*.sh`; every other path takes the full gate, which cannot pass. This
+entry landed. The six fixes did not.
+
+Fix, in preference order:
+1. Add `NEXT_PUBLIC_SUPABASE_ANON_KEY` to repo secrets and to the env blocks in
+   `supervisor.yml` and `agent-engines.yml`. The key is public by design
+   (`docs/security-baseline.md:17`), so this is not a secrecy decision, but
+   reading it out of the Supabase dashboard is a login, so **the owner adds it
+   once**. Everything after that is automated.
+2. Do **not** substitute `SUPABASE_SERVICE_ROLE_KEY`. A `NEXT_PUBLIC_*` var is
+   inlined into client bundles at build time; that would publish the service
+   role key to every visitor. Flagged here because it is the obvious shortcut
+   and it is a serious one.
+
+Separately worth fixing on its own merits: `/social` is the only data page in
+`src/app` with no `dynamic`/`revalidate` export, so it prerenders at build time
+while every sibling data page does not. The docstring on `getSupabase()` says
+the lazy client exists specifically so a keyless environment does not crash the
+build; it defers the crash rather than preventing it. **Not changed this run.**
+Altering how a live user surface renders, with no ability to smoke-test it (see
+B3) and only to unblock my own pipeline, is the tail wagging the dog.
+
+**B2. The token cannot modify workflow files. (Human required — §2)**
+
+Two of the six fixes are one-line job-timeout changes in `.github/workflows/`.
+The push was rejected outright:
+
+```
+! [remote rejected] refusing to allow a GitHub App to create or update workflow
+  `.github/workflows/agent-engines.yml` without `workflows` permission
+```
+
+This is not a `permissions:` block that can be widened. GitHub does not grant
+`GITHUB_TOKEN` the `workflow` scope at all; it requires a PAT (or a GitHub App
+with that permission) stored as a secret. Minting one is a login behind 2FA, so
+this is genuinely §2 — the first §2 item on this board that is not an OAuth
+consent screen.
+
+Until then, **no engine can repair its own schedule, timeout, secret list, or
+cron**, which is a large share of what actually breaks here. Two of six this run.
+
+**B3. Actions cannot open pull requests. (NOT AUTOMATED YET — P1)**
+
+The fallback for B1/B2 was to open a PR for review. Also refused:
+
+```
+GraphQL: GitHub Actions is not permitted to create or approve pull requests
+```
+
+That is the repo/org setting *Allow GitHub Actions to create and approve pull
+requests*, which is off. Turning it on is a settings toggle, not a credential.
+With all three blockers live, the supervisor's only outputs are a pushed branch
+and a docs commit. Supervisor-standard §1 lists "open a PR" as something it may
+do; right now it cannot.
+
+### Written, tested, pushed — not landed
+
+Branch **`fix/watchdog-truthful-0828`** (pushed, 4 commits off `main`). Each
+passes `npx tsc --noEmit` and `npx eslint scripts/watchdog.ts`, and each was
+verified against a live `npx tsx scripts/watchdog.ts` before commit. Merging it
+needs a human until B1 or B3 is cleared.
+
+| Commit | Defect |
+| --- | --- |
+| `0ff8db6` | Watchdog read `beat.at` and ignored `beat.result`, so a heartbeat reporting `failure` counted as a live engine |
+| `d55398f` | No concept of a paused lane: TRR red forever, and the issue body told an unattended agent to re-run a pay-per-result Apify actor |
+| `a831396` | Every heartbeat issue ended with "if it lives on a laptop, that is the bug" — false for the eight now in Actions, misleading for the four behind an OAuth gate |
+| `8dfbadd` | Four scheduled workflows (`catalog-promote`, `fashionphile-enrich`, `ebay-midtier-refresh`, `analytics-digest`) were in no registry at all |
+
+Item 1 was not a theory. `reports/heartbeat/dictionary-gap-report.json` carried
+`"result": "failure"` from run 33127509241 at the moment this run started, and
+the watchdog reported that engine **green**. After the fix the same state reads
+`RAN AND FAILED`. That is the July false-green bug at its third level: the
+runner lied, `9b2ce35` made the runner honest, and the reader was still deaf.
+
+Item 4 is the quiet one, and it is the reason two more problems below went
+unseen. A **cancelled** job sends no failure mail. `catalog-promote` was in no
+registry either. So seventeen days of a stalled catalogue build-out passed with
+nothing anywhere saying so.
+
+**Blocked by B2 — two one-line changes a human can paste in 30 seconds:**
+
+- `.github/workflows/catalog-promote.yml:42` — `timeout-minutes: 30` → `90`.
+  The normalise step is the whole cost and it scales with `discovered_listing`:
+  2m (07-13), 3m, 6m, 14m, 29m30s (08-10), then killed at 30m on 08-17 and
+  08-24 with the promote step never starting. Two weekly reports lost. Nothing
+  is hanging; the table outgrew the budget.
+- `.github/workflows/agent-engines.yml:56` — `timeout-minutes: 40` → `90`.
+  Run 33127509241 (dictionary-gap-report) was cancelled at 39m31s. It got as far
+  as appending to this file and produced no gap report, so that week's output is
+  simply missing. An Opus run over the live catalogue was sized like a script
+  step.
+
+### Verified already fixed — did not fix twice
+
+- **Runners discard their exit code** (2026-08-27 item 1) — closed by `9b2ce35`.
+  Confirmed in the wild, not by reading: run 33127509241 was killed and its
+  heartbeat recorded `failure`, not `job.status`. That truthful heartbeat is
+  what exposed the watchdog defect above.
+- **`SUPABASE_DB_PASSWORD` missing from the sentinel-refresh env** (item 3) —
+  closed by `9b2ce35`. `reports/credentials/state.json` has zero red findings
+  this run, where it previously carried a false human-required flag.
+- **`supervisor-run.log` untracked and unignored** (item 7) — closed by `9b2ce35`.
+- **`agent-engines.yml` had never executed** (item 6) — it has now, twice, and
+  needed no dispatch to prove anything: 33127060327 died `exit 128` on a bare
+  `git push` (closed by `0b5a819`) and 33127509241 hit the timeout (above).
+- **TRR "silent 29 days"** (2026-08-27 seeded) — diagnosed intentional last run,
+  confirmed again. Superseded; see below.
+
+### Still open, beyond the blockers
+
+**1. `catalog-promote` normalises the whole table every week. (NOT AUTOMATED YET — P2)**
+
+The timeout bump buys headroom, not a cure. The pass re-scans all of
+`discovered_listing` every run and the cost has roughly doubled per fortnight
+since July, so 90 minutes buys a few months and then this recurs. The real fix
+is to normalise only rows unseen since the last run; `promoted_at` already gives
+the watermark. Not attempted this run — a script rewrite against live data
+deserves its own run, not the tail end of this one.
+
+**2. `classify-families` dies on a Supabase statement timeout. (NOT AUTOMATED YET — P3)**
+
+Run 30698050292 (2026-08-01) failed with `57014 canceling statement due to
+statement timeout`. Manual-dispatch only and nothing depends on it on a
+schedule, so it has sat red 27 days without consequence. Same shape as item 1:
+an unbounded query over a table that outgrew it. Left for the same run.
+
+**3. `npm run aggregate:aliases` cannot run in Actions. (NOT AUTOMATED YET — P3)**
+
+Carried unchanged. It reads `data/ingest/_raw/`, gitignored and absent in a
+fresh clone. Point it at `discovered_listing` in Supabase instead.
+
+**4. The supervisor's own 45-minute budget is the next version of this bug. (NOT AUTOMATED YET — P2)**
+
+Two of the six fixes above were timeouts sized for scripts rather than agent
+runs. `supervisor.yml:43` has the same shape: 45 minutes to triage the board,
+read logs, write fixes, and run a full `next build` per landing. This run fit
+only because the build failed fast. It is also a workflow file, so B2 blocks it.
+
+### Human required — genuinely §2
+
+- **A PAT with `workflow` scope** (B2, new this run). Without it no engine can
+  repair its own schedule or timeout. This is the highest-value single item on
+  the board: it converts a whole class of breakage from "escalate" to "fixed".
+- **`NEXT_PUBLIC_SUPABASE_ANON_KEY` in repo secrets** (B1, new this run). Only
+  the reading of it is human; the key itself is public by design.
+- **Apify, Metricool, Gmail and Notion connectors are unauthorized.** Carried.
+  The consent screen is the gate. Blocks `vendor-inbox-scan`,
+  `social-engine-weekly`, `social-engine-pulse`, `analyst-weekly-brief`. Their
+  watchdog issues will stop blaming a laptop once `a831396` merges.
+- **No `VERCEL_TOKEN` in repo secrets.** Carried. No deploy was needed this run.
+
+### One thing that is not an escalation
+
+**TRR capture is not broken and must not be "fixed".** Schedule pulled
+2026-08-02 in the owner's cost review — 69% of July's Apify bill, $68.99 of
+$100.01, for ~1.2% of monthly rows. The watchdog called it red for 29 days and
+told the reader *"the supervisor can re-run and repair it"*, which is an
+unattended agent being instructed to spend money. `d55398f` fixes the advice.
+Resuming the lane is §2 and hers.
