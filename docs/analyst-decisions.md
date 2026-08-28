@@ -11,6 +11,28 @@ The `analyst` subagent appends here on every daily scan + weekly brief; flip a S
 
 ---
 
+### 2026-08-27 DECISION: Paste the Turnstile SECRET into Supabase now — the widget is live in prod and /signup just took a 50x bot surge
+
+- **Evidence:** All PostHog, prod host only (`www.luxurycatalog.com`), pulled 2026-08-28T03:37Z.
+  - **`/signup` pageviews: 61 in the last 7d vs 1 in the prior 7d.** On 2026-08-27 alone: **49 pageviews from 49 distinct persons**, one pageview each, no second event. It is now the site's #1 entry page (66 entries, 7d), ahead of the Coach authentication article (40).
+  - **Signature of the surge (2d window):** `$direct` + Chrome on Linux dominates — 149 distinct persons US/Linux/direct, then UK 23, France 15, Singapore 13, Japan 9. Same fingerprint flagged in the 2026-07-25 bot decision below.
+  - **Site-wide daily visitors:** 2026-08-26 = 112 and 2026-08-27 = 185, against a 30d daily baseline of 16 to 38 (pulse `traffic.by_day`, 2026-07-29 → 2026-08-28). This is what is driving the pulse's `wow_change_pct: 86`; it is not audience growth.
+  - **Precedent, in her own code:** `src/components/TurnstileField.tsx:5-13` records six bot accounts registered through the open form 2026-07-10 → 2026-07-23 (deleted 2026-07-26), each one making Supabase send a confirmation email to an address we do not control.
+  - **Widget state:** the live site key `0x4AAAAAAEeQ3P0isTCTt6jP` is present in the deployed prod bundle (`/_next/static/chunks/1s827s1nul2t7.js`, fetched 2026-08-28), so the widget renders in prod. `docs/handoff.md:53` still lists the Supabase Attack-Protection secret paste as outstanding and hers. The documented ordering (widget first, toggle second) is now satisfied, so the toggle is safe to flip.
+  - **What I cannot see:** `account_created` has fired **0 times all-time**, so analytics cannot tell you whether any of the 49 registered. That blind spot is the 2026-07-25 "Instrument account creation" decision, still OPEN.
+- **Options:**
+  | Option | What it does | Rating vs her stored preferences |
+  |---|---|---|
+  | **(Recommended) Paste the Turnstile SECRET into Supabase → Authentication → Attack Protection today, then load `/signup` once and complete a real signup to confirm the form still works** | Closes the form the six bot accounts came through, before a 50-a-day surge turns into a sender-reputation problem ahead of the first newsletter send | Best. It is the last step of work already shipped, and secret-pasting is hers by rule (secrets via the provider UI, never `.env`) |
+  | Wait and watch another 48h to see whether the surge is a one-off scan | Cheap, but the cost of being wrong is Supabase emailing addresses we do not control, which is the one cost that is not reversible | Weak. The widget is already live, so waiting buys nothing |
+  | Leave signup open and handle bot accounts by cleanup passes | This is the status quo that already produced six accounts in thirteen days, at a manual-cleanup cost each time | Do not choose |
+- **Moves:** Intent funnel step (signup) and the email channel that lane 5 (premium tools) converts against. Secondarily it cleans the acquisition denominator that Bet 1 (GEO is the lead channel) is measured on.
+- **Confidence:** High that the surge is automated, not human: 49 distinct persons, one pageview each, no second event, `$direct`, Chrome/Linux, spread across geos with no marketing in them. That is a fingerprint, not an inference. My read, not a verdict, is that at least some of it is registration probing rather than plain crawling, since `/signup` and `/where-to-sell` took the hit while article traffic held flat. I also cannot verify from here whether you already pasted the secret today; if you have, close this out.
+- **Class:** OWNER (a secret pasted into a third-party dashboard; outward-facing auth behavior).
+- **Status:** OPEN
+
+---
+
 ### 2026-07-25 DECISION: Do NOT ship a view-count signup trigger yet — the behavior it would tax does not exist
 
 - **Evidence:** All figures PostHog, prod host only (`www.luxurycatalog.com`), 30d window ending 2026-07-25T21:11Z. n = 597 sessions / 596 distinct persons.
