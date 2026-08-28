@@ -294,15 +294,29 @@ async function lastWorkflowSuccess(file: string): Promise<string | null> {
   return run ? run.updated_at : null;
 }
 
-/** Last heartbeat an out-of-band engine wrote for itself. */
-function lastHeartbeat(id: string): string | null {
+/**
+ * Last heartbeat an out-of-band engine wrote for itself, with its verdict.
+ *
+ * Reading only `at` was the same false-green bug one level up: the runners now
+ * write `"result": "failure"` truthfully when an engine crashes or is killed by
+ * the job timeout, and a watchdog that looks only at the timestamp is satisfied
+ * by a corpse. On 2026-08-28 dictionary-gap-report was cut off at 40 minutes,
+ * wrote `result: failure`, and the watchdog reported it green.
+ */
+function lastHeartbeat(id: string): { at: string | null; result: string | null } {
   const path = join(HEARTBEAT_DIR, `${id}.json`);
-  if (!existsSync(path)) return null;
+  if (!existsSync(path)) return { at: null, result: null };
   try {
-    const beat = JSON.parse(readFileSync(path, "utf8")) as { at?: unknown };
-    return typeof beat.at === "string" ? beat.at : null;
+    const beat = JSON.parse(readFileSync(path, "utf8")) as {
+      at?: unknown;
+      result?: unknown;
+    };
+    return {
+      at: typeof beat.at === "string" ? beat.at : null,
+      result: typeof beat.result === "string" ? beat.result : null,
+    };
   } catch {
-    return null;
+    return { at: null, result: null };
   }
 }
 
@@ -313,6 +327,7 @@ async function main(): Promise<void> {
 
   for (const engine of ENGINES) {
     let last: string | null = null;
+    let beatResult: string | null = null;
     let unreachable = false;
 
     if (engine.kind === "workflow") {
@@ -325,7 +340,9 @@ async function main(): Promise<void> {
         console.error(`  ! ${engine.id}: ${(err as Error).message}`);
       }
     } else {
-      last = lastHeartbeat(engine.id);
+      const beat = lastHeartbeat(engine.id);
+      last = beat.at;
+      beatResult = beat.result;
     }
 
     if (unreachable) {
@@ -334,18 +351,48 @@ async function main(): Promise<void> {
     }
 
     const silent = last === null ? null : hoursSince(last);
-    const red = silent === null || silent > engine.maxSilentHours;
+    const silentRed = silent === null || silent > engine.maxSilentHours;
+    // A heartbeat inside its window but reporting failure is NOT healthy. It is
+    // a different fault from silence and gets its own finding, so the two never
+    // mask each other.
+    const failedRed = !silentRed && beatResult !== null && beatResult !== "success";
     rows.push(
-      `| ${engine.label} | ${fmtSilence(silent)} | ${engine.maxSilentHours}h | ${red ? "🔴 SILENT" : "🟢"} |`,
+      `| ${engine.label} | ${fmtSilence(silent)} | ${engine.maxSilentHours}h | ${
+        silentRed ? "\u{1F534} SILENT" : failedRed ? "\u{1F534} RAN AND FAILED" : "\u{1F7E2}"
+      } |`,
     );
 
-    if (red) {
+    if (failedRed) {
+      findings.push({
+        id: `${engine.id}-failed`,
+        title: `Watchdog: ${engine.label} ran and failed`,
+        body: [
+          `**${engine.label}** wrote a heartbeat inside its window, but the heartbeat reports \`${beatResult}\`.`,
+          "",
+          `- Last heartbeat: ${new Date(last!).toISOString().slice(0, 16).replace("T", " ")} UTC, ${fmtSilence(silent)} ago`,
+          `- Reported result: **${beatResult}**`,
+          "",
+          `Why it matters: ${engine.matters}`,
+          "",
+          "It is running, so this is not a host problem. Read the run log for the engine's own exit code.",
+        ].join("\n"),
+        silentHours: silent,
+        allowedHours: engine.maxSilentHours,
+      });
+    }
+
+    if (silentRed) {
+      // "Last success" is only true of a workflow, where we query successful
+      // runs. A heartbeat records the last time the engine finished, pass or
+      // fail, so say what it actually is.
       const seen =
         last === null
           ? engine.kind === "heartbeat"
             ? "It has never written a heartbeat."
             : "It has never had a successful run."
-          : `Last success ${new Date(last).toISOString().slice(0, 16).replace("T", " ")} UTC, ${fmtSilence(silent)} ago.`;
+          : engine.kind === "heartbeat"
+            ? `Last heartbeat ${new Date(last).toISOString().slice(0, 16).replace("T", " ")} UTC (${beatResult ?? "no result recorded"}), ${fmtSilence(silent)} ago.`
+            : `Last success ${new Date(last).toISOString().slice(0, 16).replace("T", " ")} UTC, ${fmtSilence(silent)} ago.`;
       findings.push({
         id: engine.id,
         title: `Watchdog: ${engine.label} has gone silent`,
@@ -375,7 +422,7 @@ async function main(): Promise<void> {
     ...rows,
   ].join("\n");
 
-  console.log(`\nWatchdog ${today}: ${findings.length} silent of ${ENGINES.length} engines\n`);
+  console.log(`\nWatchdog ${today}: ${findings.length} problems across ${ENGINES.length} engines\n`);
   console.log(table);
 
   if (!write) {
@@ -390,7 +437,7 @@ async function main(): Promise<void> {
   );
   writeFileSync(
     join(OUT_DIR, `${today}.md`),
-    `# Watchdog ${today}\n\n${findings.length} silent of ${ENGINES.length} engines.\n\n${table}\n`,
+    `# Watchdog ${today}\n\n${findings.length} problems across ${ENGINES.length} engines.\n\n${table}\n`,
   );
   console.log(`\nWrote reports/watchdog/state.json + ${today}.md`);
 }
