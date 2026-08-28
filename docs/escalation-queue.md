@@ -195,3 +195,21 @@ the engine runner both discard their exit codes, so the layer built to notice
 silence cannot notice its own failure. That is the July "false green" bug
 reappearing inside the thing meant to catch it, and it is item 1 for the next
 live run.
+
+---
+
+## 2026-08-27 — dictionary-gap-report engine (GitHub Actions)
+
+**Not automated yet**
+
+- **`npm run aggregate:aliases` cannot run in Actions.** It reads only local JSON
+  dumps under `data/ingest/_raw/`, which is gitignored (`.gitignore:48`) and so
+  does not exist in a fresh clone — the run died with
+  `ENOENT: scandir '…/data/ingest/_raw'`. The alias aggregation is therefore
+  laptop-only, and any engine brief that names it will keep half-failing in CI.
+  It aggregates reseller *aliases* for models already in the dictionary, so it is
+  not on the critical path for the gap report itself; this week's report was
+  built from Supabase without it. **Fix is one of:** point the script at
+  `discovered_listing` in Supabase instead of the raw dumps, or commit/publish the
+  dumps somewhere CI can fetch. Until then, treat alias aggregation as a manual
+  step on the Mac.
