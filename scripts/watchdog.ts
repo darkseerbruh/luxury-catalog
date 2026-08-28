@@ -33,12 +33,23 @@ import { join } from "node:path";
 
 type Kind = "workflow" | "heartbeat";
 
+/**
+ * WHERE a heartbeat engine runs. `kind` says how we observe it; `host` says who
+ * can restart it, and they are not the same question. Every heartbeat engine
+ * used to be told "if it lives on a laptop, that is the bug" — false for the
+ * eight that c916dca moved into Actions, and misleading for the four that are
+ * waiting on an OAuth consent screen rather than on a machine.
+ */
+type Host = "actions" | "blocked-oauth" | "local";
+
 interface Engine {
   id: string;
   label: string;
   kind: Kind;
   /** Workflow file name, for kind: "workflow". */
   file?: string;
+  /** Where it runs, for kind: "heartbeat". Drives the "who can fix this" line. */
+  host?: Host;
   /** Hours of silence tolerated before this is RED. */
   maxSilentHours: number;
   /** Why this engine matters, quoted into the issue so the fixer has context. */
@@ -163,6 +174,7 @@ const ENGINES: Engine[] = [
     id: "vendor-inbox-scan",
     label: "Vendor inbox engine",
     kind: "heartbeat",
+    host: "blocked-oauth",
     maxSilentHours: 36,
     matters:
       "Twice daily. Reads vendor mail and acts on breakage. BLOCKED on the Gmail connector, which needs a one-time human OAuth consent; it cannot run in CI until then.",
@@ -171,6 +183,7 @@ const ENGINES: Engine[] = [
     id: "analyst-daily-scan",
     label: "Analyst daily scan",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 60,
     matters:
       "Daily strategy scan. Cloud-hosted in agent-engines.yml since 2026-08-27; a red here means the Actions run failed, not a closed laptop.",
@@ -179,6 +192,7 @@ const ENGINES: Engine[] = [
     id: "analyst-weekly-brief",
     label: "Analyst weekly brief",
     kind: "heartbeat",
+    host: "blocked-oauth",
     maxSilentHours: 240,
     matters:
       "Weekly brief + auto-implements AUTO-class decisions. BLOCKED on the Gmail connector for delivery; needs a one-time human OAuth consent.",
@@ -187,6 +201,7 @@ const ENGINES: Engine[] = [
     id: "social-engine-weekly",
     label: "Social engine (weekly)",
     kind: "heartbeat",
+    host: "blocked-oauth",
     maxSilentHours: 240,
     matters:
       "Builds the draft runway. BLOCKED on the Metricool + Notion connectors; needs a one-time human OAuth consent.",
@@ -195,6 +210,7 @@ const ENGINES: Engine[] = [
     id: "social-engine-pulse",
     label: "Social engine (pulse)",
     kind: "heartbeat",
+    host: "blocked-oauth",
     maxSilentHours: 240,
     matters:
       "Monday breakout check. BLOCKED on the Metricool + Notion connectors; needs a one-time human OAuth consent.",
@@ -203,6 +219,7 @@ const ENGINES: Engine[] = [
     id: "article-engine-weekly",
     label: "Article engine",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 240,
     matters:
       "Writes article drafts. Cloud-hosted in agent-engines.yml since 2026-08-27.",
@@ -211,6 +228,7 @@ const ENGINES: Engine[] = [
     id: "dictionary-gap-report",
     label: "Dictionary gap report",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 240,
     matters:
       "Ranks missing models; promotion is the catalog bottleneck. Cloud-hosted in agent-engines.yml since 2026-08-27.",
@@ -219,6 +237,7 @@ const ENGINES: Engine[] = [
     id: "archivist-monthly-pull",
     label: "Archivist standing pull",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 408,
     matters:
       "1st + 15th. Feeds the article + social backlogs. Cloud-hosted in agent-engines.yml since 2026-08-27.",
@@ -227,6 +246,7 @@ const ENGINES: Engine[] = [
     id: "market-report-monthly",
     label: "Monthly market report",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 816,
     matters: "Monthly. Cloud-hosted in agent-engines.yml since 2026-08-27.",
   },
@@ -234,6 +254,7 @@ const ENGINES: Engine[] = [
     id: "venue-terms-refresh-monthly",
     label: "Venue terms refresh",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 816,
     matters:
       "Re-verifies published seller fees; a stale fee is a factual claim going wrong. Cloud-hosted in agent-engines.yml since 2026-08-27.",
@@ -244,6 +265,7 @@ const ENGINES: Engine[] = [
     id: "supervisor",
     label: "Supervisor (self-repair loop)",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 18,
     matters:
       "Runs every 6h and repairs everything else. If IT goes quiet nothing gets fixed and no alarm fires, so this is the tightest window on the board.",
@@ -252,6 +274,7 @@ const ENGINES: Engine[] = [
     id: "weekly-digest",
     label: "Weekly digest",
     kind: "heartbeat",
+    host: "actions",
     maxSilentHours: 240,
     matters:
       "The owner's single scheduled contact with the system. Silence here means she hears nothing and assumes fine.",
@@ -269,6 +292,31 @@ interface Finding {
 const ROOT = process.cwd();
 const HEARTBEAT_DIR = join(ROOT, "reports", "heartbeat");
 const OUT_DIR = join(ROOT, "reports", "watchdog");
+
+/** Who can actually restart this, quoted into the issue so nobody chases a laptop. */
+function fixAdvice(engine: Engine): string {
+  if (engine.kind === "workflow") {
+    return "This is a GitHub workflow, so the supervisor can re-run and repair it.";
+  }
+  switch (engine.host) {
+    case "actions":
+      return (
+        "Cloud-hosted in Actions, so a red here means the run FAILED, not that a " +
+        "laptop is closed. The supervisor can dispatch it and read the log."
+      );
+    case "blocked-oauth":
+      return (
+        "BLOCKED on a one-time human OAuth consent, not on a crash. It cannot run " +
+        "unattended until the owner authorizes the connector once. This is " +
+        "supervisor-standard §2 and no amount of fixing here will clear it."
+      );
+    default:
+      return (
+        "This engine runs outside GitHub Actions, so nothing here can restart it. " +
+        "If it lives on a laptop, that is the bug, not the symptom."
+      );
+  }
+}
 
 function hoursSince(iso: string): number {
   return (Date.now() - new Date(iso).getTime()) / 36e5;
@@ -393,7 +441,7 @@ async function main(): Promise<void> {
           "",
           `Why it matters: ${engine.matters}`,
           "",
-          "It is running, so this is not a host problem. Read the run log for the engine's own exit code.",
+          `It is running, so this is not a host problem. Read the run log for the engine's own exit code. ${fixAdvice(engine)}`,
         ].join("\n"),
         silentHours: silent,
         allowedHours: engine.maxSilentHours,
@@ -424,9 +472,7 @@ async function main(): Promise<void> {
           "",
           `Why it matters: ${engine.matters}`,
           "",
-          engine.kind === "heartbeat"
-            ? "This engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom."
-            : "This is a GitHub workflow, so the supervisor can re-run and repair it.",
+          fixAdvice(engine),
         ].join("\n"),
         silentHours: silent,
         allowedHours: engine.maxSilentHours,
