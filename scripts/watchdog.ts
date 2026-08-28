@@ -43,6 +43,13 @@ interface Engine {
   maxSilentHours: number;
   /** Why this engine matters, quoted into the issue so the fixer has context. */
   matters: string;
+  /**
+   * Set when the lane is OFF on purpose. A paused lane is reported as paused,
+   * never as red: an alarm that fires forever for a decision someone made
+   * deliberately is how alarms get muted. Mirrors `exemptReason` in
+   * src/lib/data-health-core.ts, which already exempts the same lane.
+   */
+  pausedReason?: string;
 }
 
 /**
@@ -115,7 +122,13 @@ const ENGINES: Engine[] = [
     kind: "workflow",
     file: "trr-refresh.yml",
     maxSilentHours: 120,
-    matters: "Scheduled every 2 days; the paid Apify lane.",
+    matters: "The paid Apify lane. Was scheduled every 2 days until the pause.",
+    // Not broken. The cron was pulled 2026-08-02 in the owner's cost review: 69%
+    // of July's Apify bill ($68.99 of $100.01) for ~1.2% of monthly rows.
+    // Re-running it is money leaving the account, which is a supervisor-standard
+    // §2 line. The watchdog must never nudge an unattended agent across it.
+    pausedReason:
+      "schedule paused 2026-08-02 (owner cost review; 69% of the Apify bill for ~1.2% of rows). Resuming it spends money, so it is the owner's call.",
   },
 
   // ---- health + credentials: the things that notice other things breaking ----
@@ -326,6 +339,12 @@ async function main(): Promise<void> {
   const rows: string[] = [];
 
   for (const engine of ENGINES) {
+    if (engine.pausedReason) {
+      rows.push(`| ${engine.label} | paused | — | ⏸️ paused on purpose |`);
+      console.log(`  · ${engine.id}: paused — ${engine.pausedReason}`);
+      continue;
+    }
+
     let last: string | null = null;
     let beatResult: string | null = null;
     let unreachable = false;
