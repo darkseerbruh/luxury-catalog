@@ -142,6 +142,44 @@ const ENGINES: Engine[] = [
       "schedule paused 2026-08-02 (owner cost review; 69% of the Apify bill for ~1.2% of rows). Resuming it spends money, so it is the owner's call.",
   },
 
+  // ---- the catalogue build-out ----
+  {
+    id: "catalog-promote",
+    label: "Catalogue promotion",
+    kind: "workflow",
+    file: "catalog-promote.yml",
+    // Weekly (Mondays 09:17). Two missed runs, per the rule at the top of this
+    // registry: one is noise, two in a row is an outage. 2.5x would have read
+    // green through the entire 08-17..08-24 outage, which is how it went unseen.
+    maxSilentHours: 336,
+    matters:
+      "Turns discovered listings into real bag pages. Silence means the catalogue stops growing, quietly.",
+  },
+  {
+    id: "fashionphile-enrich",
+    label: "Fashionphile enrichment",
+    kind: "workflow",
+    file: "fashionphile-enrich.yml",
+    maxSilentHours: 60,
+    matters: "Fills condition + fields on the largest comp source. Without it the comps are thin.",
+  },
+  {
+    id: "ebay-midtier-refresh",
+    label: "eBay mid-tier listings",
+    kind: "workflow",
+    file: "ebay-midtier-refresh.yml",
+    maxSilentHours: 336,
+    matters: "Weekly. The only mid-tier price signal; the LC Index skews high without it.",
+  },
+  {
+    id: "analytics-digest",
+    label: "Weekly analytics digest",
+    kind: "workflow",
+    file: "analytics-digest.yml",
+    maxSilentHours: 336,
+    matters: "Weekly. The traffic side of the owner's picture of the business.",
+  },
+
   // ---- health + credentials: the things that notice other things breaking ----
   {
     id: "data-health",
