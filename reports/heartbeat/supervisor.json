@@ -1,7 +1,7 @@
 {
-  "at": "2026-08-28T00:49:39Z",
+  "at": "2026-08-28T13:03:34Z",
   "engine": "supervisor",
-  "result": "success",
-  "exitCode": 0,
-  "run": "33130032859"
+  "result": "failure",
+  "exitCode": null,
+  "run": "33173269497"
 }
