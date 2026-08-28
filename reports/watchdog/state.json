@@ -6,7 +6,7 @@
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 30d\n- Last success 2026-07-29 07:20 UTC, 30d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 731.2586613888889,
+      "silentHours": 735.7441608333334,
       "allowedHours": 120
     },
     {
@@ -15,13 +15,6 @@
       "body": "**Vendor inbox engine** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 36h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Twice daily. Reads vendor mail and acts on breakage. BLOCKED on the Gmail connector, which needs a one-time human OAuth consent; it cannot run in CI until then.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
       "silentHours": null,
       "allowedHours": 36
-    },
-    {
-      "id": "analyst-daily-scan",
-      "title": "Watchdog: Analyst daily scan has gone silent",
-      "body": "**Analyst daily scan** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Daily strategy scan. Cloud-hosted in agent-engines.yml since 2026-08-27; a red here means the Actions run failed, not a closed laptop.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
-      "silentHours": null,
-      "allowedHours": 60
     },
     {
       "id": "analyst-weekly-brief",
