@@ -6,14 +6,14 @@
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 4d\n- Last success 2026-08-27 22:12 UTC, 4d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 110.42596666666667,
+      "silentHours": 115.15632944444444,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 34d\n- Last success 2026-07-29 07:20 UTC, 34d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 821.2838538888889,
+      "silentHours": 826.0141613888889,
       "allowedHours": 120
     },
     {
@@ -45,25 +45,11 @@
       "allowedHours": 240
     },
     {
-      "id": "article-engine-weekly",
-      "title": "Watchdog: Article engine has gone silent",
-      "body": "**Article engine** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 240h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Writes article drafts. Cloud-hosted in agent-engines.yml since 2026-08-27.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
-      "silentHours": null,
-      "allowedHours": 240
-    },
-    {
       "id": "archivist-monthly-pull",
       "title": "Watchdog: Archivist standing pull has gone silent",
       "body": "**Archivist standing pull** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 408h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: 1st + 15th. Feeds the article + social backlogs. Cloud-hosted in agent-engines.yml since 2026-08-27.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
       "silentHours": null,
       "allowedHours": 408
-    },
-    {
-      "id": "market-report-monthly",
-      "title": "Watchdog: Monthly market report has gone silent",
-      "body": "**Monthly market report** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 816h\n- Actual silence: never\n- It has never written a heartbeat.\n\nWhy it matters: Monthly. Cloud-hosted in agent-engines.yml since 2026-08-27.\n\nThis engine runs outside GitHub Actions, so nothing here can restart it. If it lives on a laptop, that is the bug, not the symptom.",
-      "silentHours": null,
-      "allowedHours": 816
     },
     {
       "id": "venue-terms-refresh-monthly",
