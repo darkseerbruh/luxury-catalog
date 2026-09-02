@@ -3,24 +3,17 @@
   "checked": 23,
   "redFindings": [
     {
-      "id": "market-refresh",
-      "title": "Watchdog: Fashionphile capture has gone silent",
-      "body": "**Fashionphile capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 12h\n- Actual silence: 17h\n- Last success 2026-09-01 18:31 UTC, 17h ago.\n\nWhy it matters: Largest single source of price comps. Silence here starves the LC Index.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 17.641395555555555,
-      "allowedHours": 12
-    },
-    {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 5d\n- Last success 2026-08-27 22:12 UTC, 5d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 133.9655111111111,
+      "silentHours": 139.01499694444445,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 35d\n- Last success 2026-07-29 07:20 UTC, 35d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 844.82347,
+      "silentHours": 849.8730538888889,
       "allowedHours": 120
     },
     {
