@@ -1,12 +1,12 @@
 {
-  "lastRun": "2026-09-04",
+  "lastRun": "2026-09-05",
   "checked": 23,
   "redFindings": [
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 37d\n- Last success 2026-07-29 07:20 UTC, 37d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 902.2324783333333,
+      "silentHours": 910.5277044444445,
       "allowedHours": 120
     },
     {
