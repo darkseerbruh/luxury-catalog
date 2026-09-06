@@ -6,7 +6,7 @@
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 39d\n- Last success 2026-07-29 07:20 UTC, 39d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 940.3557138888889,
+      "silentHours": 945.0016033333334,
       "allowedHours": 120
     },
     {
