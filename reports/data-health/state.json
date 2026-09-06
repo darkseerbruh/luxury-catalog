@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-05",
-  "overall": "yellow",
+  "lastRun": "2026-09-06",
+  "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.565168900462963,
-    "freshness-therealreal": 38.565168900462965,
-    "freshness-tlc": 0.565168900462963,
-    "freshness-ebay": 5.565168900462963,
-    "capture-rows": 88100,
-    "ranking-count": 550,
-    "ranking-near-floor": 62,
-    "coverage-condition": 10.580222493622173,
-    "coverage-condition-detail": 66.74461193167413,
-    "coverage-region": 34.728555424609105,
-    "coverage-production-year": 0.8107450700944184,
-    "coverage-hardware": 22.793704520850177,
+    "freshness-fashionphile": 1.575785300925926,
+    "freshness-therealreal": 39.57578530092593,
+    "freshness-tlc": 0.575785300925926,
+    "freshness-ebay": 6.575785300925926,
+    "capture-rows": 74142,
+    "ranking-count": 551,
+    "ranking-near-floor": 61,
+    "coverage-condition": 10.608194812069879,
+    "coverage-condition-detail": 67.1241503440974,
+    "coverage-region": 34.372118449407104,
+    "coverage-production-year": 0.8004183889909917,
+    "coverage-hardware": 22.50464324686092,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1117490,
+    "backlog-total": 1130195,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 0,
+    "contamination-dupes": 608,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,12 +33,11 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.420083611111111,
-    "cadence-fashionphile": 37,
-    "cadence-tlc": 31
+    "summary-staleness": 1.2985566666666666,
+    "cadence-fashionphile": 29,
+    "cadence-tlc": 32
   },
   "rowsAddedHistory": [
-    81655,
     82029,
     83450,
     83450,
@@ -67,13 +66,28 @@
     85471,
     85801,
     87325,
-    88100
+    88100,
+    74142
   ],
   "findings": {
+    "freshness-fashionphile": {
+      "firstSeen": "2026-09-06",
+      "status": "yellow"
+    },
+    "contamination-dupes": {
+      "firstSeen": "2026-09-06",
+      "status": "red"
+    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
     }
   },
-  "redFindings": []
+  "redFindings": [
+    {
+      "id": "contamination-dupes",
+      "title": "Data health: contamination-dupes is RED",
+      "body": "608 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 608 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-09-06.md"
+    }
+  ]
 }
