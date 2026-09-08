@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-07",
-  "overall": "red",
+  "lastRun": "2026-09-08",
+  "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.6705347453703704,
-    "freshness-therealreal": 40.67053474537037,
-    "freshness-tlc": 1.6705347453703703,
-    "freshness-ebay": 0.6705347453703704,
-    "capture-rows": 65292,
+    "freshness-fashionphile": 0.6161012384259259,
+    "freshness-therealreal": 41.61610123842593,
+    "freshness-tlc": 2.616101238425926,
+    "freshness-ebay": 1.616101238425926,
+    "capture-rows": 69781,
     "ranking-count": 551,
     "ranking-near-floor": 62,
-    "coverage-condition": 10.608262759163166,
-    "coverage-condition-detail": 66.99678478059936,
-    "coverage-region": 34.519885620397694,
-    "coverage-production-year": 0.8034400531905144,
-    "coverage-hardware": 22.602094293184383,
+    "coverage-condition": 10.610518746984305,
+    "coverage-condition-detail": 66.87697524219148,
+    "coverage-region": 34.65711502543691,
+    "coverage-production-year": 0.80635093246775,
+    "coverage-hardware": 22.693183367528473,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1143317,
+    "backlog-total": 1156007,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 259,
+    "contamination-dupes": 0,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,12 +33,11 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.618926111111111,
-    "cadence-fashionphile": 29,
-    "cadence-tlc": 32
+    "summary-staleness": 1.7279936111111112,
+    "cadence-fashionphile": 31,
+    "cadence-tlc": 33
   },
   "rowsAddedHistory": [
-    83450,
     83450,
     84623,
     85009,
@@ -67,23 +66,18 @@
     87325,
     88100,
     74142,
-    65292
+    65292,
+    69781
   ],
   "findings": {
-    "contamination-dupes": {
-      "firstSeen": "2026-09-06",
-      "status": "red"
+    "freshness-tlc": {
+      "firstSeen": "2026-09-08",
+      "status": "yellow"
     },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
     }
   },
-  "redFindings": [
-    {
-      "id": "contamination-dupes",
-      "title": "Data health: contamination-dupes is RED",
-      "body": "259 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 259 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-09-07.md"
-    }
-  ]
+  "redFindings": []
 }

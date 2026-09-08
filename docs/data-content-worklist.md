@@ -665,7 +665,7 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:contamination-dupes] 259 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-09-06, last seen 2026-09-07, red)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-07, yellow)
-- ✅ [dh:freshness-fashionphile] resolved 2026-09-07 (Fashionphile freshness is back to normal)
+- ⬜ [dh:freshness-tlc] The Luxury Closet data is 2.6 days old but its schedule promises a refresh every 1 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the The Luxury Closet refresh workflow's recent runs. (first seen 2026-09-08, last seen 2026-09-08, yellow)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-08, yellow)
+- ✅ [dh:contamination-dupes] resolved 2026-09-08 (Same-day duplicate listing rows (last ~24h) is back to normal)
 <!-- data-health:end -->
