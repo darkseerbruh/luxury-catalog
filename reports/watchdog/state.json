@@ -1,26 +1,26 @@
 {
-  "lastRun": "2026-09-12",
+  "lastRun": "2026-09-13",
   "checked": 23,
   "redFindings": [
     {
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 7d\n- Last success 2026-09-05 11:56 UTC, 7d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 177.56483333333333,
+      "silentHours": 186.38308,
       "allowedHours": 60
     },
     {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 8d\n- Last success 2026-09-04 12:58 UTC, 8d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 200.52436,
+      "silentHours": 209.3426386111111,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 45d\n- Last success 2026-07-29 07:20 UTC, 45d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1094.1522563888889,
+      "silentHours": 1102.9705466666667,
       "allowedHours": 120
     },
     {
