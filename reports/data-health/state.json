@@ -3,25 +3,25 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-13",
+  "lastRun": "2026-09-14",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.6135403472222222,
-    "freshness-therealreal": 46.61354034722222,
-    "freshness-tlc": 7.613540347222222,
-    "freshness-ebay": 6.613540347222222,
-    "capture-rows": 70427,
+    "freshness-fashionphile": 0.6919380439814815,
+    "freshness-therealreal": 47.69193804398148,
+    "freshness-tlc": 8.691938043981482,
+    "freshness-ebay": 0.6919380439814815,
+    "capture-rows": 70326,
     "ranking-count": 555,
     "ranking-near-floor": 63,
-    "coverage-condition": 10.652433118659633,
-    "coverage-condition-detail": 66.6837736780975,
-    "coverage-region": 34.93796866397513,
-    "coverage-production-year": 0.8099268630879936,
-    "coverage-hardware": 22.830906673478342,
+    "coverage-condition": 10.658931772952924,
+    "coverage-condition-detail": 66.57989848999006,
+    "coverage-region": 35.05910546531678,
+    "coverage-production-year": 0.8123009923392505,
+    "coverage-hardware": 22.90945018383974,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1211504,
+    "backlog-total": 1224544,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,11 +33,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.0218933333333333,
+    "summary-staleness": 1.4320347222222223,
     "cadence-tlc": 38
   },
   "rowsAddedHistory": [
-    83622,
     82762,
     88640,
     89846,
@@ -66,7 +65,8 @@
     54845,
     68761,
     70337,
-    70427
+    70427,
+    70326
   ],
   "findings": {
     "freshness-tlc": {
@@ -82,7 +82,7 @@
     {
       "id": "freshness-tlc",
       "title": "Data health: freshness-tlc is RED",
-      "body": "The Luxury Closet data is 7.6 days old but its schedule promises a refresh every 1 day(s), so the capture likely stopped running.\n\nCurrent value: 7.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the The Luxury Closet refresh workflow's recent runs.\nReport: reports/data-health/2026-09-13.md"
+      "body": "The Luxury Closet data is 8.7 days old but its schedule promises a refresh every 1 day(s), so the capture likely stopped running.\n\nCurrent value: 8.7 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the The Luxury Closet refresh workflow's recent runs.\nReport: reports/data-health/2026-09-14.md"
     }
   ]
 }
