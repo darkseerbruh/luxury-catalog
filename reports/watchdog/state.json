@@ -1,19 +1,19 @@
 {
-  "lastRun": "2026-09-14",
+  "lastRun": "2026-09-15",
   "checked": 23,
   "redFindings": [
     {
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 9d\n- Last success 2026-09-05 11:56 UTC, 9d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 226.65646194444443,
+      "silentHours": 234.28811805555554,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 47d\n- Last success 2026-07-29 07:20 UTC, 47d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1143.2439691666666,
+      "silentHours": 1150.8756172222222,
       "allowedHours": 120
     },
     {
