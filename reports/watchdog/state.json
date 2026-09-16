@@ -1,26 +1,26 @@
 {
-  "lastRun": "2026-09-15",
+  "lastRun": "2026-09-16",
   "checked": 23,
   "redFindings": [
-    {
-      "id": "market-refresh",
-      "title": "Watchdog: Fashionphile capture has gone silent",
-      "body": "**Fashionphile capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 12h\n- Actual silence: 17h\n- Last success 2026-09-15 04:54 UTC, 17h ago.\n\nWhy it matters: Largest single source of price comps. Silence here starves the LC Index.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 17.434503888888887,
-      "allowedHours": 12
-    },
     {
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 10d\n- Last success 2026-09-05 11:56 UTC, 10d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 250.40848,
+      "silentHours": 258.2355811111111,
+      "allowedHours": 60
+    },
+    {
+      "id": "ingest-rebag",
+      "title": "Watchdog: Rebag live listings has gone silent",
+      "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-09-13 13:31 UTC, 2d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 64.64453861111112,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 48d\n- Last success 2026-07-29 07:20 UTC, 48d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1166.9959530555554,
+      "silentHours": 1174.822951388889,
       "allowedHours": 120
     },
     {
