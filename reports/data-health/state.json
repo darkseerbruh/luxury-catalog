@@ -3,17 +3,17 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-16",
+  "lastRun": "2026-09-17",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 2.6326013310185186,
-    "freshness-therealreal": 49.63260133101852,
-    "freshness-tlc": 10.632601331018519,
-    "freshness-ebay": 2.6326013310185186,
-    "capture-rows": 1985,
+    "freshness-fashionphile": 3.6385505439814816,
+    "freshness-therealreal": 50.63855054398148,
+    "freshness-tlc": 11.63855054398148,
+    "freshness-ebay": 3.6385505439814816,
+    "capture-rows": 1290,
     "ranking-count": 555,
     "ranking-near-floor": 63,
-    "coverage-condition": 10.72172063104617,
+    "coverage-condition": 10.782210852934956,
     "coverage-condition-detail": 66.56557063964415,
     "coverage-region": 35.108072555105586,
     "coverage-production-year": 0.8116884966858965,
@@ -33,11 +33,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 9.671431111111112,
+    "summary-staleness": 33.814212222222224,
     "cadence-tlc": 42
   },
   "rowsAddedHistory": [
-    88640,
     89846,
     86712,
     86541,
@@ -66,7 +65,8 @@
     70337,
     70427,
     70326,
-    1985
+    1985,
+    1290
   ],
   "findings": {
     "freshness-fashionphile": {
@@ -86,12 +86,12 @@
     {
       "id": "freshness-fashionphile",
       "title": "Data health: freshness-fashionphile is RED",
-      "body": "Fashionphile data is 2.6 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 2.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-09-16.md"
+      "body": "Fashionphile data is 3.6 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running.\n\nCurrent value: 3.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs.\nReport: reports/data-health/2026-09-17.md"
     },
     {
       "id": "freshness-tlc",
       "title": "Data health: freshness-tlc is RED",
-      "body": "The Luxury Closet data is 10.6 days old but its schedule promises a refresh every 1 day(s), so the capture likely stopped running.\n\nCurrent value: 10.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the The Luxury Closet refresh workflow's recent runs.\nReport: reports/data-health/2026-09-16.md"
+      "body": "The Luxury Closet data is 11.6 days old but its schedule promises a refresh every 1 day(s), so the capture likely stopped running.\n\nCurrent value: 11.6 day(s) since the newest listing observation\nSuggested action: Open GitHub Actions and check the The Luxury Closet refresh workflow's recent runs.\nReport: reports/data-health/2026-09-17.md"
     }
   ]
 }
