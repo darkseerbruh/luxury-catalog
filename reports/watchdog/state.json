@@ -3,59 +3,52 @@
   "checked": 23,
   "redFindings": [
     {
-      "id": "market-refresh",
-      "title": "Watchdog: Fashionphile capture has gone silent",
-      "body": "**Fashionphile capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 12h\n- Actual silence: 19h\n- Last success 2026-09-16 16:55 UTC, 19h ago.\n\nWhy it matters: Largest single source of price comps. Silence here starves the LC Index.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 19.723854444444445,
-      "allowedHours": 12
-    },
-    {
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 12d\n- Last success 2026-09-05 11:56 UTC, 12d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 288.7186236111111,
+      "silentHours": 293.73649416666666,
       "allowedHours": 60
     },
     {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
-      "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-13 13:31 UTC, 3d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 95.12758805555555,
+      "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 4d\n- Last success 2026-09-13 13:31 UTC, 4d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 100.14545638888889,
       "allowedHours": 60
     },
     {
       "id": "mygemma-refresh",
       "title": "Watchdog: myGemma listings has gone silent",
-      "body": "**myGemma listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-09-14 14:01 UTC, 2d ago.\n\nWhy it matters: Licensed photos + buy-links come from this feed.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 70.6201363888889,
+      "body": "**myGemma listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 14:01 UTC, 3d ago.\n\nWhy it matters: Licensed photos + buy-links come from this feed.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 75.63804555555555,
       "allowedHours": 60
     },
     {
       "id": "redeluxe-refresh",
       "title": "Watchdog: Redeluxe listings has gone silent",
-      "body": "**Redeluxe listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-09-14 13:19 UTC, 2d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 71.33354444444444,
+      "body": "**Redeluxe listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:19 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 76.35145388888888,
       "allowedHours": 60
     },
     {
       "id": "couture-usa-refresh",
       "title": "Watchdog: Couture USA listings has gone silent",
-      "body": "**Couture USA listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-09-14 13:26 UTC, 2d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 71.21749861111111,
+      "body": "**Couture USA listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:26 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 76.23542972222222,
       "allowedHours": 60
     },
     {
       "id": "anns-refresh",
       "title": "Watchdog: Ann's Fabulous Finds listings has gone silent",
-      "body": "**Ann's Fabulous Finds listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-09-14 13:47 UTC, 2d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 70.86396555555555,
+      "body": "**Ann's Fabulous Finds listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:47 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 75.88190833333333,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 50d\n- Last success 2026-07-29 07:20 UTC, 50d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1205.3059997222222,
+      "silentHours": 1210.3239344444444,
       "allowedHours": 120
     },
     {
