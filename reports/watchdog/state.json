@@ -6,49 +6,49 @@
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 12d\n- Last success 2026-09-05 11:56 UTC, 12d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 306.1080186111111,
+      "silentHours": 311.18068444444447,
       "allowedHours": 60
     },
     {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 4d\n- Last success 2026-09-13 13:31 UTC, 4d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 112.51701222222222,
+      "silentHours": 117.58964944444445,
       "allowedHours": 60
     },
     {
       "id": "mygemma-refresh",
       "title": "Watchdog: myGemma listings has gone silent",
       "body": "**myGemma listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 14:01 UTC, 3d ago.\n\nWhy it matters: Licensed photos + buy-links come from this feed.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 88.00961916666667,
+      "silentHours": 93.08221694444444,
       "allowedHours": 60
     },
     {
       "id": "redeluxe-refresh",
       "title": "Watchdog: Redeluxe listings has gone silent",
       "body": "**Redeluxe listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:19 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 88.72303055555555,
+      "silentHours": 93.79563916666666,
       "allowedHours": 60
     },
     {
       "id": "couture-usa-refresh",
       "title": "Watchdog: Couture USA listings has gone silent",
       "body": "**Couture USA listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:26 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 88.60698833333333,
+      "silentHours": 93.67961416666667,
       "allowedHours": 60
     },
     {
       "id": "anns-refresh",
       "title": "Watchdog: Ann's Fabulous Finds listings has gone silent",
       "body": "**Ann's Fabulous Finds listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 3d\n- Last success 2026-09-14 13:47 UTC, 3d ago.\n\nWhy it matters: Free-tier capture lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 88.25345666666666,
+      "silentHours": 93.32607055555556,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
-      "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 50d\n- Last success 2026-07-29 07:20 UTC, 50d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1222.6955066666667,
+      "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 51d\n- Last success 2026-07-29 07:20 UTC, 51d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 1227.7680833333334,
       "allowedHours": 120
     },
     {
