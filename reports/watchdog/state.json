@@ -3,24 +3,31 @@
   "checked": 23,
   "redFindings": [
     {
+      "id": "market-refresh",
+      "title": "Watchdog: Fashionphile capture has gone silent",
+      "body": "**Fashionphile capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 12h\n- Actual silence: 7d\n- Last success 2026-09-14 12:44 UTC, 7d ago.\n\nWhy it matters: Largest single source of price comps. Silence here starves the LC Index.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 191.9450463888889,
+      "allowedHours": 12
+    },
+    {
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
-      "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 16d\n- Last success 2026-09-05 11:56 UTC, 16d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 407.55555583333336,
+      "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 17d\n- Last success 2026-09-05 11:56 UTC, 17d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 408.7598413888889,
       "allowedHours": 60
     },
     {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 8d\n- Last success 2026-09-13 13:31 UTC, 8d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 213.96454972222222,
+      "silentHours": 215.1687988888889,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 55d\n- Last success 2026-07-29 07:20 UTC, 55d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1324.1430602777777,
+      "silentHours": 1325.3472191666667,
       "allowedHours": 120
     },
     {
