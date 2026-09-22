@@ -665,7 +665,6 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:freshness-fashionphile] Fashionphile data is 1.7 days old but its schedule promises a refresh every 0.125 day(s), so the capture likely stopped running. Action: Open GitHub Actions and check the Fashionphile refresh workflow's recent runs. (first seen 2026-09-21, last seen 2026-09-21, yellow)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-21, yellow)
-- ✅ [dh:freshness-tlc] resolved 2026-09-21 (The Luxury Closet freshness is back to normal)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-22, yellow)
+- ✅ [dh:freshness-fashionphile] resolved 2026-09-22 (Fashionphile freshness is back to normal)
 <!-- data-health:end -->

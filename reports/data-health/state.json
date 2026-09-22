@@ -3,25 +3,25 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-21",
+  "lastRun": "2026-09-22",
   "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 1.6924879166666666,
-    "freshness-therealreal": 54.692487916666664,
-    "freshness-tlc": 0.6924879166666666,
-    "freshness-ebay": 0.6924879166666666,
-    "capture-rows": 65068,
+    "freshness-fashionphile": 0.6328201620370371,
+    "freshness-therealreal": 55.632820162037035,
+    "freshness-tlc": 0.6328201620370371,
+    "freshness-ebay": 1.632820162037037,
+    "capture-rows": 73473,
     "ranking-count": 558,
     "ranking-near-floor": 58,
-    "coverage-condition": 10.804848953612035,
-    "coverage-condition-detail": 66.9504018865442,
-    "coverage-region": 34.79016886444135,
-    "coverage-production-year": 0.8006788403531102,
-    "coverage-hardware": 22.600839767327322,
+    "coverage-condition": 10.768942881094741,
+    "coverage-condition-detail": 66.96591528321876,
+    "coverage-region": 34.78192519780971,
+    "coverage-production-year": 0.8007425769105171,
+    "coverage-hardware": 22.594681771637593,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1267719,
+    "backlog-total": 1288365,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
@@ -33,11 +33,9 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.2712605555555556,
-    "cadence-tlc": 45
+    "summary-staleness": 2.5743905555555555
   },
   "rowsAddedHistory": [
-    85564,
     85976,
     84845,
     71948,
@@ -66,13 +64,10 @@
     35442,
     57682,
     57450,
-    65068
+    65068,
+    73473
   ],
   "findings": {
-    "freshness-fashionphile": {
-      "firstSeen": "2026-09-21",
-      "status": "yellow"
-    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
