@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-24",
+  "lastRun": "2026-09-25",
   "overall": "red",
   "metrics": {
-    "freshness-fashionphile": 0.6468071180555556,
-    "freshness-therealreal": 57.646807118055555,
-    "freshness-tlc": 0.6468071180555556,
-    "freshness-ebay": 3.6468071180555555,
-    "capture-rows": 93258,
-    "ranking-count": 563,
-    "ranking-near-floor": 56,
-    "coverage-condition": 10.66427712993833,
-    "coverage-condition-detail": 67.05531262778523,
-    "coverage-region": 34.701987441911925,
-    "coverage-production-year": 0.7991604890462491,
-    "coverage-hardware": 22.542355886258022,
+    "freshness-fashionphile": 0.6492912962962963,
+    "freshness-therealreal": 58.6492912962963,
+    "freshness-tlc": 0.6492912962962963,
+    "freshness-ebay": 4.649291296296297,
+    "capture-rows": 99077,
+    "ranking-count": 564,
+    "ranking-near-floor": 54,
+    "coverage-condition": 10.607211239798827,
+    "coverage-condition-detail": 67.12719660287122,
+    "coverage-region": 34.63301910266817,
+    "coverage-production-year": 0.7977121396919152,
+    "coverage-hardware": 22.497474325138317,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1334507,
+    "backlog-total": 1360023,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 442,
+    "contamination-dupes": 5000,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,11 +33,9 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.7989941666666667,
-    "cadence-tlc": 48
+    "summary-staleness": 1.8088036111111112
   },
   "rowsAddedHistory": [
-    71948,
     63744,
     63559,
     77623,
@@ -66,7 +64,8 @@
     65068,
     73473,
     87424,
-    93258
+    93258,
+    99077
   ],
   "findings": {
     "contamination-dupes": {
@@ -82,7 +81,7 @@
     {
       "id": "contamination-dupes",
       "title": "Data health: contamination-dupes is RED",
-      "body": "442 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 442 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-09-24.md"
+      "body": "5000 listings were written more than once for the same observation day, which contaminates medians until deduped.\n\nCurrent value: 5000 duplicate (listing, day) rows\nSuggested action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on.\nReport: reports/data-health/2026-09-25.md"
     }
   ]
 }
