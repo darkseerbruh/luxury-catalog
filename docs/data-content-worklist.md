@@ -665,5 +665,6 @@ sections. Only production_year (7%) + condition (13%) remain sparse.*
 
 <!-- data-health:begin (auto-managed by scripts/data-health.ts — edit outside the markers only) -->
 ## DATA HEALTH FINDINGS (auto-updated by the daily data-health run)
-- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-28, yellow)
+- ⬜ [dh:contamination-dupes] 41 listings were written more than once for the same observation day, which contaminates medians until deduped. Action: Inspect the newest loads; the loader should upsert on platform|listing_ref|price_type|observed_on. (first seen 2026-09-29, last seen 2026-09-29, yellow)
+- ⬜ [dh:structure-pseudo] 1 known structurally-wrong style rows (stable backlog, cleanup staged). They render as junk tiles in search and break the bag-page hierarchy until merged. Action: Owner: npx tsx scripts/ux-restructure/merge-pseudo-styles.ts --apply (dry-run first; docs/ux-review-0714-merge-report.md). (first seen 2026-07-19, last seen 2026-09-29, yellow)
 <!-- data-health:end -->

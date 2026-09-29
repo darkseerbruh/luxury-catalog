@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-09-28",
+  "lastRun": "2026-09-29",
   "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.7613946527777777,
-    "freshness-therealreal": 61.76139465277778,
-    "freshness-tlc": 0.7613946527777777,
-    "freshness-ebay": 0.7613946527777777,
-    "capture-rows": 89051,
-    "ranking-count": 570,
-    "ranking-near-floor": 57,
-    "coverage-condition": 10.492743870354504,
-    "coverage-condition-detail": 67.21076114110477,
-    "coverage-region": 34.566551947144525,
-    "coverage-production-year": 0.795854497947723,
-    "coverage-hardware": 22.450772975590414,
+    "freshness-fashionphile": 0.6937515856481481,
+    "freshness-therealreal": 62.69375158564815,
+    "freshness-tlc": 0.6937515856481481,
+    "freshness-ebay": 1.6937515856481482,
+    "capture-rows": 88826,
+    "ranking-count": 571,
+    "ranking-near-floor": 58,
+    "coverage-condition": 10.463999219916007,
+    "coverage-condition-detail": 67.24545349278438,
+    "coverage-region": 34.53700090914158,
+    "coverage-production-year": 0.7949703135481316,
+    "coverage-hardware": 22.42978499025828,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1425222,
+    "backlog-total": 1446259,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 0,
+    "contamination-dupes": 41,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,11 +33,9 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 1.4839997222222223,
-    "cadence-tlc": 52
+    "summary-staleness": 1.4491486111111112
   },
   "rowsAddedHistory": [
-    81492,
     81923,
     86245,
     85951,
@@ -66,9 +64,14 @@
     99077,
     95859,
     91012,
-    89051
+    89051,
+    88826
   ],
   "findings": {
+    "contamination-dupes": {
+      "firstSeen": "2026-09-29",
+      "status": "yellow"
+    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
