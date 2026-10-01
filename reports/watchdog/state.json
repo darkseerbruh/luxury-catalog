@@ -6,28 +6,21 @@
       "id": "ingest-tlc",
       "title": "Watchdog: TLC live listings has gone silent",
       "body": "**TLC live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 26d\n- Last success 2026-09-05 11:56 UTC, 26d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 634.6947905555555,
+      "silentHours": 635.3311441666667,
       "allowedHours": 60
     },
     {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 18d\n- Last success 2026-09-13 13:31 UTC, 18d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 441.1038161111111,
-      "allowedHours": 60
-    },
-    {
-      "id": "mygemma-refresh",
-      "title": "Watchdog: myGemma listings has gone silent",
-      "body": "**myGemma listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 17d\n- Last success 2026-09-14 14:01 UTC, 17d ago.\n\nWhy it matters: Licensed photos + buy-links come from this feed.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 416.59650194444447,
+      "silentHours": 441.7401547222222,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 64d\n- Last success 2026-07-29 07:20 UTC, 64d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1551.2823891666667,
+      "silentHours": 1551.9186772222222,
       "allowedHours": 120
     },
     {
