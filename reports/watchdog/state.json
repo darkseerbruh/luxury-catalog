@@ -6,15 +6,22 @@
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 22d\n- Last success 2026-09-13 13:31 UTC, 22d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 539.3561130555555,
+      "silentHours": 546.1252425,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
-      "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 68d\n- Last success 2026-07-29 07:20 UTC, 68d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1649.5345294444444,
+      "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 69d\n- Last success 2026-07-29 07:20 UTC, 69d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 1656.3036661111112,
       "allowedHours": 120
+    },
+    {
+      "id": "data-health",
+      "title": "Watchdog: Daily data health has gone silent",
+      "body": "**Daily data health** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 2d\n- Last success 2026-10-03 14:57 UTC, 2d ago.\n\nWhy it matters: The scorecard. It graduates to weekly after 7 green runs, so the window allows for that.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 64.68488638888888,
+      "allowedHours": 60
     },
     {
       "id": "vendor-inbox-scan",
