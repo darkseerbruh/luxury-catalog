@@ -3,18 +3,32 @@
   "checked": 23,
   "redFindings": [
     {
+      "id": "market-refresh",
+      "title": "Watchdog: Fashionphile capture has gone silent",
+      "body": "**Fashionphile capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 12h\n- Actual silence: 23d\n- Last success 2026-09-14 12:44 UTC, 23d ago.\n\nWhy it matters: Largest single source of price comps. Silence here starves the LC Index.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 553.8665533333333,
+      "allowedHours": 12
+    },
+    {
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
-      "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 23d\n- Last success 2026-09-13 13:31 UTC, 23d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 575.6966469444444,
+      "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 24d\n- Last success 2026-09-13 13:31 UTC, 24d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 577.0904019444445,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 70d\n- Last success 2026-07-29 07:20 UTC, 70d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1685.875178888889,
+      "silentHours": 1687.2689644444445,
       "allowedHours": 120
+    },
+    {
+      "id": "indexnow",
+      "title": "Watchdog: IndexNow submit has gone silent",
+      "body": "**IndexNow submit** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 10d\n- Last success 2026-09-27 12:13 UTC, 10d ago.\n\nWhy it matters: Search indexing for Bing, Yandex, Naver.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
+      "silentHours": 242.38543361111113,
+      "allowedHours": 60
     },
     {
       "id": "vendor-inbox-scan",
