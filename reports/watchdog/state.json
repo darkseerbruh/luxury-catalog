@@ -6,14 +6,14 @@
       "id": "ingest-rebag",
       "title": "Watchdog: Rebag live listings has gone silent",
       "body": "**Rebag live listings** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 60h\n- Actual silence: 24d\n- Last success 2026-09-13 13:31 UTC, 24d ago.\n\nWhy it matters: Affiliate buy-links on bag pages go stale without it.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 585.5033827777778,
+      "silentHours": 586.1043725,
       "allowedHours": 60
     },
     {
       "id": "trr-refresh",
       "title": "Watchdog: TRR capture has gone silent",
       "body": "**TRR capture** has produced nothing for longer than its allowed window.\n\n- Allowed silence: 120h\n- Actual silence: 70d\n- Last success 2026-07-29 07:20 UTC, 70d ago.\n\nWhy it matters: Scheduled every 2 days; the paid Apify lane.\n\nThis is a GitHub workflow, so the supervisor can re-run and repair it.",
-      "silentHours": 1695.6818830555555,
+      "silentHours": 1696.2828380555557,
       "allowedHours": 120
     },
     {
