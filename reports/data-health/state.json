@@ -3,29 +3,29 @@
   "cadence": "daily",
   "weeklyDow": 1,
   "greenStreak": 0,
-  "lastRun": "2026-10-07",
+  "lastRun": "2026-10-08",
   "overall": "yellow",
   "metrics": {
-    "freshness-fashionphile": 0.7315005324074074,
-    "freshness-therealreal": 70.73150053240741,
-    "freshness-tlc": 0.7315005324074074,
-    "freshness-ebay": 2.7315005324074075,
-    "capture-rows": 89656,
-    "ranking-count": 578,
-    "ranking-near-floor": 61,
-    "coverage-condition": 10.30542555416658,
-    "coverage-condition-detail": 67.91794912148892,
-    "coverage-region": 33.912240651910075,
-    "coverage-production-year": 0.7769750910246778,
-    "coverage-hardware": 21.970149685025717,
+    "freshness-fashionphile": 0.7336605555555555,
+    "freshness-therealreal": 71.73366055555556,
+    "freshness-tlc": 0.7336605555555555,
+    "freshness-ebay": 3.7336605555555558,
+    "capture-rows": 89893,
+    "ranking-count": 580,
+    "ranking-near-floor": 59,
+    "coverage-condition": 10.28528031056887,
+    "coverage-condition-detail": 67.94979304167614,
+    "coverage-region": 33.88367742677239,
+    "coverage-production-year": 0.7759326783257222,
+    "coverage-hardware": 21.949069397161534,
     "coverage-style-description": 39.75026014568158,
     "coverage-style-year": 12.278876170655566,
     "coverage-listing-images": 100,
-    "backlog-total": 1594585,
+    "backlog-total": 1614125,
     "contamination-trr": 0,
     "contamination-misattach": 0,
     "contamination-size": 0,
-    "contamination-dupes": 11,
+    "contamination-dupes": 0,
     "structure-pseudo": 1,
     "structure-title-junk": 0,
     "structure-accent-dupes": 0,
@@ -33,10 +33,10 @@
     "coverage-variant-colour": 47.745415318230854,
     "coverage-variant-material": 38.44660194174757,
     "coverage-variant-hardware": 25.156418554476808,
-    "summary-staleness": 3.0558816666666666
+    "summary-staleness": 3.028271388888889,
+    "cadence-tlc": 85
   },
   "rowsAddedHistory": [
-    88100,
     74142,
     65292,
     69781,
@@ -65,13 +65,10 @@
     83350,
     83621,
     89388,
-    89656
+    89656,
+    89893
   ],
   "findings": {
-    "contamination-dupes": {
-      "firstSeen": "2026-10-07",
-      "status": "yellow"
-    },
     "structure-pseudo": {
       "firstSeen": "2026-07-19",
       "status": "yellow"
