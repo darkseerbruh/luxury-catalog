@@ -65,7 +65,7 @@ only behind the trust gate in `docs/trusted-resellers.md`. Capture is separate f
 | **The Luxury Closet** | Firecrawl scrape | full | Dubai, broad |
 | **1stDibs** | Firecrawl scrape | vintage/high-end | uncovered by any affiliate |
 | **StockX** | Firecrawl scrape | hyped/collab + sold | streetwear-luxe crossover |
-| **myGemma** | Firecrawl scrape (Awin pending) | bags/jewelry/watches | |
+| **myGemma** | Awin product feed (approved 2026-07-14) | bags/jewelry/watches | |
 | **Redeluxe** ⭐ | Shopify `products.json` | full | flagship reseller, creator partner (Georgia Swain); mid-tier coverage the giants miss |
 | **Couture USA** | Shopify `products.json` | full | open feed verified; vet trust before *referral* |
 | **Yoogi's Closet** | Firecrawl / site feed | full | trusted since 2008 |
@@ -406,7 +406,7 @@ TRR rejection ever happened; the buyer-side lane below is intact.)*
 - ❌ **Fashionphile (Impact) — DECLINED 07-02.** Same Impact account as TRR (not a second account). Reach Fashionphile via ShopMy/LTK sub-affiliate rails instead (they carry it), or reapply direct once launch traffic is real.
 - ❌ **Skimlinks — DECLINED 06-25** ("site not suitable"). Hard 90-day lockout → earliest reapply ~2026-09-25. This removes the Vestiaire + Rent-the-Runway catch-all until then; re-source those after relaunch.
 - ✅ **CJ (publisher 7997608):** The Luxury Closet (advertiser 5312449) + **Rebag (advertiser 5749848, APPROVED 2026-07-14)** both live. Both wired the same way: raw product URLs from the CJ GraphQL feed → `cjDeepLink()` (our PID 101810137), trust entry in `platforms.ts`, daily ingest workflow. Rebag terms: **7% commission** (3% if order >$2,500; capped $423 if >$14,123), first-time customer, **30-day cookie**, daily product feed, ~$1,800 AOV. Do NOT upload traffic proof to the Documents area until post-launch (pre-launch numbers would hurt).
-- 🟡 **Awin (publisher 2945769):** Vivrelle, myGemma (5% / 30-day / $2,756 AOV), BriteCo ($10 per lead / 45-day / $5 for shopping sites) all pending. Nudged each advertiser's team via in-platform email 07-05.
+- 🟡 **Awin (publisher 2945769):** **myGemma (advertiser aid 59483, APPROVED 2026-07-14)** now live — 5% / 30-day / $2,756 AOV, wired via the Awin product feed. Vivrelle + BriteCo ($10 per lead / 45-day / $5 for shopping sites) still pending. Nudged each advertiser's team via in-platform email 07-05.
 - 🟡 **Redeluxe (GoAffPro, partners.redeluxe.com):** applied 06-30; owner is logged in (email verified) but the account still shows "under verification" 5 days on, past their own 24–48h estimate. **Email nudge sent 07-05 to Shop@redeluxe.com** (their real support; phone +1 469-686-5463) asking them to confirm the email + approve. The `no-reply@goaffpro.com` verify email is NOT a contact route. Commission % + cookie window stay login-gated until they approve → TBD. Frame as a secondary/niche partner (small inventory), not a priority line.
 - ⚠️ **ShopMy — NOT yet applied. Gate on publishing social content first.** ShopMy carries Fashionphile + TRR + Rebag and takes small creators, but judges on public, engaged socials. As of 07-05 the socials are empty (IG @luxurycatalog_ = 0 posts, TikTok = 0 videos / 0 likes), so applying now risks a rejection that then needs a member referral to overturn. Publish a handful of the staged launch posts first, then apply.
 - ⏸️ **Amazon Associates — DEFERRED to ~2–4 weeks pre-launch (owner decision 2026-07-05).** Reason: Amazon closes the account if you don't get **3 qualifying sales within 180 days of applying** (Apr-2026 policy: customer must purchase AND receive inside the window), so starting the clock pre-launch (traffic mostly owner) would burn it. At apply-time (owner-only: needs tax + bank details): build the exact disclosure string "As an Amazon Associate, I earn from qualifying purchases" + Amazon tag support in `src/lib/affiliate.ts` (mirror the eBay handling). **Guardrail:** link only Amazon-fulfilled / Amazon Luxury Stores / contemporary brands + care-accessories (`have` state), never third-party marketplace "designer" listings. Fits the midtier-bag + care lane, not the luxury core.
@@ -457,7 +457,7 @@ Madison Avenue Couture below; most other partners are buyer-side) or down-weight
 - **myGemma** — luxury resale (bags/jewelry/watches), ~5%. **ShareASale is now Awin (merged), so
   myGemma is available directly in the existing Awin account** (ID 2945769) — no duplicate signup.
   Found in Awin Join Programs: conversion 3.11%, **100% approval rate** (auto-approves), product feed,
-  EPC ~$1.74. ✅ **Applied 2026-06-24, pending** (verified in Awin → Advertisers → Pending tab).
+  EPC ~$1.74. ✅ **Applied 2026-06-24 → APPROVED 2026-07-14** (Awin membership-active email, aid 59483). Now wired via the Awin product feed.
   (Lesson: ShareASale signups now redirect to Awin; check the existing Awin account before creating
   anything new.)
 - **Madison Avenue Couture** — high-end Hermès/Chanel reseller, **consignment-based affiliate**
