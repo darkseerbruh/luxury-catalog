@@ -37,6 +37,10 @@ concurrency:
 
 jobs:
   promote:
+    # ZERO-EMAIL BAR (owner, 2026-10-14): a failed run must never email her. Promotion is
+    # best-effort backlog work; a silent miss is acceptable, an inbox alert is not.
+    # Failures still show in the Actions tab for any chat that looks.
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:

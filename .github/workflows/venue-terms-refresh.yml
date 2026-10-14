@@ -9,9 +9,11 @@ name: Venue terms freshness (never-stale safety net)
 # ALWAYS visible even if that agent fails. Pure: no network, no DB, no secrets.
 
 on:
-  schedule:
-    # Monthly, 1st at 06:23 UTC (off the hour, before the busy morning captures).
-    - cron: "23 6 1 * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Monthly, 1st at 06:23 UTC (off the hour, before the busy morning captures).
+  # - cron: "23 6 1 * *"
   workflow_dispatch:
     inputs:
       cadence:

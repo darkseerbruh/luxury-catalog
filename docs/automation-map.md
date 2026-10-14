@@ -16,9 +16,16 @@ tracker, and recurring spend goes to ~zero. Concretely:
   **agent-engines (cloud), supervisor, watchdog, data-health, analytics-digest,
   classify-families**. The cloud engines were failing on an empty Anthropic API credit
   balance; the ingest CJ lanes on a 57014 reconcile timeout. Nothing emails her anymore.
-- **Still scheduled** (free, quiet, serve the info mission): `indexnow` (daily SEO ping),
+- **Still scheduled** (free, quiet, serve the info mission): `indexnow` (daily SEO ping) and
   `catalog-promote` (weekly — works the banked `discovered_listing` backlog into catalog
-  pages), `venue-terms-refresh` (monthly report + issue). Vercel crons unchanged.
+  pages). Both are **fail-silent** (`continue-on-error`) under the ZERO-EMAIL BAR
+  (2026-10-14): nothing automated may email her, directly or via GitHub notifications, so
+  `venue-terms-refresh` (filed a monthly issue) is retired too. Vercel crons unchanged.
+- **Local Claude tasks** under the same bar: `analyst-weekly-brief` DISABLED (deliverable
+  was an email), `vendor-inbox-scan` DISABLED (opened PRs → notification email). Still
+  enabled, email-free: social-engine weekly + pulse (drafts + phone push only) and the
+  quarterly content-freshness review (report-only; prompt updated to the analyst-worktree
+  sync + as-of-dated figures).
 - **Read-time freshness gate** (`src/lib/listing-freshness.ts`, 14-day window): with no
   reconciliation, a `listed` row only counts as a LIVE offer while its latest observation is
   ≤14 days old. Buy buttons, offer rails, deals, article shop modules and JSON-LD offers

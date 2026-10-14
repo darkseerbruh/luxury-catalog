@@ -27,6 +27,10 @@ concurrency:
 
 jobs:
   submit:
+    # ZERO-EMAIL BAR (owner, 2026-10-14): a failed run must never email her. This ping is
+    # best-effort SEO; a silent miss is acceptable, an inbox alert is not. Failures still
+    # show in the Actions tab for any chat that looks.
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
