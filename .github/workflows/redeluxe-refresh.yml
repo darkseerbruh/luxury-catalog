@@ -11,10 +11,12 @@ name: Refresh Redeluxe live listings (Shopify feed)
 # (NEXT_PUBLIC_*), inlined as a fallback below — mirrors market-refresh.yml.
 
 on:
-  schedule:
-    # Daily, 06:41 UTC, off the hour (Fashionphile runs 3-hourly; Redeluxe is smaller so
-    # once a day is plenty). Tune here.
-    - cron: "41 6 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily, 06:41 UTC, off the hour (Fashionphile runs 3-hourly; Redeluxe is smaller so
+  # # once a day is plenty). Tune here.
+  # - cron: "41 6 * * *"
   workflow_dispatch:
     inputs:
       max_pages:

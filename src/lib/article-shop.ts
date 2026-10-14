@@ -11,6 +11,7 @@
  * figures as "as of" their capture date (we surface that date in the card).
  */
 import { getSupabase } from "./supabase";
+import { isFreshOffer } from "./listing-freshness";
 import { PLATFORMS } from "./platforms";
 import { displaySizeLabel } from "./variant-label";
 
@@ -69,6 +70,9 @@ export async function getStyleShopData(styleId: number | null): Promise<StyleSho
     const byRef = new Map<string, Row>();
     for (const r of data as Row[]) {
       if (r.listing_status === "sold") continue;
+      // Refresh lanes retired 2026-10-14: an observation past the live-offer window is
+      // history, not a shoppable offer.
+      if (!isFreshOffer(r.observed_on)) continue;
       const price = r.sale_price != null ? Number(r.sale_price) : NaN;
       if (!Number.isFinite(price) || price <= 0) continue;
       const key = r.listing_ref || r.source_url || `${r.variant_id}|${price}|${r.observed_on}`;

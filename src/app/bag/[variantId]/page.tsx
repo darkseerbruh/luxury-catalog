@@ -31,6 +31,7 @@ import AuthEngagementTracker from "./AuthEngagementTracker";
 import WhereToBuy from "./WhereToBuy";
 import ListingsForSale from "./ListingsForSale";
 import { getHeroListing } from "@/lib/listings";
+import { isFreshOffer } from "@/lib/listing-freshness";
 import EmptyListingsNote from "./EmptyListingsNote";
 import WhereToSell from "./WhereToSell";
 import CareModule from "./CareModule";
@@ -504,7 +505,9 @@ export default async function BagDetailPage({
       }
     : null;
   const listedComps = recordedSales
-    .filter((h) => h.priceType === "listed")
+    // "Current asking" (gauge markers + JSON-LD offers) means observed inside the
+    // live-offer window; older listed rows are history, not offers (lanes retired 2026-10-14).
+    .filter((h) => h.priceType === "listed" && isFreshOffer(h.observedOn ?? h.dateRecorded))
     .map((h) => ({
       price: h.salePrice,
       platform: h.platform,

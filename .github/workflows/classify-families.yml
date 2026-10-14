@@ -20,9 +20,11 @@ on:
         description: "Apply + commit results? false = dry run (classify + report only, no commit)"
         required: false
         default: "true"
-  schedule:
-    # Monthly, 07:00 UTC on the 1st — catch newly-captured names without anyone running it.
-    - cron: "0 7 1 * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Monthly, 07:00 UTC on the 1st — catch newly-captured names without anyone running it.
+  # - cron: "0 7 1 * *"
 
 concurrency:
   group: classify-families

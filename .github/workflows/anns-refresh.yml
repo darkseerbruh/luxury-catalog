@@ -10,9 +10,11 @@ name: Refresh Ann's Fabulous Finds listings (Shopify feed)
 # (NEXT_PUBLIC_*), inlined as a fallback — mirrors redeluxe-refresh.yml.
 
 on:
-  schedule:
-    # Daily, 07:05 UTC, off the hour and staggered from the other Shopify feeds.
-    - cron: "5 7 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily, 07:05 UTC, off the hour and staggered from the other Shopify feeds.
+  # - cron: "5 7 * * *"
   workflow_dispatch:
     inputs:
       max_pages:

@@ -14,9 +14,11 @@ name: CJ token expiry alarm
 # expires within 48h -> ping" line).
 
 on:
-  schedule:
-    # Daily, mid-morning UTC, off other jobs' :00 marks.
-    - cron: "17 7 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily, mid-morning UTC, off other jobs' :00 marks.
+  # - cron: "17 7 * * *"
   workflow_dispatch: {}
 
 permissions:

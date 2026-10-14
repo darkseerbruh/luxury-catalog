@@ -29,9 +29,11 @@ name: Refresh mid-tier live listings (eBay)
 # Runs on a schedule AND on demand (Actions tab -> this workflow -> "Run workflow").
 
 on:
-  schedule:
-    # Weekly, Mondays 05:11 UTC. Tune here.
-    - cron: "11 5 * * 1"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Weekly, Mondays 05:11 UTC. Tune here.
+  # - cron: "11 5 * * 1"
   workflow_dispatch:
     inputs:
       write:

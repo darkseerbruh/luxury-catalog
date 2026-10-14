@@ -4,6 +4,28 @@
 The one-page registry of the business's closed loops. Every engine reads this;
 the cross-feed rules in §2 are binding on every scheduled run.*
 
+## §0 STATUS — info-source pivot (2026-10-14): most schedules RETIRED
+
+Owner call 2026-10-14: the site runs as a **reference source about bags**, not a live-inventory
+tracker, and recurring spend goes to ~zero. Concretely:
+
+- **Retired schedules** (yml keeps `workflow_dispatch`, cron commented out with a dated note):
+  all live-listing refresh lanes (Fashionphile market-refresh + enrich, TLC, Rebag, myGemma,
+  Ann's, Couture USA, Redeluxe, eBay mid-tier; TRR was already paused 2026-08-02), the
+  CJ-token alarm, the monthly re-capture reminder, and the whole ops/agent layer:
+  **agent-engines (cloud), supervisor, watchdog, data-health, analytics-digest,
+  classify-families**. The cloud engines were failing on an empty Anthropic API credit
+  balance; the ingest CJ lanes on a 57014 reconcile timeout. Nothing emails her anymore.
+- **Still scheduled** (free, quiet, serve the info mission): `indexnow` (daily SEO ping),
+  `catalog-promote` (weekly — works the banked `discovered_listing` backlog into catalog
+  pages), `venue-terms-refresh` (monthly report + issue). Vercel crons unchanged.
+- **Read-time freshness gate** (`src/lib/listing-freshness.ts`, 14-day window): with no
+  reconciliation, a `listed` row only counts as a LIVE offer while its latest observation is
+  ≤14 days old. Buy buttons, offer rails, deals, article shop modules and JSON-LD offers
+  decay gracefully to history; all rows stay forever as dated price evidence.
+- The loop table below is the HISTORICAL registry of how the engines worked; §2/§3 rules
+  still bind any engine that is manually dispatched.
+
 ## §1 The loops
 
 | Loop | Sensor | Decider (standard) | Actor (run) | Memory (ledger) | Her gate |

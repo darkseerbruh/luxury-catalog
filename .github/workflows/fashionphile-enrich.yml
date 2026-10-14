@@ -12,8 +12,10 @@ name: Fashionphile enrichment (condition + fields)
 # 0 Firecrawl credits (FP product pages answer plain GET). SECRETS: SUPABASE_SERVICE_ROLE_KEY.
 
 on:
-  schedule:
-    - cron: "41 7 * * *" # daily, off the hour
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # - cron: "41 7 * * *" # daily, off the hour
   workflow_dispatch:
     inputs:
       grade_limit:

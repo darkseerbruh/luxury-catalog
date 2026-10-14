@@ -24,6 +24,7 @@ import { PLATFORMS } from "./platforms";
 import { colorFamily, materialFamily } from "./listings-taxonomy";
 import { displaySizeLabel } from "./variant-label";
 import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
+import { isFreshOffer, liveOfferCutoffISO } from "./listing-freshness";
 import {
   rateListing,
   isConfidentBasis,
@@ -287,7 +288,9 @@ function isRetail(r: PriceRow): boolean {
 function isListed(r: PriceRow): boolean {
   // A live offer = a resale listing still for sale. 'sold' rows have been retired by
   // reconcile-sold.ts (the source no longer carries them); legacy rows are null = shown.
-  return r.priceType === "listed" && r.listingStatus !== "sold";
+  // Since the refresh lanes were retired (2026-10-14) status is no longer reconciled, so
+  // an observation older than the live-offer window no longer counts as an offer.
+  return r.priceType === "listed" && r.listingStatus !== "sold" && isFreshOffer(r.observedOn);
 }
 
 /**
@@ -406,6 +409,7 @@ export async function getHeroListing(variantId: number, faceImageUrl: string | n
       .eq("variant_id", variantId)
       .eq("price_type", "listed")
       .or("listing_status.is.null,listing_status.eq.available")
+      .gte("observed_on", liveOfferCutoffISO())
       .not("sale_price", "is", null)
       .in("listing_ref", owners.map((o) => o.listing_ref))
       .order("sale_price", { ascending: true })

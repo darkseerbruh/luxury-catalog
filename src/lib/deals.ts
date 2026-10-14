@@ -4,6 +4,7 @@ import { CACHE_MARKET } from "./cache";
 import { displaySizeLabel } from "./variant-label";
 import { isNonBagAccessory, titleNamesDifferentStyle } from "./ingest/model-normalize";
 import { listingQualifier, dealSpecKey, hasUsableSpec } from "./deal-descriptor";
+import { isFreshOffer } from "./listing-freshness";
 
 /** Below this many real deals the "Priced well today" rail hides itself (no stub of one or two). */
 export const MIN_DEALS_TO_RENDER = 3;
@@ -237,7 +238,9 @@ async function loadDeals(limit = 24): Promise<Deal[]> {
       // tagged with its spec key so the median is scoped to like-for-like comps.
       const specKey = dealSpecKey(row.notes, row.source_url, row.material);
       g.resale.push({ price, specKey });
-      if (row.price_type === "listed") {
+      // Stale observations still anchor the median as comps, but only a listing observed
+      // inside the live-offer window can BE the deal (refresh lanes retired 2026-10-14).
+      if (row.price_type === "listed" && isFreshOffer(row.observed_on)) {
         g.listed.push({
           price,
           currency: row.currency,

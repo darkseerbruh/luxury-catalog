@@ -16,10 +16,12 @@ name: Refresh TLC live listings (CJ feed)
 # pollutes the pipeline. Unmatched rows land in discovered_listing, not the rail.
 
 on:
-  schedule:
-    # Daily. TLC refreshes its feed several times a day; daily keeps prices current
-    # without flooding. Tune here.
-    - cron: "23 8 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily. TLC refreshes its feed several times a day; daily keeps prices current
+  # # without flooding. Tune here.
+  # - cron: "23 8 * * *"
   workflow_dispatch:
     inputs:
       write:

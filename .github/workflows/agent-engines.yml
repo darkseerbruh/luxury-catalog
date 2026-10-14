@@ -16,14 +16,16 @@ name: Agent engines (cloud-hosted)
 # connectors, which is a genuinely human-only step.
 
 on:
-  schedule:
-    - cron: "10 12 * * *"      # analyst-daily-scan          — daily
-    - cron: "0 13 * * 2"       # article-engine-weekly       — Tuesdays
-    - cron: "0 13 * * 3"       # dictionary-gap-report       — Wednesdays
-    - cron: "0 11 1 * *"       # market-report-monthly       — 1st
-    - cron: "0 14 1 * *"       # venue-terms-refresh-monthly — 1st
-    - cron: "30 13 1,15 * *"   # archivist-monthly-pull      — 1st + 15th
-    - cron: "0 15 * * 0"       # weekly-digest               — Sundays
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # - cron: "10 12 * * *"      # analyst-daily-scan          — daily
+  # - cron: "0 13 * * 2"       # article-engine-weekly       — Tuesdays
+  # - cron: "0 13 * * 3"       # dictionary-gap-report       — Wednesdays
+  # - cron: "0 11 1 * *"       # market-report-monthly       — 1st
+  # - cron: "0 14 1 * *"       # venue-terms-refresh-monthly — 1st
+  # - cron: "30 13 1,15 * *"   # archivist-monthly-pull      — 1st + 15th
+  # - cron: "0 15 * * 0"       # weekly-digest               — Sundays
   workflow_dispatch:
     inputs:
       engine:

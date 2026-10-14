@@ -15,10 +15,12 @@ name: Daily data health
 # always runs. Logic: scripts/data-health.ts + src/lib/data-health-core.ts.
 
 on:
-  schedule:
-    # Daily 10:47 UTC — after TLC (08:23) and the 09:17 Fashionphile 3-hourly
-    # run, off the :00 mark. Cadence itself is governed by state.json, not here.
-    - cron: "47 10 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily 10:47 UTC — after TLC (08:23) and the 09:17 Fashionphile 3-hourly
+  # # run, off the :00 mark. Cadence itself is governed by state.json, not here.
+  # - cron: "47 10 * * *"
   workflow_dispatch: {}
 
 permissions:

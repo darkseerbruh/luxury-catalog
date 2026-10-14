@@ -26,14 +26,16 @@ name: Refresh market listings (Fashionphile)
 # ref ever changes. (Mirrors classify-families.yml.)
 
 on:
-  schedule:
-    # Every 3 hours (listings sell hourly, so retire sold Fashionphile listings fast — this is
-    # the only source crawlable headless). Off the :00 mark. Tune up/down here.
-    - cron: "17 */3 * * *"
-    # Once daily at 05:17 UTC: ALSO load the full live catalogue's prices (the freshness
-    # source). Its own cron because `*/3` never lands on hour 05, so the old hour==05 gate
-    # never fired and Fashionphile freshness silently froze (2026-07-10..14).
-    - cron: "17 5 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Every 3 hours (listings sell hourly, so retire sold Fashionphile listings fast — this is
+  # # the only source crawlable headless). Off the :00 mark. Tune up/down here.
+  # - cron: "17 */3 * * *"
+  # # Once daily at 05:17 UTC: ALSO load the full live catalogue's prices (the freshness
+  # # source). Its own cron because `*/3` never lands on hour 05, so the old hour==05 gate
+  # # never fired and Fashionphile freshness silently froze (2026-07-10..14).
+  # - cron: "17 5 * * *"
   workflow_dispatch:
     inputs:
       collection:

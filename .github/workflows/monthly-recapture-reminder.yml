@@ -13,9 +13,11 @@ name: Monthly re-capture reminder
 # duplicate. No secrets needed — uses the default GITHUB_TOKEN.
 
 on:
-  schedule:
-    # 1st of each month, 07:13 UTC (off the :00 mark on purpose).
-    - cron: "13 7 1 * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # 1st of each month, 07:13 UTC (off the :00 mark on purpose).
+  # - cron: "13 7 1 * *"
   workflow_dispatch: {}
 
 permissions:

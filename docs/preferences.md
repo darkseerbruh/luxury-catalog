@@ -28,6 +28,7 @@
 12b. Every **Still open** and **Decisions to make** item must be decidable WITHOUT scrolling back: name the thing, say what is blocking it or what it is waiting on, and state what changes with each choice. A bare label ("dimension capture running") is a defect. Two lines each is the target, not one.
 13. Catalog canon = what the house PRODUCED (its own documentation), site-wide; never limit filters/DB/selectors/existence to what we can source online. "No listing" ≠ "never made" — record it and keep it selectable regardless; grey out only what the house never made (sourced). (Detail: production-canon section below.)
 14. Never crop a bag photo, anywhere: bag images render WHOLE (`object-contain` on a white backdrop), never `object-cover`. Fit the frame to the photo, not the photo to the frame. (Detail in UX-copy section.)
+15. Info-source mode (2026-10-14): the site leads with reference data, not live inventory. No new scheduled runs or paid capture without her ask; a "live offer" = observation ≤14 days old (`src/lib/listing-freshness.ts`). (Detail: Product decisions section.)
 <!-- ENFORCED:end -->
 
 ## Autonomous run protocol (added 2026-06-26, after she flagged premature stopping)
@@ -203,6 +204,9 @@ subjective"). Legal detail: `docs/finance-compliance.md`; tone detail: `docs/voi
 - **Content ideas come from the archive.** The archivist proposes a ranked slate (`docs/research-drafts/seasonal-archive/content-ideas.md`, tagged GEO vs engagement, CTA-tied); the `copywriter` drafts; final publish/seeding stays the owner-gated Content lane.
 
 ## Product decisions she's locked
+- **Info-source mode (locked 2026-10-14).** The site is a reference source about bags; current-inventory surfaces are secondary. All live-listing refresh schedules + the ops/agent layer are retired (`docs/automation-map.md` §0); live offers gate on a 14-day observation window (`src/lib/listing-freshness.ts`) and decay to history, never deleted.
+- **Recurring spend runs to ~zero (2026-10-14).** Don't add scheduled runs, paid capture, or anything needing API-credit refills without her ask. Still scheduled: indexnow, catalog-promote, venue-terms-refresh (all free).
+- **Failure email bar (2026-10-14).** Never leave a schedule running that can fail into her inbox with no action she can take; a lane that needs babysitting gets retired or fixed, not watched.
 - **Names never truncate (locked 2026-07-14).** Anywhere a bag/brand/style name renders, wrap it; never clip to "Guilloche Tadelakt B…". (From her UX review: a clipped name tells the shopper nothing.)
 - **Unknowns are stated, never blank (locked 2026-07-14).** A missing variant attribute stays NULL in the DB (never a sentinel string) and the UI shows it as explicit, selectable state: an "Unknown" chip on the variant selector (the "Standard" size bucket folds in) + "Not yet documented · know it? Tell us" spec rows linking to Suggest-an-edit. (Detail: `docs/catalog-structure-audit-0714.md`.)
 - **No display ads until traffic is much larger.** Revisit only past a premium-network floor (~50K sessions/mo, so we skip cheap AdSense) AND once ad RPM is proven to beat the affiliate revenue it would cannibalize. Until then, no. (Affiliate is the backbone for a high-AOV audience; ads are a scale play that would tax the luxury feel. Rationale + traffic math: `docs/monetization-projections.md`. Locked 2026-07-07.)

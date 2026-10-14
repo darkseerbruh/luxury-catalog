@@ -15,9 +15,11 @@ name: Supervisor (triage and self-repair)
 # Anything it cannot fix lands in docs/escalation-queue.md and is retried.
 
 on:
-  schedule:
-    # Every 6 hours, offset off the :00 mark and away from the capture cluster.
-    - cron: "23 1,7,13,19 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Every 6 hours, offset off the :00 mark and away from the capture cluster.
+  # - cron: "23 1,7,13,19 * * *"
   workflow_dispatch:
     inputs:
       dry_run:

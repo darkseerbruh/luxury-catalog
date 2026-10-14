@@ -1,9 +1,11 @@
 name: Weekly analytics digest
 
 on:
-  schedule:
-    # Mondays 08:00 UTC
-    - cron: "0 8 * * 1"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Mondays 08:00 UTC
+  # - cron: "0 8 * * 1"
   workflow_dispatch: {}
 
 permissions:

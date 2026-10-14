@@ -13,9 +13,11 @@ name: Refresh myGemma handbag listings (Awin feed)
 # download URL; it embeds our Awin feed API key — same idea as TLC's CJ_API_TOKEN).
 
 on:
-  schedule:
-    # Daily, 07:17 UTC, off the hour and staggered from the other feeds.
-    - cron: "17 7 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily, 07:17 UTC, off the hour and staggered from the other feeds.
+  # - cron: "17 7 * * *"
   workflow_dispatch:
     inputs:
       write:

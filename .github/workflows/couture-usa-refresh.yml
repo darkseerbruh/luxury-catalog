@@ -10,9 +10,11 @@ name: Refresh Couture USA live listings (Shopify feed)
 # (NEXT_PUBLIC_*), inlined as a fallback — mirrors redeluxe-refresh.yml / market-refresh.yml.
 
 on:
-  schedule:
-    # Daily, 06:53 UTC, off the hour and staggered from Fashionphile/Redeluxe.
-    - cron: "53 6 * * *"
+  # SCHEDULE RETIRED 2026-10-14 (info-source pivot): the site now leads with reference
+  # data, not current inventory. Run manually via workflow_dispatch if ever needed.
+  # schedule:
+  # # Daily, 06:53 UTC, off the hour and staggered from Fashionphile/Redeluxe.
+  # - cron: "53 6 * * *"
   workflow_dispatch:
     inputs:
       max_pages:
